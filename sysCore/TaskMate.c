@@ -4,7 +4,11 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
+
 #include "drivers/timer1D.h"
+#include "drivers/timer3D.h"
+
+
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 
@@ -25,11 +29,9 @@ int main(void)
 	timer1Init();
 	timer1Lock(SYSTEM_CORE_ID);
 
+	timer3Init();
+	timer3Lock(SYSTEM_CORE_ID);
 
-	// Set up timer3 interrupt for RTC
-	TCCR3B |= (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
-	OCR3A = 624; // Interrupt every 10ms
-	TIMSK3 |= (1 << OCIE3A);
 	
 	//jump to current task for first call and run system
 	SP = (uint16_t)task_table[task_current].stack_pointer;

@@ -4,7 +4,7 @@
 #define FALSE 0
 #define TRUE 1
 
-// system status
+// driver status
 #define DRIVER_INIT 1
 #define DRIVER_UNLOCK 2
 #define DRIVER_LOCK 3
