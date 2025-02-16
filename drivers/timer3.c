@@ -24,5 +24,6 @@ uint8_t timer3Lock(uint8_t by)
 {
 	timer3_status=DRIVER_LOCK;
 	timer3_who=by;
+	return 0;
 
 }
