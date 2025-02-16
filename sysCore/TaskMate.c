@@ -2,9 +2,14 @@
 #include <avr/interrupt.h>
 #include <util/atomic.h>
 
-#include "sysCore/TaskMate_private.h"
+#include "sysCore/TaskMate_define.h"
+#include "sysCore/taskCreate.h"
 #include "tasks/task1.h"
 #include "tasks/task2.h"
+
+#define TASK_COUNT 2
+task_t task_table[TASK_COUNT];
+int8_t task_current = 0;
 
 
 int main(void) 
@@ -14,6 +19,7 @@ int main(void)
 	taskCreate(task1,ID++);
 	taskCreate(task2,ID++);
 	
+
 	// Set up timer1 interrupt for scheduler
 	TCCR1B |= (1 << WGM12) | (1 << CS11); // CTC mode, prescaler 8
 	OCR1A = 1999; // Interrupt every 1ms
@@ -36,27 +42,7 @@ int main(void)
 	return 0;
 }
 
-void taskCreate(void (*taskFunction)(void), uint8_t task_id)
-{
-	task_table[task_id].task_id=task_id;
-	
-	// RTC init
-	task_table[task_id].task_RTC=0;
-	
-	// stack init
-	task_table[task_id].stack_pointer = &task_table[task_id].stack[TASK_STACK_SIZE - 1]; // get to of stack
-	*(task_table[task_id].stack_pointer--) = (uint16_t)taskFunction & 0xFF; //PCL; 
-	*(task_table[task_id].stack_pointer--) = ((uint16_t)taskFunction >> 8) & 0xFF; //PCH
-	*(task_table[task_id].stack_pointer--) = 0x00; //PCHH always 0 if code size < 128k 
-	*(task_table[task_id].stack_pointer--) = 0x00; //R0                        
-	*(task_table[task_id].stack_pointer--) = SREG;                        
-	
-	// Registers R1-R31
-	for (int i = 1; i < 32; i++) 
-	{*(task_table[task_id].stack_pointer--) = 0x00;}
-	
-	return;
-}	
+
 
 ISR(TIMER3_COMPA_vect) 
 {

@@ -4,7 +4,6 @@
 #define FALSE 0
 #define TRUE 1
 
-#define TASK_COUNT 2
 #define TASK_STACK_SIZE 256
 
 #define LED_DDR DDRB
@@ -87,6 +86,6 @@ typedef struct
 	volatile uint16_t task_RTC;
 	uint8_t *stack_pointer;
 	uint8_t stack[TASK_STACK_SIZE];
-} Task;
+} task_t;
 
 #endif
