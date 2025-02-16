@@ -1,0 +1,11 @@
+# Ignore compiled object files
+*.o
+
+# Ignore backup files from editors
+*~
+*.swp
+
+# Ignore temporary build files
+*.out
+*.elf
+*.map
