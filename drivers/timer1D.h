@@ -3,7 +3,7 @@
 
 uint8_t timer1Init(void);
 
-uint8_t timer1Lock(void);
+uint8_t timer1Lock(uint8_t);
 
 
 #endif
