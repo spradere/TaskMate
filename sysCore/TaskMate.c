@@ -5,12 +5,12 @@
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
 
-#include "drivers/timer1D.h"
-#include "drivers/timer3D.h"
-
+#include "drivers/timer1.h"
+#include "drivers/timer3.h"
 
 #include "tasks/task1.h"
 #include "tasks/task2.h"
+
 
 // task init
 #define TASK_COUNT 2

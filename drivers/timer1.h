@@ -1,5 +1,5 @@
-#ifndef TIMER1D_H
-#define TIMER1D_H
+#ifndef TIMER1_H
+#define TIMER1_H
 
 uint8_t timer1Init(void);
 
