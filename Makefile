@@ -9,7 +9,7 @@ PORT = /dev/ttyU0
 
 # Files
 TARGET = TaskMate
-SRC = sysCore/$(TARGET).c sysCore/sysCall.c tasks/task1.c tasks/task2.c
+SRC = sysCore/$(TARGET).c sysCore/sysCall.c sysCore/taskCreate.c tasks/task1.c tasks/task2.c
 OBJ = $(SRC:.c=.o) 
 HEX = $(TARGET).hex
 ELF = $(TARGET).elf

@@ -3,7 +3,7 @@
 
 #include "sysCore/TaskMate_define.h"
 
-extern Task task_table[];
+extern task_t task_table[];
 extern int8_t task_current;
 
 #endif
