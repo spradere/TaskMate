@@ -4,35 +4,34 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
+#include "drivers/timer1D.h"
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 
+// task init
 #define TASK_COUNT 2
 task_t task_table[TASK_COUNT];
 int8_t task_current = 0;
 
 
+
 int main(void) 
 {
 	// Create tasks
-	uint8_t ID=0;
+	uint8_t ID=0; 
 	taskCreate(task1,ID++);
 	taskCreate(task2,ID++);
 	
+	timer1Init();
+	timer1Lock(SYSTEM_CORE_ID);
 
-	// Set up timer1 interrupt for scheduler
-	TCCR1B |= (1 << WGM12) | (1 << CS11); // CTC mode, prescaler 8
-	OCR1A = 1999; // Interrupt every 1ms
-	TIMSK1 |= (1 << OCIE1A);
-	// Set output for in board led 13
-	LED_DDR |= (1 << LED_PIN);
-	
+
 	// Set up timer3 interrupt for RTC
 	TCCR3B |= (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
 	OCR3A = 624; // Interrupt every 10ms
 	TIMSK3 |= (1 << OCIE3A);
 	
-	//jump to current task for first call
+	//jump to current task for first call and run system
 	SP = (uint16_t)task_table[task_current].stack_pointer;
 	asm volatile (
 		POP_ALL_REGS
@@ -41,7 +40,6 @@ int main(void)
 	
 	return 0;
 }
-
 
 
 ISR(TIMER3_COMPA_vect) 
