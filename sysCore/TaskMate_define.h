@@ -4,8 +4,14 @@
 #define FALSE 0
 #define TRUE 1
 
-#define TASK_STACK_SIZE 256
+// system status
+#define DRIVER_INIT 1
+#define DRIVER_UNLOCK 2
+#define DRIVER_LOCK 3
+#define DRIVER_FAIL 4
+#define SYSTEM_CORE_ID 0xff
 
+//in board LED 13 
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 #define LED_PIN PB7
@@ -80,6 +86,8 @@
 		"out __SREG__, r0 \n\t" \
 		"pop r0	\n\t"
 
+
+#define TASK_STACK_SIZE 256
 typedef struct 
 {
 	uint8_t task_id;
