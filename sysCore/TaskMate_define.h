@@ -1,16 +1,6 @@
 #ifndef TASKMATE_DEFINE_H
 #define TASKMATE_DEFINE_H
 
-#define FALSE 0
-#define TRUE 1
-
-// driver status
-#define DRIVER_INIT 1
-#define DRIVER_UNLOCK 2
-#define DRIVER_LOCK 3
-#define DRIVER_FAIL 4
-#define SYSTEM_CORE_ID 0xff
-
 //in board LED 13 
 #define LED_DDR DDRB
 #define LED_PORT PORTB
@@ -86,14 +76,42 @@
 		"out __SREG__, r0 \n\t" \
 		"pop r0	\n\t"
 
-
+// task table
 #define TASK_STACK_SIZE 256
+
 typedef struct 
 {
 	uint8_t task_id;
 	volatile uint16_t task_RTC;
 	uint8_t *stack_pointer;
 	uint8_t stack[TASK_STACK_SIZE];
-} task_t;
+} task_table_t;
+
+// driver frame layout
+#define FALSE 0
+#define TRUE 1
+
+#define SYSTEM_CORE_ID 0xff
+
+// driver status bits
+#define DRIVER_INIT_AT_BOOT 	0
+#define DRIVER_START_AT_BOOT 	1
+#define DRIVER_LOCK 			2
+#define DRIVER_DEAD				3
+#define DRIVER_INIT				4
+
+
+typedef struct
+{
+	uint8_t driver_id;
+	uint8_t *driver_name;
+	
+	void (*setStatus)(uint8_t);
+	uint8_t (*getStatus)(void);
+	
+	void (*init)(void);
+	void (*start)(void);
+	void (*stop)(void);
+} driver_table_t;
 
 #endif

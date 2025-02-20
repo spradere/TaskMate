@@ -1,29 +1,44 @@
 #include <avr/io.h>
-
 #include "sysCore/TaskMate_define.h"
+#include "drivers/timer3.h"
 
-static uint8_t timer3_status=DRIVER_UNLOCK;
-static uint8_t timer3_who;
+uint8_t timer3_name[]="timer 3";
+uint8_t timer3_status=0;
 
-uint8_t timer3Init(void)
+
+void timer3SetStatus(uint8_t status)
 {
-	if(timer3_status==DRIVER_UNLOCK)
-	{
-		// Set up timer3 interrupt for RTC
-		TCCR3B |= (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
-		OCR3A = 624; // Interrupt every 10ms
-		TIMSK3 |= (1 << OCIE3A);	
+	timer3_status=status;
+}
+
+uint8_t timer3GetStatus(void)
+{
+	return timer3_status;
+}
+
+uint8_t *timer3GetName(void)
+{
+	return &timer3_name[0];
+}
+void timer3Init(void)
+{
+
+	// Set up timer3 interrupt for RTC
+	TCCR3B |= (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
+	OCR3A = 624; // Interrupt every 10ms
 		
-		return DRIVER_INIT;
-	}
-	else {return DRIVER_LOCK;}
 }
 
-
-uint8_t timer3Lock(uint8_t by)
+void timer3Start(void)
 {
-	timer3_status=DRIVER_LOCK;
-	timer3_who=by;
-	return 0;
-
+	// start by enable INT
+	TIMSK3 |= (1 << OCIE3A);
 }
+
+void timer3Stop(void)
+{
+	// stop by disable INT
+	TIMSK3 &= !(1 << OCIE3A);
+}
+
+

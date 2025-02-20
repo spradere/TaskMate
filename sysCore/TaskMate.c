@@ -1,6 +1,5 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-//#include <util/atomic.h>
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
@@ -11,28 +10,46 @@
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 
+//driver init
+#define DRIVER_COUNT 2
+driver_table_t driver_table[DRIVER_COUNT];
 
 // task init
 #define TASK_COUNT 2
-task_t task_table[TASK_COUNT];
-int8_t task_current = 0;
-
-
+task_table_t task_table[TASK_COUNT];
+uint8_t task_current=0;
 
 int main(void) 
 {
 	// Create tasks
-	uint8_t ID=0; 
-	taskCreate(task1,ID++);
-	taskCreate(task2,ID++);
+	uint8_t i=0; 
+	taskCreate(task1,i++);
+	taskCreate(task2,i++);
 	
 	timer1Init();
-	timer1Lock(SYSTEM_CORE_ID);
-
+	timer1Start();
+	
 	timer3Init();
-	timer3Lock(SYSTEM_CORE_ID);
+	timer3Start();
+	
+	// store & init divers table
+	i=0;
+	driver_table[i]=(driver_table_t)
+	{
+		.driver_id = i, 
+		.driver_name=timer1GetName(),
+		.setStatus = timer1SetStatus, 
+		.getStatus = timer1GetStatus, 
+		.init = timer1Init, 
+		.start = timer1Start, 
+		.stop = timer1Stop
+	};
+	timer1SetStatus( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT));
+	
 
 	
+	
+	task_current=0;
 	//jump to current task for first call and run system
 	SP = (uint16_t)task_table[task_current].stack_pointer;
 	asm volatile (
