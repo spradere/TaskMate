@@ -1,6 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/atomic.h>
+//#include <util/atomic.h>
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
