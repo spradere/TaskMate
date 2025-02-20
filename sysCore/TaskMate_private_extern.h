@@ -3,7 +3,9 @@
 
 #include "sysCore/TaskMate_define.h"
 
-extern task_t task_table[];
-extern int8_t task_current;
+extern driver_table_t driver_table[];
+
+extern task_table_t task_table[];
+extern uint8_t task_current;
 
 #endif
