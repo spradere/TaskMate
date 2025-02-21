@@ -26,31 +26,57 @@ int main(void)
 	taskCreate(task1,i++);
 	taskCreate(task2,i++);
 	
-	timer1Init();
-	timer1Start();
+	//timer1Init();
+	//timer1Start();
 	
-	timer3Init();
-	timer3Start();
+	//timer3Init();
+	//timer3Start();
 	
 	// store & init divers table
-	i=0;
-	driver_table[i]=(driver_table_t)
+
+	driver_table[0]=(driver_table_t)
 	{
-		.driver_id = i, 
-		.driver_name=timer1GetName(),
+		.driver_id = 0, 
+		.driver_name = timer1GetName(),
 		.setStatus = timer1SetStatus, 
 		.getStatus = timer1GetStatus, 
 		.init = timer1Init, 
 		.start = timer1Start, 
 		.stop = timer1Stop
 	};
-	timer1SetStatus( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT));
+	
+	driver_table[1]=(driver_table_t)
+	{
+		.driver_id = 1, 
+		.driver_name = timer3GetName(),
+		.setStatus = timer3SetStatus, 
+		.getStatus = timer3GetStatus, 
+		.init = timer3Init, 
+		.start = timer3Start, 
+		.stop = timer3Stop
+	};
+	
+	// flag init of drivers
+	for(i=0;i<DRIVER_COUNT;i++)
+	{
+		(*driver_table[i].setStatus)( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT) );
+	}
 	
 
+	// init driver if flag on
+	for(i=0;i<DRIVER_COUNT;i++)
+	{
+		if( ((*driver_table[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT) ) != 0 ){(*driver_table[i].init)();}
+	}
+	// start driver if flag on
+	for(i=0;i<DRIVER_COUNT;i++)
+	{
+		if( ((*driver_table[i].getStatus)() & (1 << DRIVER_START_AT_BOOT) ) != 0 ){(*driver_table[i].start)();}
+	}	
 	
 	
-	task_current=0;
 	//jump to current task for first call and run system
+	task_current=0;
 	SP = (uint16_t)task_table[task_current].stack_pointer;
 	asm volatile (
 		POP_ALL_REGS

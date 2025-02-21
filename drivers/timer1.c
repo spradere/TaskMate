@@ -41,8 +41,7 @@ void timer1Start(void)
 
 void timer1Stop(void)
 {
-	// stop by disable INT
-	TIMSK1 &= !(1 << OCIE1A);
+	// nothing to do, will stop all system.
 }
 
 
