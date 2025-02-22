@@ -3,6 +3,7 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
+#include "sysCore/macro_list_arg.h"
 
 #include "drivers/timer1.h"
 #include "drivers/timer3.h"
@@ -15,7 +16,10 @@
 driver_table_t driver_table[DRIVER_COUNT];
 
 // task init
-#define TASK_COUNT 2
+#define TASK_LIST (task1, task2, f, f)
+#define TASK_COUNT COUNT_ARGS(TASK_LIST)
+
+
 task_table_t task_table[TASK_COUNT];
 uint8_t task_current=0;
 
@@ -68,6 +72,7 @@ int main(void)
 	{
 		if( ((*driver_table[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT) ) != 0 ){(*driver_table[i].init)();}
 	}
+	
 	// start driver if flag on
 	for(i=0;i<DRIVER_COUNT;i++)
 	{
