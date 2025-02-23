@@ -5,21 +5,29 @@
 #include "sysCore/taskCreate.h"
 #include "sysCore/macro_list_arg.h"
 
+
+// do not edit code between tag : automatic generated code !
+// [tag] driver include
+// [/tag]
+
+// do not edit code between tag : automatic generated code !
+// [tag] task include
+// [/tag]
+
+
+
 #include "drivers/timer1.h"
 #include "drivers/timer3.h"
 
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 
-//driver init
+
+// driver init
 #define DRIVER_COUNT 2
 driver_table_t driver_table[DRIVER_COUNT];
 
 // task init
-#define TASK_LIST (task1, task2, f, f)
-#define TASK_COUNT COUNT_ARGS(TASK_LIST)
-
-
 task_table_t task_table[TASK_COUNT];
 uint8_t task_current=0;
 
@@ -29,12 +37,6 @@ int main(void)
 	uint8_t i=0; 
 	taskCreate(task1,i++);
 	taskCreate(task2,i++);
-	
-	//timer1Init();
-	//timer1Start();
-	
-	//timer3Init();
-	//timer3Start();
 	
 	// store & init divers table
 
@@ -60,13 +62,12 @@ int main(void)
 		.stop = timer3Stop
 	};
 	
-	// flag init of drivers
+	// driver flag init 
 	for(i=0;i<DRIVER_COUNT;i++)
 	{
 		(*driver_table[i].setStatus)( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT) );
 	}
 	
-
 	// init driver if flag on
 	for(i=0;i<DRIVER_COUNT;i++)
 	{
@@ -80,7 +81,7 @@ int main(void)
 	}	
 	
 	
-	//jump to current task for first call and run system
+	//jump to current task for first call and start system
 	task_current=0;
 	SP = (uint16_t)task_table[task_current].stack_pointer;
 	asm volatile (
