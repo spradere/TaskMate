@@ -8,6 +8,8 @@
 
 // do not edit code between tag : automatic generated code !
 // [tag] driver include
+#include <zoo.zoo>
+#define pizza peperoni
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
@@ -28,6 +30,7 @@
 driver_table_t driver_table[DRIVER_COUNT];
 
 // task init
+#define TASK_COUNT 2
 task_table_t task_table[TASK_COUNT];
 uint8_t task_current=0;
 

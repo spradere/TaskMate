@@ -5,23 +5,25 @@
 #define TASK_FILE "task_list"
 #define DRIVER_FILE "driver_list" 
 #define SOURCE_FILE "sysCore/TaskMate.c"
-#define TEMP_FILE "TaskMate.tmp"
+#define TEMP_FILE "TaskMate.tmp.c"
 
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256
-#define LINE_MAX 256
 
-char line[LINE_MAX];
-#define ARGV_MAX 4
-char argv[ARGV_MAX][64]; // [tag] task include for example
+#define LINE_SIZE_MAX 256
+char line[LINE_SIZE_MAX];
+
+#define ARGN_COUNT_MAX 4
+#define ARGV_SIZE_MAX 64
+char argv[ARGN_COUNT_MAX][ARGV_SIZE_MAX]; 
 
 void get_argv(void);
 
 int main(void)
 {
 	//allocate tables
-	char task_table[TASK_COUNT_MAX][LINE_MAX];
-	char driver_table[DRIVER_COUNT_MAX][LINE_MAX];
+	char task_table[TASK_COUNT_MAX][LINE_SIZE_MAX];
+	char driver_table[DRIVER_COUNT_MAX][LINE_SIZE_MAX];
 	
 	//open list files
 	FILE *task_file=fopen(TASK_FILE,"r");
@@ -38,20 +40,22 @@ int main(void)
 		exit(0);
 	}		
 	
-	//read list -> table
-	
-    int task_count=0;
-    while(task_count < TASK_COUNT_MAX && fgets(task_table[task_count], LINE_MAX, task_file)) 
+	//read task file -> table
+	int task_count=0;
+    while(	(task_count < TASK_COUNT_MAX)
+			&& fgets(task_table[task_count], LINE_SIZE_MAX, task_file)	) 
     {
-        task_table[task_count][strcspn(task_table[task_count], "\n")] = '\0';  // Remplace newline
+        task_table[task_count][strcspn(task_table[task_count], "\n")] = 0;  // Remplace newline
         task_count++;
     }
 	if(task_count==0){printf("error : no task\n"); exit(0);}
-	
+
+	//read driver file -> table
 	int driver_count=0;
-    while(driver_count < DRIVER_COUNT_MAX && fgets(driver_table[driver_count], LINE_MAX, driver_file)) 
+    while(	(driver_count < DRIVER_COUNT_MAX)
+			&& fgets(driver_table[driver_count], LINE_SIZE_MAX, driver_file)	) 
     {
-        driver_table[driver_count][strcspn(driver_table[driver_count], "\n")] = '\0';  // Remplace newline
+        driver_table[driver_count][strcspn(driver_table[driver_count], "\n")] = 0;  // Remplace newline
         driver_count++;
     }
 	if(driver_count==0){printf("error : no driver\n"); exit(0);}
@@ -64,13 +68,13 @@ int main(void)
 	// print tables
 	int i;
 	
-	printf("find task :\n");
+	printf("found task :\n");
 	for(i=0;i<task_count;i++)
 	{
 		printf("\ttask[%i]=%s\n",i, task_table[i]);
 	}
 	
-	printf("\nfind driver :\n");
+	printf("\nfound driver :\n");
 	for(i=0;i<driver_count;i++)
 	{
 		printf("\tdriver[%i]=%s\n",i, driver_table[i]);
@@ -94,17 +98,49 @@ int main(void)
 	}		
 	
 	// read form source
-	int flag_tag=0;
+	int tag_section=0;
 	
-	while (fgets(line, LINE_MAX, file_src)) 
+	while (fgets(line, LINE_SIZE_MAX, file_src)) 
 	{
 		get_argv();
 		
-		//if(argv[0][0]!=0) {printf(" <%s> <%s> <%s> <%s>\n",argv[0],argv[1],argv[2],argv[3]);}
+		if ( !(strcmp(argv[0], "//")) && !(strcmp(argv[1],"[tag]")) )
+		{
+			printf("found tag <%s> <%s>\n",argv[2],argv[3]);
+			fprintf(file_tmp,"%s",line);
+			tag_section=1;
+			
+			if( !(strcmp(argv[2], "task")) )
+			{
+				if( !(strcmp(argv[3], "include")) )
+				{
+					for(i=0;i<task_count;i++)
+					{
+						fprintf(file_tmp,"#include \"tasks/%s.h\"\n",task_table[i]);
+					}
+				}
+			}
+			
+			if( !(strcmp(argv[2], "driver")) )
+			{
+				if( !(strcmp(argv[3], "include")) )
+				{
+					for(i=0;i<driver_count;i++)
+					{
+						fprintf(file_tmp,"#include \"drivers/%s.h\"\n",driver_table[i]);
+					}
+				}
+				
+			}
+		}
+		 	
+		if ( !(strcmp(argv[0], "//")) && !(strcmp(argv[1],"[/tag]")) )
+		{
+			printf("found end tag\n");
+			tag_section=0;
+		}
 		
-		if ( !(strcmp(argv[0], "//")) && !(strcmp(argv[1],"[tag]")) ){printf("found tag <%s> <%s>\n",argv[2],argv[3]);} 	
-		if ( !(strcmp(argv[0], "//")) && !(strcmp(argv[1],"[/tag]")) ){printf("found end tag\n");} 	
-	
+		if(tag_section==0){fprintf(file_tmp,"%s",line);} // tag used to flush old code
 	}
 	
 	
@@ -115,34 +151,45 @@ int main(void)
 }
 
 
-void get_argv()
+void get_argv(void)
 {
 	int argn;
 	int i_line=0;
 	int i_arg;
 	
 	// reset all argv
-	for(argn=0;argn<ARGV_MAX;argn++){argv[argn][0]=0;}
+	for(argn=0;argn<ARGN_COUNT_MAX;argn++){argv[argn][0]=0;}
 
-	// get off space or tab
-	while( ((line[i_line]== ' ') || (line[i_line]== '\t')) && (line[i_line]!= '\n')){i_line++;}
+	// get off leading space or tab
+	while( 	((line[i_line]== ' ') || (line[i_line]== '\t')) 
+			&& (line[i_line]!= '\n') && (line[i_line]!=0)
+			&& (i_line<LINE_SIZE_MAX-1)	)
+		{i_line++;}
 	
-	// commemt detected ?
+	// comment detected ?
 	if( (line[i_line]=='/')&&(line[i_line+1]=='/') )
 	{
 		argv[0][0]='/';argv[0][1]='/';argv[0][2]=0;
 		
 		i_line +=2;
 		
-		for(argn=1;argn<ARGV_MAX;argn++)
+		for(argn=1;argn<ARGN_COUNT_MAX;argn++)
 		{
 			// get off space or tab
-			while( ((line[i_line]== ' ') || (line[i_line]== '\t')) && (line[i_line]!= '\n'))
+			while( 	((line[i_line]== ' ') || (line[i_line]== '\t')) 
+					&& (line[i_line]!= '\n') && (line[i_line]!= 0) 
+					&& (i_line<LINE_SIZE_MAX-1)	)
+					
 				{i_line++;}
-		
+			
+			// exit if end of line
+			if ( (line[i_line] == '\n') || (line[i_line] == '\0') ) {break;}
+			
 			// get argx
 			i_arg=0;
-			while( (line[i_line]!= ' ')  && (line[i_line]!= '\n') )
+			while( 	(line[i_line]!= ' ') && (line[i_line]!= '\t') 
+					&& (line[i_line]!= '\n') && (line[i_line]!= 0)
+					&& (i_arg<ARGV_SIZE_MAX-1) && (i_line<LINE_SIZE_MAX-1)	)
 			{
 				argv[argn][i_arg++]=line[i_line++];
 			}
