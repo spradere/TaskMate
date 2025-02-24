@@ -8,14 +8,18 @@
 
 // do not edit code between tag : automatic generated code !
 // [tag] driver include
+#include "driver/timer1.h"
+#include "driver/timer3.h"
+#include "driver/dummy.h"
+#include "driver/sub-space.h"
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
 // [tag] task include
-#include task1.h
-#include task2.h
-#include essai.h
-#include macro.h
+#include "task/task1.h"
+#include "task/task2.h"
+#include "task/essai.h"
+#include "task/macro.h"
 // [/tag]
 
 
