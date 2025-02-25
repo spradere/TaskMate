@@ -1,4 +1,15 @@
-#include <stdio.h>
+/**
+ * @file expand.c
+ * @brief automaticaly generate code for task and drivers handle in Taskmate.c  
+ * 
+ * - Simple and reliable, read plain text file <task_list> and <driver_list>
+ * - extract code for #include / static allocation / initialisation
+ * 
+ * @todo status : finished
+ */
+ 
+ 
+ #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
