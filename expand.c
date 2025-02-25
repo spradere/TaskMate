@@ -5,7 +5,7 @@
 #define TASK_FILE "task_list"
 #define DRIVER_FILE "driver_list" 
 #define SOURCE_FILE "sysCore/TaskMate.c"
-#define TEMP_FILE "TaskMate.tmp.c"
+#define TEMP_FILE "sysCore/TaskMate.tmp.c"
 
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256
@@ -106,28 +106,68 @@ int main(void)
 		
 		if ( !(strcmp(argv[0], "//")) && !(strcmp(argv[1],"[tag]")) )
 		{
-			printf("found tag <%s> <%s>\n",argv[2],argv[3]);
+			printf("found tag <%s> <%s> ... ",argv[2],argv[3]);
 			fprintf(file_tmp,"%s",line);
 			tag_section=1;
 			
-			if( !(strcmp(argv[2], "task")) )
+			if( !(strcmp(argv[2], "task")) ) // task tag
 			{
-				if( !(strcmp(argv[3], "include")) )
+				if( !(strcmp(argv[3], "include")) ) // task include
 				{
 					for(i=0;i<task_count;i++)
 					{
 						fprintf(file_tmp,"#include \"tasks/%s.h\"\n",task_table[i]);
 					}
 				}
+			
+				if( !(strcmp(argv[3], "alloc")) ) // task alloc
+				{
+					fprintf(file_tmp,"#define TASK_COUNT %i\n",task_count);
+					fprintf(file_tmp,"task_table_t task_table[TASK_COUNT];\n");
+					fprintf(file_tmp,"uint8_t task_current=0;\n");
+				}
+				
+				if( !(strcmp(argv[3], "init")) ) // task init
+				{
+					fprintf(file_tmp,"\tuint8_t i=0; \n");
+					for(i=0;i<task_count;i++)
+					{
+						fprintf(file_tmp,"\ttaskCreate(%s,i++);\n",task_table[i]);
+					}
+				}
 			}
 			
-			if( !(strcmp(argv[2], "driver")) )
+			
+			if( !(strcmp(argv[2], "driver")) ) //driver tag 
 			{
-				if( !(strcmp(argv[3], "include")) )
+				if( !(strcmp(argv[3], "include")) ) // driver include
 				{
 					for(i=0;i<driver_count;i++)
 					{
 						fprintf(file_tmp,"#include \"drivers/%s.h\"\n",driver_table[i]);
+					}
+				}
+				
+				if( !(strcmp(argv[3], "alloc")) ) // driver alloc
+				{
+					fprintf(file_tmp,"#define DRIVER_COUNT %i\n",task_count);
+					fprintf(file_tmp,"driver_table_t driver_table[DRIVER_COUNT];\n");
+				}
+				
+				if( !(strcmp(argv[3], "init")) ) // driver init
+				{
+					for(i=0;i<task_count;i++)
+					{
+						fprintf(file_tmp,"\tdriver_table[%i]=(driver_table_t) \n",i);
+						fprintf(file_tmp,"\t{\n");
+						fprintf(file_tmp,"\t\t.driver_id = %i,\n",i);
+						fprintf(file_tmp,"\t\t.driver_name = %sGetName(),\n",driver_table[i]);
+						fprintf(file_tmp,"\t\t.setStatus = %sSetStatus, \n",driver_table[i]);
+						fprintf(file_tmp,"\t\t.getStatus = %sGetStatus, \n",driver_table[i]);
+						fprintf(file_tmp,"\t\t.init = %sInit, \n",driver_table[i]);
+						fprintf(file_tmp,"\t\t.start = %sStart, \n",driver_table[i]);
+						fprintf(file_tmp,"\t\t.stop = %sStop\n",driver_table[i]);						
+						fprintf(file_tmp,"\t};\n");
 					}
 				}
 				
@@ -136,14 +176,19 @@ int main(void)
 		 	
 		if ( !(strcmp(argv[0], "//")) && !(strcmp(argv[1],"[/tag]")) )
 		{
-			printf("found end tag\n");
+			printf("end tag\n");
 			tag_section=0;
 		}
 		
 		if(tag_section==0){fprintf(file_tmp,"%s",line);} // tag used to flush old code
 	}
 	
-	
+	// Replace original file with the modified version
+    if (remove(SOURCE_FILE) != 0 || rename(TEMP_FILE, SOURCE_FILE) != 0) {
+        perror("error : replacing TaskMate.c");
+        exit(2);
+    }
+
 	fclose(file_src);
 	fclose(file_tmp);
 	
