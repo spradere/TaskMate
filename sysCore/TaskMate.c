@@ -1,3 +1,14 @@
+/**
+ * @file TaskMate.c
+ * @brief Implements the TaskMate preemptive scheduler.
+ * 
+ * This file contains : 
+ * - system, drivers and task initialisation
+ * - the core scheduling algorithm, handling task switching and preemptive multitasking.
+ * 
+ * @todo documentation
+ */
+ 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
