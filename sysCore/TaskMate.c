@@ -8,44 +8,44 @@
 
 // do not edit code between tag : automatic generated code !
 // [tag] driver include
-#include <zoo.zoo>
-#define pizza peperoni
+#include "drivers/timer1.h"
+#include "drivers/timer3.h"
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
 // [tag] task include
-// [/tag]
-
-
-
-#include "drivers/timer1.h"
-#include "drivers/timer3.h"
-
 #include "tasks/task1.h"
 #include "tasks/task2.h"
+// [/tag]
 
-
-// driver init
+// do not edit code between tag : automatic generated code !
+// [tag] driver alloc
 #define DRIVER_COUNT 2
 driver_table_t driver_table[DRIVER_COUNT];
+// [/tag]
 
-// task init
+// do not edit code between tag : automatic generated code !
+// [tag] task alloc
 #define TASK_COUNT 2
 task_table_t task_table[TASK_COUNT];
 uint8_t task_current=0;
+// [/tag]
 
 int main(void) 
 {
-	// Create tasks
+	// do not edit code between tag : automatic generated code !
+	// [tag] task init
 	uint8_t i=0; 
 	taskCreate(task1,i++);
 	taskCreate(task2,i++);
-	
-	// store & init divers table
+	// [/tag]
 
-	driver_table[0]=(driver_table_t)
+	
+	// do not edit code between tag : automatic generated code !
+	// [tag] driver init
+	driver_table[0]=(driver_table_t) 
 	{
-		.driver_id = 0, 
+		.driver_id = 0,
 		.driver_name = timer1GetName(),
 		.setStatus = timer1SetStatus, 
 		.getStatus = timer1GetStatus, 
@@ -53,10 +53,9 @@ int main(void)
 		.start = timer1Start, 
 		.stop = timer1Stop
 	};
-	
-	driver_table[1]=(driver_table_t)
+	driver_table[1]=(driver_table_t) 
 	{
-		.driver_id = 1, 
+		.driver_id = 1,
 		.driver_name = timer3GetName(),
 		.setStatus = timer3SetStatus, 
 		.getStatus = timer3GetStatus, 
@@ -64,6 +63,7 @@ int main(void)
 		.start = timer3Start, 
 		.stop = timer3Stop
 	};
+	// [/tag]
 	
 	// driver flag init 
 	for(i=0;i<DRIVER_COUNT;i++)
