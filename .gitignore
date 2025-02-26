@@ -10,3 +10,6 @@
 *.elf
 *.map
 *.hex
+
+# Ignore html documentation folder
+html/
