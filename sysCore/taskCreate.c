@@ -1,3 +1,10 @@
+/**
+ * @file taskCreate.c
+ * @brief Implements taskcreate.
+ * 
+ * This file contains task stack initialisation 
+ */
+
 #include <avr/io.h>
 
 #include "sysCore/TaskMate_private_extern.h"

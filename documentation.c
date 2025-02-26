@@ -10,7 +10,7 @@
  * 2. Upload the firmware to the ATmega2560 using # make upload.
  *
  * @section license License
- * TaskMate is not licensed at all.
+ * TaskMate is not licensed at all. For the moment.
  * 
  * @author Doul
  * @date 2025/02

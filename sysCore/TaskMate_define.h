@@ -1,11 +1,18 @@
+/**
+ * @file TaskMate_define.h
+ * @brief System core base definitions
+ * 
+ * 
+ */
 #ifndef TASKMATE_DEFINE_H
 #define TASKMATE_DEFINE_H
 
-//in board LED 13 
+// arduino in board LED 13 
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 #define LED_PIN PB7
 
+// AVR register push and pop 
 #define PUSH_ALL_REGS "push r0 \n\t" \
 		"in r0, __SREG__ \n\t" \
 		"push r0 \n\t" \

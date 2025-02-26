@@ -1,4 +1,11 @@
-#include <avr/io.h>
+/**
+ * @file sysCall.c
+ * @brief Implements system calls.
+ * 
+ * @warning This file contains ATOMIC material !
+ */
+ 
+ #include <avr/io.h>
 #include <util/atomic.h>
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
