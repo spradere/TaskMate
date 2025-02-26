@@ -1,9 +1,9 @@
 /**
  * @file expand.c
- * @brief automaticaly generate code for task and drivers handle in Taskmate.c  
+ * @brief helper to generate code for task and drivers handle in Taskmate.c  
  * 
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
- * - extract code for #include / static allocation / initialisation
+ * - Write code for #include / static allocation / initialisation
  * 
  * @todo status : finished
  */

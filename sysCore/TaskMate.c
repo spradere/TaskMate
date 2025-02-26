@@ -6,7 +6,14 @@
  * - system, drivers and task initialisation
  * - the core scheduling algorithm, handling task switching and preemptive multitasking.
  * 
- * @todo documentation
+ * @warning do not edit code between tag it will be deleted by automatic generated code !
+ * 
+ * @note tag format are one line C comment // + [tag]
+ * 
+ * - task / driver
+ * - include / allocate / init
+ * 
+ * @todo more documentation
  */
  
 #include <avr/io.h>

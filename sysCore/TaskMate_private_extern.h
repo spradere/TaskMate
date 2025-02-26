@@ -1,3 +1,9 @@
+/**
+ * @file TaskMate_private_extern.h
+ * @brief extrenal header to cut main sys core in multiple files.
+ * 
+ */
+ 
 #ifndef TASKMATE_EXTERN
 #define TASKMATE_EXTERN
 
