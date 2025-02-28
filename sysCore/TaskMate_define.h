@@ -8,9 +8,9 @@
 #define TASKMATE_DEFINE_H
 
 // arduino in board LED 13 
-#define LED_DDR DDRB
-#define LED_PORT PORTB
-#define LED_PIN PB7
+#define LED_DDR DDRB /**< Arduino in board led pin 13, direction port*/
+#define LED_PORT PORTB /**< Arduino in board led pin 13, data port*/
+#define LED_PIN PB7/**< Arduino in board led pin 13, pin*/
 
 // AVR register push and pop 
 #define PUSH_ALL_REGS "push r0 \n\t" \
@@ -46,7 +46,7 @@
 		"push r28 \n\t" \
 		"push r29 \n\t" \
 		"push r30 \n\t" \
-		"push r31 \n\t"
+		"push r31 \n\t" /**< Push all AVR registers SREG + Rx  */
 
 #define POP_ALL_REGS "pop r31 \n\t" \
 		"pop r30 \n\t" \
@@ -81,44 +81,55 @@
 		"pop r1 \n\t" \
 		"pop r0 \n\t" \
 		"out __SREG__, r0 \n\t" \
-		"pop r0	\n\t"
+		"pop r0	\n\t" /**< Pop all AVR registers Rx + SREG  */
 
+/**
+ * @struct task_table_t
+ * @brief Represents a task in the RTOS.
+ */
 // task table
-#define TASK_STACK_SIZE 256
+#define TASK_STACK_SIZE 256 /**< Task stack size*/
 
 typedef struct 
 {
-	uint8_t task_id;
-	volatile uint16_t task_RTC;
-	uint8_t *stack_pointer;
-	uint8_t stack[TASK_STACK_SIZE];
+	uint8_t task_id; /**< Task identifier */
+	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
+	uint8_t *stack_pointer;/**< Task stack Pointer, pointer to stack array items*/
+	uint8_t stack[TASK_STACK_SIZE]; /**< Task stack array */
 } task_table_t;
 
 // driver frame layout
 #define FALSE 0
 #define TRUE 1
 
-#define SYSTEM_CORE_ID 0xff
+
+
+/**
+ * @struct driver_table_t
+ * @brief Represents a driver in the RTOS.
+ */
+ 
+#define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
 // driver status bits
-#define DRIVER_INIT_AT_BOOT 	0
-#define DRIVER_START_AT_BOOT 	1
-#define DRIVER_LOCK 			2
-#define DRIVER_DEAD				3
-#define DRIVER_INIT				4
+#define DRIVER_INIT_AT_BOOT 	0 /**< Automatic driver initialization at boot time */
+#define DRIVER_START_AT_BOOT 	1 /**< Automatic driver start at boot time */
+#define DRIVER_LOCK 			2 /**< Driver status locked */
+#define DRIVER_DEAD				3 /**< Driver can't be started */
+#define DRIVER_INIT				4 /**< Driver have been initialized */
 
 
 typedef struct
 {
-	uint8_t driver_id;
-	uint8_t *driver_name;
+	uint8_t driver_id; /**< Driver indentifier */
+	uint8_t *driver_name; /**< Driver name */
 	
-	void (*setStatus)(uint8_t);
-	uint8_t (*getStatus)(void);
+	void (*setStatus)(uint8_t); /**< Driver function for setting up status */
+	uint8_t (*getStatus)(void); /**< Driver function for getting up status */
 	
-	void (*init)(void);
-	void (*start)(void);
-	void (*stop)(void);
+	void (*init)(void); /**< Initialize driver function  */
+	void (*start)(void); /**< Start driver function  */
+	void (*stop)(void); /**< Stop driver function  */
 } driver_table_t;
 
 #endif
