@@ -40,3 +40,5 @@ dump:all
 	avr-objdump -D -m avr6 $(HEX) > hex.out
 	avr-objdump -D -m avr6 $(ELF) > elf.out
 	
+doc:
+	doxygen Doxyfile

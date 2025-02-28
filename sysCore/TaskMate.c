@@ -1,6 +1,6 @@
 /**
  * @file TaskMate.c
- * @brief Implements the TaskMate preemptive scheduler.
+ * @brief Implements TaskMate preemptive scheduler & RTC.
  * 
  * This file contains : 
  * - system, drivers and task initialisation
@@ -21,7 +21,6 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/taskCreate.h"
-#include "sysCore/macro_list_arg.h"
 
 
 // do not edit code between tag : automatic generated code !
