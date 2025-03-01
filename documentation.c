@@ -5,7 +5,7 @@
  * TaskMate is a lightweight RTOS for AVR microcontrollers with a focus
  * on reliability, real-time, and modularity.
  * 
- * Each task have it's own stack, use to save and restore context for task switching
+ * Each task have it's own stack, used to save and restore context for task switching
  *
  * @section installation Installation
  * 1. Compile the source code using # make all
