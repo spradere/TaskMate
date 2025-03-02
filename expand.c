@@ -1,4 +1,17 @@
-/**
+/*
+ * TaskMate Project
+ * (c) 2025 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * See the LICENSE file for full license terms.
+ *
+ * Non-commercial use permitted under conditions. Commercial use requires a separate license.
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ *
+ * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ */
+ 
+ /**
  * @file expand.c
  * @brief helper to generate code for task and drivers handle in Taskmate.c  
  * 
@@ -9,7 +22,7 @@
  */
  
  
- #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
