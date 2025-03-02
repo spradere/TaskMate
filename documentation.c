@@ -23,11 +23,7 @@
  * 
  * @section Layers
  * 
- * - 4 user task & system services
- * - 3 system call 
- * - 2 system core (scheduler & RTC)
- * - 1 drivers
- * - 0 hardware
+ * @image html TaskMate_layers.png "TaskMate System Layer Diagram"
  * 
  * @section license License
  * TaskMate is not licensed at all. For the moment.
