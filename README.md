@@ -1,7 +1,7 @@
 # TaskMate RTOS
 ## AVR preemptive real time oprating system
  
-### intro Introduction
+### Introduction
 
 **TaskMate** is a lightweight RTOS for AVR microcontrollers with a focus on reliability, real-time, and modularity.
 
@@ -45,5 +45,5 @@ To inquire about commercial licensing, please open an issue in this repository:
 
 By using this software, you agree to the terms of the TaskMate License v1.0.
 
-See the LICENSE file for full details.
+See the `LICENSE` file for full details.
 
