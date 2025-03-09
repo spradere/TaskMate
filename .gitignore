@@ -1,6 +1,9 @@
 # Ignore compiled object files
 *.o
 
+# Ignore dependency files
+*.d
+
 # Ignore backup files from editors
 *~
 *.swp
