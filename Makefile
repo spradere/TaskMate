@@ -45,6 +45,12 @@ CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -O2 -Wall -I/root/code/TaskMate/TaskMate_
 TASK_LIST_FILE = task_list
 DRIVER_LIST_FILE = driver_list
 
+# Get git tag for USB folder backup
+USB_FOLDER = /media/usbkey
+USB_DEV = /dev/da0s1
+GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//'
+TASKMATE_FOLDER != printf "/code/TaskMate/TaskMate_${GIT_TAG}"
+
 
 ################################################################################
 # Build rules
@@ -113,8 +119,35 @@ TaskMate_tag_expand: TaskMate_tag_expand.o
 ################################################################################
 
 # Git push, use command line : # make push M="message"
-push:
-	@printf "\n\033[1;33mGit routine for \"${M}\"\033[0m\n\n" 
+push: clean
+	@printf "\n\033[1;33mGit routine for \"${M}\" commit\033[0m\n\n" 
 	@git add .
-	@git commit -m${M}
+	@git commit -m "${M}"
 	@git push
+
+# USB key backup with current tag
+backup:
+	@printf "\n\033[1;33mBackup to <${USB_FOLDER}${TASKMATE_FOLDER}>\033[0m\n\n"
+	@printf "\033[0;33mInsert USB key and press ENTER to continue ... \033[0m\n"
+		
+	@read DUMMY_VAR
+	
+	#Test if USB key is mount, do if not
+	@if mount | grep "/media/usbkey" > /dev/null; then \
+	else \
+		printf "\033[0;33mMount USB key ${USB_FOLDER}\033[0m\n"; \
+		mount -v -t msdosfs ${USB_DEV} ${USB_FOLDER}; \
+	fi
+	
+	# Test if dest folder exist, create if not	
+	@if [ -d "${USB_FOLDER}${TASKMATE_FOLDER}" ]; then \
+	else \
+		mkdir ${USB_FOLDER}${TASKMATE_FOLDER}; \
+	fi
+	# Run rsync
+	@printf "\033[0;33mRun rsync, output logged in rsync.log\033[0m\n"
+	rsync -av --progress --delete --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > rsync.log
+	
+	# Umount
+	@printf "\033[0;33mUmount ${USB_FOLDER}\033[0m\n"
+	@umount ${USB_FOLDER}
