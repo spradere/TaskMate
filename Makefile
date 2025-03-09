@@ -114,7 +114,7 @@ TaskMate_tag_expand: TaskMate_tag_expand.o
 
 # Git push, use command line : # make push M="message"
 push:
-	@printf "\n\033[1;33mGit routine for ${M}\033[0m" 
+	@printf "\n\033[1;33mGit routine for \"${M}\"\033[0m\n\n" 
 	@git add .
 	@git commit -m${M}
 	@git push
