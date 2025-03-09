@@ -108,7 +108,7 @@ doc:
 	./TaskMate_tag_expand
 	touch .tag_expand_stamp
 
-# Special rule for TaskMate_tag_expand.c
+# Special rule for TaskMate_tag_expand.c with clang
 TaskMate_tag_expand: TaskMate_tag_expand.o
 	@printf "\n\033[1;33mTaskMate.c have been updated\033[0m\n\n" 
 	${CLANG}  TaskMate_tag_expand.c -o TaskMate_tag_expand
@@ -119,13 +119,13 @@ TaskMate_tag_expand: TaskMate_tag_expand.o
 ################################################################################
 
 # Git push, use command line : # make push M="message"
-push: clean
+push:
 	@printf "\n\033[1;33mGit routine for \"${M}\" commit\033[0m\n\n" 
 	@git add .
 	@git commit -m "${M}"
 	@git push
 
-# USB key backup with current tag
+# USB key backup with current tag folder
 backup:
 	@printf "\n\033[1;33mBackup to <${USB_FOLDER}${TASKMATE_FOLDER}>\033[0m\n\n"
 	@printf "\033[0;33mInsert USB key and press ENTER to continue ... \033[0m\n"
@@ -134,6 +134,7 @@ backup:
 	
 	#Test if USB key is mount, do if not
 	@if mount | grep "/media/usbkey" > /dev/null; then \
+		printf "\033[0;33mUSB key already mounted${USB_FOLDER}\033[0m\n"; \
 	else \
 		printf "\033[0;33mMount USB key ${USB_FOLDER}\033[0m\n"; \
 		mount -v -t msdosfs ${USB_DEV} ${USB_FOLDER}; \
@@ -146,7 +147,7 @@ backup:
 	fi
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in rsync.log\033[0m\n"
-	rsync -av --progress --delete --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > rsync.log
+	rsync -av --progress --delete --exclude	"*.o" --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > rsync.log
 	
 	# Umount
 	@printf "\033[0;33mUmount ${USB_FOLDER}\033[0m\n"
