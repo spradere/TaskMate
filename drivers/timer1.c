@@ -10,6 +10,13 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
+
+ /**
+ * @file timer1.c
+ * @brief implementation of timer1 used for preemptive sheduler
+ * 
+ * 
+ */
  
 #include <avr/io.h>
 #include "sysCore/TaskMate_define.h"

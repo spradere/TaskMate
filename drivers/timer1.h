@@ -10,6 +10,13 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
+
+ /**
+ * @file timer1.h
+ * @brief header for timer1 used for preemptive sheduler
+ * 
+ * 
+ */
  
 #ifndef TIMER1_H
 #define TIMER1_H
@@ -21,7 +28,5 @@ uint8_t *timer1GetName(void);
 void timer1Init(void);
 void timer1Start(void);
 void timer1Stop(void);
-
-
 
 #endif

@@ -109,8 +109,6 @@ doc:
 	touch .tag_expand_stamp
 
 # Special rule for TaskMate_tag_expand.c with clang
-
-
 TaskMate_tag_expand: TaskMate_tag_expand.o
 	${CLANG} -o TaskMate_tag_expand TaskMate_tag_expand.o
 	

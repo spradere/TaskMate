@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
+ /**
+ * @file timer3.h
+ * @brief header of timer3 used for Real Time Clock
+ * 
+ * 
+ */
 
 #ifndef TIMER3_H
 #define TIMER3_H
