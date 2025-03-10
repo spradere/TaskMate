@@ -109,7 +109,7 @@ doc:
 	touch .tag_expand_stamp
 
 # Special rule for TaskMate_tag_expand.c with clang
-TaskMate_tag_expand: TaskMate_tag_expand.o
+TaskMate_tag_expand:
 	@printf "\n\033[1;33mTaskMate.c have been updated\033[0m\n\n" 
 	${CLANG}  TaskMate_tag_expand.c -o TaskMate_tag_expand
 
@@ -124,7 +124,8 @@ push:
 	@git add .
 	@git commit -m "${M}"
 	@git push
-
+	@printf "\n"
+	
 # USB key backup with current tag folder
 backup:
 	@printf "\n\033[1;33mBackup to <${USB_FOLDER}${TASKMATE_FOLDER}>\033[0m\n\n"
@@ -152,3 +153,4 @@ backup:
 	# Umount
 	@printf "\033[0;33mUmount ${USB_FOLDER}\033[0m\n"
 	@umount ${USB_FOLDER}
+	@printf "\n"
