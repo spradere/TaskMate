@@ -51,7 +51,7 @@
 
 // do not edit code between tag : automatic generated code !
 // [tag] driver alloc
-#define DRIVER_COUNT 2
+#define DRIVER_COUNT 3
 driver_table_t driver_table[DRIVER_COUNT];
 // [/tag]
 
@@ -93,6 +93,16 @@ int main(void)
 		.init = timer3Init, 
 		.start = timer3Start, 
 		.stop = timer3Stop
+	};
+	driver_table[2]=(driver_table_t) 
+	{
+		.driver_id = 2,
+		.driver_name = i2cGetName(),
+		.setStatus = i2cSetStatus, 
+		.getStatus = i2cGetStatus, 
+		.init = i2cInit, 
+		.start = i2cStart, 
+		.stop = i2cStop
 	};
 	// [/tag]
 	

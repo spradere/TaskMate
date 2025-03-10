@@ -109,9 +109,14 @@ doc:
 	touch .tag_expand_stamp
 
 # Special rule for TaskMate_tag_expand.c with clang
-TaskMate_tag_expand:
+
+
+TaskMate_tag_expand: TaskMate_tag_expand.o
+	${CLANG} -o TaskMate_tag_expand TaskMate_tag_expand.o
+	
+TaskMate_tag_expand.o: TaskMate_tag_expand.c
 	@printf "\n\033[1;33mTaskMate.c have been updated\033[0m\n\n" 
-	${CLANG}  TaskMate_tag_expand.c -o TaskMate_tag_expand
+	${CLANG} -c $< -o $@
 
 
 ################################################################################
