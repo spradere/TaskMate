@@ -40,6 +40,7 @@
 // [tag] driver include
 #include "drivers/timer1.h"
 #include "drivers/timer3.h"
+#include "drivers/i2c.h"
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
