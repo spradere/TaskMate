@@ -10,6 +10,13 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
+
+ /**
+ * @file timer3.c
+ * @brief implementation of timer3 used for Real Time Clock
+ * 
+ * 
+ */
  
 #include <avr/io.h>
 #include "sysCore/TaskMate_define.h"

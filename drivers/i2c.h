@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
+ /**
+ * @file i2c.h
+ * @brief header of i2c communication
+ * 
+ * 
+ */
 
 #ifndef I2C_H
 #define I2C_H
@@ -27,8 +33,8 @@ void i2cInit(void);
 void i2cStart(void);
 void i2cStop(void);
 
-uint8_t i2c_comm_start(uint8_t);
-void i2c_comm_stop(void);
-uint8_t i2c_write(uint8_t);
+uint8_t i2cCommStart(uint8_t);
+void i2cCommStop(void);
+uint8_t i2cWrite(uint8_t);
 
 #endif

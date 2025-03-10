@@ -10,6 +10,13 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
+
+ /**
+ * @file i2c.c
+ * @brief implementation of i2c communication
+ * 
+ * 
+ */
  
 #include <avr/io.h>
 #include <util/twi.h>
@@ -53,7 +60,7 @@ void i2cStop(void)
 	TWCR &= !(1 << TWEN);     
 }
 
-uint8_t i2c_comm_start(uint8_t address) 
+uint8_t i2cCommStart(uint8_t address) 
 {
     TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
     while (!(TWCR & (1 << TWINT)));
@@ -68,12 +75,12 @@ uint8_t i2c_comm_start(uint8_t address)
     return 0; // Success
 }
 
-void i2c_comm_stop(void) 
+void i2cCommStop(void) 
 {
     TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
 }
 
-uint8_t i2c_write(uint8_t data)
+uint8_t i2cWrite(uint8_t data)
 {
     TWDR = data;
     TWCR = (1 << TWEN) | (1 << TWINT);
