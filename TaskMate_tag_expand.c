@@ -174,13 +174,13 @@ int main(void)
 				
 				if( !(strcmp(argv[3], "alloc")) ) // driver alloc
 				{
-					fprintf(file_tmp,"#define DRIVER_COUNT %i\n",task_count);
+					fprintf(file_tmp,"#define DRIVER_COUNT %i\n",driver_count);
 					fprintf(file_tmp,"driver_table_t driver_table[DRIVER_COUNT];\n");
 				}
 				
 				if( !(strcmp(argv[3], "init")) ) // driver init
 				{
-					for(i=0;i<task_count;i++)
+					for(i=0;i<driver_count;i++)
 					{
 						fprintf(file_tmp,"\tdriver_table[%i]=(driver_table_t) \n",i);
 						fprintf(file_tmp,"\t{\n");
