@@ -10,8 +10,7 @@ Each task have it's own stack, used to save and restore context for task switchi
 
 ### Installation
 
-* Compile the source code using # **make all**
-* Upload the firmware to the ATmega2560 using  # **make upload**
+* See : [Makefile Features & Usage](Makefile_Summary.md)
 
 
 ### RTC Real Time Clock
@@ -32,6 +31,11 @@ If not zero the counter is decremented at 10 ms rate.
 ### Layers
  
 ![System Layer Diagram](TaskMate_layers.png)
+
+
+### Project progress ...
+
+* See : [Road map](check_list.md)
 
 ### License
 
