@@ -1,26 +1,26 @@
 # TaskMate RTOS
 ## AVR preemptive real time oprating system
  
-### Introduction
+### ▶️ Introduction
 
 **TaskMate** is a lightweight RTOS for AVR microcontrollers with a focus on reliability, real-time, and modularity.
 
 Each task have it's own stack, used to save and restore context for task switching
 
 
-### Installation
+### ⚙️ Installation
 
 * See : [Makefile Features & Usage](Makefile_summary.md)
 
 
-### RTC Real Time Clock
+### ♻️ RTC Real Time Clock
 
 Each task have one 16 bits timer/counter sycronized wtih other tasks.
 
 If not zero the counter is decremented at 10 ms rate.
  
 
-### Features
+### ✔️ Features
 
 * Hybrid multitasking (cooperative & preemptive)
 * Dynamic driver & task  management
@@ -28,16 +28,16 @@ If not zero the counter is decremented at 10 ms rate.
 * Serial command-line interface (CLI)
  
   
-### Layers
+### ⤴️ Layers
  
 ![System Layer Diagram](TaskMate_layers.png)
 
 
-### Project progress ...
+### ➡️ Project progress ...
 
 * See : [Road map](check_list.md)
 
-### License
+### ️⚠ ️License
 
 This software is distributed under the **TaskMate License v1.0**.
 
