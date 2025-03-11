@@ -1,5 +1,6 @@
 # Ignore compiled object files
 *.o
+TaskMate_tag_expand
 
 # Ignore dependency files
 *.d
@@ -7,6 +8,7 @@
 # Ignore backup files from editors
 *~
 *.swp
+*.log
 
 # Ignore temporary build files
 *.out
