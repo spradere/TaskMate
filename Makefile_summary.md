@@ -22,13 +22,9 @@
 | `make backup` | Backs up the project to a USB key. |
 | `make doc` | Generate Doxygen documentation. | 
 
-## 🔧 How It Works
 
-1. **Modifies Only Necessary Files**
-   - Detects changes in headers and recompiles only relevant `.c` files.
-2. **Handles Auto-Generated Code**
-   - Runs `TaskMate_tag_expand.c` first (with `clang`), then compiles everything else.
-3. **Streamlined Workflow**
-   - Short, intuitive commands for development, deployment, and backup.
+## Streamlined Workflow
+
+Short, intuitive commands for development, deployment, and backup.
 
 
