@@ -10,7 +10,7 @@ Each task have it's own stack, used to save and restore context for task switchi
 
 ### Installation
 
-* See : [Makefile Features & Usage](Makefile_Summary.md)
+* See : [Makefile Features & Usage](Makefile_summary.md)
 
 
 ### RTC Real Time Clock
