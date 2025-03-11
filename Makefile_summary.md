@@ -1,6 +1,6 @@
 # TaskMate Makefile Summary
 
-## Features
+## ✔️ Features
 
 - **Automatic Dependency Handling**: Only recompiles modified source files.
 - **Header Dependency Tracking**: Detects changes in `.h` files and recompiles affected `.c` files.
@@ -12,7 +12,7 @@
 - **Colorized Output**: Improved readability with `@printf` messages.
 - **POSIX-Compliant**: Works on FreeBSD without requiring GNU Make.
 
-## Usage
+## ✍️ Usage
 
 Main workflow :
 
@@ -32,7 +32,7 @@ Miscellaneous commands :
 | `make dump` | Disassemble machine code in two formats, for debugging purpose |
 
 
-## Streamlined Workflow
+## ✈ Streamlined Workflow
 
 Short, intuitive commands for development, deployment, and backup.
 
