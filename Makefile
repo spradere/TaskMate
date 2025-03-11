@@ -90,7 +90,7 @@ clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n" 
 	rm -f  ${ELF} ${HEX} ${OBJ} *.out ${SRCS:.c=.d} .deps .tag_expand_stamp
 
-# Disassamble machine code in two formats
+# Disassemble machine code in two formats
 dump:all
 	@printf "\n\033[1;33mGenerate debugging informations\033[0m\n\n" 
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}

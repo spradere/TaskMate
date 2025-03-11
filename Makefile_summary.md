@@ -14,13 +14,22 @@
 
 ## Usage
 
+Main workflow :
+
 | Command | Description |
 |---------|-------------|
 | `make` | Compiles the project. |
 | `make upload` | Uploads the compiled firmware to the device. |
 | `make push M="message"` | Commits and pushes changes to Git with a message. |
 | `make backup` | Backs up the project to a USB key. |
+
+Miscellaneous commands :
+
+| Command | Description |
+|---------|-------------|
+| `make clean` | Delete files, except code, obviously ! |
 | `make doc` | Generate Doxygen documentation. | 
+| `make dump` | Disassemble machine code in two formats, for debugging purpose |
 
 
 ## Streamlined Workflow
