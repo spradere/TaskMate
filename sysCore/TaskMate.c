@@ -47,6 +47,7 @@
 // [tag] task include
 #include "tasks/task1.h"
 #include "tasks/task2.h"
+#include "tasks/lcd.h"
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
@@ -57,7 +58,7 @@ driver_table_t driver_table[DRIVER_COUNT];
 
 // do not edit code between tag : automatic generated code !
 // [tag] task alloc
-#define TASK_COUNT 2
+#define TASK_COUNT 3
 task_table_t task_table[TASK_COUNT];
 uint8_t task_current=0;
 // [/tag]
@@ -69,6 +70,7 @@ int main(void)
 	uint8_t i=0; 
 	taskCreate(task1,i++);
 	taskCreate(task2,i++);
+	taskCreate(lcd,i++);
 	// [/tag]
 
 	

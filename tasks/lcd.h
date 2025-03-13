@@ -1,0 +1,32 @@
+/*
+ * TaskMate Project
+ * (c) 2025 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * See the LICENSE file for full license terms.
+ *
+ * Non-commercial use permitted under conditions. Commercial use requires a separate license.
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ *
+ * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ */
+
+ /**
+ * @file lcd.h
+ * @brief header of lcd display
+ * 
+ * 
+ */
+ 
+ #ifndef LCD_H
+#define LCD_H
+
+void lcd(void);
+
+void lcdInit(void);
+void lcdClear(void);
+void lcdSetCursor(uint8_t, uint8_t );
+void lcdWriteChar(char);
+void lcdWriteString(const char *);
+
+#endif
