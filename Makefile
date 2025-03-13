@@ -58,7 +58,6 @@ TASKMATE_FOLDER != printf "/code/TaskMate/TaskMate_${GIT_TAG}"
 
 all: .tag_expand_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n" 
-	@printf "${M}\n" 
 	
 # Link	
 ${TARGET}: ${OBJ}
@@ -151,7 +150,7 @@ backup:
 	fi
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in rsync.log\033[0m\n"
-	rsync -av --progress --delete --exclude	"*.o" --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > rsync.log
+	rsync -av * --progress --delete --exclude	"*.o" --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > rsync.log
 	
 	# Umount
 	@printf "\033[0;33mUmount ${USB_FOLDER}\033[0m\n"

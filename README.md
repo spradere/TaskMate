@@ -15,9 +15,9 @@ Each task have it's own stack, used to save and restore context for task switchi
 
 ### ♻️ RTC Real Time Clock
 
-Each task have one 16 bits timer/counter sycronized wtih other tasks.
+Each task have one 16 bits timer/counter sycronized with other tasks.
 
-If not zero the counter is decremented at 10 ms rate.
+If not zero, the counter is decremented at 10 ms rate.
  
 
 ### ✔️ Features

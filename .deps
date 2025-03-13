@@ -27,6 +27,11 @@ tasks/task2.o: tasks/task2.c \
 /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
 /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
 /root/code/TaskMate/TaskMate_current/tasks/task2.h:
+tasks/lcd.o: tasks/lcd.c \
+ /root/code/TaskMate/TaskMate_current/drivers/i2c.h \
+ /root/code/TaskMate/TaskMate_current/tasks/lcd.h
+/root/code/TaskMate/TaskMate_current/drivers/i2c.h:
+/root/code/TaskMate/TaskMate_current/tasks/lcd.h:
 sysCore/TaskMate.o: sysCore/TaskMate.c \
  /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
  /root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h \
@@ -34,7 +39,8 @@ sysCore/TaskMate.o: sysCore/TaskMate.c \
  /root/code/TaskMate/TaskMate_current/drivers/timer3.h \
  /root/code/TaskMate/TaskMate_current/drivers/i2c.h \
  /root/code/TaskMate/TaskMate_current/tasks/task1.h \
- /root/code/TaskMate/TaskMate_current/tasks/task2.h
+ /root/code/TaskMate/TaskMate_current/tasks/task2.h \
+ /root/code/TaskMate/TaskMate_current/tasks/lcd.h
 /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
 /root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h:
 /root/code/TaskMate/TaskMate_current/drivers/timer1.h:
@@ -42,6 +48,7 @@ sysCore/TaskMate.o: sysCore/TaskMate.c \
 /root/code/TaskMate/TaskMate_current/drivers/i2c.h:
 /root/code/TaskMate/TaskMate_current/tasks/task1.h:
 /root/code/TaskMate/TaskMate_current/tasks/task2.h:
+/root/code/TaskMate/TaskMate_current/tasks/lcd.h:
 sysCore/sysCall.o: sysCore/sysCall.c \
  /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_private_extern.h \
  /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
