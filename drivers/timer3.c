@@ -58,7 +58,7 @@ void timer3Start(void)
 void timer3Stop(void)
 {
 	// stop by disable INT
-	TIMSK3 &= !(1 << OCIE3A);
+	TIMSK3 &= ~(1 << OCIE3A);
 }
 
 
