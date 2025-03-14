@@ -25,19 +25,18 @@
 
 
 #define LCD_I2C_ADDR  0x7C  // AiP31068L I2C address (Write mode)
-#define LCD_CMD       0x00  // RS = 0, Write Command
-#define LCD_DATA      0x40  // RS = 1, Write Data
+#define LCD_CMD       0x80  // RS = 0, Write Command
+#define LCD_DATA      0xC0  // RS = 1, Write Data
 
 
 void lcd(void)
 {
 	// lcd test
 	lcdInit();
-	lcdClear();
 	lcdWriteString("TaskMate running ...");
 	
 	
-	// must use yield(), but not implemented !
+	// must use sysCallYield(), but not implemented !
 	// do nothing there.
 	while(1);
 	

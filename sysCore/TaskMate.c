@@ -125,7 +125,7 @@ int main(void)
 	{
 		if( ((*driver_table[i].getStatus)() & (1 << DRIVER_START_AT_BOOT) ) != 0 ){(*driver_table[i].start)();}
 	}	
-	
+
 	
 	//jump to current task for first call and start system
 	task_current=0;
