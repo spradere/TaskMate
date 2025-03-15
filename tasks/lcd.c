@@ -24,17 +24,16 @@
 #include "tasks/lcd.h"
 
 
-#define LCD_I2C_ADDR  0x7C  // AiP31068L I2C address (Write mode)
-#define LCD_CMD       0x80  // RS = 0, Write Command
-#define LCD_DATA      0xC0  // RS = 1, Write Data
-
+#define LCD_I2C_ADDR 0x7C  // AiP31068L I2C address (Write mode)
+#define LCD_CMD 0x80  // Co=1 RS = 0, Write Command
+#define LCD_DATA 0x40  // Co=0 RS = 1, Write Data serie
 
 void lcd(void)
 {
 	// lcd test
 	lcdInit();
-	lcdWriteString("TaskMate running ...");
 	
+	lcdWriteString("TaskMate run");
 	
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.
@@ -50,14 +49,15 @@ void lcdSendCommand(uint8_t command)
     i2cWrite(LCD_CMD); // Control byte: RS=0, RW=0
     i2cWrite(command);
     i2cCommStop();
+	_delay_us(200);  // Small delay for LCD to process the command
 }
 
 void lcdSendData(uint8_t data) 
 {
-    i2cCommStart(LCD_I2C_ADDR);
+    /*i2cCommStart(LCD_I2C_ADDR);
     i2cWrite(LCD_DATA); // Control byte: RS=1
     i2cWrite(data);
-    i2cCommStop();
+    i2cCommStop();*/
 }
 
 void lcdInit(void) 
@@ -65,7 +65,9 @@ void lcdInit(void)
     _delay_ms(50);  // Wait for LCD to power up
 
     lcdSendCommand(0x38); // Function Set: 8-bit mode, 2 lines, 5x8 dots
+    _delay_us(50);
     lcdSendCommand(0x0C); // Display ON, Cursor OFF, Blink OFF
+    _delay_us(50);
     lcdSendCommand(0x01); // Clear Display
     _delay_ms(2);
     lcdSendCommand(0x06); // Entry Mode: Cursor moves right, no shift
@@ -83,16 +85,16 @@ void lcd_set_cursor(uint8_t row, uint8_t col)
     lcdSendCommand(0x80 | (col + row_offsets[row]));
 }
 
-void lcdWriteChar(char c) 
+
+void lcdWriteString(const char *str) 
 {
-    lcdSendData(c);
-}
-
-void lcdWriteString(const char *str) {
-    while (*str) {
-        lcdWriteChar(*str++);
+	i2cCommStart(LCD_I2C_ADDR);
+	i2cWrite(LCD_DATA);
+	
+    while (*str) 
+    {
+        i2cWrite(*str++);
     }
+    i2cCommStop();
 }
-
-
 

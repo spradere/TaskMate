@@ -62,12 +62,12 @@ void i2cStop(void)
 
 uint8_t i2cCommStart(uint8_t address) 
 {
-    TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
+    TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);// | (1 << TWEA);
     while (!(TWCR & (1 << TWINT)));
 
     if ((TWSR & 0xF8) != TW_START) return 1; // Error
 
-    TWDR = (address << 1);
+    TWDR = (address);
     TWCR = (1 << TWEN) | (1 << TWINT);
     while (!(TWCR & (1 << TWINT)));
 
