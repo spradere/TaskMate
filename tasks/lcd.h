@@ -26,7 +26,6 @@ void lcd(void);
 void lcdInit(void);
 void lcdClear(void);
 void lcdSetCursor(uint8_t, uint8_t );
-void lcdWriteChar(char);
 void lcdWriteString(const char *);
 
 #endif
