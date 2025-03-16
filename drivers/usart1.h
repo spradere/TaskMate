@@ -36,4 +36,8 @@ errorCode_t usart1Read(uint8_t *data);
 errorCode_t usart1Write(uint8_t data);
 void usart1Flush(void);
 
+errorCode_t usart1TestBufferRx(void);
+errorCode_t usart1WriteString(const char *str);
+
+
 #endif

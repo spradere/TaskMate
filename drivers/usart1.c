@@ -78,7 +78,7 @@ void usart1Start(void)
 
 void usart1Stop(void)
 {
-	// nothing to do, will stop all system.
+	// nothing to do
 }
 
 // USART1 Rx Interrupt Handler (Triggered when data is received)
@@ -112,18 +112,30 @@ errorCode_t usart1Write(uint8_t data)
 
     buffer_tx[buffer_tx_head] = data;
     buffer_tx_head = next_head;
-
+	return ERR_SUCCESS;
 }
 
 void usart1Flush(void)
 {
-	while(buffer_tx_tail != buffer_tx_head)// test if tx buffer empty
+	while(buffer_tx_tail != buffer_tx_head) // test if tx buffer empty
 	{
-		while ( !( UCSR1A & (1<<UDRE1)) ); 	// Wait for empty transmit buffer
-		UDR1 = buffer_tx[buffer_tx_tail];// Put data into buffer, sends the data
+		while ( !( UCSR1A & (1<<UDRE1)) ); // Wait for empty transmit buffer
+		UDR1 = buffer_tx[buffer_tx_tail]; // Put data into buffer, sends the data
 		
 		buffer_tx_tail = (buffer_tx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
 	}
-	return;
 }
 
+errorCode_t usart1TestBufferRx(void)
+{
+	if (buffer_rx_tail==buffer_rx_head) {return ERR_USART_RX_BUFFER_EMPTY;}
+	else return ERR_SUCCESS;
+}
+
+errorCode_t usart1WriteString(const char *str)
+{
+	while (*str) 
+    {
+        if(usart1Write(*str++) == ERR_USART_TX_BUFFER_FULL){break;};
+    }
+}
