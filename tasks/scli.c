@@ -48,8 +48,9 @@ void scliEcho(void)
     
     if( satus== 0) // If data available
     {  
+
 		usart1Write(data);  // Echo received character
-		lcdWriteString("data recived");
+		lcdWriteString("data recived    ");
     }
     else
     {

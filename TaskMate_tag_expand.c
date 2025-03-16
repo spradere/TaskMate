@@ -18,7 +18,15 @@
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
  * - Write code for #include / static allocation / initialisation
  * 
- * @warning file name must match with main function, lcd.c -> void lcd(void)
+ * @warning 
+ * - for tasks file name must match with main function, lcd.c -> void lcd(void)
+ * - for drivers functions name must match to generic driver layout : 
+ * 		<driver name>SetStatus()
+ * 		<driver name>GetStatus()
+ * 		<driver name>GetName()
+ * 		<driver name>Init()
+ * 		<driver name>Start()
+ * 		<driver name>Stop()
  */
 
 
