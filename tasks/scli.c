@@ -40,12 +40,25 @@ void scli(void)
 
 void scliEcho(void) 
 {
-    uint8_t data;
-   
-    while(usart1Read(&data) != ERR_USART_RX_BUFFER_EMPTY)
-    {
-		if(usart1Write(data)==ERR_USART_TX_BUFFER_FULL){break;} 
- 	}
+	uint8_t data;
 	
-	usart1Flush(); // write all Tx buffer to usart
+	if(usart1TestBufferRx()!=ERR_USART_RX_BUFFER_EMPTY)
+	{	
+		lcdSetCursor(1,0);
+		lcdWriteString("USART data in  ");
+		
+		usart1WriteString("scli.c : ");
+	
+		while(usart1Read(&data) != ERR_USART_RX_BUFFER_EMPTY)
+		{
+			if(usart1Write(data) == ERR_USART_TX_BUFFER_FULL){break;} 
+		}
+		usart1Flush(); // write all Tx buffer to usart
+	}
+	else
+	{
+		lcdSetCursor(1,0);
+		lcdWriteString("USART no data  ");
+	}
+		
 }
