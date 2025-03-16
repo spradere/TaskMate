@@ -16,11 +16,14 @@
  * @brief public header of TaskMate.
  * 
  * - This file contains the headers for user tasks, system services and drivers
- * - Not the internal system core, forbinds for task.
+ * - Not the internal system core, forbinds.
  * 
  */
-#ifndef TASKMATE0_4_PUBLIC_H
-#define TASKMATE0_4_PUBLIC_H
+#ifndef TASKMATE_PUBLIC_H
+#define TASKMATE_PUBLIC_H
+
+#include "sysCore/TaskMate_define.h"
+#include "sysCore/TaskMate_error.h"
 
 #include "sysCore/sysCall.h"
 

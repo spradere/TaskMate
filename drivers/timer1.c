@@ -19,7 +19,7 @@
  */
  
 #include <avr/io.h>
-#include "sysCore/TaskMate_define.h"
+#include "sysCore/TaskMate_public.h"
 #include "drivers/timer1.h"
 
 uint8_t timer1_name[]="timer 1";
