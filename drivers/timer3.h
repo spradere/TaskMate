@@ -21,6 +21,8 @@
 #ifndef TIMER3_H
 #define TIMER3_H
 
+#include <stdint.h>
+
 void timer3SetStatus(uint8_t);
 uint8_t timer3GetStatus(void);
 uint8_t *timer3GetName(void);

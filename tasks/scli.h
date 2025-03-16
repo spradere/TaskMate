@@ -12,31 +12,16 @@
  */
 
  /**
- * @file i2c.h
- * @brief header of i2c communication
+ * @file scli.h
+ * @brief header of serial command line interface
  * 
  * 
  */
+ 
+#ifndef SCLI_H
+#define SCLI_H
 
-#ifndef I2C_H
-#define I2C_H
-
-#include <stdint.h>
-
-
-#define I2C_FREQ 100000UL // Standard mode 100 kHz
-#define TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
-
-void i2cSetStatus(uint8_t);
-uint8_t i2cGetStatus(void);
-uint8_t *i2cGetName(void);
-
-void i2cInit(void);
-void i2cStart(void);
-void i2cStop(void);
-
-uint8_t i2cCommStart(uint8_t);
-void i2cCommStop(void);
-uint8_t i2cWrite(uint8_t);
+void scli(void);
+void scliEcho(void);
 
 #endif

@@ -17,9 +17,14 @@
  * 
  * 
  */
- 
+
+
 #ifndef TASKMATE_DEFINE_H
 #define TASKMATE_DEFINE_H
+
+// Cpu frecency
+#define F_CPU 16000000UL
+
 
 // arduino in board LED 13 
 #define LED_DDR DDRB /**< Arduino in board led pin 13, direction port*/
@@ -112,10 +117,10 @@ typedef struct
 	uint8_t stack[TASK_STACK_SIZE]; /**< Task stack array */
 } task_table_t;
 
-// driver frame layout
-#define FALSE 0
-#define TRUE 1
 
+// driver frame layout
+//#define FALSE 0
+//#define TRUE 1
 
 
 /**
