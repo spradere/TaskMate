@@ -30,7 +30,7 @@ If not zero, the counter is decremented at 10 ms rate.
   
 ### ⤴️ Layers
  
-![System Layer Diagram](TaskMate_layers.png)
+![System Layer Diagram](TaskMate_layers_v2.png)
 
 
 ### ➡️ Project progress ...

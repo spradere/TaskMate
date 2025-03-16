@@ -21,10 +21,9 @@
  * 
  * @warning do not edit code between tag it will be deleted by automatic generated code !
  * 
- * @note tag format are one line C comment // + [tag]
+ * @note tag format are one line C comment // + <tag>
  * 
- * - task / driver
- * - include / allocate / init
+ * - tag command is <task / driver> <include / allocate / init>
  * 
  * @todo more documentation
  */

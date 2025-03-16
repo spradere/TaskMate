@@ -84,20 +84,20 @@ void usart1Stop(void)
 // USART1 Rx Interrupt Handler (Triggered when data is received)
 ISR(USART1_RX_vect) 
 {
-    uint8_t nextHead = (buffer_rx_head + 1) % BUFFER_TX_SIZE_SIZE;
+    uint8_t next_head = (buffer_rx_head + 1) % BUFFER_TX_SIZE_SIZE;
     uint8_t data = UDR1; // Read the received byte
 	
-    if (nextHead != buffer_rx_tail) // Check for buffer overflow
+    if (next_head != buffer_rx_tail) // Check for buffer overflow
     {  
         buffer_rx[buffer_rx_head] = data;
-        buffer_rx_head = nextHead;  // Move head pointer forward
+        buffer_rx_head = next_head;  // Move head pointer forward
     }
 }
 
-// Read a character from Rx buffer (Non-blocking)
+// Read a character from Rx buffer (non-blocking)
 int8_t usart1Read(uint8_t *data) 
 {
-    if (buffer_rx_head == buffer_rx_tail) {return -1;}  // Buffer empty
+    if (buffer_rx_tail==buffer_rx_head) {return -1;}  // Buffer empty
 
     *data = buffer_rx[buffer_rx_tail]; // Read from buffer
     buffer_rx_tail = (buffer_rx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
@@ -107,28 +107,25 @@ int8_t usart1Read(uint8_t *data)
 // Write a character to Tx buffer
 void usart1Write(uint8_t data) 
 {
-    uint8_t nextHead = (buffer_tx_head + 1) % BUFFER_TX_SIZE;
-    while(nextHead == buffer_tx_tail);  // Wait if buffer is full
+    uint8_t next_head = (buffer_tx_head + 1) % BUFFER_TX_SIZE;
+    if(next_head == buffer_tx_tail) {return 1;}  // error buffer is full
 
     buffer_tx[buffer_tx_head] = data;
-    buffer_tx_head = nextHead;
+    buffer_tx_head = next_head;
 
-	while ( !( UCSR1A & (1<<UDRE1)) ); 	// Wait for empty transmit buffer
-	UDR1 = data;// Put data into buffer, sends the data
-	
-    //UCSR1B |= (1 << UDRIE1); // Enable Tx interrupt
 }
 
-// USART1 Tx Interrupt Handler (Triggered when Tx buffer is empty)
-/*ISR(USART1_UDRE_vect) 
+void usartFlush()
 {
-    if (buffer_tx_head == buffer_tx_tail) 
-    {
-        UCSR1B &= ~(1 << UDRIE1); // Disable Tx interrupt if buffer empty
-    } 
-    else 
-    {
-        UDR1 = buffer_tx[buffer_tx_tail]; // Load next byte to transmit
-        buffer_tx_tail = (buffer_tx_tail + 1) % BUFFER_TX_SIZE;
-    }
-}*/
+	
+	while(buffer_tx_tail==buffer_tx_head)// test if tx buffer empty
+	{
+      
+		while ( !( UCSR1A & (1<<UDRE1)) ); 	// Wait for empty transmit buffer
+		UDR1 = buffer_tx[buffer_tx_tail];// Put data into buffer, sends the data
+		
+		buffer_rx_tail = (buffer_rx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
+	}
+	return;
+}
+
