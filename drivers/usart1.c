@@ -95,36 +95,34 @@ ISR(USART1_RX_vect)
 }
 
 // Read a character from Rx buffer (non-blocking)
-int8_t usart1Read(uint8_t *data) 
+errorCode_t usart1Read(uint8_t *data) 
 {
-    if (buffer_rx_tail==buffer_rx_head) {return -1;}  // Buffer empty
+    if (buffer_rx_tail==buffer_rx_head) {return ERR_USART_RX_BUFFER_EMPTY;}
 
     *data = buffer_rx[buffer_rx_tail]; // Read from buffer
     buffer_rx_tail = (buffer_rx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
-    return 0; // Success
+    return ERR_SUCCESS;
 }
 
 // Write a character to Tx buffer
-void usart1Write(uint8_t data) 
+errorCode_t usart1Write(uint8_t data) 
 {
     uint8_t next_head = (buffer_tx_head + 1) % BUFFER_TX_SIZE;
-    if(next_head == buffer_tx_tail) {return;}  // error buffer is full
+    if(next_head == buffer_tx_tail) {return ERR_USART_TX_BUFFER_FULL;}
 
     buffer_tx[buffer_tx_head] = data;
     buffer_tx_head = next_head;
 
 }
 
-void usartFlush()
+void usart1Flush(void)
 {
-	
-	while(buffer_tx_tail==buffer_tx_head)// test if tx buffer empty
+	while(buffer_tx_tail != buffer_tx_head)// test if tx buffer empty
 	{
-      
 		while ( !( UCSR1A & (1<<UDRE1)) ); 	// Wait for empty transmit buffer
 		UDR1 = buffer_tx[buffer_tx_tail];// Put data into buffer, sends the data
 		
-		buffer_rx_tail = (buffer_rx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
+		buffer_tx_tail = (buffer_tx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
 	}
 	return;
 }

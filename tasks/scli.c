@@ -41,20 +41,11 @@ void scli(void)
 void scliEcho(void) 
 {
     uint8_t data;
-    uint8_t satus = usart1Read(&data);
-    
-        
-    lcdSetCursor(1,0);
-    
-    if( satus== 0) // If data available
-    {  
-
-		usart1Write(data);  // Echo received character
-		lcdWriteString("data recived    ");
-    }
-    else
+   
+    while(usart1Read(&data) != ERR_USART_RX_BUFFER_EMPTY)
     {
-		lcdWriteString("no USART data     ");
-	}
+		if(usart1Write(data)==ERR_USART_TX_BUFFER_FULL){break;} 
+ 	}
 	
+	usart1Flush(); // write all Tx buffer to usart
 }

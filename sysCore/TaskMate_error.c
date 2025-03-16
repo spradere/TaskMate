@@ -23,9 +23,9 @@
 #include "TaskMate_private_extern.h"
 #include "sysCore/TaskMate_error.h"
 
-volatile ErrorCode system_last_critical_error = ERR_SUCCESS;
+volatile errorCode_t system_last_critical_error = ERR_SUCCESS;
 
-void setCriticalError(ErrorCode err)
+void setCriticalError(errorCode_t err)
 {
 	system_last_critical_error = err;
 
