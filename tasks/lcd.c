@@ -20,6 +20,7 @@
 
 
 #include <util/delay.h>
+#include "sysCore/TaskMate_public.h"
 #include "drivers/i2c.h"
 #include "tasks/lcd.h"
 

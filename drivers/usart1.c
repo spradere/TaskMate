@@ -21,7 +21,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "sysCore/TaskMate_define.h"
+#include "sysCore/TaskMate_public.h"
 #include "drivers/usart1.h"
 #include "tasks/lcd.h"
 
@@ -108,7 +108,7 @@ int8_t usart1Read(uint8_t *data)
 void usart1Write(uint8_t data) 
 {
     uint8_t next_head = (buffer_tx_head + 1) % BUFFER_TX_SIZE;
-    if(next_head == buffer_tx_tail) {return 1;}  // error buffer is full
+    if(next_head == buffer_tx_tail) {return;}  // error buffer is full
 
     buffer_tx[buffer_tx_head] = data;
     buffer_tx_head = next_head;

@@ -20,7 +20,7 @@
  
 #include <avr/io.h>
 #include <util/twi.h>
-#include "sysCore/TaskMate_define.h"
+#include "sysCore/TaskMate_public.h"
 #include "drivers/i2c.h"
 
 uint8_t i2c_name[]="i2c";

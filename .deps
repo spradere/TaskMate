@@ -1,0 +1,138 @@
+drivers/timer3.o: drivers/timer3.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/drivers/timer3.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/drivers/timer3.h:
+drivers/i2c.o: drivers/i2c.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/drivers/i2c.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/drivers/i2c.h:
+drivers/timer1.o: drivers/timer1.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/drivers/timer1.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/drivers/timer1.h:
+drivers/usart1.o: drivers/usart1.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/drivers/usart1.h \
+ /root/code/TaskMate/TaskMate_current/tasks/lcd.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/drivers/usart1.h:
+/root/code/TaskMate/TaskMate_current/tasks/lcd.h:
+tasks/task1.o: tasks/task1.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/tasks/task1.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/tasks/task1.h:
+tasks/task2.o: tasks/task2.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/tasks/task2.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/tasks/task2.h:
+tasks/lcd.o: tasks/lcd.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/drivers/i2c.h \
+ /root/code/TaskMate/TaskMate_current/tasks/lcd.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/drivers/i2c.h:
+/root/code/TaskMate/TaskMate_current/tasks/lcd.h:
+tasks/scli.o: tasks/scli.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h \
+ /root/code/TaskMate/TaskMate_current/drivers/usart1.h \
+ /root/code/TaskMate/TaskMate_current/tasks/scli.h \
+ /root/code/TaskMate/TaskMate_current/tasks/lcd.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_public.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+/root/code/TaskMate/TaskMate_current/drivers/usart1.h:
+/root/code/TaskMate/TaskMate_current/tasks/scli.h:
+/root/code/TaskMate/TaskMate_current/tasks/lcd.h:
+sysCore/TaskMate.o: sysCore/TaskMate.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h \
+ /root/code/TaskMate/TaskMate_current/drivers/timer1.h \
+ /root/code/TaskMate/TaskMate_current/drivers/timer3.h \
+ /root/code/TaskMate/TaskMate_current/drivers/i2c.h \
+ /root/code/TaskMate/TaskMate_current/drivers/usart1.h \
+ /root/code/TaskMate/TaskMate_current/tasks/task1.h \
+ /root/code/TaskMate/TaskMate_current/tasks/task2.h \
+ /root/code/TaskMate/TaskMate_current/tasks/lcd.h \
+ /root/code/TaskMate/TaskMate_current/tasks/scli.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h:
+/root/code/TaskMate/TaskMate_current/drivers/timer1.h:
+/root/code/TaskMate/TaskMate_current/drivers/timer3.h:
+/root/code/TaskMate/TaskMate_current/drivers/i2c.h:
+/root/code/TaskMate/TaskMate_current/drivers/usart1.h:
+/root/code/TaskMate/TaskMate_current/tasks/task1.h:
+/root/code/TaskMate/TaskMate_current/tasks/task2.h:
+/root/code/TaskMate/TaskMate_current/tasks/lcd.h:
+/root/code/TaskMate/TaskMate_current/tasks/scli.h:
+sysCore/sysCall.o: sysCore/sysCall.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_private_extern.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/sysCall.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_private_extern.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/sysCall.h:
+sysCore/taskCreate.o: sysCore/taskCreate.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_private_extern.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_private_extern.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
+/root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h:
+sysCore/TaskMate_error.o: sysCore/TaskMate_error.c \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:

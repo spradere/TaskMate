@@ -118,11 +118,6 @@ typedef struct
 } task_table_t;
 
 
-// driver frame layout
-//#define FALSE 0
-//#define TRUE 1
-
-
 /**
  * @struct driver_table_t
  * @brief Represents a driver in the RTOS.
