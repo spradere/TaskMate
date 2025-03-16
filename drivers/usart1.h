@@ -12,31 +12,26 @@
  */
 
  /**
- * @file i2c.h
- * @brief header of i2c communication
+ * @file usart1.h
+ * @brief header for usart1 driver
  * 
  * 
  */
-
-#ifndef I2C_H
-#define I2C_H
+ 
+ 
+#ifndef USART1_H
+#define USART1_H
 
 #include <stdint.h>
 
+void usart1SetStatus(uint8_t status);
+uint8_t usart1GetStatus(void);
+uint8_t *usart1GetName(void);
+void usart1Init(void);
+void usart1Start(void);
+void usart1Stop(void);
 
-#define I2C_FREQ 100000UL // Standard mode 100 kHz
-#define TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
-
-void i2cSetStatus(uint8_t);
-uint8_t i2cGetStatus(void);
-uint8_t *i2cGetName(void);
-
-void i2cInit(void);
-void i2cStart(void);
-void i2cStop(void);
-
-uint8_t i2cCommStart(uint8_t);
-void i2cCommStop(void);
-uint8_t i2cWrite(uint8_t);
+int8_t usart1Read(uint8_t *data);
+void usart1Write(uint8_t data);
 
 #endif

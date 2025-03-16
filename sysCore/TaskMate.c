@@ -41,6 +41,7 @@
 #include "drivers/timer1.h"
 #include "drivers/timer3.h"
 #include "drivers/i2c.h"
+#include "drivers/usart1.h"
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
@@ -48,17 +49,18 @@
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 #include "tasks/lcd.h"
+#include "tasks/scli.h"
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
 // [tag] driver alloc
-#define DRIVER_COUNT 3
+#define DRIVER_COUNT 4
 driver_table_t driver_table[DRIVER_COUNT];
 // [/tag]
 
 // do not edit code between tag : automatic generated code !
 // [tag] task alloc
-#define TASK_COUNT 3
+#define TASK_COUNT 4
 task_table_t task_table[TASK_COUNT];
 uint8_t task_current=0;
 // [/tag]
@@ -71,6 +73,7 @@ int main(void)
 	taskCreate(task1,i++);
 	taskCreate(task2,i++);
 	taskCreate(lcd,i++);
+	taskCreate(scli,i++);
 	// [/tag]
 
 	
@@ -105,6 +108,16 @@ int main(void)
 		.init = i2cInit, 
 		.start = i2cStart, 
 		.stop = i2cStop
+	};
+	driver_table[3]=(driver_table_t) 
+	{
+		.driver_id = 3,
+		.driver_name = usart1GetName(),
+		.setStatus = usart1SetStatus, 
+		.getStatus = usart1GetStatus, 
+		.init = usart1Init, 
+		.start = usart1Start, 
+		.stop = usart1Stop
 	};
 	// [/tag]
 	

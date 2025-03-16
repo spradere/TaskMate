@@ -18,7 +18,7 @@
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
  * - Write code for #include / static allocation / initialisation
  * 
- * @todo status : finished
+ * @warning file name must match with main function, lcd.c -> void lcd(void)
  */
 
 

@@ -26,7 +26,7 @@
 
 #define LCD_I2C_ADDR 0x7C  // AiP31068L I2C address (Write mode)
 #define LCD_CMD 0x80  // Co=1 RS = 0, Write Command
-#define LCD_DATA 0x40  // Co=0 RS = 1, Write Data serie
+#define LCD_DATA 0x40  // Co=0 RS = 1, Write Data series
 
 void lcd(void)
 {
@@ -79,7 +79,7 @@ void lcdClear(void)
     _delay_ms(2);
 }
 
-void lcd_set_cursor(uint8_t row, uint8_t col) 
+void lcdSetCursor(uint8_t row, uint8_t col) 
 {
     uint8_t row_offsets[] = {0x00, 0x40};
     lcdSendCommand(0x80 | (col + row_offsets[row]));
