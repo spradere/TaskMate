@@ -101,6 +101,7 @@ sysCore/TaskMate.o: sysCore/TaskMate.c \
  /root/code/TaskMate/TaskMate_current/drivers/timer3.h \
  /root/code/TaskMate/TaskMate_current/drivers/i2c.h \
  /root/code/TaskMate/TaskMate_current/drivers/usart1.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h \
  /root/code/TaskMate/TaskMate_current/tasks/task1.h \
  /root/code/TaskMate/TaskMate_current/tasks/task2.h \
  /root/code/TaskMate/TaskMate_current/tasks/lcd.h \
@@ -111,6 +112,7 @@ sysCore/TaskMate.o: sysCore/TaskMate.c \
 /root/code/TaskMate/TaskMate_current/drivers/timer3.h:
 /root/code/TaskMate/TaskMate_current/drivers/i2c.h:
 /root/code/TaskMate/TaskMate_current/drivers/usart1.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
 /root/code/TaskMate/TaskMate_current/tasks/task1.h:
 /root/code/TaskMate/TaskMate_current/tasks/task2.h:
 /root/code/TaskMate/TaskMate_current/tasks/lcd.h:
@@ -134,5 +136,9 @@ sysCore/taskCreate.o: sysCore/taskCreate.c \
 /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
 /root/code/TaskMate/TaskMate_current/sysCore/taskCreate.h:
 sysCore/TaskMate_error.o: sysCore/TaskMate_error.c \
+ sysCore/TaskMate_private_extern.h \
+ /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h \
  /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h
+sysCore/TaskMate_private_extern.h:
+/root/code/TaskMate/TaskMate_current/sysCore/TaskMate_define.h:
 /root/code/TaskMate/TaskMate_current/sysCore/TaskMate_error.h:
