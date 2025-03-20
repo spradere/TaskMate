@@ -99,7 +99,9 @@ dump:all
 # Make doxygen documentation
 doc:
 	@printf "\n\033[1;36mMake Doxygen documentation\033[0m\n\n" 
-	doxygen Doxyfile
+	doxygen doc/Doxyfile
+
+.PHONY: doc
 
 # Test if mofified list files
 .tag_expand_stamp: TaskMate_tag_expand ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
@@ -150,7 +152,7 @@ backup:
 	fi
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in rsync.log\033[0m\n"
-	rsync -av * --progress --delete --exclude	"*.o" --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > rsync.log
+	rsync -av * --progress --delete --exclude	"*.o" --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > log/rsync.log
 	
 	# Umount
 	@printf "\033[0;33mUmount ${USB_FOLDER}\033[0m\n"

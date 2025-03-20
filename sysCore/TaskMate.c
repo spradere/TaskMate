@@ -169,6 +169,10 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	asm volatile ( PUSH_ALL_REGS );
 	task_table[task_current].stack_pointer=(uint8_t *)SP;
 	
+	// stack overflow test
+	
+	// system wide error handler
+	
 	// switch context
 	if(++task_current==TASK_COUNT){task_current=0;}
 	

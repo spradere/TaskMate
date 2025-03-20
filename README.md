@@ -10,7 +10,7 @@ Each task have it's own stack, used to save and restore context for task switchi
 
 ### ⚙️ Installation
 
-* See : [Makefile Features & Usage](Makefile_summary.md)
+* See : [Makefile Features & Usage](doc/Makefile_summary.md)
 
 
 ### ♻️ RTC Real Time Clock
@@ -30,12 +30,12 @@ If not zero, the counter is decremented at 10 ms rate.
   
 ### ⤴️ Layers
  
-![System Layer Diagram](TaskMate_layers_v2.png)
+![System Layer Diagram](doc/TaskMate_layers_v2.png)
 
 
 ### ➡️ Project progress ...
 
-* See : [Road map](check_list.md)
+* See : [Road map](doc/check_list.md)
 
 ### ️⚠ ️License
 
