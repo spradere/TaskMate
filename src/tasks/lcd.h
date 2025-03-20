@@ -17,8 +17,8 @@
  * 
  * 
  */
- 
- #ifndef LCD_H
+
+#ifndef LCD_H
 #define LCD_H
 
 void lcd(void);
