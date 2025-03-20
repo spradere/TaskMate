@@ -36,8 +36,8 @@
 
 #define TASK_FILE "task_list"
 #define DRIVER_FILE "driver_list" 
-#define SOURCE_FILE "sysCore/TaskMate.c"
-#define TEMP_FILE "sysCore/TaskMate.tmp.c"
+#define SOURCE_FILE "src/sysCore/TaskMate.c"
+#define TEMP_FILE "src/sysCore/TaskMate.tmp.c"
 
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256

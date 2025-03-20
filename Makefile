@@ -28,18 +28,21 @@ PROGRAMMER = avrispmkII
 PORT = /dev/ttyU0
 
 # Source directories
-SRC_DIRS = drivers tasks sysCore
+BUILD_DIR = build
+SRC_DIR = src
+SRC_DIRS = src/drivers src/tasks src/sysCore
 # Automatically gather all C files
 SRCS != find ${SRC_DIRS} -name "*.c"
+
 # Files
 TARGET = TaskMate
-OBJ = ${SRCS:.c=.o} 
+OBJS = ${SRCS:src/%.c=build/%.o} 
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
-DEP = ${OBJ:.o=.d}
+DEP = ${OBJS:.o=.d}
 
 # Compiler flags
-CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -O2 -Wall -I/root/code/TaskMate/TaskMate_current -MMD -MP
+CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -O2 -Wall -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files
 TASK_LIST_FILE = task_list
@@ -60,21 +63,24 @@ all: .tag_expand_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n" 
 	
 # Link	
-${TARGET}: ${OBJ}
+${TARGET}: ${OBJS}
 	@printf "\n\033[1;33mLinking\033[0m\n\n" 
-	${CC} ${CFLAGS} -o ${ELF} ${OBJ}
+	${CC} ${CFLAGS} -o ${ELF} ${OBJS}
 
 # Compile
-.c.o:
+${OBJS}: 
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n" 
-	${CC} ${CFLAGS} -c $< -o $@
+	
+	@printf "source : <%s> -> <%s>\n" ${@:build/%.o=src/%.c} $@
+	${CC} ${CFLAGS} -c ${@:build/%.o=src/%.c} -o $@
 	
 # Include dependency files safely, used to compile *.c if related header was edited
 header_check:
 	@printf "\n\033[1;33mCheck header files\033[0m\n\n" 
-	@if ls ${DEP} >/dev/null 2>&1; then cat ${DEP}; fi > .deps
+	@if ls ${DEP} >/dev/null 2>&1; then cat ${DEP}; fi > build/.deps
 	
--include .deps
+-include build/.deps
+
 
 # Flash Gordon
 upload:all
@@ -87,7 +93,7 @@ upload:all
 # Heavy sweep	
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n" 
-	rm -f  ${ELF} ${HEX} ${OBJ} *.out ${SRCS:.c=.d} .deps .tag_expand_stamp
+	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} .deps .tag_expand_stamp
 
 # Disassemble machine code in two formats
 dump:all
