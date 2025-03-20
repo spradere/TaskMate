@@ -115,6 +115,7 @@ errorCode_t usart1Write(uint8_t data)
 	return ERR_SUCCESS;
 }
 
+// send Tx buffer to usart
 void usart1Flush(void)
 {
 	while(buffer_tx_tail != buffer_tx_head) // test if tx buffer empty
@@ -126,12 +127,14 @@ void usart1Flush(void)
 	}
 }
 
+// test if Rx buffer is empty
 errorCode_t usart1TestBufferRx(void)
 {
 	if (buffer_rx_tail==buffer_rx_head) {return ERR_USART_RX_BUFFER_EMPTY;}
 	else return ERR_SUCCESS;
 }
 
+// write string to Tx buffer
 errorCode_t usart1WriteString(const char *str)
 {
 	while (*str) 
