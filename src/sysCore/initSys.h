@@ -12,25 +12,17 @@
  */
  
  /**
- * @file taskCreate.h
- * @brief taskCreate header
- * 
- *   
+ * @file initSys.h
+ * @brief Header for init system 
+ *  
  */
  
-
-#ifndef TASKCREATE_H
-#define TASKCREATE_H
-
-/**
- * @brief Create task to be used by scheduler.
- * 
- * Initialize task start adress, stack and stack pointer.
- * 
- * @param Pointer to function, task ID
- * 
- * @return nothing.
- */
+ #ifndef INIT_SYS_H
+ #define INIT_SYS_H
+ 
 void taskCreate(void (*)(void), uint8_t);
 
-#endif
+void initTasks(void);
+void initDrivers(void);
+
+ #endif
