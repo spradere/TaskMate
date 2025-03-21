@@ -39,6 +39,7 @@
 #include "sysCore/autoAllocTasks.h"
 #include "sysCore/autoAllocDrivers.h"
 
+
 int main(void) 
 {
 	initTasks();

@@ -30,7 +30,7 @@ Miscellaneous commands :
 | `make clean` | Delete files, except code, obviously ! |
 | `make doc` | Generate Doxygen documentation. | 
 | `make dump` | Disassemble machine code in two formats, for debugging purpose |
-
+| `make cloc` | count lines Of Code |
 
 ## ✈ Streamlined Workflow
 

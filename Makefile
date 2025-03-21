@@ -125,6 +125,11 @@ ${UTILITY_DIR}/autoCode.o: ${UTILITY_DIR}/autoCode.c
 	@printf "\n\033[1;33mautoCode\033[0m\n\n" 
 	${CLANG} -c ${UTILITY_DIR}/autoCode.c -o ${UTILITY_DIR}/autoCode.o
 
+# Count lines of code
+cloc:
+	@cloc * --exclude-dir=html --exclude-lang=D
+
+	
 ################################################################################
 # Backup
 ################################################################################
