@@ -12,7 +12,7 @@
  */
  
  /**
- * @file initSys.h
+ * @file initSys.c
  * @brief Implementation for init system 
  *  
  */
