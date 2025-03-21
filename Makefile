@@ -27,16 +27,16 @@ F_CPU = 16000000UL
 PROGRAMMER = avrispmkII
 PORT = /dev/ttyU0
 
-# Source directories
+# Source directorie
 BUILD_DIR = build
 SRC_DIR = src
-SRC_DIRS = src/drivers src/tasks src/sysCore
+SRC_DIR_LIST = ${SRC_DIR}/drivers ${SRC_DIR}/tasks ${SRC_DIR}/sysCore
 # Automatically gather all C files
-SRCS != find ${SRC_DIRS} -name "*.c"
+SRCS != find ${SRC_DIR_LIST} -name "*.c"
 
 # Files
 TARGET = TaskMate
-OBJS = ${SRCS:src/%.c=build/%.o} 
+OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o} 
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
 DEP = ${OBJS:.o=.d}
@@ -68,18 +68,18 @@ ${TARGET}: ${OBJS}
 	${CC} ${CFLAGS} -o ${ELF} ${OBJS}
 
 # Compile
-${OBJS}: 
+${OBJS}: ${@:${BUILD_DIR}/%.o=${SRC_DIR}/%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n" 
 	
-	@printf "source : <%s> -> <%s>\n" ${@:build/%.o=src/%.c} $@
-	${CC} ${CFLAGS} -c ${@:build/%.o=src/%.c} -o $@
+	@printf "source : <%s> -> <%s>\n" ${@:${BUILD_DIR}/%.o=${SRC_DIR}/%.c} $@
+	${CC} ${CFLAGS} -c ${@:${BUILD_DIR}/%.o=${SRC_DIR}/%.c} -o $@
 	
 # Include dependency files safely, used to compile *.c if related header was edited
 header_check:
 	@printf "\n\033[1;33mCheck header files\033[0m\n\n" 
-	@if ls ${DEP} >/dev/null 2>&1; then cat ${DEP}; fi > build/.deps
+	@if ls ${DEP} >/dev/null 2>&1; then cat ${DEP}; fi > ${BUILD_DIR}/.deps
 	
--include build/.deps
+-include ${BUILD_DIR}/.deps
 
 
 # Flash Gordon
@@ -156,6 +156,7 @@ backup:
 	else \
 		mkdir ${USB_FOLDER}${TASKMATE_FOLDER}; \
 	fi
+	
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in rsync.log\033[0m\n"
 	rsync -av * --progress --delete --exclude	"*.o" --exclude="html". "${USB_FOLDER}${TASKMATE_FOLDER}/" > log/rsync.log

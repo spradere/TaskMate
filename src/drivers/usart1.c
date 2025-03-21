@@ -141,4 +141,5 @@ errorCode_t usart1WriteString(const char *str)
     {
         if(usart1Write(*str++) == ERR_USART_TX_BUFFER_FULL){break;};
     }
+	return ERR_SUCCESS;
 }
