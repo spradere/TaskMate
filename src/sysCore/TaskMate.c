@@ -32,95 +32,22 @@
 #include <avr/interrupt.h>
 
 #include "sysCore/TaskMate_define.h"
-#include "sysCore/taskCreate.h"
+#include "sysCore/initSys.h"
 
-
-// do not edit code between tag : automatic generated code !
-// [tag] driver include
-#include "drivers/timer1.h"
-#include "drivers/timer3.h"
-#include "drivers/i2c.h"
-#include "drivers/usart1.h"
-// [/tag]
-
-// do not edit code between tag : automatic generated code !
-// [tag] task include
-#include "tasks/task1.h"
-#include "tasks/task2.h"
-#include "tasks/lcd.h"
-#include "tasks/scli.h"
-// [/tag]
-
-// do not edit code between tag : automatic generated code !
-// [tag] driver alloc
-#define DRIVER_COUNT 4
-driver_table_t driver_table[DRIVER_COUNT];
-// [/tag]
-
-// do not edit code between tag : automatic generated code !
-// [tag] task alloc
-#define TASK_COUNT 4
-task_table_t task_table[TASK_COUNT];
-uint8_t task_current=0;
-// [/tag]
+#include "sysCore/autoIncludeTasks.h"
+#include "sysCore/autoIncludeDrivers.h"
+#include "sysCore/autoAllocTasks.h"
+#include "sysCore/autoAllocDrivers.h"
 
 int main(void) 
 {
-	// do not edit code between tag : automatic generated code !
-	// [tag] task init
-	uint8_t i=0; 
-	taskCreate(task1,i++);
-	taskCreate(task2,i++);
-	taskCreate(lcd,i++);
-	taskCreate(scli,i++);
-	// [/tag]
-
+	initTasks();
+	initDrivers();
 	
-	// do not edit code between tag : automatic generated code !
-	// [tag] driver init
-	driver_table[0]=(driver_table_t) 
-	{
-		.driver_id = 0,
-		.driver_name = timer1GetName(),
-		.setStatus = timer1SetStatus, 
-		.getStatus = timer1GetStatus, 
-		.init = timer1Init, 
-		.start = timer1Start, 
-		.stop = timer1Stop
-	};
-	driver_table[1]=(driver_table_t) 
-	{
-		.driver_id = 1,
-		.driver_name = timer3GetName(),
-		.setStatus = timer3SetStatus, 
-		.getStatus = timer3GetStatus, 
-		.init = timer3Init, 
-		.start = timer3Start, 
-		.stop = timer3Stop
-	};
-	driver_table[2]=(driver_table_t) 
-	{
-		.driver_id = 2,
-		.driver_name = i2cGetName(),
-		.setStatus = i2cSetStatus, 
-		.getStatus = i2cGetStatus, 
-		.init = i2cInit, 
-		.start = i2cStart, 
-		.stop = i2cStop
-	};
-	driver_table[3]=(driver_table_t) 
-	{
-		.driver_id = 3,
-		.driver_name = usart1GetName(),
-		.setStatus = usart1SetStatus, 
-		.getStatus = usart1GetStatus, 
-		.init = usart1Init, 
-		.start = usart1Start, 
-		.stop = usart1Stop
-	};
-	// [/tag]
 	
-	// driver flag init 
+	uint8_t i;
+	
+	// driver flag init
 	for(i=0;i<DRIVER_COUNT;i++)
 	{
 		(*driver_table[i].setStatus)( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT) );

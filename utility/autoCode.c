@@ -12,7 +12,7 @@
  */
  
  /**
- * @file TaskMate_tag_expand.c
+ * @file auto_code.c
  * @brief helper to generate code for task and drivers handle in Taskmate.c  
  * 
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
@@ -34,16 +34,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TASK_FILE "task_list"
-#define DRIVER_FILE "driver_list" 
-#define SOURCE_FILE "src/sysCore/TaskMate.c"
-#define TEMP_FILE "src/sysCore/TaskMate.tmp.c"
+#define FILE_TASK_LIST "utility/task_list"
+#define FILE_DRIVER_LIST "utility/driver_list" 
+#define FILE_SOURCE "src/sysCore/initSys.c"
+#define FILE_TEMP "src/sysCore/initSys.tmp.c"
+#define FILE_TASK_INCLUDE "src/sysCore/autoIncludeTasks.h"
+#define FILE_DRIVER_INCLUDE "src/sysCore/autoIncludeDrivers.h"
+#define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
+#define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
+
 
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256
 
 #define LINE_SIZE_MAX 256
-char line[LINE_SIZE_MAX];
+char line[LINE_SIZE_MAX]; // buffer for reading
 
 #define ARGN_COUNT_MAX 4
 #define ARGV_SIZE_MAX 64
@@ -53,29 +58,33 @@ void get_argv(void);
 
 int main(void)
 {
+	
+	//******************************************************************
+	// read list -> table
+	//******************************************************************
 	//allocate tables
 	char task_table[TASK_COUNT_MAX][LINE_SIZE_MAX];
 	char driver_table[DRIVER_COUNT_MAX][LINE_SIZE_MAX];
 	
 	//open list files
-	FILE *task_file=fopen(TASK_FILE,"r");
-	if(task_file==0)
+	FILE *file_task_list=fopen(FILE_TASK_LIST,"r");
+	if(file_task_list==0)
 	{
-		printf("error : task file not found <%s>\n",TASK_FILE);
+		printf("error : task file not found <%s>\n",FILE_TASK_LIST);
 		exit(0);
 	}	
 	
-	FILE *driver_file=fopen(DRIVER_FILE,"r");
-	if(driver_file==0)
+	FILE *file_driver_list=fopen(FILE_DRIVER_LIST,"r");
+	if(file_driver_list==0)
 	{
-		printf("error : driver file not found <%s>\n",DRIVER_FILE);
+		printf("error : driver file not found <%s>\n",FILE_DRIVER_LIST);
 		exit(0);
 	}		
 	
 	//read task file -> table
 	int task_count=0;
     while(	(task_count < TASK_COUNT_MAX)
-			&& fgets(task_table[task_count], LINE_SIZE_MAX, task_file)	) 
+			&& fgets(task_table[task_count], LINE_SIZE_MAX, file_task_list)	) 
     {
         task_table[task_count][strcspn(task_table[task_count], "\n")] = 0;  // Remplace newline
         task_count++;
@@ -85,7 +94,7 @@ int main(void)
 	//read driver file -> table
 	int driver_count=0;
     while(	(driver_count < DRIVER_COUNT_MAX)
-			&& fgets(driver_table[driver_count], LINE_SIZE_MAX, driver_file)	) 
+			&& fgets(driver_table[driver_count], LINE_SIZE_MAX, file_driver_list)	) 
     {
         driver_table[driver_count][strcspn(driver_table[driver_count], "\n")] = 0;  // Remplace newline
         driver_count++;
@@ -93,11 +102,12 @@ int main(void)
 	if(driver_count==0){printf("error : no driver\n"); exit(0);}
 
 	// close files
-	fclose(task_file);
-	fclose(driver_file);
+	fclose(file_task_list);
+	fclose(file_driver_list);
 		
-	
+	//******************************************************************
 	// print tables
+	//******************************************************************
 	int i;
 	
 	printf("found task :\n");
@@ -114,18 +124,88 @@ int main(void)
 	printf("\n");
 	
 	
-	// open souce and tmp file
-	FILE *file_src=fopen(SOURCE_FILE,"r");
+	//******************************************************************
+	// write include files
+	//******************************************************************
+	
+	// open include files
+	FILE *file_task_include=fopen(FILE_TASK_INCLUDE,"w");
+	if(file_task_include==0)
+	{
+		printf("error : creating temp file  <%s>\n",FILE_TASK_INCLUDE);
+		exit(1);
+	}
+
+	FILE *file_driver_include=fopen(FILE_DRIVER_INCLUDE,"w");
+	if(file_driver_include==0)
+	{
+		printf("error : creating temp file  <%s>\n",FILE_DRIVER_INCLUDE);
+		exit(1);
+	}
+			
+	// write task include 
+	for(i=0;i<task_count;i++)
+	{
+		fprintf(file_task_include,"#include \"tasks/%s.h\"\n",task_table[i]);
+	}
+
+	//write driver include 
+	for(i=0;i<driver_count;i++)
+	{
+		fprintf(file_driver_include,"#include \"drivers/%s.h\"\n",driver_table[i]);
+	}
+
+	fclose(file_task_include);
+	fclose(file_driver_include);
+
+
+	//******************************************************************
+	// write alloc  files
+	//******************************************************************
+	
+	// open include files
+	FILE *file_task_alloc=fopen(FILE_TASK_ALLOC,"w");
+	if(file_task_alloc==0)
+	{
+		printf("error : creating temp file  <%s>\n",FILE_TASK_ALLOC);
+		exit(1);
+	}
+
+	FILE *file_driver_alloc=fopen(FILE_DRIVER_ALLOC,"w");
+	if(file_driver_alloc==0)
+	{
+		printf("error : creating temp file  <%s>\n",FILE_DRIVER_ALLOC);
+		exit(1);
+	}
+			
+	// write task static alloc
+	fprintf(file_task_alloc,"#define TASK_COUNT %i\n",task_count);
+	fprintf(file_task_alloc,"task_table_t task_table[TASK_COUNT];\n");
+	fprintf(file_task_alloc,"uint8_t task_current=0;\n");	
+
+	//write driver static alloc
+	fprintf(file_driver_alloc,"#define DRIVER_COUNT %i\n",driver_count);
+	fprintf(file_driver_alloc,"driver_table_t driver_table[DRIVER_COUNT];\n");
+	
+	fclose(file_task_alloc);
+	fclose(file_driver_alloc);
+			
+	//******************************************************************
+	// read tag to generate code
+	//******************************************************************
+	
+	// open source and tmp file
+	FILE *file_src=fopen(FILE_SOURCE,"r");
 	if(file_src==0)
 	{
-		printf("error : source file not found <%s>\n",SOURCE_FILE);
+		printf("error : source file not found <%s>\n",FILE_SOURCE);
 		exit(1);
 	}	
 		
-	FILE *file_tmp=fopen(TEMP_FILE,"w");
-	if(file_src==0)
+	FILE *file_tmp=fopen(FILE_TEMP,"w");
+	if(file_tmp==0)
 	{
-		printf("error : creating temp file  <%s>\n",TEMP_FILE);
+		printf("error : creating temp file  <%s>\n",FILE_TEMP);
 		exit(1);
 	}		
 	
@@ -144,21 +224,6 @@ int main(void)
 			
 			if( !(strcmp(argv[2], "task")) ) // task tag
 			{
-				if( !(strcmp(argv[3], "include")) ) // task include
-				{
-					for(i=0;i<task_count;i++)
-					{
-						fprintf(file_tmp,"#include \"tasks/%s.h\"\n",task_table[i]);
-					}
-				}
-			
-				if( !(strcmp(argv[3], "alloc")) ) // task alloc
-				{
-					fprintf(file_tmp,"#define TASK_COUNT %i\n",task_count);
-					fprintf(file_tmp,"task_table_t task_table[TASK_COUNT];\n");
-					fprintf(file_tmp,"uint8_t task_current=0;\n");
-				}
-				
 				if( !(strcmp(argv[3], "init")) ) // task init
 				{
 					fprintf(file_tmp,"\tuint8_t i=0; \n");
@@ -172,20 +237,6 @@ int main(void)
 			
 			if( !(strcmp(argv[2], "driver")) ) //driver tag 
 			{
-				if( !(strcmp(argv[3], "include")) ) // driver include
-				{
-					for(i=0;i<driver_count;i++)
-					{
-						fprintf(file_tmp,"#include \"drivers/%s.h\"\n",driver_table[i]);
-					}
-				}
-				
-				if( !(strcmp(argv[3], "alloc")) ) // driver alloc
-				{
-					fprintf(file_tmp,"#define DRIVER_COUNT %i\n",driver_count);
-					fprintf(file_tmp,"driver_table_t driver_table[DRIVER_COUNT];\n");
-				}
-				
 				if( !(strcmp(argv[3], "init")) ) // driver init
 				{
 					for(i=0;i<driver_count;i++)
@@ -216,7 +267,7 @@ int main(void)
 	}
 	
 	// Replace original file with the modified version
-    if (remove(SOURCE_FILE) != 0 || rename(TEMP_FILE, SOURCE_FILE) != 0) {
+    if (remove(FILE_SOURCE) != 0 || rename(FILE_TEMP, FILE_SOURCE) != 0) {
         perror("error : replacing TaskMate.c");
         exit(2);
     }

@@ -45,8 +45,9 @@ DEP = ${OBJS:.o=.d}
 CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -O2 -Wall -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files
-TASK_LIST_FILE = task_list
-DRIVER_LIST_FILE = driver_list
+UTILITY_DIR = utility
+TASK_LIST_FILE = ${UTILITY_DIR}/task_list
+DRIVER_LIST_FILE = ${UTILITY_DIR}/driver_list
 
 # Get git tag for USB folder backup
 USB_FOLDER = /media/usbkey
@@ -59,7 +60,7 @@ TASKMATE_FOLDER != printf "/code/TaskMate/TaskMate_${GIT_TAG}"
 # Build rules
 ################################################################################
 
-all: .tag_expand_stamp header_check ${TARGET}
+all: .list_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n" 
 	
 # Link	
@@ -93,7 +94,8 @@ upload:all
 # Heavy sweep	
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n" 
-	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} .deps .tag_expand_stamp
+	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} .deps 
+	rm -f ${UTILITY_DIR}/.list_stamp ${UTILITY_DIR}/autoCode.o ${UTILITY_DIR}/autoCode
 
 # Disassemble machine code in two formats
 dump:all
@@ -110,19 +112,18 @@ doc:
 .PHONY: doc
 
 # Test if mofified list files
-.tag_expand_stamp: TaskMate_tag_expand ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
-	@printf "\n\033[1;33mList have been updated\033[0m\n\n" 
-	./TaskMate_tag_expand
-	touch .tag_expand_stamp
+.list_stamp: autoCode ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
+	@printf "\n\033[1;33mList have changed\033[0m\n\n" 
+	./${UTILITY_DIR}/autoCode
+	touch .list_stamp
 
-# Special rule for TaskMate_tag_expand.c with clang
-TaskMate_tag_expand: TaskMate_tag_expand.o
-	${CLANG} -o TaskMate_tag_expand TaskMate_tag_expand.o
+# Special rule for autoCode.c with clang
+autoCode: ${UTILITY_DIR}/autoCode.o
+	${CLANG} -o ${UTILITY_DIR}/autoCode ${UTILITY_DIR}/autoCode.o
 	
-TaskMate_tag_expand.o: TaskMate_tag_expand.c
-	@printf "\n\033[1;33mTaskMate.c have been updated\033[0m\n\n" 
-	${CLANG} -c $< -o $@
-
+${UTILITY_DIR}/autoCode.o: ${UTILITY_DIR}/autoCode.c
+	@printf "\n\033[1;33mautoCode\033[0m\n\n" 
+	${CLANG} -c ${UTILITY_DIR}/autoCode.c -o ${UTILITY_DIR}/autoCode.o
 
 ################################################################################
 # Backup
