@@ -1,14 +1,23 @@
 # TaskMate RTOS
 ## AVR preemptive real time oprating system
- 
+
+> **TaskMate Project Stats (v0.10)**  
+>  
+> 35 source files in 6 directories, 2,000+ lines of code.  
+
+
 ### ▶️ Introduction
 
 **TaskMate** is a lightweight RTOS for AVR microcontrollers with a focus on reliability, real-time, and modularity.
 
-Each task have it's own stack, used to save and restore context for task switching
+No external RTOS used — 100% built from scratch.  
+ 
+Each task have it's own stack, used to save and restore context for task switching.
 
 
 ### ⚙️ Installation
+
+Custom POSIX Makefile with auto-deps and all project workflow management.
 
 * See : [Makefile Features & Usage](doc/Makefile_summary.md)
 
