@@ -12,21 +12,22 @@
  */
  
  /**
- * @file auto_code.c
- * @brief helper to generate code for task and drivers handle in Taskmate.c  
+ * @file autoCode.c
+ * @brief helper to generate code for task and drivers handle in initSys.c  
  * 
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
  * - Write code for #include / static allocation / initialisation
  * 
  * @warning 
- * - for tasks file name must match with main function, lcd.c -> void lcd(void)
- * - for drivers functions name must match to generic driver layout : 
- * 		<driver name>SetStatus()
- * 		<driver name>GetStatus()
- * 		<driver name>GetName()
- * 		<driver name>Init()
- * 		<driver name>Start()
- * 		<driver name>Stop()
+ * tasks file name must match with main function, lcd.c -> void lcd(void),
+ * drivers functions name must match to generic driver layout : 
+ * - <driver name>SetStatus()
+ * - <driver name>GetStatus()
+ * - <driver name>GetName()
+ * - <driver name>Init()
+ * - <driver name>Start()
+ * - <driver name>Stop()
+ * 
  */
 
 
@@ -68,14 +69,14 @@ int main(void)
 	
 	//open list files
 	FILE *file_task_list=fopen(FILE_TASK_LIST,"r");
-	if(file_task_list==0)
+	if(file_task_list==NULL)
 	{
 		printf("error : task file not found <%s>\n",FILE_TASK_LIST);
 		exit(0);
 	}	
 	
 	FILE *file_driver_list=fopen(FILE_DRIVER_LIST,"r");
-	if(file_driver_list==0)
+	if(file_driver_list==NULL)
 	{
 		printf("error : driver file not found <%s>\n",FILE_DRIVER_LIST);
 		exit(0);
@@ -130,14 +131,14 @@ int main(void)
 	
 	// open include files
 	FILE *file_task_include=fopen(FILE_TASK_INCLUDE,"w");
-	if(file_task_include==0)
+	if(file_task_include==NULL)
 	{
 		printf("error : creating temp file  <%s>\n",FILE_TASK_INCLUDE);
 		exit(1);
 	}
 
 	FILE *file_driver_include=fopen(FILE_DRIVER_INCLUDE,"w");
-	if(file_driver_include==0)
+	if(file_driver_include==NULL)
 	{
 		printf("error : creating temp file  <%s>\n",FILE_DRIVER_INCLUDE);
 		exit(1);
@@ -160,19 +161,19 @@ int main(void)
 
 
 	//******************************************************************
-	// write alloc  files
+	// write alloc files
 	//******************************************************************
 	
 	// open include files
 	FILE *file_task_alloc=fopen(FILE_TASK_ALLOC,"w");
-	if(file_task_alloc==0)
+	if(file_task_alloc==NULL)
 	{
 		printf("error : creating temp file  <%s>\n",FILE_TASK_ALLOC);
 		exit(1);
 	}
 
 	FILE *file_driver_alloc=fopen(FILE_DRIVER_ALLOC,"w");
-	if(file_driver_alloc==0)
+	if(file_driver_alloc==NULL)
 	{
 		printf("error : creating temp file  <%s>\n",FILE_DRIVER_ALLOC);
 		exit(1);
@@ -196,14 +197,14 @@ int main(void)
 	
 	// open source and tmp file
 	FILE *file_src=fopen(FILE_SOURCE,"r");
-	if(file_src==0)
+	if(file_src==NULL)
 	{
 		printf("error : source file not found <%s>\n",FILE_SOURCE);
 		exit(1);
 	}	
 		
 	FILE *file_tmp=fopen(FILE_TEMP,"w");
-	if(file_tmp==0)
+	if(file_tmp==NULL)
 	{
 		printf("error : creating temp file  <%s>\n",FILE_TEMP);
 		exit(1);
