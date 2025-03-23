@@ -15,7 +15,7 @@
  * @file i2c.h
  * @brief header of i2c communication
  * 
- * 
+ * @todo Nothing
  */
 
 #ifndef I2C_H

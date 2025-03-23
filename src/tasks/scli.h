@@ -15,7 +15,7 @@
  * @file scli.h
  * @brief header of serial command line interface
  * 
- * 
+ * @todo Nothing
  */
  
 #ifndef SCLI_H

@@ -15,7 +15,7 @@
  * @file usart1.h
  * @brief header for usart1 driver
  * 
- * 
+ * @todo Nothing
  */
  
  

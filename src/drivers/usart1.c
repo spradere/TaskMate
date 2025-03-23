@@ -15,7 +15,7 @@
  * @file usart1.c
  * @brief implementation of usart1 driver
  * 
- * 
+ * @todo Handle hardware errors
  */
 
 #include <avr/io.h>

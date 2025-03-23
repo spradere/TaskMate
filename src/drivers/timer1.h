@@ -15,7 +15,7 @@
  * @file timer1.h
  * @brief header for timer1 used for preemptive sheduler
  * 
- * 
+ * @todo Nothing
  */
  
 #ifndef TIMER1_H

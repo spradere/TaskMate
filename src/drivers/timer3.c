@@ -15,7 +15,7 @@
  * @file timer3.c
  * @brief implementation of timer3 used for Real Time Clock
  * 
- * 
+ * @todo Nothing
  */
  
 #include <avr/io.h>

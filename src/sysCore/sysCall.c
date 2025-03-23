@@ -16,6 +16,8 @@
  * @brief Implements system calls.
  * 
  * @warning This file contains ATOMIC material !
+ * 
+ * @todo Add system call for driver lock
  */
  
  #include <avr/io.h>

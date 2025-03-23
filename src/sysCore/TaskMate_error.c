@@ -16,7 +16,7 @@
  * @file TaskMate_error.c
  * @brief System wide error implementation
  * 
- * 
+ * @todo Timeout routine, critical/fatal errors handling 
  */
  
 #include <avr/io.h>
