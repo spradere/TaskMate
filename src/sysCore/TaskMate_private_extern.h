@@ -10,14 +10,14 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
- 
- /**
+
+/**
  * @file TaskMate_private_extern.h
  * @brief extrenal header to cut main sys core in multiple files.
- * 
+ *
  * @todo Nothing
  */
- 
+
 #ifndef TASKMATE_PRIVATE_EXTERN_H
 #define TASKMATE_PRIVATE_EXTERN_H
 

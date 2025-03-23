@@ -10,11 +10,11 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
- 
- /**
+
+/**
  * @file rtc.c
  * @brief Implements internal/external RTC.
- * 
+ *
  * @todo Add external clock
  */
 
@@ -24,12 +24,14 @@
 #include "TaskMate_private_extern.h"
 #include "sysCore/rtc.h"
 
-
-ISR(TIMER3_COMPA_vect) 
+ISR(TIMER3_COMPA_vect)
 {
 	// RTC decrement
-	for(uint8_t i=0;i<TASK_COUNT;i++)
+	for (uint8_t i = 0; i < TASK_COUNT; i++)
 	{
-		if( task_table[i].task_RTC > 0 ){task_table[i].task_RTC--;}
+		if (task_table[i].task_RTC > 0)
+		{
+			task_table[i].task_RTC--;
+		}
 	}
 }

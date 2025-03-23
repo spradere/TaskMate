@@ -10,20 +10,20 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
- 
- /**
+
+/**
  * @file initSys.h
- * @brief Header for init system 
- *  
+ * @brief Header for init system
+ *
  * @todo Nothing
  */
- 
- #ifndef INIT_SYS_H
- #define INIT_SYS_H
- 
+
+#ifndef INIT_SYS_H
+#define INIT_SYS_H
+
 void taskCreate(void (*)(void), uint8_t);
 
 void initTasks(void);
 void initDrivers(void);
 
- #endif
+#endif

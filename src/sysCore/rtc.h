@@ -10,11 +10,11 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
- 
- /**
+
+/**
  * @file rtc.h
  * @brief header for RTC
- * 
+ *
  * @todo Nothings
  */
 

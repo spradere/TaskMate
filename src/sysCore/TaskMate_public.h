@@ -10,18 +10,18 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
- 
- /**
+
+/**
  * @file TaskMate_public.h
  * @brief public header of TaskMate.
- * 
+ *
  * - This file contains the headers for user tasks, system services and drivers
  * - Not the internal system core, forbinds.
- * 
+ *
  * @todo Nothing
- * 
+ *
  */
- 
+
 #ifndef TASKMATE_PUBLIC_H
 #define TASKMATE_PUBLIC_H
 
@@ -31,7 +31,3 @@
 #include "sysCore/sysCall.h"
 
 #endif
-
-
-
-

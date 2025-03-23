@@ -11,13 +11,13 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
- /**
+/**
  * @file timer1.h
  * @brief header for timer1 used for preemptive sheduler
- * 
+ *
  * @todo Nothing
  */
- 
+
 #ifndef TIMER1_H
 #define TIMER1_H
 
