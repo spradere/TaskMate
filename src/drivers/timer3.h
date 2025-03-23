@@ -15,7 +15,7 @@
  * @file timer3.h
  * @brief header of timer3 used for Real Time Clock
  * 
- * 
+ * @todo Nothing
  */
 
 #ifndef TIMER3_H

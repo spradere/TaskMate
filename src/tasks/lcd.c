@@ -15,7 +15,7 @@
  * @file lcd.c
  * @brief implementation of lcd display
  * 
- * 
+ * @todo Nothing
  */
 
 

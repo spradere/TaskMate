@@ -15,7 +15,7 @@
  * @file timer1.c
  * @brief implementation of timer1 used for preemptive sheduler
  * 
- * 
+ * @todo Nothing
  */
  
 #include <avr/io.h>

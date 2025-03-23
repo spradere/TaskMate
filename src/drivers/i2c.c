@@ -15,7 +15,7 @@
  * @file i2c.c
  * @brief implementation of i2c communication
  * 
- * 
+ * @todo Handle hardware errors
  */
  
 #include <avr/io.h>

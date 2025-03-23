@@ -15,6 +15,7 @@
  * @file initSys.c
  * @brief Implementation for init system 
  *  
+ * @todo Add read list files to get flags init and start at boot time
  */
  
 #include <avr/io.h>

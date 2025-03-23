@@ -16,7 +16,7 @@
  * @file TaskMate_error.h
  * @brief System wide error definitions
  * 
- * 
+ * @todo Add event more error codes
  */
  
 #ifndef TASKMATE_ERROR_H

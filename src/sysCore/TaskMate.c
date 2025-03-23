@@ -19,13 +19,7 @@
  * - system, drivers and task initialisation
  * - the core scheduling algorithm, handling task switching and preemptive multitasking.
  * 
- * @warning do not edit code between tag it will be deleted by automatic generated code !
- * 
- * @note tag format are one line C comment // + <tag>
- * 
- * - tag command is <task / driver> <include / allocate / init>
- * 
- * @todo more documentation
+ * @todo Move code to rtc.c and scheduler.c
  */
  
 #include <avr/io.h>
@@ -91,9 +85,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	asm volatile ( PUSH_ALL_REGS );
 	task_table[task_current].stack_pointer=(uint8_t *)SP;
 	
-	// stack overflow test
+	// todo -> add stack overflow test
 	
-	// system wide error handler
+	// todo -> add system wide error handler
 	
 	// switch context
 	if(++task_current==TASK_COUNT){task_current=0;}

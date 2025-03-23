@@ -18,7 +18,12 @@
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
  * - Write code for #include / static allocation / initialisation
  * 
- * @warning 
+ * @note tag format are one line C comment // [tag]
+ * 
+ * - tag command is <task / driver> <init>
+ * 
+ * @warning
+ * do not edit code between tag it will be deleted by automatic generated code !
  * tasks file name must match with main function, lcd.c -> void lcd(void),
  * drivers functions name must match to generic driver layout : 
  * - <driver name>SetStatus()
@@ -28,6 +33,7 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  * 
+ * @todo change get_arg() -> less specific to tag handle
  */
 
 
