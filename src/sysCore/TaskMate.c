@@ -17,8 +17,7 @@
  * 
  * This file contains : 
  * - system, drivers and task initialisation
- * - the core scheduling algorithm, handling task switching and preemptive multitasking.
- * 
+ *  
  * @todo Move code to rtc.c and scheduler.c
  */
  
@@ -37,6 +36,7 @@
 int main(void) 
 {
 	initTasks();
+	
 	initDrivers();
 	
 	
@@ -66,15 +66,6 @@ int main(void)
 	return 0;
 }
 
-
-ISR(TIMER3_COMPA_vect) 
-{
-	// RTC decrement
-	for(uint8_t i=0;i<TASK_COUNT;i++)
-	{
-		if( task_table[i].task_RTC > 0 ){task_table[i].task_RTC--;}
-	}
-}
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED) 
 {

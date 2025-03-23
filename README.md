@@ -3,7 +3,7 @@
 
 > **TaskMate Project Stats (v0.10)**  
 >  
-> 35 source files in 6 directories, 2,000+ lines of code.  
+> 37 source files in 6 directories, 2,000+ lines of code, 2968 bytes in flash. 
 
 
 ### ▶️ Introduction

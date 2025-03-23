@@ -17,7 +17,7 @@
  * 
  * @warning This file contains ATOMIC material !
  * 
- * @todo Add system call for driver lock
+ * @todo Add system call for driver lock, external cloc
  */
  
  #include <avr/io.h>
