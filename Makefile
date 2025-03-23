@@ -57,7 +57,7 @@ DRIVER_LIST_FILE = ${UTILITY_DIR}/driver_list
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//'
-TASKMATE_DIR != printf "/code/TaskMate/TaskMate_${GIT_TAG}"
+TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
 
 ################################################################################
@@ -175,9 +175,9 @@ backup:
 	
 	#Test if USB key is mount, do if not
 	@if mount | grep "/media/usbkey" > /dev/null; then \
-		printf "\033[0;33mUSB key already mounted${USB_DIR}\033[0m\n" \
+		printf "\033[0;33mUSB key already mounted ${USB_DIR}\033[0m\n"; \
 	else \
-		printf "\033[0;33mMount USB key ${USB_DIR}\033[0m\n" \
+		printf "\033[0;33mMount USB key ${USB_DIR}\033[0m\n"; \
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 	
