@@ -26,7 +26,7 @@
 #define TASKMATE_PUBLIC_H
 
 #include "sysCore/TaskMate_define.h"
-#include "sysCore/TaskMate_error.h"
+#include "sysCore/error.h"
 
 #include "sysCore/sysCall.h"
 

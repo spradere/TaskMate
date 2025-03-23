@@ -4,6 +4,7 @@ autoCode
 
 # Ignore dependency files
 *.d
+.deps
 
 # Ignore backup files from editors
 *~
