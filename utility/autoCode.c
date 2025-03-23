@@ -11,16 +11,16 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
  
- /**
+
+/**
  * @file autoCode.c
  * @brief helper to generate code for task and drivers handle in initSys.c  
  * 
  * - Simple and reliable, read plain text file <task_list> and <driver_list>
  * - Write code for #include / static allocation / initialisation
  * 
- * @note tag format are one line C comment // [tag]
- * 
- * - tag command is <task / driver> <init>
+ * @note 
+ * tag format are one line C comment // [tag] <task/driver> <init>
  * 
  * @warning
  * do not edit code between tag it will be deleted by automatic generated code !
@@ -262,7 +262,6 @@ int main(void)
 						fprintf(file_tmp,"\t};\n");
 					}
 				}
-				
 			}
 		}
 		 	

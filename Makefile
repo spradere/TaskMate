@@ -33,8 +33,9 @@ SRC_DIR_LIST = ${SRC_DIR}/drivers
 SRC_DIR_LIST += ${SRC_DIR}/tasks
 SRC_DIR_LIST += ${SRC_DIR}/sysCore
 
-# Automatically gather all C files
+# Automatically gather all needed files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
+SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
 
 # Files
 TARGET = TaskMate
@@ -137,15 +138,20 @@ cloc:
 	@cloc * --exclude-dir=html --exclude-lang=D
 
 # clang-tidy
-#TIDY_SRC := src/sysCore/*.c
 TIDY_SRC := utility/autoCode.c
+TIDY_SRC += ${SRCS}
 
 tidy:
-	clang-tidy $(TIDY_SRC) \
-		-checks=clang-analyzer-*,-clang-analyzer-cplusplus*,bugprone-*,readability-* \
-		-header-filter=.* \
-		-- -Isrc -isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
+	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
+	clang-tidy $(TIDY_SRC) -- \
+		-Isrc I/root/code/TaskMate/TaskMate_current/src \
+		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
 		-D__AVR__=6 -D__AVR_ATmega2560__=1
+
+# clang-format
+format:
+	printf "\033[0;33mAuto formating code, config in .clang-format\033[0m\n\n"
+	#clang-format -i $(SRCS) $(SRCS_H)
 
 
 ################################################################################
@@ -169,9 +175,9 @@ backup:
 	
 	#Test if USB key is mount, do if not
 	@if mount | grep "/media/usbkey" > /dev/null; then \
-		printf "\033[0;33mUSB key already mounted${USB_DIR}\033[0m\n"; \
+		printf "\033[0;33mUSB key already mounted${USB_DIR}\033[0m\n" \
 	else \
-		printf "\033[0;33mMount USB key ${USB_DIR}\033[0m\n"; \
+		printf "\033[0;33mMount USB key ${USB_DIR}\033[0m\n" \
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 	
@@ -182,7 +188,7 @@ backup:
 	fi
 	
 	# Run rsync
-	@printf "\033[0;33mRun rsync, output logged in rsync.log\033[0m\n"
+	@printf "\033[0;33mRun rsync, output logged in log/rsync.log\033[0m\n"
 	rsync -av * --progress --delete --exclude	"*.o" --exclude="html". "${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
 	
 	# Umount

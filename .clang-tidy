@@ -1,0 +1,13 @@
+Checks: >
+  clang-analyzer-*,
+  -clang-analyzer-cplusplus.*,
+  -clang-analyzer-security.*,
+  bugprone-*,
+  readability-*,
+  performance-*,
+  -modernize-*,
+  -cppcoreguidelines-*
+
+HeaderFilterRegex: ^src/
+WarningsAsErrors: false
+FormatStyle: file

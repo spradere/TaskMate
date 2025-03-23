@@ -1,0 +1,25 @@
+BasedOnStyle: LLVM
+
+# Indentation and tabs
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+
+# Braces and control structures
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+
+# Formatting preferences
+ColumnLimit: 100
+PointerAlignment: Right
+SpaceAfterCStyleCast: false
+
+# Optional alignments (disable or tweak later if unwanted)
+AlignConsecutiveDeclarations: false
+AlignConsecutiveAssignments: false
+AlignTrailingComments: false
+
+# General C-style tuning
+SortIncludes: false
+IndentCaseLabels: true

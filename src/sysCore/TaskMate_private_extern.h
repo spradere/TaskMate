@@ -22,7 +22,7 @@
 #define TASKMATE_PRIVATE_EXTERN_H
 
 #include "sysCore/TaskMate_define.h"
-#include "sysCore/TaskMate_error.h"
+#include "sysCore/error.h"
 
 extern uint8_t DRIVER_COUNT;
 extern driver_table_t driver_table[];
