@@ -48,12 +48,6 @@ int main(void)
 	
 	uint8_t i;
 	
-	// driver flag init
-	for(i=0;i<DRIVER_COUNT;i++)
-	{
-		(*driver_table[i].setStatus)( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT) );
-	}
-	
 	// init driver if flag on
 	for(i=0;i<DRIVER_COUNT;i++)
 	{

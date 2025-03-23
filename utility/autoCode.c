@@ -133,14 +133,14 @@ int main(void)
 	FILE *file_task_include=fopen(FILE_TASK_INCLUDE,"w");
 	if(file_task_include==NULL)
 	{
-		printf("error : creating temp file  <%s>\n",FILE_TASK_INCLUDE);
+		printf("error : creating file  <%s>\n",FILE_TASK_INCLUDE);
 		exit(1);
 	}
 
 	FILE *file_driver_include=fopen(FILE_DRIVER_INCLUDE,"w");
 	if(file_driver_include==NULL)
 	{
-		printf("error : creating temp file  <%s>\n",FILE_DRIVER_INCLUDE);
+		printf("error : creating file  <%s>\n",FILE_DRIVER_INCLUDE);
 		exit(1);
 	}
 			
@@ -168,26 +168,28 @@ int main(void)
 	FILE *file_task_alloc=fopen(FILE_TASK_ALLOC,"w");
 	if(file_task_alloc==NULL)
 	{
-		printf("error : creating temp file  <%s>\n",FILE_TASK_ALLOC);
+		printf("error : creating file  <%s>\n",FILE_TASK_ALLOC);
 		exit(1);
 	}
 
 	FILE *file_driver_alloc=fopen(FILE_DRIVER_ALLOC,"w");
 	if(file_driver_alloc==NULL)
 	{
-		printf("error : creating temp file  <%s>\n",FILE_DRIVER_ALLOC);
+		printf("error : creating file  <%s>\n",FILE_DRIVER_ALLOC);
 		exit(1);
 	}
 			
 	// write task static alloc
-	fprintf(file_task_alloc,"#define TASK_COUNT %i\n",task_count);
-	fprintf(file_task_alloc,"task_table_t task_table[TASK_COUNT];\n");
+	//fprintf(file_task_alloc,"#define TASK_COUNT %i\n",task_count);
+	fprintf(file_task_alloc,"const uint8_t TASK_COUNT=%i;\n",task_count);
+	fprintf(file_task_alloc,"task_table_t task_table[%i];\n",task_count);
 	fprintf(file_task_alloc,"uint8_t task_current=0;\n");	
 
 	//write driver static alloc
-	fprintf(file_driver_alloc,"#define DRIVER_COUNT %i\n",driver_count);
-	fprintf(file_driver_alloc,"driver_table_t driver_table[DRIVER_COUNT];\n");
-	
+	//fprintf(file_driver_alloc,"#define DRIVER_COUNT %i\n",driver_count);
+	fprintf(file_driver_alloc,"const uint8_t DRIVER_COUNT=%i;\n",driver_count);
+	fprintf(file_driver_alloc,"driver_table_t driver_table[%i];\n",driver_count);
+
 	fclose(file_task_alloc);
 	fclose(file_driver_alloc);
 			

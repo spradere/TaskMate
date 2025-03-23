@@ -23,8 +23,10 @@
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/TaskMate_error.h"
 
+extern uint8_t DRIVER_COUNT;
 extern driver_table_t driver_table[];
 
+extern uint8_t TASK_COUNT;
 extern task_table_t task_table[];
 extern uint8_t task_current;
 
