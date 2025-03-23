@@ -104,4 +104,11 @@ void initDrivers(void)
 		.stop = usart1Stop
 	};
 	// [/tag]
+	
+	// driver flag init -> todo change by reading file list
+	uint8_t i;
+	for(i=0;i<DRIVER_COUNT;i++)
+	{
+		(*driver_table[i].setStatus)( (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT) );
+	}
 }
