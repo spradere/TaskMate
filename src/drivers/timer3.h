@@ -11,10 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
- /**
+/**
  * @file timer3.h
  * @brief header of timer3 used for Real Time Clock
- * 
+ *
  * @todo Nothing
  */
 
@@ -30,6 +30,5 @@ uint8_t *timer3GetName(void);
 void timer3Init(void);
 void timer3Start(void);
 void timer3Stop(void);
-
 
 #endif

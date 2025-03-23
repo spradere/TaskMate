@@ -11,10 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
- /**
+/**
  * @file lcd.h
  * @brief header of lcd display
- * 
+ *
  * @todo Nothing
  */
 
@@ -25,7 +25,7 @@ void lcd(void);
 
 void lcdInit(void);
 void lcdClear(void);
-void lcdSetCursor(uint8_t, uint8_t );
+void lcdSetCursor(uint8_t, uint8_t);
 void lcdWriteString(const char *);
 
 #endif

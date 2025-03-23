@@ -151,7 +151,7 @@ tidy:
 # clang-format
 format:
 	printf "\033[0;33mAuto formating code, config in .clang-format\033[0m\n\n"
-	#clang-format -i $(SRCS) $(SRCS_H)
+	clang-format -i $(SRCS) $(SRCS_H)
 
 
 ################################################################################

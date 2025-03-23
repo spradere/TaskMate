@@ -11,14 +11,13 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
- /**
+/**
  * @file usart1.h
  * @brief header for usart1 driver
- * 
+ *
  * @todo Nothing
  */
- 
- 
+
 #ifndef USART1_H
 #define USART1_H
 
@@ -38,6 +37,5 @@ void usart1Flush(void);
 
 errorCode_t usart1TestBufferRx(void);
 errorCode_t usart1WriteString(const char *str);
-
 
 #endif
