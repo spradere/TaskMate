@@ -22,7 +22,7 @@
 #define USART1_H
 
 #include <stdint.h>
-#include "sysCore/TaskMate_error.h"
+#include "sysCore/error.h"
 
 void usart1SetStatus(uint8_t status);
 uint8_t usart1GetStatus(void);

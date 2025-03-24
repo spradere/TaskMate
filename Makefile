@@ -27,11 +27,11 @@ PROGRAMMER = avrispmkII
 PORT = /dev/ttyU0
 
 # Source directory
-BUILD_DIR = build
-SRC_DIR = src
-SRC_DIR_LIST = ${SRC_DIR}/drivers
-SRC_DIR_LIST += ${SRC_DIR}/tasks
-SRC_DIR_LIST += ${SRC_DIR}/sysCore
+BUILD_DIR = build/
+SRC_DIR = src/
+SRC_DIR_LIST = ${SRC_DIR}drivers
+SRC_DIR_LIST += ${SRC_DIR}tasks
+SRC_DIR_LIST += ${SRC_DIR}sysCore
 
 # Automatically gather all needed files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
@@ -39,19 +39,21 @@ SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
 
 # Files
 TARGET = TaskMate
-OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
+OBJS = ${SRCS:${SRC_DIR}%.c=${BUILD_DIR}%.o}
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
 DEPS = ${OBJS:.o=.d}
+DEPS_FILE = .deps.h
 
 # Compiler flags
 CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -O2 -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
-# Task/Driver list files
-UTILITY_DIR = utility
-TASK_LIST_FILE = ${UTILITY_DIR}/task_list
-DRIVER_LIST_FILE = ${UTILITY_DIR}/driver_list
+# Task/Driver list files handling
+UTILITY_DIR = utility/
+AUTO_CODE = ${UTILITY_DIR}autoCode
+TASK_LIST_FILE = ${UTILITY_DIR}task_list
+DRIVER_LIST_FILE = ${UTILITY_DIR}driver_list
 
 # Get git tag for USB directory backup
 USB_DIR = /media/usbkey
@@ -73,32 +75,29 @@ ${TARGET}: ${OBJS}
 	${CC} ${CFLAGS} -o ${ELF} ${OBJS}
 
 # Compile
-${OBJS}: ${@:${BUILD_DIR}/%.o=${SRC_DIR}/%.c}
+${OBJS}: ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
 	
-	@printf "source : <%s> -> <%s>\n" ${@:${BUILD_DIR}/%.o=${SRC_DIR}/%.c} $@
-	${CC} ${CFLAGS} -c ${@:${BUILD_DIR}/%.o=${SRC_DIR}/%.c} -o $@
+	@printf "source : <%s> -> <%s>\n" ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} $@
+	${CC} ${CFLAGS} -c ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o $@
 	
 # Include dependency files safely, used to compile *.c if related header was edited
 header_check:
 	@printf "\n\033[1;33mCheck header files\033[0m\n\n" 
-	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${BUILD_DIR}/.deps
+	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 	
--include ${BUILD_DIR}/.deps
+-include ${DEPS_FILE}
 
 # Test if mofified list files
-.list_stamp: autoCode ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
-	@printf "\n\033[1;33mList have changed\033[0m\n\n"
-	./${UTILITY_DIR}/autoCode
+.list_stamp: ${AUTO_CODE} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
+	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
+	./${AUTO_CODE}
 	touch .list_stamp
 
-# Special rule for autoCode.c with clang
-autoCode: ${UTILITY_DIR}/autoCode.o
-	clang -o ${UTILITY_DIR}/autoCode ${UTILITY_DIR}/autoCode.o
-	
-${UTILITY_DIR}/autoCode.o: ${UTILITY_DIR}/autoCode.c
-	@printf "\n\033[1;33mautoCode\033[0m\n\n" 
-	clang -c ${UTILITY_DIR}/autoCode.c -o ${UTILITY_DIR}/autoCode.o
+# Special rule for autoCode with clang, not avr-gcc
+${AUTO_CODE}: ${AUTO_CODE}.c
+	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n" 
+	clang ${AUTO_CODE}.c -o ${AUTO_CODE}
 
 
 ################################################################################
@@ -112,12 +111,14 @@ upload:all
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	#upload to atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
+.PHONY: upload
 	
 # Heavy sweep
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
-	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} .deps
-	rm -f ${UTILITY_DIR}/.list_stamp ${UTILITY_DIR}/autoCode.o ${UTILITY_DIR}/autoCode
+	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} ${DEPS_FILE}
+	rm -f .list_stamp ${AUTO_CODE}
+.PHONY: clean
 
 # Disassemble machine code in two formats
 dump:all
@@ -125,17 +126,18 @@ dump:all
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	avr-objdump -D -m avr6 ${HEX} > hex.out
 	avr-objdump -D -m avr6 ${ELF} > elf.out
+.PHONY: dump
 	
 # Make doxygen documentation
 doc:
 	@printf "\n\033[1;36mMake Doxygen documentation\033[0m\n\n" 
 	doxygen doc/Doxyfile
-
 .PHONY: doc
 
 # Count lines of code
 cloc:
 	@cloc * --exclude-dir=html --exclude-lang=D
+.PHONY: cloc
 
 # clang-tidy
 TIDY_SRC := utility/autoCode.c
@@ -147,12 +149,13 @@ tidy:
 		-Isrc I/root/code/TaskMate/TaskMate_current/src \
 		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
 		-D__AVR__=6 -D__AVR_ATmega2560__=1
+.PHONY: tidy
 
 # clang-format
 format:
 	printf "\033[0;33mAuto formating code, config in .clang-format\033[0m\n\n"
 	clang-format -i $(SRCS) $(SRCS_H)
-
+.PHONY: format
 
 ################################################################################
 # Backup
@@ -165,6 +168,7 @@ push:
 	@git commit -m "${M}"
 	@git push
 	@printf "\n"
+.PHONY: push
 
 # USB key backup with current tag folder
 backup:
@@ -195,3 +199,4 @@ backup:
 	@printf "\033[0;33mUmount ${USB_DIR}\033[0m\n"
 	@umount ${USB_DIR}
 	@printf "\n"
+.PHONY: backup

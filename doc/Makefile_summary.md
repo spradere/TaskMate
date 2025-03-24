@@ -4,13 +4,10 @@
 
 - **Automatic Dependency Handling**: Only recompiles modified source files.
 - **Header Dependency Tracking**: Detects changes in `.h` files and recompiles affected `.c` files.
-- **Multi-Compiler Setup**:
-  - Uses `clang` for `TaskMate_tag_expand.c`
-  - Uses `avr-gcc` for AVR sources.
 - **Automated Code Generation**:
-  - Expands task/driver lists from `TaskMate_tag_expand.c` before compilation.
+  - If list of tasks/drivers have been updated run autoCode before compilation.
 - **Colorized Output**: Improved readability with `@printf` messages.
-- **POSIX-Compliant**: Works on FreeBSD without requiring GNU Make.
+- **POSIX-Compliant**: Works without requiring GNU Make.
 
 ## ✍️ Usage
 
@@ -28,9 +25,11 @@ Miscellaneous commands :
 | Command | Description |
 |---------|-------------|
 | `make clean` | Delete files, except code, obviously ! |
-| `make doc` | Generate Doxygen documentation. | 
-| `make dump` | Disassemble machine code in two formats, for debugging purpose |
-| `make cloc` | count lines Of Code |
+| `make doc` | Generate Doxygen documentation | 
+| `make dump` | Disassemble machine code in two formats |
+| `make cloc` | Count lines of code |
+| `make tidy` | C code static analysis with clang-tidy tool, config file .clang-tidy |
+| `make format` | C code formating with clang-format tool, config file .clang-format|
 
 ## ✈ Streamlined Workflow
 

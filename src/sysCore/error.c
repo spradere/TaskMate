@@ -13,7 +13,7 @@
  */
 
 /**
- * @file TaskMate_error.c
+ * @file error.c
  * @brief System wide error implementation
  *
  * @todo Timeout routine, critical/fatal errors handling
@@ -21,7 +21,7 @@
 
 #include <avr/io.h>
 #include "TaskMate_private_extern.h"
-#include "sysCore/TaskMate_error.h"
+#include "sysCore/error.h"
 
 volatile errorCode_t system_last_critical_error = ERR_SUCCESS;
 
