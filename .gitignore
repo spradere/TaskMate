@@ -1,10 +1,10 @@
 # Ignore compiled object files
 *.o
-autoCode
+utility/autoCode
 
 # Ignore dependency files
 *.d
-build/.deps
+.deps.h
 
 # Ignore backup files from editors
 *~
