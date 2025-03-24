@@ -13,11 +13,12 @@
  */
 
 /**
- * @file TaskMate_error.h
+ * @file error.h
  * @brief System wide error definitions
  *
  * @todo Add event more error codes
  */
+
 
 #ifndef TASKMATE_ERROR_H
 #define TASKMATE_ERROR_H
