@@ -58,7 +58,7 @@ DRIVER_LIST_FILE = ${UTILITY_DIR}driver_list
 # Get git tag for USB directory backup
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
-GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//'
+GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
 
@@ -88,7 +88,7 @@ header_check:
 	
 -include ${DEPS_FILE}
 
-# Test if mofified list files
+# Test if modified list files
 .list_stamp: ${AUTO_CODE} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
 	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
 	./${AUTO_CODE}
@@ -107,9 +107,9 @@ ${AUTO_CODE}: ${AUTO_CODE}.c
 # Flash Gordon
 upload:all
 	@printf "\n\033[1;33mUpload binary to AVR flash\033[0m\n\n"
-	#to hex format
+	# ELF to hex format
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	#upload to atmega
+	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload
 	
@@ -153,7 +153,7 @@ tidy:
 
 # clang-format
 format:
-	printf "\033[0;33mAuto formating code, config in .clang-format\033[0m\n\n"
+	printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
 	clang-format -i $(SRCS) $(SRCS_H)
 .PHONY: format
 
@@ -174,7 +174,6 @@ push:
 backup:
 	@printf "\n\033[1;33mBackup to <${USB_DIR}${TASKMATE_DIR}>\033[0m\n\n"
 	@printf "\033[0;33mInsert USB key and press ENTER to continue ... \033[0m\n"
-	
 	@read DUMMY_VAR
 	
 	#Test if USB key is mount, do if not
@@ -193,7 +192,7 @@ backup:
 	
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in log/rsync.log\033[0m\n"
-	rsync -av * --progress --delete --exclude	"*.o" --exclude="html". "${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
+	rsync -av * --progress --delete --exclude "*.o" --exclude="html" "${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
 	
 	# Umount
 	@printf "\033[0;33mUmount ${USB_DIR}\033[0m\n"
