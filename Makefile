@@ -46,7 +46,7 @@ DEPS = ${OBJS:.o=.d}
 DEPS_FILE = .deps.h
 
 # Compiler flags
-CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -O2 -Wall
+CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files handling
@@ -55,7 +55,7 @@ AUTO_CODE = ${UTILITY_DIR}autoCode
 TASK_LIST_FILE = ${UTILITY_DIR}task_list
 DRIVER_LIST_FILE = ${UTILITY_DIR}driver_list
 
-# Get git tag for USB directory backup
+# Get git tag for USB key directory backup
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
@@ -88,7 +88,7 @@ header_check:
 	
 -include ${DEPS_FILE}
 
-# Test if modified list files
+# Test if modified autoCode and list files
 .list_stamp: ${AUTO_CODE} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
 	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
 	./${AUTO_CODE}
@@ -154,8 +154,9 @@ tidy:
 # clang-format
 format:
 	printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
-	clang-format -i $(SRCS) $(SRCS_H)
+	clang-format -i $(SRCS) $(SRCS_H) utility/autoCode.c
 .PHONY: format
+
 
 ################################################################################
 # Backup
@@ -170,7 +171,7 @@ push:
 	@printf "\n"
 .PHONY: push
 
-# USB key backup with current tag folder
+# USB key backup with current tag in directory
 backup:
 	@printf "\n\033[1;33mBackup to <${USB_DIR}${TASKMATE_DIR}>\033[0m\n\n"
 	@printf "\033[0;33mInsert USB key and press ENTER to continue ... \033[0m\n"
@@ -184,7 +185,7 @@ backup:
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 	
-	# Test if dest folder exist, create if not
+	# Test if dest directory exist, create if not
 	@if [ -d "${USB_DIR}${TASKMATE_DIR}" ]; then \
 	else \
 		mkdir ${USB_DIR}${TASKMATE_DIR}; \
