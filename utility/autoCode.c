@@ -39,6 +39,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// files name
 #define FILE_TASK_LIST "utility/task_list"
 #define FILE_DRIVER_LIST "utility/driver_list"
 #define FILE_SOURCE "src/sysCore/initSys.c"
@@ -48,6 +49,7 @@
 #define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
 #define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
 
+// size of stuffs
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256
 
@@ -56,12 +58,28 @@
 #define ARGN_COUNT_MAX 4
 #define ARGV_SIZE_MAX 64
 
-int getArg(char *line, int line_size_max, char *argv[][ARGV_SIZE_MAX], int argn_count_max, int argv_size_max);
+// error message macro
+#define ERRMSG(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE__, __LINE__, msg)
+
+
+int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max);
 
 int main(void)
 {
-	char line[LINE_SIZE_MAX]; // buffer for reading
-	char argv[ARGN_COUNT_MAX][ARGV_SIZE_MAX]; // argument data
+	char *line; // buffer for reading
+	if( (line = malloc(LINE_SIZE_MAX)) == NULL)
+		{ERRMSG("malloc line"); return(1);}
+
+	char *(*argv); // argument data
+	if( (argv = malloc(ARGN_COUNT_MAX)) == NULL)
+		{ERRMSG("malloc argv\n"); return(1);}
+	
+	for(int i=0;i<ARGN_COUNT_MAX;i++)
+	{
+		if( (argv[i]=malloc(ARGV_SIZE_MAX)) == NULL)
+			{ERRMSG("malloc argv[]\n"); return(1);}
+	}
+
 
 	//******************************************************************
 	// read list -> table
@@ -74,14 +92,16 @@ int main(void)
 	FILE *file_task_list = fopen(FILE_TASK_LIST, "r");
 	if (file_task_list == NULL)
 	{
-		printf("[autoCode.c] error : task file not found <%s>\n", FILE_TASK_LIST);
+		ERRMSG("task list file not found");
+		printf("\t <%s>\n", FILE_TASK_LIST);
 		exit(0);
 	}
 
 	FILE *file_driver_list = fopen(FILE_DRIVER_LIST, "r");
 	if (file_driver_list == NULL)
 	{
-		printf("[autoCode.c] error : driver file not found <%s>\n", FILE_DRIVER_LIST);
+		ERRMSG("driver list file not found");
+		printf("\t <%s>\n", FILE_DRIVER_LIST);
 		exit(0);
 	}
 
@@ -95,7 +115,7 @@ int main(void)
 	}
 	if (task_count == 0)
 	{
-		printf("[autoCode.c] error : no task\n");
+		ERRMSG("no task");
 		exit(0);
 	}
 
@@ -110,7 +130,7 @@ int main(void)
 	}
 	if (driver_count == 0)
 	{
-		printf("[autoCode.c] error : no driver\n");
+		ERRMSG("no drivers");
 		exit(0);
 	}
 
@@ -144,14 +164,16 @@ int main(void)
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
 	if (file_task_include == NULL)
 	{
-		printf("[autoCode.c] error : creating file  <%s>\n", FILE_TASK_INCLUDE);
+		ERRMSG("creating file");
+		printf("\t <%s>\n", FILE_TASK_INCLUDE);
 		exit(1);
 	}
 
 	FILE *file_driver_include = fopen(FILE_DRIVER_INCLUDE, "w");
 	if (file_driver_include == NULL)
 	{
-		printf("[autoCode.c] error : creating file  <%s>\n", FILE_DRIVER_INCLUDE);
+		ERRMSG("creating file");
+		printf("\t <%s>\n", FILE_DRIVER_INCLUDE);
 		exit(1);
 	}
 
@@ -178,14 +200,16 @@ int main(void)
 	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
 	if (file_task_alloc == NULL)
 	{
-		printf("[autoCode.c] error : creating file  <%s>\n", FILE_TASK_ALLOC);
+		ERRMSG("creating file");
+		printf("\t <%s>\n", FILE_TASK_ALLOC);
 		exit(1);
 	}
 
 	FILE *file_driver_alloc = fopen(FILE_DRIVER_ALLOC, "w");
 	if (file_driver_alloc == NULL)
 	{
-		printf("[autoCode.c] error : creating file  <%s>\n", FILE_DRIVER_ALLOC);
+		ERRMSG("creating file");
+		printf("\t  <%s>\n", FILE_DRIVER_ALLOC);
 		exit(1);
 	}
 
@@ -209,14 +233,16 @@ int main(void)
 	FILE *file_src = fopen(FILE_SOURCE, "r");
 	if (file_src == NULL)
 	{
-		printf("[autoCode.c] error : source file not found <%s>\n", FILE_SOURCE);
+		ERRMSG("opening file");
+		printf("\t <%s>\n", FILE_SOURCE);
 		exit(1);
 	}
 
 	FILE *file_tmp = fopen(FILE_TEMP, "w");
 	if (file_tmp == NULL)
 	{
-		printf("[autoCode.c] error : creating temp file  <%s>\n", FILE_TEMP);
+		ERRMSG("creating file");
+		printf("\t <%s>\n", FILE_TEMP);
 		exit(1);
 	}
 
@@ -225,26 +251,32 @@ int main(void)
 	int arg_count;
 	int file_line_number = 0;
 
-	while (fgets(*line, LINE_SIZE_MAX, file_src))
+	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
 		file_line_number++;
 		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 
-		if (arg_count != 4)
+		printf("[read from source] arg_count=%i %s",arg_count,line);
+		for(int i=0;i<arg_count;i++)
+			{printf("\t\t<%s>\n",argv[i]);}
+		printf("\n\n");
+		
+		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
 		{
-			printf("[autoCode] error in file <%s> line %i, arg count != 4/n", 
-				FILE_SOURCE, file_line_number);
-		}
-
-		if (!(strcmp(*argv[0], "//")) && !(strcmp(*argv[1], "[tag]")))
-		{
-			printf("found tag <%s> <%s> ... ", *argv[2], *argv[3]);
-			fprintf(file_tmp, "%s", *line);
+			if (arg_count != 4)
+			{
+				ERRMSG("arg count != 4 line :");
+				printf("\t %s:%i\n", FILE_SOURCE, file_line_number);
+				break;
+			}
+						
+			printf("found tag <%s> <%s> ... ", argv[2], argv[3]);
+			fprintf(file_tmp, "%s", line);
 			tag_section = 1;
 
-			if (!(strcmp(*argv[2], "task"))) // task tag
+			if (!(strcmp(argv[2], "task"))) // task tag
 			{
-				if (!(strcmp(*argv[3], "init"))) // task init
+				if (!(strcmp(argv[3], "init"))) // task init
 				{
 					fprintf(file_tmp, "\tuint8_t i = 0; \n");
 					for (i = 0; i < task_count; i++)
@@ -254,9 +286,9 @@ int main(void)
 				}
 			}
 
-			if (!(strcmp(*argv[2], "driver"))) // driver tag
+			if (!(strcmp(argv[2], "driver"))) // driver tag
 			{
-				if (!(strcmp(*argv[3], "init"))) // driver init
+				if (!(strcmp(argv[3], "init"))) // driver init
 				{
 					for (i = 0; i < driver_count; i++)
 					{
@@ -275,7 +307,7 @@ int main(void)
 			}
 		}
 
-		if (!(strcmp(*argv[0], "//")) && !(strcmp(*argv[1], "[/tag]")))
+		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[/tag]")))
 		{
 			printf("end tag\n");
 			tag_section = 0;
@@ -283,24 +315,32 @@ int main(void)
 
 		if (tag_section == 0)
 		{
-			fprintf(file_tmp, "%s", *line);
-		} // tag used to flush old code
+			fprintf(file_tmp, "%s", line);
+		} 
 	}
 
+	if(tag_section == 1)
+	{
+		ERRMSG("missing end tag [/tag] at end of file");
+	}
+	
 	// Replace original file with the modified version
 	if (remove(FILE_SOURCE) != 0 || rename(FILE_TEMP, FILE_SOURCE) != 0)
 	{
-		perror("[autoCode.c] error : replacing initSys.c");
+		ERRMSG("replacing initSys.c");
 		exit(2);
 	}
 
 	fclose(file_src);
 	fclose(file_tmp);
 
+	free(line);
+	free(argv);
+	
 	return 0;
 }
 
-int getArg(char *line[], int line_size_max, char *argv[][ARGV_SIZE_MAX], int argn_count_max, int argv_size_max)
+int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max)
 {
 	int i_line = 0;
 	int i_arg = 0;
@@ -311,12 +351,12 @@ int getArg(char *line[], int line_size_max, char *argv[][ARGV_SIZE_MAX], int arg
 	{
 		argv[argn][0] = 0;
 	}
-
+	
 	// read line, extract arguments
 	argn=0;
 	
-	while (	(line[i_line] != '\n') && (line[i_line] != 0) 
-			&& (i_line < (line_size_max - 1)) && (argn <= argn_count_max)	)	
+	while (	(line[i_line] != '\n') && (line[i_line] != 0)
+			&& (i_line < (line_size_max - 1)) && (argn < argn_count_max)	)	
 	{
 		// get off leading space or tab
 		while (	((line[i_line] == ' ') || (line[i_line] == '\t')) 
@@ -324,13 +364,18 @@ int getArg(char *line[], int line_size_max, char *argv[][ARGV_SIZE_MAX], int arg
 				&& (i_line < line_size_max - 1) 	)
 		{i_line++;}
 		
+		//printf("after off : i_line=%i i_arg=%i argn=%i\n",i_line,i_arg,argn);
+		
 		// read and store data
 		i_arg = 0;
-		while (	(line[i_line] != ' ') && (line[i_line] == '\t') 
+		while (	(line[i_line] != ' ') && (line[i_line] != '\t') 
 				&& (line[i_line] != '\n') && (line[i_line] != 0) 
-				&& (i_line < (line_size_max - 1)) && (i_arg <= argv_size_max)	)
+				&& (i_line < (line_size_max - 1)) && (i_arg < argv_size_max)	)
 		{argv[argn][i_arg++]=line[i_line++];}
+
+		//printf("after read : i_line=%i i_arg=%i argn=%i\n",i_line,i_arg,argn);
 		
+		argv[argn][i_arg] = 0;
 		argn++;
 	}
 

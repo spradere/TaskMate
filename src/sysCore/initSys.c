@@ -55,7 +55,7 @@ void initTasks(void)
 {
 	// do not edit code between tag : automatic generated code !
 	// [tag] task init
-	uint8_t i=0; 
+	uint8_t i = 0; 
 	taskCreate(task1,i++);
 	taskCreate(task2,i++);
 	taskCreate(lcd,i++);
