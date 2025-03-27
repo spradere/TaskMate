@@ -67,19 +67,26 @@ int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int a
 int main(void)
 {
 	char *line; // buffer for reading
-	if( (line = malloc(LINE_SIZE_MAX)) == NULL)
+	if( (line = malloc(LINE_SIZE_MAX * sizeof(*line))) == NULL)
 		{ERRMSG("malloc line"); return(1);}
 
-	char *(*argv); // argument data
-	if( (argv = malloc(ARGN_COUNT_MAX)) == NULL)
+	char **argv; // argument data
+	if( (argv = malloc(ARGN_COUNT_MAX * sizeof(*argv))) == NULL)
 		{ERRMSG("malloc argv\n"); return(1);}
 	
 	for(int i=0;i<ARGN_COUNT_MAX;i++)
 	{
-		if( (argv[i]=malloc(ARGV_SIZE_MAX)) == NULL)
+		if( (argv[i]=malloc(ARGV_SIZE_MAX * sizeof(**argv))) == NULL)
 			{ERRMSG("malloc argv[]\n"); return(1);}
 	}
-
+	
+	printf("[autoCode.c] sizeof *line=%p line=%p **argv:%p *argv=%p argv=%p *argv[]=%p\n",
+		sizeof(*line),
+		sizeof(line),
+		sizeof(**argv),
+		sizeof(*argv),
+		sizeof(argv),
+		sizeof(*argv[0])	);
 
 	//******************************************************************
 	// read list -> table
@@ -256,10 +263,10 @@ int main(void)
 		file_line_number++;
 		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 
-		printf("[read from source] arg_count=%i %s",arg_count,line);
+		/*printf("[read from source] arg_count=%i %s",arg_count,line);
 		for(int i=0;i<arg_count;i++)
 			{printf("\t\t<%s>\n",argv[i]);}
-		printf("\n\n");
+		printf("\n\n");*/
 		
 		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
 		{
@@ -292,14 +299,14 @@ int main(void)
 				{
 					for (i = 0; i < driver_count; i++)
 					{
-						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t) \n", i);
+						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
 						fprintf(file_tmp, "\t{\n");
-						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
+						fprintf(file_tmp, "\t\t.driver_id = %i, \n", i);
 						fprintf(file_tmp, "\t\t.driver_name = %sGetName(),\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus, \n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus, \n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.init = %sInit, \n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.start = %sStart, \n", driver_table[i]);
+						fprintf(file_tmp, "\t\t.init = %sInit,\n", driver_table[i]);
+						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i]);
 						fprintf(file_tmp, "\t};\n");
 					}
@@ -334,8 +341,9 @@ int main(void)
 	fclose(file_src);
 	fclose(file_tmp);
 
-	free(line);
+	for(int i=0;i<ARGN_COUNT_MAX;i++){free(argv[i]);}
 	free(argv);
+	free(line);
 	
 	return 0;
 }
@@ -360,23 +368,18 @@ int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int a
 	{
 		// get off leading space or tab
 		while (	((line[i_line] == ' ') || (line[i_line] == '\t')) 
-				&& (line[i_line] != '\n') && (line[i_line] != 0) 
 				&& (i_line < line_size_max - 1) 	)
 		{i_line++;}
 		
-		//printf("after off : i_line=%i i_arg=%i argn=%i\n",i_line,i_arg,argn);
-		
-		// read and store data
+		// read and store token
 		i_arg = 0;
 		while (	(line[i_line] != ' ') && (line[i_line] != '\t') 
 				&& (line[i_line] != '\n') && (line[i_line] != 0) 
-				&& (i_line < (line_size_max - 1)) && (i_arg < argv_size_max)	)
+				&& (i_line < (line_size_max - 1)) && (i_arg < (argv_size_max-1))	)
 		{argv[argn][i_arg++]=line[i_line++];}
 
-		//printf("after read : i_line=%i i_arg=%i argn=%i\n",i_line,i_arg,argn);
-		
 		argv[argn][i_arg] = 0;
-		argn++;
+		if(argv[argn][0] != 0 ){argn++;}
 	}
 
 	return argn;
