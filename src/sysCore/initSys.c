@@ -67,49 +67,49 @@ void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code !
 	// [tag] driver init
-	driver_table[0]=(driver_table_t) 
+	driver_table[0]=(driver_table_t)
 	{
-		.driver_id = 0,
+		.driver_id = 0, 
 		.driver_name = timer1GetName(),
 		.setStatus = timer1SetStatus, 
 		.getStatus = timer1GetStatus, 
-		.init = timer1Init, 
-		.start = timer1Start, 
+		.init = timer1Init,
+		.start = timer1Start,
 		.stop = timer1Stop
 	};
-	driver_table[1]=(driver_table_t) 
+	driver_table[1]=(driver_table_t)
 	{
-		.driver_id = 1,
+		.driver_id = 1, 
 		.driver_name = timer3GetName(),
 		.setStatus = timer3SetStatus, 
 		.getStatus = timer3GetStatus, 
-		.init = timer3Init, 
-		.start = timer3Start, 
+		.init = timer3Init,
+		.start = timer3Start,
 		.stop = timer3Stop
 	};
-	driver_table[2]=(driver_table_t) 
+	driver_table[2]=(driver_table_t)
 	{
-		.driver_id = 2,
+		.driver_id = 2, 
 		.driver_name = i2cGetName(),
 		.setStatus = i2cSetStatus, 
 		.getStatus = i2cGetStatus, 
-		.init = i2cInit, 
-		.start = i2cStart, 
+		.init = i2cInit,
+		.start = i2cStart,
 		.stop = i2cStop
 	};
-	driver_table[3]=(driver_table_t) 
+	driver_table[3]=(driver_table_t)
 	{
-		.driver_id = 3,
+		.driver_id = 3, 
 		.driver_name = usart1GetName(),
 		.setStatus = usart1SetStatus, 
 		.getStatus = usart1GetStatus, 
-		.init = usart1Init, 
-		.start = usart1Start, 
+		.init = usart1Init,
+		.start = usart1Start,
 		.stop = usart1Stop
 	};
 	// [/tag]
 
-	// driver flag init -> todo change by reading file list
+	// driver flag init -> todo : change by reading file list
 	uint8_t i;
 	for (i = 0; i < DRIVER_COUNT; i++)
 	{
