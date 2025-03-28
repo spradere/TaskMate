@@ -18,7 +18,7 @@
  * This file contains :
  * - system, drivers and task initialisation
  *
- * @todo Move code to rtc.c and scheduler.c
+ * @todo Atomic for SP read/write
  */
 
 #include <avr/io.h>
@@ -37,7 +37,11 @@ int main(void)
 	initTasks();
 
 	initDrivers();
-
+	
+	// Set output for in board led 13
+	LED_DDR |= (1 << LED_PIN);
+	
+	
 	uint8_t i;
 
 	// init driver if flag on
@@ -58,7 +62,7 @@ int main(void)
 		}
 	}
 
-	// jump to current task for first call and start system
+	// jump to current task for first call and start system by enabling INT
 	task_current = 0;
 	SP = (uint16_t)task_table[task_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "sei \n\t"
