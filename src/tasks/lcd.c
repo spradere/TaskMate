@@ -32,7 +32,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("TaskMate run");
+	lcdWriteString("autoCode.c ...");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.

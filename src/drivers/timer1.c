@@ -13,7 +13,7 @@
 
 /**
  * @file timer1.c
- * @brief implementation of timer1 used for preemptive sheduler
+ * @brief implementation of timer1 driver, used for preemptive sheduler
  *
  * @todo Nothing
  */
@@ -36,9 +36,6 @@ void timer1Init(void)
 	// Set up timer1 interrupt for scheduler
 	TCCR1B |= (1 << WGM12) | (1 << CS11); // CTC mode, prescaler 8
 	OCR1A = 1999; // Interrupt every 1ms
-
-	// Set output for in board led 13
-	LED_DDR |= (1 << LED_PIN);
 }
 
 void timer1Start(void)
