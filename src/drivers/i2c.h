@@ -28,7 +28,6 @@
 
 void i2cSetStatus(uint8_t);
 uint8_t i2cGetStatus(void);
-uint8_t *i2cGetName(void);
 
 void i2cInit(void);
 void i2cStart(void);

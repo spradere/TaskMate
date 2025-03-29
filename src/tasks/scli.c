@@ -25,6 +25,14 @@
 #include "tasks/scli.h"
 #include "tasks/lcd.h"
 
+
+// status
+uint8_t scli_status = 0;
+
+void scliSetStatus(uint8_t status) { scli_status = status; }
+uint8_t scliGetStatus(void) { return scli_status; }
+
+
 void scli(void)
 {
 	while (1)

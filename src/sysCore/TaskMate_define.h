@@ -102,46 +102,11 @@
 	"out __SREG__, r0 \n\t"                                                                        \
 	"pop r0	\n\t" /**< Pop all AVR registers Rx + SREG  */
 
-/**
- * @struct task_table_t
- * @brief Represents a task in the RTOS.
- */
-// task table
-#define TASK_STACK_SIZE 256 /**< Task stack size*/
-
-typedef struct
-{
-	uint8_t task_id; /**< Task identifier */
-	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
-	uint8_t *stack_pointer; /**< Task stack Pointer, pointer to stack array items*/
-	uint8_t stack[TASK_STACK_SIZE]; /**< Task stack array */
-} task_table_t;
-
-/**
- * @struct driver_table_t
- * @brief Represents a driver in the RTOS.
- */
 
 #define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
-// driver status bits
-#define DRIVER_INIT_AT_BOOT 0 /**< Automatic driver initialization at boot time */
-#define DRIVER_START_AT_BOOT 1 /**< Automatic driver start at boot time */
-#define DRIVER_LOCK 2 /**< Driver status locked */
-#define DRIVER_DEAD 3 /**< Driver can't be started */
-#define DRIVER_INIT 4 /**< Driver have been initialized */
+#include "sysCore/task_table.h"
+#include "sysCore/driver_table.h"
 
-typedef struct
-{
-	uint8_t driver_id; /**< Driver indentifier */
-	uint8_t *driver_name; /**< Driver name */
-
-	void (*setStatus)(uint8_t); /**< Driver function for setting up status */
-	uint8_t (*getStatus)(void); /**< Driver function for getting up status */
-
-	void (*init)(void); /**< Initialize driver function  */
-	void (*start)(void); /**< Start driver function  */
-	void (*stop)(void); /**< Stop driver function  */
-} driver_table_t;
 
 #endif
