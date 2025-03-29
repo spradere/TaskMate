@@ -26,7 +26,7 @@
 
 void usart1SetStatus(uint8_t status);
 uint8_t usart1GetStatus(void);
-uint8_t *usart1GetName(void);
+
 void usart1Init(void);
 void usart1Start(void);
 void usart1Stop(void);

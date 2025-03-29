@@ -3,7 +3,7 @@
 
 > **TaskMate Project Stats (v0.10)**  
 >  
-> 71 commit, 38 source files in 6 directories, 2,394 lines of code, 2752 bytes in flash. 
+> 73 commit, 40 source files in 6 directories, 2,525 lines of code, 2696 bytes in flash. 
 
 
 ### ▶️ Introduction

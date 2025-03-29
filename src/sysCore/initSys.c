@@ -29,6 +29,8 @@
 void taskCreate(void (*taskFunction)(void), uint8_t task_id)
 {
 	task_table[task_id].task_id = task_id;
+	//task_table[task_id].task_name= ??
+
 
 	// RTC init
 	task_table[task_id].task_RTC = 0;
@@ -55,11 +57,22 @@ void initTasks(void)
 {
 	// do not edit code between tag : automatic generated code !
 	// [tag] task init
-	uint8_t i = 0; 
-	taskCreate(task1,i++);
-	taskCreate(task2,i++);
-	taskCreate(lcd,i++);
-	taskCreate(scli,i++);
+	taskCreate(task1, 0);
+	task_table[0].task_name = "task1";
+	task_table[0].setStatus = task1SetStatus;
+	task_table[0].getStatus = task1GetStatus;
+	taskCreate(task2, 1);
+	task_table[1].task_name = "task2";
+	task_table[1].setStatus = task2SetStatus;
+	task_table[1].getStatus = task2GetStatus;
+	taskCreate(lcd, 2);
+	task_table[2].task_name = "lcd";
+	task_table[2].setStatus = lcdSetStatus;
+	task_table[2].getStatus = lcdGetStatus;
+	taskCreate(scli, 3);
+	task_table[3].task_name = "scli";
+	task_table[3].setStatus = scliSetStatus;
+	task_table[3].getStatus = scliGetStatus;
 	// [/tag]
 }
 
@@ -70,7 +83,7 @@ void initDrivers(void)
 	driver_table[0]=(driver_table_t)
 	{
 		.driver_id = 0,
-		.driver_name = timer1GetName(),
+		.driver_name = "timer1",
 		.setStatus = timer1SetStatus,
 		.getStatus = timer1GetStatus,
 		.init = timer1Init,
@@ -80,7 +93,7 @@ void initDrivers(void)
 	driver_table[1]=(driver_table_t)
 	{
 		.driver_id = 1,
-		.driver_name = timer3GetName(),
+		.driver_name = "timer3",
 		.setStatus = timer3SetStatus,
 		.getStatus = timer3GetStatus,
 		.init = timer3Init,
@@ -90,7 +103,7 @@ void initDrivers(void)
 	driver_table[2]=(driver_table_t)
 	{
 		.driver_id = 2,
-		.driver_name = i2cGetName(),
+		.driver_name = "i2c",
 		.setStatus = i2cSetStatus,
 		.getStatus = i2cGetStatus,
 		.init = i2cInit,
@@ -100,7 +113,7 @@ void initDrivers(void)
 	driver_table[3]=(driver_table_t)
 	{
 		.driver_id = 3,
-		.driver_name = usart1GetName(),
+		.driver_name = "usart1",
 		.setStatus = usart1SetStatus,
 		.getStatus = usart1GetStatus,
 		.init = usart1Init,

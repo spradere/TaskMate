@@ -21,6 +21,9 @@
 #ifndef LCD_H
 #define LCD_H
 
+void lcdSetStatus(uint8_t status);
+uint8_t lcdGetStatus(void);
+
 void lcd(void);
 
 void lcdInit(void);

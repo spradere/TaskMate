@@ -22,14 +22,12 @@
 #include "sysCore/TaskMate_public.h"
 #include "drivers/timer1.h"
 
-uint8_t timer1_name[] = "timer 1";
+// status
 uint8_t timer1_status = 0;
 
 void timer1SetStatus(uint8_t status) { timer1_status = status; }
-
 uint8_t timer1GetStatus(void) { return timer1_status; }
 
-uint8_t *timer1GetName(void) { return &timer1_name[0]; }
 
 void timer1Init(void)
 {

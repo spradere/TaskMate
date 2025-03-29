@@ -23,14 +23,13 @@
 #include "sysCore/TaskMate_public.h"
 #include "drivers/i2c.h"
 
-uint8_t i2c_name[] = "i2c";
+// status
 uint8_t i2c_status = 0;
 
 void i2cSetStatus(uint8_t status) { i2c_status = status; }
-
 uint8_t i2cGetStatus(void) { return i2c_status; }
 
-uint8_t *i2cGetName(void) { return &i2c_name[0]; }
+
 void i2cInit(void)
 {
 	TWBR = (uint8_t)TWBR_VALUE; // Set baud rate

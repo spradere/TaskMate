@@ -282,10 +282,21 @@ int main(void)
 			{
 				if (!(strcmp(argv[3], "init"))) // task init
 				{
-					fprintf(file_tmp, "\tuint8_t i = 0; \n");
 					for (i = 0; i < task_count; i++)
 					{
-						fprintf(file_tmp, "\ttaskCreate(%s,i++);\n", task_table[i]);
+						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n",
+						 task_table[i], i);
+						
+						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n", 
+							i, task_table[i]);
+						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n", 
+							i, task_table[i]);
+						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n", 
+							i, task_table[i]);
+						
+						/*fprintf(file_tmp, "(*task_table[i].setStatus)()= %i;\n",
+							task_table[i].satus;*/ 
+						
 					}
 				}
 			}
@@ -299,13 +310,16 @@ int main(void)
 						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
 						fprintf(file_tmp, "\t{\n");
 						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
-						fprintf(file_tmp, "\t\t.driver_name = %sGetName(),\n", driver_table[i]);
+						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.init = %sInit,\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i]);
 						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i]);
 						fprintf(file_tmp, "\t};\n");
+						
+						/*fprintf(file_tmp, "(*driver_table[i].setStatus)()= %i;\n",
+							driver_table[i].satus;*/ 
 					}
 				}
 			}
