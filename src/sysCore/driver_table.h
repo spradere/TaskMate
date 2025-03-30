@@ -23,12 +23,7 @@
  * @brief Represents a driver in TaskMate.
  */
  
-// driver status bits
-#define DRIVER_INIT_AT_BOOT 0 /**< Automatic driver initialization at boot time */
-#define DRIVER_START_AT_BOOT 1 /**< Automatic driver start at boot time */
-#define DRIVER_LOCK 2 /**< Driver locked for mutex purpose*/
-#define DRIVER_DEAD 3 /**< Driver can't be started */
-#define DRIVER_INIT 4 /**< Driver have been initialized */
+#include "sysCore/status_bits.h"
 
 // driver table
 typedef struct
