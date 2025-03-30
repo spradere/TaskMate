@@ -19,10 +19,10 @@
  * - Write code for #include / static allocation / initialisation in initSys.c
  *
  * @note
- * tag format are one line C comment // [tag] <task/driver> <init>
+ * tag format are one line C comment // [tag] <task|driver> <init>
  *
  * @warning
- * do not edit code between tag it will be deleted by automatic generated code !
+ * do not edit code between tag, it will be deleted by automatic generated code !
  * tasks file name must match with function, lcd.c -> void lcd(void),
  * drivers functions name must match to generic driver layout :
  * - <driver name>SetStatus()
@@ -38,6 +38,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+// includes to get defined bits for status
+#include "/root/code/TaskMate/TaskMate_current/src/sysCore/status_bits.h"
+
 
 // files name
 #define FILE_TASK_LIST "utility/task_list"
@@ -61,6 +65,14 @@
 // error message macro
 #define ERRMSG(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE__, __LINE__, msg)
 
+// struct for task/driver table
+typedef struct
+{
+	char name[LINE_SIZE_MAX];
+	unsigned char status;
+	
+} list_table_t;
+
 // tokenizer
 int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max);
 
@@ -71,15 +83,17 @@ int main(void)
 	//******************************************************************
 	
 	// allocate task/driver tables
-	char task_table[TASK_COUNT_MAX][LINE_SIZE_MAX];
-	char driver_table[DRIVER_COUNT_MAX][LINE_SIZE_MAX];	
+	list_table_t task_table[TASK_COUNT_MAX];
+	list_table_t driver_table[DRIVER_COUNT_MAX];	
 	
 	// buffer for reading
 	char *line; 
+	int file_line_number;
 	if( (line = malloc(LINE_SIZE_MAX * sizeof(*line))) == NULL)
 		{ERRMSG("malloc line"); return(1);}
 	
 	// argument data
+	int arg_count;
 	char **argv; 
 	if( (argv = malloc(ARGN_COUNT_MAX * sizeof(*argv))) == NULL)
 		{ERRMSG("malloc argv\n"); return(1);}
@@ -115,11 +129,28 @@ int main(void)
 
 	// read task file -> table
 	int task_count = 0;
+	file_line_number = 0;
+	
 	while ((task_count < TASK_COUNT_MAX) &&
-		   fgets(task_table[task_count], LINE_SIZE_MAX, file_task_list))
+		   fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
-		task_table[task_count][strcspn(task_table[task_count], "\n")] = 0; // Remplace newline
-		task_count++;
+		// set status to default
+		task_table[task_count].status = 1 << TASK_START_AT_BOOT; 
+		
+		file_line_number++;
+		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
+		
+		if( (arg_count>0) && strcmp(argv[0],"//") ) //skip empty line or comment
+		{
+			if( (arg_count<2) | (arg_count>3) ) // test arg count
+			{printf("[auroCode.c] error : wrong arg cont for task line %i\n",file_line_number);}
+			else
+			{
+				strcpy(task_table[task_count].name,argv[0]);
+				task_count++;
+			}
+		}
+
 	}
 	if (task_count == 0)
 	{
@@ -129,12 +160,28 @@ int main(void)
 
 	// read driver file -> table
 	int driver_count = 0;
+	file_line_number = 0;
+	
 	while ((driver_count < DRIVER_COUNT_MAX) &&
-		   fgets(driver_table[driver_count], LINE_SIZE_MAX, file_driver_list))
+		   fgets(line, LINE_SIZE_MAX, file_driver_list))
 	{
-		driver_table[driver_count][strcspn(driver_table[driver_count], "\n")] =
-			0; // Remplace newline
-		driver_count++;
+		// set status to default
+		driver_table[driver_count].status = (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT); 
+		
+		file_line_number++;
+		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
+
+		if( (arg_count>0) && strcmp(argv[0],"//") ) //skip empty line or comment
+		{
+			if( (arg_count<1) | (arg_count>3) ) // test arg count
+			{printf("[auroCode.c] error : wrong arg cont for driver line %i\n",file_line_number);}
+			else
+			{
+				strcpy(driver_table[driver_count].name,argv[0]);
+				driver_count++;
+			}
+		}	
+
 	}
 	if (driver_count == 0)
 	{
@@ -151,16 +198,16 @@ int main(void)
 	//******************************************************************
 	int i;
 
-	printf("[autoCode] found task :\n");
+	printf("[autoCode.c] found task :\n");
 	for (i = 0; i < task_count; i++)
 	{
-		printf("\ttask[%i]=%s\n", i, task_table[i]);
+		printf("\ttask[%i]=%s status=%i\n", i, task_table[i].name, task_table[i].status);
 	}
 
-	printf("\n[autoCode] found driver :\n");
+	printf("\n[autoCode.c] found driver :\n");
 	for (i = 0; i < driver_count; i++)
 	{
-		printf("\tdriver[%i]=%s\n", i, driver_table[i]);
+		printf("\tdriver[%i]=%s status=%i\n", i, driver_table[i].name, driver_table[i].status);
 	}
 	printf("\n");
 
@@ -188,13 +235,13 @@ int main(void)
 	// write task include
 	for (i = 0; i < task_count; i++)
 	{
-		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", task_table[i]);
+		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", task_table[i].name);
 	}
 
 	// write driver include
 	for (i = 0; i < driver_count; i++)
 	{
-		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", driver_table[i]);
+		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", driver_table[i].name);
 	}
 
 	fclose(file_task_include);
@@ -256,9 +303,8 @@ int main(void)
 
 	// read form source
 	int tag_section = 0;
-	int arg_count;
-	int file_line_number = 0;
-
+	file_line_number = 0;
+	
 	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
 		file_line_number++;
@@ -285,17 +331,17 @@ int main(void)
 					for (i = 0; i < task_count; i++)
 					{
 						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n",
-						 task_table[i], i);
+						 task_table[i].name, i);
 						
 						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n", 
-							i, task_table[i]);
+							i, task_table[i].name);
 						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n", 
-							i, task_table[i]);
+							i, task_table[i].name);
 						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n", 
-							i, task_table[i]);
+							i, task_table[i].name);
 						
-						/*fprintf(file_tmp, "(*task_table[i].setStatus)()= %i;\n",
-							task_table[i].satus;*/ 
+						fprintf(file_tmp, "\t(*task_table[%i].setStatus)(%i);\n\n",
+							i, task_table[i].status);
 						
 					}
 				}
@@ -310,16 +356,16 @@ int main(void)
 						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
 						fprintf(file_tmp, "\t{\n");
 						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
-						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.init = %sInit,\n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i]);
-						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i]);
+						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", driver_table[i].name);
+						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", driver_table[i].name);
+						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", driver_table[i].name);
+						fprintf(file_tmp, "\t\t.init = %sInit,\n", driver_table[i].name);
+						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i].name);
+						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i].name);
 						fprintf(file_tmp, "\t};\n");
 						
-						/*fprintf(file_tmp, "(*driver_table[i].setStatus)()= %i;\n",
-							driver_table[i].satus;*/ 
+						fprintf(file_tmp, "\t(*driver_table[%i].setStatus)(%i);\n\n",
+							i, driver_table[i].status);
 					}
 				}
 			}

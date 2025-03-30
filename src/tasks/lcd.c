@@ -40,7 +40,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("Task layout ok");
+	lcdWriteString("status reading ...");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.

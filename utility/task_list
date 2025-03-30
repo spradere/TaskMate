@@ -1,4 +1,12 @@
-task1
-task2
-lcd
-scli
+// status for task :
+// mendatory <-user | -system>
+// optional -nostart@boot
+// implicit default -start@boot
+
+// test task, blink led
+task1 -user
+task2 -user
+
+// system services
+lcd -system
+scli -system
