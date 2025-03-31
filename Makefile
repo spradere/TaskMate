@@ -88,7 +88,7 @@ header_check:
 	
 -include ${DEPS_FILE}
 
-# Test if modified autoCode and list files
+# Test if autoCode and list files was modified
 .list_stamp: ${AUTO_CODE} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
 	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
 	./${AUTO_CODE}
