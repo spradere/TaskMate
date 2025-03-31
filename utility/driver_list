@@ -1,9 +1,12 @@
-// status for driver :
-// optional -noinit@boot
-// optional -nostart@boot
-// implicit default -init@bot -start@boot
+# status for driver :
+# optional -noinit@boot
+# optional -nostart@boot
+# implicit default -init@bot -start@boot
 
+# system core
 timer1
 timer3
+
+# display services
 i2c
 usart1

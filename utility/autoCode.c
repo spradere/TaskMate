@@ -32,7 +32,7 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo add tag in list file -> task/driver status
+ * @todo split autoCode.c -> many file/functions, read tag in list file to setup task/driver status
  */
 
 #include <stdio.h>
@@ -140,10 +140,10 @@ int main(void)
 		file_line_number++;
 		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 		
-		if( (arg_count>0) && strcmp(argv[0],"//") ) //skip empty line or comment
+		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
 		{
 			if( (arg_count<2) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c] error : wrong arg cont for task line %i\n",file_line_number);}
+			{printf("[auroCode.c][task_list] error : wrong arg count line %i\n",file_line_number);}
 			else
 			{
 				strcpy(task_table[task_count].name,argv[0]);
@@ -171,10 +171,10 @@ int main(void)
 		file_line_number++;
 		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 
-		if( (arg_count>0) && strcmp(argv[0],"//") ) //skip empty line or comment
+		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
 		{
 			if( (arg_count<1) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c] error : wrong arg cont for driver line %i\n",file_line_number);}
+			{printf("[auroCode.c][driver_list] error : wrong arg count line %i\n",file_line_number);}
 			else
 			{
 				strcpy(driver_table[driver_count].name,argv[0]);
@@ -338,8 +338,7 @@ int main(void)
 						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n", 
 							i, task_table[i].name);
 						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n", 
-							i, task_table[i].name);
-						
+							i, task_table[i].name);		
 						fprintf(file_tmp, "\t(*task_table[%i].setStatus)(%i);\n\n",
 							i, task_table[i].status);
 						
@@ -363,7 +362,6 @@ int main(void)
 						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i].name);
 						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i].name);
 						fprintf(file_tmp, "\t};\n");
-						
 						fprintf(file_tmp, "\t(*driver_table[%i].setStatus)(%i);\n\n",
 							i, driver_table[i].status);
 					}

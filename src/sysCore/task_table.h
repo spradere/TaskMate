@@ -36,7 +36,7 @@ typedef struct
 
 	void (*setStatus)(uint8_t); /**< Task function for setting up status */
 	uint8_t (*getStatus)(void); /**< Task function for getting up status */
-	void (*main)(void); /**< Task main function for resart */
+	void (*main)(void); /**< Task main function for first start and resart */
 
 	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
 	
