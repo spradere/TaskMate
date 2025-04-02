@@ -35,48 +35,12 @@
  * @todo split autoCode.c -> many file/functions, read tag in list file to setup task/driver status
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "utility/autoCode_src/autoCode.h"
+#include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode_src/listToTable.h"
 
-// get TaskMate flag bits
-#include "/root/code/TaskMate/TaskMate_current/src/sysCore/status_bits.h"
+//
 
-
-// files name
-#define FILE_TASK_LIST "utility/task_list"
-#define FILE_DRIVER_LIST "utility/driver_list"
-#define FILE_SOURCE "src/sysCore/initSys.c"
-#define FILE_TEMP "src/sysCore/initSys.tmp.c"
-#define FILE_TASK_INCLUDE "src/sysCore/autoIncludeTasks.h"
-#define FILE_DRIVER_INCLUDE "src/sysCore/autoIncludeDrivers.h"
-#define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
-#define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
-
-// size of buffers
-#define TASK_COUNT_MAX 256
-#define DRIVER_COUNT_MAX 256
-
-#define LINE_SIZE_MAX 256
-
-#define ARGN_COUNT_MAX 4
-#define ARGV_SIZE_MAX 64
-
-// error message macro
-#define ERRMSG(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE__, __LINE__, msg)
-
-// struct for task/driver table
-typedef struct
-{
-	char name[LINE_SIZE_MAX];
-	unsigned char status;
-	
-} list_table_t;
-
-
-
-// tokenizer
-int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max);
 
 int main(void)
 {
@@ -85,8 +49,36 @@ int main(void)
 	//******************************************************************
 	
 	// allocate task/driver tables
-	list_table_t task_table[TASK_COUNT_MAX];
-	list_table_t driver_table[DRIVER_COUNT_MAX];	
+	list_table_t *list_table;
+	if( (list_table = malloc(sizeof(*list_table))) == NULL)
+		{ERRMSG("malloc list_table"); return(1);}
+	if( (list_table->driver_list = malloc(DRIVER_COUNT_MAX*sizeof(*list_table->driver_list))) == NULL)
+		{ERRMSG("malloc list_table->driver_list"); return(1);}
+	if( (list_table->task_list = malloc(TASK_COUNT_MAX*sizeof(*list_table->task_list))) == NULL)
+		{ERRMSG("malloc list_table->task_list"); return(1);}
+	
+	for(int i=0;i<DRIVER_COUNT_MAX;i++)
+	{
+		if( (list_table->driver_list[i] = malloc(sizeof(**list_table->driver_list))) == NULL)
+			{ERRMSG("malloc list_table->driver_list[i]"); return(1);}
+			
+		if( (list_table->driver_list[i]->name = malloc(NAME_SIZE_MAX*sizeof(*list_table->driver_list[i]->name))) == NULL)
+			{ERRMSG("malloc list_table->driver_list[i]->name"); return(1);}		
+	}
+	
+	for(int i=0;i<TASK_COUNT_MAX;i++)
+	{
+		if( (list_table->task_list[i] = malloc(sizeof(**list_table->task_list))) == NULL)
+			{ERRMSG("malloc list_table->task_list[i]"); return(1);}
+		
+		if( (list_table->task_list[i]->name = malloc(NAME_SIZE_MAX*sizeof(*list_table->task_list[i]->name))) == NULL)
+			{ERRMSG("malloc list_table->task_list[i]->name"); return(1);}		
+	}
+	
+	printf("size of : %lu %lu %lu\n",
+		sizeof(*list_table->task_list), 
+		sizeof(**list_table->task_list),
+		sizeof(*list_table->task_list[0]->name)	);
 	
 	// buffer for reading
 	char *line; 
@@ -106,99 +98,16 @@ int main(void)
 			{ERRMSG("malloc argv[]\n"); return(1);}
 	}
 	
-	ERRMSG("no error, just a test");
-
 	//******************************************************************
 	// read list -> table
 	//******************************************************************
 
-	// open list files
-	FILE *file_task_list = fopen(FILE_TASK_LIST, "r");
-	if (file_task_list == NULL)
-	{
-		ERRMSG("task list file not found");
-		printf("\t <%s>\n", FILE_TASK_LIST);
-		return 1;
-	}
-
-	FILE *file_driver_list = fopen(FILE_DRIVER_LIST, "r");
-	if (file_driver_list == NULL)
-	{
-		ERRMSG("driver list file not found");
-		printf("\t <%s>\n", FILE_DRIVER_LIST);
-		return 1;
-	}
-
-	// read task file -> table
-	int task_count = 0;
-	file_line_number = 0;
-	
-	while ((task_count < TASK_COUNT_MAX) &&
-		   fgets(line, LINE_SIZE_MAX, file_task_list))
-	{
-		// set status to default
-		task_table[task_count].status = 1 << TASK_START_AT_BOOT; 
-		
-		file_line_number++;
-		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
-		
-		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
-		{
-			if( (arg_count<2) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c][task_list] error : wrong arg count line %i\n",file_line_number);}
-			else
-			{
-				strcpy(task_table[task_count].name,argv[0]);
-				task_count++;
-			}
-		}
-
-	}
-	if (task_count == 0)
-	{
-		ERRMSG("no task");
-		return 1;
-	}
-
-	// read driver file -> table
-	int driver_count = 0;
-	file_line_number = 0;
-	
-	while ((driver_count < DRIVER_COUNT_MAX) &&
-		   fgets(line, LINE_SIZE_MAX, file_driver_list))
-	{
-		// set status to default
-		driver_table[driver_count].status = (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT); 
-		
-		file_line_number++;
-		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
-
-		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
-		{
-			if( (arg_count<1) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c][driver_list] error : wrong arg count line %i\n",file_line_number);}
-			else
-			{
-				strcpy(driver_table[driver_count].name,argv[0]);
-				driver_count++;
-			}
-		}	
-
-	}
-	if (driver_count == 0)
-	{
-		ERRMSG("no drivers");
-		return 1;
-	}
-
-	// close files
-	fclose(file_task_list);
-	fclose(file_driver_list);
+	listToTable();
 
 	//******************************************************************
 	// print tables
 	//******************************************************************
-	int i;
+	/*int i;
 
 	printf("[autoCode.c] found task :\n");
 	for (i = 0; i < task_count; i++)
@@ -211,13 +120,13 @@ int main(void)
 	{
 		printf("\tdriver[%i]=%s status=%i\n", i, driver_table[i].name, driver_table[i].status);
 	}
-	printf("\n");
+	printf("\n");*/
 
 	//******************************************************************
 	// write include files
 	//******************************************************************
 
-	// open include files
+	/*// open include files
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
 	if (file_task_include == NULL)
 	{
@@ -247,13 +156,13 @@ int main(void)
 	}
 
 	fclose(file_task_include);
-	fclose(file_driver_include);
+	fclose(file_driver_include);*/
 
 	//******************************************************************
 	// write alloc files
 	//******************************************************************
 
-	// open include files
+	/*// open include files
 	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
 	if (file_task_alloc == NULL)
 	{
@@ -280,13 +189,13 @@ int main(void)
 	fprintf(file_driver_alloc, "driver_table_t driver_table[%i];\n", driver_count);
 
 	fclose(file_task_alloc);
-	fclose(file_driver_alloc);
+	fclose(file_driver_alloc);*/
 
 	//******************************************************************
 	// read tag to generate code
 	//******************************************************************
 
-	// open source and tmp file
+	/*// open source and tmp file
 	FILE *file_src = fopen(FILE_SOURCE, "r");
 	if (file_src == NULL)
 	{
@@ -310,7 +219,7 @@ int main(void)
 	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
 		file_line_number++;
-		arg_count = getArg(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
+		arg_count = tokenizer(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 
 		
 		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
@@ -400,45 +309,10 @@ int main(void)
 
 	for(int i=0;i<ARGN_COUNT_MAX;i++){free(argv[i]);}
 	free(argv);
-	free(line);
+	free(line);*/
 	
 	return 0;
 }
 
-int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max)
-{
-	int i_line = 0;
-	int i_arg = 0;
-	int argn;
 
-	// reset all argv
-	for (argn = 0; argn < argn_count_max; argn++)
-	{
-		argv[argn][0] = 0;
-	}
-	
-	// read line, extract arguments
-	argn=0;
-	
-	while (	(line[i_line] != '\n') && (line[i_line] != 0)
-			&& (i_line < (line_size_max - 1)) && (argn < argn_count_max)	)	
-	{
-		// get off leading space or tab
-		while (	((line[i_line] == ' ') || (line[i_line] == '\t')) 
-				&& (i_line < line_size_max - 1) 	)
-		{i_line++;}
-		
-		// read and store token
-		i_arg = 0;
-		while (	(line[i_line] != ' ') && (line[i_line] != '\t') 
-				&& (line[i_line] != '\n') && (line[i_line] != 0) 
-				&& (i_line < (line_size_max - 1)) && (i_arg < (argv_size_max-1))	)
-		{argv[argn][i_arg++]=line[i_line++];}
-
-		argv[argn][i_arg] = 0;
-		if(argv[argn][0] != 0 ){argn++;}
-	}
-
-	return argn;
-}
 

@@ -29,13 +29,19 @@ PORT = /dev/ttyU0
 # Source directory
 BUILD_DIR = build/
 SRC_DIR = src/
-SRC_DIR_LIST = ${SRC_DIR}drivers
-SRC_DIR_LIST += ${SRC_DIR}tasks
-SRC_DIR_LIST += ${SRC_DIR}sysCore
+SRC_DIR_LIST = ${SRC_DIR}drivers/
+SRC_DIR_LIST += ${SRC_DIR}tasks/
+SRC_DIR_LIST += ${SRC_DIR}sysCore/
+
+UTILITY_DIR = utility/
 
 # Automatically gather all needed files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
+
+# auotoCode
+AUTOCODE_TARGET = ${UTILITY_DIR}autoCode
+AUTOCODE_SRC != find ${UTILITY_DIR}autoCode_src/ -name "*.c"
 
 # Files
 TARGET = TaskMate
@@ -50,8 +56,6 @@ CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files handling
-UTILITY_DIR = utility/
-AUTO_CODE = ${UTILITY_DIR}autoCode
 TASK_LIST_FILE = ${UTILITY_DIR}task_list
 DRIVER_LIST_FILE = ${UTILITY_DIR}driver_list
 
@@ -89,15 +93,15 @@ header_check:
 -include ${DEPS_FILE}
 
 # Test if autoCode and list files was modified
-.list_stamp: ${AUTO_CODE} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
+.list_stamp: ${AUTOCODE_TARGET} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
 	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
-	./${AUTO_CODE}
+	./${AUTOCODE_TARGET}
 	touch .list_stamp
 
 # Special rule for autoCode with clang, not avr-gcc
-${AUTO_CODE}: ${AUTO_CODE}.c
+${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
 	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n" 
-	clang ${AUTO_CODE}.c -o ${AUTO_CODE}
+	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
 
 
 ################################################################################
@@ -117,7 +121,7 @@ upload:all
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
 	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} ${DEPS_FILE}
-	rm -f .list_stamp ${AUTO_CODE}
+	rm -f .list_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
 
 # Disassemble machine code in two formats
