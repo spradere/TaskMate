@@ -39,7 +39,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// includes to get defined bits for status
+// get TaskMate flag bits
 #include "/root/code/TaskMate/TaskMate_current/src/sysCore/status_bits.h"
 
 
@@ -72,6 +72,8 @@ typedef struct
 	unsigned char status;
 	
 } list_table_t;
+
+
 
 // tokenizer
 int getArg(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max);
