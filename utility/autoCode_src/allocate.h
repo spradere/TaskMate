@@ -12,15 +12,15 @@
  */
 
 /**
- * @file tokenizer.h
- * @brief tokenizer header
+ * @file allocate.h
+ * @brief allocate header
  *
  * @todo nothing
  */
 
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
+#ifndef ALLOCATE_H
+#define ALLOCATE_H
 
-int tokenizer(char *line, char **argv);
+void allocate(list_table_t*, char*, char **);
 
 #endif

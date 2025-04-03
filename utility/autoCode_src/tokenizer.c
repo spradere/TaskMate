@@ -17,18 +17,19 @@
  *
  * @todo struct for input/output data
  */
-
+ 
+#include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
 
 
-int tokenizer(char *line, int line_size_max, char **argv, int argn_count_max, int argv_size_max)
+int tokenizer(char *line, char **argv)
 {
-	int i_line = 0;
-	int i_arg = 0;
+	int index_line = 0;
+	int index_arg = 0;
 	int argn;
 
 	// reset all argv
-	for (argn = 0; argn < argn_count_max; argn++)
+	for (argn = 0; argn < ARGN_COUNT_MAX; argn++)
 	{
 		argv[argn][0] = 0;
 	}
@@ -36,22 +37,22 @@ int tokenizer(char *line, int line_size_max, char **argv, int argn_count_max, in
 	// read line, extract arguments
 	argn=0;
 	
-	while (	(line[i_line] != '\n') && (line[i_line] != 0)
-			&& (i_line < (line_size_max - 1)) && (argn < argn_count_max)	)	
+	while (	(line[index_line] != '\n') && (line[index_line] != 0)
+			&& (index_line < (LINE_SIZE_MAX - 1)) && (argn < ARGN_COUNT_MAX)	)	
 	{
 		// get off leading space or tab
-		while (	((line[i_line] == ' ') || (line[i_line] == '\t')) 
-				&& (i_line < line_size_max - 1) 	)
-		{i_line++;}
+		while (	((line[index_line] == ' ') || (line[index_line] == '\t')) 
+				&& (index_line < LINE_SIZE_MAX - 1) 	)
+		{index_line++;}
 		
 		// read and store token
-		i_arg = 0;
-		while (	(line[i_line] != ' ') && (line[i_line] != '\t') 
-				&& (line[i_line] != '\n') && (line[i_line] != 0) 
-				&& (i_line < (line_size_max - 1)) && (i_arg < (argv_size_max-1))	)
-		{argv[argn][i_arg++]=line[i_line++];}
+		index_arg = 0;
+		while (	(line[index_line] != ' ') && (line[index_line] != '\t') 
+				&& (line[index_line] != '\n') && (line[index_line] != 0) 
+				&& (index_line < (LINE_SIZE_MAX - 1)) && (index_arg < (ARGV_SIZE_MAX-1))	)
+		{argv[argn][index_arg++]=line[index_line++];}
 
-		argv[argn][i_arg] = 0;
+		argv[argn][index_arg] = 0;
 		if(argv[argn][0] != 0 ){argn++;}
 	}
 
