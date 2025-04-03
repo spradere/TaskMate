@@ -39,13 +39,13 @@
 #define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
 #define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
 
-// size of buffers
+// size for list table
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256
-
-#define LINE_SIZE_MAX 256
 #define NAME_SIZE_MAX 64
 
+// size for tokenizer
+#define LINE_SIZE_MAX 256
 #define ARGN_COUNT_MAX 4
 #define ARGV_SIZE_MAX 64
 

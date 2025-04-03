@@ -36,10 +36,9 @@
  */
 
 #include "utility/autoCode_src/autoCode.h"
+#include "utility/autoCode_src/allocate.h"
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/listToTable.h"
-
-//
 
 
 int main(void)
@@ -48,61 +47,18 @@ int main(void)
 	// allocation
 	//******************************************************************
 	
-	// allocate task/driver tables
-	list_table_t *list_table;
-	if( (list_table = malloc(sizeof(*list_table))) == NULL)
-		{ERRMSG("malloc list_table"); return(1);}
-	if( (list_table->driver_list = malloc(DRIVER_COUNT_MAX*sizeof(*list_table->driver_list))) == NULL)
-		{ERRMSG("malloc list_table->driver_list"); return(1);}
-	if( (list_table->task_list = malloc(TASK_COUNT_MAX*sizeof(*list_table->task_list))) == NULL)
-		{ERRMSG("malloc list_table->task_list"); return(1);}
+	list_table_t *list_table; // allocate task/driver tables
+	char *line; // buffer for reading
+	char **argv; // argument data
 	
-	for(int i=0;i<DRIVER_COUNT_MAX;i++)
-	{
-		if( (list_table->driver_list[i] = malloc(sizeof(**list_table->driver_list))) == NULL)
-			{ERRMSG("malloc list_table->driver_list[i]"); return(1);}
-			
-		if( (list_table->driver_list[i]->name = malloc(NAME_SIZE_MAX*sizeof(*list_table->driver_list[i]->name))) == NULL)
-			{ERRMSG("malloc list_table->driver_list[i]->name"); return(1);}		
-	}
+	allocate(list_table, line, argv);
 	
-	for(int i=0;i<TASK_COUNT_MAX;i++)
-	{
-		if( (list_table->task_list[i] = malloc(sizeof(**list_table->task_list))) == NULL)
-			{ERRMSG("malloc list_table->task_list[i]"); return(1);}
-		
-		if( (list_table->task_list[i]->name = malloc(NAME_SIZE_MAX*sizeof(*list_table->task_list[i]->name))) == NULL)
-			{ERRMSG("malloc list_table->task_list[i]->name"); return(1);}		
-	}
-	
-	printf("size of : %lu %lu %lu\n",
-		sizeof(*list_table->task_list), 
-		sizeof(**list_table->task_list),
-		sizeof(*list_table->task_list[0]->name)	);
-	
-	// buffer for reading
-	char *line; 
-	int file_line_number;
-	if( (line = malloc(LINE_SIZE_MAX * sizeof(*line))) == NULL)
-		{ERRMSG("malloc line"); return(1);}
-	
-	// argument data
-	int arg_count;
-	char **argv; 
-	if( (argv = malloc(ARGN_COUNT_MAX * sizeof(*argv))) == NULL)
-		{ERRMSG("malloc argv\n"); return(1);}
-	
-	for(int i=0;i<ARGN_COUNT_MAX;i++)
-	{
-		if( (argv[i]=malloc(ARGV_SIZE_MAX * sizeof(**argv))) == NULL)
-			{ERRMSG("malloc argv[]\n"); return(1);}
-	}
 	
 	//******************************************************************
 	// read list -> table
 	//******************************************************************
 
-	listToTable();
+	//listToTable();
 
 	//******************************************************************
 	// print tables
