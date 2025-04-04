@@ -12,16 +12,15 @@
  */
 
 /**
- * @file allocate.h
- * @brief allocate header
+ * @file writeAlloc.h
+ * @brief write alloc code header
  *
  * @todo nothing
  */
-
-#ifndef ALLOCATE_H
-#define ALLOCATE_H
-
-void allocate(list_table_t**, char*, char **);
-void unAllocate(list_table_t*, char*, char **);
-
-#endif
+ 
+ #ifndef WRITEALLOC_H
+ #define WRITEALLOC_H
+ 
+ void writeAlloc(list_table_t *);
+ 
+ #endif

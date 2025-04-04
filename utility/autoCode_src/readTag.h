@@ -12,16 +12,15 @@
  */
 
 /**
- * @file allocate.h
- * @brief allocate header
+ * @file readTag.h
+ * @brief read tag header
  *
  * @todo nothing
  */
-
-#ifndef ALLOCATE_H
-#define ALLOCATE_H
-
-void allocate(list_table_t**, char*, char **);
-void unAllocate(list_table_t*, char*, char **);
-
-#endif
+ 
+ #ifndef READTAG_H
+ #define READTAG_H
+ 
+ void readTag(list_table_t *);
+ 
+ #endif

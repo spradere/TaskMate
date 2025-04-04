@@ -34,238 +34,57 @@
  *
  * @todo split autoCode.c -> many file/functions, read tag in list file to setup task/driver status
  */
+#include <string.h>
+#include <assert.h>
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/listToTable.h"
+#include "utility/autoCode_src/writeInclude.h"
+#include "utility/autoCode_src/writeAlloc.h"
+#include "utility/autoCode_src/readTag.h"
 
 
 int main(void)
 {
-	//******************************************************************
 	// allocation
-	//******************************************************************
-	
-	list_table_t *list_table; // allocate task/driver tables
-	char *line; // buffer for reading
-	char **argv; // argument data
-	
-	allocate(list_table, line, argv);
-	
-	
-	//******************************************************************
-	// read list -> table
-	//******************************************************************
+	list_table_t *list_table=NULL; // task and driver tables
+	char *line=NULL; // buffer for reading
+	char **argv=NULL; // argument data
 
-	//listToTable();
+	printf("[%s]list_table %p-> %p\n",__FILE__,&list_table, list_table);
+	
+	allocate(&list_table, line, argv);
+	
+	//test allocation
+	
+	printf("[%s]list_table %p-> %p\n",__FILE__,&list_table, list_table);
+	printf("driver_list %p-> %p\n", (void*)&list_table->driver_list,(void*)list_table->driver_list);
+	printf("driver_list[0] %p-> %p\n", (void*)&list_table->driver_list[0], (void*)list_table->driver_list[0]);
+	printf("driver_list[0]->name %p-> %p\n", (void*)&list_table->driver_list[0]->name, (void*)list_table->driver_list[0]->name);
 
-	//******************************************************************
+	strcpy(list_table->driver_list[0]->name, "hello");
+	printf("[%s;%i] name=<%s>\n",__FILE__,__LINE__,list_table->driver_list[0]->name);
+	
+	
+	// read list file and store data in table
+	//listToTable(list_table);
+
 	// print tables
-	//******************************************************************
-	/*int i;
-
-	printf("[autoCode.c] found task :\n");
-	for (i = 0; i < task_count; i++)
-	{
-		printf("\ttask[%i]=%s status=%i\n", i, task_table[i].name, task_table[i].status);
-	}
-
-	printf("\n[autoCode.c] found driver :\n");
-	for (i = 0; i < driver_count; i++)
-	{
-		printf("\tdriver[%i]=%s status=%i\n", i, driver_table[i].name, driver_table[i].status);
-	}
-	printf("\n");*/
-
-	//******************************************************************
+	//printTable(list_table);
+	
 	// write include files
-	//******************************************************************
+	//writeInclude(list_table);
 
-	/*// open include files
-	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
-	if (file_task_include == NULL)
-	{
-		ERRMSG("creating file");
-		printf("\t <%s>\n", FILE_TASK_INCLUDE);
-		exit(1);
-	}
-
-	FILE *file_driver_include = fopen(FILE_DRIVER_INCLUDE, "w");
-	if (file_driver_include == NULL)
-	{
-		ERRMSG("creating file");
-		printf("\t <%s>\n", FILE_DRIVER_INCLUDE);
-		exit(1);
-	}
-
-	// write task include
-	for (i = 0; i < task_count; i++)
-	{
-		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", task_table[i].name);
-	}
-
-	// write driver include
-	for (i = 0; i < driver_count; i++)
-	{
-		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", driver_table[i].name);
-	}
-
-	fclose(file_task_include);
-	fclose(file_driver_include);*/
-
-	//******************************************************************
 	// write alloc files
-	//******************************************************************
-
-	/*// open include files
-	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
-	if (file_task_alloc == NULL)
-	{
-		ERRMSG("creating file");
-		printf("\t <%s>\n", FILE_TASK_ALLOC);
-		exit(1);
-	}
-
-	FILE *file_driver_alloc = fopen(FILE_DRIVER_ALLOC, "w");
-	if (file_driver_alloc == NULL)
-	{
-		ERRMSG("creating file");
-		printf("\t  <%s>\n", FILE_DRIVER_ALLOC);
-		exit(1);
-	}
-
-	// write task static alloc
-	fprintf(file_task_alloc, "const uint8_t TASK_COUNT = %i;\n", task_count);
-	fprintf(file_task_alloc, "task_table_t task_table[%i];\n", task_count);
-	fprintf(file_task_alloc, "uint8_t task_current = 0;\n");
-
-	// write driver static alloc
-	fprintf(file_driver_alloc, "const uint8_t DRIVER_COUNT = %i;\n", driver_count);
-	fprintf(file_driver_alloc, "driver_table_t driver_table[%i];\n", driver_count);
-
-	fclose(file_task_alloc);
-	fclose(file_driver_alloc);*/
-
-	//******************************************************************
+	//writeAlloc(list_table);
+	
 	// read tag to generate code
-	//******************************************************************
+	//readTag(list_table);
 
-	/*// open source and tmp file
-	FILE *file_src = fopen(FILE_SOURCE, "r");
-	if (file_src == NULL)
-	{
-		ERRMSG("opening file");
-		printf("\t <%s>\n", FILE_SOURCE);
-		exit(1);
-	}
-
-	FILE *file_tmp = fopen(FILE_TEMP, "w");
-	if (file_tmp == NULL)
-	{
-		ERRMSG("creating file");
-		printf("\t <%s>\n", FILE_TEMP);
-		exit(1);
-	}
-
-	// read form source
-	int tag_section = 0;
-	file_line_number = 0;
-	
-	while (fgets(line, LINE_SIZE_MAX, file_src))
-	{
-		file_line_number++;
-		arg_count = tokenizer(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
-
-		
-		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
-		{
-			if (arg_count != 4)
-			{
-				ERRMSG("arg count != 4 line :");
-				printf("\t %s:%i\n", FILE_SOURCE, file_line_number);
-				break;
-			}
-						
-			printf("found tag <%s> <%s> ... ", argv[2], argv[3]);
-			fprintf(file_tmp, "%s", line);
-			tag_section = 1;
-
-			if (!(strcmp(argv[2], "task"))) // task tag
-			{
-				if (!(strcmp(argv[3], "init"))) // task init
-				{
-					for (i = 0; i < task_count; i++)
-					{
-						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n",
-						 task_table[i].name, i);
-						
-						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n", 
-							i, task_table[i].name);
-						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n", 
-							i, task_table[i].name);
-						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n", 
-							i, task_table[i].name);		
-						fprintf(file_tmp, "\t(*task_table[%i].setStatus)(%i);\n\n",
-							i, task_table[i].status);
-						
-					}
-				}
-			}
-
-			if (!(strcmp(argv[2], "driver"))) // driver tag
-			{
-				if (!(strcmp(argv[3], "init"))) // driver init
-				{
-					for (i = 0; i < driver_count; i++)
-					{
-						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
-						fprintf(file_tmp, "\t{\n");
-						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
-						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.init = %sInit,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i].name);
-						fprintf(file_tmp, "\t};\n");
-						fprintf(file_tmp, "\t(*driver_table[%i].setStatus)(%i);\n\n",
-							i, driver_table[i].status);
-					}
-				}
-			}
-		}
-
-		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[/tag]")))
-		{
-			printf("end tag\n");
-			tag_section = 0;
-		}
-
-		if (tag_section == 0)
-		{
-			fprintf(file_tmp, "%s", line);
-		} 
-	}
-
-	if(tag_section == 1)
-	{
-		ERRMSG("missing end tag [/tag] at end of file");
-	}
-	
-	// Replace original file with the modified version
-	if (remove(FILE_SOURCE) != 0 || rename(FILE_TEMP, FILE_SOURCE) != 0)
-	{
-		ERRMSG("replacing initSys.c");
-		exit(2);
-	}
-
-	fclose(file_src);
-	fclose(file_tmp);
-
-	for(int i=0;i<ARGN_COUNT_MAX;i++){free(argv[i]);}
-	free(argv);
-	free(line);*/
+	// free malloc
+	//unAllocate(list_table, line, argv);
 	
 	return 0;
 }

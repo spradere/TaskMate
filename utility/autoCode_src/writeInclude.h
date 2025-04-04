@@ -12,16 +12,15 @@
  */
 
 /**
- * @file allocate.h
- * @brief allocate header
+ * @file writeInclude.h
+ * @brief write include code header
  *
  * @todo nothing
  */
-
-#ifndef ALLOCATE_H
-#define ALLOCATE_H
-
-void allocate(list_table_t**, char*, char **);
-void unAllocate(list_table_t*, char*, char **);
-
-#endif
+ 
+ #ifndef WRITEINCLUDE_H
+ #define WRITEINCLUDE_H
+ 
+ void writeInclude(list_table_t *);
+ 
+ #endif

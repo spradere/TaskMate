@@ -12,16 +12,15 @@
  */
 
 /**
- * @file allocate.h
- * @brief allocate header
+ * @file printTable.h
+ * @brief print table header
  *
  * @todo nothing
  */
-
-#ifndef ALLOCATE_H
-#define ALLOCATE_H
-
-void allocate(list_table_t**, char*, char **);
-void unAllocate(list_table_t*, char*, char **);
-
-#endif
+ 
+ #ifndef PRINTTABLE_H
+ #define PRINTTABLE_H
+ 
+ void printTable(list_table_t *);
+ 
+ #endif
