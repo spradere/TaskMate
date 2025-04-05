@@ -17,7 +17,7 @@
  *
  * @todo nothing
  */
- 
+
 #include "utility/autoCode_src/autoCode.h"
 
 void listToTable(void)
@@ -42,16 +42,16 @@ void listToTable(void)
 	// read task file -> table
 	int task_count = 0;
 	file_line_number = 0;
-	
+
 	while ((task_count < TASK_COUNT_MAX) &&
 		   fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
 		// set status to default
-		task_table[task_count].status = 1 << TASK_START_AT_BOOT; 
-		
+		task_table[task_count].status = 1 << TASK_START_AT_BOOT;
+
 		file_line_number++;
 		arg_count = tokenizer(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
-		
+
 		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
 		{
 			if( (arg_count<2) | (arg_count>3) ) // test arg count
@@ -73,26 +73,27 @@ void listToTable(void)
 	// read driver file -> table
 	int driver_count = 0;
 	file_line_number = 0;
-	
+
 	while ((driver_count < DRIVER_COUNT_MAX) &&
 		   fgets(line, LINE_SIZE_MAX, file_driver_list))
 	{
 		// set status to default
-		driver_table[driver_count].status = (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT); 
-		
+		driver_table[driver_count].status = (1 << DRIVER_INIT_AT_BOOT) | (1 <<
+	DRIVER_START_AT_BOOT);
+
 		file_line_number++;
 		arg_count = tokenizer(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 
 		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
 		{
 			if( (arg_count<1) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c][driver_list] error : wrong arg count line %i\n",file_line_number);}
-			else
+			{printf("[auroCode.c][driver_list] error : wrong arg count line
+	%i\n",file_line_number);} else
 			{
 				strcpy(driver_table[driver_count].name,argv[0]);
 				driver_count++;
 			}
-		}	
+		}
 
 	}
 	if (driver_count == 0)

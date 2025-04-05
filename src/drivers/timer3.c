@@ -28,7 +28,6 @@ uint8_t timer3_status = 0;
 void timer3SetStatus(uint8_t status) { timer3_status = status; }
 uint8_t timer3GetStatus(void) { return timer3_status; }
 
-
 void timer3Init(void)
 {
 

@@ -28,7 +28,6 @@ uint8_t timer1_status = 0;
 void timer1SetStatus(uint8_t status) { timer1_status = status; }
 uint8_t timer1GetStatus(void) { return timer1_status; }
 
-
 void timer1Init(void)
 {
 	// Set up timer1 interrupt for scheduler

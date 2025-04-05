@@ -9,6 +9,8 @@ UseTab: Always
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
+InsertBraces: true
+
 
 # Formatting preferences
 ColumnLimit: 100

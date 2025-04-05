@@ -33,7 +33,6 @@ uint8_t usart1_status = 0;
 void usart1SetStatus(uint8_t status) { usart1_status = status; }
 uint8_t usart1GetStatus(void) { return usart1_status; }
 
-
 // Circular buffers
 #define BUFFER_TX_SIZE_SIZE 256
 #define BUFFER_TX_SIZE 256
@@ -42,8 +41,6 @@ static volatile uint8_t buffer_rx[BUFFER_TX_SIZE];
 static volatile uint8_t buffer_tx[BUFFER_TX_SIZE];
 static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
-
-
 
 void usart1Init(void)
 {

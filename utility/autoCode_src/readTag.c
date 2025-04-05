@@ -17,7 +17,7 @@
  *
  * @todo nothing
  */
- 
+
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/readTag.h"
 
@@ -43,13 +43,13 @@ void readTag(list_table_t *table)
 	// read form source
 	int tag_section = 0;
 	file_line_number = 0;
-	
+
 	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
 		file_line_number++;
 		arg_count = tokenizer(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
 
-		
+
 		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
 		{
 			if (arg_count != 4)
@@ -58,7 +58,7 @@ void readTag(list_table_t *table)
 				printf("\t %s:%i\n", FILE_SOURCE, file_line_number);
 				break;
 			}
-						
+
 			printf("found tag <%s> <%s> ... ", argv[2], argv[3]);
 			fprintf(file_tmp, "%s", line);
 			tag_section = 1;
@@ -71,16 +71,16 @@ void readTag(list_table_t *table)
 					{
 						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n",
 						 task_table[i].name, i);
-						
-						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n", 
+
+						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n",
 							i, task_table[i].name);
-						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n", 
+						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n",
 							i, task_table[i].name);
-						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n", 
-							i, task_table[i].name);		
+						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n",
+							i, task_table[i].name);
 						fprintf(file_tmp, "\t(*task_table[%i].setStatus)(%i);\n\n",
 							i, task_table[i].status);
-						
+
 					}
 				}
 			}
@@ -117,14 +117,14 @@ void readTag(list_table_t *table)
 		if (tag_section == 0)
 		{
 			fprintf(file_tmp, "%s", line);
-		} 
+		}
 	}
 
 	if(tag_section == 1)
 	{
 		ERRMSG("missing end tag [/tag] at end of file");
 	}
-	
+
 	// Replace original file with the modified version
 	if (remove(FILE_SOURCE) != 0 || rename(FILE_TEMP, FILE_SOURCE) != 0)
 	{

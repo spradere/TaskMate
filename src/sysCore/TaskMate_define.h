@@ -102,11 +102,9 @@
 	"out __SREG__, r0 \n\t"                                                                        \
 	"pop r0	\n\t" /**< Pop all AVR registers Rx + SREG  */
 
-
 #define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
 #include "sysCore/task_table.h"
 #include "sysCore/driver_table.h"
-
 
 #endif

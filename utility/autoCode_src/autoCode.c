@@ -45,49 +45,61 @@
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/readTag.h"
 
-
 int main(void)
 {
 	// allocation
-	list_table_t *list_table=NULL; // task and driver tables
-	char *line=NULL; // buffer for reading
-	char **argv=NULL; // argument data
+	list_table_t *list_table = NULL; // task and driver tables
+	char *line = NULL; // buffer for reading
+	char **argv = NULL; // argument data
 
-	printf("[%s]list_table %p-> %p\n",__FILE__,&list_table, list_table);
-	
-	allocate(&list_table, line, argv);
-	
-	//test allocation
-	
-	printf("[%s]list_table %p-> %p\n",__FILE__,&list_table, list_table);
-	printf("driver_list %p-> %p\n", (void*)&list_table->driver_list,(void*)list_table->driver_list);
-	printf("driver_list[0] %p-> %p\n", (void*)&list_table->driver_list[0], (void*)list_table->driver_list[0]);
-	printf("driver_list[0]->name %p-> %p\n", (void*)&list_table->driver_list[0]->name, (void*)list_table->driver_list[0]->name);
+	allocate(&list_table, &line, &argv);
+
+	// test allocation
+
+	printf("[%s]\nlist_table %p-> %p\n", __FILE__, &list_table, list_table);
+	printf("driver_list %p-> %p\n", (void *)&list_table->driver_list,
+		   (void *)list_table->driver_list);
+	printf("driver_list[0] %p-> %p\n", (void *)&list_table->driver_list[0],
+		   (void *)list_table->driver_list[0]);
+	printf("driver_list[0]->name %p-> %p\n", (void *)&list_table->driver_list[0]->name,
+		   (void *)list_table->driver_list[0]->name);
 
 	strcpy(list_table->driver_list[0]->name, "hello");
-	printf("[%s;%i] name=<%s>\n",__FILE__,__LINE__,list_table->driver_list[0]->name);
-	
-	
+	printf("[%s:%i] name=<%s>\n", __FILE__, __LINE__, list_table->driver_list[0]->name);
+
+	strcpy(line, "one two three");
+	int count = tokenizer(line, argv);
+
+	if (count > 0)
+	{
+		for (int i = 0; i < count; i++)
+		{
+			printf("[autoCode.c] token[%i]=%s\n", i, argv[i]);
+		}
+	}
+	else
+	{
+		perror("[autoCode.c] tokenizer fail");
+		return (0);
+	}
+
 	// read list file and store data in table
-	//listToTable(list_table);
+	// listToTable(list_table);
 
 	// print tables
-	//printTable(list_table);
-	
+	// printTable(list_table);
+
 	// write include files
-	//writeInclude(list_table);
+	// writeInclude(list_table);
 
 	// write alloc files
-	//writeAlloc(list_table);
-	
+	// writeAlloc(list_table);
+
 	// read tag to generate code
-	//readTag(list_table);
+	// readTag(list_table);
 
 	// free malloc
-	//unAllocate(list_table, line, argv);
-	
+	unAllocate(&list_table, &line, &argv);
+
 	return 0;
 }
-
-
-
