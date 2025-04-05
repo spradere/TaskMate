@@ -22,7 +22,7 @@
  * @struct driver_table_t
  * @brief Represents a driver in TaskMate.
  */
- 
+
 #include "sysCore/status_bits.h"
 
 // driver table
@@ -37,5 +37,5 @@ typedef struct
 	void (*init)(void); /**< Initialize driver function  */
 	void (*start)(void); /**< Start driver function  */
 	void (*stop)(void); /**< Stop driver function  */
-	
+
 } driver_table_t;

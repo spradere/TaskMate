@@ -19,7 +19,6 @@
  * @todo Add event more error codes
  */
 
-
 #ifndef TASKMATE_ERROR_H
 #define TASKMATE_ERROR_H
 

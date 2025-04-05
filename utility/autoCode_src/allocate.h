@@ -21,7 +21,7 @@
 #ifndef ALLOCATE_H
 #define ALLOCATE_H
 
-void allocate(list_table_t**, char*, char **);
-void unAllocate(list_table_t*, char*, char **);
+void allocate(list_table_t**, char**, char ***);
+void unAllocate(list_table_t**, char**, char ***);
 
 #endif

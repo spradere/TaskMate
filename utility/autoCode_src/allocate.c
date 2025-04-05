@@ -17,83 +17,110 @@
  *
  * @todo nothing
  */
- 
- 
+
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
 
-
-void allocate(list_table_t **table, char *line, char **argv)
 {
 	// task and driver table
-	//printf("[%s]table %p-> %p\n",__FILE__,&*table, *table);	
-	if( ( (*table) = malloc(sizeof(*(*table))))==NULL)
-		{ERRMSG("malloc table"); exit(0);}
-	if( ((*table)->driver_list = malloc(DRIVER_COUNT_MAX*sizeof(*(*table)->driver_list))) == NULL)
-		{ERRMSG("malloc table->driver_list"); exit(0);}
-	if( ((*table)->task_list = malloc(TASK_COUNT_MAX*sizeof(*(*table)->task_list))) == NULL)
-		{ERRMSG("malloc table->task_list"); exit(0);}
-	
-	for(int i=0;i<DRIVER_COUNT_MAX;i++)
+	if (((*table) = malloc(sizeof(*(*table)))) == NULL)
 	{
-		if( ((*table)->driver_list[i] = malloc(sizeof(**(*table)->driver_list))) == NULL)
-			{ERRMSG("malloc table->driver_list[i]"); exit(0);}
-			
-		if( ((*table)->driver_list[i]->name = malloc(NAME_SIZE_MAX*sizeof(*(*table)->driver_list[i]->name))) == NULL)
-			{ERRMSG("malloc table->driver_list[i]->name"); exit(0);}		
+		ERRMSG("malloc table");
+		exit(0);
 	}
-	
-	for(int i=0;i<TASK_COUNT_MAX;i++)
+	if (((*table)->driver_list = malloc(DRIVER_COUNT_MAX * sizeof(*(*table)->driver_list))) == NULL)
 	{
-		if( ((*table)->task_list[i] = malloc(sizeof(**(*table)->task_list))) == NULL)
-			{ERRMSG("malloc table->task_list[i]"); exit(0);}
-		
-		if( ((*table)->task_list[i]->name = malloc(NAME_SIZE_MAX*sizeof(*(*table)->task_list[i]->name))) == NULL)
-			{ERRMSG("malloc table->task_list[i]->name"); exit(0);}		
+		ERRMSG("malloc table->driver_list");
+		exit(0);
 	}
-	
-	/*// buffer for reading
-	if( (line = malloc(LINE_SIZE_MAX * sizeof(*line))) == NULL)
-		{ERRMSG("malloc line"); exit(0);}
-		
+	if (((*table)->task_list = malloc(TASK_COUNT_MAX * sizeof(*(*table)->task_list))) == NULL)
+	{
+		ERRMSG("malloc table->task_list");
+		exit(0);
+	}
+
+	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
+	{
+		if (((*table)->driver_list[i] = malloc(sizeof(**(*table)->driver_list))) == NULL)
+		{
+			ERRMSG("malloc table->driver_list[i]");
+			exit(0);
+		}
+
+		if (((*table)->driver_list[i]->name =
+				 malloc(NAME_SIZE_MAX * sizeof(*(*table)->driver_list[i]->name))) == NULL)
+		{
+			ERRMSG("malloc table->driver_list[i]->name");
+			exit(0);
+		}
+	}
+
+	for (int i = 0; i < TASK_COUNT_MAX; i++)
+	{
+		if (((*table)->task_list[i] = malloc(sizeof(**(*table)->task_list))) == NULL)
+		{
+			ERRMSG("malloc table->task_list[i]");
+			exit(0);
+		}
+
+		if (((*table)->task_list[i]->name =
+				 malloc(NAME_SIZE_MAX * sizeof(*(*table)->task_list[i]->name))) == NULL)
+		{
+			ERRMSG("malloc table->task_list[i]->name");
+			exit(0);
+		}
+	}
+
+	// buffer for reading
+	if ((*line = malloc(LINE_SIZE_MAX * sizeof(*(*line)))) == NULL)
+	{
+		ERRMSG("malloc line");
+		exit(0);
+	}
+
 	// argv
-	if( (argv = malloc(ARGN_COUNT_MAX * sizeof(*argv))) == NULL)
-		{ERRMSG("malloc argv\n"); exit(0);}
-	
-	for(int i=0;i<ARGN_COUNT_MAX;i++)
+	if ((*argv = malloc(ARGN_COUNT_MAX * sizeof(**argv))) == NULL)
 	{
-		if( (argv[i]=malloc(ARGV_SIZE_MAX * sizeof(**argv))) == NULL)
-			{ERRMSG("malloc argv[]\n"); exit(0);}
-	}*/
+		ERRMSG("malloc argv\n");
+		exit(0);
+	}
+
+	for (int i = 0; i < ARGN_COUNT_MAX; i++)
+	{
+		if (((*argv)[i] = malloc(ARGV_SIZE_MAX * sizeof(***argv))) == NULL)
+		{
+			ERRMSG("malloc argv[]\n");
+			exit(0);
+		}
+	}
 }
 
-void unAllocate(list_table_t *table, char *line, char **argv)
+void unAllocate(list_table_t **table, char **line, char ***argv)
 {
 	// task and driver table
-	for(int i=0;i<DRIVER_COUNT_MAX;i++)
+	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
 	{
-		free(table->driver_list[i]->name);
-		free(table->driver_list[i]);
+		free((*table)->driver_list[i]->name);
+		free((*table)->driver_list[i]);
 	}
 
-	
-	for(int i=0;i<TASK_COUNT_MAX;i++)
+	for (int i = 0; i < TASK_COUNT_MAX; i++)
 	{
-		free(table->task_list[i]->name);
-		free(table->task_list[i]);	
+		free((*table)->task_list[i]->name);
+		free((*table)->task_list[i]);
 	}
 
-	
-	free(table->driver_list);
-	free(table->task_list);
-	free(table);
-	
+	free((*table)->driver_list);
+	free((*table)->task_list);
+	free(*table);
+
 	// buffer for reading
-	free(line);
+	free(*line);
 
-			
 	// argv
-	for(int i=0;i<ARGN_COUNT_MAX;i++){free(argv[i]);}
-	free(argv);
-
+	for (int i = 0; i < ARGN_COUNT_MAX; i++)
+	{
+		free((*argv)[i]);
+	}
+	free(*argv);
 }

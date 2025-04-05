@@ -37,11 +37,10 @@ int main(void)
 	initTasks();
 
 	initDrivers();
-	
+
 	// Set output for in board led 13
 	LED_DDR |= (1 << LED_PIN);
-	
-	
+
 	uint8_t i;
 
 	// init driver if flag on

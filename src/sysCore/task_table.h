@@ -22,7 +22,7 @@
  * @struct task_table_t
  * @brief Represents a task in TaskMate.
  */
- 
+
 #include "sysCore/status_bits.h"
 
 // task table
@@ -39,7 +39,7 @@ typedef struct
 	void (*main)(void); /**< Task main function for first start and resart */
 
 	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
-	
+
 	uint8_t *stack_pointer; /**< Task stack Pointer, pointer to stack array items*/
 	uint8_t stack[TASK_STACK_SIZE]; /**< Task stack array */
 } task_table_t;

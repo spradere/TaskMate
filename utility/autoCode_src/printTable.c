@@ -17,11 +17,10 @@
  *
  * @todo nothing
  */
- 
+
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/printTable.h"
- 
- 
+
 void printTable(list_table_t *table)
 {
 	/*int i;

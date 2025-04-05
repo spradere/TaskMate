@@ -29,8 +29,7 @@
 void taskCreate(void (*taskFunction)(void), uint8_t task_id)
 {
 	task_table[task_id].task_id = task_id;
-	//task_table[task_id].task_name= ??
-
+	// task_table[task_id].task_name= ??
 
 	// RTC init
 	task_table[task_id].task_RTC = 0;
@@ -88,52 +87,40 @@ void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code !
 	// [tag] driver init
-	driver_table[0]=(driver_table_t)
-	{
-		.driver_id = 0,
-		.driver_name = "timer1",
-		.setStatus = timer1SetStatus,
-		.getStatus = timer1GetStatus,
-		.init = timer1Init,
-		.start = timer1Start,
-		.stop = timer1Stop
-	};
+	driver_table[0] = (driver_table_t){.driver_id = 0,
+									   .driver_name = "timer1",
+									   .setStatus = timer1SetStatus,
+									   .getStatus = timer1GetStatus,
+									   .init = timer1Init,
+									   .start = timer1Start,
+									   .stop = timer1Stop};
 	(*driver_table[0].setStatus)(3);
 
-	driver_table[1]=(driver_table_t)
-	{
-		.driver_id = 1,
-		.driver_name = "timer3",
-		.setStatus = timer3SetStatus,
-		.getStatus = timer3GetStatus,
-		.init = timer3Init,
-		.start = timer3Start,
-		.stop = timer3Stop
-	};
+	driver_table[1] = (driver_table_t){.driver_id = 1,
+									   .driver_name = "timer3",
+									   .setStatus = timer3SetStatus,
+									   .getStatus = timer3GetStatus,
+									   .init = timer3Init,
+									   .start = timer3Start,
+									   .stop = timer3Stop};
 	(*driver_table[1].setStatus)(3);
 
-	driver_table[2]=(driver_table_t)
-	{
-		.driver_id = 2,
-		.driver_name = "i2c",
-		.setStatus = i2cSetStatus,
-		.getStatus = i2cGetStatus,
-		.init = i2cInit,
-		.start = i2cStart,
-		.stop = i2cStop
-	};
+	driver_table[2] = (driver_table_t){.driver_id = 2,
+									   .driver_name = "i2c",
+									   .setStatus = i2cSetStatus,
+									   .getStatus = i2cGetStatus,
+									   .init = i2cInit,
+									   .start = i2cStart,
+									   .stop = i2cStop};
 	(*driver_table[2].setStatus)(3);
 
-	driver_table[3]=(driver_table_t)
-	{
-		.driver_id = 3,
-		.driver_name = "usart1",
-		.setStatus = usart1SetStatus,
-		.getStatus = usart1GetStatus,
-		.init = usart1Init,
-		.start = usart1Start,
-		.stop = usart1Stop
-	};
+	driver_table[3] = (driver_table_t){.driver_id = 3,
+									   .driver_name = "usart1",
+									   .setStatus = usart1SetStatus,
+									   .getStatus = usart1GetStatus,
+									   .init = usart1Init,
+									   .start = usart1Start,
+									   .stop = usart1Stop};
 	(*driver_table[3].setStatus)(3);
 
 	// [/tag]

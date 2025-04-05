@@ -144,13 +144,14 @@ cloc:
 .PHONY: cloc
 
 # clang-tidy
-TIDY_SRC := utility/autoCode.c
+TIDY_SRC := ${AUTOCODE_SRC}
 TIDY_SRC += ${SRCS}
 
 tidy:
 	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
 	clang-tidy $(TIDY_SRC) -- \
 		-Isrc I/root/code/TaskMate/TaskMate_current/src \
+		-Isrc I/root/code/TaskMate/TaskMate_current \		
 		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
 		-D__AVR__=6 -D__AVR_ATmega2560__=1
 .PHONY: tidy
@@ -158,7 +159,7 @@ tidy:
 # clang-format
 format:
 	printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
-	clang-format -i $(SRCS) $(SRCS_H) utility/autoCode.c
+	clang-format -i $(SRCS) $(SRCS_H) utility/autoCode_src/*.c
 .PHONY: format
 
 

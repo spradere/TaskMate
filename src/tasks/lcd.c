@@ -27,13 +27,11 @@
 #define LCD_CMD 0x80 // Co=1 RS = 0, Write Command
 #define LCD_DATA 0x40 // Co=0 RS = 1, Write Data series
 
-
 // status
 uint8_t lcd_status = 0;
 
 void lcdSetStatus(uint8_t status) { lcd_status = status; }
 uint8_t lcdGetStatus(void) { return lcd_status; }
-
 
 void lcd(void)
 {
