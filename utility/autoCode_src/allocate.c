@@ -21,6 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
 
+void allocate(list_table_t **table, char **line, char ***argv)
 {
 	// task and driver table
 	if (((*table) = malloc(sizeof(*(*table)))) == NULL)
