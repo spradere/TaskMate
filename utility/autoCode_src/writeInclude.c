@@ -23,7 +23,7 @@
 
 void writeInclude(list_table_t *table)
 {
-	/*// open include files
+	// open include files
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
 	if (file_task_include == NULL)
 	{
@@ -40,18 +40,20 @@ void writeInclude(list_table_t *table)
 		exit(1);
 	}
 
+	int i;
 	// write task include
-	for (i = 0; i < task_count; i++)
+	
+	for (i = 0; i < table->task_count; i++)
 	{
-		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", task_table[i].name);
+		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", table->task_list[i]->name);
 	}
 
 	// write driver include
-	for (i = 0; i < driver_count; i++)
+	for (i = 0; i < table->driver_count; i++)
 	{
-		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", driver_table[i].name);
+		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", table->driver_list[i]->name);
 	}
 
 	fclose(file_task_include);
-	fclose(file_driver_include);*/
+	fclose(file_driver_include);
 }

@@ -62,13 +62,13 @@ int main(void)
 	printTable(list_table);
 
 	// write include files
-	// writeInclude(list_table);
+	writeInclude(list_table);
 
 	// write alloc files
-	// writeAlloc(list_table);
+	writeAlloc(list_table);
 
 	// read tag to generate code
-	// readTag(list_table);
+	readTag(list_table, line, argv);
 
 	// free malloc
 	unAllocate(&list_table, &line, &argv);
