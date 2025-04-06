@@ -20,10 +20,11 @@
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/readTag.h"
+#include "utility/autoCode_src/tokenizer.h"
 
-void readTag(list_table_t *table)
+void readTag(list_table_t *table, char *line, char **argv)
 {
-	/*// open source and tmp file
+	// open source and tmp file
 	FILE *file_src = fopen(FILE_SOURCE, "r");
 	if (file_src == NULL)
 	{
@@ -42,13 +43,13 @@ void readTag(list_table_t *table)
 
 	// read form source
 	int tag_section = 0;
-	file_line_number = 0;
+	int file_line_number = 0;
+	int i, arg_count;
 
 	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
 		file_line_number++;
-		arg_count = tokenizer(line, LINE_SIZE_MAX, argv, ARGN_COUNT_MAX, ARGV_SIZE_MAX);
-
+		arg_count = tokenizer(line, argv);
 
 		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
 		{
@@ -67,19 +68,19 @@ void readTag(list_table_t *table)
 			{
 				if (!(strcmp(argv[3], "init"))) // task init
 				{
-					for (i = 0; i < task_count; i++)
+					for (i = 0; i < table->task_count; i++)
 					{
 						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n",
-						 task_table[i].name, i);
+						 table->task_list[i]->name, i);
 
 						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n",
-							i, task_table[i].name);
+							i, table->task_list[i]->name);
 						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n",
-							i, task_table[i].name);
+							i, table->task_list[i]->name);
 						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n",
-							i, task_table[i].name);
+							i, table->task_list[i]->name);
 						fprintf(file_tmp, "\t(*task_table[%i].setStatus)(%i);\n\n",
-							i, task_table[i].status);
+							i, table->task_list[i]->status);
 
 					}
 				}
@@ -89,41 +90,32 @@ void readTag(list_table_t *table)
 			{
 				if (!(strcmp(argv[3], "init"))) // driver init
 				{
-					for (i = 0; i < driver_count; i++)
+					for (i = 0; i < table->driver_count; i++)
 					{
 						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
 						fprintf(file_tmp, "\t{\n");
 						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
-						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.init = %sInit,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.start = %sStart,\n", driver_table[i].name);
-						fprintf(file_tmp, "\t\t.stop = %sStop\n", driver_table[i].name);
+						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", table->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", table->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", table->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.init = %sInit,\n", table->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.start = %sStart,\n", table->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.stop = %sStop\n", table->driver_list[i]->name);
 						fprintf(file_tmp, "\t};\n");
 						fprintf(file_tmp, "\t(*driver_table[%i].setStatus)(%i);\n\n",
-							i, driver_table[i].status);
+							i, table->driver_list[i]->status);
 					}
 				}
 			}
 		}
 
 		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[/tag]")))
-		{
-			printf("end tag\n");
-			tag_section = 0;
-		}
+			{printf("end tag\n"); tag_section = 0;}
 
-		if (tag_section == 0)
-		{
-			fprintf(file_tmp, "%s", line);
-		}
+		if (tag_section == 0) {fprintf(file_tmp, "%s", line);}
 	}
 
-	if(tag_section == 1)
-	{
-		ERRMSG("missing end tag [/tag] at end of file");
-	}
+	if(tag_section == 1) {ERRMSG("missing end tag [/tag] at end of file");}
 
 	// Replace original file with the modified version
 	if (remove(FILE_SOURCE) != 0 || rename(FILE_TEMP, FILE_SOURCE) != 0)
@@ -133,5 +125,5 @@ void readTag(list_table_t *table)
 	}
 
 	fclose(file_src);
-	fclose(file_tmp);*/
+	fclose(file_tmp);
 }

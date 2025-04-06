@@ -60,7 +60,7 @@ void listToTable(list_table_t *table, char *line, char **argv)
 		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
 		{
 			if( (arg_count<2) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c][task_list] error : wrong arg count line %i\n",file_line_number);}
+			{printf("[auroCode.c] task_list error : wrong arg count line %i\n",file_line_number);}
 			
 			else
 			{strcpy(table->task_list[task_count++]->name,argv[0]);}
@@ -88,7 +88,7 @@ void listToTable(list_table_t *table, char *line, char **argv)
 		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
 		{
 			if( (arg_count<1) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c][driver_list] error : wrong arg count line%i\n",file_line_number);} 
+			{printf("[auroCode.c] driver_list error : wrong arg count line%i\n",file_line_number);} 
 			
 			else
 			{strcpy(table->driver_list[driver_count++]->name,argv[0]);}
