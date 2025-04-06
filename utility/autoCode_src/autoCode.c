@@ -41,6 +41,7 @@
 #include "utility/autoCode_src/allocate.h"
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/listToTable.h"
+#include "utility/autoCode_src/printTable.h"
 #include "utility/autoCode_src/writeInclude.h"
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/readTag.h"
@@ -54,40 +55,11 @@ int main(void)
 
 	allocate(&list_table, &line, &argv);
 
-	// test allocation
-
-	printf("[%s]\nlist_table %p-> %p\n", __FILE__, &list_table, list_table);
-	printf("driver_list %p-> %p\n", (void *)&list_table->driver_list,
-		   (void *)list_table->driver_list);
-	printf("driver_list[0] %p-> %p\n", (void *)&list_table->driver_list[0],
-		   (void *)list_table->driver_list[0]);
-	printf("driver_list[0]->name %p-> %p\n", (void *)&list_table->driver_list[0]->name,
-		   (void *)list_table->driver_list[0]->name);
-
-	strcpy(list_table->driver_list[0]->name, "hello");
-	printf("[%s:%i] name=<%s>\n", __FILE__, __LINE__, list_table->driver_list[0]->name);
-
-	strcpy(line, "one two three");
-	int count = tokenizer(line, argv);
-
-	if (count > 0)
-	{
-		for (int i = 0; i < count; i++)
-		{
-			printf("[autoCode.c] token[%i]=%s\n", i, argv[i]);
-		}
-	}
-	else
-	{
-		perror("[autoCode.c] tokenizer fail");
-		return (0);
-	}
-
 	// read list file and store data in table
-	// listToTable(list_table);
+	listToTable(list_table, line, argv);
 
 	// print tables
-	// printTable(list_table);
+	printTable(list_table);
 
 	// write include files
 	// writeInclude(list_table);

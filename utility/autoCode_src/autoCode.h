@@ -63,7 +63,9 @@ typedef struct
 typedef struct
 {
 	item_table_t **task_list;
+	int task_count;
 	item_table_t **driver_list;
+	int driver_count;
 	
 } list_table_t;
 
