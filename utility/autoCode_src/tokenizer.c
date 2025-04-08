@@ -15,7 +15,7 @@
  * @file tokenizer.c
  * @brief tokenizer implementation, cut one line to tokens
  *
- * @todo struct for input/output data
+ * @todo Nothing
  */
 
 #include "utility/autoCode_src/autoCode.h"

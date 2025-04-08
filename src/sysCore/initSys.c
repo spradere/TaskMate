@@ -57,25 +57,33 @@ void initTasks(void)
 	// do not edit code between tag : automatic generated code !
 	// [tag] task init
 	taskCreate(task1, 0);
-	task_table[0].task_name = "task1";
+
+	const char* task0_name = "task1";
+	task_table[0].task_name = (uint8_t *)task0_name;
 	task_table[0].setStatus = task1SetStatus;
 	task_table[0].getStatus = task1GetStatus;
 	(*task_table[0].setStatus)(1);
 
 	taskCreate(task2, 1);
-	task_table[1].task_name = "task2";
+
+	const char* task1_name = "task2";
+	task_table[1].task_name = (uint8_t *)task1_name;
 	task_table[1].setStatus = task2SetStatus;
 	task_table[1].getStatus = task2GetStatus;
 	(*task_table[1].setStatus)(1);
 
 	taskCreate(lcd, 2);
-	task_table[2].task_name = "lcd";
+
+	const char* task2_name = "lcd";
+	task_table[2].task_name = (uint8_t *)task2_name;
 	task_table[2].setStatus = lcdSetStatus;
 	task_table[2].getStatus = lcdGetStatus;
 	(*task_table[2].setStatus)(1);
 
 	taskCreate(scli, 3);
-	task_table[3].task_name = "scli";
+
+	const char* task3_name = "scli";
+	task_table[3].task_name = (uint8_t *)task3_name;
 	task_table[3].setStatus = scliSetStatus;
 	task_table[3].getStatus = scliGetStatus;
 	(*task_table[3].setStatus)(1);
@@ -87,10 +95,11 @@ void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code !
 	// [tag] driver init
+	const char* driver0_name = "timer1";
 	driver_table[0]=(driver_table_t)
 	{
 		.driver_id = 0,
-		.driver_name = "timer1",
+		.driver_name = (uint8_t *)driver0_name,
 		.setStatus = timer1SetStatus,
 		.getStatus = timer1GetStatus,
 		.init = timer1Init,
@@ -99,10 +108,11 @@ void initDrivers(void)
 	};
 	(*driver_table[0].setStatus)(3);
 
+	const char* driver1_name = "timer3";
 	driver_table[1]=(driver_table_t)
 	{
 		.driver_id = 1,
-		.driver_name = "timer3",
+		.driver_name = (uint8_t *)driver1_name,
 		.setStatus = timer3SetStatus,
 		.getStatus = timer3GetStatus,
 		.init = timer3Init,
@@ -111,10 +121,11 @@ void initDrivers(void)
 	};
 	(*driver_table[1].setStatus)(3);
 
+	const char* driver2_name = "i2c";
 	driver_table[2]=(driver_table_t)
 	{
 		.driver_id = 2,
-		.driver_name = "i2c",
+		.driver_name = (uint8_t *)driver2_name,
 		.setStatus = i2cSetStatus,
 		.getStatus = i2cGetStatus,
 		.init = i2cInit,
@@ -123,10 +134,11 @@ void initDrivers(void)
 	};
 	(*driver_table[2].setStatus)(3);
 
+	const char* driver3_name = "usart1";
 	driver_table[3]=(driver_table_t)
 	{
 		.driver_id = 3,
-		.driver_name = "usart1",
+		.driver_name = (uint8_t *)driver3_name,
 		.setStatus = usart1SetStatus,
 		.getStatus = usart1GetStatus,
 		.init = usart1Init,
