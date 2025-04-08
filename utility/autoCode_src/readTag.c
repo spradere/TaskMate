@@ -15,7 +15,7 @@
  * @file readTag.c
  * @brief read tag witre code in file implemetation
  *
- * @todo nothing
+ * @todo find solution to sting copy
  */
 
 #include "utility/autoCode_src/autoCode.h"
@@ -70,11 +70,13 @@ void readTag(list_table_t *table, char *line, char **argv)
 				{
 					for (i = 0; i < table->task_count; i++)
 					{
-						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n",
+						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n\n",
 						 table->task_list[i]->name, i);
-
-						fprintf(file_tmp, "\ttask_table[%i].task_name = \"%s\";\n",
+						 
+						fprintf(file_tmp, "\tconst char* task%i_name = \"%s\";\n",
 							i, table->task_list[i]->name);
+						fprintf(file_tmp, "\ttask_table[%i].task_name = (uint8_t *)task%i_name;\n",
+							i, i);
 						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n",
 							i, table->task_list[i]->name);
 						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n",
@@ -92,10 +94,13 @@ void readTag(list_table_t *table, char *line, char **argv)
 				{
 					for (i = 0; i < table->driver_count; i++)
 					{
+						fprintf(file_tmp, "\tconst char* driver%i_name = \"%s\";\n",
+							i, table->driver_list[i]->name);
+
 						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
 						fprintf(file_tmp, "\t{\n");
 						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
-						fprintf(file_tmp, "\t\t.driver_name = \"%s\",\n", table->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.driver_name = (uint8_t *)driver%i_name,\n", i);
 						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n", table->driver_list[i]->name);
 						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n", table->driver_list[i]->name);
 						fprintf(file_tmp, "\t\t.init = %sInit,\n", table->driver_list[i]->name);
