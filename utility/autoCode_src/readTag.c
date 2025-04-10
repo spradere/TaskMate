@@ -15,7 +15,7 @@
  * @file readTag.c
  * @brief read tag witre code in file implemetation
  *
- * @todo find solution to sting copy
+ * @todo read options -noInit@boot ...
  */
 
 #include "utility/autoCode_src/autoCode.h"

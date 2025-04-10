@@ -25,10 +25,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// get TaskMate flag bits
-#include "src/sysCore/status_bits.h"
-
-
 // files name
 #define FILE_TASK_LIST "utility/task_list"
 #define FILE_DRIVER_LIST "utility/driver_list"

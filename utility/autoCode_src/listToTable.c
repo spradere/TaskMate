@@ -21,6 +21,11 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/listToTable.h"
 #include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode_src/listCmd.h"
+// get TaskMate flag bits
+#include "src/sysCore/status_bits.h"
+
+
 
 void listToTable(list_table_t *table, char *line, char **argv)
 {
@@ -63,9 +68,15 @@ void listToTable(list_table_t *table, char *line, char **argv)
 			{printf("[auroCode.c] task_list error : wrong arg count line %i\n",file_line_number);}
 			
 			else
-			{strcpy(table->task_list[task_count++]->name,argv[0]);}
+			{
+				strcpy(table->task_list[task_count]->name,argv[0]);
+				for(int i=1;i<arg_count;i++)
+				{
+					cmdTaskDispatch(argv[i], &table->task_list[task_count]->status);
+				}
+				task_count++;
+			}
 		}
-
 	}
 	
 	if (task_count == 0){ERRMSG("no task"); exit(0);}
@@ -91,9 +102,15 @@ void listToTable(list_table_t *table, char *line, char **argv)
 			{printf("[auroCode.c] driver_list error : wrong arg count line%i\n",file_line_number);} 
 			
 			else
-			{strcpy(table->driver_list[driver_count++]->name,argv[0]);}
+			{
+				strcpy(table->driver_list[driver_count]->name,argv[0]);
+				for(int i=1;i<arg_count;i++)
+				{
+					cmdDriverDispatch(argv[i], &table->driver_list[driver_count]->status);
+				}
+				driver_count++;
+			}
 		}
-
 	}
 	
 	if (driver_count == 0){ERRMSG("no drivers"); exit(0);}
