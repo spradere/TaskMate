@@ -22,17 +22,16 @@
 #define LISTCMD_H
 
 #include "utility/autoCode_src/autoCode.h"
-extern list_table_t *list_table;
 
 typedef struct
 {
 	const char *name;
-	void (*func)(typeof(list_table->task_list[0]->status) *);
+	void (*func)(status_t *);
 
 } cmd_t;
 
-int cmdTaskDispatch(const char *cmd, typeof(list_table->task_list[0]->status) *status);
-int cmdDriverDispatch(const char *cmd, typeof(list_table->driver_list[0]->status) *status);
+int cmdTaskDispatch(const char *cmd, status_t *status);
+int cmdDriverDispatch(const char *cmd, status_t *status);
 
 #endif
 

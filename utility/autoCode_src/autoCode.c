@@ -32,8 +32,9 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo split autoCode.c -> many file/functions, read tag in list file to setup task/driver status
+ * @todo exit properly
  */
+
 #include <string.h>
 #include <assert.h>
 

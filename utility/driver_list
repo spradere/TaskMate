@@ -1,7 +1,7 @@
 # status for driver :
 # optional -noinit@boot
 # optional -nostart@boot
-# implicit default -init@bot -start@boot
+# implicit default : -init@boot -start@boot
 
 # system core
 timer1

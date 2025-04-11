@@ -56,6 +56,8 @@ typedef struct
 	
 } item_table_t;
 
+typedef typeof(((item_table_t*)0)->status) status_t;
+
 typedef struct
 {
 	item_table_t **task_list;
