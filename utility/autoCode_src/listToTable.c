@@ -25,6 +25,7 @@
 // get TaskMate flag bits
 #include "src/sysCore/status_bits.h"
 
+#define TASK_TYPE_MASK ((1 << TASK_TYPE_USER) | (1 << TASK_TYPE_SYSTEM))
 
 
 void listToTable(list_table_t *table, char *line, char **argv)
@@ -49,6 +50,7 @@ void listToTable(list_table_t *table, char *line, char **argv)
 	// variables
 	int file_line_number = 0;
 	int arg_count;
+	int err;
 
 	// read task file -> table
 	int task_count = 0;
@@ -69,10 +71,31 @@ void listToTable(list_table_t *table, char *line, char **argv)
 			
 			else
 			{
+				for (int j = 0; j < task_count; j++)
+				{
+					if (strcmp(table->task_list[j]->name, argv[0]) == 0)
+					{
+						printf("[aurocode.c] error : duplicate task name \"%s\" on line %d\n", 
+							argv[0], file_line_number);
+						break;
+					}
+				}
+								
 				strcpy(table->task_list[task_count]->name,argv[0]);
+						
 				for(int i=1;i<arg_count;i++)
 				{
-					cmdTaskDispatch(argv[i], &table->task_list[task_count]->status);
+					err = cmdTaskDispatch(argv[i], &table->task_list[task_count]->status);
+					if(err !=0)
+					{
+						printf("[auroCode.c] error : task unknown command %s line %i\n",
+							argv[i],file_line_number);
+					}
+				}
+				if ((table->task_list[task_count]->status & TASK_TYPE_MASK) == 0)
+				{
+					printf("[autoCode.c] error : missing -user or -system for task on line %d\n", 
+						file_line_number);
 				}
 				task_count++;
 			}
@@ -103,10 +126,26 @@ void listToTable(list_table_t *table, char *line, char **argv)
 			
 			else
 			{
+				for (int j = 0; j < driver_count; j++)
+				{
+					if (strcmp(table->driver_list[j]->name, argv[0]) == 0)
+					{
+						printf("[aurocode.c] error : duplicate driver name \"%s\" on line %d\n", 
+							argv[0], file_line_number);
+						break;
+					}
+				}
+	
 				strcpy(table->driver_list[driver_count]->name,argv[0]);
 				for(int i=1;i<arg_count;i++)
 				{
-					cmdDriverDispatch(argv[i], &table->driver_list[driver_count]->status);
+					err = cmdDriverDispatch(argv[i], &table->driver_list[driver_count]->status);
+					if(err !=0)
+					{
+						printf("[auroCode.c] error : driver unknown command %s on file %s line %i\n",
+							argv[i],FILE_DRIVER_LIST,file_line_number);
+					}
+
 				}
 				driver_count++;
 			}

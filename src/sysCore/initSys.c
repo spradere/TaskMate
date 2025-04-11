@@ -62,7 +62,7 @@ void initTasks(void)
 	task_table[0].task_name = (uint8_t *)task0_name;
 	task_table[0].setStatus = task1SetStatus;
 	task_table[0].getStatus = task1GetStatus;
-	(*task_table[0].setStatus)(1);
+	(*task_table[0].setStatus)(3);
 
 	taskCreate(task2, 1);
 
@@ -70,7 +70,7 @@ void initTasks(void)
 	task_table[1].task_name = (uint8_t *)task1_name;
 	task_table[1].setStatus = task2SetStatus;
 	task_table[1].getStatus = task2GetStatus;
-	(*task_table[1].setStatus)(1);
+	(*task_table[1].setStatus)(2);
 
 	taskCreate(lcd, 2);
 
@@ -78,7 +78,7 @@ void initTasks(void)
 	task_table[2].task_name = (uint8_t *)task2_name;
 	task_table[2].setStatus = lcdSetStatus;
 	task_table[2].getStatus = lcdGetStatus;
-	(*task_table[2].setStatus)(1);
+	(*task_table[2].setStatus)(5);
 
 	taskCreate(scli, 3);
 
@@ -86,7 +86,23 @@ void initTasks(void)
 	task_table[3].task_name = (uint8_t *)task3_name;
 	task_table[3].setStatus = scliSetStatus;
 	task_table[3].getStatus = scliGetStatus;
-	(*task_table[3].setStatus)(1);
+	(*task_table[3].setStatus)(5);
+
+	taskCreate(task1, 4);
+
+	const char* task4_name = "task1";
+	task_table[4].task_name = (uint8_t *)task4_name;
+	task_table[4].setStatus = task1SetStatus;
+	task_table[4].getStatus = task1GetStatus;
+	(*task_table[4].setStatus)(5);
+
+	taskCreate(task2, 5);
+
+	const char* task5_name = "task2";
+	task_table[5].task_name = (uint8_t *)task5_name;
+	task_table[5].setStatus = task2SetStatus;
+	task_table[5].getStatus = task2GetStatus;
+	(*task_table[5].setStatus)(1);
 
 	// [/tag]
 }

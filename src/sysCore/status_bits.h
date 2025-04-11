@@ -20,8 +20,9 @@
 
 // task status bits
 #define TASK_START_AT_BOOT 0 /**< Automatic task start at boot time */
-#define TASK_TYPE 1 /**< 0=user task 1=system service */
-#define TASK_DEAD 2 /**< Task can't be started */
+#define TASK_TYPE_USER 1 /**< user task*/
+#define TASK_TYPE_SYSTEM 2 /**< system service */
+#define TASK_DEAD 3 /**< Task can't be started */
 
 // driver status bits
 #define DRIVER_INIT_AT_BOOT 0 /**< Automatic driver initialization at boot time */
