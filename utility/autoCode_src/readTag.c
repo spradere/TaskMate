@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/readTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-void readTag(list_table_t *table, char *line, char **argv)
+void readTag(list_table_t *table, char *line, char **token_list)
 {
 	// open source and tmp file
 	FILE *file_src = fopen(FILE_SOURCE, "r");
@@ -49,9 +49,9 @@ void readTag(list_table_t *table, char *line, char **argv)
 	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
 		file_line_number++;
-		token_count = tokenizer(line, argv);
+		token_count = tokenizer(line, token_list);
 
-		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[tag]")))
+		if (!(strcmp(token_list[0], "//")) && !(strcmp(token_list[1], "[tag]")))
 		{
 			if (token_count != 4)
 			{
@@ -60,13 +60,13 @@ void readTag(list_table_t *table, char *line, char **argv)
 				break;
 			}
 
-			printf("found tag <%s> <%s> ... ", argv[2], argv[3]);
+			printf("found tag <%s> <%s> ... ", token_list[2], token_list[3]);
 			fprintf(file_tmp, "%s", line);
 			tag_section = 1;
 
-			if (!(strcmp(argv[2], "task"))) // task tag
+			if (!(strcmp(token_list[2], "task"))) // task tag
 			{
-				if (!(strcmp(argv[3], "init"))) // task init
+				if (!(strcmp(token_list[3], "init"))) // task init
 				{
 					for (i = 0; i < table->task_count; i++)
 					{
@@ -87,9 +87,9 @@ void readTag(list_table_t *table, char *line, char **argv)
 				}
 			}
 
-			if (!(strcmp(argv[2], "driver"))) // driver tag
+			if (!(strcmp(token_list[2], "driver"))) // driver tag
 			{
-				if (!(strcmp(argv[3], "init"))) // driver init
+				if (!(strcmp(token_list[3], "init"))) // driver init
 				{
 					for (i = 0; i < table->driver_count; i++)
 					{
@@ -115,7 +115,7 @@ void readTag(list_table_t *table, char *line, char **argv)
 			}
 		}
 
-		if (!(strcmp(argv[0], "//")) && !(strcmp(argv[1], "[/tag]")))
+		if (!(strcmp(token_list[0], "//")) && !(strcmp(token_list[1], "[/tag]")))
 		{
 			printf("end tag\n");
 			tag_section = 0;

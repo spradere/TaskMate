@@ -52,12 +52,12 @@ int main(void)
 	// allocation
 	list_table_t *list_table = NULL; // task and driver tables
 	char *line = NULL; // buffer for reading one line from file
-	char **argv = NULL; // argument data
+	char **token_list = NULL; // argument data
 
-	allocate(&list_table, &line, &argv);
+	allocate(&list_table, &line, &token_list);
 
 	// read list file and store data in table
-	listToTable(list_table, line, argv);
+	listToTable(list_table, line, token_list);
 
 	// print tables
 	printTable(list_table);
@@ -69,10 +69,10 @@ int main(void)
 	writeAlloc(list_table);
 
 	// read tag to generate code
-	readTag(list_table, line, argv);
+	readTag(list_table, line, token_list);
 
 	// free malloc
-	unAllocate(&list_table, &line, &argv);
+	unAllocate(&list_table, &line, &token_list);
 
 	return 0;
 }
