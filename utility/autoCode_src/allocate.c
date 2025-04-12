@@ -29,45 +29,45 @@ void allocate(module_t **modules, char **line, char ***tokens)
 		ERRMSG("malloc modules");
 		exit(0);
 	}
-	if (((*modules)->driver_list = malloc(DRIVER_COUNT_MAX * sizeof(*(*modules)->driver_list))) == NULL)
+	if (((*modules)->drivers = malloc(DRIVER_COUNT_MAX * sizeof(*(*modules)->drivers))) == NULL)
 	{
-		ERRMSG("malloc modules->driver_list");
+		ERRMSG("malloc modules->drivers");
 		exit(0);
 	}
-	if (((*modules)->task_list = malloc(TASK_COUNT_MAX * sizeof(*(*modules)->task_list))) == NULL)
+	if (((*modules)->tasks = malloc(TASK_COUNT_MAX * sizeof(*(*modules)->tasks))) == NULL)
 	{
-		ERRMSG("malloc modules->task_list");
+		ERRMSG("malloc modules->tasks");
 		exit(0);
 	}
 
 	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
 	{
-		if (((*modules)->driver_list[i] = malloc(sizeof(**(*modules)->driver_list))) == NULL)
+		if (((*modules)->drivers[i] = malloc(sizeof(**(*modules)->drivers))) == NULL)
 		{
-			ERRMSG("malloc modules->driver_list[i]");
+			ERRMSG("malloc modules->drivers[i]");
 			exit(0);
 		}
 
-		if (((*modules)->driver_list[i]->name =
-				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->driver_list[i]->name))) == NULL)
+		if (((*modules)->drivers[i]->name =
+				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->drivers[i]->name))) == NULL)
 		{
-			ERRMSG("malloc modules->driver_list[i]->name");
+			ERRMSG("malloc modules->drivers[i]->name");
 			exit(0);
 		}
 	}
 
 	for (int i = 0; i < TASK_COUNT_MAX; i++)
 	{
-		if (((*modules)->task_list[i] = malloc(sizeof(**(*modules)->task_list))) == NULL)
+		if (((*modules)->tasks[i] = malloc(sizeof(**(*modules)->tasks))) == NULL)
 		{
-			ERRMSG("malloc modules->task_list[i]");
+			ERRMSG("malloc modules->tasks[i]");
 			exit(0);
 		}
 
-		if (((*modules)->task_list[i]->name =
-				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->task_list[i]->name))) == NULL)
+		if (((*modules)->tasks[i]->name =
+				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->tasks[i]->name))) == NULL)
 		{
-			ERRMSG("malloc modules->task_list[i]->name");
+			ERRMSG("malloc modules->tasks[i]->name");
 			exit(0);
 		}
 	}
@@ -101,18 +101,18 @@ void unAllocate(module_t **modules, char **line, char ***tokens)
 	// task and driver modules
 	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
 	{
-		free((*modules)->driver_list[i]->name);
-		free((*modules)->driver_list[i]);
+		free((*modules)->drivers[i]->name);
+		free((*modules)->drivers[i]);
 	}
 
 	for (int i = 0; i < TASK_COUNT_MAX; i++)
 	{
-		free((*modules)->task_list[i]->name);
-		free((*modules)->task_list[i]);
+		free((*modules)->tasks[i]->name);
+		free((*modules)->tasks[i]);
 	}
 
-	free((*modules)->driver_list);
-	free((*modules)->task_list);
+	free((*modules)->drivers);
+	free((*modules)->tasks);
 	free(*modules);
 
 	// buffer for reading

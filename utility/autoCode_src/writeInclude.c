@@ -45,13 +45,13 @@ void writeInclude(module_t *modules)
 
 	for (i = 0; i < modules->task_count; i++)
 	{
-		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", modules->task_list[i]->name);
+		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", modules->tasks[i]->name);
 	}
 
 	// write driver include
 	for (i = 0; i < modules->driver_count; i++)
 	{
-		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", modules->driver_list[i]->name);
+		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", modules->drivers[i]->name);
 	}
 
 	fclose(file_task_include);

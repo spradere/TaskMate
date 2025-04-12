@@ -26,8 +26,8 @@
 #include <string.h>
 
 // files name
-#define FILE_TASK_LIST "utility/task_list"
-#define FILE_DRIVER_LIST "utility/driver_list"
+#define FILE_TASK_LIST "utility/tasks_list"
+#define FILE_DRIVER_LIST "utility/drivers_list"
 #define FILE_SOURCE "src/sysCore/initSys.c"
 #define FILE_TEMP "src/sysCore/initSys.tmp.c"
 #define FILE_TASK_INCLUDE "src/sysCore/autoIncludeTasks.h"
@@ -60,9 +60,9 @@ typedef typeof(((module_item_t*)0)->status) module_status_t;
 
 typedef struct
 {
-	module_item_t **task_list;
+	module_item_t **tasks;
 	int task_count;
-	module_item_t **driver_list;
+	module_item_t **drivers;
 	int driver_count;
 	
 } module_t;
