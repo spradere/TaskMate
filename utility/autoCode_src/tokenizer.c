@@ -24,20 +24,20 @@
 int tokenizer(char *line, char **argv)
 {
 	int index_line = 0;
-	int index_arg = 0;
-	int argn;
+	int index_token = 0;
+	int token_count;
 
 	// reset all argv
-	for (argn = 0; argn < ARGN_COUNT_MAX; argn++)
+	for (token_count = 0; token_count < TOKEN_COUNT_MAX; token_count++)
 	{
-		argv[argn][0] = 0;
+		argv[token_count][0] = 0;
 	}
 
 	// read line, extract arguments
-	argn = 0;
+	token_count = 0;
 
 	while ((line[index_line] != '\n') && (line[index_line] != 0) &&
-		   (index_line < (LINE_SIZE_MAX - 1)) && (argn < ARGN_COUNT_MAX))
+		   (index_line < (LINE_SIZE_MAX - 1)) && (token_count < TOKEN_COUNT_MAX))
 	{
 		// get off leading space or tab
 		while (((line[index_line] == ' ') || (line[index_line] == '\t')) &&
@@ -47,20 +47,20 @@ int tokenizer(char *line, char **argv)
 		}
 
 		// read and store token
-		index_arg = 0;
+		index_token = 0;
 		while ((line[index_line] != ' ') && (line[index_line] != '\t') &&
 			   (line[index_line] != '\n') && (line[index_line] != 0) &&
-			   (index_line < (LINE_SIZE_MAX - 1)) && (index_arg < (ARGV_SIZE_MAX - 1)))
+			   (index_line < (LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)))
 		{
-			argv[argn][index_arg++] = line[index_line++];
+			argv[token_count][index_token++] = line[index_line++];
 		}
 
-		argv[argn][index_arg] = 0;
-		if (argv[argn][0] != 0)
+		argv[token_count][index_token] = 0;
+		if (argv[token_count][0] != 0)
 		{
-			argn++;
+			token_count++;
 		}
 	}
 
-	return argn;
+	return token_count;
 }

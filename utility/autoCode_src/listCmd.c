@@ -24,58 +24,54 @@
 // get TaskMate flag bits
 #include "src/sysCore/status_bits.h"
 
+void cmdTaskUser(status_t *status) { *status |= (1 << TASK_TYPE_USER); }
+void cmdTaskSys(status_t *status) { *status |= (1 << TASK_TYPE_SYSTEM); }
+void cmdTaskStart(status_t *status) { *status |= (1 << TASK_START_AT_BOOT); }
+void cmdTaskNoStart(status_t *status) { *status &= ~(1 << TASK_START_AT_BOOT); }
 
-void cmdTaskUser(status_t *status){*status |= (1 << TASK_TYPE_USER);}
-void cmdTaskSys(status_t *status){*status |= (1 << TASK_TYPE_SYSTEM);}
-void cmdTaskStart(status_t *status){*status |= (1 << TASK_START_AT_BOOT);}
-void cmdTaskNoStart(status_t *status){*status &= ~(1 << TASK_START_AT_BOOT);}
+const cmd_t cmd_task[] = {{"-user", cmdTaskUser},
+						  {"-system", cmdTaskSys},
+						  {"-start@boot", cmdTaskStart},
+						  {"-nostart@boot", cmdTaskNoStart},
+						  {NULL, NULL}};
 
-const cmd_t cmd_task[] = {
-	{"-user", cmdTaskUser},
-	{"-system", cmdTaskSys},
-	{"-start@boot", cmdTaskStart},
-	{"-nostart@boot", cmdTaskNoStart},
-	{NULL,NULL}
-};
+void cmdDriverInit(status_t *status) { *status |= (1 << DRIVER_INIT_AT_BOOT); }
+void cmdDriverNoInit(status_t *status) { *status &= ~(1 << DRIVER_INIT_AT_BOOT); }
+void cmdDriverStart(status_t *status) { *status |= (1 << DRIVER_START_AT_BOOT); }
+void cmdDriverNoStart(status_t *status) { *status &= ~(1 << DRIVER_START_AT_BOOT); }
 
-void cmdDriverInit(status_t *status){*status |= (1<<DRIVER_INIT_AT_BOOT);}
-void cmdDriverNoInit(status_t *status){*status &= ~(1<<DRIVER_INIT_AT_BOOT);}
-void cmdDriverStart(status_t *status){*status |= (1<<DRIVER_START_AT_BOOT);}
-void cmdDriverNoStart(status_t *status){*status &= ~(1<<DRIVER_START_AT_BOOT);}
-
-const cmd_t cmd_driver[] = {
-	{"-init@boot", cmdDriverInit},
-	{"-noinit@boot", cmdDriverNoInit},
-	{"-start@boot", cmdDriverStart},
-	{"-nostart@boot", cmdDriverNoStart},
-	{NULL,NULL}
+const cmd_t cmd_driver[] = {{"-init@boot", cmdDriverInit},
+							{"-noinit@boot", cmdDriverNoInit},
+							{"-start@boot", cmdDriverStart},
+							{"-nostart@boot", cmdDriverNoStart},
+							{NULL, NULL}
 
 };
 
 int cmdTaskDispatch(const char *cmd, status_t *status)
 {
-	for(int i=0; cmd_task[i].name != NULL; i++)
+	for (int i = 0; cmd_task[i].name != NULL; i++)
+	{
+		if (strcmp(cmd, cmd_task[i].name) == 0)
 		{
-			if(strcmp(cmd,cmd_task[i].name) == 0)
-			{
-				(*cmd_task[i].func)(status);
-				//printf("[listCmd.c cmdTaskDispatch()] cmd=%s status=0x%02x\n",cmd, *status);
-				return 0;
-			}
+			(*cmd_task[i].func)(status);
+			// printf("[listCmd.c cmdTaskDispatch()] cmd=%s status=0x%02x\n",cmd, *status);
+			return 0;
 		}
+	}
 	return -1;
 }
 
 int cmdDriverDispatch(const char *cmd, status_t *status)
 {
-	for(int i=0; cmd_driver[i].name != NULL; i++)
+	for (int i = 0; cmd_driver[i].name != NULL; i++)
+	{
+		if (strcmp(cmd, cmd_driver[i].name) == 0)
 		{
-			if(strcmp(cmd,cmd_driver[i].name) == 0)
-			{
-				(*cmd_driver[i].func)(status);
-				//printf("[listCmd.c cmdDriverDispatch()] cmd=%s status=0x%02x\n",cmd, *status);
-				return 0;
-			}
+			(*cmd_driver[i].func)(status);
+			// printf("[listCmd.c cmdDriverDispatch()] cmd=%s status=0x%02x\n",cmd, *status);
+			return 0;
 		}
+	}
 	return -1;
 }

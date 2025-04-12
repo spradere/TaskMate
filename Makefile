@@ -158,8 +158,8 @@ tidy:
 
 # clang-format
 format:
-	printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
-	clang-format -i $(SRCS) $(SRCS_H) utility/autoCode_src/*.c
+	@printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
+	clang-format -i $(SRCS) $(SRCS_H) $(AUTOCODE_SRC)
 .PHONY: format
 
 

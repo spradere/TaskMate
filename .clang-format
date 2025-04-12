@@ -9,7 +9,7 @@ UseTab: Always
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
-# todo : test InsertBraces: true
+InsertBraces: true
 
 
 # Formatting preferences

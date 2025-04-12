@@ -70,7 +70,7 @@ void initTasks(void)
 	task_table[1].task_name = (uint8_t *)task1_name;
 	task_table[1].setStatus = task2SetStatus;
 	task_table[1].getStatus = task2GetStatus;
-	(*task_table[1].setStatus)(2);
+	(*task_table[1].setStatus)(3);
 
 	taskCreate(lcd, 2);
 
@@ -87,22 +87,6 @@ void initTasks(void)
 	task_table[3].setStatus = scliSetStatus;
 	task_table[3].getStatus = scliGetStatus;
 	(*task_table[3].setStatus)(5);
-
-	taskCreate(task1, 4);
-
-	const char* task4_name = "task1";
-	task_table[4].task_name = (uint8_t *)task4_name;
-	task_table[4].setStatus = task1SetStatus;
-	task_table[4].getStatus = task1GetStatus;
-	(*task_table[4].setStatus)(5);
-
-	taskCreate(task2, 5);
-
-	const char* task5_name = "task2";
-	task_table[5].task_name = (uint8_t *)task5_name;
-	task_table[5].setStatus = task2SetStatus;
-	task_table[5].getStatus = task2GetStatus;
-	(*task_table[5].setStatus)(1);
 
 	// [/tag]
 }

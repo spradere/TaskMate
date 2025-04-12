@@ -52,13 +52,19 @@ uint8_t i2cCommStart(uint8_t address)
 	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT); // | (1 << TWEA);
 	while (!(TWCR & (1 << TWINT)));
 
-	if ((TWSR & 0xF8) != TW_START) return 1; // Error
+	if ((TWSR & 0xF8) != TW_START)
+	{
+		return 1; // Error
+	}
 
 	TWDR = (address);
 	TWCR = (1 << TWEN) | (1 << TWINT);
 	while (!(TWCR & (1 << TWINT)));
 
-	if ((TWSR & 0xF8) != TW_MT_SLA_ACK) return 2; // Error
+	if ((TWSR & 0xF8) != TW_MT_SLA_ACK)
+	{
+		return 2; // Error
+	}
 	return 0; // Success
 }
 
@@ -70,6 +76,9 @@ uint8_t i2cWrite(uint8_t data)
 	TWCR = (1 << TWEN) | (1 << TWINT);
 	while (!(TWCR & (1 << TWINT)));
 
-	if ((TWSR & 0xF8) != TW_MT_DATA_ACK) return 1; // Error
+	if ((TWSR & 0xF8) != TW_MT_DATA_ACK)
+	{
+		return 1; // Error
+	}
 	return 0; // Success
 }

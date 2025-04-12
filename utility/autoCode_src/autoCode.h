@@ -42,8 +42,8 @@
 
 // size for tokenizer
 #define LINE_SIZE_MAX 256
-#define ARGN_COUNT_MAX 4
-#define ARGV_SIZE_MAX 64
+#define TOKEN_COUNT_MAX 4
+#define TOKEN_SIZE_MAX 64
 
 // error message macro
 #define ERRMSG(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE__, __LINE__, msg)

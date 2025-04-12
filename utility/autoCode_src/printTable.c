@@ -28,15 +28,15 @@ void printTable(list_table_t *table)
 	printf("[autoCode.c] found task :\n");
 	for (i = 0; i < table->task_count; i++)
 	{
-		printf("\ttask[%i] name:%s status=%i\n", 
-			i, table->task_list[i]->name, table->task_list[i]->status);
+		printf("\ttask[%i] name:%s status=%i\n", i, table->task_list[i]->name,
+			   table->task_list[i]->status);
 	}
 
 	printf("\n[autoCode.c] found driver :\n");
 	for (i = 0; i < table->driver_count; i++)
 	{
-		printf("\tdriver[%i] name:%s status=%i\n", 
-			i, table->driver_list[i]->name, table->driver_list[i]->status);
+		printf("\tdriver[%i] name:%s status=%i\n", i, table->driver_list[i]->name,
+			   table->driver_list[i]->status);
 	}
 	printf("\n");
 }
