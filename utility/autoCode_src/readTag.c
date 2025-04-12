@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/readTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-void readTag(module_t *table, char *line, char **tokens)
+void readTag(module_t *modules, char *line, char **tokens)
 {
 	// open source and tmp file
 	FILE *file_src = fopen(FILE_SOURCE, "r");
@@ -68,21 +68,21 @@ void readTag(module_t *table, char *line, char **tokens)
 			{
 				if (!(strcmp(tokens[3], "init"))) // task init
 				{
-					for (i = 0; i < table->task_count; i++)
+					for (i = 0; i < modules->task_count; i++)
 					{
-						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n\n", table->task_list[i]->name,
+						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n\n", modules->task_list[i]->name,
 								i);
 
 						fprintf(file_tmp, "\tconst char* task%i_name = \"%s\";\n", i,
-								table->task_list[i]->name);
+								modules->task_list[i]->name);
 						fprintf(file_tmp, "\ttask_table[%i].task_name = (uint8_t *)task%i_name;\n",
 								i, i);
 						fprintf(file_tmp, "\ttask_table[%i].setStatus = %sSetStatus;\n", i,
-								table->task_list[i]->name);
+								modules->task_list[i]->name);
 						fprintf(file_tmp, "\ttask_table[%i].getStatus = %sGetStatus;\n", i,
-								table->task_list[i]->name);
+								modules->task_list[i]->name);
 						fprintf(file_tmp, "\t(*task_table[%i].setStatus)(%i);\n\n", i,
-								table->task_list[i]->status);
+								modules->task_list[i]->status);
 					}
 				}
 			}
@@ -91,25 +91,25 @@ void readTag(module_t *table, char *line, char **tokens)
 			{
 				if (!(strcmp(tokens[3], "init"))) // driver init
 				{
-					for (i = 0; i < table->driver_count; i++)
+					for (i = 0; i < modules->driver_count; i++)
 					{
 						fprintf(file_tmp, "\tconst char* driver%i_name = \"%s\";\n", i,
-								table->driver_list[i]->name);
+								modules->driver_list[i]->name);
 
 						fprintf(file_tmp, "\tdriver_table[%i]=(driver_table_t)\n", i);
 						fprintf(file_tmp, "\t{\n");
 						fprintf(file_tmp, "\t\t.driver_id = %i,\n", i);
 						fprintf(file_tmp, "\t\t.driver_name = (uint8_t *)driver%i_name,\n", i);
 						fprintf(file_tmp, "\t\t.setStatus = %sSetStatus,\n",
-								table->driver_list[i]->name);
+								modules->driver_list[i]->name);
 						fprintf(file_tmp, "\t\t.getStatus = %sGetStatus,\n",
-								table->driver_list[i]->name);
-						fprintf(file_tmp, "\t\t.init = %sInit,\n", table->driver_list[i]->name);
-						fprintf(file_tmp, "\t\t.start = %sStart,\n", table->driver_list[i]->name);
-						fprintf(file_tmp, "\t\t.stop = %sStop\n", table->driver_list[i]->name);
+								modules->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.init = %sInit,\n", modules->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.start = %sStart,\n", modules->driver_list[i]->name);
+						fprintf(file_tmp, "\t\t.stop = %sStop\n", modules->driver_list[i]->name);
 						fprintf(file_tmp, "\t};\n");
 						fprintf(file_tmp, "\t(*driver_table[%i].setStatus)(%i);\n\n", i,
-								table->driver_list[i]->status);
+								modules->driver_list[i]->status);
 					}
 				}
 			}

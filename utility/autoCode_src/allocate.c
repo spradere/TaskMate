@@ -21,53 +21,53 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
 
-void allocate(module_t **table, char **line, char ***tokens)
+void allocate(module_t **modules, char **line, char ***tokens)
 {
-	// task and driver table
-	if (((*table) = malloc(sizeof(*(*table)))) == NULL)
+	// task and driver modules
+	if (((*modules) = malloc(sizeof(*(*modules)))) == NULL)
 	{
-		ERRMSG("malloc table");
+		ERRMSG("malloc modules");
 		exit(0);
 	}
-	if (((*table)->driver_list = malloc(DRIVER_COUNT_MAX * sizeof(*(*table)->driver_list))) == NULL)
+	if (((*modules)->driver_list = malloc(DRIVER_COUNT_MAX * sizeof(*(*modules)->driver_list))) == NULL)
 	{
-		ERRMSG("malloc table->driver_list");
+		ERRMSG("malloc modules->driver_list");
 		exit(0);
 	}
-	if (((*table)->task_list = malloc(TASK_COUNT_MAX * sizeof(*(*table)->task_list))) == NULL)
+	if (((*modules)->task_list = malloc(TASK_COUNT_MAX * sizeof(*(*modules)->task_list))) == NULL)
 	{
-		ERRMSG("malloc table->task_list");
+		ERRMSG("malloc modules->task_list");
 		exit(0);
 	}
 
 	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
 	{
-		if (((*table)->driver_list[i] = malloc(sizeof(**(*table)->driver_list))) == NULL)
+		if (((*modules)->driver_list[i] = malloc(sizeof(**(*modules)->driver_list))) == NULL)
 		{
-			ERRMSG("malloc table->driver_list[i]");
+			ERRMSG("malloc modules->driver_list[i]");
 			exit(0);
 		}
 
-		if (((*table)->driver_list[i]->name =
-				 malloc(NAME_SIZE_MAX * sizeof(*(*table)->driver_list[i]->name))) == NULL)
+		if (((*modules)->driver_list[i]->name =
+				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->driver_list[i]->name))) == NULL)
 		{
-			ERRMSG("malloc table->driver_list[i]->name");
+			ERRMSG("malloc modules->driver_list[i]->name");
 			exit(0);
 		}
 	}
 
 	for (int i = 0; i < TASK_COUNT_MAX; i++)
 	{
-		if (((*table)->task_list[i] = malloc(sizeof(**(*table)->task_list))) == NULL)
+		if (((*modules)->task_list[i] = malloc(sizeof(**(*modules)->task_list))) == NULL)
 		{
-			ERRMSG("malloc table->task_list[i]");
+			ERRMSG("malloc modules->task_list[i]");
 			exit(0);
 		}
 
-		if (((*table)->task_list[i]->name =
-				 malloc(NAME_SIZE_MAX * sizeof(*(*table)->task_list[i]->name))) == NULL)
+		if (((*modules)->task_list[i]->name =
+				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->task_list[i]->name))) == NULL)
 		{
-			ERRMSG("malloc table->task_list[i]->name");
+			ERRMSG("malloc modules->task_list[i]->name");
 			exit(0);
 		}
 	}
@@ -96,24 +96,24 @@ void allocate(module_t **table, char **line, char ***tokens)
 	}
 }
 
-void unAllocate(module_t **table, char **line, char ***tokens)
+void unAllocate(module_t **modules, char **line, char ***tokens)
 {
-	// task and driver table
+	// task and driver modules
 	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
 	{
-		free((*table)->driver_list[i]->name);
-		free((*table)->driver_list[i]);
+		free((*modules)->driver_list[i]->name);
+		free((*modules)->driver_list[i]);
 	}
 
 	for (int i = 0; i < TASK_COUNT_MAX; i++)
 	{
-		free((*table)->task_list[i]->name);
-		free((*table)->task_list[i]);
+		free((*modules)->task_list[i]->name);
+		free((*modules)->task_list[i]);
 	}
 
-	free((*table)->driver_list);
-	free((*table)->task_list);
-	free(*table);
+	free((*modules)->driver_list);
+	free((*modules)->task_list);
+	free(*modules);
 
 	// buffer for reading
 	free(*line);

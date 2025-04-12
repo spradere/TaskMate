@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(module_t *table)
+void writeInclude(module_t *modules)
 {
 	// open include files
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
@@ -43,15 +43,15 @@ void writeInclude(module_t *table)
 	int i;
 	// write task include
 
-	for (i = 0; i < table->task_count; i++)
+	for (i = 0; i < modules->task_count; i++)
 	{
-		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", table->task_list[i]->name);
+		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", modules->task_list[i]->name);
 	}
 
 	// write driver include
-	for (i = 0; i < table->driver_count; i++)
+	for (i = 0; i < modules->driver_count; i++)
 	{
-		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", table->driver_list[i]->name);
+		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", modules->driver_list[i]->name);
 	}
 
 	fclose(file_task_include);

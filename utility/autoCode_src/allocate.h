@@ -21,7 +21,7 @@
 #ifndef ALLOCATE_H
 #define ALLOCATE_H
 
-void allocate(module_t**, char**, char ***);
-void unAllocate(module_t**, char**, char ***);
+void allocate(module_t **modules, char **line, char ***tokens);
+void unAllocate(module_t **modules, char **line, char ***tokens);
 
 #endif

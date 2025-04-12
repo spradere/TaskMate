@@ -21,6 +21,6 @@
  #ifndef READTAG_H
  #define READTAG_H
  
- void readTag(module_t *,char *, char **);
+ void readTag(module_t *modules, char *line, char **tokens);
  
  #endif
