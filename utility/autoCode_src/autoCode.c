@@ -52,12 +52,12 @@ int main(void)
 	// allocation
 	module_t *modules = NULL; // task and driver tables
 	char *line = NULL; // buffer for reading one line from file
-	char **token_list = NULL; // argument data
-
-	allocate(&modules, &line, &token_list);
+	char **tokens = NULL; 
+	
+	allocate(&modules, &line, &tokens);
 
 	// read list file and store data in table
-	listToTable(modules, line, token_list);
+	listToTable(modules, line, tokens);
 
 	// print tables
 	printTable(modules);
@@ -69,10 +69,10 @@ int main(void)
 	writeAlloc(modules);
 
 	// read tag to generate code in initSys.c
-	readTag(modules, line, token_list);
+	readTag(modules, line, tokens);
 
 	// free malloc
-	unAllocate(&modules, &line, &token_list);
+	unAllocate(&modules, &line, &tokens);
 
 	return 0;
 }
