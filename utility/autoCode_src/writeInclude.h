@@ -21,6 +21,6 @@
  #ifndef WRITEINCLUDE_H
  #define WRITEINCLUDE_H
  
- void writeInclude(list_table_t *);
+ void writeInclude(module_t *);
  
  #endif

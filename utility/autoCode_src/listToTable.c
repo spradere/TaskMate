@@ -27,7 +27,7 @@
 
 #define TASK_TYPE_MASK ((1 << TASK_TYPE_USER) | (1 << TASK_TYPE_SYSTEM))
 
-void listToTable(list_table_t *table, char *line, char **token_list)
+void listToTable(module_t *table, char *line, char **token_list)
 {
 	// open list files
 	FILE *file_task_list = fopen(FILE_TASK_LIST, "r");

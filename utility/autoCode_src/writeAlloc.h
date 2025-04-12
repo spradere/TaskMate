@@ -21,6 +21,6 @@
  #ifndef WRITEALLOC_H
  #define WRITEALLOC_H
  
- void writeAlloc(list_table_t *);
+ void writeAlloc(module_t *);
  
  #endif

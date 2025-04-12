@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/printTable.h"
 
-void printTable(list_table_t *table)
+void printTable(module_t *table)
 {
 	int i;
 

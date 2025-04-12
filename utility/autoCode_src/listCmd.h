@@ -26,12 +26,12 @@
 typedef struct
 {
 	const char *name;
-	void (*func)(status_t *);
+	void (*func)(module_status_t *);
 
 } cmd_t;
 
-int cmdTaskDispatch(const char *cmd, status_t *status);
-int cmdDriverDispatch(const char *cmd, status_t *status);
+int cmdTaskDispatch(const char *cmd, module_status_t *status);
+int cmdDriverDispatch(const char *cmd, module_status_t *status);
 
 #endif
 

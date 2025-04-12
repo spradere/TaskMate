@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/readTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-void readTag(list_table_t *table, char *line, char **token_list)
+void readTag(module_t *table, char *line, char **token_list)
 {
 	// open source and tmp file
 	FILE *file_src = fopen(FILE_SOURCE, "r");

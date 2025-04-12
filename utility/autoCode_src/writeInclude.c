@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(list_table_t *table)
+void writeInclude(module_t *table)
 {
 	// open include files
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");

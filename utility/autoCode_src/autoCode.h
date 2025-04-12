@@ -54,17 +54,17 @@ typedef struct
 	char *name;
 	unsigned char status;
 	
-} item_table_t;
+} module_item_t;
 
-typedef typeof(((item_table_t*)0)->status) status_t;
+typedef typeof(((module_item_t*)0)->status) module_status_t;
 
 typedef struct
 {
-	item_table_t **task_list;
+	module_item_t **task_list;
 	int task_count;
-	item_table_t **driver_list;
+	module_item_t **driver_list;
 	int driver_count;
 	
-} list_table_t;
+} module_t;
 
 #endif
