@@ -38,7 +38,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("status reading ...");
+	lcdWriteString("autoCode.c");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.

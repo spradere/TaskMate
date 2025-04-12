@@ -42,7 +42,7 @@ void writeInclude(list_table_t *table)
 
 	int i;
 	// write task include
-	
+
 	for (i = 0; i < table->task_count; i++)
 	{
 		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", table->task_list[i]->name);

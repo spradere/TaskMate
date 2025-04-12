@@ -27,7 +27,6 @@
 
 #define TASK_TYPE_MASK ((1 << TASK_TYPE_USER) | (1 << TASK_TYPE_SYSTEM))
 
-
 void listToTable(list_table_t *table, char *line, char **argv)
 {
 	// open list files
@@ -46,113 +45,125 @@ void listToTable(list_table_t *table, char *line, char **argv)
 		printf("\t <%s>\n", FILE_DRIVER_LIST);
 		exit(0);
 	}
-	
+
 	// variables
 	int file_line_number = 0;
-	int arg_count;
+	int token_count;
 	int err;
 
 	// read task file -> table
 	int task_count = 0;
-	
-	while ((table->task_count < TASK_COUNT_MAX) &&
-		   fgets(line, LINE_SIZE_MAX, file_task_list))
+
+	while ((table->task_count < TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
 		// set status to default
 		table->task_list[task_count]->status = 1 << TASK_START_AT_BOOT;
 
 		file_line_number++;
-		arg_count = tokenizer(line, argv);
+		token_count = tokenizer(line, argv);
 
-		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
+		if ((token_count > 0) && strcmp(argv[0], "#")) // skip empty line or comment
 		{
-			if( (arg_count<2) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c] task_list error : wrong arg count line %i\n",file_line_number);}
-			
+			if ((token_count < 2) | (token_count > 3)) // test arg count
+			{
+				printf("[auroCode.c] task_list error : wrong arg count line %i\n",
+					   file_line_number);
+			}
+
 			else
 			{
 				for (int j = 0; j < task_count; j++)
 				{
 					if (strcmp(table->task_list[j]->name, argv[0]) == 0)
 					{
-						printf("[aurocode.c] error : duplicate task name \"%s\" on line %d\n", 
-							argv[0], file_line_number);
+						printf("[aurocode.c] error : duplicate task name \"%s\" on line %d\n",
+							   argv[0], file_line_number);
 						break;
 					}
 				}
-								
-				strcpy(table->task_list[task_count]->name,argv[0]);
-						
-				for(int i=1;i<arg_count;i++)
+
+				strcpy(table->task_list[task_count]->name, argv[0]);
+
+				for (int i = 1; i < token_count; i++)
 				{
 					err = cmdTaskDispatch(argv[i], &table->task_list[task_count]->status);
-					if(err !=0)
+					if (err != 0)
 					{
-						printf("[auroCode.c] error : task unknown command %s line %i\n",
-							argv[i],file_line_number);
+						printf("[auroCode.c] error : task unknown command %s line %i\n", argv[i],
+							   file_line_number);
 					}
 				}
 				if ((table->task_list[task_count]->status & TASK_TYPE_MASK) == 0)
 				{
-					printf("[autoCode.c] error : missing -user or -system for task on line %d\n", 
-						file_line_number);
+					printf("[autoCode.c] error : missing -user or -system for task on line %d\n",
+						   file_line_number);
 				}
 				task_count++;
 			}
 		}
 	}
-	
-	if (task_count == 0){ERRMSG("no task"); exit(0);}
+
+	if (task_count == 0)
+	{
+		ERRMSG("no task");
+		exit(0);
+	}
 	table->task_count = task_count;
 
 	// read driver file -> table
 	int driver_count = 0;
 	file_line_number = 0;
-	
-	while ((driver_count < DRIVER_COUNT_MAX) &&
-		   fgets(line, LINE_SIZE_MAX, file_driver_list))
+
+	while ((driver_count < DRIVER_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_driver_list))
 	{
 		// set status to default
-		table->driver_list[driver_count]->status = 
-				(1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT);
+		table->driver_list[driver_count]->status =
+			(1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT);
 
 		file_line_number++;
-		arg_count = tokenizer(line, argv);
+		token_count = tokenizer(line, argv);
 
-		if( (arg_count>0) && strcmp(argv[0],"#") ) //skip empty line or comment
+		if ((token_count > 0) && strcmp(argv[0], "#")) // skip empty line or comment
 		{
-			if( (arg_count<1) | (arg_count>3) ) // test arg count
-			{printf("[auroCode.c] driver_list error : wrong arg count line%i\n",file_line_number);} 
-			
+			if ((token_count < 1) | (token_count > 3)) // test arg count
+			{
+				printf("[auroCode.c] driver_list error : wrong arg count line%i\n",
+					   file_line_number);
+			}
+
 			else
 			{
 				for (int j = 0; j < driver_count; j++)
 				{
 					if (strcmp(table->driver_list[j]->name, argv[0]) == 0)
 					{
-						printf("[aurocode.c] error : duplicate driver name \"%s\" on line %d\n", 
-							argv[0], file_line_number);
+						printf("[aurocode.c] error : duplicate driver name \"%s\" on line %d\n",
+							   argv[0], file_line_number);
 						break;
 					}
 				}
-	
-				strcpy(table->driver_list[driver_count]->name,argv[0]);
-				for(int i=1;i<arg_count;i++)
+
+				strcpy(table->driver_list[driver_count]->name, argv[0]);
+				for (int i = 1; i < token_count; i++)
 				{
 					err = cmdDriverDispatch(argv[i], &table->driver_list[driver_count]->status);
-					if(err !=0)
+					if (err != 0)
 					{
-						printf("[auroCode.c] error : driver unknown command %s on file %s line %i\n",
-							argv[i],FILE_DRIVER_LIST,file_line_number);
+						printf(
+							"[auroCode.c] error : driver unknown command %s on file %s line %i\n",
+							argv[i], FILE_DRIVER_LIST, file_line_number);
 					}
-
 				}
 				driver_count++;
 			}
 		}
 	}
-	
-	if (driver_count == 0){ERRMSG("no drivers"); exit(0);}
+
+	if (driver_count == 0)
+	{
+		ERRMSG("no drivers");
+		exit(0);
+	}
 	table->driver_count = driver_count;
 
 	// close files

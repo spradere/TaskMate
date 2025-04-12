@@ -80,15 +80,15 @@ void allocate(list_table_t **table, char **line, char ***argv)
 	}
 
 	// argv
-	if ((*argv = malloc(ARGN_COUNT_MAX * sizeof(**argv))) == NULL)
+	if ((*argv = malloc(TOKEN_COUNT_MAX * sizeof(**argv))) == NULL)
 	{
 		ERRMSG("malloc argv\n");
 		exit(0);
 	}
 
-	for (int i = 0; i < ARGN_COUNT_MAX; i++)
+	for (int i = 0; i < TOKEN_COUNT_MAX; i++)
 	{
-		if (((*argv)[i] = malloc(ARGV_SIZE_MAX * sizeof(***argv))) == NULL)
+		if (((*argv)[i] = malloc(TOKEN_SIZE_MAX * sizeof(***argv))) == NULL)
 		{
 			ERRMSG("malloc argv[]\n");
 			exit(0);
@@ -119,7 +119,7 @@ void unAllocate(list_table_t **table, char **line, char ***argv)
 	free(*line);
 
 	// argv
-	for (int i = 0; i < ARGN_COUNT_MAX; i++)
+	for (int i = 0; i < TOKEN_COUNT_MAX; i++)
 	{
 		free((*argv)[i]);
 	}

@@ -123,7 +123,9 @@ errorCode_t usart1TestBufferRx(void)
 		return ERR_USART_RX_BUFFER_EMPTY;
 	}
 	else
+	{
 		return ERR_SUCCESS;
+	}
 }
 
 // write string to Tx buffer

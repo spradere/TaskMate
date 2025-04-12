@@ -32,7 +32,7 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo exit properly
+ * @todo exit(0) don't free properly, change printf("[autocode.c]\n"); -> auroCode/func()
  */
 
 #include <string.h>
@@ -51,7 +51,7 @@ int main(void)
 {
 	// allocation
 	list_table_t *list_table = NULL; // task and driver tables
-	char *line = NULL; // buffer for reading
+	char *line = NULL; // buffer for reading one line from file
 	char **argv = NULL; // argument data
 
 	allocate(&list_table, &line, &argv);
