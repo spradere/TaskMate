@@ -57,7 +57,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 	while ((modules->task_count < TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
 		// set status to default
-		modules->task_list[task_count]->status = 1 << TASK_START_AT_BOOT;
+		modules->tasks[task_count]->status = 1 << TASK_START_AT_BOOT;
 
 		file_line_number++;
 		token_count = tokenizer(line, tokens);
@@ -66,7 +66,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 		{
 			if ((token_count < 2) | (token_count > 3)) // test arg count
 			{
-				printf("[auroCode.c] task_list error : wrong arg count line %i\n",
+				printf("[auroCode.c] tasks error : wrong arg count line %i\n",
 					   file_line_number);
 			}
 
@@ -74,7 +74,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 			{
 				for (int j = 0; j < task_count; j++)
 				{
-					if (strcmp(modules->task_list[j]->name, tokens[0]) == 0)
+					if (strcmp(modules->tasks[j]->name, tokens[0]) == 0)
 					{
 						printf("[aurocode.c] error : duplicate task name \"%s\" on line %d\n",
 							   tokens[0], file_line_number);
@@ -82,18 +82,18 @@ void listToTable(module_t *modules, char *line, char **tokens)
 					}
 				}
 
-				strcpy(modules->task_list[task_count]->name, tokens[0]);
+				strcpy(modules->tasks[task_count]->name, tokens[0]);
 
 				for (int i = 1; i < token_count; i++)
 				{
-					err = cmdTaskDispatch(tokens[i], &modules->task_list[task_count]->status);
+					err = cmdTaskDispatch(tokens[i], &modules->tasks[task_count]->status);
 					if (err != 0)
 					{
 						printf("[auroCode.c] error : task unknown command %s line %i\n", tokens[i],
 							   file_line_number);
 					}
 				}
-				if ((modules->task_list[task_count]->status & TASK_TYPE_MASK) == 0)
+				if ((modules->tasks[task_count]->status & TASK_TYPE_MASK) == 0)
 				{
 					printf("[autoCode.c] error : missing -user or -system for task on line %d\n",
 						   file_line_number);
@@ -117,7 +117,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 	while ((driver_count < DRIVER_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_driver_list))
 	{
 		// set status to default
-		modules->driver_list[driver_count]->status =
+		modules->drivers[driver_count]->status =
 			(1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT);
 
 		file_line_number++;
@@ -127,7 +127,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 		{
 			if ((token_count < 1) | (token_count > 3)) // test arg count
 			{
-				printf("[auroCode.c] driver_list error : wrong arg count line%i\n",
+				printf("[auroCode.c] drivers error : wrong arg count line%i\n",
 					   file_line_number);
 			}
 
@@ -135,7 +135,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 			{
 				for (int j = 0; j < driver_count; j++)
 				{
-					if (strcmp(modules->driver_list[j]->name, tokens[0]) == 0)
+					if (strcmp(modules->drivers[j]->name, tokens[0]) == 0)
 					{
 						printf("[aurocode.c] error : duplicate driver name \"%s\" on line %d\n",
 							   tokens[0], file_line_number);
@@ -143,10 +143,10 @@ void listToTable(module_t *modules, char *line, char **tokens)
 					}
 				}
 
-				strcpy(modules->driver_list[driver_count]->name, tokens[0]);
+				strcpy(modules->drivers[driver_count]->name, tokens[0]);
 				for (int i = 1; i < token_count; i++)
 				{
-					err = cmdDriverDispatch(tokens[i], &modules->driver_list[driver_count]->status);
+					err = cmdDriverDispatch(tokens[i], &modules->drivers[driver_count]->status);
 					if (err != 0)
 					{
 						printf(

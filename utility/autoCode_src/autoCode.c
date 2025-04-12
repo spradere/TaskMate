@@ -15,7 +15,7 @@
  * @file autoCode.c
  * @brief helper to generate code for task and drivers handle in initSys.c
  *
- * - Simple and reliable, read plain text file <task_list> and <driver_list>
+ * - Simple and reliable, read plain text file <tasks> and <drivers>
  * - Write code for #include / static allocation / initialisation in initSys.c
  *
  * @note
@@ -34,9 +34,6 @@
  *
  * @todo exit(0) don't free properly, change printf("[autocode.c]\n"); -> auroCode/func()
  */
-
-#include <string.h>
-#include <assert.h>
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
