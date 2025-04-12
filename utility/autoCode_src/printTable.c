@@ -13,7 +13,7 @@
 
 /**
  * @file printTable.c
- * @brief print table content implemetation
+ * @brief print modules content implemetation
  *
  * @todo nothing
  */
@@ -21,22 +21,22 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/printTable.h"
 
-void printTable(module_t *table)
+void printTable(module_t *modules)
 {
 	int i;
 
 	printf("[autoCode.c] found task :\n");
-	for (i = 0; i < table->task_count; i++)
+	for (i = 0; i < modules->task_count; i++)
 	{
-		printf("\ttask[%i] name:%s status=%i\n", i, table->task_list[i]->name,
-			   table->task_list[i]->status);
+		printf("\ttask[%i] name:%s status=%i\n", i, modules->task_list[i]->name,
+			   modules->task_list[i]->status);
 	}
 
 	printf("\n[autoCode.c] found driver :\n");
-	for (i = 0; i < table->driver_count; i++)
+	for (i = 0; i < modules->driver_count; i++)
 	{
-		printf("\tdriver[%i] name:%s status=%i\n", i, table->driver_list[i]->name,
-			   table->driver_list[i]->status);
+		printf("\tdriver[%i] name:%s status=%i\n", i, modules->driver_list[i]->name,
+			   modules->driver_list[i]->status);
 	}
 	printf("\n");
 }

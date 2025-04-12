@@ -13,7 +13,7 @@
 
 /**
  * @file listToTable.c
- * @brief read list file and write to table
+ * @brief read list file and write to modules
  *
  * @todo nothing
  */
@@ -27,7 +27,7 @@
 
 #define TASK_TYPE_MASK ((1 << TASK_TYPE_USER) | (1 << TASK_TYPE_SYSTEM))
 
-void listToTable(module_t *table, char *line, char **tokens)
+void listToTable(module_t *modules, char *line, char **tokens)
 {
 	// open list files
 	FILE *file_task_list = fopen(FILE_TASK_LIST, "r");
@@ -51,13 +51,13 @@ void listToTable(module_t *table, char *line, char **tokens)
 	int token_count;
 	int err;
 
-	// read task file -> table
+	// read task file -> modules
 	int task_count = 0;
 
-	while ((table->task_count < TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
+	while ((modules->task_count < TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
 		// set status to default
-		table->task_list[task_count]->status = 1 << TASK_START_AT_BOOT;
+		modules->task_list[task_count]->status = 1 << TASK_START_AT_BOOT;
 
 		file_line_number++;
 		token_count = tokenizer(line, tokens);
@@ -74,7 +74,7 @@ void listToTable(module_t *table, char *line, char **tokens)
 			{
 				for (int j = 0; j < task_count; j++)
 				{
-					if (strcmp(table->task_list[j]->name, tokens[0]) == 0)
+					if (strcmp(modules->task_list[j]->name, tokens[0]) == 0)
 					{
 						printf("[aurocode.c] error : duplicate task name \"%s\" on line %d\n",
 							   tokens[0], file_line_number);
@@ -82,18 +82,18 @@ void listToTable(module_t *table, char *line, char **tokens)
 					}
 				}
 
-				strcpy(table->task_list[task_count]->name, tokens[0]);
+				strcpy(modules->task_list[task_count]->name, tokens[0]);
 
 				for (int i = 1; i < token_count; i++)
 				{
-					err = cmdTaskDispatch(tokens[i], &table->task_list[task_count]->status);
+					err = cmdTaskDispatch(tokens[i], &modules->task_list[task_count]->status);
 					if (err != 0)
 					{
 						printf("[auroCode.c] error : task unknown command %s line %i\n", tokens[i],
 							   file_line_number);
 					}
 				}
-				if ((table->task_list[task_count]->status & TASK_TYPE_MASK) == 0)
+				if ((modules->task_list[task_count]->status & TASK_TYPE_MASK) == 0)
 				{
 					printf("[autoCode.c] error : missing -user or -system for task on line %d\n",
 						   file_line_number);
@@ -108,16 +108,16 @@ void listToTable(module_t *table, char *line, char **tokens)
 		ERRMSG("no task");
 		exit(0);
 	}
-	table->task_count = task_count;
+	modules->task_count = task_count;
 
-	// read driver file -> table
+	// read driver file -> modules
 	int driver_count = 0;
 	file_line_number = 0;
 
 	while ((driver_count < DRIVER_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_driver_list))
 	{
 		// set status to default
-		table->driver_list[driver_count]->status =
+		modules->driver_list[driver_count]->status =
 			(1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT);
 
 		file_line_number++;
@@ -135,7 +135,7 @@ void listToTable(module_t *table, char *line, char **tokens)
 			{
 				for (int j = 0; j < driver_count; j++)
 				{
-					if (strcmp(table->driver_list[j]->name, tokens[0]) == 0)
+					if (strcmp(modules->driver_list[j]->name, tokens[0]) == 0)
 					{
 						printf("[aurocode.c] error : duplicate driver name \"%s\" on line %d\n",
 							   tokens[0], file_line_number);
@@ -143,10 +143,10 @@ void listToTable(module_t *table, char *line, char **tokens)
 					}
 				}
 
-				strcpy(table->driver_list[driver_count]->name, tokens[0]);
+				strcpy(modules->driver_list[driver_count]->name, tokens[0]);
 				for (int i = 1; i < token_count; i++)
 				{
-					err = cmdDriverDispatch(tokens[i], &table->driver_list[driver_count]->status);
+					err = cmdDriverDispatch(tokens[i], &modules->driver_list[driver_count]->status);
 					if (err != 0)
 					{
 						printf(
@@ -164,7 +164,7 @@ void listToTable(module_t *table, char *line, char **tokens)
 		ERRMSG("no drivers");
 		exit(0);
 	}
-	table->driver_count = driver_count;
+	modules->driver_count = driver_count;
 
 	// close files
 	fclose(file_task_list);

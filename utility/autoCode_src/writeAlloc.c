@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeAlloc(module_t *table)
+void writeAlloc(module_t *modules)
 {
 	// open include files
 	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
@@ -41,13 +41,13 @@ void writeAlloc(module_t *table)
 	}
 
 	// write task static alloc
-	fprintf(file_task_alloc, "const uint8_t TASK_COUNT = %i;\n", table->task_count);
-	fprintf(file_task_alloc, "task_table_t task_table[%i];\n", table->task_count);
+	fprintf(file_task_alloc, "const uint8_t TASK_COUNT = %i;\n", modules->task_count);
+	fprintf(file_task_alloc, "task_table_t task_table[%i];\n", modules->task_count);
 	fprintf(file_task_alloc, "uint8_t task_current = 0;\n");
 
 	// write driver static alloc
-	fprintf(file_driver_alloc, "const uint8_t DRIVER_COUNT = %i;\n", table->driver_count);
-	fprintf(file_driver_alloc, "driver_table_t driver_table[%i];\n", table->driver_count);
+	fprintf(file_driver_alloc, "const uint8_t DRIVER_COUNT = %i;\n", modules->driver_count);
+	fprintf(file_driver_alloc, "driver_table_t driver_table[%i];\n", modules->driver_count);
 
 	fclose(file_task_alloc);
 	fclose(file_driver_alloc);
