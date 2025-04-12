@@ -21,16 +21,16 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-int tokenizer(char *line, char **argv)
+int tokenizer(char *line, char **token_list)
 {
 	int index_line = 0;
 	int index_token = 0;
 	int token_count;
 
-	// reset all argv
+	// reset all token_list
 	for (token_count = 0; token_count < TOKEN_COUNT_MAX; token_count++)
 	{
-		argv[token_count][0] = 0;
+		token_list[token_count][0] = 0;
 	}
 
 	// read line, extract arguments
@@ -52,11 +52,11 @@ int tokenizer(char *line, char **argv)
 			   (line[index_line] != '\n') && (line[index_line] != 0) &&
 			   (index_line < (LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)))
 		{
-			argv[token_count][index_token++] = line[index_line++];
+			token_list[token_count][index_token++] = line[index_line++];
 		}
 
-		argv[token_count][index_token] = 0;
-		if (argv[token_count][0] != 0)
+		token_list[token_count][index_token] = 0;
+		if (token_list[token_count][0] != 0)
 		{
 			token_count++;
 		}

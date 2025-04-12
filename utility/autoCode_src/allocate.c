@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
 
-void allocate(list_table_t **table, char **line, char ***argv)
+void allocate(list_table_t **table, char **line, char ***token_list)
 {
 	// task and driver table
 	if (((*table) = malloc(sizeof(*(*table)))) == NULL)
@@ -79,24 +79,24 @@ void allocate(list_table_t **table, char **line, char ***argv)
 		exit(0);
 	}
 
-	// argv
-	if ((*argv = malloc(TOKEN_COUNT_MAX * sizeof(**argv))) == NULL)
+	// token_list
+	if ((*token_list = malloc(TOKEN_COUNT_MAX * sizeof(**token_list))) == NULL)
 	{
-		ERRMSG("malloc argv\n");
+		ERRMSG("malloc token_list\n");
 		exit(0);
 	}
 
 	for (int i = 0; i < TOKEN_COUNT_MAX; i++)
 	{
-		if (((*argv)[i] = malloc(TOKEN_SIZE_MAX * sizeof(***argv))) == NULL)
+		if (((*token_list)[i] = malloc(TOKEN_SIZE_MAX * sizeof(***token_list))) == NULL)
 		{
-			ERRMSG("malloc argv[]\n");
+			ERRMSG("malloc token_list[]\n");
 			exit(0);
 		}
 	}
 }
 
-void unAllocate(list_table_t **table, char **line, char ***argv)
+void unAllocate(list_table_t **table, char **line, char ***token_list)
 {
 	// task and driver table
 	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
@@ -118,10 +118,10 @@ void unAllocate(list_table_t **table, char **line, char ***argv)
 	// buffer for reading
 	free(*line);
 
-	// argv
+	// token_list
 	for (int i = 0; i < TOKEN_COUNT_MAX; i++)
 	{
-		free((*argv)[i]);
+		free((*token_list)[i]);
 	}
-	free(*argv);
+	free(*token_list);
 }

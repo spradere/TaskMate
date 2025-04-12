@@ -21,6 +21,6 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
-int tokenizer(char *line, char **argv);
+int tokenizer(char *line, char **token_list);
 
 #endif
