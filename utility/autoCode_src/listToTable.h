@@ -21,6 +21,6 @@
 #ifndef LISTTOTABLE_H
 #define LISTTOTABLE_H
 
-void listToTable(list_table_t *, char *, char **);
+void listToTable(module_t *, char *, char **);
 
 #endif

@@ -50,29 +50,29 @@
 int main(void)
 {
 	// allocation
-	list_table_t *list_table = NULL; // task and driver tables
+	module_t *modules = NULL; // task and driver tables
 	char *line = NULL; // buffer for reading one line from file
 	char **token_list = NULL; // argument data
 
-	allocate(&list_table, &line, &token_list);
+	allocate(&modules, &line, &token_list);
 
 	// read list file and store data in table
-	listToTable(list_table, line, token_list);
+	listToTable(modules, line, token_list);
 
 	// print tables
-	printTable(list_table);
+	printTable(modules);
 
-	// write include files
-	writeInclude(list_table);
+	// write autoInclude.h files
+	writeInclude(modules);
 
-	// write alloc files
-	writeAlloc(list_table);
+	// write autoAlloc.h files
+	writeAlloc(modules);
 
-	// read tag to generate code
-	readTag(list_table, line, token_list);
+	// read tag to generate code in initSys.c
+	readTag(modules, line, token_list);
 
 	// free malloc
-	unAllocate(&list_table, &line, &token_list);
+	unAllocate(&modules, &line, &token_list);
 
 	return 0;
 }

@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/allocate.h"
 
-void allocate(list_table_t **table, char **line, char ***token_list)
+void allocate(module_t **table, char **line, char ***token_list)
 {
 	// task and driver table
 	if (((*table) = malloc(sizeof(*(*table)))) == NULL)
@@ -96,7 +96,7 @@ void allocate(list_table_t **table, char **line, char ***token_list)
 	}
 }
 
-void unAllocate(list_table_t **table, char **line, char ***token_list)
+void unAllocate(module_t **table, char **line, char ***token_list)
 {
 	// task and driver table
 	for (int i = 0; i < DRIVER_COUNT_MAX; i++)

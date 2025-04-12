@@ -24,10 +24,10 @@
 // get TaskMate flag bits
 #include "src/sysCore/status_bits.h"
 
-void cmdTaskUser(status_t *status) { *status |= (1 << TASK_TYPE_USER); }
-void cmdTaskSys(status_t *status) { *status |= (1 << TASK_TYPE_SYSTEM); }
-void cmdTaskStart(status_t *status) { *status |= (1 << TASK_START_AT_BOOT); }
-void cmdTaskNoStart(status_t *status) { *status &= ~(1 << TASK_START_AT_BOOT); }
+void cmdTaskUser(module_status_t *status) { *status |= (1 << TASK_TYPE_USER); }
+void cmdTaskSys(module_status_t *status) { *status |= (1 << TASK_TYPE_SYSTEM); }
+void cmdTaskStart(module_status_t *status) { *status |= (1 << TASK_START_AT_BOOT); }
+void cmdTaskNoStart(module_status_t *status) { *status &= ~(1 << TASK_START_AT_BOOT); }
 
 const cmd_t cmd_task[] = {{"-user", cmdTaskUser},
 						  {"-system", cmdTaskSys},
@@ -35,10 +35,10 @@ const cmd_t cmd_task[] = {{"-user", cmdTaskUser},
 						  {"-nostart@boot", cmdTaskNoStart},
 						  {NULL, NULL}};
 
-void cmdDriverInit(status_t *status) { *status |= (1 << DRIVER_INIT_AT_BOOT); }
-void cmdDriverNoInit(status_t *status) { *status &= ~(1 << DRIVER_INIT_AT_BOOT); }
-void cmdDriverStart(status_t *status) { *status |= (1 << DRIVER_START_AT_BOOT); }
-void cmdDriverNoStart(status_t *status) { *status &= ~(1 << DRIVER_START_AT_BOOT); }
+void cmdDriverInit(module_status_t *status) { *status |= (1 << DRIVER_INIT_AT_BOOT); }
+void cmdDriverNoInit(module_status_t *status) { *status &= ~(1 << DRIVER_INIT_AT_BOOT); }
+void cmdDriverStart(module_status_t *status) { *status |= (1 << DRIVER_START_AT_BOOT); }
+void cmdDriverNoStart(module_status_t *status) { *status &= ~(1 << DRIVER_START_AT_BOOT); }
 
 const cmd_t cmd_driver[] = {{"-init@boot", cmdDriverInit},
 							{"-noinit@boot", cmdDriverNoInit},
@@ -48,7 +48,7 @@ const cmd_t cmd_driver[] = {{"-init@boot", cmdDriverInit},
 
 };
 
-int cmdTaskDispatch(const char *cmd, status_t *status)
+int cmdTaskDispatch(const char *cmd, module_status_t *status)
 {
 	for (int i = 0; cmd_task[i].name != NULL; i++)
 	{
@@ -62,7 +62,7 @@ int cmdTaskDispatch(const char *cmd, status_t *status)
 	return -1;
 }
 
-int cmdDriverDispatch(const char *cmd, status_t *status)
+int cmdDriverDispatch(const char *cmd, module_status_t *status)
 {
 	for (int i = 0; cmd_driver[i].name != NULL; i++)
 	{

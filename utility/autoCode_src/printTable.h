@@ -21,6 +21,6 @@
  #ifndef PRINTTABLE_H
  #define PRINTTABLE_H
  
- void printTable(list_table_t *);
+ void printTable(module_t *);
  
  #endif
