@@ -27,7 +27,7 @@ void writeInclude(module_t *modules)
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
 	if (file_task_include == NULL)
 	{
-		ERRMSG("creating file");
+		msgError("creating file");
 		printf("\t <%s>\n", FILE_TASK_INCLUDE);
 		exit(1);
 	}
@@ -35,7 +35,7 @@ void writeInclude(module_t *modules)
 	FILE *file_driver_include = fopen(FILE_DRIVER_INCLUDE, "w");
 	if (file_driver_include == NULL)
 	{
-		ERRMSG("creating file");
+		msgError("creating file");
 		printf("\t <%s>\n", FILE_DRIVER_INCLUDE);
 		exit(1);
 	}

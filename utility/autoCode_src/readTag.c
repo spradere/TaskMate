@@ -28,7 +28,7 @@ void readTag(module_t *modules, char *line, char **tokens)
 	FILE *file_src = fopen(FILE_SOURCE, "r");
 	if (file_src == NULL)
 	{
-		ERRMSG("opening file");
+		msgError("opening file");
 		printf("\t <%s>\n", FILE_SOURCE);
 		exit(1);
 	}
@@ -36,7 +36,7 @@ void readTag(module_t *modules, char *line, char **tokens)
 	FILE *file_tmp = fopen(FILE_TEMP, "w");
 	if (file_tmp == NULL)
 	{
-		ERRMSG("creating file");
+		msgError("creating file");
 		printf("\t <%s>\n", FILE_TEMP);
 		exit(1);
 	}
@@ -44,7 +44,7 @@ void readTag(module_t *modules, char *line, char **tokens)
 	// read form source
 	int tag_section = 0;
 	int file_line_number = 0;
-	int i, token_count;
+	int token_count;
 
 	while (fgets(line, LINE_SIZE_MAX, file_src))
 	{
@@ -55,12 +55,15 @@ void readTag(module_t *modules, char *line, char **tokens)
 		{
 			if (token_count != 4)
 			{
-				ERRMSG("arg count != 4 line :");
-				printf("\t %s:%i\n", FILE_SOURCE, file_line_number);
+				msgError("token count != 4 line :");
+				printf("\t [%s:%i] %s\n\n",
+					FILE_SOURCE,file_line_number,line);
 				break;
 			}
 
-			printf("found tag <%s> <%s> ... ", tokens[2], tokens[3]);
+			msgInfo("found tag :");
+			printf("\t <%s> <%s>\n", tokens[2], tokens[3]);
+
 			fprintf(file_tmp, "%s", line);
 			tag_section = 1;
 
@@ -68,10 +71,9 @@ void readTag(module_t *modules, char *line, char **tokens)
 			{
 				if (!(strcmp(tokens[3], "init"))) // task init
 				{
-					for (i = 0; i < modules->task_count; i++)
+					for (int i = 0; i < modules->task_count; i++)
 					{
-						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n\n", modules->tasks[i]->name,
-								i);
+						fprintf(file_tmp, "\ttaskCreate(%s, %i);\n\n", modules->tasks[i]->name, i);
 
 						fprintf(file_tmp, "\tconst char* task%i_name = \"%s\";\n", i,
 								modules->tasks[i]->name);
@@ -91,7 +93,7 @@ void readTag(module_t *modules, char *line, char **tokens)
 			{
 				if (!(strcmp(tokens[3], "init"))) // driver init
 				{
-					for (i = 0; i < modules->driver_count; i++)
+					for (int i = 0; i < modules->driver_count; i++)
 					{
 						fprintf(file_tmp, "\tconst char* driver%i_name = \"%s\";\n", i,
 								modules->drivers[i]->name);
@@ -117,7 +119,7 @@ void readTag(module_t *modules, char *line, char **tokens)
 
 		if (!(strcmp(tokens[0], "//")) && !(strcmp(tokens[1], "[/tag]")))
 		{
-			printf("end tag\n");
+			msgInfo("end tag");
 			tag_section = 0;
 		}
 
@@ -129,13 +131,15 @@ void readTag(module_t *modules, char *line, char **tokens)
 
 	if (tag_section == 1)
 	{
-		ERRMSG("missing end tag [/tag] at end of file");
+		msgError("missing end tag [/tag] at end of file");
+		printf("\t [%s]\n\n",FILE_SOURCE);
+
 	}
 
 	// Replace original file with the modified version
 	if (remove(FILE_SOURCE) != 0 || rename(FILE_TEMP, FILE_SOURCE) != 0)
 	{
-		ERRMSG("replacing initSys.c");
+		msgError("replacing initSys.c");
 		exit(2);
 	}
 

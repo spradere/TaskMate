@@ -20,7 +20,7 @@
 
 #ifndef AUTOCODE_H
 #define AUTOCODE_H
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,14 +46,15 @@
 #define TOKEN_SIZE_MAX 64
 
 // error message macro
-#define ERRMSG(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE__, __LINE__, msg)
+#define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
+#define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
 
 // struct for task/driver table
 typedef struct
 {
 	char *name;
 	unsigned char status;
-	
+
 } module_item_t;
 
 typedef typeof(((module_item_t*)0)->status) module_status_t;
@@ -64,7 +65,7 @@ typedef struct
 	int task_count;
 	module_item_t **drivers;
 	int driver_count;
-	
+
 } module_t;
 
 #endif

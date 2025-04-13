@@ -27,7 +27,7 @@ void writeAlloc(module_t *modules)
 	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
 	if (file_task_alloc == NULL)
 	{
-		ERRMSG("creating file");
+		msgError("creating file");
 		printf("\t <%s>\n", FILE_TASK_ALLOC);
 		exit(1);
 	}
@@ -35,7 +35,7 @@ void writeAlloc(module_t *modules)
 	FILE *file_driver_alloc = fopen(FILE_DRIVER_ALLOC, "w");
 	if (file_driver_alloc == NULL)
 	{
-		ERRMSG("creating file");
+		msgError("creating file");
 		printf("\t  <%s>\n", FILE_DRIVER_ALLOC);
 		exit(1);
 	}

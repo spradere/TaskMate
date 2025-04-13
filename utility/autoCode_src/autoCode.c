@@ -15,7 +15,7 @@
  * @file autoCode.c
  * @brief helper to generate code for task and drivers handle in initSys.c
  *
- * - Simple and reliable, read plain text file <tasks> and <drivers>
+ * - Simple and reliable, read plain text file <tasks_list> and <drivers_list>
  * - Write code for #include / static allocation / initialisation in initSys.c
  *
  * @note
@@ -49,8 +49,8 @@ int main(void)
 	// allocation
 	module_t *modules = NULL; // task and driver tables
 	char *line = NULL; // buffer for reading one line from file
-	char **tokens = NULL; 
-	
+	char **tokens = NULL;
+
 	allocate(&modules, &line, &tokens);
 
 	// read list file and store data in table
