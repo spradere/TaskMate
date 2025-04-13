@@ -1,15 +1,32 @@
 # Code Style, Readability, Refactoring & Best Practices Summary
 
 ---
+## Table of Contents
 
-## The Golden Rule of Code
+1. [The Golden Rule of Code](#1-the-golden-rule-of-code)
+2. [Readability: Clarity over cleverness](#2-readability-clarity-over-cleverness)
+3. [Maintainability: Avoid cryptic names and magic numbers](#3-maintainability-avoid-cryptic-names-and-magic-numbers)
+4. [Scalability and Extensibility](#4-scalability-and-extensibility)
+5. [Testing and Debugging](#5-testing-and-debugging)
+6. [Safety and Robustness](#6-safety-and-robustness)
+7. [Tooling and Process](#7-tooling-and-process)
+8. [Commenting Rules for Humans](#8-commenting-rules-for-humans)
+9. [Naming: Use plural for collections, singular for items](#9-naming-use-plural-for-collections-singular-for-items)
+10. [Abbreviations: Use only when standard or obvious](#10-abbreviations-use-only-when-standard-or-obvious)
+11. [Error messages: Informative, precise, human-readable](#11-error-messages-informative-precise-human-readable)
+12. [Refactoring mindset](#12-refactoring-mindset)
+13. [Git Commit Message Guidelines](#13-git-commit-message-guidelines)
+
+---
+
+## 1. The Golden Rule of Code
 
 **Define once. Define clearly. Define where it makes sense.**
 Promotes clarity, avoids duplication, and keeps logic in the right layer.
 
 ---
 
-## Readability: Clarity over cleverness
+## 2. Readability: Clarity over cleverness
 
 Code is read more than it is written. Prioritize understandable variable names and structure.
 
@@ -32,13 +49,13 @@ Prefer if (ptr == NULL) over if (!ptr) when clarity matters.
 modules->drivers[i]->status = DRIVER_STATUS_DEFAULT;
 ```
 ```c
-typeof(table->task_list[i]->status) task_satus; // unclear
+typeof(table->task_list[i]->status) task_status; // unclear
 status_t task_status; // clear
 ```
 
 ---
 
-## Maintainability: Avoid cryptic names and magic numbers
+## 3. Maintainability: Avoid cryptic names and magic numbers
 
 Use meaningful names, constants, and enums instead of hardcoded values.
 
@@ -62,10 +79,9 @@ file_status = STATUS_DEFAULT;   // good
 
 ---
 
-## Scalability and Extensibility
+## 4. Scalability and Extensibility
 
-Use data structures and algorithms 
-
+Use data structures and algorithms
 
 * Data-driven design beats control-flow spaghetti.
 Instead of a long if/else chain, use function pointer arrays, lookup tables, or dispatch maps.
@@ -77,7 +93,7 @@ Copied code multiplies bugs and update work. Refactor common logic into function
 Anticipate what's likely to change and isolate it.
 
 ---
-## Testing and Debugging
+## 5. Testing and Debugging
 
 * Fail early, fail loud.
 Use asserts or clear error returns when contracts are broken.
@@ -90,7 +106,7 @@ Decouple logic from I/O and hardware to allow mocking.
 
 ---
 
-## Safety and Robustness
+## 6. Safety and Robustness
 
 * Never trust input.
 Validate everything—especially in embedded or user-facing code.
@@ -102,7 +118,7 @@ Embedded systems die silently on overflows. Use guards, checks, and tools.
 Check bounds, handle NULLs, and expect the unexpected.
 
 ---
-## Tooling and Process
+## 7. Tooling and Process
 
 * Automate what can be automated.
 Builds, tests, formatting, flashing—your time is precious.
@@ -115,30 +131,30 @@ The code already says what it does. Comments should explain the reason or intent
 
 ---
 
-## Commenting Rules for Humans
+## 8. Commenting Rules for Humans
 
-### 1. Comment “why”, not “what”
+### 8.1. Comment “why”, not “what”
 
 The code shows what happens. Your job is to write why it happens. Self-documenting code over excessive comments. Write code so clear it needs fewer comments. Use comments to explain **why**, not **what**.
 
 * Don’t: timeout = 1000; // set timeout to 1000
 * Do: timeout = 1000; // 1 second max wait before watchdog reset
 
-### 2. Explain magic numbers and edge cases
+### 8.2. Explain magic numbers and edge cases
 
 If the value isn't self-explanatory, either use a #define or explain why that number.
 
 * Don’t: if(x == 42)
 * Do: if(x == 42) // 42 is the max sensor reading before overflow
 
-### 3. Document non-obvious constraints or dependencies
+### 8.3. Document non-obvious constraints or dependencies
 
 When something works only in a specific sequence, say it.
 
 * Don’t: enableInterrupts();
 * Do: enableInterrupts(); // Must be called after initTimer(), otherwise ISR won’t fire
 
-### 4. Summarize purpose at the start of non-trivial blocks
+### 8.4. Summarize purpose at the start of non-trivial blocks
 
 tell the reader where they are and what this block is about.
 
@@ -151,27 +167,27 @@ for(i = 0; i < MAX_RETRIES; i++)
 }
 ```
 
-### 5. Highlight workarounds, hacks, and TODOs
+### 8.5. Highlight workarounds, hacks, and TODOs
 
-Comments are also a dev diary—use them to flag temporary solutions.
+Comments are a dev diary—use them to flag temporary solutions.
 
 Do:
 
 ```c
-// HACK: force watchdog reset here to avoid rare freeze on power loss 
+// HACK: force watchdog reset here to avoid rare freeze on power loss
 resetWatchdog();
 
 // TODO: replace with dynamic allocation when memory model is fixed
 ```
 
-### 6. Give units when assigning values
+### 8.6. Give units when assigning values
 
 Especially in embedded or timing-sensitive code—always say what the units are.
 
 * Don’t: delay = 200;
 * Do: delay = 200; // 200 ms delay between measurements
 
-### 7. Explain why not something was done
+### 8.7. Explain why not something was done
 
 Prevent future bugs by documenting why something wasn’t done.
 Do:
@@ -179,7 +195,7 @@ Do:
 // Do not call free() here: pointer is shared across tasks
 ```
 
-### 8. Flag concurrency and timing issues
+### 8.8. Flag concurrency and timing issues
 
 Race conditions are silent killers. Leave signposts for them.
 
@@ -189,7 +205,7 @@ Do:
 if(flag_ready)
 ```
 
-### 9. Describe data formats when working with raw buffers
+### 8.9. Describe data formats when working with raw buffers
 
 If you’re decoding binary data, draw the structure in the comments.
 
@@ -198,14 +214,14 @@ Do:
 // Packet format: [0]=start, [1]=cmd, [2]=len, [3..n]=data, [n+1]=CRC
 ```
 
-### 10. Don’t repeat what the code already says
+### 8.10. Don’t repeat what the code already says
 
 The golden rule: If a comment just rewords the code, delete it.
 
 * Don’t: index++; // increment index
 * Do: index++; // move to next task in round-robin scheduler
 
-### Three comment maturity levels
+### 8.11 Three comment maturity levels
 
 1. Describe what the code does (beginner)
 2. Explain the logic’s purpose (intermediate)
@@ -213,7 +229,7 @@ The golden rule: If a comment just rewords the code, delete it.
 
 ---
 
-## Naming: Use plural for collections, singular for items
+## 9. Naming: Use plural for collections, singular for items
 
 Helps indicate intent and structure of data.
 
@@ -226,9 +242,10 @@ list_table_t *list_table; // unclear
 
 ---
 
-## Abbreviations: Use only when standard or obvious
+## 10. Abbreviations: Use only when standard or obvious
 
-Avoid cryptic short forms unless they are universally recognized (e.g., UART, ISR). Auto-completion makes long names cheap. So there’s no excuse for being cryptic in the name of brevity.
+Avoid cryptic short forms unless they are universally recognized (e.g., UART, ISR).
+Since autocompletion makes long names easy, there’s no excuse for being cryptic in the name of brevity.
 
 **Example:**
 ```c
@@ -238,7 +255,7 @@ messageError();    // clear
 
 ---
 
-## Error messages: Informative, precise, human-readable
+## 11. Error messages: Informative, precise, human-readable
 
 Provide file, line, nature of the problem, actual vs. expected values. Solution.
 
@@ -249,17 +266,17 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 * Handles all common failure cases → Unknown command, missing flags, name duplication, wrong arg count, ...
 * Speaks like a human → Natural and helpful
 
-### very bad 
+### Very bad
 `driver arg error`
 
 * No file, no line, no values — just frustration.
 
-### better
+### Better
 `[autoCode.c:59] driver wrong arg count`
 
 * Shows where, and what kind of error. You're no longer blind.
 
-### top
+### Top
 `[autoCode.c:59] driver wrong arg count, is 1, should be [2,3]`
 
 * Where the problem is
@@ -277,7 +294,7 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 
 ---
 
-## Refactoring mindset
+## 12. Refactoring mindset
 
 Start by thinking “add more comments,” but end by writing cleaner, clearer code that needs fewer of them.
 
@@ -298,7 +315,7 @@ Turning a pile of code into a system.
 * Style is structure. Names, indentation, modularity—they aren’t cosmetic. They’re communication.
 * You write for readers, not just compilers. Compilers don’t rage-quit. Humans do.
 
-### key points of refactoring
+### Key points of refactoring
 
 This is the hard part—but it’s also what makes a system satisfying to build and maintain.
 
@@ -308,9 +325,9 @@ This is the hard part—but it’s also what makes a system satisfying to build 
 
 ---
 
-## Git Commit Message Guidelines
+## 13. Git Commit Message Guidelines
 
-Commit messages must be **short, clear, and action-oriented**.  
+Commit messages must be **short, clear, and action-oriented**.
 Each message should begin with a **verb prefix** followed by a short description of the change.
 
 ### Accepted prefixes:
@@ -318,12 +335,12 @@ Each message should begin with a **verb prefix** followed by a short description
 - `remove` — for deleted code, features, or cleanup
 - `fix` — for bug fixes or corrections
 - `change` — for modifications, refactors, or renames
-- `upgrade` 
+- `upgrade`
 
 ### Examples:
-- add command parser for task input 
-- remove unused debug macros 
-- fix null pointer in tokenizer() 
+- add command parser for task input
+- remove unused debug macros
+- fix null pointer in tokenizer()
 - change task_list to tasks
 
 - Use **imperative mood** (like a commit is a command: "fix", not "fixed")
