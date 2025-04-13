@@ -26,17 +26,17 @@ void allocate(module_t **modules, char **line, char ***tokens)
 	// task and driver modules
 	if (((*modules) = malloc(sizeof(*(*modules)))) == NULL)
 	{
-		ERRMSG("malloc modules");
+		msgError("malloc modules fail");
 		exit(0);
 	}
 	if (((*modules)->drivers = malloc(DRIVER_COUNT_MAX * sizeof(*(*modules)->drivers))) == NULL)
 	{
-		ERRMSG("malloc modules->drivers");
+		msgError("malloc modules->drivers fail");
 		exit(0);
 	}
 	if (((*modules)->tasks = malloc(TASK_COUNT_MAX * sizeof(*(*modules)->tasks))) == NULL)
 	{
-		ERRMSG("malloc modules->tasks");
+		msgError("malloc modules->tasks fail");
 		exit(0);
 	}
 
@@ -44,14 +44,14 @@ void allocate(module_t **modules, char **line, char ***tokens)
 	{
 		if (((*modules)->drivers[i] = malloc(sizeof(**(*modules)->drivers))) == NULL)
 		{
-			ERRMSG("malloc modules->drivers[i]");
+			msgError("malloc modules->drivers[i] fail");
 			exit(0);
 		}
 
 		if (((*modules)->drivers[i]->name =
 				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->drivers[i]->name))) == NULL)
 		{
-			ERRMSG("malloc modules->drivers[i]->name");
+			msgError("malloc modules->drivers[i]->name fail");
 			exit(0);
 		}
 	}
@@ -60,14 +60,14 @@ void allocate(module_t **modules, char **line, char ***tokens)
 	{
 		if (((*modules)->tasks[i] = malloc(sizeof(**(*modules)->tasks))) == NULL)
 		{
-			ERRMSG("malloc modules->tasks[i]");
+			msgError("malloc modules->tasks[i] fail");
 			exit(0);
 		}
 
 		if (((*modules)->tasks[i]->name =
 				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->tasks[i]->name))) == NULL)
 		{
-			ERRMSG("malloc modules->tasks[i]->name");
+			msgError("malloc modules->tasks[i]->name fail");
 			exit(0);
 		}
 	}
@@ -75,14 +75,14 @@ void allocate(module_t **modules, char **line, char ***tokens)
 	// buffer for reading
 	if ((*line = malloc(LINE_SIZE_MAX * sizeof(*(*line)))) == NULL)
 	{
-		ERRMSG("malloc line");
+		msgError("malloc line fail");
 		exit(0);
 	}
 
 	// tokens
 	if ((*tokens = malloc(TOKEN_COUNT_MAX * sizeof(**tokens))) == NULL)
 	{
-		ERRMSG("malloc tokens\n");
+		msgError("malloc tokens fail");
 		exit(0);
 	}
 
@@ -90,7 +90,7 @@ void allocate(module_t **modules, char **line, char ***tokens)
 	{
 		if (((*tokens)[i] = malloc(TOKEN_SIZE_MAX * sizeof(***tokens))) == NULL)
 		{
-			ERRMSG("malloc tokens[]\n");
+			msgError("malloc tokens[] fail");
 			exit(0);
 		}
 	}
@@ -123,5 +123,5 @@ void unAllocate(module_t **modules, char **line, char ***tokens)
 	{
 		free((*tokens)[i]);
 	}
-	free(*tokens);
+	free(**tokens);
 }

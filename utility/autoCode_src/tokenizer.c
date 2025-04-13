@@ -21,7 +21,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-int tokenizer(char *line, char **tokens)
+int tokenizer(const char *line, char **tokens)
 {
 	int index_line = 0;
 	int index_token = 0;

@@ -55,7 +55,6 @@ int cmdTaskDispatch(const char *cmd, module_status_t *status)
 		if (strcmp(cmd, cmd_task[i].name) == 0)
 		{
 			(*cmd_task[i].func)(status);
-			// printf("[listCmd.c cmdTaskDispatch()] cmd=%s status=0x%02x\n",cmd, *status);
 			return 0;
 		}
 	}
@@ -69,7 +68,6 @@ int cmdDriverDispatch(const char *cmd, module_status_t *status)
 		if (strcmp(cmd, cmd_driver[i].name) == 0)
 		{
 			(*cmd_driver[i].func)(status);
-			// printf("[listCmd.c cmdDriverDispatch()] cmd=%s status=0x%02x\n",cmd, *status);
 			return 0;
 		}
 	}
