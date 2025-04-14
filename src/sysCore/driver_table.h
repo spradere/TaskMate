@@ -15,7 +15,7 @@
  * @file driver_table.h
  * @brief driver struct and definitions
  *
- * @todo Nothing
+ * @todo add lock system, with error handling
  */
 
 /**

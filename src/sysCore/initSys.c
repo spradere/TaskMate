@@ -15,7 +15,7 @@
  * @file initSys.c
  * @brief Implementation for init system
  *
- * @todo Add read list files to get flags init and start at boot time
+ * @todo nothing
  */
 
 #include <avr/io.h>
@@ -25,18 +25,17 @@
 #include "sysCore/autoIncludeTasks.h"
 #include "sysCore/autoIncludeDrivers.h"
 
-// create and initailize task memory
+// initailize task memory
 void taskCreate(void (*taskFunction)(void), uint8_t task_id)
 {
 	task_table[task_id].task_id = task_id;
-	// task_table[task_id].task_name= ??
 
 	// RTC init
 	task_table[task_id].task_RTC = 0;
 
 	// stack init
 	task_table[task_id].stack_pointer =
-		&task_table[task_id].stack[TASK_STACK_SIZE - 1]; // get to of stack
+		&task_table[task_id].stack[TASK_STACK_SIZE - 1]; // get top of stack
 	*(task_table[task_id].stack_pointer--) = (uint16_t)taskFunction & 0xFF; // PCL;
 	*(task_table[task_id].stack_pointer--) = ((uint16_t)taskFunction >> 8) & 0xFF; // PCH
 	*(task_table[task_id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
@@ -54,7 +53,7 @@ void taskCreate(void (*taskFunction)(void), uint8_t task_id)
 
 void initTasks(void)
 {
-	// do not edit code between tag : automatic generated code !
+	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] task init
 	taskCreate(task1, 0);
 
@@ -93,7 +92,7 @@ void initTasks(void)
 
 void initDrivers(void)
 {
-	// do not edit code between tag : automatic generated code !
+	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] driver init
 	const char* driver0_name = "timer1";
 	driver_table[0]=(driver_table_t)
@@ -148,11 +147,4 @@ void initDrivers(void)
 	(*driver_table[3].setStatus)(3);
 
 	// [/tag]
-
-	// driver flag init -> todo : change by reading file list and write driver satus.
-	uint8_t i;
-	for (i = 0; i < DRIVER_COUNT; i++)
-	{
-		(*driver_table[i].setStatus)((1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT));
-	}
 }
