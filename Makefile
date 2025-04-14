@@ -17,7 +17,7 @@
 # Variables
 ################################################################################
 
-# Compiler 
+# Compiler
 CC = avr-gcc
 
 # MCU and Programmer settings
@@ -56,8 +56,8 @@ CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files handling
-TASK_LIST_FILE = ${UTILITY_DIR}task_list
-DRIVER_LIST_FILE = ${UTILITY_DIR}driver_list
+TASK_LIST_FILE = ${UTILITY_DIR}tasks_list
+DRIVER_LIST_FILE = ${UTILITY_DIR}drivers_list
 
 # Get git tag for USB key directory backup
 USB_DIR = /media/usbkey
@@ -72,7 +72,7 @@ TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
 all: .list_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n"
-	
+
 # Link
 ${TARGET}: ${OBJS}
 	@printf "\n\033[1;33mLinking\033[0m\n\n"
@@ -81,15 +81,15 @@ ${TARGET}: ${OBJS}
 # Compile
 ${OBJS}: ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
-	
+
 	@printf "source : <%s> -> <%s>\n" ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} $@
 	${CC} ${CFLAGS} -c ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o $@
-	
+
 # Include dependency files safely, used to compile *.c if related header was edited
 header_check:
-	@printf "\n\033[1;33mCheck header files\033[0m\n\n" 
+	@printf "\n\033[1;33mCheck header files\033[0m\n\n"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
-	
+
 -include ${DEPS_FILE}
 
 # Test if autoCode and list files was modified
@@ -100,7 +100,7 @@ header_check:
 
 # Special rule for autoCode with clang, not avr-gcc
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
-	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n" 
+	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
 
 
@@ -116,7 +116,7 @@ upload:all
 	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload
-	
+
 # Heavy sweep
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
@@ -131,10 +131,10 @@ dump:all
 	avr-objdump -D -m avr6 ${HEX} > hex.out
 	avr-objdump -D -m avr6 ${ELF} > elf.out
 .PHONY: dump
-	
+
 # Make doxygen documentation
 doc:
-	@printf "\n\033[1;36mMake Doxygen documentation\033[0m\n\n" 
+	@printf "\n\033[1;36mMake Doxygen documentation\033[0m\n\n"
 	doxygen doc/Doxyfile
 .PHONY: doc
 
@@ -151,7 +151,7 @@ tidy:
 	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
 	clang-tidy $(TIDY_SRC) -- \
 		-Isrc I/root/code/TaskMate/TaskMate_current/src \
-		-Isrc I/root/code/TaskMate/TaskMate_current \		
+		-Isrc I/root/code/TaskMate/TaskMate_current \
 		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
 		-D__AVR__=6 -D__AVR_ATmega2560__=1
 .PHONY: tidy
@@ -181,7 +181,7 @@ backup:
 	@printf "\n\033[1;33mBackup to <${USB_DIR}${TASKMATE_DIR}>\033[0m\n\n"
 	@printf "\033[0;33mInsert USB key and press ENTER to continue ... \033[0m\n"
 	@read DUMMY_VAR
-	
+
 	#Test if USB key is mount, do if not
 	@if mount | grep "/media/usbkey" > /dev/null; then \
 		printf "\033[0;33mUSB key already mounted ${USB_DIR}\033[0m\n"; \
@@ -189,17 +189,17 @@ backup:
 		printf "\033[0;33mMount USB key ${USB_DIR}\033[0m\n"; \
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
-	
+
 	# Test if dest directory exist, create if not
 	@if [ -d "${USB_DIR}${TASKMATE_DIR}" ]; then \
 	else \
 		mkdir ${USB_DIR}${TASKMATE_DIR}; \
 	fi
-	
+
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in log/rsync.log\033[0m\n"
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" "${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
-	
+
 	# Umount
 	@printf "\033[0;33mUmount ${USB_DIR}\033[0m\n"
 	@umount ${USB_DIR}

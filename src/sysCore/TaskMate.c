@@ -18,7 +18,10 @@
  * This file contains :
  * - system, drivers and task initialisation
  *
- * @todo Atomic for SP read/write
+ * @todo Atomic for SP read/write, sequence for startup.
+ * Now or later you will have to write a very light wight libc,
+ * designed for embedded system with MCU. Not POSIX compliant.
+ *
  */
 
 #include <avr/io.h>

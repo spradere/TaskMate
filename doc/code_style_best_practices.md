@@ -126,9 +126,6 @@ Builds, tests, formatting, flashing—your time is precious.
 * Use version control. Always.
 Your future self will thank you.
 
-* Comment why, not what.
-The code already says what it does. Comments should explain the reason or intent.
-
 ---
 
 ## 8. Commenting Rules for Humans
