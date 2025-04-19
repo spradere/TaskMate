@@ -25,10 +25,10 @@
 #include "sysCore/error.h"
 
 extern const uint8_t DRIVER_COUNT;
-extern driver_table_t driver_table[];
+extern driver_item_t driver_table[];
 
-extern const uint8_t TASK_COUNT;
-extern task_table_t task_table[];
-extern uint8_t task_current;
+extern const uint8_t THREAD_COUNT;
+extern thread_item_t task_table[];
+extern uint8_t thread_current;
 
 #endif

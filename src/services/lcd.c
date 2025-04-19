@@ -38,7 +38,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("Add servives");
+	lcdWriteString("Change module");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.

@@ -29,7 +29,7 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/initSys.h"
-
+#include "sysCore/status_bits.h"
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
 
@@ -64,8 +64,8 @@ int main(void)
 	}
 
 	// jump to current task for first call and start system by enabling INT
-	task_current = 0;
-	SP = (uint16_t)task_table[task_current].stack_pointer;
+	thread_current = 0;
+	SP = (uint16_t)task_table[thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "sei \n\t"
 							  "ret \n\t");
 
@@ -79,16 +79,16 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 
 	// Save current task context
 	asm volatile(PUSH_ALL_REGS);
-	task_table[task_current].stack_pointer = (uint8_t *)SP;
+	task_table[thread_current].stack_pointer = (uint8_t *)SP;
 
 	// todo -> add stack overflow test
 
 	// todo -> add system wide error handler
 
 	// switch context
-	if (++task_current == TASK_COUNT)
+	if (++thread_current == THREAD_COUNT)
 	{
-		task_current = 0;
+		thread_current = 0;
 	}
 
 	// I'm alive blink in board led 13
@@ -100,6 +100,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	}
 
 	// Restore next task context
-	SP = (uint16_t)task_table[task_current].stack_pointer;
+	SP = (uint16_t)task_table[thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "reti \n\t");
 }

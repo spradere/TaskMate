@@ -12,18 +12,17 @@
  */
 
 /**
- * @file task_table.h
- * @brief task struct and definitions
+ * @file module_t.h
+ * @brief thread and driver struct and definitions
  *
  * @todo Nothing
  */
 
 /**
- * @struct task_table_t
- * @brief Represents a task in TaskMate.
+ * @struct thread_item_t
+ * @brief Represents a thread in TaskMate.
  */
 
-#include "sysCore/status_bits.h"
 
 // task table
 #define TASK_STACK_SIZE 256 /**< Task stack size*/
@@ -42,4 +41,25 @@ typedef struct
 
 	uint8_t *stack_pointer; /**< Task stack Pointer, pointer to stack array items*/
 	uint8_t stack[TASK_STACK_SIZE]; /**< Task stack array */
-} task_table_t;
+} thread_item_t;
+
+/**
+ * @struct driver_item_t
+ * @brief Represents a driver in TaskMate.
+ */
+
+
+// driver table
+typedef struct
+{
+	uint8_t driver_id; /**< Driver indentifier */
+	uint8_t *driver_name; /**< Driver name */
+
+	void (*setStatus)(uint8_t); /**< Driver function for setting up status */
+	uint8_t (*getStatus)(void); /**< Driver function for getting up status */
+
+	void (*init)(void); /**< Initialize driver function  */
+	void (*start)(void); /**< Start driver function  */
+	void (*stop)(void); /**< Stop driver function  */
+
+} driver_item_t;
