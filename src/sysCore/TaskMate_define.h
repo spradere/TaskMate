@@ -104,6 +104,4 @@
 
 #define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
-#include "sysCore/module_t.h"
-
 #endif

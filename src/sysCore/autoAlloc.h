@@ -1,19 +1,21 @@
-/*const uint8_t DRIVER_COUNT = 4;
-driver_item_t driver_table[4];
+#ifndef AUTOALLOC_H
+#define AOTOALLOC_H
 
-const uint8_t THREAD_COUNT = 4;
-thread_item_t task_table[4];
-uint8_t thread_current = 0;*/
+#include "sysCore/module_t.h"
 
-struct modules
+
+#define THREAD_COUNT 4
+#define DRIVER_COUNT 4
+
+
+typedef struct
 {
-	const uint8_t DRIVER_COUNT = 4;
-	driver_item_t driver_table[4];
 
-	const uint8_t THREAD_COUNT = 4;
-	thread_item_t task_table[4];
-	uint8_t thread_current = 0;
-}
+	driver_item_t drivers[4];
+	thread_item_t threads[4];
+	uint8_t thread_current;
 
+}modules_t;
 
 
+#endif

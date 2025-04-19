@@ -1,14 +1,14 @@
 /*
- * TaskMate Project
+ * ThreadMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * This file is part of ThreadMate and is distributed under the ThreadMate License v1.0.
  * See the LICENSE file for full license terms.
  *
  * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/ThreadMate/issues
  *
- * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ * Powered by ThreadMate, (c) 2025 PRADERE Sebastien
  */
 
 /**
@@ -20,32 +20,32 @@
 
 /**
  * @struct thread_item_t
- * @brief Represents a thread in TaskMate.
+ * @brief Represents a thread in ThreadMate.
  */
 
 
 // task table
-#define TASK_STACK_SIZE 256 /**< Task stack size*/
+#define THREAD_STACK_SIZE 256 /**< Thread stack size*/
 
 // task table
 typedef struct
 {
-	uint8_t task_id; /**< Task identifier */
-	uint8_t *task_name; /**< Task name */
+	uint8_t thread_id; /**< Thread identifier */
+	uint8_t *thread_name; /**< Thread name */
 
-	void (*setStatus)(uint8_t); /**< Task function for setting up status */
-	uint8_t (*getStatus)(void); /**< Task function for getting up status */
-	void (*main)(void); /**< Task main function for first start and resart */
+	void (*setStatus)(uint8_t); /**< Thread function for setting up status */
+	uint8_t (*getStatus)(void); /**< Thread function for getting up status */
+	void (*main)(void); /**< Thread main function for first start and resart */
 
-	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
+	volatile uint16_t task_RTC; /**< Thread's Real Time Counter */
 
-	uint8_t *stack_pointer; /**< Task stack Pointer, pointer to stack array items*/
-	uint8_t stack[TASK_STACK_SIZE]; /**< Task stack array */
+	uint8_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
+	uint8_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
 } thread_item_t;
 
 /**
  * @struct driver_item_t
- * @brief Represents a driver in TaskMate.
+ * @brief Represents a driver in ThreadMate.
  */
 
 
