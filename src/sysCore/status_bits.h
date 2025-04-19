@@ -18,6 +18,12 @@
  * @todo Nothing
  */
 
+// services status bits
+#define SERVICE_START_AT_BOOT 0 /**< Automatic service start at boot time */
+#define SERVICE_TYPE_USER 1 /**< user service*/
+#define SERVICE_TYPE_SYSTEM 2 /**< system service */
+#define SERVICE_DEAD 3 /**< Task can't be started */
+
 // task status bits
 #define TASK_START_AT_BOOT 0 /**< Automatic task start at boot time */
 #define TASK_TYPE_USER 1 /**< user task*/

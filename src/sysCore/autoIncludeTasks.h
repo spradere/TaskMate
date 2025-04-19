@@ -1,4 +1,0 @@
-#include "tasks/task1.h"
-#include "tasks/task2.h"
-#include "tasks/lcd.h"
-#include "tasks/scli.h"

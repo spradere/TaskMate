@@ -15,7 +15,7 @@
  * @file autoCode.h
  * @brief autoCode header definitions
  *
- * @todo nothing
+ * @todo implement run level
  */
 
 #ifndef AUTOCODE_H
@@ -35,7 +35,7 @@
 #define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
 #define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
 
-// size for list table
+// size for module table
 #define TASK_COUNT_MAX 256
 #define DRIVER_COUNT_MAX 256
 #define NAME_SIZE_MAX 64
@@ -45,11 +45,11 @@
 #define TOKEN_COUNT_MAX 4
 #define TOKEN_SIZE_MAX 64
 
-// error message macro
+// message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
 #define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
 
-// struct for task/driver table
+// structs for task/driver table
 typedef struct
 {
 	char *name;

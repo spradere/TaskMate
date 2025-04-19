@@ -17,7 +17,7 @@
  *
  * @warning This file contains ATOMIC material !
  *
- * @todo Add system call for driver lock, add runLevel() boot sequence ,external cloc
+ * @todo Add system call for driver lock, add runLevel() boot sequence, external RTC cloc
  */
 
 #include <avr/io.h>

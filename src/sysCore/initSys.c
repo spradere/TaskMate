@@ -22,56 +22,39 @@
 
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/initSys.h"
-#include "sysCore/autoIncludeTasks.h"
-#include "sysCore/autoIncludeDrivers.h"
+#include "sysCore/autoInclude.h"
 
 // initailize task memory
-void taskCreate(void (*taskFunction)(void), uint8_t task_id)
+void threadCreate(void (*func)(void), uint8_t thread_id)
 {
-	task_table[task_id].task_id = task_id;
+	task_table[thread_id].task_id = thread_id;
 
 	// RTC init
-	task_table[task_id].task_RTC = 0;
+	task_table[thread_id].task_RTC = 0;
 
 	// stack init
-	task_table[task_id].stack_pointer =
-		&task_table[task_id].stack[TASK_STACK_SIZE - 1]; // get top of stack
-	*(task_table[task_id].stack_pointer--) = (uint16_t)taskFunction & 0xFF; // PCL;
-	*(task_table[task_id].stack_pointer--) = ((uint16_t)taskFunction >> 8) & 0xFF; // PCH
-	*(task_table[task_id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
-	*(task_table[task_id].stack_pointer--) = 0x00; // R0
-	*(task_table[task_id].stack_pointer--) = SREG;
+	task_table[thread_id].stack_pointer =
+		&task_table[thread_id].stack[TASK_STACK_SIZE - 1]; // get top of stack
+	*(task_table[thread_id].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
+	*(task_table[thread_id].stack_pointer--) = ((uint16_t)func>> 8) & 0xFF; // PCH
+	*(task_table[thread_id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
+	*(task_table[thread_id].stack_pointer--) = 0x00; // R0
+	*(task_table[thread_id].stack_pointer--) = SREG;
 
 	// Registers R1-R31
 	for (int i = 1; i < 32; i++)
 	{
-		*(task_table[task_id].stack_pointer--) = 0x00;
+		*(task_table[thread_id].stack_pointer--) = 0x00;
 	}
 
 	return;
 }
 
-void initTasks(void)
+void initServices(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] task init
-	taskCreate(task1, 0);
-
-	const char* task0_name = "task1";
-	task_table[0].task_name = (uint8_t *)task0_name;
-	task_table[0].setStatus = task1SetStatus;
-	task_table[0].getStatus = task1GetStatus;
-	(*task_table[0].setStatus)(3);
-
-	taskCreate(task2, 1);
-
-	const char* task1_name = "task2";
-	task_table[1].task_name = (uint8_t *)task1_name;
-	task_table[1].setStatus = task2SetStatus;
-	task_table[1].getStatus = task2GetStatus;
-	(*task_table[1].setStatus)(3);
-
-	taskCreate(lcd, 2);
+	// [tag] service init
+	threadCreate(lcd, 0);
 
 	const char* task2_name = "lcd";
 	task_table[2].task_name = (uint8_t *)task2_name;
@@ -79,14 +62,35 @@ void initTasks(void)
 	task_table[2].getStatus = lcdGetStatus;
 	(*task_table[2].setStatus)(5);
 
-	taskCreate(scli, 3);
+	threadCreate(scli, 1);
 
 	const char* task3_name = "scli";
 	task_table[3].task_name = (uint8_t *)task3_name;
 	task_table[3].setStatus = scliSetStatus;
 	task_table[3].getStatus = scliGetStatus;
 	(*task_table[3].setStatus)(5);
+	// [/tag]
+}
 
+void initTasks(void)
+{
+	// do not edit code between tag : automatic generated code by autoCode
+	// [tag] task init
+	threadCreate(task1, 2);
+
+	const char* task0_name = "task1";
+	task_table[0].task_name = (uint8_t *)task0_name;
+	task_table[0].setStatus = task1SetStatus;
+	task_table[0].getStatus = task1GetStatus;
+	(*task_table[0].setStatus)(3);
+
+	threadCreate(task2, 3);
+
+	const char* task1_name = "task2";
+	task_table[1].task_name = (uint8_t *)task1_name;
+	task_table[1].setStatus = task2SetStatus;
+	task_table[1].getStatus = task2GetStatus;
+	(*task_table[1].setStatus)(3);
 	// [/tag]
 }
 
