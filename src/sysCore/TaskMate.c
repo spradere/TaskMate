@@ -33,6 +33,7 @@
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
 
+modules_t modules;
 
 int main(void)
 {
@@ -48,24 +49,24 @@ int main(void)
 	// init driver if flag on
 	for (i = 0; i < DRIVER_COUNT; i++)
 	{
-		if (((*driver_table[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0)
+		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0)
 		{
-			(*driver_table[i].init)();
+			(*modules.drivers[i].init)();
 		}
 	}
 
 	// start driver if flag on
 		for (i = 0; i < DRIVER_COUNT; i++)
 	{
-		if (((*driver_table[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0)
+		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0)
 		{
-			(*driver_table[i].start)();
+			(*modules.drivers[i].start)();
 		}
 	}
 
 	// jump to current task for first call and start system by enabling INT
-	thread_current = 0;
-	SP = (uint16_t)task_table[thread_current].stack_pointer;
+	modules.thread_current = 0;
+	SP = (uint16_t)modules.threads[modules.thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "sei \n\t"
 							  "ret \n\t");
 
@@ -79,16 +80,16 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 
 	// Save current task context
 	asm volatile(PUSH_ALL_REGS);
-	task_table[thread_current].stack_pointer = (uint8_t *)SP;
+	modules.threads[modules.thread_current].stack_pointer = (uint8_t *)SP;
 
 	// todo -> add stack overflow test
 
 	// todo -> add system wide error handler
 
 	// switch context
-	if (++thread_current == THREAD_COUNT)
+	if (++modules.thread_current == THREAD_COUNT)
 	{
-		thread_current = 0;
+		modules.thread_current = 0;
 	}
 
 	// I'm alive blink in board led 13
@@ -100,6 +101,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	}
 
 	// Restore next task context
-	SP = (uint16_t)task_table[thread_current].stack_pointer;
+	SP = (uint16_t)modules.threads[modules.thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "reti \n\t");
 }

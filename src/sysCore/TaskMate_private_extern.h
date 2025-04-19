@@ -23,12 +23,8 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/error.h"
+#include "sysCore/autoAlloc.h"
 
-extern const uint8_t DRIVER_COUNT;
-extern driver_item_t driver_table[];
-
-extern const uint8_t THREAD_COUNT;
-extern thread_item_t task_table[];
-extern uint8_t thread_current;
+extern modules_t modules;
 
 #endif

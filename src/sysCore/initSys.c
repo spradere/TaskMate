@@ -27,24 +27,24 @@
 // initailize task memory
 void threadCreate(void (*func)(void), uint8_t thread_id)
 {
-	task_table[thread_id].task_id = thread_id;
+	modules.threads[thread_id].thread_id = thread_id;
 
 	// RTC init
-	task_table[thread_id].task_RTC = 0;
+	modules.threads[thread_id].task_RTC = 0;
 
 	// stack init
-	task_table[thread_id].stack_pointer =
-		&task_table[thread_id].stack[TASK_STACK_SIZE - 1]; // get top of stack
-	*(task_table[thread_id].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
-	*(task_table[thread_id].stack_pointer--) = ((uint16_t)func>> 8) & 0xFF; // PCH
-	*(task_table[thread_id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
-	*(task_table[thread_id].stack_pointer--) = 0x00; // R0
-	*(task_table[thread_id].stack_pointer--) = SREG;
+	modules.threads[thread_id].stack_pointer =
+		&modules.threads[thread_id].stack[THREAD_STACK_SIZE - 1]; // get top of stack
+	*(modules.threads[thread_id].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
+	*(modules.threads[thread_id].stack_pointer--) = ((uint16_t)func>> 8) & 0xFF; // PCH
+	*(modules.threads[thread_id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
+	*(modules.threads[thread_id].stack_pointer--) = 0x00; // R0
+	*(modules.threads[thread_id].stack_pointer--) = SREG;
 
 	// Registers R1-R31
 	for (int i = 1; i < 32; i++)
 	{
-		*(task_table[thread_id].stack_pointer--) = 0x00;
+		*(modules.threads[thread_id].stack_pointer--) = 0x00;
 	}
 
 	return;
@@ -57,18 +57,18 @@ void initServices(void)
 	threadCreate(lcd, 0);
 
 	const char* task2_name = "lcd";
-	task_table[2].task_name = (uint8_t *)task2_name;
-	task_table[2].setStatus = lcdSetStatus;
-	task_table[2].getStatus = lcdGetStatus;
-	(*task_table[2].setStatus)(5);
+	modules.threads[2].thread_name = (uint8_t *)task2_name;
+	modules.threads[2].setStatus = lcdSetStatus;
+	modules.threads[2].getStatus = lcdGetStatus;
+	(*modules.threads[2].setStatus)(5);
 
 	threadCreate(scli, 1);
 
 	const char* task3_name = "scli";
-	task_table[3].task_name = (uint8_t *)task3_name;
-	task_table[3].setStatus = scliSetStatus;
-	task_table[3].getStatus = scliGetStatus;
-	(*task_table[3].setStatus)(5);
+	modules.threads[3].thread_name = (uint8_t *)task3_name;
+	modules.threads[3].setStatus = scliSetStatus;
+	modules.threads[3].getStatus = scliGetStatus;
+	(*modules.threads[3].setStatus)(5);
 	// [/tag]
 }
 
@@ -79,18 +79,18 @@ void initTasks(void)
 	threadCreate(task1, 2);
 
 	const char* task0_name = "task1";
-	task_table[0].task_name = (uint8_t *)task0_name;
-	task_table[0].setStatus = task1SetStatus;
-	task_table[0].getStatus = task1GetStatus;
-	(*task_table[0].setStatus)(3);
+	modules.threads[0].thread_name = (uint8_t *)task0_name;
+	modules.threads[0].setStatus = task1SetStatus;
+	modules.threads[0].getStatus = task1GetStatus;
+	(*modules.threads[0].setStatus)(3);
 
 	threadCreate(task2, 3);
 
 	const char* task1_name = "task2";
-	task_table[1].task_name = (uint8_t *)task1_name;
-	task_table[1].setStatus = task2SetStatus;
-	task_table[1].getStatus = task2GetStatus;
-	(*task_table[1].setStatus)(3);
+	modules.threads[1].thread_name = (uint8_t *)task1_name;
+	modules.threads[1].setStatus = task2SetStatus;
+	modules.threads[1].getStatus = task2GetStatus;
+	(*modules.threads[1].setStatus)(3);
 	// [/tag]
 }
 
@@ -99,7 +99,7 @@ void initDrivers(void)
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] driver init
 	const char* driver0_name = "timer1";
-	driver_table[0]=(driver_item_t)
+	modules.drivers[0]=(driver_item_t)
 	{
 		.driver_id = 0,
 		.driver_name = (uint8_t *)driver0_name,
@@ -109,10 +109,10 @@ void initDrivers(void)
 		.start = timer1Start,
 		.stop = timer1Stop
 	};
-	(*driver_table[0].setStatus)(3);
+	(*modules.drivers[0].setStatus)(3);
 
 	const char* driver1_name = "timer3";
-	driver_table[1]=(driver_item_t)
+	modules.drivers[1]=(driver_item_t)
 	{
 		.driver_id = 1,
 		.driver_name = (uint8_t *)driver1_name,
@@ -122,10 +122,10 @@ void initDrivers(void)
 		.start = timer3Start,
 		.stop = timer3Stop
 	};
-	(*driver_table[1].setStatus)(3);
+	(*modules.drivers[1].setStatus)(3);
 
 	const char* driver2_name = "i2c";
-	driver_table[2]=(driver_item_t)
+	modules.drivers[2]=(driver_item_t)
 	{
 		.driver_id = 2,
 		.driver_name = (uint8_t *)driver2_name,
@@ -135,10 +135,10 @@ void initDrivers(void)
 		.start = i2cStart,
 		.stop = i2cStop
 	};
-	(*driver_table[2].setStatus)(3);
+	(*modules.drivers[2].setStatus)(3);
 
 	const char* driver3_name = "usart1";
-	driver_table[3]=(driver_item_t)
+	modules.drivers[3]=(driver_item_t)
 	{
 		.driver_id = 3,
 		.driver_name = (uint8_t *)driver3_name,
@@ -148,7 +148,7 @@ void initDrivers(void)
 		.start = usart1Start,
 		.stop = usart1Stop
 	};
-	(*driver_table[3].setStatus)(3);
+	(*modules.drivers[3].setStatus)(3);
 
 	// [/tag]
 }
