@@ -104,7 +104,6 @@
 
 #define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
-#include "sysCore/task_table.h"
-#include "sysCore/driver_table.h"
+#include "sysCore/module_t.h"
 
 #endif

@@ -99,7 +99,7 @@ void initDrivers(void)
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] driver init
 	const char* driver0_name = "timer1";
-	driver_table[0]=(driver_table_t)
+	driver_table[0]=(driver_item_t)
 	{
 		.driver_id = 0,
 		.driver_name = (uint8_t *)driver0_name,
@@ -112,7 +112,7 @@ void initDrivers(void)
 	(*driver_table[0].setStatus)(3);
 
 	const char* driver1_name = "timer3";
-	driver_table[1]=(driver_table_t)
+	driver_table[1]=(driver_item_t)
 	{
 		.driver_id = 1,
 		.driver_name = (uint8_t *)driver1_name,
@@ -125,7 +125,7 @@ void initDrivers(void)
 	(*driver_table[1].setStatus)(3);
 
 	const char* driver2_name = "i2c";
-	driver_table[2]=(driver_table_t)
+	driver_table[2]=(driver_item_t)
 	{
 		.driver_id = 2,
 		.driver_name = (uint8_t *)driver2_name,
@@ -138,7 +138,7 @@ void initDrivers(void)
 	(*driver_table[2].setStatus)(3);
 
 	const char* driver3_name = "usart1";
-	driver_table[3]=(driver_table_t)
+	driver_table[3]=(driver_item_t)
 	{
 		.driver_id = 3,
 		.driver_name = (uint8_t *)driver3_name,

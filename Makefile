@@ -55,12 +55,9 @@ CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files handling
-FILE_INIT_RC = /src/drivers/drivers_init.rc
-FILE_INIT_RC += /src/serices/services_init.rc
-FILE_INIT_RC += /src/tasks/taks_init.rc
-
-# TASK_LIST_FILE = ${UTILITY_DIR}tasks_list
-# DRIVER_LIST_FILE = ${UTILITY_DIR}drivers_list
+FILE_INIT_RC = src/drivers/drivers_init.rc
+FILE_INIT_RC += src/services/services_init.rc
+FILE_INIT_RC += src/tasks/tasks_init.rc
 
 # Get git tag for USB key directory backup
 USB_DIR = /media/usbkey
@@ -73,7 +70,7 @@ TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 # Build rules
 ################################################################################
 
-all: .list_stamp header_check ${TARGET}
+all: .autoCode_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n"
 
 # Link
@@ -84,7 +81,6 @@ ${TARGET}: ${OBJS}
 # Compile
 ${OBJS}: ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
-
 	@printf "source : <%s> -> <%s>\n" ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} $@
 	${CC} ${CFLAGS} -c ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o $@
 
@@ -96,11 +92,11 @@ header_check:
 -include ${DEPS_FILE}
 
 # Test if autoCode and list files was modified
-.list_stamp: ${AUTOCODE_TARGET}
-	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
-	# ./${AUTOCODE_TARGET}
-	touch .list_stamp
 
+.autoCode_stamp: ${AUTOCODE_TARGET} ${FILE_INIT_RC}
+	@printf "\n\033[1;33mList have changed or autoCode.c -> run autoCode\033[0m\n\n"
+	# ./${AUTOCODE_TARGET}
+	touch .autoCode_stamp
 
 # Special rule for autoCode with clang, not avr-gcc
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
@@ -126,7 +122,7 @@ clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
 	rm -f  ${ELF} ${HEX} ${OBJS} *.out
 	rm -f ${DEPS}
-	rm -f .list_stamp ${AUTOCODE_TARGET}
+	rm -f autoCode_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
 
 # Disassemble machine code in two formats
