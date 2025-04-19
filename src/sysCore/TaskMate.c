@@ -30,16 +30,15 @@
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/initSys.h"
 
-#include "sysCore/autoIncludeTasks.h"
-#include "sysCore/autoIncludeDrivers.h"
-#include "sysCore/autoAllocTasks.h"
-#include "sysCore/autoAllocDrivers.h"
+#include "sysCore/autoInclude.h"
+#include "sysCore/autoAlloc.h"
+
 
 int main(void)
 {
-	initTasks();
-
 	initDrivers();
+	initServices();
+	initTasks();
 
 	// Set output for in board led 13
 	LED_DDR |= (1 << LED_PIN);
@@ -56,7 +55,7 @@ int main(void)
 	}
 
 	// start driver if flag on
-	for (i = 0; i < DRIVER_COUNT; i++)
+		for (i = 0; i < DRIVER_COUNT; i++)
 	{
 		if (((*driver_table[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0)
 		{

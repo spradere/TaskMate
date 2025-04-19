@@ -21,8 +21,9 @@
 #ifndef INIT_SYS_H
 #define INIT_SYS_H
 
-void taskCreate(void (*)(void), uint8_t);
+void threadCreate(void (*)(void), uint8_t);
 
+void initServices(void);
 void initTasks(void);
 void initDrivers(void);
 

@@ -22,8 +22,8 @@
 
 #include "sysCore/TaskMate_public.h"
 #include "drivers/usart1.h"
-#include "tasks/scli.h"
-#include "tasks/lcd.h"
+#include "services/scli.h"
+#include "services/lcd.h"
 
 // status
 uint8_t scli_status = 0;

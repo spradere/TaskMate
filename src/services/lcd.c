@@ -21,7 +21,7 @@
 #include <util/delay.h>
 #include "sysCore/TaskMate_public.h"
 #include "drivers/i2c.h"
-#include "tasks/lcd.h"
+#include "services/lcd.h"
 
 #define LCD_I2C_ADDR 0x7C // AiP31068L I2C address (Write mode)
 #define LCD_CMD 0x80 // Co=1 RS = 0, Write Command
@@ -38,7 +38,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("autoCode.c");
+	lcdWriteString("Add servives");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.

@@ -29,19 +29,18 @@ PORT = /dev/ttyU0
 # Source directory
 BUILD_DIR = build/
 SRC_DIR = src/
-SRC_DIR_LIST = ${SRC_DIR}drivers/
-SRC_DIR_LIST += ${SRC_DIR}tasks/
-SRC_DIR_LIST += ${SRC_DIR}sysCore/
-
-UTILITY_DIR = utility/
+SRC_DIR_LIST = src/drivers/
+SRC_DIR_LIST += src/services/
+SRC_DIR_LIST += src/sysCore/
+SRC_DIR_LIST += src/tasks/
 
 # Automatically gather all needed files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
 
 # auotoCode
-AUTOCODE_TARGET = ${UTILITY_DIR}autoCode
-AUTOCODE_SRC != find ${UTILITY_DIR}autoCode_src/ -name "*.c"
+AUTOCODE_TARGET = utility/autoCode
+AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
 # Files
 TARGET = TaskMate
@@ -56,8 +55,12 @@ CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
 # Task/Driver list files handling
-TASK_LIST_FILE = ${UTILITY_DIR}tasks_list
-DRIVER_LIST_FILE = ${UTILITY_DIR}drivers_list
+FILE_INIT_RC = /src/drivers/drivers_init.rc
+FILE_INIT_RC += /src/serices/services_init.rc
+FILE_INIT_RC += /src/tasks/taks_init.rc
+
+# TASK_LIST_FILE = ${UTILITY_DIR}tasks_list
+# DRIVER_LIST_FILE = ${UTILITY_DIR}drivers_list
 
 # Get git tag for USB key directory backup
 USB_DIR = /media/usbkey
@@ -93,10 +96,11 @@ header_check:
 -include ${DEPS_FILE}
 
 # Test if autoCode and list files was modified
-.list_stamp: ${AUTOCODE_TARGET} ${DRIVER_LIST_FILE} ${TASK_LIST_FILE}
+.list_stamp: ${AUTOCODE_TARGET}
 	@printf "\n\033[1;33mList have changed (or autoCode.c)\033[0m\n\n"
-	./${AUTOCODE_TARGET}
+	# ./${AUTOCODE_TARGET}
 	touch .list_stamp
+
 
 # Special rule for autoCode with clang, not avr-gcc
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
@@ -120,7 +124,8 @@ upload:all
 # Heavy sweep
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
-	rm -f  ${ELF} ${HEX} ${OBJS} *.out ${SRCS:.c=.d} ${DEPS_FILE}
+	rm -f  ${ELF} ${HEX} ${OBJS} *.out
+	rm -f ${DEPS}
 	rm -f .list_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
 

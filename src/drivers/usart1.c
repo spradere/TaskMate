@@ -23,7 +23,7 @@
 
 #include "sysCore/TaskMate_public.h"
 #include "drivers/usart1.h"
-#include "tasks/lcd.h"
+#include "services/lcd.h"
 
 #define BAUD_RATE 9600
 
