@@ -25,7 +25,7 @@
 // get TaskMate flag bits
 #include "src/sysCore/status_bits.h"
 
-#define TASK_TYPE_MASK ((1 << TASK_TYPE_USER) | (1 << TASK_TYPE_SYSTEM))
+#define TASK_TYPE_MASK ((1 << THREAD_TYPE_USER) | (1 << THREAD_TYPE_SYSTEM))
 
 void listToTable(module_t *modules, char *line, char **tokens)
 {
@@ -57,7 +57,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 	while ((modules->task_count < TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
 		// set status to default
-		modules->tasks[task_count]->status = 1 << TASK_START_AT_BOOT;
+		modules->tasks[task_count]->status = 1 << THREAD_START_AT_BOOT;
 
 		file_line_number++;
 		token_count = tokenizer(line, tokens);

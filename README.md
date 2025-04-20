@@ -6,8 +6,6 @@
 > 99 commits • 56 source files • 7 directories • 3641 lines of code
 > Final binary size: 2776 bytes (Flash)
 
----
-
 ### ▶️ Introduction
 
 **TaskMate** is a lightweight, preemptive real-time operating system.
@@ -35,6 +33,7 @@ TaskMate uses a custom **POSIX-compatible Makefile** that fully manages dependen
 Each task have one 16 bits software timer/counter sycronized with other tasks.
 
 If not zero, the counter is decremented automatically at 10 ms rate, it can be used for sleep/delay behaviors.
+
 ---
 
 ### ✔️ Features
@@ -52,20 +51,20 @@ If not zero, the counter is decremented automatically at 10 ms rate, it can be u
 
 ---
 
-### 📦 Modular Design & autoCode
+### ⚙ Modular Design & autoCode
 
 Starting with version 0.10, TaskMate uses a **modular design model**:
 
 - Drivers, system services, and user tasks are placed in dedicated directories.
-- Each module provides a `*_init.rc` file describing its initialization parameters.
+- Each directory provides a `*_init.rc` file describing initialization parameters.
 - These files are parsed before **compile time** by a custom tool : `autoCode`.
 
 The result is **auto-generated code**, without runtime overhead:
 
 | File | Purpose |
 |------|---------|
-| `autoInclude.h` | Centralized module includes |
-| `autoAlloc.h`   | Module allocation tables |
+| `sysCore/autoInclude.h` | Centralized module includes |
+| `sysCore/autoAlloc.h`   | Module allocation tables |
 | `sysCore/initSys.c` | Module initialization code |
 
 All modules are referenced through the global structure `modules`:

@@ -24,10 +24,10 @@
 // get TaskMate flag bits
 #include "src/sysCore/status_bits.h"
 
-void cmdTaskUser(module_status_t *status) { *status |= (1 << TASK_TYPE_USER); }
-void cmdTaskSys(module_status_t *status) { *status |= (1 << TASK_TYPE_SYSTEM); }
-void cmdTaskStart(module_status_t *status) { *status |= (1 << TASK_START_AT_BOOT); }
-void cmdTaskNoStart(module_status_t *status) { *status &= ~(1 << TASK_START_AT_BOOT); }
+void cmdTaskUser(module_status_t *status) { *status |= (1 << THREAD_TYPE_USER); }
+void cmdTaskSys(module_status_t *status) { *status |= (1 << THREAD_TYPE_SYSTEM); }
+void cmdTaskStart(module_status_t *status) { *status |= (1 << THREAD_START_AT_BOOT); }
+void cmdTaskNoStart(module_status_t *status) { *status &= ~(1 << THREAD_START_AT_BOOT); }
 
 const cmd_t cmd_task[] = {{"-user", cmdTaskUser},
 						  {"-system", cmdTaskSys},

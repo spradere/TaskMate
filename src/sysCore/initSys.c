@@ -24,13 +24,13 @@
 #include "sysCore/initSys.h"
 #include "sysCore/autoInclude.h"
 
-// initailize task memory
+// initailize thread memory
 void threadCreate(void (*func)(void), uint8_t thread_id)
 {
 	modules.threads[thread_id].thread_id = thread_id;
 
 	// RTC init
-	modules.threads[thread_id].task_RTC = 0;
+	modules.threads[thread_id].thread_counter = 0;
 
 	// stack init
 	modules.threads[thread_id].stack_pointer =
