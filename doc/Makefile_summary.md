@@ -5,7 +5,7 @@
 - **Automatic Dependency Handling**: Only recompiles modified source files.
 - **Header Dependency Tracking**: Detects changes in `.h` files and recompiles affected `.c` files.
 - **Automated Code Generation**:
-  - If list of tasks/drivers have been updated run autoCode before compilation.
+  - If any *_init.rc have been updated run autoCode before compilation.
 - **Colorized Output**: Improved readability with `@printf` messages.
 - **POSIX-Compliant**: Works without requiring GNU Make.
 
@@ -25,7 +25,7 @@ Miscellaneous commands :
 | Command | Description |
 |---------|-------------|
 | `make clean` | Delete files, except code, obviously ! |
-| `make doc` | Generate Doxygen documentation | 
+| `make doc` | Generate Doxygen documentation |
 | `make dump` | Disassemble machine code in two formats |
 | `make cloc` | Count lines of code |
 | `make tidy` | C code static analysis with clang-tidy tool, config file .clang-tidy |

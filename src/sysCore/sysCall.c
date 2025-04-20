@@ -29,11 +29,11 @@ uint8_t sysCallGetTaskID(void) { return (modules.threads[modules.thread_current]
 
 void sysCallSetTaskRTC(uint16_t count)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].task_RTC = count; }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].thread_counter = count; }
 	return;
 }
 
 uint16_t sysCallGetTaskRTC(void)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].task_RTC); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].thread_counter); }
 }

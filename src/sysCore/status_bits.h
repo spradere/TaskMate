@@ -18,17 +18,12 @@
  * @todo Nothing
  */
 
-// services status bits
-#define SERVICE_START_AT_BOOT 0 /**< Automatic service start at boot time */
-#define SERVICE_TYPE_USER 1 /**< user service*/
-#define SERVICE_TYPE_SYSTEM 2 /**< system service */
-#define SERVICE_DEAD 3 /**< Task can't be started */
 
-// task status bits
-#define TASK_START_AT_BOOT 0 /**< Automatic task start at boot time */
-#define TASK_TYPE_USER 1 /**< user task*/
-#define TASK_TYPE_SYSTEM 2 /**< system service */
-#define TASK_DEAD 3 /**< Task can't be started */
+// thread status bits
+#define THREAD_START_AT_BOOT 0 /**< Automatic task start at boot time */
+#define THREAD_TYPE_USER 1 /**< user task*/
+#define THREAD_TYPE_SYSTEM 2 /**< system service */
+#define THREAD_DEAD 3 /**< Task can't be started */
 
 // driver status bits
 #define DRIVER_INIT_AT_BOOT 0 /**< Automatic driver initialization at boot time */

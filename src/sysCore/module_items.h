@@ -37,7 +37,7 @@ typedef struct
 	uint8_t (*getStatus)(void); /**< Thread function for getting up status */
 	void (*main)(void); /**< Thread main function for first start and resart */
 
-	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
+	volatile uint16_t thread_counter; /**< Task's Real Time Counter */
 
 	uint8_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
 	uint8_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
