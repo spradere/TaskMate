@@ -23,7 +23,7 @@
 
 void printTable(module_t *modules)
 {
-	int i;
+	/*int i;
 
 	msgInfo("found task :");
 
@@ -40,5 +40,5 @@ void printTable(module_t *modules)
 		printf("\tdriver[%i] \"%s\" status=%i\n", i, modules->drivers[i]->name,
 			   modules->drivers[i]->status);
 	}
-	printf("\n");
+	printf("\n");*/
 }

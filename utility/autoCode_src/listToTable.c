@@ -25,11 +25,11 @@
 // get TaskMate flag bits
 #include "src/sysCore/status_bits.h"
 
-#define TASK_TYPE_MASK ((1 << THREAD_TYPE_USER) | (1 << THREAD_TYPE_SYSTEM))
+#define THREAD_TYPE_MASK ((1 << THREAD_TYPE_USER) | (1 << THREAD_TYPE_SYSTEM))
 
 void listToTable(module_t *modules, char *line, char **tokens)
 {
-	// open list files
+	/*// open list files
 	FILE *file_task_list = fopen(FILE_TASK_LIST, "r");
 	if (file_task_list == NULL)
 	{
@@ -54,7 +54,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 	// read task file -> modules
 	int task_count = 0;
 
-	while ((modules->task_count < TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
+	while ((modules->task_count < MODULE_TASK_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_task_list))
 	{
 		// set status to default
 		modules->tasks[task_count]->status = 1 << THREAD_START_AT_BOOT;
@@ -96,13 +96,13 @@ void listToTable(module_t *modules, char *line, char **tokens)
 							FILE_TASK_LIST,file_line_number,tokens[i]);
 					}
 				}
-				if ((modules->tasks[task_count]->status & TASK_TYPE_MASK) == 0)
+				if ((modules->tasks[task_count]->status & THREAD_TYPE_MASK) == 0)
 				{
 					msgError("missing -user or -system for task");
 					printf("\t [%s:%i] %s\n\n",
 						FILE_TASK_LIST,file_line_number,tokens[0]);
 				}
-				if ((modules->tasks[task_count]->status & TASK_TYPE_MASK) == TASK_TYPE_MASK)
+				if ((modules->tasks[task_count]->status & THREAD_TYPE_MASK) == THREAD_TYPE_MASK)
 				{
 					msgError("you can't -user and -system for task");
 					printf("\t [%s:%i] %s\n\n",
@@ -124,7 +124,7 @@ void listToTable(module_t *modules, char *line, char **tokens)
 	int driver_count = 0;
 	file_line_number = 0;
 
-	while ((driver_count < DRIVER_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_driver_list))
+	while ((driver_count < MODULE_DRIVER_COUNT_MAX) && fgets(line, LINE_SIZE_MAX, file_driver_list))
 	{
 		// set driver status to default
 		modules->drivers[driver_count]->status =
@@ -181,5 +181,5 @@ void listToTable(module_t *modules, char *line, char **tokens)
 
 	// close files
 	fclose(file_task_list);
-	fclose(file_driver_list);
+	fclose(file_driver_list);*/
 }

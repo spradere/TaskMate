@@ -32,7 +32,7 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo exit(0) don't free properly, change printf("[autocode.c]\n"); -> auroCode/func()
+ * @todo refactoring
  */
 
 #include "utility/autoCode_src/autoCode.h"
@@ -47,29 +47,39 @@
 int main(void)
 {
 	// allocation
-	module_t *modules = NULL; // task and driver tables
-	char *line = NULL; // buffer for reading one line from file
-	char **tokens = NULL;
+	module_t modules;
 
-	allocate(&modules, &line, &tokens);
+	// new tokenizer test
+	tokens_t data;
+
+	strcpy(data.line, "hello why ?");
+	tokenizer(&data);
+
+	for(int i=0; i<data.token_count; i++)
+	{
+		printf("[autocode.c] token[%i] = <%s>\n",i,data.tokens[i]);
+	}
+
+
+	//allocate(&modules, &line, &tokens);
 
 	// read list file and store data in table
-	listToTable(modules, line, tokens);
+	//listToTable(modules, line, tokens);
 
 	// print tables
-	printTable(modules);
+	//printTable(modules);
 
 	// write autoInclude.h files
-	writeInclude(modules);
+	//writeInclude(modules);
 
 	// write autoAlloc.h files
-	writeAlloc(modules);
+	//writeAlloc(modules);
 
 	// read tag to generate code in initSys.c
-	readTag(modules, line, tokens);
+	//readTag(modules, line, tokens);
 
 	// free malloc
-	unAllocate(&modules, &line, &tokens);
+	//unAllocate(&modules, &line, &tokens);
 
 	return 0;
 }
