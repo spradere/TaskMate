@@ -1,14 +1,14 @@
 /*
- * ThreadMate Project
+ * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of ThreadMate and is distributed under the ThreadMate License v1.0.
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
  * See the LICENSE file for full license terms.
  *
  * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/ThreadMate/issues
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
  *
- * Powered by ThreadMate, (c) 2025 PRADERE Sebastien
+ * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
 /**
@@ -20,7 +20,7 @@
 
 /**
  * @struct thread_item_t
- * @brief Represents a thread in ThreadMate.
+ * @brief Represents a thread in TaskMate.
  */
 
 
@@ -37,7 +37,7 @@ typedef struct
 	uint8_t (*getStatus)(void); /**< Thread function for getting up status */
 	void (*main)(void); /**< Thread main function for first start and resart */
 
-	volatile uint16_t task_RTC; /**< Thread's Real Time Counter */
+	volatile uint16_t task_RTC; /**< Task's Real Time Counter */
 
 	uint8_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
 	uint8_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
@@ -45,7 +45,7 @@ typedef struct
 
 /**
  * @struct driver_item_t
- * @brief Represents a driver in ThreadMate.
+ * @brief Represents a driver in TaskMate.
  */
 
 
