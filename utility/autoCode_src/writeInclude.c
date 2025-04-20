@@ -23,7 +23,7 @@
 
 void writeInclude(module_t *modules)
 {
-	// open include files
+	/*// open include files
 	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
 	if (file_task_include == NULL)
 	{
@@ -55,5 +55,5 @@ void writeInclude(module_t *modules)
 	}
 
 	fclose(file_task_include);
-	fclose(file_driver_include);
+	fclose(file_driver_include);*/
 }

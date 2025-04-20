@@ -23,24 +23,24 @@
 
 void allocate(module_t **modules, char **line, char ***tokens)
 {
-	// task and driver modules
+	/*// task and driver modules
 	if (((*modules) = malloc(sizeof(*(*modules)))) == NULL)
 	{
 		msgError("malloc modules fail");
 		exit(0);
 	}
-	if (((*modules)->drivers = malloc(DRIVER_COUNT_MAX * sizeof(*(*modules)->drivers))) == NULL)
+	if (((*modules)->drivers = malloc(MODULE_DRIVER_COUNT_MAX * sizeof(*(*modules)->drivers))) == NULL)
 	{
 		msgError("malloc modules->drivers fail");
 		exit(0);
 	}
-	if (((*modules)->tasks = malloc(TASK_COUNT_MAX * sizeof(*(*modules)->tasks))) == NULL)
+	if (((*modules)->tasks = malloc(MODULE_TASK_COUNT_MAX * sizeof(*(*modules)->tasks))) == NULL)
 	{
 		msgError("malloc modules->tasks fail");
 		exit(0);
 	}
 
-	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
+	for (int i = 0; i < MODULE_DRIVER_COUNT_MAX; i++)
 	{
 		if (((*modules)->drivers[i] = malloc(sizeof(**(*modules)->drivers))) == NULL)
 		{
@@ -49,14 +49,14 @@ void allocate(module_t **modules, char **line, char ***tokens)
 		}
 
 		if (((*modules)->drivers[i]->name =
-				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->drivers[i]->name))) == NULL)
+				 malloc(MODULE_NAME_SIZE_MAX * sizeof(*(*modules)->drivers[i]->name))) == NULL)
 		{
 			msgError("malloc modules->drivers[i]->name fail");
 			exit(0);
 		}
 	}
 
-	for (int i = 0; i < TASK_COUNT_MAX; i++)
+	for (int i = 0; i < MODULE_TASK_COUNT_MAX; i++)
 	{
 		if (((*modules)->tasks[i] = malloc(sizeof(**(*modules)->tasks))) == NULL)
 		{
@@ -65,7 +65,7 @@ void allocate(module_t **modules, char **line, char ***tokens)
 		}
 
 		if (((*modules)->tasks[i]->name =
-				 malloc(NAME_SIZE_MAX * sizeof(*(*modules)->tasks[i]->name))) == NULL)
+				 malloc(MODULE_NAME_SIZE_MAX * sizeof(*(*modules)->tasks[i]->name))) == NULL)
 		{
 			msgError("malloc modules->tasks[i]->name fail");
 			exit(0);
@@ -93,19 +93,19 @@ void allocate(module_t **modules, char **line, char ***tokens)
 			msgError("malloc tokens[] fail");
 			exit(0);
 		}
-	}
+	}*/
 }
 
 void unAllocate(module_t **modules, char **line, char ***tokens)
 {
-	// task and driver modules
-	for (int i = 0; i < DRIVER_COUNT_MAX; i++)
+	/*// task and driver modules
+	for (int i = 0; i < MODULE_DRIVER_COUNT_MAX; i++)
 	{
 		free((*modules)->drivers[i]->name);
 		free((*modules)->drivers[i]);
 	}
 
-	for (int i = 0; i < TASK_COUNT_MAX; i++)
+	for (int i = 0; i < MODULE_TASK_COUNT_MAX; i++)
 	{
 		free((*modules)->tasks[i]->name);
 		free((*modules)->tasks[i]);
@@ -123,5 +123,5 @@ void unAllocate(module_t **modules, char **line, char ***tokens)
 	{
 		free((*tokens)[i]);
 	}
-	free(**tokens);
+	free(**tokens);*/
 }

@@ -24,7 +24,7 @@
 
 void readTag(module_t *modules, char *line, char **tokens)
 {
-	// open source and tmp file
+	/*// open source and tmp file
 	FILE *file_src = fopen(FILE_SOURCE, "r");
 	if (file_src == NULL)
 	{
@@ -144,5 +144,5 @@ void readTag(module_t *modules, char *line, char **tokens)
 	}
 
 	fclose(file_src);
-	fclose(file_tmp);
+	fclose(file_tmp);*/
 }

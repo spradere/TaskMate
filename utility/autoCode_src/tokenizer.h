@@ -21,6 +21,20 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
-int tokenizer(const char *line, char **tokens);
+// size for tokenizer
+#define TOKEN_LINE_SIZE_MAX 256
+#define TOKEN_COUNT_MAX 4
+#define TOKEN_SIZE_MAX 32
+
+typedef struct
+{
+	char line[TOKEN_LINE_SIZE_MAX];
+	char tokens[TOKEN_COUNT_MAX][TOKEN_SIZE_MAX];
+	int token_count;
+
+}tokens_t;
+
+
+void tokenizer(tokens_t *data);
 
 #endif

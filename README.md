@@ -9,7 +9,7 @@
 ### ▶️ Introduction
 
 **TaskMate** is a lightweight, preemptive real-time operating system.
-Designed specifically for **AVR microcontrollers**.
+Designed specifically for **AVR mega microcontrollers**.
 It emphasizes **reliability** and **modularity**.
 Without relying on any external RTOS — everything is built entirely from scratch.
 
@@ -17,7 +17,7 @@ Without relying on any external RTOS — everything is built entirely from scrat
 
 ### ⚙️ Build System
 
-TaskMate uses a custom **POSIX-compatible Makefile** that fully manages dependencies and workflow.
+TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
 - Automatic recompilation based on file changes, including headers.
 - Colorized output for clarity.
@@ -30,7 +30,7 @@ TaskMate uses a custom **POSIX-compatible Makefile** that fully manages dependen
 
 ### ♻️ RTC Real Time Clock
 
-Each task have one 16 bits software timer/counter sycronized with other tasks.
+Each thread have one 16 bits software timer/counter sycronized with other threads.
 
 If not zero, the counter is decremented automatically at 10 ms rate, it can be used for sleep/delay behaviors.
 
@@ -38,10 +38,10 @@ If not zero, the counter is decremented automatically at 10 ms rate, it can be u
 
 ### ✔️ Features
 
-* Hybrid multitasking (cooperative & preemptive)
-* Dynamic driver & task  management
-* Real-time clock (RTC) support
-* Modular drivers and task registration via `*_init.rc` files
+* Hybrid multithreading (cooperative & preemptive).
+* Dynamic driver and thread  management.
+* Real-time clock (RTC) support.
+* Modular drivers and thread registration.
 
 ---
 
@@ -63,14 +63,14 @@ The result is **auto-generated code**, without runtime overhead:
 
 | File | Purpose |
 |------|---------|
-| `sysCore/autoInclude.h` | Centralized module includes |
-| `sysCore/autoAlloc.h`   | Module allocation tables |
-| `sysCore/initSys.c` | Module initialization code |
+| `sysCore/autoInclude.h` | Centralized modules includes |
+| `sysCore/autoAlloc.h`   | Modules allocation tables |
+| `sysCore/initSys.c` | Modules initialization code |
 
 All modules are referenced through the global structure `modules`:
 
 ```c
-modules.tasks[i].name
+modules.threads[i].name
 modules.services[i].priority
 modules.drivers[i].id
 ```
@@ -84,7 +84,7 @@ This approach keeps the flexibility of a dynamic system but ensures that
 
 Coming features:
 - Mutex and semaphore support
-- Inter-task message passing
+- Inter-thread message passing
 - Stack usage monitoring
 - CLI command parser with argument handling
 - Dynamic service discovery from `.rc` files

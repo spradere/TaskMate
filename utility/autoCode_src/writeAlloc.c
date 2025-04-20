@@ -23,7 +23,7 @@
 
 void writeAlloc(module_t *modules)
 {
-	// open include files
+	/*// open include files
 	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
 	if (file_task_alloc == NULL)
 	{
@@ -50,5 +50,5 @@ void writeAlloc(module_t *modules)
 	fprintf(file_driver_alloc, "driver_table_t driver_table[%i];\n", modules->driver_count);
 
 	fclose(file_task_alloc);
-	fclose(file_driver_alloc);
+	fclose(file_driver_alloc);*/
 }
