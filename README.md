@@ -1,50 +1,98 @@
 # TaskMate RTOS
 ## AVR preemptive real time oprating system
 
-> **TaskMate Project Stats (v0.10)**  
->  
-> 85 commit, 58 source files in 6 directories, 3263 lines of code, 2924 bytes in flash. 
+> **TaskMate Project Stats (v0.11)**
+>
+> 99 commits • 56 source files • 7 directories • 3641 lines of code
+> Final binary size: 2776 bytes (Flash)
 
+---
 
 ### ▶️ Introduction
 
-**TaskMate** is a lightweight RTOS for AVR microcontrollers with a focus on reliability, real-time, and modularity.
+**TaskMate** is a lightweight, preemptive real-time operating system.
+Designed specifically for **AVR microcontrollers**.
+It emphasizes **reliability** and **modularity**.
+Without relying on any external RTOS — everything is built entirely from scratch.
 
-No external RTOS used — 100% built from scratch.  
- 
-Each task have it's own stack, used to save and restore context for task switching.
+---
 
+### ⚙️ Build System
 
-### ⚙️ Installation
+TaskMate uses a custom **POSIX-compatible Makefile** that fully manages dependencies and workflow.
 
-Custom POSIX Makefile with auto-deps and all project workflow management.
+- Automatic recompilation based on file changes, including headers.
+- Colorized output for clarity.
+- Separate source and build directories.
+- CLI commands like `make upload`, `make push`, and `make backup`.
 
 * See : [Makefile Features & Usage](doc/Makefile_summary.md)
 
+---
 
 ### ♻️ RTC Real Time Clock
 
-Each task have one 16 bits timer/counter sycronized with other tasks.
+Each task have one 16 bits software timer/counter sycronized with other tasks.
 
-If not zero, the counter is decremented at 10 ms rate.
- 
+If not zero, the counter is decremented automatically at 10 ms rate, it can be used for sleep/delay behaviors.
+---
 
 ### ✔️ Features
 
 * Hybrid multitasking (cooperative & preemptive)
 * Dynamic driver & task  management
 * Real-time clock (RTC) support
-* Serial command-line interface (CLI)
- 
-  
+* Modular drivers and task registration via `*_init.rc` files
+
+---
+
 ### ⤴️ Layers
- 
+
 ![System Layer Diagram](doc/TaskMate_layers_v2.png)
 
+---
+
+### 📦 Modular Design & autoCode
+
+Starting with version 0.10, TaskMate uses a **modular design model**:
+
+- Drivers, system services, and user tasks are placed in dedicated directories.
+- Each module provides a `*_init.rc` file describing its initialization parameters.
+- These files are parsed before **compile time** by a custom tool : `autoCode`.
+
+The result is **auto-generated code**, without runtime overhead:
+
+| File | Purpose |
+|------|---------|
+| `autoInclude.h` | Centralized module includes |
+| `autoAlloc.h`   | Module allocation tables |
+| `sysCore/initSys.c` | Module initialization code |
+
+All modules are referenced through the global structure `modules`:
+
+```c
+modules.tasks[i].name
+modules.services[i].priority
+modules.drivers[i].id
+```
+
+This approach keeps the flexibility of a dynamic system but ensures that
+ **everything is resolved at compile time**, minimizing Flash and RAM usage.
+
+---
 
 ### ➡️ Project progress ...
 
+Coming features:
+- Mutex and semaphore support
+- Inter-task message passing
+- Stack usage monitoring
+- CLI command parser with argument handling
+- Dynamic service discovery from `.rc` files
+
 * See : [Road map](doc/check_list.md)
+
+---
 
 ### ️⚠ ️License
 
@@ -53,7 +101,7 @@ This software is distributed under the **TaskMate License v1.0**.
 * Free for **non-commercial use** under conditions described in the `LICENSE` file.
 * Commercial use requires a **separate paid license**.
 
-To inquire about commercial licensing, please open an issue in this repository:  
+To inquire about commercial licensing, please open an issue in this repository:
 [Open Licensing Issue](https://codeberg.org/Doul09/TaskMate/issues)
 
 By using this software, you agree to the terms of the TaskMate License v1.0.
