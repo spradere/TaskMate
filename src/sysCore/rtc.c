@@ -29,9 +29,9 @@ ISR(TIMER3_COMPA_vect)
 	// RTC decrement
 	for (uint8_t i = 0; i < THREAD_COUNT; i++)
 	{
-		if (modules.threads[i].thread_counter > 0)
+		if (modules.threads[i].time_counter > 0)
 		{
-			modules.threads[i].thread_counter--;
+			modules.threads[i].time_counter--;
 		}
 	}
 }

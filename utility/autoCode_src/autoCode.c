@@ -36,13 +36,8 @@
  */
 
 #include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/allocate.h"
 #include "utility/autoCode_src/tokenizer.h"
-#include "utility/autoCode_src/listToTable.h"
-#include "utility/autoCode_src/printTable.h"
-#include "utility/autoCode_src/writeInclude.h"
-#include "utility/autoCode_src/writeAlloc.h"
-#include "utility/autoCode_src/readTag.h"
+
 
 int main(void)
 {
@@ -50,23 +45,21 @@ int main(void)
 	module_t modules;
 
 	// new tokenizer test
-	tokens_t data;
+	tokenizer_t data;
 
-	strcpy(data.line, "hello why ?");
+	strcpy(data.line, "    hello why ?");
 	tokenizer(&data);
 
-	for(int i=0; i<data.token_count; i++)
+	for(int i=0; i<data.tokens_count; i++)
 	{
 		printf("[autocode.c] token[%i] = <%s>\n",i,data.tokens[i]);
 	}
 
 
-	//allocate(&modules, &line, &tokens);
-
-	// read list file and store data in table
+	// read init.rc file and store data in modules
 	//listToTable(modules, line, tokens);
 
-	// print tables
+	// print found modules
 	//printTable(modules);
 
 	// write autoInclude.h files
@@ -77,9 +70,6 @@ int main(void)
 
 	// read tag to generate code in initSys.c
 	//readTag(modules, line, tokens);
-
-	// free malloc
-	//unAllocate(&modules, &line, &tokens);
 
 	return 0;
 }
