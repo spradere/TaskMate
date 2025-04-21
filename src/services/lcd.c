@@ -38,7 +38,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("Thread ...");
+	lcdWriteString("Thread again");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.

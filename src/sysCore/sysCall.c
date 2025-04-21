@@ -25,15 +25,15 @@
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
 
-uint8_t sysCallGetTaskID(void) { return (modules.threads[modules.thread_current].thread_id); }
+uint8_t sysCallGetThreadID(void) { return (modules.threads[modules.thread_current].id); }
 
-void sysCallSetTaskRTC(uint16_t count)
+void sysCallSetThreadTC(uint16_t count)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].thread_counter = count; }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].time_counter = count; }
 	return;
 }
 
-uint16_t sysCallGetTaskRTC(void)
+uint16_t sysCallGetThreadTC(void)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].thread_counter); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].time_counter); }
 }

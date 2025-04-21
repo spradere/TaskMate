@@ -24,20 +24,21 @@
  */
 
 
-// task table
+// thread table
 #define THREAD_STACK_SIZE 256 /**< Thread stack size*/
 
-// task table
+// thread table
 typedef struct
 {
-	uint8_t thread_id; /**< Thread identifier */
-	uint8_t *thread_name; /**< Thread name */
+	uint8_t id; /**< Thread identifier */
+	uint8_t *name; /**< Thread name */
+	uint8_t run_level;
 
 	void (*setStatus)(uint8_t); /**< Thread function for setting up status */
 	uint8_t (*getStatus)(void); /**< Thread function for getting up status */
 	void (*main)(void); /**< Thread main function for first start and resart */
 
-	volatile uint16_t thread_counter; /**< Task's Real Time Counter */
+	volatile uint16_t time_counter; /**< Thread's Real Time Counter */
 
 	uint8_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
 	uint8_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
@@ -52,8 +53,9 @@ typedef struct
 // driver table
 typedef struct
 {
-	uint8_t driver_id; /**< Driver indentifier */
-	uint8_t *driver_name; /**< Driver name */
+	uint8_t id; /**< Driver indentifier */
+	uint8_t *name; /**< Driver name */
+	uint8_t run_level;
 
 	void (*setStatus)(uint8_t); /**< Driver function for setting up status */
 	uint8_t (*getStatus)(void); /**< Driver function for getting up status */

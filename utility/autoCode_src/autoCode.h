@@ -56,16 +56,14 @@ typedef struct
 
 } module_item_t;
 
-
-
 typedef struct
 {
 	module_item_t services[MODULE_SERVICE_COUNT_MAX];
 	int services_count;
 	module_item_t tasks[MODULE_TASK_COUNT_MAX];
-	int task_count;
+	int tasks_count;
 	module_item_t drivers[MODULE_DRIVER_COUNT_MAX];
-	int driver_count;
+	int drivers_count;
 
 } module_t;
 

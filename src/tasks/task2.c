@@ -16,8 +16,8 @@ void task2(void)
 	while (1)
 	{
 		PORTA ^= (1 << PA1);
-		sysCallSetTaskRTC(50);
-		while (sysCallGetTaskRTC() > 0);
+		sysCallSetThreadTC(50);
+		while (sysCallGetThreadTC() > 0);
 	}
 
 	return;

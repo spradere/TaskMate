@@ -36,8 +36,8 @@ void scli(void)
 	while (1)
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo
-		sysCallSetTaskRTC(100);
-		while (sysCallGetTaskRTC() > 0);
+		sysCallSetThreadTC(100);
+		while (sysCallGetThreadTC() > 0);
 	}
 
 	return;

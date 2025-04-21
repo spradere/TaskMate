@@ -30,7 +30,7 @@
  * @param none, calling task is deternined by sysCall, not the task itself.
  * @return task ID
  */
-uint8_t sysCallGetTaskID(void);
+uint8_t sysCallGetThreadID(void);
 
 /** @defgroup RTC Real Time Clock
  *
@@ -45,7 +45,7 @@ uint8_t sysCallGetTaskID(void);
  * @param RTC counter value.
  * @return nothing.
  */
-void sysCallSetTaskRTC(uint16_t);
+void sysCallSetThreadTC(uint16_t);
 
 /**
  * @brief get RTC sys call
@@ -54,6 +54,6 @@ void sysCallSetTaskRTC(uint16_t);
  * @return RTC counter load value.
  */
 
-uint16_t sysCallGetTaskRTC(void);
+uint16_t sysCallGetThreadTC(void);
 /** @} */
 #endif
