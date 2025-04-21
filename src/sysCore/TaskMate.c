@@ -16,7 +16,7 @@
  * @brief Implements TaskMate preemptive scheduler & RTC.
  *
  * This file contains :
- * - system, drivers and task initialisation
+ * - system, drivers and thread initialisation
  *
  * @todo Atomic for SP read/write, sequence for startup.
  * Now or later you will have to write a very light wight libc,
@@ -29,7 +29,7 @@
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/initSys.h"
-#include "sysCore/status_bits.h"
+#include "sysCore/modules_items.h"
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
 
@@ -50,21 +50,21 @@ int main(void)
 	for (i = 0; i < DRIVER_COUNT; i++)
 	{
 		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0)
-		{
+		{}
 			(*modules.drivers[i].init)();
-		}
+
 	}
 
 	// start driver if flag on
 		for (i = 0; i < DRIVER_COUNT; i++)
 	{
 		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0)
-		{
+		{}
 			(*modules.drivers[i].start)();
-		}
+
 	}
 
-	// jump to current task for first call and start system by enabling INT
+	// jump to current thread for first call and start system by enabling INT
 	modules.thread_current = 0;
 	SP = (uint16_t)modules.threads[modules.thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "sei \n\t"
@@ -78,7 +78,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// enable global INT to catch RTC INT without delay
 	sei();
 
-	// Save current task context
+	// Save current thread context
 	asm volatile(PUSH_ALL_REGS);
 	modules.threads[modules.thread_current].stack_pointer = (uint8_t *)SP;
 
@@ -100,7 +100,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 		alive_cnt = 0;
 	}
 
-	// Restore next task context
+	// Restore next thread context
 	SP = (uint16_t)modules.threads[modules.thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "reti \n\t");
 }

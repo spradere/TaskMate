@@ -1,7 +1,7 @@
 #ifndef AUTOALLOC_H
 #define AOTOALLOC_H
 
-#include "sysCore/module_items.h"
+#include "sysCore/modules_items.h"
 
 #define THREAD_COUNT 4
 #define DRIVER_COUNT 4

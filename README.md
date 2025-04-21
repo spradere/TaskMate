@@ -30,7 +30,7 @@ TaskMate uses a custom **Makefile** that fully manages dependencies and workflow
 
 ### ♻️ RTC Real Time Clock
 
-Each thread have one 16 bits software timer/counter sycronized with other threads.
+Each thread have one 16 bits software time counter sycronized with other threads.
 
 If not zero, the counter is decremented automatically at 10 ms rate, it can be used for sleep/delay behaviors.
 

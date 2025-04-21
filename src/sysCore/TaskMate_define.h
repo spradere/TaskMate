@@ -104,12 +104,4 @@
 
 #define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
-// run levels
-#define RUN_NONE 0 /**< no start, could be started later via sCLI */
-#define RUN_CORE 1 /**< start minimal critical system compoments, */
-#define RUN_DRIVER 2 /**< start harware drivers*/
-#define RUN_SERVICE 3 /**< start system servives*/
-#define RUN_USER 4 /**< start user tasks*/
-
-
 #endif

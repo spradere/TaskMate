@@ -113,6 +113,10 @@ upload:all
 	@printf "\n\033[1;33mUpload binary to AVR flash\033[0m\n\n"
 	# ELF to hex format
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
+	# RAM usage
+	@printf "\nStatic RAM usage : "
+	avr-size -B ${HEX}
+	@printf "\n"
 	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload

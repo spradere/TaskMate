@@ -35,9 +35,8 @@ void setCriticalError(errorCode_t err)
 		case ERR_FATAL_STACK_OVERFLOW:
 		case ERR_FATAL_MEMORY_CORRUPTION:
 		case ERR_FATAL_HW_FAILURE:
-			printf("[FATAL ERROR] System killing task...\n");
-			// Kill current task (replace with your OS's task termination function)
-			taskKillCurrent();
+			printf("[FATAL ERROR] System killing thread ...\n");
+			threadKillCurrent();
 			break;
 		default:
 			break;

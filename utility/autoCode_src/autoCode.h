@@ -35,17 +35,15 @@
 #define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
 #define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
 
-// size for module table
-#define MODULE_TASK_COUNT_MAX 128
-#define MODULE_SERVICE_COUNT_MAX 128
-#define MODULE_DRIVER_COUNT_MAX 256
-#define MODULE_NAME_SIZE_MAX 32
-
 // message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
 #define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
 
-// structs for task/driver table
+// modules
+#define MODULE_TASK_COUNT_MAX 128
+#define MODULE_SERVICE_COUNT_MAX 128
+#define MODULE_DRIVER_COUNT_MAX 256
+#define MODULE_NAME_SIZE_MAX 32
 
 typedef unsigned char module_status_t;
 
