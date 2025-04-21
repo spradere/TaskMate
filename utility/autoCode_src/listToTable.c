@@ -21,11 +21,11 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/listToTable.h"
 #include "utility/autoCode_src/tokenizer.h"
-#include "utility/autoCode_src/listCmd.h"
-// get TaskMate flag bits
-#include "src/sysCore/status_bits.h"
+#include "utility/autoCode_src/cmdDispatch.h"
 
-#define THREAD_TYPE_MASK ((1 << THREAD_TYPE_USER) | (1 << THREAD_TYPE_SYSTEM))
+
+
+
 
 void listToTable(module_t *modules, char *line, char **tokens)
 {

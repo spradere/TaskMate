@@ -47,14 +47,13 @@ int main(void)
 	// new tokenizer test
 	tokenizer_t data;
 
-	strcpy(data.line, "    hello why ?");
+	strcpy(data.line, "    hello   why ?");
 	tokenizer(&data);
 
 	for(int i=0; i<data.tokens_count; i++)
 	{
 		printf("[autocode.c] token[%i] = <%s>\n",i,data.tokens[i]);
 	}
-
 
 	// read init.rc file and store data in modules
 	//listToTable(modules, line, tokens);

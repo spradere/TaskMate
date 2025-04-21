@@ -12,8 +12,8 @@
  */
 
 /**
- * @file listCmd.h
- * @brief list command parser header
+ * @file cmdDispatch.h
+ * @brief command dispatch header
  *
  * @todo nothing
  */
@@ -30,8 +30,8 @@ typedef struct
 
 } cmd_t;
 
-int cmdTaskDispatch(const char *cmd, module_status_t *status);
-int cmdDriverDispatch(const char *cmd, module_status_t *status);
+int cmdDispatch(const char *cmd, module_status_t *status);
+
 
 #endif
 
