@@ -25,15 +25,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+// get TaskMate run levels
+#include "src/sysCore/modules_define.h"
+
 // files name
-#define FILE_TASK_LIST "utility/tasks_list"
-#define FILE_DRIVER_LIST "utility/drivers_list"
-#define FILE_SOURCE "src/sysCore/initSys.c"
+#define FILE_TASK_INITRC "src/tasks/tasks_init.rc"
+#define FILE_DRIVER_INITRC "src/drivers/drivers_init.rc"
+#define FILE_SERVICE_INITRC "src/services/services_init.rc"
+
+
+#define FILE_INITSYS "src/sysCore/initSys.c"
 #define FILE_TEMP "src/sysCore/initSys.tmp.c"
-#define FILE_TASK_INCLUDE "src/sysCore/autoIncludeTasks.h"
-#define FILE_DRIVER_INCLUDE "src/sysCore/autoIncludeDrivers.h"
-#define FILE_TASK_ALLOC "src/sysCore/autoAllocTasks.h"
-#define FILE_DRIVER_ALLOC "src/sysCore/autoAllocDrivers.h"
+
+#define FILE_AUTOINCLUDE "src/sysCore/autoIncludeTasks.h"
+#define FILE_AUTOALLOC "src/sysCore/autoAllocTasks.h"
 
 // message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)

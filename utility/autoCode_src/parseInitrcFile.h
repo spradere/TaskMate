@@ -12,8 +12,8 @@
  */
 
 /**
- * @file listToTable.h
- * @brief read list header
+ * @file parseinitrcFile.h
+ * @brief read init.rc file header
  *
  * @todo nothing
  */
@@ -21,6 +21,13 @@
 #ifndef LISTTOTABLE_H
 #define LISTTOTABLE_H
 
-void listToTable(module_t *module, char *line, char **tokens);
+typedef enum
+{
+	MODULE_TYPE_DRIVER,
+	MODULE_TYPE_SERVICE,
+	MODULE_TYPE_TASK
+} modules_type_t;
+
+void parseInitrcFile(module_t *modules, char *file_name, modules_type_t type);
 
 #endif

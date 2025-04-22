@@ -1,0 +1,8 @@
+# drivers init.rc
+# default run level RUN_DRIVER
+
+timer1 -RUN_CORE
+timer3 -RUN_CORE
+
+i2c
+usart -RUN_CORE
