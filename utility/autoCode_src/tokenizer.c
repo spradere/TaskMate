@@ -27,16 +27,14 @@ void tokenizer(tokenizer_t *data)
 	int index_token = 0;
 	int tokens_count;
 
-	data->tokens_count = 0;
+	data->count = 0;
 
-	printf("[tokenizer.c] line = <%s>\n",data->line);
+	//printf("[tokenizer.c] start with line <%s>\n",data->line);
 
 	// reset all tokens
 	for (tokens_count = 0; tokens_count < TOKEN_COUNT_MAX; tokens_count++)
 	{
 		data->tokens[tokens_count][0] = 0;
-		printf("[tokenizer.c] token[%i] = <%s>\n",tokens_count,data->tokens[tokens_count]);
-
 	}
 
 	// read line, extract arguments
@@ -62,12 +60,13 @@ void tokenizer(tokenizer_t *data)
 		}
 
 		data->tokens[tokens_count][index_token] = 0;
+
 		if (data->tokens[tokens_count][0] != 0)
 		{
 			tokens_count++;
 		}
 	}
 
-	data->tokens_count = tokens_count;
+	data->count = tokens_count;
 	return;
 }

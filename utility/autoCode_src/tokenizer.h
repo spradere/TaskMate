@@ -30,7 +30,7 @@ typedef struct
 {
 	char line[TOKEN_LINE_SIZE_MAX];
 	char tokens[TOKEN_COUNT_MAX][TOKEN_SIZE_MAX];
-	int tokens_count;
+	int count;
 
 }tokenizer_t;
 

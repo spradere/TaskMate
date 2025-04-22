@@ -37,6 +37,7 @@
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode_src/parseInitrcFile.h"
 
 
 int main(void)
@@ -45,18 +46,22 @@ int main(void)
 	module_t modules;
 
 	// new tokenizer test
-	tokenizer_t data;
+	tokenizer_t tok;
 
-	strcpy(data.line, "    hello   why ?");
-	tokenizer(&data);
+	strcpy(tok.line, "    test hello   why ?");
+	tokenizer(&tok);
 
-	for(int i=0; i<data.tokens_count; i++)
+	for(int i=0; i<tok.count; i++)
 	{
-		printf("[autocode.c] token[%i] = <%s>\n",i,data.tokens[i]);
+		printf("[autocode.c] token[%i] = <%s>\n",i,tok.tokens[i]);
 	}
 
-	// read init.rc file and store data in modules
-	//listToTable(modules, line, tokens);
+	// read init.rc file and store data in modules[]
+	parseInitrcFile(&modules, FILE_DRIVER_INITRC, MODULE_TYPE_DRIVER);
+	parseInitrcFile(&modules, FILE_SERVICE_INITRC, MODULE_TYPE_SERVICE);
+	parseInitrcFile(&modules, FILE_TASK_INITRC, MODULE_TYPE_TASK);
+
+
 
 	// print found modules
 	//printTable(modules);
