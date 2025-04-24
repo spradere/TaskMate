@@ -33,7 +33,6 @@
 #define FILE_DRIVER_INITRC "src/drivers/drivers_init.rc"
 #define FILE_SERVICE_INITRC "src/services/services_init.rc"
 
-
 #define FILE_INITSYS "src/sysCore/initSys.c"
 #define FILE_TEMP "src/sysCore/initSys.tmp.c"
 

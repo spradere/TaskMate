@@ -23,22 +23,31 @@
 
 void printTable(module_t *modules)
 {
-	/*int i;
+	int i;
 
-	msgInfo("found task :");
+	msgInfo("found drivers :");
 
-	for (i = 0; i < modules->task_count; i++)
+	for (i = 0; i < modules->drivers_count; i++)
 	{
-		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->tasks[i]->name,
-			   modules->tasks[i]->status);
+		printf("\tdriver[%i] \"%s\" status=%i\n", i, modules->drivers[i].name,
+			   modules->drivers[i].status);
+	}
+	printf("\n");
+
+	msgInfo("found services :");
+
+	for (i = 0; i < modules->services_count; i++)
+	{
+		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->services[i].name,
+			   modules->services[i].status);
 	}
 
-	msgInfo("found driver :");
+	msgInfo("found tasks :");
 
-	for (i = 0; i < modules->driver_count; i++)
+	for (i = 0; i < modules->tasks_count; i++)
 	{
-		printf("\tdriver[%i] \"%s\" status=%i\n", i, modules->drivers[i]->name,
-			   modules->drivers[i]->status);
+		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->tasks[i].name,
+			   modules->tasks[i].status);
 	}
-	printf("\n");*/
+
 }

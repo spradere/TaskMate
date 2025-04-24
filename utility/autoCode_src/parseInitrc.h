@@ -12,22 +12,19 @@
  */
 
 /**
- * @file parseinitrcFile.h
+ * @file parseInitrc.h
  * @brief read init.rc file header
  *
  * @todo nothing
  */
 
-#ifndef LISTTOTABLE_H
-#define LISTTOTABLE_H
+#ifndef PARSEINITRC_H
+#define PARSEINITRC_H
 
-typedef enum
-{
-	MODULE_TYPE_DRIVER,
-	MODULE_TYPE_SERVICE,
-	MODULE_TYPE_TASK
-} modules_type_t;
 
-void parseInitrcFile(module_t *modules, char *file_name, modules_type_t type);
+void parseDriversInitrc(module_t *modules, char *file_name);
+void parseServicesInitrc(module_t *modules, char *file_name);
+void parseTasksInitrc(module_t *modules, char *file_name);
+
 
 #endif

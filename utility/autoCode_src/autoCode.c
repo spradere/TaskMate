@@ -37,8 +37,8 @@
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
-#include "utility/autoCode_src/parseInitrcFile.h"
-
+#include "utility/autoCode_src/parseInitrc.h"
+#include "utility/autoCode_src/printTable.h"
 
 int main(void)
 {
@@ -57,14 +57,12 @@ int main(void)
 	}
 
 	// read init.rc file and store data in modules[]
-	parseInitrcFile(&modules, FILE_DRIVER_INITRC, MODULE_TYPE_DRIVER);
-	parseInitrcFile(&modules, FILE_SERVICE_INITRC, MODULE_TYPE_SERVICE);
-	parseInitrcFile(&modules, FILE_TASK_INITRC, MODULE_TYPE_TASK);
-
-
+	parseDriversInitrc(&modules, FILE_DRIVER_INITRC);
+	parseServicesInitrc(&modules, FILE_SERVICE_INITRC);
+	parseTasksInitrc(&modules, FILE_TASK_INITRC);
 
 	// print found modules
-	//printTable(modules);
+	printTable(&modules);
 
 	// write autoInclude.h files
 	//writeInclude(modules);
