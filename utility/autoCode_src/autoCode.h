@@ -29,14 +29,10 @@
 #include "src/sysCore/modules_define.h"
 
 // files name
-#define FILE_TASK_INITRC "src/tasks/tasks_init.rc"
-#define FILE_DRIVER_INITRC "src/drivers/drivers_init.rc"
-#define FILE_SERVICE_INITRC "src/services/services_init.rc"
-
 #define FILE_INITSYS "src/sysCore/initSys.c"
 #define FILE_TEMP "src/sysCore/initSys.tmp.c"
 
-#define FILE_AUTOINCLUDE "src/sysCore/autoIncludeTasks.h"
+
 #define FILE_AUTOALLOC "src/sysCore/autoAllocTasks.h"
 
 // message macro

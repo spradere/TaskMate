@@ -21,34 +21,28 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeAlloc(module_t *modules)
+void writeAlloc(module_t *modules, char *file_name)
 {
-	/*// open include files
-	FILE *file_task_alloc = fopen(FILE_TASK_ALLOC, "w");
-	if (file_task_alloc == NULL)
+	FILE *file_alloc = fopen(file_name, "w");
+	if (file_alloc == NULL)
 	{
 		msgError("creating file");
-		printf("\t <%s>\n", FILE_TASK_ALLOC);
+		printf("\t <%s>\n", file_name);
 		exit(1);
 	}
+	fprintf(file_alloc,"#include \"sysCore/modules_items.h\"\n");
+	fprintf(file_alloc,"\n");
 
-	FILE *file_driver_alloc = fopen(FILE_DRIVER_ALLOC, "w");
-	if (file_driver_alloc == NULL)
-	{
-		msgError("creating file");
-		printf("\t  <%s>\n", FILE_DRIVER_ALLOC);
-		exit(1);
-	}
+	fprintf(file_alloc, "#define DRIVERS_COUNT %i\n", modules->drivers_count);
+	fprintf(file_alloc, "#define THREADS_COUNT %i\n", (modules->services_count + modules->tasks_count) );
+	fprintf(file_alloc,"\n");
 
-	// write task static alloc
-	fprintf(file_task_alloc, "const uint8_t TASK_COUNT = %i;\n", modules->task_count);
-	fprintf(file_task_alloc, "task_table_t task_table[%i];\n", modules->task_count);
-	fprintf(file_task_alloc, "uint8_t task_current = 0;\n");
+	fprintf(file_alloc,"typedef struct\n");
+	fprintf(file_alloc,"{\n");
+	fprintf(file_alloc,"\tdriver_item_t drivers[DRIVERS_COUNT];\n");
+	fprintf(file_alloc,"\tthread_item_t threads[THREADS_COUNT];\n");
+	fprintf(file_alloc,"\tuint8_t thread_current;\n");
+	fprintf(file_alloc,"}modules_t;\n");
 
-	// write driver static alloc
-	fprintf(file_driver_alloc, "const uint8_t DRIVER_COUNT = %i;\n", modules->driver_count);
-	fprintf(file_driver_alloc, "driver_table_t driver_table[%i];\n", modules->driver_count);
-
-	fclose(file_task_alloc);
-	fclose(file_driver_alloc);*/
+	fclose(file_alloc);
 }

@@ -17,10 +17,10 @@
  *
  * @todo nothing
  */
- 
+
  #ifndef WRITEALLOC_H
  #define WRITEALLOC_H
- 
- void writeAlloc(module_t *modules);
- 
+
+ void writeAlloc(module_t *modules, char *file_name);
+
  #endif

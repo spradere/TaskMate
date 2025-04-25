@@ -12,16 +12,16 @@
  */
 
 /**
- * @file printTable.c
+ * @file printModules.c
  * @brief print modules content implemetation
  *
  * @todo nothing
  */
 
 #include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/printTable.h"
+#include "utility/autoCode_src/printModules.h"
 
-void printTable(module_t *modules)
+void printModules(module_t *modules)
 {
 	int i;
 
@@ -41,6 +41,7 @@ void printTable(module_t *modules)
 		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->services[i].name,
 			   modules->services[i].status);
 	}
+	printf("\n");
 
 	msgInfo("found tasks :");
 
@@ -49,5 +50,5 @@ void printTable(module_t *modules)
 		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->tasks[i].name,
 			   modules->tasks[i].status);
 	}
-
+	printf("\n");
 }

@@ -38,37 +38,28 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/parseInitrc.h"
-#include "utility/autoCode_src/printTable.h"
+#include "utility/autoCode_src/printModules.h"
+#include "utility/autoCode_src/writeInclude.h"
+#include "utility/autoCode_src/writeAlloc.h"
 
 int main(void)
 {
 	// allocation
 	module_t modules;
 
-	// new tokenizer test
-	tokenizer_t tok;
-
-	strcpy(tok.line, "    test hello   why ?");
-	tokenizer(&tok);
-
-	for(int i=0; i<tok.count; i++)
-	{
-		printf("[autocode.c] token[%i] = <%s>\n",i,tok.tokens[i]);
-	}
-
 	// read init.rc file and store data in modules[]
-	parseDriversInitrc(&modules, FILE_DRIVER_INITRC);
-	parseServicesInitrc(&modules, FILE_SERVICE_INITRC);
-	parseTasksInitrc(&modules, FILE_TASK_INITRC);
+	parseDriversInitrc(&modules, "src/drivers/drivers_init.rc");
+	parseServicesInitrc(&modules, "src/services/services_init.rc");
+	parseTasksInitrc(&modules, "src/tasks/tasks_init.rc");
 
 	// print found modules
-	printTable(&modules);
+	printModules(&modules);
 
 	// write autoInclude.h files
-	//writeInclude(modules);
+	writeInclude(&modules, "src/sysCore/autoInclude.h");
 
 	// write autoAlloc.h files
-	//writeAlloc(modules);
+	writeAlloc(&modules, "src/sysCore/autoAlloc.h" );
 
 	// read tag to generate code in initSys.c
 	//readTag(modules, line, tokens);

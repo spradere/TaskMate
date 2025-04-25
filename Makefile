@@ -95,7 +95,7 @@ header_check:
 
 .autoCode_stamp: ${AUTOCODE_TARGET} ${FILE_INIT_RC}
 	@printf "\n\033[1;33mList have changed or autoCode.c -> run autoCode\033[0m\n\n"
-	# ./${AUTOCODE_TARGET}
+	./${AUTOCODE_TARGET}
 	touch .autoCode_stamp
 
 # Special rule for autoCode with clang, not avr-gcc
@@ -145,7 +145,7 @@ doc:
 
 # Count lines of code
 cloc:
-	@cloc * --exclude-dir=html --exclude-lang=D
+	@cloc * --exclude-dir=html --exclude-lang=D --exclude-ext=rc
 .PHONY: cloc
 
 # clang-tidy
