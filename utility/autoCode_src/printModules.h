@@ -12,15 +12,15 @@
  */
 
 /**
- * @file printTable.h
+ * @file printModules.h
  * @brief print table header
  *
  * @todo nothing
  */
- 
- #ifndef PRINTTABLE_H
- #define PRINTTABLE_H
- 
- void printTable(module_t *modules);
- 
+
+ #ifndef PRINTMODULES_H
+ #define PRINTMODULES_H
+
+ void printModules(module_t *modules);
+
  #endif

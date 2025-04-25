@@ -5,4 +5,4 @@ timer1 -RUN_CORE
 timer3 -RUN_CORE
 
 i2c
-usart -RUN_CORE
+usart1 -RUN_CORE

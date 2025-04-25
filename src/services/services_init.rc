@@ -1,5 +1,5 @@
 # services init.rc
 # default run level RUN_SERVICE
 
-i2c
+lcd
 scli -RUN_CORE

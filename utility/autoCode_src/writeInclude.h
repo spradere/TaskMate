@@ -17,10 +17,10 @@
  *
  * @todo nothing
  */
- 
+
  #ifndef WRITEINCLUDE_H
  #define WRITEINCLUDE_H
- 
- void writeInclude(module_t *modules);
- 
+
+ void writeInclude(module_t *modules, char *file_name);
+
  #endif

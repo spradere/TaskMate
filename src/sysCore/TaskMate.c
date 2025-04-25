@@ -47,7 +47,7 @@ int main(void)
 	uint8_t i;
 
 	// init driver if flag on
-	for (i = 0; i < DRIVER_COUNT; i++)
+	for (i = 0; i < DRIVERS_COUNT; i++)
 	{
 		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0)
 		{}
@@ -56,7 +56,7 @@ int main(void)
 	}
 
 	// start driver if flag on
-		for (i = 0; i < DRIVER_COUNT; i++)
+		for (i = 0; i < DRIVERS_COUNT; i++)
 	{
 		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0)
 		{}
@@ -87,7 +87,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// todo -> add system wide error handler
 
 	// switch context
-	if (++modules.thread_current == THREAD_COUNT)
+	if (++modules.thread_current == THREADS_COUNT)
 	{
 		modules.thread_current = 0;
 	}

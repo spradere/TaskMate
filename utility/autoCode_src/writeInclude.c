@@ -21,39 +21,32 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(module_t *modules)
+void writeInclude(module_t *modules, char *file_name)
 {
-	/*// open include files
-	FILE *file_task_include = fopen(FILE_TASK_INCLUDE, "w");
-	if (file_task_include == NULL)
+	FILE *file_include = fopen(file_name, "w");
+	if (file_include == NULL)
 	{
 		msgError("creating file");
-		printf("\t <%s>\n", FILE_TASK_INCLUDE);
+		printf("\t <%s>\n", file_name);
 		exit(1);
 	}
 
-	FILE *file_driver_include = fopen(FILE_DRIVER_INCLUDE, "w");
-	if (file_driver_include == NULL)
+	for (int i = 0; i < modules->drivers_count; i++)
 	{
-		msgError("creating file");
-		printf("\t <%s>\n", FILE_DRIVER_INCLUDE);
-		exit(1);
+		fprintf(file_include, "#include \"drivers/%s.h\"\n", modules->drivers[i].name);
+	}
+	fprintf(file_include, "\n");
+
+	for (int i = 0; i < modules->services_count; i++)
+	{
+		fprintf(file_include, "#include \"services/%s.h\"\n", modules->services[i].name);
+	}
+	fprintf(file_include, "\n");
+
+	for (int i = 0; i < modules->tasks_count; i++)
+	{
+		fprintf(file_include, "#include \"tasks/%s.h\"\n", modules->tasks[i].name);
 	}
 
-	int i;
-	// write task include
-
-	for (i = 0; i < modules->task_count; i++)
-	{
-		fprintf(file_task_include, "#include \"tasks/%s.h\"\n", modules->tasks[i]->name);
-	}
-
-	// write driver include
-	for (i = 0; i < modules->driver_count; i++)
-	{
-		fprintf(file_driver_include, "#include \"drivers/%s.h\"\n", modules->drivers[i]->name);
-	}
-
-	fclose(file_task_include);
-	fclose(file_driver_include);*/
+	fclose(file_include);
 }

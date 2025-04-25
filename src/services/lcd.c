@@ -38,7 +38,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("modules*.h");
+	lcdWriteString("auto*.h");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.
