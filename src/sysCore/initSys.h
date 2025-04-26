@@ -23,8 +23,7 @@
 
 void threadCreate(void (*)(void), uint8_t);
 
-void initServices(void);
-void initTasks(void);
+void initThreads(void);
 void initDrivers(void);
 
 #endif

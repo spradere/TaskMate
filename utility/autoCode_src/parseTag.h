@@ -17,10 +17,14 @@
  *
  * @todo nothing
  */
- 
- #ifndef READTAG_H
- #define READTAG_H
- 
- void readTag(module_t *modules, char *line, char **tokens);
- 
+
+ #ifndef PARSETAG_H
+ #define PARSETAG_H
+
+void parseTag(module_t *modules, char *name_src);
+
+void writeDriversInit(module_t *modules, FILE *file);
+void writeThreadsInit(module_t *modules, FILE *file);
+
+
  #endif

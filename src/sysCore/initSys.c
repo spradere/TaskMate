@@ -28,8 +28,6 @@
 void threadCreate(void (*func)(void), uint8_t id)
 {
 	modules.threads[id].id = id;
-
-	// RTC init
 	modules.threads[id].time_counter = 0;
 
 	// stack init
@@ -50,54 +48,49 @@ void threadCreate(void (*func)(void), uint8_t id)
 	return;
 }
 
-void initServices(void)
+void initThreads(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] service init
+	// [tag] threads init
 	threadCreate(lcd, 0);
 
-	const char* task2_name = "lcd";
-	modules.threads[2].name = (uint8_t *)task2_name;
-	modules.threads[2].setStatus = lcdSetStatus;
-	modules.threads[2].getStatus = lcdGetStatus;
-	(*modules.threads[2].setStatus)(5);
+	const char* thread0_name = "lcd";
+	modules.threads[0].name = (uint8_t *)thread0_name;
+	modules.threads[0].setStatus = lcdSetStatus;
+	modules.threads[0].getStatus = lcdGetStatus;
+	(*modules.threads[0].setStatus)(4);
 
 	threadCreate(scli, 1);
 
-	const char* task3_name = "scli";
-	modules.threads[3].name = (uint8_t *)task3_name;
-	modules.threads[3].setStatus = scliSetStatus;
-	modules.threads[3].getStatus = scliGetStatus;
-	(*modules.threads[3].setStatus)(5);
-	// [/tag]
-}
+	const char* thread1_name = "scli";
+	modules.threads[1].name = (uint8_t *)thread1_name;
+	modules.threads[1].setStatus = scliSetStatus;
+	modules.threads[1].getStatus = scliGetStatus;
+	(*modules.threads[1].setStatus)(1);
 
-void initTasks(void)
-{
-	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] task init
 	threadCreate(task1, 2);
 
-	const char* task0_name = "task1";
-	modules.threads[0].name = (uint8_t *)task0_name;
-	modules.threads[0].setStatus = task1SetStatus;
-	modules.threads[0].getStatus = task1GetStatus;
-	(*modules.threads[0].setStatus)(3);
+	const char* thread2_name = "task1";
+	modules.threads[2].name = (uint8_t *)thread2_name;
+	modules.threads[2].setStatus = task1SetStatus;
+	modules.threads[2].getStatus = task1GetStatus;
+	(*modules.threads[2].setStatus)(4);
 
 	threadCreate(task2, 3);
 
-	const char* task1_name = "task2";
-	modules.threads[1].name = (uint8_t *)task1_name;
-	modules.threads[1].setStatus = task2SetStatus;
-	modules.threads[1].getStatus = task2GetStatus;
-	(*modules.threads[1].setStatus)(3);
+	const char* thread3_name = "task2";
+	modules.threads[3].name = (uint8_t *)thread3_name;
+	modules.threads[3].setStatus = task2SetStatus;
+	modules.threads[3].getStatus = task2GetStatus;
+	(*modules.threads[3].setStatus)(4);
+
 	// [/tag]
 }
 
 void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] driver init
+	// [tag] drivers init
 	const char* driver0_name = "timer1";
 	modules.drivers[0]=(driver_item_t)
 	{
@@ -109,7 +102,7 @@ void initDrivers(void)
 		.start = timer1Start,
 		.stop = timer1Stop
 	};
-	(*modules.drivers[0].setStatus)(3);
+	(*modules.drivers[0].setStatus)(1);
 
 	const char* driver1_name = "timer3";
 	modules.drivers[1]=(driver_item_t)
@@ -122,7 +115,7 @@ void initDrivers(void)
 		.start = timer3Start,
 		.stop = timer3Stop
 	};
-	(*modules.drivers[1].setStatus)(3);
+	(*modules.drivers[1].setStatus)(1);
 
 	const char* driver2_name = "i2c";
 	modules.drivers[2]=(driver_item_t)
@@ -135,7 +128,7 @@ void initDrivers(void)
 		.start = i2cStart,
 		.stop = i2cStop
 	};
-	(*modules.drivers[2].setStatus)(3);
+	(*modules.drivers[2].setStatus)(4);
 
 	const char* driver3_name = "usart1";
 	modules.drivers[3]=(driver_item_t)
@@ -148,7 +141,7 @@ void initDrivers(void)
 		.start = usart1Start,
 		.stop = usart1Stop
 	};
-	(*modules.drivers[3].setStatus)(3);
+	(*modules.drivers[3].setStatus)(1);
 
 	// [/tag]
 }
