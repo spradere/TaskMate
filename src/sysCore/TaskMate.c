@@ -38,8 +38,7 @@ modules_t modules;
 int main(void)
 {
 	initDrivers();
-	initServices();
-	initTasks();
+	initThreads();
 
 	// Set output for in board led 13
 	LED_DDR |= (1 << LED_PIN);

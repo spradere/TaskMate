@@ -28,13 +28,6 @@
 // get TaskMate run levels
 #include "src/sysCore/modules_define.h"
 
-// files name
-#define FILE_INITSYS "src/sysCore/initSys.c"
-#define FILE_TEMP "src/sysCore/initSys.tmp.c"
-
-
-#define FILE_AUTOALLOC "src/sysCore/autoAllocTasks.h"
-
 // message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
 #define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)

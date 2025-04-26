@@ -13,9 +13,9 @@
 
 /**
  * @file autoCode.c
- * @brief helper to generate code for task and drivers handle in initSys.c
+ * @brief helper to generate code for threads and drivers handle in initSys.c
  *
- * - Simple and reliable, read plain text file <tasks_list> and <drivers_list>
+ * - Simple and reliable, read plain text init.rc file for drivers, system services and user tasks
  * - Write code for #include / static allocation / initialisation in initSys.c
  *
  * @note
@@ -32,7 +32,7 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo refactoring
+ * @todo refactoring, again ...
  */
 
 #include "utility/autoCode_src/autoCode.h"
@@ -41,6 +41,7 @@
 #include "utility/autoCode_src/printModules.h"
 #include "utility/autoCode_src/writeInclude.h"
 #include "utility/autoCode_src/writeAlloc.h"
+#include "utility/autoCode_src/parseTag.h"
 
 int main(void)
 {
@@ -55,14 +56,15 @@ int main(void)
 	// print found modules
 	printModules(&modules);
 
-	// write autoInclude.h files
+	// write autoInclude.h file
 	writeInclude(&modules, "src/sysCore/autoInclude.h");
 
-	// write autoAlloc.h files
+	// write autoAlloc.h file
 	writeAlloc(&modules, "src/sysCore/autoAlloc.h" );
 
 	// read tag to generate code in initSys.c
-	//readTag(modules, line, tokens);
+	parseTag(&modules, "src/sysCore/initSys.c");
+
 
 	return 0;
 }

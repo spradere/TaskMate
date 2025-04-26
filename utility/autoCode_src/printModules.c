@@ -29,7 +29,7 @@ void printModules(module_t *modules)
 
 	for (i = 0; i < modules->drivers_count; i++)
 	{
-		printf("\tdriver[%i] \"%s\" status=%i\n", i, modules->drivers[i].name,
+		printf("\tdrivers[%i] \"%s\" status=%i\n", i, modules->drivers[i].name,
 			   modules->drivers[i].status);
 	}
 	printf("\n");
@@ -38,7 +38,7 @@ void printModules(module_t *modules)
 
 	for (i = 0; i < modules->services_count; i++)
 	{
-		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->services[i].name,
+		printf("\tservices[%i] \"%s\" status=%i\n", i, modules->services[i].name,
 			   modules->services[i].status);
 	}
 	printf("\n");
@@ -47,7 +47,7 @@ void printModules(module_t *modules)
 
 	for (i = 0; i < modules->tasks_count; i++)
 	{
-		printf("\ttask[%i] \"%s\" status=%i\n", i, modules->tasks[i].name,
+		printf("\ttasks[%i] \"%s\" status=%i\n", i, modules->tasks[i].name,
 			   modules->tasks[i].status);
 	}
 	printf("\n");
