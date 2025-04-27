@@ -20,8 +20,11 @@
  */
 
 #include <avr/io.h>
+#include <util/atomic.h>
 #include "sysCore/TaskMate_public.h"
 #include "drivers/timer1.h"
+
+const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
 // status
 uint8_t timer1_status = 0;
@@ -33,7 +36,7 @@ void timer1Init(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TCCR1B |= (1 << WGM12) | (1 << CS11); // CTC mode, prescaler 8
-	OCR1A = 1999; // Interrupt every 1ms
+	OCR1A = TIMER1_OVERFLOW_COUNT;
 }
 
 void timer1Start(void)
@@ -45,4 +48,11 @@ void timer1Start(void)
 void timer1Stop(void)
 {
 	// nothing to do, will stop all system.
+}
+
+void timer1LoadOverflow(void)
+{
+	// used for cooperative yield hand to scheduler
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1=TIMER1_OVERFLOW_COUNT; }
+	while(1); // wait AVR ISR, normally just few cpu clock cycles
 }

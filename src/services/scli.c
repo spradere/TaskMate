@@ -22,6 +22,7 @@
 #include <avr/io.h>
 
 #include "sysCore/TaskMate_public.h"
+#include "sysCore/sysCall.h"
 #include "drivers/usart1.h"
 #include "services/scli.h"
 #include "services/lcd.h"
@@ -37,8 +38,9 @@ void scli(void)
 	while( 1 )
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo
+
 		sysCallSetThreadTC(100);
-		while( sysCallGetThreadTC() > 0 );
+		while( sysCallGetThreadTC() > 0 ){/*yieldHand();*/};
 	}
 }
 

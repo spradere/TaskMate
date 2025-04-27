@@ -58,4 +58,18 @@ void sysCallSetThreadTC(uint16_t count);
 
 uint16_t sysCallGetThreadTC(void);
 /** @} */
+
+
+/**
+ * @brief yield hand to scheduler
+ *
+ * Used for cooperative mode, yield hand to scheduler by overflowing timer couter,
+ * so the next thread will have a full time slice without adding more code.
+ *
+ * @param none.
+ * @return nothing.
+ */
+void yieldHand(void);
+
+
 #endif

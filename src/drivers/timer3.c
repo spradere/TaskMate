@@ -23,6 +23,8 @@
 #include "sysCore/TaskMate_public.h"
 #include "drivers/timer3.h"
 
+const int TIMER3_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
+
 // status
 uint8_t timer3_status = 0;
 
@@ -34,7 +36,7 @@ void timer3Init(void)
 
 	// Set up timer3 interrupt for RTC
 	TCCR3B |= (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
-	OCR3A = 624; // Interrupt every 10ms
+	OCR3A = TIMER3_OVERFLOW_COUNT;
 }
 
 void timer3Start(void)

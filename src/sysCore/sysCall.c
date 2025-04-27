@@ -26,6 +26,7 @@
 #include <util/atomic.h>
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
+#include "drivers/timer1.h"
 
 uint8_t sysCallGetThreadID(void) { return (modules.threads[modules.thread_current].id); }
 
@@ -37,4 +38,9 @@ void sysCallSetThreadTC(uint16_t count)
 uint16_t sysCallGetThreadTC(void)
 {
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].time_counter); }
+}
+
+void yieldHand(void)
+{
+	timer1LoadOverflow();
 }
