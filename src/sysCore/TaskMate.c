@@ -20,7 +20,7 @@
  * - system, drivers and thread initialisation
  *
  * @todo Atomic for SP read/write, sequence for startup.
- * Now or later you will have to write a very light wight libc,
+ * Now or later you will have to write a very light weight libc,
  * designed for embedded system with MCU. Not POSIX compliant.
  *
  */
@@ -46,17 +46,10 @@ int main(void)
 
 	uint8_t i;
 
-	// init driver if flag on
+	// init driver
 	for( i = 0; i < DRIVERS_COUNT; i++ )
 	{
-		if( ((*modules.drivers[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0 ) {}
 		(*modules.drivers[i].init)();
-	}
-
-	// start driver if flag on
-	for( i = 0; i < DRIVERS_COUNT; i++ )
-	{
-		if( ((*modules.drivers[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0 ) {}
 		(*modules.drivers[i].start)();
 	}
 

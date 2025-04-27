@@ -25,7 +25,7 @@
 #include "sysCore/initSys.h"
 #include "sysCore/autoInclude.h"
 
-#define AVR_REGISTER_COUNT 32
+#define AVR_REGISTER_COUNT 32 // from R0 to R31
 
 // initailize thread memory
 void threadCreate(void (*func)(void), uint8_t id)

@@ -39,11 +39,10 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("format + tidy");
+	lcdWriteString("yieldHand()");
 
-	// must use sysCallYield(), but not implemented !
-	// do nothing there.
-	while( 1 );
+	// do nothing after
+	while( 1 ){ yieldHand();}
 }
 
 void lcdSendCommand(uint8_t command)

@@ -31,4 +31,6 @@ void timer1Init(void);
 void timer1Start(void);
 void timer1Stop(void);
 
+void timer1LoadOverflow(void);
+
 #endif

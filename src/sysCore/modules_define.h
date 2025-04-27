@@ -37,15 +37,12 @@
 
 // thread status bits
 // bit [2 1 0 ] is run level
-#define THREAD_START_AT_BOOT 3 /**< Automatic thread start at boot time */
 #define THREAD_TYPE_USER 4 /**< user task*/
 #define THREAD_TYPE_SYSTEM 5 /**< system service */
 #define THREAD_DEAD 6 /**< Task can't be started */
 
 // driver status bits
 // bit [2 1 0 ] is run level
-#define DRIVER_INIT_AT_BOOT 3 /**< Automatic driver initialization at boot time */
-#define DRIVER_START_AT_BOOT 4 /**< Automatic driver start at boot time */
 #define DRIVER_LOCK 5 /**< Driver locked for mutex purpose*/
 #define DRIVER_DEAD 6 /**< Driver can't be started */
 #define DRIVER_INIT 7 /**< Driver have been initialized */
