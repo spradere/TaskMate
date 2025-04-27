@@ -9,15 +9,27 @@ UseTab: Always
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
-InsertBraces: true
-
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
 
 # Formatting preferences
-ColumnLimit: 100
+ColumnLimit: 110
 PointerAlignment: Right
 SpaceAfterCStyleCast: false
 
-# Optional alignments (disable or tweak later if unwanted)
+# space management
+SpaceBeforeParens: Custom
+SpaceBeforeParensOptions:
+    AfterControlStatements: false
+    AfterFunctionDefinitionName: false
+
+SpacesInParens: Custom
+SpacesInParensOptions:
+   ExceptDoubleParentheses: true
+   InConditionalStatements: true
+   Other: false
+
+# Optional alignments 
 AlignConsecutiveDeclarations: false
 AlignConsecutiveAssignments: false
 AlignTrailingComments: false

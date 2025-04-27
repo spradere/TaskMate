@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -46,21 +47,17 @@ int main(void)
 	uint8_t i;
 
 	// init driver if flag on
-	for (i = 0; i < DRIVERS_COUNT; i++)
+	for( i = 0; i < DRIVERS_COUNT; i++ )
 	{
-		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0)
-		{}
-			(*modules.drivers[i].init)();
-
+		if( ((*modules.drivers[i].getStatus)() & (1 << DRIVER_INIT_AT_BOOT)) != 0 ) {}
+		(*modules.drivers[i].init)();
 	}
 
 	// start driver if flag on
-		for (i = 0; i < DRIVERS_COUNT; i++)
+	for( i = 0; i < DRIVERS_COUNT; i++ )
 	{
-		if (((*modules.drivers[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0)
-		{}
-			(*modules.drivers[i].start)();
-
+		if( ((*modules.drivers[i].getStatus)() & (1 << DRIVER_START_AT_BOOT)) != 0 ) {}
+		(*modules.drivers[i].start)();
 	}
 
 	// jump to current thread for first call and start system by enabling INT
@@ -86,14 +83,11 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// todo -> add system wide error handler
 
 	// switch context
-	if (++modules.thread_current == THREADS_COUNT)
-	{
-		modules.thread_current = 0;
-	}
+	if( ++modules.thread_current == THREADS_COUNT ) { modules.thread_current = 0; }
 
 	// I'm alive blink in board led 13
 	static uint8_t alive_cnt = 0;
-	if (++alive_cnt > 250)
+	if( ++alive_cnt > 250 )
 	{
 		LED_PORT ^= (1 << LED_PIN);
 		alive_cnt = 0;

@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -38,13 +39,11 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("refactoring end ?");
+	lcdWriteString("format + tidy");
 
 	// must use sysCallYield(), but not implemented !
 	// do nothing there.
-	while (1);
-
-	return;
+	while( 1 );
 }
 
 void lcdSendCommand(uint8_t command)
@@ -94,9 +93,6 @@ void lcdWriteString(const char *str)
 	i2cCommStart(LCD_I2C_ADDR);
 	i2cWrite(LCD_DATA);
 
-	while (*str)
-	{
-		i2cWrite(*str++);
-	}
+	while( *str ) { i2cWrite(*str++); }
 	i2cCommStop();
 }

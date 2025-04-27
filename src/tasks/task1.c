@@ -13,12 +13,10 @@ void task1(void)
 	// Set PA0 as an output
 	DDRA |= (1 << PA0);
 
-	while (1)
+	while( 1 )
 	{
 		PORTA ^= (1 << PA0);
 		sysCallSetThreadTC(50);
-		while (sysCallGetThreadTC() > 0);
+		while( sysCallGetThreadTC() > 0 );
 	}
-
-	return;
 }

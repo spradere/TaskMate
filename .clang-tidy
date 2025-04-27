@@ -4,9 +4,11 @@ Checks: >
   -clang-analyzer-security.*,
   bugprone-*,
   readability-*,
+  -readability-braces-around-statements,
   performance-*,
   -modernize-*,
   -cppcoreguidelines-*
+
 
 HeaderFilterRegex: ^src/
 WarningsAsErrors: false

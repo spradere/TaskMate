@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -50,18 +51,18 @@ void i2cStop(void)
 uint8_t i2cCommStart(uint8_t address)
 {
 	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT); // | (1 << TWEA);
-	while (!(TWCR & (1 << TWINT)));
+	while( !(TWCR & (1 << TWINT)) );
 
-	if ((TWSR & 0xF8) != TW_START)
+	if( (TWSR & 0xF8) != TW_START )
 	{
 		return 1; // Error
 	}
 
 	TWDR = (address);
 	TWCR = (1 << TWEN) | (1 << TWINT);
-	while (!(TWCR & (1 << TWINT)));
+	while( !(TWCR & (1 << TWINT)) );
 
-	if ((TWSR & 0xF8) != TW_MT_SLA_ACK)
+	if( (TWSR & 0xF8) != TW_MT_SLA_ACK )
 	{
 		return 2; // Error
 	}
@@ -74,9 +75,9 @@ uint8_t i2cWrite(uint8_t data)
 {
 	TWDR = data;
 	TWCR = (1 << TWEN) | (1 << TWINT);
-	while (!(TWCR & (1 << TWINT)));
+	while( !(TWCR & (1 << TWINT)) );
 
-	if ((TWSR & 0xF8) != TW_MT_DATA_ACK)
+	if( (TWSR & 0xF8) != TW_MT_DATA_ACK )
 	{
 		return 1; // Error
 	}
