@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -69,7 +70,7 @@ ISR(USART1_RX_vect)
 	uint8_t next_head = (buffer_rx_head + 1) % BUFFER_TX_SIZE_SIZE;
 	uint8_t data = UDR1; // Read the received byte
 
-	if (next_head != buffer_rx_tail) // Check for buffer overflow
+	if( next_head != buffer_rx_tail ) // Check for buffer overflow
 	{
 		buffer_rx[buffer_rx_head] = data;
 		buffer_rx_head = next_head; // Move head pointer forward
@@ -79,10 +80,7 @@ ISR(USART1_RX_vect)
 // Read a character from Rx buffer (non-blocking)
 errorCode_t usart1Read(uint8_t *data)
 {
-	if (buffer_rx_tail == buffer_rx_head)
-	{
-		return ERR_USART_RX_BUFFER_EMPTY;
-	}
+	if( buffer_rx_tail == buffer_rx_head ) { return ERR_USART_RX_BUFFER_EMPTY; }
 
 	*data = buffer_rx[buffer_rx_tail]; // Read from buffer
 	buffer_rx_tail = (buffer_rx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
@@ -93,10 +91,7 @@ errorCode_t usart1Read(uint8_t *data)
 errorCode_t usart1Write(uint8_t data)
 {
 	uint8_t next_head = (buffer_tx_head + 1) % BUFFER_TX_SIZE;
-	if (next_head == buffer_tx_tail)
-	{
-		return ERR_USART_TX_BUFFER_FULL;
-	}
+	if( next_head == buffer_tx_tail ) { return ERR_USART_TX_BUFFER_FULL; }
 
 	buffer_tx[buffer_tx_head] = data;
 	buffer_tx_head = next_head;
@@ -106,9 +101,9 @@ errorCode_t usart1Write(uint8_t data)
 // send Tx buffer to usart
 void usart1Flush(void)
 {
-	while (buffer_tx_tail != buffer_tx_head) // test if tx buffer empty
+	while( buffer_tx_tail != buffer_tx_head ) // test if tx buffer empty
 	{
-		while (!(UCSR1A & (1 << UDRE1))); // Wait for empty transmit buffer
+		while( !(UCSR1A & (1 << UDRE1)) ); // Wait for empty transmit buffer
 		UDR1 = buffer_tx[buffer_tx_tail]; // Put data into buffer, sends the data
 
 		buffer_tx_tail = (buffer_tx_tail + 1) % BUFFER_TX_SIZE_SIZE; // Move tail forward
@@ -118,25 +113,16 @@ void usart1Flush(void)
 // test if Rx buffer is empty
 errorCode_t usart1TestBufferRx(void)
 {
-	if (buffer_rx_tail == buffer_rx_head)
-	{
-		return ERR_USART_RX_BUFFER_EMPTY;
-	}
-	else
-	{
-		return ERR_SUCCESS;
-	}
+	if( buffer_rx_tail == buffer_rx_head ) { return ERR_USART_RX_BUFFER_EMPTY; }
+	return ERR_SUCCESS;
 }
 
 // write string to Tx buffer
 errorCode_t usart1WriteString(const char *str)
 {
-	while (*str)
+	while( *str )
 	{
-		if (usart1Write(*str++) == ERR_USART_TX_BUFFER_FULL)
-		{
-			break;
-		};
+		if( usart1Write(*str++) == ERR_USART_TX_BUFFER_FULL ) { break; };
 	}
 	return ERR_SUCCESS;
 }

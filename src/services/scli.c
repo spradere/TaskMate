@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -33,33 +34,28 @@ uint8_t scliGetStatus(void) { return scli_status; }
 
 void scli(void)
 {
-	while (1)
+	while( 1 )
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo
 		sysCallSetThreadTC(100);
-		while (sysCallGetThreadTC() > 0);
+		while( sysCallGetThreadTC() > 0 );
 	}
-
-	return;
 }
 
 void scliEcho(void)
 {
 	uint8_t data;
 
-	if (usart1TestBufferRx() != ERR_USART_RX_BUFFER_EMPTY)
+	if( usart1TestBufferRx() != ERR_USART_RX_BUFFER_EMPTY )
 	{
 		lcdSetCursor(1, 0);
 		lcdWriteString("USART data in  ");
 
 		usart1WriteString("scli.c : ");
 
-		while (usart1Read(&data) != ERR_USART_RX_BUFFER_EMPTY)
+		while( usart1Read(&data) != ERR_USART_RX_BUFFER_EMPTY )
 		{
-			if (usart1Write(data) == ERR_USART_TX_BUFFER_FULL)
-			{
-				break;
-			}
+			if( usart1Write(data) == ERR_USART_TX_BUFFER_FULL ) { break; }
 		}
 		usart1Flush(); // write all Tx buffer to usart
 	}

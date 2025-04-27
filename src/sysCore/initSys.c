@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -24,6 +25,8 @@
 #include "sysCore/initSys.h"
 #include "sysCore/autoInclude.h"
 
+#define AVR_REGISTER_COUNT 32
+
 // initailize thread memory
 void threadCreate(void (*func)(void), uint8_t id)
 {
@@ -31,21 +34,15 @@ void threadCreate(void (*func)(void), uint8_t id)
 	modules.threads[id].time_counter = 0;
 
 	// stack init
-	modules.threads[id].stack_pointer =
-		&modules.threads[id].stack[THREAD_STACK_SIZE - 1]; // get top of stack
+	modules.threads[id].stack_pointer = &modules.threads[id].stack[THREAD_STACK_SIZE - 1]; // get top of stack
 	*(modules.threads[id].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
-	*(modules.threads[id].stack_pointer--) = ((uint16_t)func>> 8) & 0xFF; // PCH
+	*(modules.threads[id].stack_pointer--) = ((uint16_t)func >> 8) & 0xFF; // PCH
 	*(modules.threads[id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
 	*(modules.threads[id].stack_pointer--) = 0x00; // R0
 	*(modules.threads[id].stack_pointer--) = SREG;
 
 	// Registers R1-R31
-	for (int i = 1; i < 32; i++)
-	{
-		*(modules.threads[id].stack_pointer--) = 0x00;
-	}
-
-	return;
+	for( int i = 1; i < AVR_REGISTER_COUNT; i++ ) { *(modules.threads[id].stack_pointer--) = 0x00; }
 }
 
 void initThreads(void)
@@ -55,14 +52,16 @@ void initThreads(void)
 	threadCreate(lcd, 0);
 
 	const char* thread0_name = "lcd";
+	modules.threads[0].id = 0;
 	modules.threads[0].name = (uint8_t *)thread0_name;
 	modules.threads[0].setStatus = lcdSetStatus;
 	modules.threads[0].getStatus = lcdGetStatus;
-	(*modules.threads[0].setStatus)(4);
+	(*modules.threads[0].setStatus)(3);
 
 	threadCreate(scli, 1);
 
 	const char* thread1_name = "scli";
+	modules.threads[1].id = 1;
 	modules.threads[1].name = (uint8_t *)thread1_name;
 	modules.threads[1].setStatus = scliSetStatus;
 	modules.threads[1].getStatus = scliGetStatus;
@@ -71,6 +70,7 @@ void initThreads(void)
 	threadCreate(task1, 2);
 
 	const char* thread2_name = "task1";
+	modules.threads[2].id = 2;
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].setStatus = task1SetStatus;
 	modules.threads[2].getStatus = task1GetStatus;
@@ -79,6 +79,7 @@ void initThreads(void)
 	threadCreate(task2, 3);
 
 	const char* thread3_name = "task2";
+	modules.threads[3].id = 3;
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].setStatus = task2SetStatus;
 	modules.threads[3].getStatus = task2GetStatus;
@@ -128,7 +129,7 @@ void initDrivers(void)
 		.start = i2cStart,
 		.stop = i2cStop
 	};
-	(*modules.drivers[2].setStatus)(4);
+	(*modules.drivers[2].setStatus)(2);
 
 	const char* driver3_name = "usart1";
 	modules.drivers[3]=(driver_item_t)

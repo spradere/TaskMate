@@ -12,7 +12,7 @@
  */
 
 /**
- * @file readTag.h
+ * @file parseTag.h
  * @brief read tag header
  *
  * @todo nothing

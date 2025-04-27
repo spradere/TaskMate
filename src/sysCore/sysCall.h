@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -27,7 +28,8 @@
 /**
  * @brief Get thread ID
  *
- * @param none, calling thread is deternined by sysCall, not by the thread itself.
+ * @param none, calling thread is deternined by sysCall, not by the thread
+ * itself.
  * @return thread ID
  */
 uint8_t sysCallGetThreadID(void);
@@ -45,7 +47,7 @@ uint8_t sysCallGetThreadID(void);
  * @param RTC counter value.
  * @return nothing.
  */
-void sysCallSetThreadTC(uint16_t);
+void sysCallSetThreadTC(uint16_t count);
 
 /**
  * @brief get RTC sys call

@@ -155,8 +155,8 @@ TIDY_SRC += ${SRCS}
 tidy:
 	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
 	clang-tidy $(TIDY_SRC) -- \
-		-Isrc I/root/code/TaskMate/TaskMate_current/src \
-		-Isrc I/root/code/TaskMate/TaskMate_current \
+		-I/root/code/TaskMate/TaskMate_current/src \
+		-I/root/code/TaskMate/TaskMate_current/ \
 		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
 		-D__AVR__=6 -D__AVR_ATmega2560__=1
 .PHONY: tidy

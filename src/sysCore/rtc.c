@@ -2,11 +2,12 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
- * See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
@@ -27,11 +28,8 @@
 ISR(TIMER3_COMPA_vect)
 {
 	// RTC decrement
-	for (uint8_t i = 0; i < THREADS_COUNT; i++)
+	for( uint8_t i = 0; i < THREADS_COUNT; i++ )
 	{
-		if (modules.threads[i].time_counter > 0)
-		{
-			modules.threads[i].time_counter--;
-		}
+		if( modules.threads[i].time_counter > 0 ) { modules.threads[i].time_counter--; }
 	}
 }
