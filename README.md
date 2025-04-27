@@ -3,8 +3,8 @@
 
 > **TaskMate Project Stats (v0.11)**
 >
-> 107 commits • 56 source files • 3694 lines of code
-> Binary size: 2788 bytes (Flash)
+> 107 commits • 56 source files • 3650 lines of code •
+> binary size: 2804 bytes (Flash)
 
 ### ▶️ Introduction
 
@@ -71,12 +71,32 @@ All modules are referenced through the global structure `modules`:
 
 ```c
 modules.threads[i].name
-modules.services[i].priority
 modules.drivers[i].id
 ```
 
 This approach keeps the flexibility of a dynamic system but ensures that
  **everything is resolved at compile time**, minimizing Flash and RAM usage.
+
+---
+
+### ⎇ Run Levels
+
+The system implements run levels to control and sequence the initialization
+of modules during system startup. Each module is assigned a run level according to its role:
+
+- **RUN_NONE**: Not started automatically; can be manually launched later via the system CLI.
+- **RUN_CORE**: Start only the minimal critical components required for the system to function safely.
+- **RUN_DRIVER**: Initialize hardware drivers needed by higher-level services and tasks.
+- **RUN_SERVICE**: Launch system services that depend on drivers but are still internal to the OS.
+- **RUN_USER**: Start user tasks.
+
+To save memory, the run level is stored using only the three least significant bits
+of the module's status byte (RUN_LEVEL_MASK = 0xF8).
+
+This mechanism is crucial for maintaining a deterministic and controlled startup sequence,
+ensuring that dependencies are properly satisfied before launching higher-level components.
+It also allows dynamic system management by enabling selective start/stop operations at runtime,
+enhancing flexibility and robustness, especially for debugging, recovery, and partial system restarts.
 
 ---
 
@@ -87,7 +107,6 @@ Coming features:
 - Inter-thread message passing
 - Stack usage monitoring
 - CLI command parser with argument handling
-- Dynamic service discovery from `.rc` files
 
 * See : [Road map](doc/check_list.md)
 

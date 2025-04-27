@@ -14,7 +14,7 @@
 
 /**
  * @file modules_items.h
- * @brief thread and driver struct and definitions
+ * @brief thread and driver struct
  *
  * @todo Nothing
  */
