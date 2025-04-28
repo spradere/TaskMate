@@ -12,14 +12,14 @@
  */
 
 /**
- * @file cmdDispatch.h
+ * @file initrcCmdDispatch.h
  * @brief command dispatch header
  *
  * @todo nothing
  */
 
-#ifndef LISTCMD_H
-#define LISTCMD_H
+#ifndef INITRC_CMD_DISPATCH_H
+#define INITRC_CMD_DISPATCH_H
 
 #include "utility/autoCode_src/autoCode.h"
 
@@ -28,9 +28,9 @@ typedef struct
 	const char *name;
 	void (*func)(module_status_t *);
 
-} cmd_t;
+} initrc_cmd_t;
 
-int cmdDispatch(const char *cmd, module_status_t *status);
+int initrcCmdDispatch(const char *cmd, module_status_t *status);
 
 
 #endif

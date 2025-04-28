@@ -37,14 +37,14 @@
 
 // thread status bits
 // bit [2 1 0 ] is run level
-#define THREAD_TYPE_USER 4 /**< user task*/
-#define THREAD_TYPE_SYSTEM 5 /**< system service */
-#define THREAD_DEAD 6 /**< Task can't be started */
+#define THREAD_TYPE_USER 3 /**< user task*/
+#define THREAD_TYPE_SYSTEM 4 /**< system service */
+#define THREAD_DEAD 5 /**< Task can't be started */
 
 // driver status bits
 // bit [2 1 0 ] is run level
-#define DRIVER_LOCK 5 /**< Driver locked for mutex purpose*/
-#define DRIVER_DEAD 6 /**< Driver can't be started */
-#define DRIVER_INIT 7 /**< Driver have been initialized */
+#define DRIVER_LOCK 3 /**< Driver locked for mutex purpose*/
+#define DRIVER_DEAD 4 /**< Driver can't be started */
+#define DRIVER_INIT 5 /**< Driver have been initialized */
 
 #endif

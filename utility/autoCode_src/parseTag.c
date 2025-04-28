@@ -115,29 +115,30 @@ void writeThreadsInit(module_t *modules, FILE *file)
 
 	for( int i = 0; i < modules->services_count; i++ )
 	{
-		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, i);
+		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, threads_count);
 
-		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", i, modules->services[i].name);
-		fprintf(file, "\tmodules.threads[%i].id = %i;\n", i, i);
-		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", i, i);
-		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", i, modules->services[i].name);
-		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", i, modules->services[i].name);
-		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i);\n\n", i, modules->services[i].status);
+		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
+		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, threads_count);
+		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count, threads_count);
+		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count, modules->services[i].name);
+		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count, modules->services[i].name);
+		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i); // set run level | thread type\n\n",
+				threads_count, modules->services[i].status | (1 << THREAD_TYPE_SYSTEM));
+		threads_count++;
 	}
 
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
-		int thread_count;
-		thread_count = i + modules->services_count;
+		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->tasks[i].name, threads_count);
 
-		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->tasks[i].name, thread_count);
-
-		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", thread_count, modules->tasks[i].name);
-		fprintf(file, "\tmodules.threads[%i].id = %i;\n", thread_count, thread_count);
-		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", thread_count, thread_count);
-		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", thread_count, modules->tasks[i].name);
-		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", thread_count, modules->tasks[i].name);
-		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i);\n\n", thread_count, modules->tasks[i].status);
+		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
+		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, threads_count);
+		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count, threads_count);
+		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count, modules->tasks[i].name);
+		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count, modules->tasks[i].name);
+		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i); // set run level | thread type\n\n",
+				threads_count, modules->tasks[i].status | (1 << THREAD_TYPE_USER) );
+		threads_count++;
 	}
 }
 

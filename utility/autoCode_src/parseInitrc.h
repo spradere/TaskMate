@@ -22,9 +22,9 @@
 #define PARSEINITRC_H
 
 
-void parseDriversInitrc(module_t *modules, char *file_name);
-void parseServicesInitrc(module_t *modules, char *file_name);
-void parseTasksInitrc(module_t *modules, char *file_name);
+void parseInitrcDrivers(module_t *modules, char *file_name);
+void parseInitrcServices(module_t *modules, char *file_name);
+void parseInitrcTasks(module_t *modules, char *file_name);
 
 
 #endif

@@ -13,7 +13,7 @@
  */
 
 /**
- * @file parseDriversInitrc.c
+ * @file parseInitrcDrivers.c
  * @brief read init.rc file and write data to modules
  *
  * @todo nothing
@@ -22,9 +22,9 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/parseInitrc.h"
 #include "utility/autoCode_src/tokenizer.h"
-#include "utility/autoCode_src/cmdDispatch.h"
+#include "utility/autoCode_src/initrcCmdDispatch.h"
 
-void parseDriversInitrc(module_t *modules, char *file_name)
+void parseInitrcDrivers(module_t *modules, char *file_name)
 {
 	// open list files
 	msgInfo("open init.rc file");
@@ -72,7 +72,7 @@ void parseDriversInitrc(module_t *modules, char *file_name)
 
 			for( int i = 1; i < tok.count; i++ )
 			{
-				err = cmdDispatch(tok.tokens[i], &modules->drivers[drivers_count].status);
+				err = initrcCmdDispatch(tok.tokens[i], &modules->drivers[drivers_count].status);
 				if( err != 0 )
 				{
 					msgError("driver unknown command");

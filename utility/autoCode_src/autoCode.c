@@ -50,9 +50,9 @@ int main(void)
 	module_t modules;
 
 	// read init.rc file and store data in modules
-	parseDriversInitrc(&modules, "src/drivers/drivers_init.rc");
-	parseServicesInitrc(&modules, "src/services/services_init.rc");
-	parseTasksInitrc(&modules, "src/tasks/tasks_init.rc");
+	parseInitrcDrivers(&modules, "src/drivers/drivers_init.rc");
+	parseInitrcServices(&modules, "src/services/services_init.rc");
+	parseInitrcTasks(&modules, "src/tasks/tasks_init.rc");
 
 	// print found modules
 	printModules(&modules);
