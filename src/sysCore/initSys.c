@@ -28,21 +28,21 @@
 #define AVR_REGISTER_COUNT 32 // from R0 to R31
 
 // initailize thread memory
-void threadCreate(void (*func)(void), uint8_t id)
+void threadCreate(void (*func)(void), uint8_t num)
 {
-	modules.threads[id].id = id;
-	modules.threads[id].time_counter = 0;
+	//modules.threads[num].num = num;
+	modules.threads[num].time_counter = 0;
 
 	// stack init
-	modules.threads[id].stack_pointer = &modules.threads[id].stack[THREAD_STACK_SIZE - 1]; // get top of stack
-	*(modules.threads[id].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
-	*(modules.threads[id].stack_pointer--) = ((uint16_t)func >> 8) & 0xFF; // PCH
-	*(modules.threads[id].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
-	*(modules.threads[id].stack_pointer--) = 0x00; // R0
-	*(modules.threads[id].stack_pointer--) = SREG;
+	modules.threads[num].stack_pointer = &modules.threads[num].stack[THREAD_STACK_SIZE - 1]; // get top of stack
+	*(modules.threads[num].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
+	*(modules.threads[num].stack_pointer--) = ((uint16_t)func >> 8) & 0xFF; // PCH
+	*(modules.threads[num].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
+	*(modules.threads[num].stack_pointer--) = 0x00; // R0
+	*(modules.threads[num].stack_pointer--) = SREG;
 
 	// Registers R1-R31
-	for( int i = 1; i < AVR_REGISTER_COUNT; i++ ) { *(modules.threads[id].stack_pointer--) = 0x00; }
+	for( int i = 1; i < AVR_REGISTER_COUNT; i++ ) { *(modules.threads[num].stack_pointer--) = 0x00; }
 }
 
 void initThreads(void)
@@ -56,7 +56,7 @@ void initThreads(void)
 	modules.threads[0].name = (uint8_t *)thread0_name;
 	modules.threads[0].setStatus = lcdSetStatus;
 	modules.threads[0].getStatus = lcdGetStatus;
-	(*modules.threads[0].setStatus)(3);
+	(*modules.threads[0].setStatus)(19); // set run level | thread type
 
 	threadCreate(scli, 1);
 
@@ -65,7 +65,7 @@ void initThreads(void)
 	modules.threads[1].name = (uint8_t *)thread1_name;
 	modules.threads[1].setStatus = scliSetStatus;
 	modules.threads[1].getStatus = scliGetStatus;
-	(*modules.threads[1].setStatus)(1);
+	(*modules.threads[1].setStatus)(17); // set run level | thread type
 
 	threadCreate(task1, 2);
 
@@ -74,7 +74,7 @@ void initThreads(void)
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].setStatus = task1SetStatus;
 	modules.threads[2].getStatus = task1GetStatus;
-	(*modules.threads[2].setStatus)(4);
+	(*modules.threads[2].setStatus)(12); // set run level | thread type
 
 	threadCreate(task2, 3);
 
@@ -83,7 +83,7 @@ void initThreads(void)
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].setStatus = task2SetStatus;
 	modules.threads[3].getStatus = task2GetStatus;
-	(*modules.threads[3].setStatus)(4);
+	(*modules.threads[3].setStatus)(12); // set run level | thread type
 
 	// [/tag]
 }

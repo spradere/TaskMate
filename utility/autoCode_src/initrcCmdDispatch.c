@@ -13,14 +13,14 @@
  */
 
 /**
- * @file cmdDispatch.c
+ * @file initrcCmdDispatch.c
  * @brief command parser for list file options
  *
  * @todo nothing
  */
 
 #include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/cmdDispatch.h"
+#include "utility/autoCode_src/initrcCmdDispatch.h"
 
 void funcRunNone(module_status_t *status)
 {
@@ -48,7 +48,7 @@ void funcRunUser(module_status_t *status)
 	*status |= RUN_USER;
 }
 
-const cmd_t cmd_list[] = {{"-RUN_NONE", funcRunNone},
+const initrc_cmd_t initrc_cmds[] = {{"-RUN_NONE", funcRunNone},
 						  {"-RUN_CORE", funcRunCore},
 						  {"-RUN_DRIVER", funcRunDriver},
 						  {"-RUN_SERVICE", funcRunService},
@@ -57,13 +57,13 @@ const cmd_t cmd_list[] = {{"-RUN_NONE", funcRunNone},
 
 };
 
-int cmdDispatch(const char *cmd, module_status_t *status)
+int initrcCmdDispatch(const char *cmd, module_status_t *status)
 {
-	for( int i = 0; cmd_list[i].name != NULL; i++ )
+	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
 	{
-		if( strcmp(cmd, cmd_list[i].name) == 0 )
+		if( strcmp(cmd, initrc_cmds[i].name) == 0 )
 		{
-			(*cmd_list[i].func)(status);
+			(*initrc_cmds[i].func)(status);
 			return 0;
 		}
 	}

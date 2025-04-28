@@ -39,7 +39,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("yieldHand()");
+	lcdWriteString("file name");
 
 	// do nothing after
 	while( 1 ){ yieldHand();}
