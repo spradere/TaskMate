@@ -15,7 +15,7 @@
  * @file autoCode.h
  * @brief autoCode header definitions
  *
- * @todo nothing
+ * @todo add run level count in module_t -> intrcCmdDispatch
  */
 
 #ifndef AUTOCODE_H
