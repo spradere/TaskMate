@@ -26,11 +26,11 @@
 typedef struct
 {
 	const char *name;
-	void (*func)(module_status_t *);
+	void (*func)(module_status_t *status, run_level_threads_count_t *count);
 
 } initrc_cmd_t;
 
-int initrcCmdDispatch(const char *cmd, module_status_t *status);
+int initrcCmdDispatch(const char *cmd, module_status_t *status, run_level_threads_count_t *level_count);
 
 
 #endif

@@ -49,6 +49,8 @@ int main(void)
 {
 	module_t modules;
 
+	for (int i = 0; i < RUN_LEVEL_COUNT; i++) {modules.run_level_threads_count[i] = 0;}
+
 	// read init.rc file and store data in modules
 	parseInitrcDrivers(&modules, "src/drivers/drivers_init.rc");
 	parseInitrcServices(&modules, "src/services/services_init.rc");

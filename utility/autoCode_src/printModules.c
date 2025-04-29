@@ -45,4 +45,21 @@ void printModules(module_t *modules)
 		printf("\ttasks[%i] \"%s\" status=%i\n", i, modules->tasks[i].name, modules->tasks[i].status);
 	}
 	printf("\n");
+
+	msgInfo("threads by run level :");
+	char name[256];
+	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
+	{
+		switch( i )
+		{
+			case 0 : strcpy( name, "RUN_NONE"); break;
+			case 1 : strcpy( name, "RUN_CORE"); break;
+			case 2 : strcpy( name, "RUN_DRIVER"); break;
+			case 3 : strcpy( name, "RUN_SERVICE"); break;
+			case 4 : strcpy( name, "RUN_USER"); break;
+		}
+
+		printf("\trun_level_threads_count[%s] = %i\n", name, modules->run_level_threads_count[i]);
+	}
+	printf("\n");
 }

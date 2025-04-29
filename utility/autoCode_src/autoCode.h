@@ -39,6 +39,7 @@
 #define MODULE_NAME_SIZE_MAX 32
 
 typedef unsigned char module_status_t;
+typedef int run_level_threads_count_t;
 
 typedef struct
 {
@@ -55,6 +56,7 @@ typedef struct
 	int tasks_count;
 	module_item_t drivers[MODULE_DRIVER_COUNT_MAX];
 	int drivers_count;
+	run_level_threads_count_t run_level_threads_count[RUN_LEVEL_COUNT];
 
 } module_t;
 

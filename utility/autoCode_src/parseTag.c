@@ -84,7 +84,7 @@ void parseTag(module_t *modules, char *name_src)
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
 		{
-			msgInfo("end tag");
+			msgInfo("end tag\n");
 			tag_section = 0;
 		}
 
