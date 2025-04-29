@@ -33,7 +33,9 @@
 #define RUN_DRIVER 2 /**< start harware drivers*/
 #define RUN_SERVICE 3 /**< start system servives*/
 #define RUN_USER 4 /**< start user tasks*/
+
 #define RUN_LEVEL_MASK 0xf8 /**< to save space run level is stored in status byte, the first 3 LSB bits are used*/
+#define RUN_LEVEL_COUNT 5
 
 // thread status bits
 // bit [2 1 0 ] is run level
