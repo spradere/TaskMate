@@ -39,10 +39,10 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("file name");
+	lcdWriteString("ATOMIC Duke");
 
 	// do nothing after
-	while( 1 ){ yieldHand();}
+	while( 1 ){ sysCallyieldHand();}
 }
 
 void lcdSendCommand(uint8_t command)

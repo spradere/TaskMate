@@ -16,7 +16,7 @@
  * @file rtc.c
  * @brief Implements internal/external RTC.
  *
- * @todo Add external clock
+ * @todo Add I2C external clock
  */
 
 #include <avr/io.h>
