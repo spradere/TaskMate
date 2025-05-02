@@ -69,7 +69,7 @@ uint16_t sysCallGetThreadTC(void);
  * @param none.
  * @return nothing.
  */
-void yieldHand(void);
+void sysCallyieldHand(void);
 
 
 #endif
