@@ -19,14 +19,10 @@
  * This file contains :
  * - system, drivers and thread initialisation
  *
- * @todo Atomic for SP read/write
- * finish run level, sequence for startup.
+ * @todo finish run level : add init service for startup
  *
  * Now or later you will have to write a very light weight libc,
  * designed for embedded system with MCU. Not POSIX compliant.
- *
- * stop timer1 while in scheduler.
- * To prevent scheduler eat thread time slice, or preempt scheduler itself -> panic
  *
  * new hardware LCD4x20, RTC
  *

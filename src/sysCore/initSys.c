@@ -52,7 +52,7 @@ void initThreads(void)
 	threadCreate(lcd, 0);
 
 	const char* thread0_name = "lcd";
-	modules.threads[0].id = 0;
+	modules.threads[0].id = 2000;
 	modules.threads[0].name = (uint8_t *)thread0_name;
 	modules.threads[0].setStatus = lcdSetStatus;
 	modules.threads[0].getStatus = lcdGetStatus;
@@ -61,7 +61,7 @@ void initThreads(void)
 	threadCreate(scli, 1);
 
 	const char* thread1_name = "scli";
-	modules.threads[1].id = 1;
+	modules.threads[1].id = 2001;
 	modules.threads[1].name = (uint8_t *)thread1_name;
 	modules.threads[1].setStatus = scliSetStatus;
 	modules.threads[1].getStatus = scliGetStatus;
@@ -70,7 +70,7 @@ void initThreads(void)
 	threadCreate(task1, 2);
 
 	const char* thread2_name = "task1";
-	modules.threads[2].id = 2;
+	modules.threads[2].id = 3000;
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].setStatus = task1SetStatus;
 	modules.threads[2].getStatus = task1GetStatus;
@@ -79,7 +79,7 @@ void initThreads(void)
 	threadCreate(task2, 3);
 
 	const char* thread3_name = "task2";
-	modules.threads[3].id = 3;
+	modules.threads[3].id = 3001;
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].setStatus = task2SetStatus;
 	modules.threads[3].getStatus = task2GetStatus;
@@ -95,7 +95,7 @@ void initDrivers(void)
 	const char* driver0_name = "timer1";
 	modules.drivers[0]=(driver_item_t)
 	{
-		.id = 0,
+		.id = 1000,
 		.name = (uint8_t *)driver0_name,
 		.setStatus = timer1SetStatus,
 		.getStatus = timer1GetStatus,
@@ -108,7 +108,7 @@ void initDrivers(void)
 	const char* driver1_name = "timer3";
 	modules.drivers[1]=(driver_item_t)
 	{
-		.id = 1,
+		.id = 1001,
 		.name = (uint8_t *)driver1_name,
 		.setStatus = timer3SetStatus,
 		.getStatus = timer3GetStatus,
@@ -121,7 +121,7 @@ void initDrivers(void)
 	const char* driver2_name = "i2c";
 	modules.drivers[2]=(driver_item_t)
 	{
-		.id = 2,
+		.id = 1002,
 		.name = (uint8_t *)driver2_name,
 		.setStatus = i2cSetStatus,
 		.getStatus = i2cGetStatus,
@@ -134,7 +134,7 @@ void initDrivers(void)
 	const char* driver3_name = "usart1";
 	modules.drivers[3]=(driver_item_t)
 	{
-		.id = 3,
+		.id = 1003,
 		.name = (uint8_t *)driver3_name,
 		.setStatus = usart1SetStatus,
 		.getStatus = usart1GetStatus,

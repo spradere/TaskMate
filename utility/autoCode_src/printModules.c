@@ -27,22 +27,24 @@ void printModules(module_t *modules)
 	msgInfo("found drivers :");
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" status=%i\n", i, modules->drivers[i].name, modules->drivers[i].status);
+		printf("\tdrivers[%i] \"%s\" id=%i status=%i\n", i, modules->drivers[i].name,
+				modules->drivers[i].id, modules->drivers[i].status);
 	}
 	printf("\n");
 
 	msgInfo("found services :");
 	for( int i = 0; i < modules->services_count; i++ )
 	{
-		printf("\tservices[%i] \"%s\" status=%i\n", i, modules->services[i].name,
-			   modules->services[i].status);
+		printf("\tservices[%i] \"%s\" id=%i status=%i\n", i, modules->services[i].name,
+			   modules->services[i].id,modules->services[i].status);
 	}
 	printf("\n");
 
 	msgInfo("found tasks :");
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
-		printf("\ttasks[%i] \"%s\" status=%i\n", i, modules->tasks[i].name, modules->tasks[i].status);
+		printf("\ttasks[%i] \"%s\" id=%i status=%i\n", i, modules->tasks[i].name,
+				modules->tasks[i].id, modules->tasks[i].status);
 	}
 	printf("\n");
 

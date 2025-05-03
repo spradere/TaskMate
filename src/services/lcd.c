@@ -39,7 +39,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("ATOMIC Duke");
+	lcdWriteString("runlevel ID");
 
 	// do nothing after
 	while( 1 ){ sysCallyieldHand();}

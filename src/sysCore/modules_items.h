@@ -29,7 +29,7 @@
 
 #include "sysCore/modules_define.h"
 
-// thread table
+// thread
 #define THREAD_STACK_SIZE 256 /**< Thread stack size*/
 
 typedef struct
@@ -53,7 +53,7 @@ typedef struct
  * @brief Represents a driver in TaskMate.
  */
 
-// driver table
+// driver
 typedef struct
 {
 	uint8_t id; /**< Driver indentifier */
