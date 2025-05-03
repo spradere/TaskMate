@@ -19,6 +19,9 @@
  * @todo Nothing
  */
 
+#ifndef RUN_LEVEL_ITEMS_H
+#define RUN_LEVEL_ITEMS_H
+
 #include "sysCore/run_level_define.h"
 
 typedef struct
