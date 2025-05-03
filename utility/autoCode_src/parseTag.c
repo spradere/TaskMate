@@ -23,6 +23,8 @@
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
+static int id_counter;
+
 void parseTag(module_t *modules, char *name_src)
 {
 	// open source and tmp file
@@ -112,13 +114,16 @@ void parseTag(module_t *modules, char *name_src)
 void writeThreadsInit(module_t *modules, FILE *file)
 {
 	int threads_count = 0;
+	id_counter = 2000;
 
 	for( int i = 0; i < modules->services_count; i++ )
 	{
+		modules->services[i].id=id_counter++;
+
 		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, threads_count);
 
 		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
-		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, threads_count);
+		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->services[i].id);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count, threads_count);
 		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count, modules->services[i].name);
 		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count, modules->services[i].name);
@@ -127,12 +132,16 @@ void writeThreadsInit(module_t *modules, FILE *file)
 		threads_count++;
 	}
 
+	id_counter = 3000;
+
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
+		modules->tasks[i].id = id_counter++;
+
 		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->tasks[i].name, threads_count);
 
 		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
-		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, threads_count);
+		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->tasks[i].id);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count, threads_count);
 		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count, modules->tasks[i].name);
 		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count, modules->tasks[i].name);
@@ -144,13 +153,17 @@ void writeThreadsInit(module_t *modules, FILE *file)
 
 void writeDriversInit(module_t *modules, FILE *file)
 {
+	id_counter = 1000;
+
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
+		modules->drivers[i].id=id_counter++;
+
 		fprintf(file, "\tconst char* driver%i_name = \"%s\";\n", i, modules->drivers[i].name);
 
 		fprintf(file, "\tmodules.drivers[%i]=(driver_item_t)\n", i);
 		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.id = %i,\n", i);
+		fprintf(file, "\t\t.id = %i,\n", modules->drivers[i].id);
 		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
 		fprintf(file, "\t\t.setStatus = %sSetStatus,\n", modules->drivers[i].name);
 		fprintf(file, "\t\t.getStatus = %sGetStatus,\n", modules->drivers[i].name);

@@ -25,8 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-// get TaskMate run levels
+// get TaskMate define
 #include "src/sysCore/modules_define.h"
+#include "src/sysCore/run_level_define.h"
 
 // message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
@@ -45,6 +46,7 @@ typedef struct
 {
 	char name[MODULE_NAME_SIZE_MAX];
 	module_status_t status;
+	int id;
 
 } module_item_t;
 

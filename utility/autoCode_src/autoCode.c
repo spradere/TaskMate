@@ -51,22 +51,20 @@ int main(void)
 
 	for (int i = 0; i < RUN_LEVEL_COUNT; i++) {modules.run_level_threads_count[i] = 0;}
 
-	// read init.rc file and store data in modules
+	// read init.rc file and store data in modules[]
 	parseInitrcDrivers(&modules, "src/drivers/drivers_init.rc");
 	parseInitrcServices(&modules, "src/services/services_init.rc");
 	parseInitrcTasks(&modules, "src/tasks/tasks_init.rc");
 
-	// print found modules
-	printModules(&modules);
-
-	// write autoInclude.h file
+	// write headers
 	writeInclude(&modules, "src/sysCore/autoInclude.h");
-
-	// write autoAlloc.h file
 	writeAlloc(&modules, "src/sysCore/autoAlloc.h");
 
-	// read tag and generate code in initSys.c
+	// read tag and generate code
 	parseTag(&modules, "src/sysCore/initSys.c");
+
+	// print all info about modules
+	printModules(&modules);
 
 	return 0;
 }

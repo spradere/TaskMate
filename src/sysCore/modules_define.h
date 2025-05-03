@@ -27,16 +27,6 @@
 #ifndef MODULES_DEFINE_H
 #define MODULES_DEFINE_H
 
-// run levels
-#define RUN_NONE 0 /**< no start, could be started later via sCLI */
-#define RUN_CORE 1 /**< start minimal critical system compoments, */
-#define RUN_DRIVER 2 /**< start harware drivers*/
-#define RUN_SERVICE 3 /**< start system servives*/
-#define RUN_USER 4 /**< start user tasks*/
-
-#define RUN_LEVEL_MASK 0xf8 /**< to save space run level is stored in status byte, the first 3 LSB bits are used*/
-#define RUN_LEVEL_COUNT 5
-
 // thread status bits
 // bit [2 1 0 ] is run level
 #define THREAD_TYPE_USER 3 /**< user task*/
