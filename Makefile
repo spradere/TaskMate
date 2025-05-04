@@ -27,7 +27,6 @@ PROGRAMMER = avrispmkII
 PORT = /dev/ttyU0
 
 # Source directory
-BUILD_DIR = build/
 SRC_DIR = src/
 SRC_DIR_LIST = src/drivers/
 SRC_DIR_LIST += src/services/
@@ -38,26 +37,32 @@ SRC_DIR_LIST += src/tasks/
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
 
-# auotoCode
+# autoCode
 AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
-# Files
+# Build files and directory
+BUILD_DIR = build/
 TARGET = TaskMate
-OBJS = ${SRCS:${SRC_DIR}%.c=${BUILD_DIR}%.o}
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
-DEPS = ${OBJS:.o=.d}
-DEPS_FILE = .deps.h
+
+OBJS = ${SRCS:${SRC_DIR}%.c=${BUILD_DIR}%.o}
+OBJS_ONE_DIR = ${OBJS:S/drivers\///:S/services\///:S/sysCore\///:S/tasks\///}
+OBJS_COUNT != seq  ${OBJS_ONE_DIR:[#]}
+
+# Dependency files
+DEPS = ${OBJS_ONE_DIR:.o=.d}
+DEPS_FILE = .deps.d
 
 # Compiler flags
 CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
 
-# Task/Driver list files handling
-FILE_INIT_RC = src/drivers/drivers_init.rc
-FILE_INIT_RC += src/services/services_init.rc
-FILE_INIT_RC += src/tasks/tasks_init.rc
+# Initrc files
+FILES_INIT_RC = src/drivers/drivers_init.rc
+FILES_INIT_RC += src/services/services_init.rc
+FILES_INIT_RC += src/tasks/tasks_init.rc
 
 # Get git tag for USB key directory backup
 USB_DIR = /media/usbkey
@@ -74,26 +79,27 @@ all: .autoCode_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n"
 
 # Link
-${TARGET}: ${OBJS}
+${TARGET}: ${OBJS_ONE_DIR}
 	@printf "\n\033[1;33mLinking\033[0m\n\n"
-	${CC} ${CFLAGS} -o ${ELF} ${OBJS}
+	${CC} ${CFLAGS} -o ${ELF} ${OBJS_ONE_DIR}
 
 # Compile
-${OBJS}: ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c}
+.for index in ${OBJS_COUNT}
+${OBJS_ONE_DIR:[${index}]}: ${SRCS:[${index}]}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
-	@printf "source : <%s> -> <%s>\n" ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} $@
-	${CC} ${CFLAGS} -c ${@:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o $@
+	@printf "source : <%s> -> <%s>\n" ${.ALLSRC:[1]} ${.TARGET}
+	${CC} ${CFLAGS} -c  ${.ALLSRC:[1]} -o ${.TARGET}
+.endfor
 
-# Include dependency files safely, used to compile *.c if related header was edited
+# Include dependency files used to compile *.c if related header was edited
 header_check:
 	@printf "\n\033[1;33mCheck header files\033[0m\n\n"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 -include ${DEPS_FILE}
 
-# Test if autoCode and list files was modified
-
-.autoCode_stamp: ${AUTOCODE_TARGET} ${FILE_INIT_RC}
+# Test if autoCode and initrc files was modified
+.autoCode_stamp: ${AUTOCODE_TARGET} ${FILES_INIT_RC}
 	@printf "\n\033[1;33mList have changed or autoCode.c -> run autoCode\033[0m\n\n"
 	./${AUTOCODE_TARGET}
 	touch .autoCode_stamp
@@ -124,7 +130,7 @@ upload:all
 # Heavy sweep
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
-	rm -f  ${ELF} ${HEX} ${OBJS} *.out
+	rm -f  ${ELF} ${HEX} ${OBJS_ONE_DIR}
 	rm -f ${DEPS}
 	rm -f autoCode_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
