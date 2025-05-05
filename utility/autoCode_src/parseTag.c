@@ -82,6 +82,11 @@ void parseTag(module_t *modules, char *name_src)
 			{
 				writeDriversInit(modules, file_tmp);
 			}
+
+			if( (strcmp(tok.tokens[2], "run") == 0) && (strcmp(tok.tokens[3], "levels") == 0) )
+			{
+				writeRunLevels(modules, file_tmp);
+			}
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
@@ -172,5 +177,30 @@ void writeDriversInit(module_t *modules, FILE *file)
 		fprintf(file, "\t\t.stop = %sStop\n", modules->drivers[i].name);
 		fprintf(file, "\t};\n");
 		fprintf(file, "\t(*modules.drivers[%i].setStatus)(%i);\n\n", i, modules->drivers[i].status);
+	}
+}
+
+void writeRunLevels(module_t *modules, FILE *file)
+{
+	for(int level=0; level<RUN_LEVEL_COUNT; level++)
+	{
+		fprintf(file, "to_run.levels[%i].modules[%i] = {%i", level,
+				modules->run_level_threads_count[level] +1, modules->run_level_threads_count[level]);
+
+		for( int i = 0; i < modules->drivers_count; i++ )
+		{
+			if( (modules->drivers[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->drivers[i].id);}
+		}
+		for( int i = 0; i < modules->services_count; i++ )
+		{
+			if( (modules->services[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->services[i].id);}
+		}
+		for( int i = 0; i < modules->tasks_count; i++ )
+		{
+			if( (modules->tasks[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->tasks[i].id);}
+		}
+
+		fprintf(file, "}\n");
+
 	}
 }

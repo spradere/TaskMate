@@ -24,32 +24,32 @@
 
 void funcRunNone(module_status_t *status, run_level_threads_count_t *count)
 {
-	*status &= RUN_LEVEL_MASK;
+	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_NONE;
 	count[RUN_NONE] = 0;
 }
 void funcRunCore(module_status_t *status, run_level_threads_count_t *count)
 {
-	*status &= RUN_LEVEL_MASK;
+	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_CORE;
 	count[RUN_CORE]++;
 }
 void funcRunDriver(module_status_t *status, run_level_threads_count_t *count)
 {
-	*status &= RUN_LEVEL_MASK;
+	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_DRIVER;
 	count[RUN_DRIVER]++;
 
 }
 void funcRunService(module_status_t *status, run_level_threads_count_t *count)
 {
-	*status &= RUN_LEVEL_MASK;
+	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_SERVICE;
 	count[RUN_SERVICE]++;
 }
 void funcRunUser(module_status_t *status, run_level_threads_count_t *count)
 {
-	*status &= RUN_LEVEL_MASK;
+	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_USER;
 	count[RUN_USER]++;
 }

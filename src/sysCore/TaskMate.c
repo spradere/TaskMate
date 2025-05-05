@@ -38,8 +38,13 @@
 #include "sysCore/modules_items.h"
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
+#include "sysCore/run_level_items.h"
+
 
 modules_t modules;
+run_level_t to_run;
+
+
 
 int main(void)
 {
@@ -49,10 +54,20 @@ int main(void)
 	// Set output for in board led 13
 	LED_DDR |= (1 << LED_PIN);
 
-	uint8_t i;
+	// do not edit code between tag : automatic generated code by autoCode
+	// [tag] run levels
+to_run.levels[0].modules[1] = {0}
+to_run.levels[1].modules[5] = {4,1000,1001,1003,2001}
+to_run.levels[2].modules[2] = {1,1002}
+to_run.levels[3].modules[2] = {1,2000}
+to_run.levels[4].modules[3] = {2,3000,3001}
+	// [/tag]
+
+	to_run.current=RUN_CORE;
+	to_run.next=RUN_CORE;
 
 	// init driver
-	for( i = 0; i < DRIVERS_COUNT; i++ )
+	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
 	{
 		(*modules.drivers[i].init)();
 		(*modules.drivers[i].start)();
