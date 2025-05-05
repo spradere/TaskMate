@@ -60,11 +60,14 @@ int main(void)
 	writeInclude(&modules, "src/sysCore/autoInclude.h");
 	writeAlloc(&modules, "src/sysCore/autoAlloc.h");
 
-	// read tag and generate code
+	// parse tag and generate code for init
 	parseTag(&modules, "src/sysCore/initSys.c");
 
 	// print all info about modules
 	printModules(&modules);
+
+	// parse tag for run_levels
+	parseTag(&modules, "src/sysCore/TaskMate.c");
 
 	return 0;
 }

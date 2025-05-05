@@ -25,6 +25,7 @@ void parseTag(module_t *modules, char *name_src);
 
 void writeDriversInit(module_t *modules, FILE *file);
 void writeThreadsInit(module_t *modules, FILE *file);
+void writeRunLevels(module_t *modules, FILE *file);
 
 
  #endif
