@@ -24,7 +24,7 @@
 
 #include "sysCore/run_level_define.h"
 
-typedef struct
+/*typedef struct
 {
 	uint8_t count;
 	uint16_t modules[RUN_LEVEL_MODULES_COUNT_MAX];
@@ -38,6 +38,6 @@ typedef struct
 	uint8_t current;
 	uint8_t next;
 
-} run_level_t;
+} run_level_t;*/
 
 #endif

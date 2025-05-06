@@ -26,5 +26,6 @@ void threadCreate(void (*func)(void), uint8_t id);
 
 void initThreads(void);
 void initDrivers(void);
+void initRunLevels(void);
 
 #endif

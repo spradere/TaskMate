@@ -34,7 +34,7 @@
 
 typedef struct
 {
-	uint8_t id; /**< Thread identifier */
+	uint16_t id; /**< Thread identifier */
 	uint8_t *name; /**< Thread name */
 	uint8_t run_level; /**< level to start thread */
 
@@ -56,7 +56,7 @@ typedef struct
 // driver
 typedef struct
 {
-	uint8_t id; /**< Driver indentifier */
+	uint16_t id; /**< Driver indentifier */
 	uint8_t *name; /**< Driver name */
 	uint8_t run_level; /**< level to init and start driver */
 

@@ -43,7 +43,7 @@ void printModules(module_t *modules)
 	msgInfo("found tasks :");
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
-		printf("\ttasks[%i] \"%s\" id=%i status=%i", i, modules->tasks[i].name,
+		printf("\ttasks[%i] \"%s\" id=%i status=%i\n", i, modules->tasks[i].name,
 				modules->tasks[i].id, modules->tasks[i].status);
 	}
 	printf("\n");
@@ -61,7 +61,7 @@ void printModules(module_t *modules)
 			case 4 : strcpy( name, "RUN_USER"); break;
 		}
 
-		printf("\trun_level_threads_count[%s] = %i\n", name, modules->run_level_threads_count[i]);
+		printf("\trun_level_modules_count[%s] = %i\n", name, modules->run_level_modules_count[i]);
 	}
 	printf("\n");
 }
