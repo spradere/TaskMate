@@ -59,7 +59,6 @@ void sysCallSetThreadTC(uint16_t count);
 uint16_t sysCallGetThreadTC(void);
 /** @} */
 
-
 /**
  * @brief yield hand to scheduler
  *
@@ -70,6 +69,5 @@ uint16_t sysCallGetThreadTC(void);
  * @return nothing.
  */
 void sysCallyieldHand(void);
-
 
 #endif

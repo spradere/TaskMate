@@ -38,13 +38,10 @@
 #include "sysCore/modules_items.h"
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
-#include "sysCore/run_level_items.h"
-
+#include "sysCore/run_level_define.h"
 
 modules_t modules;
 run_levels_t to_run;
-
-
 
 int main(void)
 {
@@ -83,14 +80,13 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// enable global INT to let run timer3 RTC and usart1 sCLI
 	sei();
 
-
-	// stop timer1 prevent preemption of the schduler itself -> panic
-	// prevent scheduler eat thread time slice
-	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR
+// stop timer1 prevent preemption of the schduler itself -> panic
+// prevent scheduler eat thread time slice
+#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;
-	TCCR1B &= !(TIMER1_CS_MASK); //CS12 CS11 CS10 = 0 0 0 timer stopped
+	TCCR1B &= !(TIMER1_CS_MASK); // CS12 CS11 CS10 = 0 0 0 timer stopped
 
 	// todo -> add stack overflow test
 

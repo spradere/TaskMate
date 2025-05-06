@@ -39,7 +39,6 @@ void funcRunDriver(module_status_t *status, run_level_modules_count_t *count)
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_DRIVER;
 	count[RUN_DRIVER]++;
-
 }
 void funcRunService(module_status_t *status, run_level_modules_count_t *count)
 {
@@ -55,11 +54,11 @@ void funcRunUser(module_status_t *status, run_level_modules_count_t *count)
 }
 
 const initrc_cmd_t initrc_cmds[] = {{"-RUN_NONE", funcRunNone},
-						  {"-RUN_CORE", funcRunCore},
-						  {"-RUN_DRIVER", funcRunDriver},
-						  {"-RUN_SERVICE", funcRunService},
-						  {"-RUN_USER", funcRunUser},
-						  {NULL, NULL}
+									{"-RUN_CORE", funcRunCore},
+									{"-RUN_DRIVER", funcRunDriver},
+									{"-RUN_SERVICE", funcRunService},
+									{"-RUN_USER", funcRunUser},
+									{NULL, NULL}
 
 };
 

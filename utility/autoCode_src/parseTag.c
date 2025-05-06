@@ -24,6 +24,9 @@
 #include "utility/autoCode_src/tokenizer.h"
 
 static int id_counter;
+const int id_driver_start = 1000;
+const int id_service_start = 2000;
+const int id_task_start = 3000;
 
 void parseTag(module_t *modules, char *name_src)
 {
@@ -37,7 +40,7 @@ void parseTag(module_t *modules, char *name_src)
 	}
 
 	char *name_tmp;
-	name_tmp = malloc(strlen(name_src)+strlen(".tmp")+1);
+	name_tmp = malloc(strlen(name_src) + strlen(".tmp") + 1);
 	sprintf(name_tmp, "%s.tmp", name_src);
 
 	FILE *file_tmp = fopen(name_tmp, "w");
@@ -74,13 +77,19 @@ void parseTag(module_t *modules, char *name_src)
 			tag_section = 1;
 
 			if( (strcmp(tok.tokens[2], "threads") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
-				{writeThreadsInit(modules, file_tmp);}
+			{
+				writeThreadsInit(modules, file_tmp);
+			}
 
 			if( (strcmp(tok.tokens[2], "drivers") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
-				{writeDriversInit(modules, file_tmp);}
+			{
+				writeDriversInit(modules, file_tmp);
+			}
 
 			if( (strcmp(tok.tokens[2], "run") == 0) && (strcmp(tok.tokens[3], "levels") == 0) )
-				{writeRunLevelsInit(modules, file_tmp);}
+			{
+				writeRunLevelsInit(modules, file_tmp);
+			}
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
@@ -113,25 +122,28 @@ void parseTag(module_t *modules, char *name_src)
 void writeThreadsInit(module_t *modules, FILE *file)
 {
 	int threads_count = 0;
-	id_counter = 2000;
+	id_counter = id_service_start;
 
 	for( int i = 0; i < modules->services_count; i++ )
 	{
-		modules->services[i].id=id_counter++;
+		modules->services[i].id = id_counter++;
 
 		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, threads_count);
 
 		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
 		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->services[i].id);
-		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count, threads_count);
-		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count, modules->services[i].name);
-		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count, modules->services[i].name);
+		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
+				threads_count);
+		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count,
+				modules->services[i].name);
+		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count,
+				modules->services[i].name);
 		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i); // set run level | thread type\n\n",
 				threads_count, modules->services[i].status | (1 << THREAD_TYPE_SYSTEM));
 		threads_count++;
 	}
 
-	id_counter = 3000;
+	id_counter = id_task_start;
 
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
@@ -141,22 +153,25 @@ void writeThreadsInit(module_t *modules, FILE *file)
 
 		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
 		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->tasks[i].id);
-		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count, threads_count);
-		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count, modules->tasks[i].name);
-		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count, modules->tasks[i].name);
+		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
+				threads_count);
+		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count,
+				modules->tasks[i].name);
+		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count,
+				modules->tasks[i].name);
 		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i); // set run level | thread type\n\n",
-				threads_count, modules->tasks[i].status | (1 << THREAD_TYPE_USER) );
+				threads_count, modules->tasks[i].status | (1 << THREAD_TYPE_USER));
 		threads_count++;
 	}
 }
 
 void writeDriversInit(module_t *modules, FILE *file)
 {
-	id_counter = 1000;
+	id_counter = id_driver_start;
 
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		modules->drivers[i].id=id_counter++;
+		modules->drivers[i].id = id_counter++;
 
 		fprintf(file, "\tconst char* driver%i_name = \"%s\";\n", i, modules->drivers[i].name);
 
@@ -179,31 +194,39 @@ void writeRunLevelsInit(module_t *modules, FILE *file)
 
 	fprintf(file, "\tto_run = (run_levels_t){\n");
 
-	for(int level=0; level<RUN_LEVEL_COUNT; level++)
+	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
-		fprintf(file, "\t\t.level%i = {%i", level,
-				modules->run_level_modules_count[level]);
+		fprintf(file, "\t\t.level%i = {%i", level, modules->run_level_modules_count[level]);
 
 		for( int i = 0; i < modules->drivers_count; i++ )
 		{
-			if( (modules->drivers[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->drivers[i].id);}
+			if( (modules->drivers[i].status & RUN_LEVEL_MASK) == level )
+			{
+				fprintf(file, ",%i", modules->drivers[i].id);
+			}
 		}
 		for( int i = 0; i < modules->services_count; i++ )
 		{
-			if( (modules->services[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->services[i].id);}
+			if( (modules->services[i].status & RUN_LEVEL_MASK) == level )
+			{
+				fprintf(file, ",%i", modules->services[i].id);
+			}
 		}
 		for( int i = 0; i < modules->tasks_count; i++ )
 		{
-			if( (modules->tasks[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->tasks[i].id);}
+			if( (modules->tasks[i].status & RUN_LEVEL_MASK) == level )
+			{
+				fprintf(file, ",%i", modules->tasks[i].id);
+			}
 		}
 
 		fprintf(file, "},\n");
 	}
 
-	fprintf(file, "\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}\n");
+	fprintf(file,
+			"\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}\n");
 	fprintf(file, "\t};\n");
 
 	fprintf(file, "\tto_run.current=RUN_CORE;\n");
 	fprintf(file, "\tto_run.next=RUN_CORE;\n");
-
 }

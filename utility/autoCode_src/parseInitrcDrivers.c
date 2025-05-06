@@ -71,11 +71,12 @@ void parseInitrcDrivers(module_t *modules, char *file_name)
 			}
 
 			// no cmd parsing, add one tread to run level
-			if( tok.count == 1 ){modules->run_level_modules_count[RUN_DRIVER]++;}
+			if( tok.count == 1 ) { modules->run_level_modules_count[RUN_DRIVER]++; }
 
 			for( int i = 1; i < tok.count; i++ )
 			{
-				err = initrcCmdDispatch(tok.tokens[i], &modules->drivers[drivers_count].status, modules->run_level_modules_count);
+				err = initrcCmdDispatch(tok.tokens[i], &modules->drivers[drivers_count].status,
+										modules->run_level_modules_count);
 				if( err != 0 )
 				{
 					msgError("driver unknown command");

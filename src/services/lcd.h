@@ -30,6 +30,6 @@ void lcd(void);
 void lcdInit(void);
 void lcdClear(void);
 void lcdSetCursor(uint8_t row, uint8_t col);
-void lcdWriteString(const char * str);
+void lcdWriteString(const char *str);
 
 #endif
