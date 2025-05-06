@@ -74,19 +74,13 @@ void parseTag(module_t *modules, char *name_src)
 			tag_section = 1;
 
 			if( (strcmp(tok.tokens[2], "threads") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
-			{
-				writeThreadsInit(modules, file_tmp);
-			}
+				{writeThreadsInit(modules, file_tmp);}
 
 			if( (strcmp(tok.tokens[2], "drivers") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
-			{
-				writeDriversInit(modules, file_tmp);
-			}
+				{writeDriversInit(modules, file_tmp);}
 
 			if( (strcmp(tok.tokens[2], "run") == 0) && (strcmp(tok.tokens[3], "levels") == 0) )
-			{
-				writeRunLevels(modules, file_tmp);
-			}
+				{writeRunLevelsInit(modules, file_tmp);}
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
@@ -180,12 +174,15 @@ void writeDriversInit(module_t *modules, FILE *file)
 	}
 }
 
-void writeRunLevels(module_t *modules, FILE *file)
+void writeRunLevelsInit(module_t *modules, FILE *file)
 {
+
+	fprintf(file, "\tto_run = (run_levels_t){\n");
+
 	for(int level=0; level<RUN_LEVEL_COUNT; level++)
 	{
-		fprintf(file, "to_run.levels[%i].modules[%i] = {%i", level,
-				modules->run_level_threads_count[level] +1, modules->run_level_threads_count[level]);
+		fprintf(file, "\t\t.level%i = {%i", level,
+				modules->run_level_modules_count[level]);
 
 		for( int i = 0; i < modules->drivers_count; i++ )
 		{
@@ -200,7 +197,13 @@ void writeRunLevels(module_t *modules, FILE *file)
 			if( (modules->tasks[i].status & RUN_LEVEL_MASK) == level){fprintf(file, ",%i",modules->tasks[i].id);}
 		}
 
-		fprintf(file, "}\n");
-
+		fprintf(file, "},\n");
 	}
+
+	fprintf(file, "\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}\n");
+	fprintf(file, "\t};\n");
+
+	fprintf(file, "\tto_run.current=RUN_CORE;\n");
+	fprintf(file, "\tto_run.next=RUN_CORE;\n");
+
 }

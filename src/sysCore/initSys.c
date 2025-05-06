@@ -24,6 +24,7 @@
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/initSys.h"
 #include "sysCore/autoInclude.h"
+#include "sysCore/run_level_define.h"
 
 #define AVR_REGISTER_COUNT 32 // from R0 to R31
 
@@ -144,5 +145,22 @@ void initDrivers(void)
 	};
 	(*modules.drivers[3].setStatus)(1);
 
+	// [/tag]
+}
+
+void initRunLevels(void)
+{
+	// do not edit code between tag : automatic generated code by autoCode
+	// [tag] run levels
+	to_run = (run_levels_t){
+		.level0 = {0},
+		.level1 = {4,1000,1001,1003,2001},
+		.level2 = {1,1002},
+		.level3 = {1,2000},
+		.level4 = {2,3000,3001},
+		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
+	};
+	to_run.current=RUN_CORE;
+	to_run.next=RUN_CORE;
 	// [/tag]
 }
