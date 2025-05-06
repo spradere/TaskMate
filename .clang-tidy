@@ -9,6 +9,9 @@ Checks: >
   -modernize-*,
   -cppcoreguidelines-*
 
+CheckOptions:
+  - key: readability-function-cognitive-complexity.Threshold
+    value: '30'
 
 HeaderFilterRegex: ^src/
 WarningsAsErrors: false

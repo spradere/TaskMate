@@ -27,8 +27,8 @@ void printModules(module_t *modules)
 	msgInfo("found drivers :");
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" id=%i status=%i \n", i, modules->drivers[i].name,
-				modules->drivers[i].id, modules->drivers[i].status);
+		printf("\tdrivers[%i] \"%s\" id=%i status=%i \n", i, modules->drivers[i].name, modules->drivers[i].id,
+			   modules->drivers[i].status);
 	}
 	printf("\n");
 
@@ -43,8 +43,8 @@ void printModules(module_t *modules)
 	msgInfo("found tasks :");
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
-		printf("\ttasks[%i] \"%s\" id=%i status=%i\n", i, modules->tasks[i].name,
-				modules->tasks[i].id, modules->tasks[i].status);
+		printf("\ttasks[%i] \"%s\" id=%i status=%i\n", i, modules->tasks[i].name, modules->tasks[i].id,
+			   modules->tasks[i].status);
 	}
 	printf("\n");
 
@@ -54,11 +54,21 @@ void printModules(module_t *modules)
 	{
 		switch( i )
 		{
-			case 0 : strcpy( name, "RUN_NONE"); break;
-			case 1 : strcpy( name, "RUN_CORE"); break;
-			case 2 : strcpy( name, "RUN_DRIVER"); break;
-			case 3 : strcpy( name, "RUN_SERVICE"); break;
-			case 4 : strcpy( name, "RUN_USER"); break;
+			case 0:
+				strcpy(name, "RUN_NONE");
+				break;
+			case 1:
+				strcpy(name, "RUN_CORE");
+				break;
+			case 2:
+				strcpy(name, "RUN_DRIVER");
+				break;
+			case 3:
+				strcpy(name, "RUN_SERVICE");
+				break;
+			case 4:
+				strcpy(name, "RUN_USER");
+				break;
 		}
 
 		printf("\trun_level_modules_count[%s] = %i\n", name, modules->run_level_modules_count[i]);

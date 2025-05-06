@@ -53,6 +53,6 @@ void timer1Stop(void)
 void timer1LoadOverflow(void)
 {
 	// used for cooperative yield hand to scheduler
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1=TIMER1_OVERFLOW_COUNT; }
-	while(1); // wait AVR ISR, normally just few cpu clock cycles
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1 = TIMER1_OVERFLOW_COUNT; }
+	while( 1 ); // wait AVR ISR, normally just few cpu clock cycles
 }

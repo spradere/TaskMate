@@ -40,7 +40,7 @@ void scli(void)
 		scliEcho(); // Echo echo echo echo echo echo echo
 
 		sysCallSetThreadTC(100);
-		while( sysCallGetThreadTC() > 0 ){/*sysCallyieldHand();*/};
+		while( sysCallGetThreadTC() > 0 ) { /*sysCallyieldHand();*/ };
 	}
 }
 

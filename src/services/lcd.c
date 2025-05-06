@@ -39,10 +39,10 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("runlevel ID");
+	lcdWriteString("fail test RL 1");
 
 	// do nothing after
-	while( 1 ){ sysCallyieldHand();}
+	while( 1 ) { sysCallyieldHand(); }
 }
 
 void lcdSendCommand(uint8_t command)

@@ -48,20 +48,20 @@ void writeAlloc(module_t *modules, char *file_name)
 	fprintf(file_alloc, "}modules_t;\n\n");
 
 	// write run level
-	for(int i = 0; i<RUN_LEVEL_COUNT; i++)
-		{
-			fprintf(file_alloc, "#define RUN_LEVEL%i_MODULE_COUNT %i\n",i,modules->run_level_modules_count[i]);
-		}
+	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
+	{
+		fprintf(file_alloc, "#define RUN_LEVEL%i_MODULE_COUNT %i\n", i, modules->run_level_modules_count[i]);
+	}
 
 	fprintf(file_alloc, "\ntypedef struct\n");
 	fprintf(file_alloc, "{\n");
 
-	for(int i = 0; i<RUN_LEVEL_COUNT; i++)
-		{
-			fprintf(file_alloc, "\tuint16_t level%i[RUN_LEVEL%i_MODULE_COUNT + 1];\n",i,i);
-		}
+	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
+	{
+		fprintf(file_alloc, "\tuint16_t level%i[RUN_LEVEL%i_MODULE_COUNT + 1];\n", i, i);
+	}
 
-	fprintf(file_alloc, "\tuint16_t *levels[%i];\n",RUN_LEVEL_COUNT);
+	fprintf(file_alloc, "\tuint16_t *levels[%i];\n", RUN_LEVEL_COUNT);
 	fprintf(file_alloc, "\tuint8_t current;\n");
 	fprintf(file_alloc, "\tuint8_t next;\n");
 	fprintf(file_alloc, "}run_levels_t;\n\n");
