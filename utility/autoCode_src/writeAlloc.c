@@ -45,7 +45,7 @@ void writeAlloc(module_t *modules, char *file_name)
 	fprintf(file_alloc, "\tdriver_item_t drivers[DRIVERS_COUNT];\n");
 	fprintf(file_alloc, "\tthread_item_t threads[THREADS_COUNT];\n");
 	fprintf(file_alloc, "\tuint8_t thread_current;\n");
-	fprintf(file_alloc, "}modules_t;\n\n");
+	fprintf(file_alloc, "} modules_t;\n\n");
 
 	// write run level
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
@@ -64,7 +64,7 @@ void writeAlloc(module_t *modules, char *file_name)
 	fprintf(file_alloc, "\tuint16_t *levels[%i];\n", RUN_LEVEL_COUNT);
 	fprintf(file_alloc, "\tuint8_t current;\n");
 	fprintf(file_alloc, "\tuint8_t next;\n");
-	fprintf(file_alloc, "}run_levels_t;\n\n");
+	fprintf(file_alloc, "} run_levels_t;\n\n");
 
 	fclose(file_alloc);
 }

@@ -40,4 +40,4 @@ uint16_t sysCallGetThreadTC(void)
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].time_counter); }
 }
 
-void sysCallyieldHand(void) { timer1LoadOverflow(); }
+void sysCallYieldHand(void) { timer1LoadOverflow(); }

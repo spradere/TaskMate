@@ -80,9 +80,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// enable global INT to let run timer3 RTC and usart1 sCLI
 	sei();
 
-// stop timer1 prevent preemption of the schduler itself -> panic
-// prevent scheduler eat thread time slice
-#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR
+	// stop timer1 prevent preemption of the schduler itself -> panic
+	// prevent scheduler eat thread time slice
+	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;

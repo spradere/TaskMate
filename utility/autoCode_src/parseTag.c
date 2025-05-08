@@ -130,7 +130,7 @@ void writeThreadsInit(module_t *modules, FILE *file)
 
 		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, threads_count);
 
-		fprintf(file, "\tconst char* thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
+		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
 		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->services[i].id);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);

@@ -74,7 +74,7 @@ void initThreads(void)
 
 	threadCreate(task1, 2);
 
-	const char *thread2_name = "task1";
+	const char* thread2_name = "task1";
 	modules.threads[2].id = 3000;
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].setStatus = task1SetStatus;
@@ -83,7 +83,7 @@ void initThreads(void)
 
 	threadCreate(task2, 3);
 
-	const char *thread3_name = "task2";
+	const char* thread3_name = "task2";
 	modules.threads[3].id = 3001;
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].setStatus = task2SetStatus;
@@ -97,44 +97,56 @@ void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] drivers init
-	const char *driver0_name = "timer1";
-	modules.drivers[0] = (driver_item_t){.id = 1000,
-										 .name = (uint8_t *)driver0_name,
-										 .setStatus = timer1SetStatus,
-										 .getStatus = timer1GetStatus,
-										 .init = timer1Init,
-										 .start = timer1Start,
-										 .stop = timer1Stop};
+	const char* driver0_name = "timer1";
+	modules.drivers[0]=(driver_item_t)
+	{
+		.id = 1000,
+		.name = (uint8_t *)driver0_name,
+		.setStatus = timer1SetStatus,
+		.getStatus = timer1GetStatus,
+		.init = timer1Init,
+		.start = timer1Start,
+		.stop = timer1Stop
+	};
 	(*modules.drivers[0].setStatus)(1);
 
-	const char *driver1_name = "timer3";
-	modules.drivers[1] = (driver_item_t){.id = 1001,
-										 .name = (uint8_t *)driver1_name,
-										 .setStatus = timer3SetStatus,
-										 .getStatus = timer3GetStatus,
-										 .init = timer3Init,
-										 .start = timer3Start,
-										 .stop = timer3Stop};
+	const char* driver1_name = "timer3";
+	modules.drivers[1]=(driver_item_t)
+	{
+		.id = 1001,
+		.name = (uint8_t *)driver1_name,
+		.setStatus = timer3SetStatus,
+		.getStatus = timer3GetStatus,
+		.init = timer3Init,
+		.start = timer3Start,
+		.stop = timer3Stop
+	};
 	(*modules.drivers[1].setStatus)(1);
 
-	const char *driver2_name = "i2c";
-	modules.drivers[2] = (driver_item_t){.id = 1002,
-										 .name = (uint8_t *)driver2_name,
-										 .setStatus = i2cSetStatus,
-										 .getStatus = i2cGetStatus,
-										 .init = i2cInit,
-										 .start = i2cStart,
-										 .stop = i2cStop};
+	const char* driver2_name = "i2c";
+	modules.drivers[2]=(driver_item_t)
+	{
+		.id = 1002,
+		.name = (uint8_t *)driver2_name,
+		.setStatus = i2cSetStatus,
+		.getStatus = i2cGetStatus,
+		.init = i2cInit,
+		.start = i2cStart,
+		.stop = i2cStop
+	};
 	(*modules.drivers[2].setStatus)(2);
 
-	const char *driver3_name = "usart1";
-	modules.drivers[3] = (driver_item_t){.id = 1003,
-										 .name = (uint8_t *)driver3_name,
-										 .setStatus = usart1SetStatus,
-										 .getStatus = usart1GetStatus,
-										 .init = usart1Init,
-										 .start = usart1Start,
-										 .stop = usart1Stop};
+	const char* driver3_name = "usart1";
+	modules.drivers[3]=(driver_item_t)
+	{
+		.id = 1003,
+		.name = (uint8_t *)driver3_name,
+		.setStatus = usart1SetStatus,
+		.getStatus = usart1GetStatus,
+		.init = usart1Init,
+		.start = usart1Start,
+		.stop = usart1Stop
+	};
 	(*modules.drivers[3].setStatus)(1);
 
 	// [/tag]
@@ -144,15 +156,16 @@ void initRunLevels(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] run levels
-	to_run =
-		(run_levels_t){.level0 = {0},
-					   .level1 = {4, 1000, 1001, 1003, 2001},
-					   .level2 = {1, 1002},
-					   .level3 = {1, 2000},
-					   .level4 = {2, 3000, 3001},
-					   .levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}};
-	to_run.current = RUN_CORE;
-	to_run.next = RUN_CORE;
+	to_run = (run_levels_t){
+		.level0 = {0},
+		.level1 = {4,1000,1001,1003,2001},
+		.level2 = {1,1002},
+		.level3 = {1,2000},
+		.level4 = {2,3000,3001},
+		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
+	};
+	to_run.current=RUN_CORE;
+	to_run.next=RUN_CORE;
 	// [/tag]
 }
 // NOLINTEND
