@@ -39,10 +39,10 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("fail test RL 1");
+	lcdWriteString("usart1 work 4");
 
 	// do nothing after
-	while( 1 ) { sysCallyieldHand(); }
+	while( 1 ) { sysCallYieldHand(); }
 }
 
 void lcdSendCommand(uint8_t command)

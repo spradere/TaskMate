@@ -40,7 +40,7 @@ void scli(void)
 		scliEcho(); // Echo echo echo echo echo echo echo
 
 		sysCallSetThreadTC(100);
-		while( sysCallGetThreadTC() > 0 ) { /*sysCallyieldHand();*/ };
+		while( sysCallGetThreadTC() > 0 ) { sysCallYieldHand();};
 	}
 }
 
@@ -48,22 +48,14 @@ void scliEcho(void)
 {
 	uint8_t data;
 
-	if( usart1TestBufferRx() != ERR_USART_RX_BUFFER_EMPTY )
+	if( usart1TestBufferRx() != ERR_USART1_RX_BUFFER_EMPTY )
 	{
-		lcdSetCursor(1, 0);
-		lcdWriteString("USART data in  ");
-
 		usart1WriteString("scli.c : ");
 
-		while( usart1Read(&data) != ERR_USART_RX_BUFFER_EMPTY )
+		while( usart1Read(&data) != ERR_USART1_RX_BUFFER_EMPTY )
 		{
-			if( usart1Write(data) == ERR_USART_TX_BUFFER_FULL ) { break; }
+			if( usart1WriteChar(data) == ERR_USART1_TX_BUFFER_FULL ) { break; }
 		}
-		usart1Flush(); // write all Tx buffer to usart
-	}
-	else
-	{
-		lcdSetCursor(1, 0);
-		lcdWriteString("USART no data  ");
+		usart1SendTXBuffer();
 	}
 }

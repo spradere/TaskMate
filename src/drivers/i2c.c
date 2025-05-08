@@ -32,20 +32,18 @@ uint8_t i2cGetStatus(void) { return i2c_status; }
 
 void i2cInit(void)
 {
-	TWBR = (uint8_t)TWBR_VALUE; // Set baud rate
+	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Prescaler = 1
 }
 
 void i2cStart(void)
 {
-	// Enable TWI
-	TWCR = (1 << TWEN);
+	TWCR = (1 << TWEN); // Enable TWI
 }
 
 void i2cStop(void)
 {
-	// Stop TWI
-	TWCR &= ~(1 << TWEN);
+	TWCR &= ~(1 << TWEN); // Stop TWI
 }
 
 uint8_t i2cCommStart(uint8_t address)
