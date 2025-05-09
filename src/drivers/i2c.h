@@ -22,7 +22,7 @@
 #ifndef I2C_H
 #define I2C_H
 
-#include <stdint.h>
+//#include <stdint.h>
 
 #define I2C_FREQ 100000UL // Standard mode 100 kHz
 #define I2C_TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)

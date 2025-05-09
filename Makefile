@@ -164,7 +164,8 @@ tidy:
 		-I/root/code/TaskMate/TaskMate_current/src \
 		-I/root/code/TaskMate/TaskMate_current/ \
 		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
-		-D__AVR__=6 -D__AVR_ATmega2560__=1
+		-D__AVR__=6 -D__AVR_ATmega2560__=1 \
+		-DF_CPU=${F_CPU}
 .PHONY: tidy
 
 # clang-format

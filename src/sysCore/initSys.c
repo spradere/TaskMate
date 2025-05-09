@@ -74,7 +74,7 @@ void initThreads(void)
 
 	threadCreate(task1, 2);
 
-	const char* thread2_name = "task1";
+	const char *thread2_name = "task1";
 	modules.threads[2].id = 3000;
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].setStatus = task1SetStatus;
@@ -83,7 +83,7 @@ void initThreads(void)
 
 	threadCreate(task2, 3);
 
-	const char* thread3_name = "task2";
+	const char *thread3_name = "task2";
 	modules.threads[3].id = 3001;
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].setStatus = task2SetStatus;
