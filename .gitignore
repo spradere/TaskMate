@@ -4,7 +4,7 @@ utility/autoCode
 
 # Ignore dependency files
 *.d
-.deps.h
+.deps.d
 
 # Ignore backup files from editors
 *~
@@ -17,6 +17,7 @@ utility/autoCode
 *.elf
 *.map
 *.hex
+.autoCode_stamp
 
 # Ignore html documentation folder
 html/

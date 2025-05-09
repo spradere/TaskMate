@@ -40,8 +40,10 @@
 #include "sysCore/autoAlloc.h"
 #include "sysCore/run_level_define.h"
 
+// system wide variables
 modules_t modules;
 run_levels_t to_run;
+uint8_t system_status = 0;
 
 int main(void)
 {
@@ -82,7 +84,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 
 	// stop timer1 prevent preemption of the schduler itself -> panic
 	// prevent scheduler eat thread time slice
-	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR
+	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;
