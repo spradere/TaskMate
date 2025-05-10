@@ -53,6 +53,7 @@ void timer1Stop(void)
 void timer1LoadOverflow(void)
 {
 	// used for cooperative yield hand to scheduler
+	sysCallSetFlag(FLAG_COOP);
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1 = TIMER1_OVERFLOW_COUNT - 1; }
-	while( (TIFR1 & (1 << TOV1)) == 1 );
+	while( sysCallGetFlag(FLAG_COOP) == 1 );
 }

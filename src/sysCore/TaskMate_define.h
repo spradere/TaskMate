@@ -22,9 +22,6 @@
 #ifndef TASKMATE_DEFINE_H
 #define TASKMATE_DEFINE_H
 
-// Cpu frecency
-// #define F_CPU 16000000UL
-
 // arduino in board LED 13
 #define LED_DDR DDRB /**< Arduino in board led pin 13, direction port*/
 #define LED_PORT PORTB /**< Arduino in board led pin 13, data port*/

@@ -70,4 +70,12 @@ uint16_t sysCallGetThreadTC(void);
  */
 void sysCallYieldHand(void);
 
+// system stauts flags
+#define FLAG_COOP 0x01
+
+void sysCallClearFlag(uint8_t flag);
+void sysCallSetFlag(uint8_t flag);
+uint8_t sysCallGetFlag(uint8_t flag);
+
+
 #endif
