@@ -70,5 +70,4 @@ uint16_t sysCallGetThreadTC(void);
  */
 void sysCallYieldHand(void);
 
-
 #endif

@@ -18,9 +18,9 @@
  * @todo nothing
  */
 
- #ifndef WRITEINCLUDE_H
- #define WRITEINCLUDE_H
+ #ifndef WRITE_INCLUDE_H
+ #define WRITE_INCLUDE_H
 
- void writeInclude(module_t *modules, char *file_name);
+ void writeInclude(const module_t *modules, const char *file_name);
 
  #endif

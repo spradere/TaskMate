@@ -18,9 +18,9 @@
  * @todo nothing
  */
 
- #ifndef WRITEALLOC_H
- #define WRITEALLOC_H
+ #ifndef WRITE_ALLOC_H
+ #define WRITE_ALLOC_H
 
- void writeAlloc(module_t *modules, char *file_name);
+ void writeAlloc(const module_t *modules, const char *file_name);
 
  #endif

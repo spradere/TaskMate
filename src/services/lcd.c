@@ -54,14 +54,6 @@ void lcdSendCommand(uint8_t command)
 	_delay_us(200); // Small delay for LCD to process the command
 }
 
-void lcdSendData(uint8_t data)
-{
-	/*i2cCommStart(LCD_I2C_ADDR);
-	i2cWrite(LCD_DATA); // Control byte: RS=1
-	i2cWrite(data);
-	i2cCommStop();*/
-}
-
 void lcdInit(void)
 {
 	_delay_ms(50); // Wait for LCD to power up
@@ -83,7 +75,7 @@ void lcdClear(void)
 
 void lcdSetCursor(uint8_t row, uint8_t col)
 {
-	uint8_t row_offsets[] = {0x00, 0x40};
+	const uint8_t row_offsets[] = {0x00, 0x40};
 	lcdSendCommand(0x80 | (col + row_offsets[row]));
 }
 

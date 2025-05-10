@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(module_t *modules, char *file_name)
+void writeInclude(const module_t *modules, const char *file_name)
 {
 	FILE *file_include = fopen(file_name, "w");
 	if( file_include == NULL )
