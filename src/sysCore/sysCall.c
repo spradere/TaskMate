@@ -41,3 +41,7 @@ uint16_t sysCallGetThreadTC(void)
 }
 
 void sysCallYieldHand(void) { timer1LoadOverflow(); }
+
+void sysCallClearFlag(uint8_t flag){system_status &= !flag;}
+void sysCallSetFlag(uint8_t flag){system_status |= flag;}
+uint8_t sysCallGetFlag(uint8_t flag){return system_status &= flag;}

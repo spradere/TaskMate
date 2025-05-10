@@ -34,6 +34,7 @@
 #include <util/atomic.h>
 
 #include "sysCore/TaskMate_define.h"
+#include "sysCore/sysCall.h"
 #include "sysCore/initSys.h"
 #include "sysCore/modules_items.h"
 #include "sysCore/autoInclude.h"
@@ -82,9 +83,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// enable global INT to let run timer3 RTC and usart1 sCLI
 	sei();
 
-// stop timer1 prevent preemption of the schduler itself -> panic
-// prevent scheduler eat thread time slice
-#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
+	// stop timer1 prevent preemption of the schduler itself -> panic
+	// prevent scheduler eat thread time slice
+	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;
@@ -104,6 +105,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 		LED_PORT ^= (1 << LED_PIN);
 		alive_cnt = 0;
 	}
+
+	// cooperative handling
+	sysCallClearFlag(FLAG_COOP);
 
 	// reset / resart timer1
 	TCNT1 = 0;

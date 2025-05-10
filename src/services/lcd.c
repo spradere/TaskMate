@@ -39,7 +39,7 @@ void lcd(void)
 	// lcd test
 	lcdInit();
 
-	lcdWriteString("TaskMate cleanup");
+	lcdWriteString("Coop ok now ?");
 
 	// do nothing after
 	while( 1 ) { sysCallYieldHand(); }
