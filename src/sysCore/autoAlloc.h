@@ -27,4 +27,3 @@ typedef struct
 	uint8_t current;
 	uint8_t next;
 } run_levels_t;
-

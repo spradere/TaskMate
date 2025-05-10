@@ -22,7 +22,7 @@
 #ifndef INIT_SYS_H
 #define INIT_SYS_H
 
-void threadCreate(void (*func)(void), uint8_t num);
+static void threadCreate(void (*func)(void), uint8_t num);
 
 void initThreads(void);
 void initDrivers(void);

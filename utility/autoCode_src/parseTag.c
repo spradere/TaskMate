@@ -23,12 +23,12 @@
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-static int id_counter;
+int id_counter;
 const int id_driver_start = 1000;
 const int id_service_start = 2000;
 const int id_task_start = 3000;
 
-void parseTag(module_t *modules, char *name_src)
+void parseTag(module_t *modules, const char *name_src)
 {
 	// open source and tmp file
 	FILE *file_src = fopen(name_src, "r");
@@ -41,6 +41,11 @@ void parseTag(module_t *modules, char *name_src)
 
 	char *name_tmp;
 	name_tmp = malloc(strlen(name_src) + strlen(".tmp") + 1);
+	if( name_tmp == NULL )
+	{
+		msgError("malloc name_tmp");
+		exit(0);
+	}
 	sprintf(name_tmp, "%s.tmp", name_src);
 
 	FILE *file_tmp = fopen(name_tmp, "w");
@@ -119,7 +124,7 @@ void parseTag(module_t *modules, char *name_src)
 	free(name_tmp);
 }
 
-void writeThreadsInit(module_t *modules, FILE *file)
+static void writeThreadsInit(module_t *modules, FILE *file)
 {
 	int threads_count = 0;
 	id_counter = id_service_start;
@@ -165,7 +170,7 @@ void writeThreadsInit(module_t *modules, FILE *file)
 	}
 }
 
-void writeDriversInit(module_t *modules, FILE *file)
+static void writeDriversInit(module_t *modules, FILE *file)
 {
 	id_counter = id_driver_start;
 
@@ -189,7 +194,7 @@ void writeDriversInit(module_t *modules, FILE *file)
 	}
 }
 
-void writeRunLevelsInit(module_t *modules, FILE *file)
+static void writeRunLevelsInit(const module_t *modules, FILE *file)
 {
 
 	fprintf(file, "\tto_run = (run_levels_t){\n");

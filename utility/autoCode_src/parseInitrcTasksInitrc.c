@@ -24,7 +24,7 @@
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/initrcCmdDispatch.h"
 
-void parseInitrcTasks(module_t *modules, char *file_name)
+void parseInitrcTasks(module_t *modules, const char *file_name)
 {
 	// open list files
 	msgInfo("open init.rc file  for parsing");
@@ -53,7 +53,7 @@ void parseInitrcTasks(module_t *modules, char *file_name)
 
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
-			if( (tok.count < 1) | (tok.count > 2) )
+			if( tok.count > 2 )
 			{
 				msgError("wrong task token count");
 				printf("\t [%s:%i] is %i, should be [1,2]\n\n", file_name, file_line_number, tok.count);

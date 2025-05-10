@@ -21,6 +21,6 @@
  #ifndef PRINTMODULES_H
  #define PRINTMODULES_H
 
- void printModules(module_t *modules);
+ void printModules(const module_t *modules);
 
  #endif

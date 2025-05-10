@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/printModules.h"
 
-void printModules(module_t *modules)
+void printModules(const module_t *modules)
 {
 	msgInfo("found drivers :");
 	for( int i = 0; i < modules->drivers_count; i++ )
@@ -48,7 +48,7 @@ void printModules(module_t *modules)
 	}
 	printf("\n");
 
-	msgInfo("threads by run level :");
+	msgInfo("modules by run level :");
 	char name[256];
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{

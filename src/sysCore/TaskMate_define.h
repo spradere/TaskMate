@@ -23,8 +23,7 @@
 #define TASKMATE_DEFINE_H
 
 // Cpu frecency
-//#define F_CPU 16000000UL
-
+// #define F_CPU 16000000UL
 
 // arduino in board LED 13
 #define LED_DDR DDRB /**< Arduino in board led pin 13, direction port*/
@@ -104,6 +103,6 @@
 	"out __SREG__, r0 \n\t"                                                                                  \
 	"pop r0	\n\t" /**< Pop all AVR registers Rx + SREG  */
 
-//#define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
+// #define SYSTEM_CORE_ID 0xff /**< Used in system call for system core indentification*/
 
 #endif

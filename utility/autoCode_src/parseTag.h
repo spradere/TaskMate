@@ -21,11 +21,11 @@
  #ifndef PARSETAG_H
  #define PARSETAG_H
 
-void parseTag(module_t *modules, char *name_src);
+void parseTag(module_t *modules, const char *name_src);
 
-void writeDriversInit(module_t *modules, FILE *file);
-void writeThreadsInit(module_t *modules, FILE *file);
-void writeRunLevelsInit(module_t *modules, FILE *file);
+static void writeDriversInit(module_t *modules, FILE *file);
+static void writeThreadsInit(module_t *modules, FILE *file);
+static void writeRunLevelsInit(const module_t *modules, FILE *file);
 
 
  #endif

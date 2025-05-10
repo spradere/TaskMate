@@ -22,31 +22,31 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/initrcCmdDispatch.h"
 
-void funcRunNone(module_status_t *status, run_level_modules_count_t *count)
+static void funcRunNone(module_status_t *status, run_level_modules_count_t *count)
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_NONE;
 	count[RUN_NONE] = 0;
 }
-void funcRunCore(module_status_t *status, run_level_modules_count_t *count)
+static void funcRunCore(module_status_t *status, run_level_modules_count_t *count)
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_CORE;
 	count[RUN_CORE]++;
 }
-void funcRunDriver(module_status_t *status, run_level_modules_count_t *count)
+static void funcRunDriver(module_status_t *status, run_level_modules_count_t *count)
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_DRIVER;
 	count[RUN_DRIVER]++;
 }
-void funcRunService(module_status_t *status, run_level_modules_count_t *count)
+static void funcRunService(module_status_t *status, run_level_modules_count_t *count)
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_SERVICE;
 	count[RUN_SERVICE]++;
 }
-void funcRunUser(module_status_t *status, run_level_modules_count_t *count)
+static void funcRunUser(module_status_t *status, run_level_modules_count_t *count)
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_USER;

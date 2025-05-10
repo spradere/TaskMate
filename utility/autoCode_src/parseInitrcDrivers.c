@@ -24,7 +24,7 @@
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/initrcCmdDispatch.h"
 
-void parseInitrcDrivers(module_t *modules, char *file_name)
+void parseInitrcDrivers(module_t *modules, const char *file_name)
 {
 	// open list files
 	msgInfo("open init.rc file for parsing");
@@ -53,7 +53,7 @@ void parseInitrcDrivers(module_t *modules, char *file_name)
 
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
-			if( (tok.count < 1) | (tok.count > 2) )
+			if( tok.count > 2 )
 			{
 				msgError("wrong driver token count");
 				printf("\t [%s:%i] is %i, should be [1,2]\n\n", file_name, file_line_number, tok.count);
@@ -70,7 +70,7 @@ void parseInitrcDrivers(module_t *modules, char *file_name)
 				}
 			}
 
-			// no cmd parsing, add one tread to run level
+			// no cmd parsing, add one driver to run level
 			if( tok.count == 1 ) { modules->run_level_modules_count[RUN_DRIVER]++; }
 
 			for( int i = 1; i < tok.count; i++ )

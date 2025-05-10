@@ -25,7 +25,6 @@
 void tokenizer(tokenizer_t *data)
 {
 	int index_line = 0;
-	int index_token = 0;
 	int tokens_count;
 
 	// reset tokens
@@ -49,7 +48,7 @@ void tokenizer(tokenizer_t *data)
 		}
 
 		// read and store one token
-		index_token = 0;
+		int index_token = 0;
 		while( (data->line[index_line] != ' ') && (data->line[index_line] != '\t') &&
 			   (data->line[index_line] != '\n') && (data->line[index_line] != 0) &&
 			   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)) )
