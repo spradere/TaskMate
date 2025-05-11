@@ -13,23 +13,23 @@
  */
 
 /**
- * @file lcd.h
+ * @file lcdAMC2004.h
  * @brief header of lcd display
  *
  * @todo Nothing
  */
 
-#ifndef LCD_H
-#define LCD_H
+#ifndef LCDAMC2004_H
+#define LCDAMC2004_H
 
-void lcdSetStatus(uint8_t status);
-uint8_t lcdGetStatus(void);
+void lcdAMC2004SetStatus(uint8_t status);
+uint8_t lcdAMC2004GetStatus(void);
 
-void lcd(void);
+void lcdAMC2004(void);
 
-void lcdInit(void);
-void lcdClear(void);
-void lcdSetCursor(uint8_t row, uint8_t col);
-void lcdWriteString(const char *str);
+void lcdAMC2004Init(void);
+void lcdAMC2004Clear(void);
+void lcdAMC2004SetCursor(uint8_t row, uint8_t col);
+void lcdAMC2004WriteString(const char *str);
 
 #endif

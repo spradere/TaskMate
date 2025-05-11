@@ -1,5 +1,5 @@
 # services init.rc
 # default run level RUN_SERVICE
 
-lcd
+lcdAMC2004
 scli -RUN_CORE

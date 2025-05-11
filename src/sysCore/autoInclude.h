@@ -3,7 +3,7 @@
 #include "drivers/i2c.h"
 #include "drivers/usart1.h"
 
-#include "services/lcd.h"
+#include "services/lcdAMC2004.h"
 #include "services/scli.h"
 
 #include "tasks/task1.h"
