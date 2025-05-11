@@ -54,13 +54,13 @@ void initThreads(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] threads init
-	threadCreate(lcd, 0);
+	threadCreate(lcdAMC2004, 0);
 
-	const char *thread0_name = "lcd";
+	const char *thread0_name = "lcdAMC2004";
 	modules.threads[0].id = 2000;
 	modules.threads[0].name = (uint8_t *)thread0_name;
-	modules.threads[0].setStatus = lcdSetStatus;
-	modules.threads[0].getStatus = lcdGetStatus;
+	modules.threads[0].setStatus = lcdAMC2004SetStatus;
+	modules.threads[0].getStatus = lcdAMC2004GetStatus;
 	(*modules.threads[0].setStatus)(19); // set run level | thread type
 
 	threadCreate(scli, 1);

@@ -190,7 +190,6 @@ check:
 # clang-format
 format:
 	@printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
-	@printf "No init <%s>\n" ${SRCS_NO_INIT}
 	clang-format -i $(SRCS:S/src\/sysCore\/initSys.c//) $(SRCS_H) $(AUTOCODE_SRC)
 .PHONY: format
 

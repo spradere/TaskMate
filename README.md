@@ -3,8 +3,8 @@
 
 > **TaskMate Project Stats (v0.11)**
 >
-> 116 commits • 58 source files • 3854 lines of code •
-> binary size: 2836 bytes (Flash)
+> 126 commits • 58 source files • 3896 lines of code •
+> binary size : 3350 bytes (Flash) • ram usage : 1548 bytes
 
 ### ▶️ Introduction
 

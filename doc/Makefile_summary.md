@@ -29,7 +29,9 @@ Miscellaneous commands :
 | `make dump` | Disassemble machine code in two formats |
 | `make cloc` | Count lines of code |
 | `make tidy` | C code static analysis with clang-tidy tool, config file .clang-tidy |
+| `make check` | C code static analysis with cppcheck tool |
 | `make format` | C code formating with clang-format tool, config file .clang-format|
+
 
 ## ✈ Streamlined Workflow
 

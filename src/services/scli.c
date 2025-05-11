@@ -25,7 +25,7 @@
 #include "sysCore/sysCall.h"
 #include "drivers/usart1.h"
 #include "services/scli.h"
-#include "services/lcd.h"
+
 
 // status
 uint8_t scli_status = 0;
