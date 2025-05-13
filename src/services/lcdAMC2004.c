@@ -14,7 +14,7 @@
 
 /**
  * @file lcdAMC2004.c
- * @brief implementation of lcd display
+ * @brief implementation of lcd display AMC2004 4x20
  *
  * @todo Nothing
  */

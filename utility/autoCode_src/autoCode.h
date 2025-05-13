@@ -58,7 +58,10 @@ typedef struct
 	int tasks_count;
 	module_item_t drivers[MODULE_DRIVER_COUNT_MAX];
 	int drivers_count;
-	run_level_modules_count_t run_level_modules_count[RUN_LEVEL_COUNT];
+	run_level_modules_count_t run_level_threads_count[RUN_LEVEL_COUNT];
+	run_level_modules_count_t run_level_threads_total_count[RUN_LEVEL_COUNT];
+	run_level_modules_count_t run_level_drivers_count[RUN_LEVEL_COUNT];
+
 
 } module_t;
 

@@ -50,7 +50,8 @@ void writeAlloc(const module_t *modules, const char *file_name)
 	// write run level
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(file_alloc, "#define RUN_LEVEL%i_MODULE_COUNT %i\n", i, modules->run_level_modules_count[i]);
+		fprintf(file_alloc, "#define RUN_LEVEL%i_THREADS_COUNT %i\n", i,
+				modules->run_level_threads_total_count[i]);
 	}
 
 	fprintf(file_alloc, "\ntypedef struct\n");
@@ -58,7 +59,7 @@ void writeAlloc(const module_t *modules, const char *file_name)
 
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(file_alloc, "\tuint16_t level%i[RUN_LEVEL%i_MODULE_COUNT + 1];\n", i, i);
+		fprintf(file_alloc, "\tuint16_t level%i[RUN_LEVEL%i_THREADS_COUNT + 1];\n", i, i);
 	}
 
 	fprintf(file_alloc, "\tuint16_t *levels[%i];\n", RUN_LEVEL_COUNT);

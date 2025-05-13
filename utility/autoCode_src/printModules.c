@@ -48,7 +48,7 @@ void printModules(const module_t *modules)
 	}
 	printf("\n");
 
-	msgInfo("modules by run level :");
+	msgInfo("threads by run level :");
 	char name[256];
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
@@ -71,7 +71,7 @@ void printModules(const module_t *modules)
 				break;
 		}
 
-		printf("\trun_level_modules_count[%s] = %i\n", name, modules->run_level_modules_count[i]);
+		printf("\trun_level_threads_count[%s] = %i\n", name, modules->run_level_threads_count[i]);
 	}
 	printf("\n");
 }

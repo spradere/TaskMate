@@ -49,19 +49,23 @@ int main(void)
 {
 	module_t modules;
 
-	for( int i = 0; i < RUN_LEVEL_COUNT; i++ ) { modules.run_level_modules_count[i] = 0; }
+	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
+		{
+			modules.run_level_threads_count[i] = 0;
+			modules.run_level_drivers_count[i] = 0;
+		}
 
 	// read init.rc file and store data in modules[]
 	parseInitrcDrivers(&modules, "src/drivers/drivers_init.rc");
 	parseInitrcServices(&modules, "src/services/services_init.rc");
 	parseInitrcTasks(&modules, "src/tasks/tasks_init.rc");
 
+	// parse tag and generate code for init
+	parseTag(&modules, "src/sysCore/initSys.c");
+
 	// write headers
 	writeInclude(&modules, "src/sysCore/autoInclude.h");
 	writeAlloc(&modules, "src/sysCore/autoAlloc.h");
-
-	// parse tag and generate code for init
-	parseTag(&modules, "src/sysCore/initSys.c");
 
 	// print all info about modules
 	printModules(&modules);
