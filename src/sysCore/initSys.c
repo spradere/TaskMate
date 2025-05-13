@@ -158,10 +158,10 @@ void initRunLevels(void)
 	// [tag] run levels
 	to_run = (run_levels_t){
 		.level0 = {0},
-		.level1 = {4,1000,1001,1003,2001},
-		.level2 = {1,1002},
-		.level3 = {1,2000},
-		.level4 = {2,3000,3001},
+		.level1 = {1,2001},
+		.level2 = {1,2001},
+		.level3 = {2,2000,2001},
+		.level4 = {4,2000,2001,3000,3001},
 		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
 	};
 	to_run.current=RUN_CORE;

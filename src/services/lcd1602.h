@@ -14,7 +14,7 @@
 
 /**
  * @file lcd1602.h
- * @brief header of lcd display
+ * @brief header of lcd display 1602 2x16
  *
  * @todo Nothing
  */

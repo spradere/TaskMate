@@ -14,7 +14,7 @@
 
 /**
  * @file lcdAMC2004.h
- * @brief header of lcd display
+ * @brief header of lcd display AMC2004 4x20
  *
  * @todo Nothing
  */

@@ -14,7 +14,7 @@
 
 /**
  * @file lcd1602.c
- * @brief implementation of lcd display
+ * @brief implementation of lcd display 1602 2x16
  *
  * @todo Nothing
  */

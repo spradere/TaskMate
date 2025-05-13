@@ -194,32 +194,34 @@ static void writeDriversInit(module_t *modules, FILE *file)
 	}
 }
 
-static void writeRunLevelsInit(const module_t *modules, FILE *file)
+static void writeRunLevelsInit(module_t *modules, FILE *file)
 {
 
 	fprintf(file, "\tto_run = (run_levels_t){\n");
 
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
-		fprintf(file, "\t\t.level%i = {%i", level, modules->run_level_modules_count[level]);
 
-		for( int i = 0; i < modules->drivers_count; i++ )
+		int total_thread_count=0;
+		for(int i=1; i <= level; i++)
 		{
-			if( (modules->drivers[i].status & RUN_LEVEL_MASK) == level )
-			{
-				fprintf(file, ",%i", modules->drivers[i].id);
-			}
+			total_thread_count += modules->run_level_threads_count[i];
 		}
+
+		modules->run_level_threads_total_count[level] = total_thread_count;
+		fprintf(file, "\t\t.level%i = {%i", level, modules->run_level_threads_total_count[level]);
+
+
 		for( int i = 0; i < modules->services_count; i++ )
 		{
-			if( (modules->services[i].status & RUN_LEVEL_MASK) == level )
+			if( (modules->services[i].status & RUN_LEVEL_MASK) <= level )
 			{
 				fprintf(file, ",%i", modules->services[i].id);
 			}
 		}
 		for( int i = 0; i < modules->tasks_count; i++ )
 		{
-			if( (modules->tasks[i].status & RUN_LEVEL_MASK) == level )
+			if( (modules->tasks[i].status & RUN_LEVEL_MASK) <= level )
 			{
 				fprintf(file, ",%i", modules->tasks[i].id);
 			}
