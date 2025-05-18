@@ -43,7 +43,7 @@ void parseInitrcServices(module_t *modules, const char *file_name)
 	tokenizer_t tok;
 	int services_count = 0;
 
-	while( (services_count < MODULE_SERVICE_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
+	while( (services_count < MODULES_SERVICES_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
 		// set status to default
 		modules->services[services_count].status = RUN_SERVICE;
@@ -96,6 +96,14 @@ void parseInitrcServices(module_t *modules, const char *file_name)
 		printf("\t in %s\n\n", file_name);
 		exit(0);
 	}
+
+	if( services_count > MODULES_SERVICES_COUNT_MAX )
+	{
+		msgError("too many services");
+		printf("\t in %s\n\n", file_name);
+		exit(0);
+	}
+
 	modules->services_count = services_count;
 
 	// close files

@@ -59,7 +59,7 @@ void usart1Start(void)
 
 void usart1Stop(void)
 {
-	// nothing to do
+	// nothing to do ?
 }
 
 // USART1 Rx Interrupt Handler (Triggered when data is received)

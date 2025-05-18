@@ -43,7 +43,7 @@ void parseInitrcDrivers(module_t *modules, const char *file_name)
 	tokenizer_t tok;
 	int drivers_count = 0;
 
-	while( (drivers_count < MODULE_DRIVER_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
+	while( (drivers_count < MODULES_DRIVERS_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
 		// set status to default
 		modules->drivers[drivers_count].status = RUN_DRIVER;
@@ -96,6 +96,14 @@ void parseInitrcDrivers(module_t *modules, const char *file_name)
 		printf("\t in %s\n\n", file_name);
 		exit(0);
 	}
+
+	if( drivers_count > MODULES_DRIVERS_COUNT_MAX )
+	{
+		msgError("too many drivers");
+		printf("\t in %s\n\n", file_name);
+		exit(0);
+	}
+
 	modules->drivers_count = drivers_count;
 
 	// close files
