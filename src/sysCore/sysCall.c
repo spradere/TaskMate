@@ -28,7 +28,7 @@
 #include "sysCore/sysCall.h"
 #include "drivers/timer1.h"
 
-uint8_t sysCallGetThreadID(void) { return (modules.threads[modules.thread_current].id); }
+uint8_t sysCallGetThreadID(void) { return modules.thread_current; }
 
 void sysCallSetThreadTC(uint16_t count)
 {

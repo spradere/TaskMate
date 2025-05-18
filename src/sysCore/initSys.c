@@ -57,7 +57,6 @@ void initThreads(void)
 	threadCreate(lcdAMC2004, 0);
 
 	const char *thread0_name = "lcdAMC2004";
-	modules.threads[0].id = 2000;
 	modules.threads[0].name = (uint8_t *)thread0_name;
 	modules.threads[0].setStatus = lcdAMC2004SetStatus;
 	modules.threads[0].getStatus = lcdAMC2004GetStatus;
@@ -66,7 +65,6 @@ void initThreads(void)
 	threadCreate(scli, 1);
 
 	const char *thread1_name = "scli";
-	modules.threads[1].id = 2001;
 	modules.threads[1].name = (uint8_t *)thread1_name;
 	modules.threads[1].setStatus = scliSetStatus;
 	modules.threads[1].getStatus = scliGetStatus;
@@ -75,7 +73,6 @@ void initThreads(void)
 	threadCreate(task1, 2);
 
 	const char *thread2_name = "task1";
-	modules.threads[2].id = 3000;
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].setStatus = task1SetStatus;
 	modules.threads[2].getStatus = task1GetStatus;
@@ -84,7 +81,6 @@ void initThreads(void)
 	threadCreate(task2, 3);
 
 	const char *thread3_name = "task2";
-	modules.threads[3].id = 3001;
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].setStatus = task2SetStatus;
 	modules.threads[3].getStatus = task2GetStatus;
@@ -100,7 +96,6 @@ void initDrivers(void)
 	const char* driver0_name = "timer1";
 	modules.drivers[0]=(driver_item_t)
 	{
-		.id = 1000,
 		.name = (uint8_t *)driver0_name,
 		.setStatus = timer1SetStatus,
 		.getStatus = timer1GetStatus,
@@ -113,7 +108,6 @@ void initDrivers(void)
 	const char* driver1_name = "timer3";
 	modules.drivers[1]=(driver_item_t)
 	{
-		.id = 1001,
 		.name = (uint8_t *)driver1_name,
 		.setStatus = timer3SetStatus,
 		.getStatus = timer3GetStatus,
@@ -126,7 +120,6 @@ void initDrivers(void)
 	const char* driver2_name = "i2c";
 	modules.drivers[2]=(driver_item_t)
 	{
-		.id = 1002,
 		.name = (uint8_t *)driver2_name,
 		.setStatus = i2cSetStatus,
 		.getStatus = i2cGetStatus,
@@ -139,7 +132,6 @@ void initDrivers(void)
 	const char* driver3_name = "usart1";
 	modules.drivers[3]=(driver_item_t)
 	{
-		.id = 1003,
 		.name = (uint8_t *)driver3_name,
 		.setStatus = usart1SetStatus,
 		.getStatus = usart1GetStatus,
@@ -158,10 +150,10 @@ void initRunLevels(void)
 	// [tag] run levels
 	to_run = (run_levels_t){
 		.level0 = {0},
-		.level1 = {1,2001},
-		.level2 = {1,2001},
-		.level3 = {2,2000,2001},
-		.level4 = {4,2000,2001,3000,3001},
+		.level1 = {1,0},
+		.level2 = {1,0},
+		.level3 = {2,0,1},
+		.level4 = {4,0,1,2,3},
 		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
 	};
 	to_run.current=RUN_CORE;
