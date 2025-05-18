@@ -43,7 +43,7 @@ void parseInitrcTasks(module_t *modules, const char *file_name)
 	tokenizer_t tok;
 	int tasks_count = 0;
 
-	while( (tasks_count < MODULE_TASK_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
+	while( (tasks_count < MODULES_TASKS_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
 		// set status to default
 		modules->tasks[tasks_count].status = RUN_USER;
@@ -96,6 +96,14 @@ void parseInitrcTasks(module_t *modules, const char *file_name)
 		printf("\t in %s\n\n", file_name);
 		exit(0);
 	}
+
+	if( tasks_count > MODULES_TASKS_COUNT_MAX )
+	{
+		msgError("too many tasks");
+		printf("\t in %s\n\n", file_name);
+		exit(0);
+	}
+
 	modules->tasks_count = tasks_count;
 
 	// close files

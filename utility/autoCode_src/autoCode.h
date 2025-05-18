@@ -33,18 +33,12 @@
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
 #define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
 
-// modules
-#define MODULE_TASK_COUNT_MAX 128
-#define MODULE_SERVICE_COUNT_MAX 128
-#define MODULE_DRIVER_COUNT_MAX 256
-#define MODULE_NAME_SIZE_MAX 32
-
 typedef unsigned char module_status_t;
 typedef int run_level_modules_count_t;
 
 typedef struct
 {
-	char name[MODULE_NAME_SIZE_MAX];
+	char name[MODULES_NAME_SIZE_MAX];
 	module_status_t status;
 	int id;
 
@@ -52,11 +46,11 @@ typedef struct
 
 typedef struct
 {
-	module_item_t services[MODULE_SERVICE_COUNT_MAX];
+	module_item_t services[MODULES_SERVICES_COUNT_MAX];
 	int services_count;
-	module_item_t tasks[MODULE_TASK_COUNT_MAX];
+	module_item_t tasks[MODULES_TASKS_COUNT_MAX];
 	int tasks_count;
-	module_item_t drivers[MODULE_DRIVER_COUNT_MAX];
+	module_item_t drivers[MODULES_DRIVERS_COUNT_MAX];
 	int drivers_count;
 	run_level_modules_count_t run_level_threads_count[RUN_LEVEL_COUNT];
 	run_level_modules_count_t run_level_threads_total_count[RUN_LEVEL_COUNT];
