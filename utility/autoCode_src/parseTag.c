@@ -23,11 +23,6 @@
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-int id_counter;
-const int id_driver_start = 1000;
-const int id_service_start = 2000;
-const int id_task_start = 3000;
-
 void parseTag(module_t *modules, const char *name_src)
 {
 	// open source and tmp file
@@ -127,16 +122,12 @@ void parseTag(module_t *modules, const char *name_src)
 static void writeThreadsInit(module_t *modules, FILE *file)
 {
 	int threads_count = 0;
-	id_counter = id_service_start;
 
 	for( int i = 0; i < modules->services_count; i++ )
 	{
-		modules->services[i].id = id_counter++;
-
 		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, threads_count);
 
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
-		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->services[i].id);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
 		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count,
@@ -148,16 +139,11 @@ static void writeThreadsInit(module_t *modules, FILE *file)
 		threads_count++;
 	}
 
-	id_counter = id_task_start;
-
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
-		modules->tasks[i].id = id_counter++;
-
 		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->tasks[i].name, threads_count);
 
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
-		fprintf(file, "\tmodules.threads[%i].id = %i;\n", threads_count, modules->tasks[i].id);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
 		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count,
@@ -172,17 +158,12 @@ static void writeThreadsInit(module_t *modules, FILE *file)
 
 static void writeDriversInit(module_t *modules, FILE *file)
 {
-	id_counter = id_driver_start;
-
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		modules->drivers[i].id = id_counter++;
-
 		fprintf(file, "\tconst char* driver%i_name = \"%s\";\n", i, modules->drivers[i].name);
 
 		fprintf(file, "\tmodules.drivers[%i]=(driver_item_t)\n", i);
 		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.id = %i,\n", modules->drivers[i].id);
 		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
 		fprintf(file, "\t\t.setStatus = %sSetStatus,\n", modules->drivers[i].name);
 		fprintf(file, "\t\t.getStatus = %sGetStatus,\n", modules->drivers[i].name);
@@ -211,19 +192,20 @@ static void writeRunLevelsInit(module_t *modules, FILE *file)
 		modules->run_level_threads_total_count[level] = total_thread_count;
 		fprintf(file, "\t\t.level%i = {%i", level, modules->run_level_threads_total_count[level]);
 
+		int threads_count = 0;
 
 		for( int i = 0; i < modules->services_count; i++ )
 		{
 			if( (modules->services[i].status & RUN_LEVEL_MASK) <= level )
 			{
-				fprintf(file, ",%i", modules->services[i].id);
+				fprintf(file, ",%i", threads_count++);
 			}
 		}
 		for( int i = 0; i < modules->tasks_count; i++ )
 		{
 			if( (modules->tasks[i].status & RUN_LEVEL_MASK) <= level )
 			{
-				fprintf(file, ",%i", modules->tasks[i].id);
+				fprintf(file, ",%i", threads_count++ );
 			}
 		}
 

@@ -44,7 +44,7 @@ void lcdAMC2004(void)
 	lcdAMC2004WriteString("lcd AMC2004");
 
 	lcdAMC2004SetCursor(1,0);
-	lcdAMC2004WriteString("Refactoring for ID");
+	lcdAMC2004WriteString("Refactoring for ID.2");
 
 	lcdAMC2004SetCursor(2,0);
 	lcdAMC2004WriteString("11/05/2025 22:45");

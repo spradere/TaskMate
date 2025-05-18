@@ -40,7 +40,6 @@ typedef struct
 {
 	char name[MODULES_NAME_SIZE_MAX];
 	module_status_t status;
-	int id;
 
 } module_item_t;
 
