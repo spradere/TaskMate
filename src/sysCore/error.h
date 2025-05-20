@@ -34,6 +34,9 @@ typedef enum
 	ERR_USART1_TX_BUFFER_FULL = 102,
 	ERR_USART1_RX_BUFFER_FULL = 103,
 
+	ERR_MSG_OUT_OF_FREE_CHANNEL = 104,
+
+
 	ERR_FATAL_STACK_OVERFLOW = 200, // Critical: OS must take action
 	ERR_FATAL_MEMORY_CORRUPTION = 201, // Critical: OS must kill thread
 	ERR_FATAL_HW_FAILURE = 202 // Critical: OS must halt or reboot

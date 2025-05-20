@@ -5,6 +5,7 @@
 
 #include "services/lcdAMC2004.h"
 #include "services/scli.h"
+#include "services/msg.h"
 
 #include "tasks/task1.h"
 #include "tasks/task2.h"

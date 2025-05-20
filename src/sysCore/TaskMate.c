@@ -55,7 +55,7 @@ int main(void)
 	// Set output for in board led 13
 	LED_DDR |= (1 << LED_PIN);
 
-	// init driver
+	// start driver
 	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
 	{
 		(*modules.drivers[i].init)();
@@ -89,7 +89,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;
-	TCCR1B &= !(TIMER1_CS_MASK); // CS12 CS11 CS10 = 0 0 0 timer stopped
+	TCCR1B &= ~TIMER1_CS_MASK; // CS12 CS11 CS10 = 0 0 0 no source, timer stopped
 
 	// todo -> add stack overflow test
 

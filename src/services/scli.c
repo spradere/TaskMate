@@ -22,7 +22,6 @@
 #include <avr/io.h>
 
 #include "sysCore/TaskMate_public.h"
-#include "sysCore/sysCall.h"
 #include "drivers/usart1.h"
 #include "services/scli.h"
 

@@ -70,21 +70,29 @@ void initThreads(void)
 	modules.threads[1].getStatus = scliGetStatus;
 	(*modules.threads[1].setStatus)(17); // set run level | thread type
 
-	threadCreate(task1, 2);
+	threadCreate(msg, 2);
 
-	const char *thread2_name = "task1";
+	const char *thread2_name = "msg";
 	modules.threads[2].name = (uint8_t *)thread2_name;
-	modules.threads[2].setStatus = task1SetStatus;
-	modules.threads[2].getStatus = task1GetStatus;
-	(*modules.threads[2].setStatus)(12); // set run level | thread type
+	modules.threads[2].setStatus = msgSetStatus;
+	modules.threads[2].getStatus = msgGetStatus;
+	(*modules.threads[2].setStatus)(19); // set run level | thread type
 
-	threadCreate(task2, 3);
+	threadCreate(task1, 3);
 
-	const char *thread3_name = "task2";
+	const char *thread3_name = "task1";
 	modules.threads[3].name = (uint8_t *)thread3_name;
-	modules.threads[3].setStatus = task2SetStatus;
-	modules.threads[3].getStatus = task2GetStatus;
+	modules.threads[3].setStatus = task1SetStatus;
+	modules.threads[3].getStatus = task1GetStatus;
 	(*modules.threads[3].setStatus)(12); // set run level | thread type
+
+	threadCreate(task2, 4);
+
+	const char *thread4_name = "task2";
+	modules.threads[4].name = (uint8_t *)thread4_name;
+	modules.threads[4].setStatus = task2SetStatus;
+	modules.threads[4].getStatus = task2GetStatus;
+	(*modules.threads[4].setStatus)(12); // set run level | thread type
 
 	// [/tag]
 }
@@ -152,8 +160,8 @@ void initRunLevels(void)
 		.level0 = {0},
 		.level1 = {1,0},
 		.level2 = {1,0},
-		.level3 = {2,0,1},
-		.level4 = {4,0,1,2,3},
+		.level3 = {3,0,1,2},
+		.level4 = {5,0,1,2,3,4},
 		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
 	};
 	to_run.current=RUN_CORE;
