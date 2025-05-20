@@ -27,12 +27,6 @@
 
 #define USART1_BAUD_RATE 9600
 
-// satus
-uint8_t usart1_status = 0;
-
-void usart1SetStatus(uint8_t status) { usart1_status = status; }
-uint8_t usart1GetStatus(void) { return usart1_status; }
-
 // Circular buffers
 #define USART1_BUFFER_SIZE 128
 

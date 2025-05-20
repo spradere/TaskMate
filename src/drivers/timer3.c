@@ -25,12 +25,6 @@
 
 const int TIMER3_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
 
-// status
-uint8_t timer3_status = 0;
-
-void timer3SetStatus(uint8_t status) { timer3_status = status; }
-uint8_t timer3GetStatus(void) { return timer3_status; }
-
 void timer3Init(void)
 {
 

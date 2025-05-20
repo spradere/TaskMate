@@ -22,9 +22,6 @@
 #ifndef LCDAMC2004_H
 #define LCDAMC2004_H
 
-void lcdAMC2004SetStatus(uint8_t status);
-uint8_t lcdAMC2004GetStatus(void);
-
 void lcdAMC2004(void);
 
 void lcdAMC2004Init(void);

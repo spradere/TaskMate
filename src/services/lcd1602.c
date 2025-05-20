@@ -30,12 +30,6 @@
 #define LCD1602_RAW 2
 #define LCD1602_COL 16
 
-// status
-uint8_t lcd1602_status = 0;
-
-void lcd1602SetStatus(uint8_t status) { lcd1602_status = status; }
-uint8_t lcd1602GetStatus(void) { return lcd1602_status; }
-
 void lcd1602(void)
 {
 	// lcd test

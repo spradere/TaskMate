@@ -22,9 +22,6 @@
 #ifndef LCD1602_H
 #define LCD1602_H
 
-void lcd1602SetStatus(uint8_t status);
-uint8_t lcd1602GetStatus(void);
-
 void lcd1602(void);
 
 void lcd1602Init(void);

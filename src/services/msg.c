@@ -24,12 +24,6 @@
 #include "sysCore/TaskMate_public.h"
 #include "services/msg.h"
 
-// status
-uint8_t msg_status = 0;
-
-void msgSetStatus(uint8_t status) { msg_status = status; }
-uint8_t msgGetStatus(void) { return msg_status; }
-
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
 

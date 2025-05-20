@@ -22,11 +22,6 @@
 #ifndef TIMER3_H
 #define TIMER3_H
 
-#include <stdint.h>
-
-void timer3SetStatus(uint8_t status);
-uint8_t timer3GetStatus(void);
-
 void timer3Init(void);
 void timer3Start(void);
 void timer3Stop(void);

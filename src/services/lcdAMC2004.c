@@ -30,12 +30,6 @@
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-// status
-uint8_t lcdAMC2004_status = 0;
-
-void lcdAMC2004SetStatus(uint8_t status) { lcdAMC2004_status = status; }
-uint8_t lcdAMC2004GetStatus(void) { return lcdAMC2004_status; }
-
 void lcdAMC2004(void)
 {
 	// lcd test
@@ -44,7 +38,7 @@ void lcdAMC2004(void)
 	lcdAMC2004WriteString("lcd AMC2004");
 
 	lcdAMC2004SetCursor(1,0);
-	lcdAMC2004WriteString("Refactoring for ID.2");
+	lcdAMC2004WriteString("msg server 0.3 -status");
 
 	lcdAMC2004SetCursor(2,0);
 	lcdAMC2004WriteString("11/05/2025 22:45");

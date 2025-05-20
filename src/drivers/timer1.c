@@ -26,12 +26,6 @@
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
-// status
-uint8_t timer1_status = 0;
-
-void timer1SetStatus(uint8_t status) { timer1_status = status; }
-uint8_t timer1GetStatus(void) { return timer1_status; }
-
 void timer1Init(void)
 {
 	// Set up timer1 interrupt for scheduler
