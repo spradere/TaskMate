@@ -1,7 +1,7 @@
 #include "sysCore/modules_items.h"
 
 #define DRIVERS_COUNT 4
-#define THREADS_COUNT 4
+#define THREADS_COUNT 5
 
 typedef struct
 {
@@ -13,8 +13,8 @@ typedef struct
 #define RUN_LEVEL0_THREADS_COUNT 0
 #define RUN_LEVEL1_THREADS_COUNT 1
 #define RUN_LEVEL2_THREADS_COUNT 1
-#define RUN_LEVEL3_THREADS_COUNT 2
-#define RUN_LEVEL4_THREADS_COUNT 4
+#define RUN_LEVEL3_THREADS_COUNT 3
+#define RUN_LEVEL4_THREADS_COUNT 5
 
 typedef struct
 {
