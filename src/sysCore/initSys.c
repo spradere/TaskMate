@@ -58,42 +58,32 @@ void initThreads(void)
 
 	const char *thread0_name = "lcdAMC2004";
 	modules.threads[0].name = (uint8_t *)thread0_name;
-	modules.threads[0].setStatus = lcdAMC2004SetStatus;
-	modules.threads[0].getStatus = lcdAMC2004GetStatus;
-	(*modules.threads[0].setStatus)(19); // set run level | thread type
-
+	modules.threads[0].status = 19; // set run level | thread type
+	modules.threads[0].main = lcdAMC2004;
 	threadCreate(scli, 1);
 
 	const char *thread1_name = "scli";
 	modules.threads[1].name = (uint8_t *)thread1_name;
-	modules.threads[1].setStatus = scliSetStatus;
-	modules.threads[1].getStatus = scliGetStatus;
-	(*modules.threads[1].setStatus)(17); // set run level | thread type
-
+	modules.threads[1].status = 17; // set run level | thread type
+	modules.threads[1].main = scli;
 	threadCreate(msg, 2);
 
 	const char *thread2_name = "msg";
 	modules.threads[2].name = (uint8_t *)thread2_name;
-	modules.threads[2].setStatus = msgSetStatus;
-	modules.threads[2].getStatus = msgGetStatus;
-	(*modules.threads[2].setStatus)(19); // set run level | thread type
-
+	modules.threads[2].status = 19; // set run level | thread type
+	modules.threads[2].main = msg;
 	threadCreate(task1, 3);
 
 	const char *thread3_name = "task1";
 	modules.threads[3].name = (uint8_t *)thread3_name;
-	modules.threads[3].setStatus = task1SetStatus;
-	modules.threads[3].getStatus = task1GetStatus;
-	(*modules.threads[3].setStatus)(12); // set run level | thread type
-
+	modules.threads[3].status = 12; // set run level | thread type
+	modules.threads[0].main = task1;
 	threadCreate(task2, 4);
 
 	const char *thread4_name = "task2";
 	modules.threads[4].name = (uint8_t *)thread4_name;
-	modules.threads[4].setStatus = task2SetStatus;
-	modules.threads[4].getStatus = task2GetStatus;
-	(*modules.threads[4].setStatus)(12); // set run level | thread type
-
+	modules.threads[4].status = 12; // set run level | thread type
+	modules.threads[1].main = task2;
 	// [/tag]
 }
 
@@ -105,50 +95,38 @@ void initDrivers(void)
 	modules.drivers[0]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver0_name,
-		.setStatus = timer1SetStatus,
-		.getStatus = timer1GetStatus,
+		.status = 1,
 		.init = timer1Init,
 		.start = timer1Start,
 		.stop = timer1Stop
 	};
-	(*modules.drivers[0].setStatus)(1);
-
 	const char* driver1_name = "timer3";
 	modules.drivers[1]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver1_name,
-		.setStatus = timer3SetStatus,
-		.getStatus = timer3GetStatus,
+		.status = 1,
 		.init = timer3Init,
 		.start = timer3Start,
 		.stop = timer3Stop
 	};
-	(*modules.drivers[1].setStatus)(1);
-
 	const char* driver2_name = "i2c";
 	modules.drivers[2]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver2_name,
-		.setStatus = i2cSetStatus,
-		.getStatus = i2cGetStatus,
+		.status = 2,
 		.init = i2cInit,
 		.start = i2cStart,
 		.stop = i2cStop
 	};
-	(*modules.drivers[2].setStatus)(2);
-
 	const char* driver3_name = "usart1";
 	modules.drivers[3]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver3_name,
-		.setStatus = usart1SetStatus,
-		.getStatus = usart1GetStatus,
+		.status = 1,
 		.init = usart1Init,
 		.start = usart1Start,
 		.stop = usart1Stop
 	};
-	(*modules.drivers[3].setStatus)(1);
-
 	// [/tag]
 }
 

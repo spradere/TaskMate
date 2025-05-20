@@ -22,9 +22,6 @@
 #ifndef SCLI_H
 #define SCLI_H
 
-void scliSetStatus(uint8_t status);
-uint8_t scliGetStatus(void);
-
 void scli(void);
 void scliEcho(void);
 

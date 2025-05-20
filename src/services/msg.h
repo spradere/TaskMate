@@ -22,9 +22,6 @@
 #ifndef MSG_H
 #define MSG_H
 
-#define MSG_CHANNELS_MAX 5
-#define MSG_SIZE_MAX 64
-
 // bits [2 1 0] is destination
 #define MSG_TO_NULL 0x0
 #define MSG_TO_LCD1 0x1
@@ -36,15 +33,15 @@
 #define MSG_FLAG_IN_USE 3
 #define MSG_FLAG_SEND 4
 
+// channel
+#define MSG_CHANNELS_MAX 5
+#define MSG_SIZE_MAX 64
+
 typedef struct
 {
 	uint8_t status;
 	uint8_t text[MSG_SIZE_MAX];
 }channel_item_t;
-
-
-void msgSetStatus(uint8_t status);
-uint8_t msgGetStatus(void);
 
 void msg(void);
 

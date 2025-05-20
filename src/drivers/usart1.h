@@ -22,11 +22,7 @@
 #ifndef USART1_H
 #define USART1_H
 
-#include <stdint.h>
 #include "sysCore/error.h"
-
-void usart1SetStatus(uint8_t status);
-uint8_t usart1GetStatus(void);
 
 void usart1Init(void);
 void usart1Start(void);

@@ -2,12 +2,6 @@
 #include "sysCore/TaskMate_public.h"
 #include "tasks/task2.h"
 
-// status
-uint8_t task2_status = 0;
-
-void task2SetStatus(uint8_t status) { task2_status = status; }
-uint8_t task2GetStatus(void) { return task2_status; }
-
 void task2(void)
 {
 	// Set PA1 as an output

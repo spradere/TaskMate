@@ -22,11 +22,6 @@
 #ifndef TIMER1_H
 #define TIMER1_H
 
-#include <stdint.h>
-
-void timer1SetStatus(uint8_t status);
-uint8_t timer1GetStatus(void);
-
 void timer1Init(void);
 void timer1Start(void);
 void timer1Stop(void);

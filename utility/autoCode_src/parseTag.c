@@ -130,12 +130,9 @@ static void writeThreadsInit(module_t *modules, FILE *file)
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
-		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count,
-				modules->services[i].name);
-		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count,
-				modules->services[i].name);
-		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i); // set run level | thread type\n\n",
+		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n",
 				threads_count, modules->services[i].status | (1 << THREAD_TYPE_SYSTEM));
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n",i ,modules->services[i].name);
 		threads_count++;
 	}
 
@@ -146,12 +143,9 @@ static void writeThreadsInit(module_t *modules, FILE *file)
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
-		fprintf(file, "\tmodules.threads[%i].setStatus = %sSetStatus;\n", threads_count,
-				modules->tasks[i].name);
-		fprintf(file, "\tmodules.threads[%i].getStatus = %sGetStatus;\n", threads_count,
-				modules->tasks[i].name);
-		fprintf(file, "\t(*modules.threads[%i].setStatus)(%i); // set run level | thread type\n\n",
+		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n",
 				threads_count, modules->tasks[i].status | (1 << THREAD_TYPE_USER));
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n",i ,modules->tasks[i].name);
 		threads_count++;
 	}
 }
@@ -165,13 +159,11 @@ static void writeDriversInit(module_t *modules, FILE *file)
 		fprintf(file, "\tmodules.drivers[%i]=(driver_item_t)\n", i);
 		fprintf(file, "\t{\n");
 		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
-		fprintf(file, "\t\t.setStatus = %sSetStatus,\n", modules->drivers[i].name);
-		fprintf(file, "\t\t.getStatus = %sGetStatus,\n", modules->drivers[i].name);
+		fprintf(file, "\t\t.status = %i,\n", modules->drivers[i].status);
 		fprintf(file, "\t\t.init = %sInit,\n", modules->drivers[i].name);
 		fprintf(file, "\t\t.start = %sStart,\n", modules->drivers[i].name);
 		fprintf(file, "\t\t.stop = %sStop\n", modules->drivers[i].name);
 		fprintf(file, "\t};\n");
-		fprintf(file, "\t(*modules.drivers[%i].setStatus)(%i);\n\n", i, modules->drivers[i].status);
 	}
 }
 

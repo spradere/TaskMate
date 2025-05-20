@@ -25,9 +25,6 @@
 #define I2C_FREQ 100000UL // Standard mode 100 kHz
 #define I2C_TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
 
-void i2cSetStatus(uint8_t status);
-uint8_t i2cGetStatus(void);
-
 void i2cInit(void);
 void i2cStart(void);
 void i2cStop(void);

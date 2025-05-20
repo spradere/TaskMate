@@ -35,10 +35,8 @@
 typedef struct
 {
 	uint8_t *name; /**< Thread name */
-	uint8_t run_level; /**< level to start thread */
+	uint8_t status; /**< flag | run level */
 
-	void (*setStatus)(uint8_t); /**< Thread function for setting up status */
-	uint8_t (*getStatus)(void); /**< Thread function for getting up status */
 	void (*main)(void); /**< Thread main function for first start and resart */
 
 	volatile uint16_t time_counter; /**< Thread's Time Counter */
@@ -56,10 +54,7 @@ typedef struct
 typedef struct
 {
 	uint8_t *name; /**< Driver name */
-	uint8_t run_level; /**< level to init and start driver */
-
-	void (*setStatus)(uint8_t); /**< Driver function for setting up status */
-	uint8_t (*getStatus)(void); /**< Driver function for getting up status */
+	uint8_t status; /**< flag | run level */
 
 	void (*init)(void); /**< Initialize driver function  */
 	void (*start)(void); /**< Start driver function  */
