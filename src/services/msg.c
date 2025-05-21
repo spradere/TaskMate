@@ -23,6 +23,11 @@
 
 #include "sysCore/TaskMate_public.h"
 #include "services/msg.h"
+#include "libc/string.h"
+
+// Send message to :
+#include "services/lcdAMC2004.h"
+#include "drivers/usart1.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -33,12 +38,27 @@ void msg(void)
 	// init
 	for(uint8_t i = 0; i < MSG_CHANNELS_MAX; i++)
 		{channels[i].status = 0; }
+	lcdAMC2004Init();
 
 	//run
+
+	uint8_t ch_id;
+
+	if(msgRequestChannel(&ch_id) == ERR_SUCCESS)
+		{
+			msgWritreText(ch_id, "msg : Essai USART1 \n", MSG_TO_USART1);
+		}
+
+	if(msgRequestChannel(&ch_id) == ERR_SUCCESS)
+		{
+			msgWritreText(ch_id, "\3msg : Essai LCD", MSG_TO_LCD);
+		}
+
+
+	msgProcess();
+
 	while( 1 )
 	{
-		msgManageDisplay();
-
 		sysCallSetThreadTC(10);
 		while( sysCallGetThreadTC() > 0 ) { sysCallYieldHand(); };
 	}
@@ -50,7 +70,7 @@ errorCode_t msgRequestChannel(uint8_t *channel_id)
 	{
 		if( (channels[i].status & (1 << MSG_FLAG_IN_USE)) == 0)
 		{
-			channels[i].status &= (1 << MSG_FLAG_IN_USE);
+			channels[i].status |= (1 << MSG_FLAG_IN_USE);
 			*channel_id = i;
 			return ERR_SUCCESS;
 		}
@@ -58,7 +78,48 @@ errorCode_t msgRequestChannel(uint8_t *channel_id)
 	return ERR_MSG_OUT_OF_FREE_CHANNEL;
 }
 
-void msgManageDisplay(void)
+void msgWritreText(uint8_t channel_id, const char *msg, uint8_t dest)
 {
+    strncpy(channels[channel_id].text, msg, MSG_SIZE_MAX);
+
+    channels[channel_id].status &= ~(1 << MSG_TO_MASK);
+    channels[channel_id].status |= dest;
+    channels[channel_id].status |= (1 << MSG_FLAG_SEND);
+
+}
+
+void msgProcess(void)
+{
+	for (uint8_t i = 0; i < MSG_CHANNELS_MAX; i++)
+	{
+        if ( (channels[i].status & (1 << MSG_FLAG_SEND)) != 0 )
+        {
+            switch (channels[i].status & MSG_TO_MASK)
+            {
+                case MSG_TO_LCD:
+
+		            lcdAMC2004SetCursor(channels[i].text[0],0);
+					// Zap escape code for line select
+					uint8_t i_src, i_dest=0;
+					for(i_src=1; channels[i].text[i_dest] != 0; i_src++)
+					{
+						channels[i].text[i_dest++] = channels[i].text[i_src];
+					}
+
+                    lcdAMC2004WriteString(channels[i].text);
+                    break;
+
+                case MSG_TO_USART1:
+
+                    usart1WriteString(channels[i].text);
+                    usart1SendTXBuffer();
+                    break;
+
+                case MSG_TO_NULL:
+                    break;
+            }
+            channels[i].status &= ~(1 << MSG_FLAG_IN_USE);
+        }
+    }
 }
 

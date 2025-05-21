@@ -1,0 +1,27 @@
+/*
+ * TaskMate Project
+ * (c) 2025 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the TaskMate License
+ * v1.0. See the LICENSE file for full license terms.
+ *
+ * Non-commercial use permitted under conditions. Commercial use requires a
+ * separate license. Commercial licensing inquiries:
+ * https://codeberg.org/Doul09/TaskMate/issues
+ *
+ * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ */
+
+/**
+ * @file string.h
+ * @brief header of libc string
+ *
+ * @todo nothing
+ */
+
+#ifndef STRING_H
+#define STRING_H
+
+void strncpy(char *dest, const char *src, uint8_t n);
+
+#endif
