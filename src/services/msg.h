@@ -23,12 +23,10 @@
 #define MSG_H
 
 // bits [2 1 0] is destination
-#define MSG_TO_NULL 0x0
-#define MSG_TO_LCD1 0x1
-#define MSG_TO_LCD2 0x2
-#define MSG_TO_LCD3 0x3
-#define MSG_TO_LCD4 0x4
-#define MSG_TO_UART1 0x6
+#define MSG_TO_MASK 0x07
+#define MSG_TO_NULL 0x00
+#define MSG_TO_LCD 0x01
+#define MSG_TO_USART1 0x02
 
 #define MSG_FLAG_IN_USE 3
 #define MSG_FLAG_SEND 4
@@ -40,12 +38,14 @@
 typedef struct
 {
 	uint8_t status;
-	uint8_t text[MSG_SIZE_MAX];
+	char text[MSG_SIZE_MAX];
 }channel_item_t;
 
 void msg(void);
 
 errorCode_t msgRequestChannel(uint8_t *channel_id);
-void msgManageDisplay(void);
+void msgWritreText(uint8_t channel_id, const char* msg, uint8_t dest);
+
+void msgProcess(void);
 
 #endif

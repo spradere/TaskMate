@@ -32,6 +32,7 @@ SRC_DIR_LIST = src/drivers/
 SRC_DIR_LIST += src/services/
 SRC_DIR_LIST += src/sysCore/
 SRC_DIR_LIST += src/tasks/
+SRC_DIR_LIST += src/libc/
 
 # Automatically gather all needed files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
@@ -48,7 +49,7 @@ HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
 
 OBJS = ${SRCS:${SRC_DIR}%.c=${BUILD_DIR}%.o}
-OBJS_ONE_DIR = ${OBJS:S/drivers\///:S/services\///:S/sysCore\///:S/tasks\///}
+OBJS_ONE_DIR = ${OBJS:S/drivers\///:S/services\///:S/sysCore\///:S/tasks\///:S/libc\///}
 OBJS_COUNT != seq  ${OBJS_ONE_DIR:[#]}
 
 # Dependency files
@@ -154,7 +155,7 @@ cloc:
 	@cloc * --exclude-dir=html --exclude-lang=D --exclude-ext=rc
 .PHONY: cloc
 
-# clang-tidy
+# clang-tidy cppcheck
 TIDY_SRC := ${AUTOCODE_SRC}
 TIDY_SRC += ${SRCS}
 

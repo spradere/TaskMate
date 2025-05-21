@@ -33,21 +33,21 @@
 void lcdAMC2004(void)
 {
 	// lcd test
-	lcdAMC2004Init();
+	//lcdAMC2004Init();
+	//lcdAMC2004WriteString("lcd AMC2004");
 
-	lcdAMC2004WriteString("lcd AMC2004");
-
-	lcdAMC2004SetCursor(1,0);
-	lcdAMC2004WriteString("msg server 0.3 -status");
+	/*lcdAMC2004SetCursor(1,0);
+	lcdAMC2004WriteString("Test msg server");
 
 	lcdAMC2004SetCursor(2,0);
 	lcdAMC2004WriteString("11/05/2025 22:45");
 
 	lcdAMC2004SetCursor(3,10);
-	lcdAMC2004WriteString("No error");
+	lcdAMC2004WriteString("No error");*/
 
 
 	// do nothing after
+
 	while( 1 ) { sysCallYieldHand(); }
 }
 
