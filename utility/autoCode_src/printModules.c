@@ -27,8 +27,7 @@ void printModules(const module_t *modules)
 	msgInfo("found drivers :");
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" status=%i \n", i, modules->drivers[i].name,
-			   modules->drivers[i].status);
+		printf("\tdrivers[%i] \"%s\" status=%i \n", i, modules->drivers[i].name, modules->drivers[i].status);
 	}
 	printf("\n");
 
@@ -43,8 +42,7 @@ void printModules(const module_t *modules)
 	msgInfo("found tasks :");
 	for( int i = 0; i < modules->tasks_count; i++ )
 	{
-		printf("\ttasks[%i] \"%s\" status=%i\n", i, modules->tasks[i].name,
-			   modules->tasks[i].status);
+		printf("\ttasks[%i] \"%s\" status=%i\n", i, modules->tasks[i].name, modules->tasks[i].status);
 	}
 	printf("\n");
 
@@ -68,6 +66,9 @@ void printModules(const module_t *modules)
 				break;
 			case 4:
 				strcpy(name, "RUN_USER");
+				break;
+			default:
+				strcpy(name, "error : unknow level");
 				break;
 		}
 

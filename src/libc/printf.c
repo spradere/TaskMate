@@ -13,22 +13,19 @@
  */
 
 /**
- * @file string.c
- * @brief implementation of libc string
+ * @file printf.c
+ * @brief implementation of libc print formated
  *
  * @todo nothing
  */
 
 #include <avr/io.h>
+#include <stdarg.h>
 
-void strncpy(char *dest, const char *src, uint8_t n)
-{
-	uint8_t i = 0;
+// private function
+void vsnprintf(char *buf, uint8_t n, const char *format, va_list args)
+{}
 
-	while( (i < n) && (src[i] != 0) && (i < 255) )
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-}
+// public function
+void snprintf(char *buf, uint8_t n, const char *format, ...)
+{}

@@ -33,5 +33,4 @@
 	0x07 /**< to save space run level is stored in status byte, the first 3 LSB bits are used*/
 #define RUN_LEVEL_COUNT 5
 
-
 #endif

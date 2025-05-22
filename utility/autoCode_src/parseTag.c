@@ -130,9 +130,9 @@ static void writeThreadsInit(module_t *modules, FILE *file)
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
-		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n",
-				threads_count, modules->services[i].status | (1 << THREAD_TYPE_SYSTEM));
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n",i ,modules->services[i].name);
+		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n", threads_count,
+				modules->services[i].status | (1 << THREAD_TYPE_SYSTEM));
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, modules->services[i].name);
 		threads_count++;
 	}
 
@@ -143,9 +143,9 @@ static void writeThreadsInit(module_t *modules, FILE *file)
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
-		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n",
-				threads_count, modules->tasks[i].status | (1 << THREAD_TYPE_USER));
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n",i ,modules->tasks[i].name);
+		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n", threads_count,
+				modules->tasks[i].status | (1 << THREAD_TYPE_USER));
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, modules->tasks[i].name);
 		threads_count++;
 	}
 }
@@ -175,11 +175,8 @@ static void writeRunLevelsInit(module_t *modules, FILE *file)
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
 
-		int total_thread_count=0;
-		for(int i=1; i <= level; i++)
-		{
-			total_thread_count += modules->run_level_threads_count[i];
-		}
+		int total_thread_count = 0;
+		for( int i = 1; i <= level; i++ ) { total_thread_count += modules->run_level_threads_count[i]; }
 
 		modules->run_level_threads_total_count[level] = total_thread_count;
 		fprintf(file, "\t\t.level%i = {%i", level, modules->run_level_threads_total_count[level]);
@@ -197,7 +194,7 @@ static void writeRunLevelsInit(module_t *modules, FILE *file)
 		{
 			if( (modules->tasks[i].status & RUN_LEVEL_MASK) <= level )
 			{
-				fprintf(file, ",%i", threads_count++ );
+				fprintf(file, ",%i", threads_count++);
 			}
 		}
 
