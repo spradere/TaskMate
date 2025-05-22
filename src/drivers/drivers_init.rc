@@ -4,5 +4,7 @@
 timer1 -RUN_CORE
 timer3 -RUN_CORE
 
-i2c
+i2c -RUN_CORE
 usart1 -RUN_CORE
+
+lcdAMC2004

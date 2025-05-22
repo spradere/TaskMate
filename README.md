@@ -91,7 +91,7 @@ of modules during system startup. Each module is assigned a run level according 
 - **RUN_USER**: Start user tasks.
 
 To save memory, the run level is stored using only the three least significant bits
-of the module's status byte (RUN_LEVEL_MASK = 0xF8).
+of the module's status byte.
 
 This mechanism is crucial for maintaining a deterministic and controlled startup sequence,
 ensuring that dependencies are properly satisfied before launching higher-level components.
