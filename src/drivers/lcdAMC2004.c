@@ -14,7 +14,7 @@
 
 /**
  * @file lcdAMC2004.c
- * @brief implementation of lcd display AMC2004 4x20
+ * @brief implementation of driver for lcd display AMC2004 4x20
  *
  * @todo Nothing
  */
@@ -22,7 +22,7 @@
 #include <util/delay.h>
 #include "sysCore/TaskMate_public.h"
 #include "drivers/i2c.h"
-#include "services/lcdAMC2004.h"
+#include "drivers/lcdAMC2004.h"
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
@@ -30,35 +30,6 @@
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-void lcdAMC2004(void)
-{
-	// lcd test
-	//lcdAMC2004Init();
-	//lcdAMC2004WriteString("lcd AMC2004");
-
-	/*lcdAMC2004SetCursor(1,0);
-	lcdAMC2004WriteString("Test msg server");
-
-	lcdAMC2004SetCursor(2,0);
-	lcdAMC2004WriteString("11/05/2025 22:45");
-
-	lcdAMC2004SetCursor(3,10);
-	lcdAMC2004WriteString("No error");*/
-
-
-	// do nothing after
-
-	while( 1 ) { sysCallYieldHand(); }
-}
-
-void lcdAMC2004SendCommand(uint8_t command)
-{
-	i2cCommStart(LCDAMC2004_I2C_ADDR);
-	i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
-	i2cWrite(command);
-	i2cCommStop();
-	_delay_us(200); // Small delay for LCD to process the command
-}
 
 void lcdAMC2004Init(void)
 {
@@ -74,6 +45,28 @@ void lcdAMC2004Init(void)
 	_delay_us(110);
 
 }
+
+void lcdAMC2004Start(void)
+{
+	lcdAMC2004Clear();
+	lcdAMC2004WriteString("lcdAMC2004");
+}
+
+void lcdAMC2004Stop(void)
+{
+	// nothing to do.
+}
+
+
+void lcdAMC2004SendCommand(uint8_t command)
+{
+	i2cCommStart(LCDAMC2004_I2C_ADDR);
+	i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
+	i2cWrite(command);
+	i2cCommStop();
+	_delay_us(200); // Small delay for LCD to process the command
+}
+
 
 void lcdAMC2004Clear(void)
 {

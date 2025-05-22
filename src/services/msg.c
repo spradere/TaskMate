@@ -26,7 +26,7 @@
 #include "libc/string.h"
 
 // Send message to :
-#include "services/lcdAMC2004.h"
+#include "drivers/lcdAMC2004.h"
 #include "drivers/usart1.h"
 
 // variables
@@ -35,10 +35,12 @@ channel_item_t channels[MSG_CHANNELS_MAX];
 
 void msg(void)
 {
-	// init
+	// init channels
 	for(uint8_t i = 0; i < MSG_CHANNELS_MAX; i++)
-		{channels[i].status = 0; }
-	lcdAMC2004Init();
+		{
+			channels[i].status = 0;
+			channels[i].text[0] = 0;
+		}
 
 	//run
 

@@ -54,35 +54,29 @@ void initThreads(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] threads init
-	threadCreate(lcdAMC2004, 0);
+	threadCreate(scli, 0);
 
-	const char *thread0_name = "lcdAMC2004";
+	const char *thread0_name = "scli";
 	modules.threads[0].name = (uint8_t *)thread0_name;
-	modules.threads[0].status = 19; // set run level | thread type
-	modules.threads[0].main = lcdAMC2004;
-	threadCreate(scli, 1);
+	modules.threads[0].status = 17; // set run level | thread type
+	modules.threads[0].main = scli;
+	threadCreate(msg, 1);
 
-	const char *thread1_name = "scli";
+	const char *thread1_name = "msg";
 	modules.threads[1].name = (uint8_t *)thread1_name;
-	modules.threads[1].status = 17; // set run level | thread type
-	modules.threads[1].main = scli;
-	threadCreate(msg, 2);
+	modules.threads[1].status = 19; // set run level | thread type
+	modules.threads[1].main = msg;
+	threadCreate(task1, 2);
 
-	const char *thread2_name = "msg";
+	const char *thread2_name = "task1";
 	modules.threads[2].name = (uint8_t *)thread2_name;
-	modules.threads[2].status = 19; // set run level | thread type
-	modules.threads[2].main = msg;
-	threadCreate(task1, 3);
+	modules.threads[2].status = 12; // set run level | thread type
+	modules.threads[0].main = task1;
+	threadCreate(task2, 3);
 
-	const char *thread3_name = "task1";
+	const char *thread3_name = "task2";
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].status = 12; // set run level | thread type
-	modules.threads[0].main = task1;
-	threadCreate(task2, 4);
-
-	const char *thread4_name = "task2";
-	modules.threads[4].name = (uint8_t *)thread4_name;
-	modules.threads[4].status = 12; // set run level | thread type
 	modules.threads[1].main = task2;
 	// [/tag]
 }
@@ -113,7 +107,7 @@ void initDrivers(void)
 	modules.drivers[2]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver2_name,
-		.status = 2,
+		.status = 1,
 		.init = i2cInit,
 		.start = i2cStart,
 		.stop = i2cStop
@@ -127,6 +121,15 @@ void initDrivers(void)
 		.start = usart1Start,
 		.stop = usart1Stop
 	};
+	const char* driver4_name = "lcdAMC2004";
+	modules.drivers[4]=(driver_item_t)
+	{
+		.name = (uint8_t *)driver4_name,
+		.status = 2,
+		.init = lcdAMC2004Init,
+		.start = lcdAMC2004Start,
+		.stop = lcdAMC2004Stop
+	};
 	// [/tag]
 }
 
@@ -138,8 +141,8 @@ void initRunLevels(void)
 		.level0 = {0},
 		.level1 = {1,0},
 		.level2 = {1,0},
-		.level3 = {3,0,1,2},
-		.level4 = {5,0,1,2,3,4},
+		.level3 = {2,0,1},
+		.level4 = {4,0,1,2,3},
 		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
 	};
 	to_run.current=RUN_CORE;
