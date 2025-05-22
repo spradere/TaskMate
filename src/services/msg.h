@@ -39,12 +39,12 @@ typedef struct
 {
 	uint8_t status;
 	char text[MSG_SIZE_MAX];
-}channel_item_t;
+} channel_item_t;
 
 void msg(void);
 
 errorCode_t msgRequestChannel(uint8_t *channel_id);
-void msgWritreText(uint8_t channel_id, const char* msg, uint8_t dest);
+void msgWritreText(uint8_t channel_id, const char *msg, uint8_t dest);
 
 void msgProcess(void);
 

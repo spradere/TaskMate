@@ -13,22 +13,15 @@
  */
 
 /**
- * @file string.c
- * @brief implementation of libc string
+ * @file stdio.h
+ * @brief header of libc stdio
  *
  * @todo nothing
  */
 
-#include <avr/io.h>
+#ifndef STDIO_H
+#define STDIO_H
 
-void strncpy(char *dest, const char *src, uint8_t n)
-{
-	uint8_t i = 0;
+void snprintf(char *buf, uint8_t n, const char *format, ...);
 
-	while( (i < n) && (src[i] != 0) && (i < 255) )
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-}
+#endif

@@ -30,7 +30,6 @@
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-
 void lcdAMC2004Init(void)
 {
 	_delay_ms(50); // Wait for LCD to power up
@@ -43,20 +42,18 @@ void lcdAMC2004Init(void)
 	_delay_ms(11);
 	lcdAMC2004SendCommand(0x06); // Entry Mode: Cursor moves right, no shift
 	_delay_us(110);
-
 }
 
 void lcdAMC2004Start(void)
 {
 	lcdAMC2004Clear();
-	lcdAMC2004WriteString("lcdAMC2004");
+	lcdAMC2004WriteString("lcdAMC2004 ready");
 }
 
 void lcdAMC2004Stop(void)
 {
 	// nothing to do.
 }
-
 
 void lcdAMC2004SendCommand(uint8_t command)
 {
@@ -66,7 +63,6 @@ void lcdAMC2004SendCommand(uint8_t command)
 	i2cCommStop();
 	_delay_us(200); // Small delay for LCD to process the command
 }
-
 
 void lcdAMC2004Clear(void)
 {

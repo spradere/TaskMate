@@ -77,5 +77,4 @@ void sysCallClearFlag(uint8_t flag);
 void sysCallSetFlag(uint8_t flag);
 uint8_t sysCallGetFlag(uint8_t flag);
 
-
 #endif
