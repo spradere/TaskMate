@@ -22,10 +22,32 @@
 #include <avr/io.h>
 #include <stdarg.h>
 
-// private function
-void vsnprintf(char *buf, uint8_t n, const char *format, va_list args)
-{}
-
 // public function
 void snprintf(char *buf, uint8_t n, const char *format, ...)
-{}
+{
+	va_list args;
+    va_start(args, format);
+
+    while (*format)
+    {
+        if (*format == '%' && *(format + 1))
+        {
+            format++;
+            switch (*format)
+            {
+                case 's': /*uart_puts(va_arg(args, char*));*/ break;
+                case 'c': /*uart_putc((char)va_arg(args, int));*/ break;
+                case 'd': /*print_decimal(va_arg(args, int));*/ break;
+                case 'x': /*print_hex(va_arg(args, unsigned int));*/ break;
+                default: /*uart_putc(*format);*/ break;
+            }
+        }
+        else
+        {
+            /*uart_putc(*format);*/
+        }
+        format++;
+    }
+
+    va_end(args);
+}
