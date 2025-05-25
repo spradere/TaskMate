@@ -154,7 +154,7 @@ static void writeDriversInit(module_t *modules, FILE *file)
 {
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		fprintf(file, "\tconst char* driver%i_name = \"%s\";\n", i, modules->drivers[i].name);
+		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, modules->drivers[i].name);
 
 		fprintf(file, "\tmodules.drivers[%i]=(driver_item_t)\n", i);
 		fprintf(file, "\t{\n");

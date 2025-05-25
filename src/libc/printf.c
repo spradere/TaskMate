@@ -39,7 +39,8 @@ void snprintf(char *buf, uint8_t n, const char *format, ...)
                 case 'c': /*uart_putc((char)va_arg(args, int));*/ break;
                 case 'd': /*print_decimal(va_arg(args, int));*/ break;
                 case 'x': /*print_hex(va_arg(args, unsigned int));*/ break;
-                default: /*uart_putc(*format);*/ break;
+                case '%': /*uart_putc('%');*/ break;
+                default: /*uart_putc('?');*/
             }
         }
         else
