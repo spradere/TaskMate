@@ -5,6 +5,7 @@
 #define SLAB_COUNT 64
 #define SLAB_SIZE 32
 
+// todo add slabFree()
 
 typedef struct
 {
@@ -62,6 +63,35 @@ int main(void)
 
 	slab_pool_t pool;
 
+	// !! do not compile !!
+	/*uint8_t *test_group = slab16Alloc(pool_16);
+	*test_group = slab32GroupAlloc(pool_32, size);
+	uint8_t *test_data = slabGetPtr(test_group);
+
+	uint8_t **test;
+	test = slabAlloc(16);
+	*test = slabAlloc(32);
+	slabGroupAlloc(test, 128);
+
+	uint8_t group = slabAlloc(128);
+	uint8_t *p_data = slabGetPtr(group);
+
+	use(test->pointer);
+
+	(&pool.slabs[index][0])*/
+
+	typedef struct
+	{
+		const uint8_t a;
+		const uint8_t b;
+	} const_test_t;
+
+	const_test_t foo;
+
+	uint8_t *wa = &foo.b;
+	*wa=8;
+
+	printf("const test b=%i\n",foo.b);
 	// init
 	pool.mem_barrier_hight = &pool.slabs[SLAB_COUNT-1][SLAB_SIZE-1];
 	pool.mem_barrier_low = &pool.slabs[0][0];
@@ -75,13 +105,13 @@ int main(void)
 
 	slab_t **slab;
 
-	slab=malloc(sizeof(slab));
-	*slab=malloc(sizeof(*slab));
+	slab=malloc(sizeof(*slab));
+	*slab=malloc(sizeof(slab));
 
 	int test = slabAlloc(&pool, slab, 4);
-	printf("test alloc 1 4n: pos = %i\n", (*slab)->slab_first);
+	printf("test alloc 1 4n: pos = %i %p\n", (*slab)->slab_first,(*slab)->pointer);
 
 	test = slabAlloc(&pool, slab, 4);
-	printf("test alloc 2 4n: pos = %i\n", (*slab)->slab_first);
+	printf("test alloc 2 4n: pos = %i %p\n", (*slab)->slab_first, (*slab)->pointer);
 	return 0;
 }
