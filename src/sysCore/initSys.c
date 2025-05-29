@@ -85,7 +85,7 @@ void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] drivers init
-	const char* driver0_name = "timer1";
+	const char *driver0_name = "timer1";
 	modules.drivers[0]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver0_name,
@@ -94,7 +94,7 @@ void initDrivers(void)
 		.start = timer1Start,
 		.stop = timer1Stop
 	};
-	const char* driver1_name = "timer3";
+	const char *driver1_name = "timer3";
 	modules.drivers[1]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver1_name,
@@ -103,7 +103,7 @@ void initDrivers(void)
 		.start = timer3Start,
 		.stop = timer3Stop
 	};
-	const char* driver2_name = "i2c";
+	const char *driver2_name = "i2c";
 	modules.drivers[2]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver2_name,
@@ -112,7 +112,7 @@ void initDrivers(void)
 		.start = i2cStart,
 		.stop = i2cStop
 	};
-	const char* driver3_name = "usart1";
+	const char *driver3_name = "usart1";
 	modules.drivers[3]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver3_name,
@@ -121,7 +121,7 @@ void initDrivers(void)
 		.start = usart1Start,
 		.stop = usart1Stop
 	};
-	const char* driver4_name = "lcdAMC2004";
+	const char *driver4_name = "lcdAMC2004";
 	modules.drivers[4]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver4_name,

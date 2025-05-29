@@ -86,7 +86,7 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 
 void msgProcess(void)
 {
-	for( uint8_t channel = 0; channel < MSG_CHANNELS_MAX; i++ )
+	for( uint8_t channel = 0; channel < MSG_CHANNELS_MAX; channel++ )
 	{
 		if( (channels[channel].status & (1 << MSG_FLAG_SEND)) != 0 )
 		{
