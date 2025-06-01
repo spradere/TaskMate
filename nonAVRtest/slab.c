@@ -4,6 +4,18 @@
 
 #define SLAB_COUNT 64
 #define SLAB_SIZE 32
+#define SLAB_GROUP_SIZE_MAX 512
+#define SLAB_POS_MASK 0x00ff
+#define SLAB_COUNT_MASK 0xff00
+#define SLAB_COUNT_SHIFT 8
+
+
+
+// slab pseudo functions
+#define slabGetPtr(pool, index)  (void *)&(pool.slabs[index][0])
+#define slabGetFirst(group) (group & SLAB_POS_MASK)
+#define slabGetSize(group) ((group & SLAB_COUNT_MASK) >> SLAB_COUNT_SHIFT) * SLAB_SIZE
+
 
 // todo add slabFree()
 
@@ -16,23 +28,13 @@ typedef struct
 } slab_pool_t;
 
 
-typedef struct
+int slabFindFree(uint64_t bitmap, uint8_t n)
 {
-	uint8_t *pointer;
-	uint8_t slab_first;
-	uint8_t slab_count;
+    if (n < 1 || (n > (SLAB_GROUP_SIZE_MAX/SLAB_SIZE))){return -1;}
 
-}slab_t;
-
-
-int slabFindFree(uint64_t bitmap, int n)
-{
-    if (n < 1 || n > 4){return -1;}
-
-	// todo change 64 -> 8 ?
     uint64_t mask = (1ULL << n) - 1;  // mask n bits=1
 
-    for (int i = 0; i <= 64 - n; i++)
+    for (int i = 0; i <= SLAB_COUNT - n; i++)
     {
         if ( ((bitmap >> i) & mask) == 0 )
             return i;  // find
@@ -41,18 +43,22 @@ int slabFindFree(uint64_t bitmap, int n)
     return -1; // not find
 }
 
-int slabAlloc(slab_pool_t *pool, slab_t **slab, int n)
+uint16_t slabAlloc(slab_pool_t *pool, uint16_t size)
 {
-    int pos = slabFindFree( pool->bitmap, n);
+    if(size > SLAB_GROUP_SIZE_MAX){ return -1;}
+
+    uint16_t count = (size + SLAB_SIZE -1) / SLAB_SIZE;
+    uint8_t pos = slabFindFree( pool->bitmap, count);
+
+
     if (pos >= 0)
     {
-        printf("[slabAlloc] pos = %i\n",pos);
-        pool->bitmap |= ((1ULL << n) - 1) << pos;
+        printf("[slabAlloc] count = %i pos = %i\n",count, pos);
+        pool->bitmap |= ((1ULL << count) - 1) << pos;
 
-        (*slab)->pointer = &(pool->slabs[pos][0]);
-		(*slab)->slab_first = pos;
-        (*slab)->slab_count = n;
-        return pos;
+        uint16_t output = count;
+        output = (output << SLAB_COUNT_SHIFT) | pos;
+        return output;
     }
     return -1;
 }
@@ -63,55 +69,27 @@ int main(void)
 
 	slab_pool_t pool;
 
-	// !! do not compile !!
-	/*uint8_t *test_group = slab16Alloc(pool_16);
-	*test_group = slab32GroupAlloc(pool_32, size);
-	uint8_t *test_data = slabGetPtr(test_group);
-
-	uint8_t **test;
-	test = slabAlloc(16);
-	*test = slabAlloc(32);
-	slabGroupAlloc(test, 128);
-
-	uint8_t group = slabAlloc(128);
-	uint8_t *p_data = slabGetPtr(group);
-
-	use(test->pointer);
-
-	(&pool.slabs[index][0])*/
-
-	typedef struct
-	{
-		const uint8_t a;
-		const uint8_t b;
-	} const_test_t;
-
-	const_test_t foo;
-
-	uint8_t *wa = &foo.b;
-	*wa=8;
-
-	printf("const test b=%i\n",foo.b);
 	// init
 	pool.mem_barrier_hight = &pool.slabs[SLAB_COUNT-1][SLAB_SIZE-1];
 	pool.mem_barrier_low = &pool.slabs[0][0];
 	pool.bitmap = 0;
 
 	// test
-	printf("memory barrier low : %p hight = %p diff = %i\n", pool.mem_barrier_low,
+	printf("memory barrier low : %p hight = %p diff = %li\n", pool.mem_barrier_low,
 			pool.mem_barrier_hight, (pool.mem_barrier_hight-pool.mem_barrier_low));
 
-	pool.bitmap = 0x0f0f55aa;
+	pool.bitmap = 0x0f0f55aa; // dummy data for test purpose
 
-	slab_t **slab;
+	uint16_t group = 0;
+	printf("pool bitmap = %lx\n\n", pool.bitmap);
 
-	slab=malloc(sizeof(*slab));
-	*slab=malloc(sizeof(slab));
+	group = slabAlloc(&pool, 128);
+	printf("test alloc 1 4*64 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
+	printf("pool bitmap = %lx\n\n", pool.bitmap);
 
-	int test = slabAlloc(&pool, slab, 4);
-	printf("test alloc 1 4n: pos = %i %p\n", (*slab)->slab_first,(*slab)->pointer);
+	group = slabAlloc(&pool, 128);
+	printf("test alloc 2 4*64 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
+	printf("pool bitmap = %lx\n\n", pool.bitmap);
 
-	test = slabAlloc(&pool, slab, 4);
-	printf("test alloc 2 4n: pos = %i %p\n", (*slab)->slab_first, (*slab)->pointer);
 	return 0;
 }

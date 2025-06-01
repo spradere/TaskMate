@@ -1,0 +1,22 @@
++---------------------+
+|     Code (.text)    | ← Instructions machine (exécutable, read-only)
++---------------------+
+|     Constantes      | ← Chaînes "..." en lecture seule (.rodata)
++---------------------+
+|   Données globales  | ← Variables globales initialisées (.data)
++---------------------+
+| Données non init.   | ← Variables globales non initialisées (.bss)
++---------------------+
+|       Heap          | ← malloc(), calloc(), realloc() (croît vers le haut)
++---------------------+
+|       Stack         | ← variables locales, appels de fonctions (croît vers le bas)
++---------------------+
+
+🕹️ Durée de vie et accès
+Type de donnée	Allocation	Durée de vie	Accès
+int a;	Stack	jusqu’à la fin du bloc	rapide (offset)
+static int a;	.data/.bss	jusqu’à la fin du prog	global (adresse)
+char *s = "abc";	.rodata	jusqu’à la fin du prog	lecture seule
+int *p = malloc();	Heap	jusqu’au free()	manuel
+const int c = 4;	.rodata	jusqu’à la fin du prog	lecture seule
+global int g;	.data/.bss	jusqu’à la fin du prog	global
