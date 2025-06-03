@@ -2,22 +2,44 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define SLAB_COUNT 64
+// slab size & count
+#define SLAB16_COUNT 64
+#define SLAB16_SIZE 16
+#define SLAB32_COUNT 64
+#define SLAB32_SIZE 32
+#define SLAB64_COUNT 32
+#define SLAB64_SIZE 64
+
+// slab 16 bits mask
+#define SLAB_INDEX_BITN 6
+#define SLAB_INDEX_SHIFT 0
+#define SLAB_COUNT_BITN 6
+#define SLAB_COUNT_SHIFT 6
+#define SLAB_POOLID_BITN 4
+#define SLAB_POOLID_SHIFT 12
+
+#define SLAB_INDEX_MASK ((1U << SLAB_INDEX_BITN) - 1) << SLAB_INDEX_SHIFT
+#define SLAB_COUNT_MASK ((1U << SLAB_COUNT_BITN) - 1) << SLAB_COUNT_SHIFT
+#define SLAB_POOLID_MASK ((1U << SLAB_POOLID_BITN) - 1) << SLAB_POOLID_SHIFT
+
+// old def
 #define SLAB_SIZE 32
-#define SLAB_GROUP_SIZE_MAX 512
+#define SLAB_COUNT 64
+
+#define SLAB_GROUP_SIZE_MAX 256
 #define SLAB_POS_MASK 0x00ff
 #define SLAB_COUNT_MASK 0xff00
 #define SLAB_COUNT_SHIFT 8
 
-
-
-// slab pseudo functions
+// slab pseudo functions todo change to functions auto find related slab size
 #define slabGetPtr(pool, index)  (void *)&(pool.slabs[index][0])
 #define slabGetFirst(group) (group & SLAB_POS_MASK)
 #define slabGetSize(group) ((group & SLAB_COUNT_MASK) >> SLAB_COUNT_SHIFT) * SLAB_SIZE
 
 
 // todo add slabFree()
+// pool.slab16.mem[index]
+// pool.slab32.slab_size
 
 typedef struct
 {
@@ -30,8 +52,6 @@ typedef struct
 
 int slabFindFree(uint64_t bitmap, uint8_t n)
 {
-    if (n < 1 || (n > (SLAB_GROUP_SIZE_MAX/SLAB_SIZE))){return -1;}
-
     uint64_t mask = (1ULL << n) - 1;  // mask n bits=1
 
     for (int i = 0; i <= SLAB_COUNT - n; i++)
@@ -75,6 +95,9 @@ int main(void)
 	pool.bitmap = 0;
 
 	// test
+
+	printf("test mask : \n\t0x%04x\n\t0x%04x\n\t0x%04x\n", SLAB_INDEX_MASK, SLAB_SIZE_MASK, SLAB_POOLID_MASK);
+
 	printf("memory barrier low : %p hight = %p diff = %li\n", pool.mem_barrier_low,
 			pool.mem_barrier_hight, (pool.mem_barrier_hight-pool.mem_barrier_low));
 
@@ -83,12 +106,12 @@ int main(void)
 	uint16_t group = 0;
 	printf("pool bitmap = %lx\n\n", pool.bitmap);
 
-	group = slabAlloc(&pool, 128);
-	printf("test alloc 1 4*64 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
+	group = slabAlloc(&pool, 4*SLAB_SIZE);
+	printf("test alloc 1 4*32 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
 	printf("pool bitmap = %lx\n\n", pool.bitmap);
 
-	group = slabAlloc(&pool, 128);
-	printf("test alloc 2 4*64 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
+	group = slabAlloc(&pool, 4*SLAB_SIZE);
+	printf("test alloc 2 4*32 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
 	printf("pool bitmap = %lx\n\n", pool.bitmap);
 
 	return 0;
