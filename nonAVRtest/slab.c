@@ -27,15 +27,15 @@
 #define SLAB_COUNT_MASK ((1U << SLAB_COUNT_BITN) - 1) << SLAB_COUNT_SHIFT
 #define SLAB_ID_MASK ((1U << SLAB_ID_BITN) - 1) << SLAB_ID_SHIFT
 
-// slab pseudo functions todo change to functions auto find related slab size
-//#define slabGetPtr(pool, index)  (void *)&(pool.slabs[index][0])
-//#define slabGetFirst(group) (group & SLAB_POS_MASK)
-//#define slabGetSize(group) ((group & SLAB_COUNT_MASK) >> SLAB_COUNT_SHIFT) * SLAB_SIZE
+// slab pseudo functions
+#define slabPtrGetIndex(ptr) ( ptr & SLAB_INDEX_MASK) >> SLAB_INDEX_SHIFT
+#define slabPtrGetCount(ptr) ( ptr & SLAB_COUNT_MASK) >> SLAB_COUNT_SHIFT
+#define slabPtrGetId(ptr) (ptr & SLAB_ID_MASK) >> SLAB_ID_SHIFT
 
+#define slabPtrPrint(ptr) printf("[slabPtrPrint] id = %i count = %i index = %i\n", slabPtrGetId(ptr), slabPtrGetCount(ptr), slabPtrGetIndex(ptr))
+#define slabPtrGetPtr(ptr) (void *)pool.slabs_ptr[slabPtrGetId(ptr)] + (pool.slabs_size[slabPtrGetId(ptr)] * slabPtrGetIndex(ptr))
+#define slabPtrGetSize(ptr) pool.slabs_size[slabPtrGetId(ptr)] * slabPtrGetCount(ptr)
 
-// todo add slabFree()
-// pool.slab16.mem[index]
-// pool.slab32.slab_size
 
 
 typedef struct
@@ -43,6 +43,7 @@ typedef struct
 	uint64_t bitmaps[POOL_SLAB_COUNT];
 	const uint8_t slabs_count[POOL_SLAB_COUNT];
 	const uint8_t slabs_size[POOL_SLAB_COUNT];
+	const uint8_t *slabs_ptr[POOL_SLAB_COUNT];
 
 	uint8_t slabs16[SLAB16_COUNT][SLAB16_SIZE];
 	uint8_t slabs32[SLAB32_COUNT][SLAB32_SIZE];
@@ -51,7 +52,7 @@ typedef struct
 } slabs_pool_t;
 
 
-int slabFindFree(slabs_pool_t *pool, uint8_t slabn, uint8_t count)
+uint8_t slabFindFree(slabs_pool_t *pool, uint8_t slabn, uint8_t count)
 {
     uint64_t mask = (1ULL << count) - 1;  // mask count bits=1
 
@@ -65,9 +66,10 @@ int slabFindFree(slabs_pool_t *pool, uint8_t slabn, uint8_t count)
 
 uint16_t slabAlloc(slabs_pool_t *pool, uint8_t slabn, uint16_t size)
 {
-    //if(size > SLAB_GROUP_SIZE_MAX){ return -1;}
+    if(size == 0 ){ return 0;}
+    if(size > pool->slabs_size[slabn] * 4){return 0;}
 
-    uint16_t count = (size + pool->slabs_size[slabn] -1) / pool->slabs_size[slabn];
+    uint16_t count = (size + pool->slabs_size[slabn] -1) / pool->slabs_size[slabn]; // rounded up blocks
     uint8_t index = slabFindFree( pool, slabn, count);
 
 
@@ -83,30 +85,21 @@ uint16_t slabAlloc(slabs_pool_t *pool, uint8_t slabn, uint16_t size)
         printf("[slabAlloc] output = 0x%04x\n",output);
         return output;
     }
-    return -1;
-}
-
-void expandPtr(const uint16_t ptr)
-{
-
-	uint16_t index = ( ptr & SLAB_INDEX_MASK) >> SLAB_INDEX_SHIFT;
-	uint16_t count = ( ptr & SLAB_COUNT_MASK) >> SLAB_COUNT_SHIFT;
-	uint16_t id = (ptr & SLAB_ID_MASK) >> SLAB_ID_SHIFT;
-
-	printf("[expandPtr] id = %i count = %i index = %i\n", id, count, index);
+    return 0;
 }
 
 
 int main(void)
 {
 
+	// init
 	slabs_pool_t pool =
 	{
 		.slabs_count = {SLAB16_COUNT, SLAB32_COUNT, SLAB64_COUNT},
-		.slabs_size = {SLAB16_SIZE, SLAB32_SIZE, SLAB64_SIZE}
+		.slabs_size = {SLAB16_SIZE, SLAB32_SIZE, SLAB64_SIZE},
+		.slabs_ptr = {pool.slabs16, pool.slabs32, pool.slabs64}
 	};
 
-	// init
 	for(int i = 0; i < POOL_SLAB_COUNT;i++)
 	{
 		pool.bitmaps[i] = 0;
@@ -116,23 +109,30 @@ int main(void)
 
 	printf("test mask : \n\t0x%04x\n\t0x%04x\n\t0x%04x\n", SLAB_INDEX_MASK, SLAB_COUNT_MASK, SLAB_ID_MASK);
 
-
 	pool.bitmaps[POOL_SLAB32] = 0x0f0f55aa; // dummy data for test purpose
 
-	uint16_t group = 0;
-	printf("pool bitmap = %lx\n\n", pool.bitmaps[POOL_SLAB32]);
+	printf("slabs32 bitmap = %lx\n\n", pool.bitmaps[POOL_SLAB32]);
 
-	group = slabAlloc(&pool, POOL_SLAB32, 4*SLAB32_SIZE);
+	uint16_t group1 = slabAlloc(&pool, POOL_SLAB32, 4*SLAB32_SIZE);
 	//printf("test alloc 1 4*32 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
-	printf("pool bitmap = %lx\n", pool.bitmaps[POOL_SLAB32]);
-	expandPtr(group);
+	printf("slabs32 bitmap = %lx\n", pool.bitmaps[POOL_SLAB32]);
+	slabPtrPrint(group1);
+	printf("group1 ptr,size 0x%p,0x%x\n", slabPtrGetPtr(group1), slabPtrGetSize(group1));
 
 	printf("\n");
 
-	group = slabAlloc(&pool, POOL_SLAB32, 4*SLAB32_SIZE);
+	uint16_t group2 = slabAlloc(&pool, POOL_SLAB32, 4*SLAB32_SIZE);
 	//printf("test alloc 2 4*32 : pos = %i %p\n", slabGetFirst(group),slabGetPtr(pool, group));
-	printf("pool bitmap = %lx\n", pool.bitmaps[POOL_SLAB32]);
-	expandPtr(group);
+	printf("slabs32 bitmap = %lx\n", pool.bitmaps[POOL_SLAB32]);
+	slabPtrPrint(group2);
+	printf("group2 ptr,size 0x%p,0x%x\n", slabPtrGetPtr(group2), slabPtrGetSize(group2));
 
+	uint8_t *ptr2;
+	uint8_t *ptr1;
+
+	ptr1 = slabPtrGetPtr(group1);
+	ptr2 = slabPtrGetPtr(group2);
+
+	printf("\ndiff group2 group1 : 0x%lx \n", ptr2-ptr1);
 	return 0;
 }
