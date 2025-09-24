@@ -1,0 +1,6 @@
+develop slab allocation
+
+porting slab form amd64 to avr -> implement libc printf -> finish implementation of run level
+
+develop system wide error management
+
