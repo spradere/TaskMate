@@ -1,0 +1,21 @@
+normal save :
+	git add .
+	git commit -m "comment"
+	git push
+
+
+tag version : git tag vx.y
+recall version : git checkout vx.y
+
+merge :
+git checkout main
+git pull origin main
+git checkout main
+git merge branch-test
+git push origin main
+
+delete local : git branch -d test_branch
+delete remote : git push origin --delete test_branch
+
+list last commits :
+git log --oneline

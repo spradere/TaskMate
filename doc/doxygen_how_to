@@ -1,0 +1,67 @@
+
+# doxygen Doxyfile
+
+TOP OF FILE **************************************************************
+/**
+ * @file scheduler.c
+ * @brief Implements the TaskMate preemptive scheduler.
+ * 
+ * This file contains the core scheduling algorithm, handling
+ * task switching and preemptive multitasking.
+ */
+
+FUCTION **************************************************************
+/**
+ * @brief Initializes the system timer.
+ * 
+ * This function configures Timer1 for the system scheduler.
+ * 
+ * @param freq The desired frequency in Hz.
+ * @return 0 on success, -1 on error.
+ */
+int timer_init(uint16_t freq);
+
+STRUCT **************************************************************
+/**
+ * @struct Task
+ * @brief Represents a task in the TaskMate OS.
+ * 
+ * This struct holds task metadata such as ID, state, and stack pointer.
+ */
+typedef struct {
+    uint8_t id;      /**< Task ID */
+    uint8_t state;   /**< Current task state */
+    void* stackPtr;  /**< Pointer to task stack */
+} Task;
+
+COMMAND **********************************************************
+@file	Describes the file. Used at the top of a source file.
+@brief	A short summary for a function, struct, or file.
+@details	A longer description (optional, used after @brief).
+@author	Specifies the author of the file.
+@date	Adds a date.
+@version	Defines a version number.
+@param <name>	Documents a function parameter.
+@return	Describes the return value of a function.
+@retval <value>	Describes specific return values in detail.
+@var	Documents a variable inside a struct.
+@struct	Documents a struct.
+@typedef	Documents a typedef.
+@enum	Documents an enum.
+@macro	Documents a macro definition.
+@defgroup	Defines a module (group of functions).
+/** @{ */
+/** @} */
+@ingroup	Adds a function/struct to an existing group.
+@todo	Marks something that needs to be done.
+@warning	Displays a warning message in the documentation.
+@note	Adds a note section.
+@bug	Marks a known bug.
+@image <filename>	Embeds an image.
+@dot	Allows drawing Graphviz diagrams.
+@msc	Allows drawing Message Sequence Charts.
+\f$ ... \f$	Inline LaTeX math notation.
+@ref	Creates a link to another documented element.
+@see	References related functions/files.
+@code ... @endcode	Adds a formatted code block.
+@verbatim ... @endverbatim	Displays text exactly as written.
