@@ -68,7 +68,7 @@ int main(void)
 	asm volatile(POP_ALL_REGS "sei \n\t"
 							  "ret \n\t");
 
-	return 0;
+	return 0; //You should never get here
 }
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)

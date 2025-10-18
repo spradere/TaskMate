@@ -3,8 +3,8 @@
 
 > **TaskMate Project Stats (v0.11)**
 >
-> 137 commits • 61 source files • 3942 lines of code •
-> binary size : 3224 bytes (Flash) • ram usage : 1993 bytes
+> 150 commits • 61 source files • 4402 lines of code •
+> binary size : 3286 bytes (Flash) • ram usage : 1903 bytes
 
 ### ▶️ Introduction
 
@@ -103,8 +103,7 @@ enhancing flexibility and robustness, especially for debugging, recovery, and pa
 ### ➡️ Project progress ...
 
 Coming features:
-- Mutex and semaphore support
-- Inter-thread message passing
+
 - Stack usage monitoring
 - CLI command parser with argument handling
 

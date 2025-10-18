@@ -1,0 +1,62 @@
+TaskMate 0.1
+	first code written for base system
+	just one src file TaskMate.c
+	
+Taskmate0.2
+	major code cosmetics
+	more consistent names
+	main header split (private/public)
+	
+TaskMate0.3
+	Realtime counter
+	code cosmetics
+	big file split
+
+TaskMate0.4
+	 test USART comm, must use another usart to don't mess with USB bootloader / in situ programer  
+
+TaskMate0.5
+	major code re-organisation with sub-folder
+	more consistent names
+	git / codeberg use
+
+TaskMate0.6
+	Driver formated to generic layout (init start stop lock) -> automation
+	expand.c program helper to automatically expand task/driver #include/alloc/init in TaskMate.c
+	Doxygen documentation
+
+TaskMate 0.7
+	License + documentation
+	Makefile even big improvements
+
+TaskMate 0.8
+	i2c driver
+	lcd system service
+	usart driver
+	serial command line interface base
+
+TaskMate 0.9
+	base of system wide error handling, wtih a fault-tolerant design
+
+TaskMate 0.10
+	new folders doc/log/src/build
+	Makefile update
+
+TaskMate 0.10_test
+	TaskMate_tag_expand -> utility/autoCode
+	new initSys.c for all system intialisation
+	Makefile update
+	task formated to a generic layout
+	autoCode.c spliced in many files
+	autoCode read flags in list file to set system flags
+	autocode style refactoring : vars name, comments, messages
+
+TaskMate 0.11
+	refactoring TaskMate for modules
+	refactoring autoCode for init.rc files 
+	add run level
+	add cooperative yieldHand();  function
+	add message server
+	add strings manipulations
+	add memory slab allocation
+
