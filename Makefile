@@ -20,6 +20,9 @@
 # Compiler
 CC = avr-gcc
 
+CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
+CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
+
 # MCU and Programmer settings
 MCU = atmega2560
 F_CPU = 16000000UL
@@ -27,40 +30,34 @@ PROGRAMMER = avrispmkII
 PORT = /dev/ttyU0
 
 # Source directory
-SRC_DIR = src/
+SRC_DIR = src
 SRC_DIR_LIST = src/drivers/
 SRC_DIR_LIST += src/services/
 SRC_DIR_LIST += src/sysCore/
 SRC_DIR_LIST += src/tasks/
 SRC_DIR_LIST += src/libc/
 
-# Automatically gather all needed files
+# Automatically gather all sources files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
+
+# Build files and directory
+BUILD_DIR = build
+TARGET = TaskMate
+HEX = ${TARGET}.hex
+ELF = ${TARGET}.elf
+
+OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
+
+# Dependency files
+DEPS = ${OBJS:.o=.d}
+DEPS_FILE = .deps.d
 
 # autoCode
 AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
-# Build files and directory
-BUILD_DIR = build/
-TARGET = TaskMate
-HEX = ${TARGET}.hex
-ELF = ${TARGET}.elf
-
-OBJS = ${SRCS:${SRC_DIR}%.c=${BUILD_DIR}%.o}
-OBJS_ONE_DIR = ${OBJS:S/drivers\///:S/services\///:S/sysCore\///:S/tasks\///:S/libc\///}
-OBJS_COUNT != seq  ${OBJS_ONE_DIR:[#]}
-
-# Dependency files
-DEPS = ${OBJS_ONE_DIR:.o=.d}
-DEPS_FILE = .deps.d
-
-# Compiler flags
-CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
-CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
-
-# Initrc files
+# Initrc files for autocode
 FILES_INIT_RC = src/drivers/drivers_init.rc
 FILES_INIT_RC += src/services/services_init.rc
 FILES_INIT_RC += src/tasks/tasks_init.rc
@@ -80,17 +77,16 @@ all: .autoCode_stamp header_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n"
 
 # Link
-${TARGET}: ${OBJS_ONE_DIR}
+${TARGET}: ${OBJS}
 	@printf "\n\033[1;33mLinking\033[0m\n\n"
-	${CC} ${CFLAGS} -o ${ELF} ${OBJS_ONE_DIR}
+	${CC} ${CFLAGS} -o ${ELF} ${OBJS}
 
 # Compile
-.for index in ${OBJS_COUNT}
-${OBJS_ONE_DIR:[${index}]}: ${SRCS:[${index}]}
+${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
-	@printf "source : <%s> -> <%s>\n" ${.ALLSRC:[1]} ${.TARGET}
-	${CC} ${CFLAGS} -c  ${.ALLSRC:[1]} -o ${.TARGET}
-.endfor
+	@printf "source : <%s> -> <%s>\n" ${.ALLSRC} ${.TARGET}
+	@mkdir -p ${.TARGET:H}
+	${CC} ${CFLAGS} -c ${.ALLSRC} -o ${.TARGET}
 
 # Include dependency files used to compile *.c if related header was edited
 header_check:
@@ -131,7 +127,7 @@ upload:all
 # Heavy sweep
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
-	rm -f  ${ELF} ${HEX} ${OBJS_ONE_DIR}
+	rm -f ${ELF} ${HEX} ${OBJS}
 	rm -f ${DEPS}
 	rm -f autoCode_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
