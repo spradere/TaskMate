@@ -28,7 +28,7 @@ TaskMate uses a custom **Makefile** that fully manages dependencies and workflow
 
 ---
 
-### ♻️ RTC Real Time Clock
+### ⏱️ RTC Real Time Clock
 
 Each thread have one 16 bits software time counter sycronized with other threads.
 
@@ -36,7 +36,7 @@ If not zero, the counter is decremented automatically at 10 ms rate, it can be u
 
 ---
 
-### ✔️ Features
+### ✨ Features
 
 * Hybrid multithreading (cooperative & preemptive).
 * Dynamic driver and thread  management.
@@ -45,13 +45,13 @@ If not zero, the counter is decremented automatically at 10 ms rate, it can be u
 
 ---
 
-### ⤴️ Layers
+### ⬆️ Layers
 
 ![System Layer Diagram](doc/TaskMate_layers_v2.png)
 
 ---
 
-### ⚙ Modular Design & autoCode
+### 🧩 Modular Design & autoCode
 
 Starting with version 0.10, TaskMate uses a **modular design model**:
 
@@ -79,7 +79,7 @@ This approach keeps the flexibility of a dynamic system but ensures that
 
 ---
 
-### ⎇ Run Levels
+### 🔀 Run Levels
 
 The system implements run levels to control and sequence the initialization
 of modules during system startup. Each module is assigned a run level according to its role:
@@ -100,7 +100,7 @@ enhancing flexibility and robustness, especially for debugging, recovery, and pa
 
 ---
 
-### ➡️ Project progress ...
+### 🔜 Project progress ...
 
 Coming features:
 
@@ -111,7 +111,7 @@ Coming features:
 
 ---
 
-### ️⚠ ️License
+### ️📜 License
 
 This software is distributed under the **TaskMate License v1.0**.
 
@@ -125,3 +125,8 @@ By using this software, you agree to the terms of the TaskMate License v1.0.
 
 See the `LICENSE` file for full details.
 
+---
+
+### 📟  The hardware
+
+![So called wired hardware](doc/hardware_mega.jpg)

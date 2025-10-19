@@ -1,6 +1,6 @@
 # TaskMate Makefile Summary
 
-## ✔️ Features
+## ✨ Features
 
 - **Automatic Dependency Handling**: Only recompiles modified source files.
 - **Header Dependency Tracking**: Detects changes in `.h` files and recompiles affected `.c` files.
@@ -8,6 +8,8 @@
   - If any *_init.rc have been updated run autoCode before compilation.
 - **Colorized Output**: Improved readability with `@printf` messages.
 - **POSIX-Compliant**: Works without requiring GNU Make.
+
+---
 
 ## ✍️ Usage
 
@@ -32,8 +34,9 @@ Miscellaneous commands :
 | `make check` | C code static analysis with cppcheck tool |
 | `make format` | C code formating with clang-format tool, config file .clang-format|
 
+---
 
-## ✈ Streamlined Workflow
+## 🚀 Streamlined Workflow
 
 Short, intuitive commands for development, deployment, and backup.
 
