@@ -12,7 +12,7 @@
 - [x] Task Launch & Management (via scheduler)
 - [x] Core System Call Layer (basic)
 
-### ✍️ Process & Documentation Tools
+### 📝 Process & Documentation Tools
 - [x] Git Workflow (with Codeberg)
 - [x] Backup Strategy (remote, local and USB)
 - [x] Doxygen documentation
@@ -20,7 +20,7 @@
 
 ---
 
-## ➡️ Planned / In Progress
+## 🗓️ Planned / In Progress
 
 ### ☢️ System Robustness & Safety
 - [ ] Stack Overflow Detection (canary values and boundary check per task)
@@ -56,7 +56,7 @@
 
 ---
 
-## ➡️ Overall Progress Estimate
+## 📋 Overall Progress Estimate
 
 | Phase | Status | Notes |
 |---|---|---|

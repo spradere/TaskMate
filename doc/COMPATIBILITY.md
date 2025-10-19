@@ -1,13 +1,13 @@
 # COMPATIBILITY.md
 
-## ▶️ Purpose
+## 🎯 Purpose
 
 This document defines the compatibility policy for the embedded system **TaskMate OS**
 to ensure long-term maintainability, stable upgrades, and a predictable developer experience.
 
 ---
 
-## 1. ⚙️ Scope
+## 1. 🚧 Scope
 
 The following rules apply to these system components:
 
@@ -28,7 +28,7 @@ The following rules apply to these system components:
 
 ---
 
-## 2. ♻ Compatibility Policy
+## 2. ♻️ Compatibility Policy
 
 ### 2.1 Public API (User Task Layer)
 
@@ -72,7 +72,7 @@ The following rules apply to these system components:
 
 ---
 
-## 3. ⎇ Versioning Scheme
+## 3. 🏷️ Versioning Scheme
 
 - Uses **MAJOR.MINOR.PATCH** inspired by [SemVer](https://semver.org/)
 - A **MAJOR** version change (e.g., 1.x → 2.x) allows for breaking changes.
@@ -81,7 +81,7 @@ The following rules apply to these system components:
 
 ---
 
-## 4. ⤴️ Rollback & Migration
+## 4. 🔃 Rollback & Migration
 
 - Each stable release must support rollback to the previous version without loss of functionality (on compatible hardware).
 - Configuration scripts (`*.rc`) must remain readable by the previous release when possible.
@@ -89,7 +89,7 @@ The following rules apply to these system components:
 
 ---
 
-## 5. ➡️ Compatibility Testing
+## 5. 🛠️ Compatibility Testing
 
 Each stable build must include regression tests for:
 
