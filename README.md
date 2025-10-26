@@ -1,5 +1,5 @@
 # TaskMate RTOS ![](doc/icon_64.png)
-## MCU real time oprating system
+## MCU real time operating system
 
 ---
 
@@ -14,6 +14,11 @@ Without relying on any external RTOS — everything is built entirely from scrat
 >
 > 150 commits • 61 source files • 4402 lines of code •
 > binary size : 3286 bytes (Flash) • ram usage : 1903 bytes
+
+> **Main features that work (v0.11)**
+> - Hybrid multithreading (cooperative & preemptive).
+> - Real-time clock (RTC) support.
+> - Modular drivers and thread registration.
 
 
 ---
@@ -42,20 +47,29 @@ This will allow TaskMate to run on multiple architectures:
 
 ---
 
-### ⏱️ RTC Real Time Clock
+### ⏱️ Real-Time Behaviour
 
-Each thread have one 16 bits software time counter sycronized with other threads.
+Although TaskMate includes preemptive scheduling and a software real-time clock,
+it **is not yet a true real-time operating system** in the strict sense.
 
-If not zero, the counter is decremented automatically at 10 ms rate, it can be used for sleep/delay behaviors.
+At its current stage, TaskMate guarantees **task switching** and **time slicing** with good stability,
+but it does not yet ensure **hard real-time determinism.**
 
----
+System latency and jitter are acceptable for testing and lightweight applications,
+yet they remain **non-deterministic** under specific conditions such as nested interrupts,
+driver contention, or prolonged critical sections.
 
-### ✨ Features
+Future improvements will focus on achieving predictable timing behaviour by addressing key aspects:
 
-* Hybrid multithreading (cooperative & preemptive).
-* Dynamic driver and thread  management.
-* Real-time clock (RTC) support.
-* Modular drivers and thread registration.
+- **Latency control:** minimizing the time between an interrupt event and task resumption.
+- **Jitter reduction:** ensuring consistent timing intervals across scheduler cycles.
+- **Deterministic preemption:** guaranteeing that high-priority tasks always execute within bounded response times.
+- **Protected I/O operations:** introducing mechanisms to temporarily shield critical drivers or sections from preemption.
+- **System profiling tools:** adding real-time metrics for CPU load, context-switch latency, and ISR duration.
+
+Once these mechanisms are implemented and validated,
+TaskMate will evolve into a **deterministic RTOS** suitable for demanding embedded applications
+where timing precision and reliability are critical.
 
 ---
 
@@ -104,9 +118,6 @@ of modules during system startup. Each module is assigned a run level according 
 - **RUN_SERVICE**: Launch system services that depend on drivers but are still internal to the OS.
 - **RUN_USER**: Start user tasks.
 
-To save memory, the run level is stored using only the three least significant bits
-of the module's status byte.
-
 This mechanism is crucial for maintaining a deterministic and controlled startup sequence,
 ensuring that dependencies are properly satisfied before launching higher-level components.
 It also allows dynamic system management by enabling selective start/stop operations at runtime,
@@ -116,8 +127,10 @@ enhancing flexibility and robustness, especially for debugging, recovery, and pa
 
 ### 🔜 Project progress ...
 
-Coming features:
+Upcoming features:
 
+- HAL
+- system-wide error handling
 - Stack usage monitoring
 - CLI command parser with argument handling
 
@@ -129,8 +142,8 @@ Coming features:
 
 This software is distributed under the **TaskMate License v1.0**.
 
-* Free for **non-commercial use** under conditions described in the `LICENSE` file.
-* Commercial use requires a **separate paid license**.
+- Free for **non-commercial use** under conditions described in the `LICENSE` file.
+- Commercial use requires a **separate paid license**.
 
 To inquire about commercial licensing, please open an issue in this repository:
 [Open Licensing Issue](https://codeberg.org/Doul09/TaskMate/issues)
@@ -148,6 +161,6 @@ See the `LICENSE` file for full details.
 
 ---
 
-### 📟  The hardware
+### 📟  Hardware setup
 
 ![So called wired hardware](doc/hardware_mega.jpg)
