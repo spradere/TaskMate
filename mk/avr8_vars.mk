@@ -13,16 +13,14 @@
 #
 ################################################################################
 
+# MCU and Programmer settings
+MCU = atmega2560
+F_CPU = 16000000UL
+PROGRAMMER = avrispmkII
+PORT = /dev/ttyU0
 
-# Arch choice : make ARCH=avr  (défautl avr8)
-ARCH ?= avr8
+# Compiler
+CC = avr-gcc
 
-.include "mk/${ARCH}_vars.mk"
-.include "mk/global_vars.mk"
-
-.include "mk/global_build.mk"
-
-.include "mk/global_utils.mk"
-.include "mk/${ARCH}_utils.mk"
-
-.include "mk/global_backup.mk"
+CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
+CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP

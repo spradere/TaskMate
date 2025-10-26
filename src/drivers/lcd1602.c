@@ -22,7 +22,7 @@
 #include <util/delay.h>
 #include "sysCore/TaskMate_public.h"
 #include "drivers/i2c.h"
-#include "services/lcd1602.h"
+#include "drivers/lcd1602.h"
 
 #define LCD1602_I2C_ADDR 0x7C // AiP31068L I2C address (Write mode)
 #define LCD1602_CMD 0x80 // Co=1 RS = 0, Write Command
