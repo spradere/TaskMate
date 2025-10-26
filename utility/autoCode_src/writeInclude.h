@@ -21,6 +21,6 @@
  #ifndef WRITE_INCLUDE_H
  #define WRITE_INCLUDE_H
 
- void writeInclude(const module_t *modules, const char *file_name);
+ void writeInclude(const module_t *modules, const char *file_name, const char *arch);
 
  #endif
