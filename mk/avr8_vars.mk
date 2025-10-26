@@ -24,3 +24,4 @@ CC = avr-gcc
 
 CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU} -Os -Wall
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src -MMD -MP
+CFLAGS += -DTM_ARCH_AVR

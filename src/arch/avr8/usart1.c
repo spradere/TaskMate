@@ -23,7 +23,7 @@
 #include <avr/interrupt.h>
 
 #include "sysCore/TaskMate_public.h"
-#include "drivers/usart1.h"
+#include "arch/avr8/usart1.h"
 
 #define USART1_BAUD_RATE 9600
 

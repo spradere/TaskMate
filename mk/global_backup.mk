@@ -17,6 +17,13 @@
 # Backup
 ################################################################################
 
+# Get git tag for USB key directory backup
+USB_DIR = /media/usbkey
+USB_DEV = /dev/da0s1
+GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
+TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
+
+
 # Git push, use command line : # make push M="message"
 push:
 	@printf "\n\033[1;33mGit routine for \"${M}\" commit\033[0m\n\n"

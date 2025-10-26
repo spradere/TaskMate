@@ -1,8 +1,8 @@
-#include "drivers/timer1.h"
-#include "drivers/timer3.h"
-#include "drivers/i2c.h"
-#include "drivers/usart1.h"
-#include "drivers/lcdAMC2004.h"
+#include "arch/avr8/timer1.h"
+#include "arch/avr8/timer3.h"
+#include "arch/avr8/i2c.h"
+#include "arch/avr8/usart1.h"
+#include "arch/avr8/lcdAMC2004.h"
 
 #include "services/scli.h"
 #include "services/msg.h"

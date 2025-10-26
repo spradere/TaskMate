@@ -14,19 +14,20 @@
 ################################################################################
 
 ################################################################################
-# Variables
+# Sources
 ################################################################################
 
 # Source directory
 SRC_DIR = src
-SRC_DIR_LIST = src/drivers/
-SRC_DIR_LIST += src/services/
-SRC_DIR_LIST += src/sysCore/
-SRC_DIR_LIST += src/tasks/
-SRC_DIR_LIST += src/libc/
+SRC_DIR_LIST += ${SRC_DIR}/services/
+SRC_DIR_LIST += ${SRC_DIR}/sysCore/
+SRC_DIR_LIST += ${SRC_DIR}/tasks/
+SRC_DIR_LIST += ${SRC_DIR}/libc/
 
 # Automatically gather all sources files
 SRCS != find ${SRC_DIR_LIST} -name "*.c"
+.include "mk/${ARCH}_hal_srcs.mk"
+
 SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
 
 # Build files and directory
@@ -44,12 +45,7 @@ AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
 # Initrc files for autocode
-FILES_INIT_RC = src/drivers/drivers_init.rc
+FILES_INIT_RC = src/arch/${ARCH}/drivers_init.rc
 FILES_INIT_RC += src/services/services_init.rc
 FILES_INIT_RC += src/tasks/tasks_init.rc
 
-# Get git tag for USB key directory backup
-USB_DIR = /media/usbkey
-USB_DEV = /dev/da0s1
-GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
-TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}

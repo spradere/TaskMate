@@ -22,7 +22,7 @@
 #include <avr/io.h>
 
 #include "sysCore/TaskMate_public.h"
-#include "drivers/usart1.h"
+#include "arch/avr8/usart1.h"
 #include "services/scli.h"
 
 void scli(void)

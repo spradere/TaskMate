@@ -16,7 +16,7 @@
  * @file msg.c
  * @brief implementation of message display server
  *
- * @todo all
+ * @todo add free channel
  */
 
 #include <avr/io.h>
@@ -26,8 +26,8 @@
 #include "libc/string.h"
 
 // Send message to :
-#include "drivers/lcdAMC2004.h"
-#include "drivers/usart1.h"
+#include "arch/avr8/lcdAMC2004.h"
+#include "arch/avr8/usart1.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -50,7 +50,7 @@ void msg(void)
 		msgWritreText(channel, "msg : Essai USART1 \n", MSG_TO_USART1);
 	}
 
-	if( msgRequestChannel(&channel) == ERR_SUCCESS ) { msgWritreText(channel, "\3msg : make end", MSG_TO_LCD); }
+	if( msgRequestChannel(&channel) == ERR_SUCCESS ) { msgWritreText(channel, "\3msg : HAL files", MSG_TO_LCD); }
 
 	msgProcess();
 
