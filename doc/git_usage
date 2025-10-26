@@ -19,3 +19,9 @@ delete remote : git push origin --delete test_branch
 
 list last commits :
 git log --oneline
+
+versionning using git :
+close current version git tag v0.4
+start new git checkout -b v0.5
+close current version git tag v0.5
+...
