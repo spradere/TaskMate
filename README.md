@@ -1,17 +1,20 @@
-# TaskMate RTOS
-## AVR preemptive real time oprating system
+# TaskMate RTOS ![](doc/icon_64.png)
+## MCU real time oprating system
+
+---
+
+### ▶️ Introduction
+
+**TaskMate** is a lightweight, preemptive real-time operating system.
+Designed specifically for **microcontrollers**.
+It emphasizes **reliability** and **modularity**.
+Without relying on any external RTOS — everything is built entirely from scratch.
 
 > **TaskMate Project Stats (v0.11)**
 >
 > 150 commits • 61 source files • 4402 lines of code •
 > binary size : 3286 bytes (Flash) • ram usage : 1903 bytes
 
-### ▶️ Introduction
-
-**TaskMate** is a lightweight, preemptive real-time operating system.
-Designed specifically for **AVR mega microcontrollers**.
-It emphasizes **reliability** and **modularity**.
-Without relying on any external RTOS — everything is built entirely from scratch.
 
 ---
 
@@ -24,7 +27,18 @@ TaskMate uses a custom **Makefile** that fully manages dependencies and workflow
 - Separate source and build directories.
 - CLI commands like `make upload`, `make push`, and `make backup`.
 
-* See : [Makefile Features & Usage](doc/Makefile_summary.md)
+See : [Makefile Features & Usage](doc/Makefile_summary.md)
+
+
+**HAL and Architecture Support**
+
+TaskMate is currently undergoing major development to improve portability.
+A **Hardware Abstraction Layer (HAL)** is being implemented to isolate the system core from hardware-specific code.
+This will allow TaskMate to run on multiple architectures:
+
+- **AVR8 (ATmega)** – the historical beginning of TaskMate
+- **AMD64** – for testing and faster development cycles
+- **STM32** – planned for future hardware performance upgrades
 
 ---
 
@@ -47,7 +61,7 @@ If not zero, the counter is decremented automatically at 10 ms rate, it can be u
 
 ### ⬆️ Layers
 
-![System Layer Diagram](doc/TaskMate_layers_v2.png)
+![System Layer Diagram](doc/TaskMate_layers_v3.png)
 
 ---
 
@@ -124,6 +138,13 @@ To inquire about commercial licensing, please open an issue in this repository:
 By using this software, you agree to the terms of the TaskMate License v1.0.
 
 See the `LICENSE` file for full details.
+
+> **Development Status**
+>
+> TaskMate is currently in active development and should be considered **experimental**.
+> While the core system and architecture are functional, many components are still evolving.
+> It is **not yet suitable for production use**, and both APIs and internal structures may change without notice.
+
 
 ---
 
