@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(const module_t *modules, const char *file_name)
+void writeInclude(const module_t *modules, const char *file_name, const char *arch)
 {
 	FILE *file_include = fopen(file_name, "w");
 	if( file_include == NULL )
@@ -34,7 +34,7 @@ void writeInclude(const module_t *modules, const char *file_name)
 
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		fprintf(file_include, "#include \"drivers/%s.h\"\n", modules->drivers[i].name);
+		fprintf(file_include, "#include \"arch/%s/%s.h\"\n",arch, modules->drivers[i].name);
 	}
 	fprintf(file_include, "\n");
 

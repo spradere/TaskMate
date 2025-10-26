@@ -22,7 +22,7 @@
 #include <avr/io.h>
 #include <util/twi.h>
 #include "sysCore/TaskMate_public.h"
-#include "drivers/i2c.h"
+#include "arch/avr8/i2c.h"
 
 void i2cInit(void)
 {

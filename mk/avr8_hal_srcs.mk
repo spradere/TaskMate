@@ -13,24 +13,16 @@
 #
 ################################################################################
 
+CFLAGS  += -DTM_ARCH_AVR8
 
-# Arch choice : make ARCH=avr8  (défautl avr8)
-VALID_ARCHS = avr8 amd64 stm32
-ARCH ?= avr8
+SRCS += src/hal/hal_timers.c
+SRCS += src/arch/avr8/timer1.c
+SRCS += src/arch/avr8/timer3.c
 
-.if empty(VALID_ARCHS:M${ARCH})
-.error Invalid ARCH="${ARCH}". Valid values: ${VALID_ARCHS}
-.endif
-.info Building for architecture: ${ARCH}
+SRCS += src/hal/hal_comm.c
+SRCS += src/arch/avr8/usart1.c
+SRCS += src/arch/avr8/i2c.c
 
-# Make process
-.include "mk/${ARCH}_vars.mk"
-
-.include "mk/global_srcs.mk"
-
-.include "mk/global_build.mk"
-
-.include "mk/global_utils.mk"
-.include "mk/${ARCH}_utils.mk"
-
-.include "mk/global_backup.mk"
+SRCS += src/hal/hal_display.c
+#SRCS += src/arch/avr8/led.c
+SRCS += src/arch/avr8/lcdAMC2004.c

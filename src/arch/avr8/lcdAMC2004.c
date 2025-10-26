@@ -21,8 +21,8 @@
 
 #include <util/delay.h>
 #include "sysCore/TaskMate_public.h"
-#include "drivers/i2c.h"
-#include "drivers/lcdAMC2004.h"
+#include "arch/avr8/i2c.h"
+#include "arch/avr8/lcdAMC2004.h"
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command

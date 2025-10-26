@@ -22,7 +22,7 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 #include "sysCore/TaskMate_public.h"
-#include "drivers/timer1.h"
+#include "arch/avr8/timer1.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 

@@ -34,7 +34,7 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo nothing
+ * @todo concat 3 parseInitrc in 1
  */
 
 #include "utility/autoCode_src/autoCode.h"
@@ -45,8 +45,12 @@
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/parseTag.h"
 
-int main(void)
+int main(int argn, char *argv[])
 {
+
+	// test arg
+	if(argn != 2 ){perror("[autoCode.c 56]Bad argn");exit(0);}
+
 	module_t modules;
 
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
@@ -56,7 +60,11 @@ int main(void)
 	}
 
 	// read init.rc file and store data in modules[]
-	parseInitrcDrivers(&modules, "src/drivers/drivers_init.rc");
+	char arch_path[256];
+	sprintf(arch_path,"src/arch/%s/drivers_init.rc",argv[1]);
+	printf("[autoCode 71] debug arch_path = <%s>\n",arch_path);
+
+	parseInitrcDrivers(&modules, arch_path);
 	parseInitrcServices(&modules, "src/services/services_init.rc");
 	parseInitrcTasks(&modules, "src/tasks/tasks_init.rc");
 
@@ -64,7 +72,7 @@ int main(void)
 	parseTag(&modules, "src/sysCore/initSys.c");
 
 	// write headers
-	writeInclude(&modules, "src/sysCore/autoInclude.h");
+	writeInclude(&modules, "src/sysCore/autoInclude.h", argv[1]);
 	writeAlloc(&modules, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules
