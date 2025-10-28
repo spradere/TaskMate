@@ -1,10 +1,11 @@
 # 🥇 Code Style, Readability, Refactoring & Best Practices Summary
 
 ---
+
 ## 📋 Table of Contents
 
-1. [The Golden Rule of Code](#1--the-golden-rule-of-code)
-2. [Readability: Clarity over cleverness](#readability-clarity-over-cleverness)
+1. [The Golden Rule of Code](#1-the-golden-rule-of-code)
+2. [Readability: Clarity over cleverness](#2-readability-clarity-over-cleverness)
 3. [Maintainability: Avoid cryptic names and magic numbers](#3-maintainability-avoid-cryptic-names-and-magic-numbers)
 4. [Scalability and Extensibility](#4-scalability-and-extensibility)
 5. [Testing and Debugging](#5-testing-and-debugging)
@@ -34,13 +35,13 @@ Code is read more than it is written. Prioritize understandable variable names a
 Don't write clever code. Write code you'd understand a year from now with a hangover.
 
 * Use meaningful names.
-status_t file_status; is good. int fs; is not.
+`status_t file_status;` is good. `int fs;` is not.
 
 * Use typedefs and enums for meaning.
-typedef enum { STATUS_OK, STATUS_ERR } status_t; is far clearer than using 0 and 1.
+`typedef enum { STATUS_OK, STATUS_ERR } status_t;` is far clearer than using 0 and 1.
 
 * Be explicit, not implicit.
-Prefer if (ptr == NULL) over if (!ptr) when clarity matters.
+Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
 
 **Example:**
 ```c
