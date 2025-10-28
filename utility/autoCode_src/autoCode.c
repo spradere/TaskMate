@@ -48,9 +48,13 @@
 int main(int argn, char *argv[])
 {
 
-	// test arg
-	if(argn != 2 ){perror("[autoCode.c 56]Bad argn");exit(0);}
+	// test command line arguments
+	if(argn != 2 ){msgError("Bad argn for autoCode, forget arch ?"); exit(0);}
+	char *arch_name = argv[1];
+	msgInfo("arch_name");
+	printf("\t <%s>\n\n",arch_name);
 
+	// setup modules
 	module_t modules;
 
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
@@ -60,11 +64,10 @@ int main(int argn, char *argv[])
 	}
 
 	// read init.rc file and store data in modules[]
-	char arch_path[256];
-	sprintf(arch_path,"src/arch/%s/drivers_init.rc",argv[1]);
-	printf("[autoCode 71] debug arch_path = <%s>\n",arch_path);
+	char arch_initrc_path[256];
+	sprintf(arch_initrc_path,"src/arch/%s/drivers_init.rc",arch_name);
 
-	parseInitrcDrivers(&modules, arch_path);
+	parseInitrcDrivers(&modules, arch_initrc_path);
 	parseInitrcServices(&modules, "src/services/services_init.rc");
 	parseInitrcTasks(&modules, "src/tasks/tasks_init.rc");
 
@@ -72,7 +75,7 @@ int main(int argn, char *argv[])
 	parseTag(&modules, "src/sysCore/initSys.c");
 
 	// write headers
-	writeInclude(&modules, "src/sysCore/autoInclude.h", argv[1]);
+	writeInclude(&modules, "src/sysCore/autoInclude.h", arch_name);
 	writeAlloc(&modules, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules

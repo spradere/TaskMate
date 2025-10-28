@@ -1,19 +1,19 @@
 TaskMate 0.1
 	first code written for base system
 	just one src file TaskMate.c
-	
+
 Taskmate0.2
 	major code cosmetics
 	more consistent names
 	main header split (private/public)
-	
+
 TaskMate0.3
 	Realtime counter
 	code cosmetics
 	big file split
 
 TaskMate0.4
-	 test USART comm, must use another usart to don't mess with USB bootloader / in situ programer  
+	 test USART comm, must use another usart to don't mess with USB bootloader / in situ programer
 
 TaskMate0.5
 	major code re-organisation with sub-folder
@@ -36,7 +36,7 @@ TaskMate 0.8
 	serial command line interface base
 
 TaskMate 0.9
-	base of system wide error handling, wtih a fault-tolerant design
+	base of system wide error handling
 
 TaskMate 0.10
 	new folders doc/log/src/build
@@ -53,10 +53,16 @@ TaskMate 0.10_test
 
 TaskMate 0.11
 	refactoring TaskMate for modules
-	refactoring autoCode for init.rc files 
+	refactoring autoCode for init.rc files
 	add run level
 	add cooperative yieldHand();  function
 	add message server
 	add strings manipulations
-	add memory slab allocation
+	add memory slab allocation (amd64)
 
+TaskMate 0.20
+	refactoring README
+	refactoring Makefile -> split + add arch selection
+	add HAL directories and files
+	update documentation
+	refactor autoCode
