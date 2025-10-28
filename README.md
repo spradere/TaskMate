@@ -164,4 +164,4 @@ See the `LICENSE` file for full details.
 
 - **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
-- **C Style Guide** — best practices (pointers, errors, etc.): see [docs/c-style-guide.md](./doc/code_best_practices.md)
+- **C Style Guide** — best practices (pointers, errors, etc.): see [code best pratices](./doc/code_best_practices.md)
