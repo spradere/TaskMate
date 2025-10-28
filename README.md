@@ -10,12 +10,12 @@ Designed specifically for **microcontrollers**.
 It emphasizes **reliability** and **modularity**.
 Without relying on any external RTOS — everything is built entirely from scratch.
 
-> **TaskMate Project Stats (v0.11)**
+> **TaskMate Project Stats (v0.20)**
 >
-> 150 commits • 61 source files • 4402 lines of code •
+> 156 commits • 79 source files • 2309 lines of code •
 > binary size : 3286 bytes (Flash) • ram usage : 1903 bytes
 
-> **Main features that work (v0.11)**
+> **Main features that work (v0.20)**
 > - Hybrid multithreading (cooperative & preemptive).
 > - Real-time clock (RTC) support.
 > - Modular drivers and thread registration.
@@ -30,12 +30,13 @@ TaskMate uses a custom **Makefile** that fully manages dependencies and workflow
 - Automatic recompilation based on file changes, including headers.
 - Colorized output for clarity.
 - Separate source and build directories.
-- CLI commands like `make upload`, `make push`, and `make backup`.
+- CLI commands like `make upload`, `make push` and `make backup`.
 
 See : [Makefile Features & Usage](doc/Makefile_summary.md)
 
+---
 
-**HAL and Architecture Support**
+### 🧱 HAL and Architecture Support
 
 TaskMate is currently undergoing major development to improve portability.
 A **Hardware Abstraction Layer (HAL)** is being implemented to isolate the system core from hardware-specific code.
@@ -59,23 +60,15 @@ System latency and jitter are acceptable for testing and lightweight application
 yet they remain **non-deterministic** under specific conditions such as nested interrupts,
 driver contention, or prolonged critical sections.
 
-Future improvements will focus on achieving predictable timing behaviour by addressing key aspects:
-
-- **Latency control:** minimizing the time between an interrupt event and task resumption.
-- **Jitter reduction:** ensuring consistent timing intervals across scheduler cycles.
-- **Deterministic preemption:** guaranteeing that high-priority tasks always execute within bounded response times.
-- **Protected I/O operations:** introducing mechanisms to temporarily shield critical drivers or sections from preemption.
-- **System profiling tools:** adding real-time metrics for CPU load, context-switch latency, and ISR duration.
-
-Once these mechanisms are implemented and validated,
-TaskMate will evolve into a **deterministic RTOS** suitable for demanding embedded applications
-where timing precision and reliability are critical.
+See : [Future improvements](doc/RTOS_improvements.md)
 
 ---
 
 ### ⬆️ Layers
 
 ![System Layer Diagram](doc/TaskMate_layers_v3.png)
+
+See : [System Architecture and Isolation](doc/OS_architecture.md)
 
 ---
 
@@ -164,3 +157,11 @@ See the `LICENSE` file for full details.
 ### 📟  Hardware setup
 
 ![So called wired hardware](doc/hardware_mega.jpg)
+
+---
+
+### 📑 Documentation
+
+- **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
+- **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
+- **C Style Guide** — best practices (pointers, errors, etc.): see [docs/c-style-guide.md](./doc/code_best_practices.md)

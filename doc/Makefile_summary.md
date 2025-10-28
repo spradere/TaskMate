@@ -1,4 +1,4 @@
-# TaskMate Makefile Summary
+# 📝 TaskMate Makefile Summary
 
 ## ✨ Features
 

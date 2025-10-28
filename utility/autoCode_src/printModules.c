@@ -21,6 +21,7 @@
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/printModules.h"
+#include "src/sysCore/run_level_define.h"
 
 void printModules(const module_t *modules)
 {
@@ -52,23 +53,25 @@ void printModules(const module_t *modules)
 	{
 		switch( i )
 		{
-			case 0:
+			case RUN_NONE:
 				strcpy(name, "RUN_NONE");
 				break;
-			case 1:
+			case RUN_CORE:
 				strcpy(name, "RUN_CORE");
 				break;
-			case 2:
+			case RUN_DRIVER:
 				strcpy(name, "RUN_DRIVER");
 				break;
-			case 3:
+			case RUN_SERVICE:
 				strcpy(name, "RUN_SERVICE");
 				break;
-			case 4:
+			case RUN_USER:
 				strcpy(name, "RUN_USER");
 				break;
 			default:
-				strcpy(name, "error : unknow level");
+				 msgError("unknow run level");
+				 printf("\t =%i ?\n",i);
+				 exit(0);
 				break;
 		}
 

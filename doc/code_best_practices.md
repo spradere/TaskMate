@@ -1,10 +1,10 @@
-# Code Style, Readability, Refactoring & Best Practices Summary
+# 🥇 Code Style, Readability, Refactoring & Best Practices Summary
 
 ---
-## Table of Contents
+## 📋 Table of Contents
 
-1. [The Golden Rule of Code](#1-the-golden-rule-of-code)
-2. [Readability: Clarity over cleverness](#2-readability-clarity-over-cleverness)
+1. [The Golden Rule of Code](#1--the-golden-rule-of-code)
+2. [Readability: Clarity over cleverness](#readability-clarity-over-cleverness)
 3. [Maintainability: Avoid cryptic names and magic numbers](#3-maintainability-avoid-cryptic-names-and-magic-numbers)
 4. [Scalability and Extensibility](#4-scalability-and-extensibility)
 5. [Testing and Debugging](#5-testing-and-debugging)
@@ -19,17 +19,16 @@
 
 ---
 
-## 1. The Golden Rule of Code
+## 1. 🪙 The Golden Rule of Code
 
 **Define once. Define clearly. Define where it makes sense.**
 Promotes clarity, avoids duplication, and keeps logic in the right layer.
 
 ---
 
-## 2. Readability: Clarity over cleverness
+## 2. 📖 Readability: Clarity over cleverness
 
 Code is read more than it is written. Prioritize understandable variable names and structure.
-
 
 * Code is for humans first, compilers second.
 Don't write clever code. Write code you'd understand a year from now with a hangover.
@@ -55,7 +54,7 @@ status_t task_status; // clear
 
 ---
 
-## 3. Maintainability: Avoid cryptic names and magic numbers
+## 3. 🛠️ Maintainability: Avoid cryptic names and magic numbers
 
 Use meaningful names, constants, and enums instead of hardcoded values.
 
@@ -79,7 +78,7 @@ file_status = STATUS_DEFAULT;   // good
 
 ---
 
-## 4. Scalability and Extensibility
+## 4. 📈 Scalability and Extensibility
 
 Use data structures and algorithms
 
@@ -93,7 +92,7 @@ Copied code multiplies bugs and update work. Refactor common logic into function
 Anticipate what's likely to change and isolate it.
 
 ---
-## 5. Testing and Debugging
+## 5. 💻 Testing and Debugging
 
 * Fail early, fail loud.
 Use asserts or clear error returns when contracts are broken.
@@ -106,7 +105,7 @@ Decouple logic from I/O and hardware to allow mocking.
 
 ---
 
-## 6. Safety and Robustness
+## 6. 🛡️ Safety and Robustness
 
 * Never trust input.
 Validate everything—especially in embedded or user-facing code.
@@ -118,7 +117,7 @@ Embedded systems die silently on overflows. Use guards, checks, and tools.
 Check bounds, handle NULLs, and expect the unexpected.
 
 ---
-## 7. Tooling and Process
+## 7. 🔧 Tooling and Process
 
 * Automate what can be automated.
 Builds, tests, formatting, flashing—your time is precious.
@@ -128,7 +127,7 @@ Your future self will thank you.
 
 ---
 
-## 8. Commenting Rules for Humans
+## 8. 💬 Commenting Rules for Humans
 
 ### 8.1. Comment “why”, not “what”
 
@@ -226,7 +225,7 @@ The golden rule: If a comment just rewords the code, delete it.
 
 ---
 
-## 9. Naming: Use plural for collections, singular for items
+## 9. ✍🏻 Naming: Use plural for collections, singular for items
 
 Helps indicate intent and structure of data.
 
@@ -239,7 +238,7 @@ list_table_t *list_table; // unclear
 
 ---
 
-## 10. Abbreviations: Use only when standard or obvious
+## 10. 🔤 Abbreviations: Use only when standard or obvious
 
 Avoid cryptic short forms unless they are universally recognized (e.g., UART, ISR).
 Since autocompletion makes long names easy, there’s no excuse for being cryptic in the name of brevity.
@@ -252,7 +251,7 @@ messageError();    // clear
 
 ---
 
-## 11. Error messages: Informative, precise, human-readable
+## 11. ⚠️ Error messages: Informative, precise, human-readable
 
 Provide file, line, nature of the problem, actual vs. expected values. Solution.
 
@@ -291,7 +290,7 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 
 ---
 
-## 12. Refactoring mindset
+## 12. ♻️ Refactoring mindset
 
 Start by thinking “add more comments,” but end by writing cleaner, clearer code that needs fewer of them.
 
@@ -322,7 +321,7 @@ This is the hard part—but it’s also what makes a system satisfying to build 
 
 ---
 
-## 13. Git Commit Message Guidelines
+## 13. 📩 Git Commit Message Guidelines
 
 Commit messages must be **short, clear, and action-oriented**.
 Each message should begin with a **verb prefix** followed by a short description of the change.

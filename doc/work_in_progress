@@ -1,9 +1,7 @@
-develop slab allocation
+HAL implementation
 
 porting slab form amd64 to avr -> implement libc printf -> finish implementation of run level
 
 develop system wide error management
-
-make a diagram to show file organisation (sysCore, headers, autoCode)
 
 refactor auto code to one parceInitrc.c (drivers + services + tasks)
