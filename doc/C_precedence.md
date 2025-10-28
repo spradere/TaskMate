@@ -1,7 +1,7 @@
-# C Operator Precedence and Associativity Table
+# 🔢 C Operator Precedence and Associativity Table
 
 | Precedence | Operators | Description | Associativity |
-|---|---|---|---| 
+|---|---|---|---|
 | 1 | () [] . -> | Function call, array access, struct member | Left-to-right |
 | 2 | ++ -- (postfix) |Post-increment, post-decrement | Left-to-right |
 | 3 | + - ! ~ ++ -- * & sizeof (_type_) | Unary plus/minus, logical/bitwise NOT, pre-inc/dec, dereference, address-of, size-of, cast | Right-to-left |
