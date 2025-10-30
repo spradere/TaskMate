@@ -1,0 +1,72 @@
+/*
+ * TaskMate Project
+ * (c) 2025 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * See the LICENSE file for full license terms.
+ *
+ * Non-commercial use permitted under conditions. Commercial use requires a separate license.
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
+ *
+ * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ */
+
+/**
+ * @file autoCode.h
+ * @brief autoCode header definitions
+ *
+ * @todo add run level count in module_t -> intrcCmdDispatch
+ */
+
+#ifndef AUTOCODE_H
+#define AUTOCODE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// get TaskMate define
+#include "src/sysCore/modules_define.h"
+#include "src/sysCore/run_level_define.h"
+
+// message macro
+#define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
+#define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
+
+typedef unsigned char module_status_t;
+typedef int run_level_modules_count_t;
+
+typedef struct
+{
+	char name[MODULES_NAME_SIZE_MAX];
+	module_status_t status;
+
+} module_item_t;
+
+#define AUTOCODE_MODULE_COUNT_MAX 256
+
+typedef struct
+{
+	module_item_t module[AUTOCODE_MODULE_COUNT_MAX];
+	int module_count;
+	int initrc_arg_count;
+	int status_default;
+
+} module_base_t;
+
+#define MODULES_COUNT 3
+#define MODULE_DRIVERS 1
+#define MODULE_SERVICES 2
+#define MODULE_TASK 3
+
+typedef struct
+{
+	module_base_t modules[MODULES_COUNT];
+
+	run_level_modules_count_t run_level_threads_count[RUN_LEVEL_COUNT];
+	run_level_modules_count_t run_level_drivers_count[RUN_LEVEL_COUNT];
+
+
+} modules_t;
+
+#endif
