@@ -60,10 +60,10 @@ status_t task_status; // clear
 Use meaningful names, constants, and enums instead of hardcoded values.
 
 * Avoid magic numbers.
-Use #define TIMEOUT_MS 1000 instead of if(t > 1000).
+Use `#define TIMEOUT_MS 1000` instead of `if(t > 1000)`.
 
 * Prefer constants over hard-coded values.
-const uint8_t MAX_RETRIES = 5; makes intent clear.
+`const uint8_t MAX_RETRIES = 5;` makes intent clear.
 
 * Group related logic.
 Keep functions short and focused. One job per function.
@@ -134,22 +134,22 @@ Your future self will thank you.
 
 The code shows what happens. Your job is to write why it happens. Self-documenting code over excessive comments. Write code so clear it needs fewer comments. Use comments to explain **why**, not **what**.
 
-* Don’t: timeout = 1000; // set timeout to 1000
-* Do: timeout = 1000; // 1 second max wait before watchdog reset
+* Don’t: `timeout = 1000; // set timeout to 1000`
+* Do: `timeout = 1000; // 1 second max wait before watchdog reset`
 
 ### 8.2. Explain magic numbers and edge cases
 
 If the value isn't self-explanatory, either use a #define or explain why that number.
 
-* Don’t: if(x == 42)
-* Do: if(x == 42) // 42 is the max sensor reading before overflow
+* Don’t: `if(x == 42)`
+* Do: `if(x == 42) // 42 is the max sensor reading before overflow`
 
 ### 8.3. Document non-obvious constraints or dependencies
 
 When something works only in a specific sequence, say it.
 
-* Don’t: enableInterrupts();
-* Do: enableInterrupts(); // Must be called after initTimer(), otherwise ISR won’t fire
+* Don’t: `enableInterrupts();`
+* Do: `enableInterrupts(); // Must be called after initTimer(), otherwise ISR won’t fire`
 
 ### 8.4. Summarize purpose at the start of non-trivial blocks
 
@@ -181,8 +181,8 @@ resetWatchdog();
 
 Especially in embedded or timing-sensitive code—always say what the units are.
 
-* Don’t: delay = 200;
-* Do: delay = 200; // 200 ms delay between measurements
+* Don’t: `delay = 200;`
+* Do: `delay = 200; // 200 ms delay between measurements`
 
 ### 8.7. Explain why not something was done
 
@@ -215,8 +215,8 @@ Do:
 
 The golden rule: If a comment just rewords the code, delete it.
 
-* Don’t: index++; // increment index
-* Do: index++; // move to next task in round-robin scheduler
+* Don’t: `index++; // increment index`
+* Do: `index++; // move to next task in round-robin scheduler`
 
 ### 8.11 Three comment maturity levels
 
