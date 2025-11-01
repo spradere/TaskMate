@@ -19,8 +19,8 @@
  * @todo Nothing
  */
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode2_src/autoCode.h"
+#include "utility/autoCode2_src/tokenizer.h"
 
 void tokenizer(tokenizer_t *data)
 {

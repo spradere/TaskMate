@@ -12,29 +12,26 @@
  */
 
 /**
- * @file tokenizer.h
- * @brief tokenizer header
+ * @file initrcCmdDispatch.h
+ * @brief command dispatch header
  *
  * @todo nothing
  */
 
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
+#ifndef INITRC_CMD_DISPATCH_H
+#define INITRC_CMD_DISPATCH_H
 
-// sizes for tokenizer
-#define TOKEN_LINE_SIZE_MAX 256
-#define TOKEN_COUNT_MAX 4
-#define TOKEN_SIZE_MAX 32
+#include "utility/autoCode2_src/autoCode.h"
 
 typedef struct
 {
-	char line[TOKEN_LINE_SIZE_MAX];
-	char tokens[TOKEN_COUNT_MAX][TOKEN_SIZE_MAX];
-	int count;
+	const char *name;
+	void (*func)(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]);
 
-}tokenizer_t;
+} initrc_cmd_t;
 
+int initrcCmdDispatch(const char *cmd, module_status_t *status, run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT]);
 
-void tokenizer(tokenizer_t *data);
 
 #endif
+
