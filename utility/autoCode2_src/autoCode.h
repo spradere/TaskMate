@@ -47,26 +47,19 @@ typedef struct
 
 typedef struct
 {
-	module_item_t module[AUTOCODE_MODULE_COUNT_MAX];
-	int module_count;
-	int initrc_arg_count;
+	module_item_t modules[AUTOCODE_MODULE_COUNT_MAX];
+	int modules_count;
+	int initrc_arg_count_max;
 	int status_default;
+	char *name;
 
-} module_base_t;
-
-#define MODULES_COUNT 3
-#define MODULE_DRIVERS 1
-#define MODULE_SERVICES 2
-#define MODULE_TASK 3
+} module_type_t;
 
 typedef struct
 {
-	module_base_t modules[MODULES_COUNT];
+	module_type_t modules_type[MODULES_COUNT];
+	run_level_modules_count_t run_level_module_count[MODULES_COUNT][RUN_LEVEL_COUNT];
 
-	run_level_modules_count_t run_level_threads_count[RUN_LEVEL_COUNT];
-	run_level_modules_count_t run_level_drivers_count[RUN_LEVEL_COUNT];
-
-
-} modules_t;
+} modules_database_t;
 
 #endif

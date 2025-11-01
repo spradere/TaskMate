@@ -19,12 +19,12 @@
  * @todo all
  */
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/parseInitrc.h"
-#include "utility/autoCode_src/tokenizer.h"
-#include "utility/autoCode_src/initrcCmdDispatch.h"
+#include "utility/autoCode2_src/autoCode.h"
+#include "utility/autoCode2_src/parseInitrc.h"
+#include "utility/autoCode2_src/tokenizer.h"
+#include "utility/autoCode2_src/initrcCmdDispatch.h"
 
-void parseInitrc(parse_init_rc_type_t TYPE, module_base_t *modules, const char *file_name)
+void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const char *file_name)
 {
 	// open list files
 	msgInfo("open init.rc file for parsing");
@@ -39,54 +39,63 @@ void parseInitrc(parse_init_rc_type_t TYPE, module_base_t *modules, const char *
 
 	// variables
 	int file_line_number = 0;
-	int err;
+	int err_flag = 0;
 	tokenizer_t tok;
 	int module_count = 0;
-
+	module_type_t *mod = &data_base->modules_type[TYPE];
 
 	while( (module_count < AUTOCODE_MODULE_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
-		// set status to default
-		modules->module.status = modules->status_default;
-
+		// start
+		mod->modules[module_count].status = mod->status_default;
 		file_line_number++;
 		tokenizer(&tok);
 
+		// procced args
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
-			if( tok.count > 2 )
+			if( tok.count > mod->initrc_arg_count_max )
 			{
-				msgError("wrong driver token count");
-				printf("\t [%s:%i] is %i, should be [1,2]\n\n", file_name, file_line_number, tok.count);
-				exit(0);
+				msgError("wrong token count");
+				printf("\t [%s:%i] is %i, should be max(%i)\n\n", file_name, file_line_number, tok.count, mod->initrc_arg_count_max);
+				err_flag = 1;
 			}
 
 			for( int j = 0; j < module_count; j++ )
 			{
-				if( strcmp(modules->drivers[j].name, tok.tokens[0]) == 0 )
+				if( strcmp(mod->modules[j].name, tok.tokens[0]) == 0 )
 				{
-					msgError("duplicate driver name");
+					msgError("duplicate name");
 					printf("\t [%s:%i] %s\n\n", file_name, file_line_number, tok.tokens[0]);
-					exit(0);
+					err_flag = 1;
 				}
 			}
 
-			// no cmd parsing, add one driver to run level
-			if( tok.count == 1 ) { modules->run_level_module_count[RUN_DRIVER]++; }
+			// no cmd parsing, add one module to run level
+			if( tok.count == 1 ) { data_base->run_level_module_count[TYPE][mod->status_default]++; }
 
+			// parse commands
 			for( int i = 1; i < tok.count; i++ )
 			{
-				err = initrcCmdDispatch(tok.tokens[i], &modules->drivers[module_count].status,
-										modules->run_level_module_count);
+				int err = initrcCmdDispatch(tok.tokens[i], &mod->modules[module_count].status,
+						&data_base->run_level_module_count[TYPE] );
 				if( err != 0 )
 				{
-					msgError("driver unknown command");
+					msgError("unknown command");
 					printf("\t [%s:%i] %s\n\n", file_name, file_line_number, tok.tokens[i]);
-					exit(0);
+					err_flag = 1;
 				}
 			}
 
-			strcpy(modules->drivers[module_count].name, tok.tokens[0]);
+			// proceed name
+			if ( strlen(tok.tokens[0]) > MODULES_NAME_SIZE_MAX)
+			{
+				msgError("Name too long");
+				printf("\t <%s> is over %i\n\n", tok.tokens[0], MODULES_NAME_SIZE_MAX);
+				err_flag = 1;
+			}
+
+			strcpy( mod->modules[module_count].name, tok.tokens[0]);
 			module_count++;
 		}
 	}
@@ -95,13 +104,13 @@ void parseInitrc(parse_init_rc_type_t TYPE, module_base_t *modules, const char *
 	{
 		msgError("no module ???");
 		printf("\t in %s\n\n", file_name);
-		exit(0);
+		err_flag = 1;
 	}
 
+	mod->modules_count = module_count;
 
-	modules->module_count = module_count;
-
-	// close files
 	fclose(file_initrc);
+
+	if( err_flag == 1 ) {exit(0);}
 }
 
