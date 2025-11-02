@@ -22,7 +22,6 @@
 #include "utility/autoCode2_src/autoCode.h"
 #include "utility/autoCode2_src/printModules.h"
 
-
 void printModules(const modules_database_t *data_base)
 {
 	msgInfo("found drivers :");
@@ -37,7 +36,8 @@ void printModules(const modules_database_t *data_base)
 	const module_type_t *services = &data_base->modules_type[MODULES_SERVICES_ID];
 	for( int i = 0; i < services->modules_count; i++ )
 	{
-		printf("\tservices[%i] \"%s\" status=%i\n", i, services->modules[i].name, services->modules[i].status);
+		printf("\tservices[%i] \"%s\" status=%i\n", i, services->modules[i].name,
+			   services->modules[i].status);
 	}
 	printf("\n");
 
@@ -48,7 +48,6 @@ void printModules(const modules_database_t *data_base)
 		printf("\ttasks[%i] \"%s\" status=%i\n", i, tasks->modules[i].name, tasks->modules[i].status);
 	}
 	printf("\n");
-
 
 	msgInfo("threads (services + tasks) by run level :");
 	char name[256];
@@ -72,15 +71,15 @@ void printModules(const modules_database_t *data_base)
 				strcpy(name, "RUN_USER");
 				break;
 			default:
-				 msgError("unknow run level");
-				 printf("\t =%i ?\n",i);
-				 exit(0);
+				msgError("unknow run level");
+				printf("\t =%i ?\n", i);
+				exit(0);
 				break;
 		}
 
 		printf("\trun_level_threads_count[%s] = %i\n", name,
-				data_base->run_level_module_count[MODULES_SERVICES_ID][i] +
-				data_base->run_level_module_count[MODULES_TASKS_ID][i]		);
+			   data_base->run_level_module_count[MODULES_SERVICES_ID][i] +
+				   data_base->run_level_module_count[MODULES_TASKS_ID][i]);
 	}
 	printf("\n");
 }

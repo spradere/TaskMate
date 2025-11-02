@@ -34,7 +34,7 @@ void writeInclude(const module_t *modules, const char *file_name, const char *ar
 
 	for( int i = 0; i < modules->drivers_count; i++ )
 	{
-		fprintf(file_include, "#include \"arch/%s/%s.h\"\n",arch, modules->drivers[i].name);
+		fprintf(file_include, "#include \"arch/%s/%s.h\"\n", arch, modules->drivers[i].name);
 	}
 	fprintf(file_include, "\n");
 

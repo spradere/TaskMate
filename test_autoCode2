@@ -1,2 +1,0 @@
-clang -I/root/code/TaskMate/TaskMate_current/ utility/autoCode2_src/autoCode.c utility/autoCode2_src/parseInitrc.c utility/autoCode2_src/tokenizer.c utility/autoCode2_src/initrcCmdDispatch.c utility/autoCode2_src/printModules.c -o autoCode2
-./autoCode2 avr8

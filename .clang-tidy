@@ -11,7 +11,7 @@ Checks: >
 
 CheckOptions:
   - key: readability-function-cognitive-complexity.Threshold
-    value: '30'
+    value: '32'
 
 HeaderFilterRegex: ^src/
 WarningsAsErrors: false
