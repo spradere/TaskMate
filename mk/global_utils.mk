@@ -24,8 +24,6 @@ clean:
 	rm -f autoCode_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
 
-
-
 # Make doxygen documentation
 doc:
 	@printf "\n\033[1;36mMake Doxygen documentation\033[0m\n\n"
@@ -40,6 +38,7 @@ cloc:
 # clang-tidy cppcheck
 TIDY_SRC := ${AUTOCODE_SRC}
 TIDY_SRC += ${SRCS}
+TIDY_SRC := ${AUTOCODE2_SRC}
 
 tidy:
 	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
@@ -73,5 +72,5 @@ check:
 # clang-format
 format:
 	@printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
-	clang-format -i $(SRCS:S/src\/sysCore\/initSys.c//) $(SRCS_H) $(AUTOCODE_SRC)
+	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRC} ${AUTOCODE2_SRC}
 .PHONY: format

@@ -62,7 +62,8 @@ const initrc_cmd_t initrc_cmds[] = {{"-RUN_NONE", funcRunNone},
 
 };
 
-int initrcCmdDispatch(const char *cmd, module_status_t *status, run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT])
+int initrcCmdDispatch(const char *cmd, module_status_t *status,
+					  run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT])
 {
 	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
 	{

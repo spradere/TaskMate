@@ -49,3 +49,8 @@ header_check:
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
 	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
+
+${AUTOCODE2_TARGET}: ${AUTOCODE2_SRC}
+	@printf "\n\033[1;33mCompiling autoCode2\033[0m\n\n"
+	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE2_SRC} -o ${AUTOCODE2_TARGET}
+	./${AUTOCODE2_TARGET} avr8

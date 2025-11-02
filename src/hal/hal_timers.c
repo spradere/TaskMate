@@ -21,5 +21,4 @@
 
 #include "hal/hal_timers.h"
 
-void hal_timer_shed()
-{}
+void hal_timer_shed() {}

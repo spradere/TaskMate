@@ -57,7 +57,8 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 			if( tok.count > mod->initrc_arg_count_max )
 			{
 				msgError("wrong token count");
-				printf("\t [%s:%i] is %i, should be max(%i)\n\n", file_name, file_line_number, tok.count, mod->initrc_arg_count_max);
+				printf("\t [%s:%i] is %i, should be max(%i)\n\n", file_name, file_line_number, tok.count,
+					   mod->initrc_arg_count_max);
 				err_flag = 1;
 			}
 
@@ -78,7 +79,7 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 			for( int i = 1; i < tok.count; i++ )
 			{
 				int err = initrcCmdDispatch(tok.tokens[i], &mod->modules[module_count].status,
-						&data_base->run_level_module_count[TYPE] );
+											&data_base->run_level_module_count[TYPE]);
 				if( err != 0 )
 				{
 					msgError("unknown command");
@@ -88,14 +89,14 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 			}
 
 			// proceed name
-			if ( strlen(tok.tokens[0]) > MODULES_NAME_SIZE_MAX)
+			if( strlen(tok.tokens[0]) > MODULES_NAME_SIZE_MAX )
 			{
 				msgError("Name too long");
 				printf("\t <%s> is over %i\n\n", tok.tokens[0], MODULES_NAME_SIZE_MAX);
 				err_flag = 1;
 			}
 
-			strcpy( mod->modules[module_count].name, tok.tokens[0]);
+			strcpy(mod->modules[module_count].name, tok.tokens[0]);
 			module_count++;
 		}
 	}
@@ -111,6 +112,5 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 
 	fclose(file_initrc);
 
-	if( err_flag == 1 ) {exit(0);}
+	if( err_flag == 1 ) { exit(0); }
 }
-

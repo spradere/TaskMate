@@ -26,29 +26,31 @@
 void snprintf(char *buf, uint8_t n, const char *format, ...)
 {
 	va_list args;
-    va_start(args, format);
+	va_start(args, format);
 
-    while (*format)
-    {
-        if (*format == '%' && *(format + 1))
-        {
-            format++;
-            switch (*format)
-            {
-                case 's': /*uart_puts(va_arg(args, char*));*/ break;
-                case 'c': /*uart_putc((char)va_arg(args, int));*/ break;
-                case 'd': /*print_decimal(va_arg(args, int));*/ break;
-                case 'x': /*print_hex(va_arg(args, unsigned int));*/ break;
-                case '%': /*uart_putc('%');*/ break;
-                default: /*uart_putc('?');*/
-            }
-        }
-        else
-        {
-            /*uart_putc(*format);*/
-        }
-        format++;
-    }
+	while( *format )
+	{
+		if( *format == '%' && *(format + 1) )
+		{
+			format++;
+			switch( *format )
+			{
+				case 's': /*uart_puts(va_arg(args, char*));*/
+					break;
+				case 'c': /*uart_putc((char)va_arg(args, int));*/
+					break;
+				case 'd': /*print_decimal(va_arg(args, int));*/
+					break;
+				case 'x': /*print_hex(va_arg(args, unsigned int));*/
+					break;
+				case '%': /*uart_putc('%');*/
+					break;
+				default: /*uart_putc('?');*/
+			}
+		}
+		else { /*uart_putc(*format);*/ }
+		format++;
+	}
 
-    va_end(args);
+	va_end(args);
 }
