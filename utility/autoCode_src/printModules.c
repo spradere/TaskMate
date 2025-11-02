@@ -69,9 +69,9 @@ void printModules(const module_t *modules)
 				strcpy(name, "RUN_USER");
 				break;
 			default:
-				 msgError("unknow run level");
-				 printf("\t =%i ?\n",i);
-				 exit(0);
+				msgError("unknow run level");
+				printf("\t =%i ?\n", i);
+				exit(0);
 				break;
 		}
 

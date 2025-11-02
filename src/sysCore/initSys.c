@@ -58,7 +58,7 @@ void initThreads(void)
 
 	const char *thread0_name = "scli";
 	modules.threads[0].name = (uint8_t *)thread0_name;
-	modules.threads[0].status = 17; // set run level | thread type
+	modules.threads[0].status = 19; // set run level | thread type
 	modules.threads[0].main = scli;
 	threadCreate(msg, 1);
 
@@ -139,8 +139,8 @@ void initRunLevels(void)
 	// [tag] run levels
 	to_run = (run_levels_t){
 		.level0 = {0},
-		.level1 = {1,0},
-		.level2 = {1,0},
+		.level1 = {0},
+		.level2 = {0},
 		.level3 = {2,0,1},
 		.level4 = {4,0,1,2,3},
 		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}

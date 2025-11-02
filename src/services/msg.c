@@ -50,7 +50,10 @@ void msg(void)
 		msgWritreText(channel, "msg : Essai USART1 \n", MSG_TO_USART1);
 	}
 
-	if( msgRequestChannel(&channel) == ERR_SUCCESS ) { msgWritreText(channel, "\3msg : HAL files", MSG_TO_LCD); }
+	if( msgRequestChannel(&channel) == ERR_SUCCESS )
+	{
+		msgWritreText(channel, "\3msg : HAL files", MSG_TO_LCD);
+	}
 
 	msgProcess();
 

@@ -15,7 +15,7 @@
  * @file autoCode.h
  * @brief autoCode header definitions
  *
- * @todo add run level count in module_t -> intrcCmdDispatch
+ * @todo
  */
 
 #ifndef AUTOCODE_H
@@ -57,8 +57,8 @@ typedef struct
 
 typedef struct
 {
-	module_type_t modules_type[MODULES_COUNT];
-	run_level_modules_count_t run_level_module_count[MODULES_COUNT][RUN_LEVEL_COUNT];
+	module_type_t modules_type[MODULES_TYPE_COUNT];
+	run_level_modules_count_t run_level_module_count[MODULES_TYPE_COUNT][RUN_LEVEL_COUNT];
 
 } modules_database_t;
 

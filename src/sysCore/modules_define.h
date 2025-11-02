@@ -36,9 +36,8 @@
 #define MODULES_SERVICES_ID 1
 #define MODULES_TASKS_ID 2
 
-#define MODULES_COUNT 3
+#define MODULES_TYPE_COUNT 3
 #define MODULES_NAME_SIZE_MAX 32
-
 
 // thread status bits
 // bit [2 1 0 ] is run level

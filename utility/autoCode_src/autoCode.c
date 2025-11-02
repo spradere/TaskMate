@@ -49,10 +49,14 @@ int main(int argn, char *argv[])
 {
 
 	// test command line arguments
-	if(argn != 2 ){msgError("Bad argn for autoCode, forget arch ?"); exit(0);}
+	if( argn != 2 )
+	{
+		msgError("Bad argn for autoCode, forget arch ?");
+		exit(0);
+	}
 	char *arch_name = argv[1];
 	msgInfo("arch_name");
-	printf("\t <%s>\n\n",arch_name);
+	printf("\t <%s>\n\n", arch_name);
 
 	// setup modules
 	module_t modules;
@@ -65,7 +69,7 @@ int main(int argn, char *argv[])
 
 	// read init.rc file and store data in modules[]
 	char arch_initrc_path[256];
-	sprintf(arch_initrc_path,"src/arch/%s/drivers_init.rc",arch_name);
+	sprintf(arch_initrc_path, "src/arch/%s/drivers_init.rc", arch_name);
 
 	parseInitrcDrivers(&modules, arch_initrc_path);
 	parseInitrcServices(&modules, "src/services/services_init.rc");
