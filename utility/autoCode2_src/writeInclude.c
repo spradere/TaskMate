@@ -19,10 +19,10 @@
  * @todo nothing
  */
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/writeInclude.h"
+#include "utility/autoCode2_src/autoCode.h"
+#include "utility/autoCode2_src/writeInclude.h"
 
-void writeInclude(const module_t *modules, const char *file_name, const char *arch)
+void writeInclude(const modules_database_t *data_base, const char *file_name, const char *arch)
 {
 	FILE *file_include = fopen(file_name, "w");
 	if( file_include == NULL )
@@ -32,21 +32,30 @@ void writeInclude(const module_t *modules, const char *file_name, const char *ar
 		exit(1);
 	}
 
-	for( int i = 0; i < modules->drivers_count; i++ )
+	fprintf(file_include, "// Auto generated code, do not edit !\n");
+	fprintf(file_include, "// any changes will be lost\n\n");
+
+	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file_include, "#include \"arch/%s/%s.h\"\n",arch, modules->drivers[i].name);
+		fprintf(file_include, "#include \"arch/%s/%s.h\"\n", arch, mod->modules[i].name);
 	}
 	fprintf(file_include, "\n");
 
-	for( int i = 0; i < modules->services_count; i++ )
+	mod = &data_base->modules_type[MODULES_SERVICES_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file_include, "#include \"services/%s.h\"\n", modules->services[i].name);
+		fprintf(file_include, "#include \"services/%s.h\"\n", mod->modules[i].name);
 	}
 	fprintf(file_include, "\n");
 
-	for( int i = 0; i < modules->tasks_count; i++ )
+	mod = &data_base->modules_type[MODULES_TASKS_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file_include, "#include \"tasks/%s.h\"\n", modules->tasks[i].name);
+		fprintf(file_include, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
 	}
 
 	fclose(file_include);

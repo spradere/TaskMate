@@ -21,7 +21,7 @@
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
 	rm -f ${OBJS} ${DEPS}
-	rm -f autoCode_stamp ${AUTOCODE_TARGET}
+	rm -f autoCode_stamp ${AUTOCODE_TARGET} ${AUTOCODE2_TARGET}
 .PHONY: clean
 
 # Make doxygen documentation

@@ -1,6 +1,8 @@
 # Ignore compiled object files
 *.o
 utility/autoCode
+utility/autoCode2
+
 
 # Ignore dependency files
 *.d

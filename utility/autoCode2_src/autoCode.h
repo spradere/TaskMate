@@ -59,6 +59,7 @@ typedef struct
 {
 	module_type_t modules_type[MODULES_TYPE_COUNT];
 	run_level_modules_count_t run_level_module_count[MODULES_TYPE_COUNT][RUN_LEVEL_COUNT];
+	int threads_count[RUN_LEVEL_COUNT];
 
 } modules_database_t;
 
