@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : HAL files", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : autoCode2 ok", MSG_TO_LCD);
 	}
 
 	msgProcess();

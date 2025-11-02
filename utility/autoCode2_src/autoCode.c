@@ -41,9 +41,9 @@
 #include "utility/autoCode2_src/tokenizer.h"
 #include "utility/autoCode2_src/parseInitrc.h"
 #include "utility/autoCode2_src/printModules.h"
-// #include "utility/autoCode2_src/writeInclude.h"
-// #include "utility/autoCode2_src/writeAlloc.h"
-// #include "utility/autoCode2_src/parseTag.h"
+#include "utility/autoCode2_src/parseTag.h"
+#include "utility/autoCode2_src/writeInclude.h"
+#include "utility/autoCode2_src/writeAlloc.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -73,17 +73,15 @@ int main(int argn, char *argv[])
 	parseInitrc(MODULES_SERVICES_ID, &data_base, "src/services/services_init.rc");
 	parseInitrc(MODULES_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
 
-	// parseInitrc(MODULES_DRIVERS_ID, data_base, "utility/test_init.rc");
-
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 
 	// parse tag and generate code for init
-	// parseTag(&data_base, "src/sysCore/initSys.c");
+	parseTag(&data_base, "src/sysCore/initSys.c");
 
 	// write headers
-	// writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name);
-	// writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
+	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name);
+	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules
 	printModules(&data_base);
@@ -121,7 +119,7 @@ static void checkModulesCount(modules_database_t *data_base)
 
 	id = MODULES_DRIVERS_ID;
 	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = 4; // MODULES_DRIVERS_COUNT_MAX;
+	module_count[id][1] = MODULES_DRIVERS_COUNT_MAX;
 
 	id = MODULES_SERVICES_ID;
 	module_count[id][0] = data_base->modules_type[id].modules_count;

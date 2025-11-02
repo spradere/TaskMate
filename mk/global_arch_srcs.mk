@@ -45,11 +45,7 @@ AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
 AUTOCODE2_TARGET = utility/autoCode2
-AUTOCODE2_SRC = utility/autoCode2_src/autoCode.c
-AUTOCODE2_SRC += utility/autoCode2_src/parseInitrc.c
-AUTOCODE2_SRC += utility/autoCode2_src/tokenizer.c
-AUTOCODE2_SRC += utility/autoCode2_src/initrcCmdDispatch.c
-AUTOCODE2_SRC += utility/autoCode2_src/printModules.c
+AUTOCODE2_SRC != find utility/autoCode2_src/ -name "*.c"
 
 # Initrc files for autocode
 FILES_INIT_RC = src/arch/${ARCH}/drivers_init.rc

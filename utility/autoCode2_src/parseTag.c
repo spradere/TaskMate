@@ -19,11 +19,11 @@
  * @todo nothing
  */
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/parseTag.h"
-#include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode2_src/autoCode.h"
+#include "utility/autoCode2_src/parseTag.h"
+#include "utility/autoCode2_src/tokenizer.h"
 
-void parseTag(module_t *modules, const char *name_src)
+void parseTag(modules_database_t *data_base, const char *name_src)
 {
 	// open source and tmp file
 	FILE *file_src = fopen(name_src, "r");
@@ -70,6 +70,13 @@ void parseTag(module_t *modules, const char *name_src)
 				break;
 			}
 
+			if( tag_section == 1 )
+			{
+				msgError("Start new tag section without previous end tag [/tag]");
+				printf("\t [%s:%i] %s\n\n", name_src, file_line_number, tok.line);
+				break;
+			}
+
 			msgInfo("found tag :");
 			printf("\t %s %s\n", tok.tokens[2], tok.tokens[3]);
 
@@ -78,17 +85,17 @@ void parseTag(module_t *modules, const char *name_src)
 
 			if( (strcmp(tok.tokens[2], "threads") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeThreadsInit(modules, file_tmp);
+				writeThreadsInit(data_base, file_tmp);
 			}
 
 			if( (strcmp(tok.tokens[2], "drivers") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeDriversInit(modules, file_tmp);
+				writeDriversInit(data_base, file_tmp);
 			}
 
 			if( (strcmp(tok.tokens[2], "run") == 0) && (strcmp(tok.tokens[3], "levels") == 0) )
 			{
-				writeRunLevelsInit(modules, file_tmp);
+				writeRunLevelsInit(data_base, file_tmp);
 			}
 		}
 
@@ -103,8 +110,9 @@ void parseTag(module_t *modules, const char *name_src)
 
 	if( tag_section == 1 )
 	{
-		msgError("missing end tag [/tag] at end of file");
-		printf("\t [%s]\n\n", name_src);
+		msgError("missing end tag [/tag]");
+		printf("\t [%s:%i]\n\n", name_src, file_line_number);
+		exit(0);
 	}
 
 	// Replace original file with the modified version
@@ -119,55 +127,68 @@ void parseTag(module_t *modules, const char *name_src)
 	free(name_tmp);
 }
 
-static void writeThreadsInit(module_t *modules, FILE *file)
+static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 {
 	int threads_count = 0;
+	const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
 
-	for( int i = 0; i < modules->services_count; i++ )
+	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->services[i].name, threads_count);
+		fprintf(file, "\tthreadCreate(%s, %i);\n\n", mod->modules[i].name, threads_count);
 
-		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->services[i].name);
+		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
+
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
+
 		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n", threads_count,
-				modules->services[i].status | (1 << THREAD_TYPE_SYSTEM));
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, modules->services[i].name);
+				mod->modules[i].status | (1 << THREAD_TYPE_SYSTEM));
+
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
+
 		threads_count++;
 	}
 
-	for( int i = 0; i < modules->tasks_count; i++ )
-	{
-		fprintf(file, "\tthreadCreate(%s, %i);\n\n", modules->tasks[i].name, threads_count);
+	mod = &data_base->modules_type[MODULES_TASKS_ID];
 
-		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, modules->tasks[i].name);
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		fprintf(file, "\tthreadCreate(%s, %i);\n\n", mod->modules[i].name, threads_count);
+
+		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
+
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
+
 		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n", threads_count,
-				modules->tasks[i].status | (1 << THREAD_TYPE_USER));
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, modules->tasks[i].name);
+				mod->modules[i].status | (1 << THREAD_TYPE_USER));
+
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
+
 		threads_count++;
 	}
 }
 
-static void writeDriversInit(module_t *modules, FILE *file)
+static void writeDriversInit(modules_database_t *data_base, FILE *file)
 {
-	for( int i = 0; i < modules->drivers_count; i++ )
+	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, modules->drivers[i].name);
+		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
 
 		fprintf(file, "\tmodules.drivers[%i]=(driver_item_t)\n", i);
 		fprintf(file, "\t{\n");
 		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
-		fprintf(file, "\t\t.status = %i,\n", modules->drivers[i].status);
-		fprintf(file, "\t\t.init = %sInit,\n", modules->drivers[i].name);
-		fprintf(file, "\t\t.start = %sStart,\n", modules->drivers[i].name);
-		fprintf(file, "\t\t.stop = %sStop\n", modules->drivers[i].name);
+		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
+		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
+		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
+		fprintf(file, "\t\t.stop = %sStop\n", mod->modules[i].name);
 		fprintf(file, "\t};\n");
 	}
 }
 
-static void writeRunLevelsInit(module_t *modules, FILE *file)
+static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 {
 
 	fprintf(file, "\tto_run = (run_levels_t){\n");
@@ -175,24 +196,38 @@ static void writeRunLevelsInit(module_t *modules, FILE *file)
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
 
-		int total_thread_count = 0;
-		for( int i = 1; i <= level; i++ ) { total_thread_count += modules->run_level_threads_count[i]; }
+		int thread_count = 0;
 
-		modules->run_level_threads_total_count[level] = total_thread_count;
-		fprintf(file, "\t\t.level%i = {%i", level, modules->run_level_threads_total_count[level]);
+		for( int i = 1; i <= level; i++ )
+		{
+			thread_count += data_base->run_level_module_count[MODULES_SERVICES_ID][i];
+		}
+		for( int i = 1; i <= level; i++ )
+		{
+			thread_count += data_base->run_level_module_count[MODULES_TASKS_ID][i];
+		}
+
+		data_base->threads_count[level] = thread_count;
+
+		fprintf(file, "\t\t.level%i = {%i", level, data_base->threads_count[level]);
 
 		int threads_count = 0;
 
-		for( int i = 0; i < modules->services_count; i++ )
+		const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
+
+		for( int i = 0; i < mod->modules_count; i++ )
 		{
-			if( (modules->services[i].status & RUN_LEVEL_MASK) <= level )
+			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
 			{
 				fprintf(file, ",%i", threads_count++);
 			}
 		}
-		for( int i = 0; i < modules->tasks_count; i++ )
+
+		mod = &data_base->modules_type[MODULES_TASKS_ID];
+
+		for( int i = 0; i < mod->modules_count; i++ )
 		{
-			if( (modules->tasks[i].status & RUN_LEVEL_MASK) <= level )
+			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
 			{
 				fprintf(file, ",%i", threads_count++);
 			}

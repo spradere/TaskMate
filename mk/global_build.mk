@@ -40,9 +40,9 @@ header_check:
 -include ${DEPS_FILE}
 
 # Test if autoCode and initrc files was modified
-.autoCode_stamp: ${AUTOCODE_TARGET} ${FILES_INIT_RC}
-	@printf "\n\033[1;33minitrc have changed or autoCode.c -> run autoCode\033[0m\n\n"
-	./${AUTOCODE_TARGET} ${ARCH}
+.autoCode_stamp: ${AUTOCODE2_TARGET} ${FILES_INIT_RC}
+	@printf "\n\033[1;33minitrc have changed or autoCode2.c -> run autoCode2\033[0m\n\n"
+	./${AUTOCODE2_TARGET} ${ARCH}
 	touch .autoCode_stamp
 
 # Special rule for autoCode with clang, not avr-gcc
@@ -53,4 +53,3 @@ ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
 ${AUTOCODE2_TARGET}: ${AUTOCODE2_SRC}
 	@printf "\n\033[1;33mCompiling autoCode2\033[0m\n\n"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE2_SRC} -o ${AUTOCODE2_TARGET}
-	./${AUTOCODE2_TARGET} avr8
