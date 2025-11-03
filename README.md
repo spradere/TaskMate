@@ -80,23 +80,12 @@ Starting with version 0.10, TaskMate uses a **modular design model**:
 - Each directory provides a `*_init.rc` file describing initialization parameters.
 - These files are parsed before **compile time** by a custom tool : `autoCode`.
 
-The result is **auto-generated code**, without runtime overhead:
-
-| File | Purpose |
-|------|---------|
-| `sysCore/autoInclude.h` | Centralized modules includes |
-| `sysCore/autoAlloc.h`   | Modules allocation tables |
-| `sysCore/initSys.c` | Modules initialization code |
-
-All modules are referenced through the global structure `modules`:
-
-```c
-modules.threads[i].name
-modules.drivers[i].id
-```
+The result is **auto-generated code**, without runtime overhead 👍
 
 This approach keeps the flexibility of a dynamic system but ensures that
  **everything is resolved at compile time**, minimizing Flash and RAM usage.
+
+See : [More about autoCode](doc/autoCode.md)
 
 ---
 
@@ -125,7 +114,7 @@ Upcoming features:
 - HAL
 - system-wide error handling
 - Stack usage monitoring
-- CLI command parser with argument handling
+- serial CLI command parser
 
 * See : [Road map](doc/check_list.md)
 

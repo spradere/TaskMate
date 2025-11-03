@@ -160,7 +160,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
 
-		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n", threads_count,
+		fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
 				mod->modules[i].status | (1 << THREAD_TYPE_USER));
 
 		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
