@@ -34,8 +34,15 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo v2
+ * @todo add dry run
  */
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * autoCode is a critical component: if it generates incorrect code,
+ * TaskMate may still compile but will behave unpredictably at runtime.
+ * Any change to autoCode must be considered system-critical and tested accordingly.
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * */
 
 #include "utility/autoCode2_src/autoCode.h"
 #include "utility/autoCode2_src/tokenizer.h"
