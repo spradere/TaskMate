@@ -65,4 +65,4 @@ TaskMate 0.20
 	refactoring Makefile -> split + add arch selection
 	add HAL directories and files
 	update documentation
-	refactor autoCode
+	refactor autoCode -> autoCode2

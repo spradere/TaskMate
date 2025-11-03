@@ -70,13 +70,13 @@ void initThreads(void)
 
 	const char *thread2_name = "task1";
 	modules.threads[2].name = (uint8_t *)thread2_name;
-	modules.threads[2].status = 12; // set run level | thread type
+	modules.threads[2].status = 12;
 	modules.threads[0].main = task1;
 	threadCreate(task2, 3);
 
 	const char *thread3_name = "task2";
 	modules.threads[3].name = (uint8_t *)thread3_name;
-	modules.threads[3].status = 12; // set run level | thread type
+	modules.threads[3].status = 12;
 	modules.threads[1].main = task2;
 	// [/tag]
 }
