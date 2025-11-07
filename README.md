@@ -149,8 +149,13 @@ See the `LICENSE` file for full details.
 
 ---
 
-### 📑 Documentation
+### 📑 Documentation & books 📚
 
 - **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best pratices](./doc/code_best_practices.md)
+
+- La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
+- Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
+- The markdown guide, author Matt Cone, publisher Amazon. ISBN 9798656504492
+- Hands-On RTOS with Microcontrollers, author Brian Amos, publisher Packt. ISBN 978-1-83882-673-4
