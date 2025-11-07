@@ -16,7 +16,7 @@
  * @file parseInitrc.c
  * @brief read init.rc file and write data to modules
  *
- * @todo all
+ * @todo add check module -> file.c exist
  */
 
 #include "utility/autoCode2_src/autoCode.h"

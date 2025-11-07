@@ -21,10 +21,9 @@
  *
  * @todo finish run level : add init service for startup
  *
- * Now or later you will have to write a very light weight libc,
- * designed for embedded system with MCU. Not POSIX compliant.
+ * Now or later I will have to write a very lightweight libc,
+ * designed for embedded systems with MCU. Not POSIX compliant.
  *
- * new hardware LCD4x20, RTC
  *
  * sysCallPreemptProtected(timeout, driver);
  */
@@ -39,18 +38,16 @@
 #include "sysCore/modules_items.h"
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
-#include "sysCore/run_level_define.h"
+#include "sysCore/runLevel.h"
 
-// system wide variables
+// system core wide variables
 modules_t modules;
-run_levels_t to_run;
-uint8_t system_status = 0;
 
 int main(void)
 {
 	initDrivers();
 	initThreads();
-	initRunLevels();
+	runLevelInit();
 
 	// Set output for in board led 13
 	LED_DDR |= (1 << LED_PIN);
@@ -83,9 +80,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// enable global INT to let run timer3 RTC and usart1 sCLI
 	sei();
 
-// stop timer1 prevent preemption of the schduler itself -> panic
-// prevent scheduler eat thread time slice
-#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
+	// stop timer1 prevent preemption of the scheduler itself -> panic
+	// prevent scheduler eat thread time slice
+	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;

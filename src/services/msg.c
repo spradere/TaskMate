@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : doc upgrade", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : -> runLevel ?", MSG_TO_LCD);
 	}
 
 	msgProcess();

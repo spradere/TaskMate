@@ -13,8 +13,8 @@
  */
 
 /**
- * @file run_level_define.h
- * @brief run level definition header
+ * @file runLevel.h
+ * @brief run level header
  *
  * @todo Nothing
  */
@@ -32,5 +32,7 @@
 #define RUN_LEVEL_MASK                                                                                       \
 	0x07 /**< to save space run level is stored in status byte, the first 3 LSB bits are used*/
 #define RUN_LEVEL_COUNT 5
+
+void runLevelInit(void);
 
 #endif

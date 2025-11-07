@@ -134,14 +134,14 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\tthreadCreate(%s, %i);\n\n", mod->modules[i].name, threads_count);
+		fprintf(file, "\n\tthreadCreate(%s, %i);\n", mod->modules[i].name, threads_count);
 
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
 
-		fprintf(file, "\tmodules.threads[%i].status = %i; // set run level | thread type\n", threads_count,
+		fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
 				mod->modules[i].status | (1 << THREAD_TYPE_SYSTEM));
 
 		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
@@ -153,7 +153,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\tthreadCreate(%s, %i);\n\n", mod->modules[i].name, threads_count);
+		fprintf(file, "\n\tthreadCreate(%s, %i);\n", mod->modules[i].name, threads_count);
 
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
@@ -163,7 +163,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 		fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
 				mod->modules[i].status | (1 << THREAD_TYPE_USER));
 
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
+		fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);
 
 		threads_count++;
 	}
