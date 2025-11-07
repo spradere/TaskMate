@@ -85,6 +85,8 @@ int main(int argn, char *argv[])
 
 	// parse tag and generate code for init
 	parseTag(&data_base, "src/sysCore/initSys.c");
+	parseTag(&data_base, "src/sysCore/runLevel.c");
+
 
 	// write headers
 	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name);

@@ -26,7 +26,7 @@ ARCH ?= avr8
 # Make process
 .include "mk/${ARCH}_vars.mk"
 
-.include "mk/global_arch_srcs.mk"
+.include "mk/global_and_arch_srcs.mk"
 
 .include "mk/global_build.mk"
 
