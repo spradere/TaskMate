@@ -27,7 +27,7 @@
 
 // get TaskMate define
 #include "src/sysCore/modules_define.h"
-#include "src/sysCore/run_level_define.h"
+#include "src/sysCore/runLevel.h"
 
 // message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)

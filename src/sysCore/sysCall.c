@@ -18,8 +18,8 @@
  *
  * @warning This file contains ATOMIC material !
  *
- * @todo Add system call for driver lock, add runLevel() boot sequence, external
- * RTC cloc
+ * @todo Add system call for driver lock, add runLevel() boot sequence
+ *
  */
 
 #include <avr/io.h>
@@ -27,6 +27,8 @@
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
 #include "arch/avr8/timer1.h"
+
+static uint8_t system_status = 0;
 
 uint8_t sysCallGetThreadID(void) { return modules.thread_current; }
 

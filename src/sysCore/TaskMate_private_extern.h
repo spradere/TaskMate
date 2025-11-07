@@ -27,7 +27,6 @@
 #include "sysCore/autoAlloc.h"
 
 extern modules_t modules;
-extern run_levels_t to_run;
-extern uint8_t system_status;
+// to delete extern run_levels_t to_run;
 
 #endif

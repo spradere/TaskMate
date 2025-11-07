@@ -24,7 +24,6 @@
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/initSys.h"
 #include "sysCore/autoInclude.h"
-#include "sysCore/run_level_define.h"
 
 #define AVR_REGISTER_COUNT 32 // from R0 to R31
 
@@ -34,7 +33,7 @@
 // initailize thread memory
 void threadCreate(void (*func)(void), uint8_t num)
 {
-	// modules.threads[num].num = num;
+
 	modules.threads[num].time_counter = 0;
 
 	// stack init
@@ -54,30 +53,30 @@ void initThreads(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] threads init
-	threadCreate(scli, 0);
 
+	threadCreate(scli, 0);
 	const char *thread0_name = "scli";
 	modules.threads[0].name = (uint8_t *)thread0_name;
-	modules.threads[0].status = 19; // set run level | thread type
+	modules.threads[0].status = 19;
 	modules.threads[0].main = scli;
-	threadCreate(msg, 1);
 
+	threadCreate(msg, 1);
 	const char *thread1_name = "msg";
 	modules.threads[1].name = (uint8_t *)thread1_name;
-	modules.threads[1].status = 19; // set run level | thread type
+	modules.threads[1].status = 19;
 	modules.threads[1].main = msg;
-	threadCreate(task1, 2);
 
+	threadCreate(task1, 2);
 	const char *thread2_name = "task1";
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].status = 12;
-	modules.threads[0].main = task1;
-	threadCreate(task2, 3);
+	modules.threads[2].main = task1;
 
+	threadCreate(task2, 3);
 	const char *thread3_name = "task2";
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].status = 12;
-	modules.threads[1].main = task2;
+	modules.threads[3].main = task2;
 	// [/tag]
 }
 
@@ -133,20 +132,4 @@ void initDrivers(void)
 	// [/tag]
 }
 
-void initRunLevels(void)
-{
-	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] run levels
-	to_run = (run_levels_t){
-		.level0 = {0},
-		.level1 = {0},
-		.level2 = {0},
-		.level3 = {2,0,1},
-		.level4 = {4,0,1,2,3},
-		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
-	};
-	to_run.current=RUN_CORE;
-	to_run.next=RUN_CORE;
-	// [/tag]
-}
 // NOLINTEND

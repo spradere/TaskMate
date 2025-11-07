@@ -8,7 +8,7 @@
 
 `autoCode` is a **code generation tool** used by TaskMate to automatically build
 the initialization code for drivers, services, and user tasks.
-It consolidates all module definitions from `.rc` configuration files
+It consolidates all module definitions from `*_init.rc` configuration files
 into the generated system files that TaskMate uses at runtime.
 
 ---
@@ -37,7 +37,7 @@ dense and optimized without impacting maintainability.
 
 ## 📁 Input Files
 
-`autoCode` reads `.rc` initialization files describing which modules are active
+`autoCode` reads `*_init.rc` initialization files describing which modules are active
 for the target architecture and how they should be initialized.
 
 | Type        | Typical Path                          | Description                              |
@@ -67,7 +67,8 @@ and determines which folder under `src/arch/` is parsed.
 
 A typical autoCode run looks like this:
 
-```[autoCode.c:61] info : arch_name
+```
+[autoCode.c:61] info : arch_name
          <avr8>
 
 [parseInitrc.c:30] info : open init.rc file for parsing
@@ -113,11 +114,12 @@ A typical autoCode run looks like this:
         run_level_threads_count[RUN_SERVICE] = 2
         run_level_threads_count[RUN_USER] = 2
 
-touch .autoCode_stamp ```
+touch .autoCode_stamp
+```
 
 This log demonstrates that:
 
-- all .rc files were found and parsed.
+- all *_init.rc files were found and parsed.
 - each tag section was properly closed.
 - all modules were listed with their respective status.
 - thread counts per run level were consistent.
