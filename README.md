@@ -10,6 +10,9 @@ Designed specifically for **microcontrollers**.
 It emphasizes **reliability** and **modularity**.
 Without relying on any external RTOS — everything is built entirely from scratch.
 
+**TaskMate** is structured around a clean and portable architecture designed
+to separate build logic, system logic, and hardware dependencies.
+
 > **TaskMate Project Stats (v0.20)**
 >
 > 156 commits • 79 source files • 2309 lines of code •
@@ -31,6 +34,10 @@ TaskMate uses a custom **Makefile** that fully manages dependencies and workflow
 - Colorized output for clarity.
 - Separate source and build directories.
 - CLI commands like `make upload`, `make push` and `make backup`.
+- architecture-specific and board-specific code is compiled without
+using conditional macros (#ifdef).
+
+**Portability is achieved by build selection, not by preprocessor logic.**
 
 See : [Makefile Features & Usage](doc/Makefile_summary.md)
 
@@ -42,9 +49,14 @@ TaskMate is currently undergoing major development to improve portability.
 A **Hardware Abstraction Layer (HAL)** is being implemented to isolate the system core from hardware-specific code.
 This will allow TaskMate to run on multiple architectures:
 
-- **AVR8 (ATmega)** – the historical beginning of TaskMate
-- **AMD64** – for testing and faster development cycles
-- **STM32** – planned for future hardware performance upgrades
+- **avr8** – the historical beginning of TaskMate
+- **amd64** – for testing and faster development cycles
+- **armv7-m4** – planned for future hardware performance upgrades
+
+The HAL will provide a **clean interface** between the system and the hardware.
+Ensures true portability across hardware families.
+
+See : [Portability](doc/portability.md)
 
 ---
 
@@ -84,6 +96,8 @@ The result is **auto-generated code**, without runtime overhead 👍
 
 This approach keeps the flexibility of a dynamic system but ensures that
  **everything is resolved at compile time**, minimizing Flash and RAM usage.
+This mechanism defines system initialization and resource mapping
+**without manually hardcoding** any configuration.
 
 See : [More about autoCode](doc/autoCode.md)
 
@@ -154,6 +168,7 @@ See the `LICENSE` file for full details.
 - **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best pratices](./doc/code_best_practices.md)
+
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
