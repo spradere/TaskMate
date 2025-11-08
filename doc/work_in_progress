@@ -4,4 +4,3 @@ porting slab form amd64 to avr -> implement libc printf -> finish implementation
 
 develop system wide error management
 
-refactor auto code to one parceInitrc.c (drivers + services + tasks)
