@@ -1,5 +1,5 @@
 # TaskMate RTOS ![](doc/icon_64.png)
-## MCU real time operating system
+## Micro Controler Unit - Real Time Operating System
 
 ---
 
@@ -13,15 +13,17 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
-> **TaskMate Project Stats (v0.20)**
+> <span style="color:green"> **Project Stats (v0.20)**
 >
 > 167 commits • 84 source files • 2593 lines of code •
-> binary size : 3286 bytes (Flash) • ram usage : 1903 bytes
+> binary size : 3286 bytes (Flash) • ram usage : 1903 bytes</span>
 
-> **Main features that work (v0.20)**
-> - Hybrid multithreading (cooperative & preemptive).
-> - Real-time clock (RTC) support.
-> - Modular drivers and thread registration.
+> ⚠️ <span style="color:red">**Development Status**
+>
+> TaskMate is currently in active development and
+> should be considered **experimental**. While the core system and architecture are
+> functional, many components are still evolving. It is **not yet suitable for production use**,
+> and both APIs and internal structures may change without notice.</span>
 
 
 ---
@@ -32,8 +34,7 @@ Although **no code from ChatGPT is ever copied directly** into the TaskMate sour
 tree, the project would never have reached its current level of maturity without
 the assistance of AI. ChatGPT has been an invaluable tool for **structuring ideas,
 learning new concepts, and refining both code and architectural design.** It
-provides **technical guidance** on specific lines of code, algorithms, data
-structures, and general C programming practices. Moreover, it enables **efficient
+provides **technical guidance**. Moreover, it enables **efficient
 research** on related topics by summarizing and contextualizing complex technical
 information, helping me focus on building rather than endlessly searching.
 
@@ -46,7 +47,6 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
 - Automatic recompilation based on file changes, including headers.
-- Colorized output for clarity.
 - CLI commands like `make upload`, `make push` and `make backup`.
 - architecture-specific and board-specific code is compiled without
 using conditional macros (#ifdef).
@@ -103,6 +103,8 @@ such as messaging, timing, I/O, and services —
 but always through indirect calls via the SysCall, SysServices and HAL layers.
 This design significantly improves **stability** and **portability**.
 
+See : [Info about run level](doc/run_level.md)
+
 ---
 
 ### 🧩 Modular Design & autoCode
@@ -124,24 +126,6 @@ See : [More about autoCode](doc/autoCode.md)
 
 ---
 
-### 🔀 Run Levels
-
-The system implements run levels to control and sequence the initialization
-of modules during system startup. Each module is assigned a run level according to its role:
-
-- **RUN_NONE**: Not started automatically; can be manually launched later via the system CLI.
-- **RUN_CORE**: Start only the minimal critical components required for the system to function safely.
-- **RUN_DRIVER**: Initialize hardware drivers needed by higher-level services and tasks.
-- **RUN_SERVICE**: Launch system services that depend on drivers but are still internal to the OS.
-- **RUN_USER**: Start user tasks.
-
-This mechanism is crucial for maintaining a deterministic and controlled startup sequence,
-ensuring that dependencies are properly satisfied before launching higher-level components.
-It also allows dynamic system management by enabling selective start/stop operations at runtime,
-enhancing flexibility and robustness, especially for debugging, recovery, and partial system restarts.
-
----
-
 ### 🔜 Project progress ...
 
 Upcoming features:
@@ -151,7 +135,7 @@ Upcoming features:
 - Stack usage monitoring
 - serial CLI command parser
 
-* See : [Road map](doc/check_list.md)
+See : [Road map](doc/check_list.md)
 
 ---
 
@@ -163,18 +147,9 @@ This software is distributed under the **TaskMate License v1.0**.
 - Commercial use requires a **separate paid license**.
 
 To inquire about commercial licensing, please open an issue in this repository:
-[Open Licensing Issue](https://codeberg.org/Doul09/TaskMate/issues)
-
+[Open Licensing Issue](https://codeberg.org/Doul09/TaskMate/issues).
 By using this software, you agree to the terms of the TaskMate License v1.0.
-
 See the `LICENSE` file for full details.
-
-> **Development Status**
->
-> TaskMate is currently in active development and should be considered **experimental**.
-> While the core system and architecture are functional, many components are still evolving.
-> It is **not yet suitable for production use**, and both APIs and internal structures may change without notice.
-
 
 ---
 
