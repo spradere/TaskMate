@@ -15,7 +15,7 @@ to separate build logic, system logic, and hardware dependencies.
 
 > **TaskMate Project Stats (v0.20)**
 >
-> 156 commits • 79 source files • 2309 lines of code •
+> 167 commits • 84 source files • 2593 lines of code •
 > binary size : 3286 bytes (Flash) • ram usage : 1903 bytes
 
 > **Main features that work (v0.20)**
@@ -23,6 +23,21 @@ to separate build logic, system logic, and hardware dependencies.
 > - Real-time clock (RTC) support.
 > - Modular drivers and thread registration.
 
+
+---
+
+### 🧭 About ChatGPT and TaskMate
+
+Although **no code from ChatGPT is ever copied directly** into the TaskMate source
+tree, the project would never have reached its current level of maturity without
+the assistance of AI. ChatGPT has been an invaluable tool for **structuring ideas,
+learning new concepts, and refining both code and architectural design.** It
+provides **technical guidance** on specific lines of code, algorithms, data
+structures, and general C programming practices. Moreover, it enables **efficient
+research** on related topics by summarizing and contextualizing complex technical
+information, helping me focus on building rather than endlessly searching.
+
+See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 ---
 

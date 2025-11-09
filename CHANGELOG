@@ -66,3 +66,5 @@ TaskMate 0.20
 	add HAL directories and files
 	update documentation
 	refactor autoCode -> autoCode2
+	add tree structure for arch/mcu/board
+	modify makefile and autoCode for arch/mcu/board
