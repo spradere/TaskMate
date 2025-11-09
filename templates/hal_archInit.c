@@ -11,17 +11,6 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-/**
- * @file writeInclude.h
- * @brief write include code header
- *
- * @todo nothing
- */
+#include "hal/hal_api.h"
 
- #ifndef WRITE_INCLUDE_H
- #define WRITE_INCLUDE_H
-
- void writeInclude(const modules_database_t *data_base, const char *file_name,
-		const char *arch, const char *mcu, const char *board);
-
- #endif
+void hal_archInit(){}
