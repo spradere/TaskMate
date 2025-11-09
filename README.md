@@ -32,7 +32,6 @@ TaskMate uses a custom **Makefile** that fully manages dependencies and workflow
 
 - Automatic recompilation based on file changes, including headers.
 - Colorized output for clarity.
-- Separate source and build directories.
 - CLI commands like `make upload`, `make push` and `make backup`.
 - architecture-specific and board-specific code is compiled without
 using conditional macros (#ifdef).
@@ -80,7 +79,14 @@ See : [Future improvements](doc/RTOS_improvements.md)
 
 ![System Layer Diagram](doc/TaskMate_layers_v3.png)
 
-See : [System Architecture and Isolation](doc/OS_architecture.md)
+The new TaskMate layer configuration provides a **stronger isolation between system components**.
+Each layer communicates through **well-defined interfaces**,
+preventing direct access to the hardware or core system logic.
+
+User tasks can still **benefit from all system features** —
+such as messaging, timing, I/O, and services —
+but always through indirect calls via the SysCall, SysServices and HAL layers.
+This design significantly improves **stability** and **portability**.
 
 ---
 

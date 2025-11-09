@@ -59,14 +59,17 @@ int main(int argn, char *argv[])
 {
 
 	// test command line arguments
-	if( argn != 2 )
+	if( argn != 4 )
 	{
-		msgError("Bad argn for autoCode, forget arch ?");
+		msgError("Bad argn for autoCode, forget arch / mcu / board ?");
 		exit(0);
 	}
 	const char *arch_name = argv[1];
-	msgInfo("arch_name");
-	printf("\t <%s>\n\n", arch_name);
+	const char *mcu_name = argv[2];
+	const char *board_name = argv[3];
+
+	msgInfo("target : ");
+	printf("\t %s/%s/%s \n\n", arch_name, mcu_name, board_name);
 
 	// setup data_base
 	modules_database_t data_base;
@@ -74,9 +77,16 @@ int main(int argn, char *argv[])
 
 	// read init.rc file and store data in data_base[]
 	char arch_initrc_path[256];
+	char mcu_initrc_path[256];
+	char board_initrc_path[256];
+
 	sprintf(arch_initrc_path, "src/arch/%s/drivers_init.rc", arch_name);
+	sprintf(mcu_initrc_path, "src/arch/%s/%s/drivers_init.rc", arch_name, mcu_name);
+	sprintf(board_initrc_path, "src/arch/%s/%s/%s/drivers_init.rc", arch_name, mcu_name, board_name);
 
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, board_initrc_path);
 	parseInitrc(MODULES_SERVICES_ID, &data_base, "src/services/services_init.rc");
 	parseInitrc(MODULES_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
 
@@ -87,9 +97,8 @@ int main(int argn, char *argv[])
 	parseTag(&data_base, "src/sysCore/initSys.c");
 	parseTag(&data_base, "src/sysCore/runLevel.c");
 
-
 	// write headers
-	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name);
+	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name, mcu_name, board_name);
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules

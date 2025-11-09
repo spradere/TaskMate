@@ -22,7 +22,8 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(const modules_database_t *data_base, const char *file_name, const char *arch)
+void writeInclude(const modules_database_t *data_base, const char *file_name,
+		const char *arch, const char *mcu, const char *board)
 {
 	FILE *file_include = fopen(file_name, "w");
 	if( file_include == NULL )
@@ -39,7 +40,7 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file_include, "#include \"arch/%s/%s.h\"\n", arch, mod->modules[i].name);
+		fprintf(file_include, "#include \"arch/%s/%s/%s/%s.h\"\n", arch, mcu, board, mod->modules[i].name);
 	}
 	fprintf(file_include, "\n");
 
