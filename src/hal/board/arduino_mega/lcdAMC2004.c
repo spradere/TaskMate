@@ -14,8 +14,8 @@
 
 #include <util/delay.h>
 #include "sysCore/TaskMate_public.h"
-#include "arch/avr8/atmega2560/arduino_mega/i2c.h"
-#include "arch/avr8/atmega2560/arduino_mega/lcdAMC2004.h"
+#include "hal/board/arduino_mega/i2c.h"
+#include "hal/board/arduino_mega/lcdAMC2004.h"
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command

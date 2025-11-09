@@ -36,7 +36,6 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 header_check:
 	@printf "\n\033[1;33mCheck header files\033[0m\n\n"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
-
 -include ${DEPS_FILE}
 
 # Test if autoCode and initrc files was modified
@@ -44,6 +43,7 @@ header_check:
 	@printf "\n\033[1;33minitrc have changed or autoCode.c -> run autoCode\033[0m\n\n"
 	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD}
 	touch .autoCode_stamp
+
 
 # Special rule for autoCode with clang, not avr-gcc
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
