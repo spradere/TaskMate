@@ -24,7 +24,7 @@
 // sizes for tokenizer
 #define TOKEN_LINE_SIZE_MAX 256
 #define TOKEN_COUNT_MAX 4
-#define TOKEN_SIZE_MAX 32
+#define TOKEN_SIZE_MAX 64
 
 typedef struct
 {

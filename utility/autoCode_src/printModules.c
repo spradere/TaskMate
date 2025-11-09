@@ -21,33 +21,35 @@
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/printModules.h"
-#include "src/sysCore/run_level_define.h"
 
-void printModules(const module_t *modules)
+void printModules(const modules_database_t *data_base)
 {
 	msgInfo("found drivers :");
-	for( int i = 0; i < modules->drivers_count; i++ )
+	const module_type_t *driver = &data_base->modules_type[MODULES_DRIVERS_ID];
+	for( int i = 0; i < driver->modules_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" status=%i \n", i, modules->drivers[i].name, modules->drivers[i].status);
+		printf("\tdrivers[%i] \"%s\" status=%i \n", i, driver->modules[i].name, driver->modules[i].status);
 	}
 	printf("\n");
 
 	msgInfo("found services :");
-	for( int i = 0; i < modules->services_count; i++ )
+	const module_type_t *services = &data_base->modules_type[MODULES_SERVICES_ID];
+	for( int i = 0; i < services->modules_count; i++ )
 	{
-		printf("\tservices[%i] \"%s\" status=%i\n", i, modules->services[i].name,
-			   modules->services[i].status);
+		printf("\tservices[%i] \"%s\" status=%i\n", i, services->modules[i].name,
+			   services->modules[i].status);
 	}
 	printf("\n");
 
 	msgInfo("found tasks :");
-	for( int i = 0; i < modules->tasks_count; i++ )
+	const module_type_t *tasks = &data_base->modules_type[MODULES_TASKS_ID];
+	for( int i = 0; i < tasks->modules_count; i++ )
 	{
-		printf("\ttasks[%i] \"%s\" status=%i\n", i, modules->tasks[i].name, modules->tasks[i].status);
+		printf("\ttasks[%i] \"%s\" status=%i\n", i, tasks->modules[i].name, tasks->modules[i].status);
 	}
 	printf("\n");
 
-	msgInfo("threads by run level :");
+	msgInfo("threads (services + tasks) by run level :");
 	char name[256];
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
@@ -75,7 +77,9 @@ void printModules(const module_t *modules)
 				break;
 		}
 
-		printf("\trun_level_threads_count[%s] = %i\n", name, modules->run_level_threads_count[i]);
+		printf("\trun_level_threads_count[%s] = %i\n", name,
+			   data_base->run_level_module_count[MODULES_SERVICES_ID][i] +
+				   data_base->run_level_module_count[MODULES_TASKS_ID][i]);
 	}
 	printf("\n");
 }
