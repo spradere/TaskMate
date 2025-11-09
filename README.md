@@ -13,9 +13,9 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
-> <span style="color:green"> **Project Stats (v0.20)**
+> <span style="color:green"> **Project Stats (v0.20)**</span>
 >
-> 167 commits • 84 source files • 2593 lines of code •
+>  <span style="color:green">167 commits • 84 source files • 2593 lines of code •
 > binary size : 3286 bytes (Flash) • ram usage : 1903 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
