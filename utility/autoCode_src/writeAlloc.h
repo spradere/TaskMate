@@ -21,6 +21,6 @@
  #ifndef WRITE_ALLOC_H
  #define WRITE_ALLOC_H
 
- void writeAlloc(const module_t *modules, const char *file_name);
+ void writeAlloc(const modules_database_t *data_base, const char *file_name);
 
  #endif

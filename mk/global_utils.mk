@@ -21,7 +21,7 @@
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
 	rm -f ${OBJS} ${DEPS}
-	rm -f autoCode_stamp ${AUTOCODE_TARGET} ${AUTOCODE2_TARGET}
+	rm -f autoCode_stamp ${AUTOCODE_TARGET}
 .PHONY: clean
 
 # Make doxygen documentation
@@ -36,9 +36,8 @@ cloc:
 .PHONY: cloc
 
 # clang-tidy cppcheck
-TIDY_SRC := ${AUTOCODE_SRC}
+TIDY_SRC = ${AUTOCODE_SRC}
 TIDY_SRC += ${SRCS}
-TIDY_SRC := ${AUTOCODE2_SRC}
 
 tidy:
 	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
@@ -72,5 +71,5 @@ check:
 # clang-format
 format:
 	@printf "\033[0;33mAuto formatting code, config in .clang-format\033[0m\n\n"
-	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRC} ${AUTOCODE2_SRC}
+	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRC}
 .PHONY: format

@@ -44,9 +44,6 @@ DEPS_FILE = .deps.d
 AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
-AUTOCODE2_TARGET = utility/autoCode2
-AUTOCODE2_SRC != find utility/autoCode2_src/ -name "*.c"
-
 # Initrc files for autocode
 FILES_INIT_RC = src/arch/${ARCH}/drivers_init.rc
 FILES_INIT_RC += src/services/services_init.rc

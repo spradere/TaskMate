@@ -15,7 +15,7 @@
  * @file autoCode.h
  * @brief autoCode header definitions
  *
- * @todo add run level count in module_t -> intrcCmdDispatch
+ * @todo
  */
 
 #ifndef AUTOCODE_H
@@ -27,7 +27,7 @@
 
 // get TaskMate define
 #include "src/sysCore/modules_define.h"
-#include "src/sysCore/run_level_define.h"
+#include "src/sysCore/runLevel.h"
 
 // message macro
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
@@ -43,19 +43,24 @@ typedef struct
 
 } module_item_t;
 
+#define AUTOCODE_MODULE_COUNT_MAX 256
+
 typedef struct
 {
-	module_item_t services[MODULES_SERVICES_COUNT_MAX];
-	int services_count;
-	module_item_t tasks[MODULES_TASKS_COUNT_MAX];
-	int tasks_count;
-	module_item_t drivers[MODULES_DRIVERS_COUNT_MAX];
-	int drivers_count;
-	run_level_modules_count_t run_level_threads_count[RUN_LEVEL_COUNT];
-	run_level_modules_count_t run_level_threads_total_count[RUN_LEVEL_COUNT];
-	run_level_modules_count_t run_level_drivers_count[RUN_LEVEL_COUNT];
+	module_item_t modules[AUTOCODE_MODULE_COUNT_MAX];
+	int modules_count;
+	int initrc_arg_count_max;
+	int status_default;
+	char *name;
 
+} module_type_t;
 
-} module_t;
+typedef struct
+{
+	module_type_t modules_type[MODULES_TYPE_COUNT];
+	run_level_modules_count_t run_level_module_count[MODULES_TYPE_COUNT][RUN_LEVEL_COUNT];
+	int threads_count[RUN_LEVEL_COUNT];
+
+} modules_database_t;
 
 #endif

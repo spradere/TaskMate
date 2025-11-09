@@ -13,7 +13,7 @@
 #
 ################################################################################
 
-CFLAGS  += -DTM_ARCH_AVR8
+#CFLAGS  += -DTM_ARCH_AVR8
 
 SRCS += src/hal/hal_timers.c
 SRCS += src/arch/avr8/timer1.c
