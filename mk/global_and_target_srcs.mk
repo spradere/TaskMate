@@ -30,7 +30,7 @@ SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/${MCU}/${BOARD}/
 
 # Automatically gather all sources files
 SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
-SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
+SRCS_H != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.h"
 
 # Build files and directory
 BUILD_DIR = build
@@ -44,7 +44,7 @@ DEPS_FILE = .deps.d
 
 # autoCode
 AUTOCODE_TARGET = utility/autoCode
-AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
+AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
 
 # Initrc files for autocode
 FILES_INIT_RC = src/arch/${ARCH}/drivers_init.rc
@@ -53,4 +53,3 @@ FILES_INIT_RC = src/arch/${ARCH}/${MCU}/${BOARD}/drivers_init.rc
 
 FILES_INIT_RC += src/services/services_init.rc
 FILES_INIT_RC += src/tasks/tasks_init.rc
-

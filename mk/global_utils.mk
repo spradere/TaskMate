@@ -35,7 +35,7 @@ cloc:
 	@cloc * --exclude-dir=html --exclude-lang=D --exclude-ext=rc
 .PHONY: cloc
 
-# clang-tidy cppcheck
+# clang-tidy
 TIDY_SRC = ${AUTOCODE_SRC}
 TIDY_SRC += ${SRCS}
 
@@ -49,13 +49,18 @@ tidy:
 		-DF_CPU=${F_CPU}
 .PHONY: tidy
 
-check:
+# Check annotations
+note:
 	@printf "\n\033[1;33mCheck code\033[0m\n\n"
 	@printf "**********************************************************\n"
 	@printf "* todo / fix / hack\n"
 	@printf "**********************************************************\n\n"
 	@grep -r -n -E 'todo|fix|hack' ${TIDY_SRC}
 
+.PHONY: note
+
+# cppcheck
+check:
 	@printf "\n**********************************************************\n"
 	@printf "* cppcheck \n"
 	@printf "**********************************************************\n\n"
