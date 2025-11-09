@@ -14,7 +14,7 @@
 
 #include <avr/io.h>
 #include "sysCore/TaskMate_public.h"
-#include "arch/avr8/atmega2560/arduino_mega/timer3.h"
+#include "hal/board/arduino_mega/timer3.h"
 
 const int TIMER3_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
 

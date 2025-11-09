@@ -24,9 +24,9 @@ SRC_DIR_LIST += ${SRC_DIR}/sysCore/
 SRC_DIR_LIST += ${SRC_DIR}/tasks/
 SRC_DIR_LIST += ${SRC_DIR}/libc/
 
-SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/
-SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/${MCU}/
-SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/${MCU}/${BOARD}/
+SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}/
+SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}/
+SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}/
 
 # Automatically gather all sources files
 SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
@@ -47,9 +47,9 @@ AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
 
 # Initrc files for autocode
-FILES_INIT_RC = src/arch/${ARCH}/drivers_init.rc
-FILES_INIT_RC = src/arch/${ARCH}/${MCU}/drivers_init.rc
-FILES_INIT_RC = src/arch/${ARCH}/${MCU}/${BOARD}/drivers_init.rc
+FILES_INIT_RC = ${SRC_DIR}/hal/arch/${ARCH}/drivers_init.rc
+FILES_INIT_RC = ${SRC_DIR}/hal/mcu/${MCU}/drivers_init.rc
+FILES_INIT_RC = ${SRC_DIR}/hal/board/${BOARD}/drivers_init.rc
 
-FILES_INIT_RC += src/services/services_init.rc
-FILES_INIT_RC += src/tasks/tasks_init.rc
+FILES_INIT_RC += ${SRC_DIR}/services/services_init.rc
+FILES_INIT_RC += ${SRC_DIR}/tasks/tasks_init.rc
