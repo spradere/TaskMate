@@ -22,7 +22,7 @@
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeAlloc(const module_t *modules, const char *file_name)
+void writeAlloc(const modules_database_t *data_base, const char *file_name)
 {
 	FILE *file_alloc = fopen(file_name, "w");
 	if( file_alloc == NULL )
@@ -33,11 +33,18 @@ void writeAlloc(const module_t *modules, const char *file_name)
 	}
 
 	// write modules
+	fprintf(file_alloc, "// Auto generated code, do not edit !\n");
+	fprintf(file_alloc, "// any changes will be lost\n\n");
+
 	fprintf(file_alloc, "#include \"sysCore/modules_items.h\"\n");
 	fprintf(file_alloc, "\n");
 
-	fprintf(file_alloc, "#define DRIVERS_COUNT %i\n", modules->drivers_count);
-	fprintf(file_alloc, "#define THREADS_COUNT %i\n", (modules->services_count + modules->tasks_count));
+	fprintf(file_alloc, "#define DRIVERS_COUNT %i\n",
+			data_base->modules_type[MODULES_DRIVERS_ID].modules_count);
+	fprintf(file_alloc, "#define THREADS_COUNT %i\n",
+			(data_base->modules_type[MODULES_SERVICES_ID].modules_count +
+			 data_base->modules_type[MODULES_TASKS_ID].modules_count));
+
 	fprintf(file_alloc, "\n");
 
 	fprintf(file_alloc, "typedef struct\n");
@@ -50,8 +57,7 @@ void writeAlloc(const module_t *modules, const char *file_name)
 	// write run level
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(file_alloc, "#define RUN_LEVEL%i_THREADS_COUNT %i\n", i,
-				modules->run_level_threads_total_count[i]);
+		fprintf(file_alloc, "#define RUN_LEVEL%i_THREADS_COUNT %i\n", i, data_base->threads_count[i]);
 	}
 
 	fprintf(file_alloc, "\ntypedef struct\n");
