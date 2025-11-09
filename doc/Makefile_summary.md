@@ -28,7 +28,7 @@ Miscellaneous commands :
 |---------|-------------|
 | `make clean` | Delete files, except code, obviously ! |
 | `make doc` | Generate Doxygen documentation |
-| `make dump` | Disassemble machine code in two formats |
+| `make dump` | Disassemble machine code |
 | `make cloc` | Count lines of code |
 | `make tidy` | C code static analysis with clang-tidy tool, config file .clang-tidy |
 | `make check` | C code static analysis with cppcheck tool |
