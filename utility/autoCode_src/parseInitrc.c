@@ -41,8 +41,8 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 	int file_line_number = 0;
 	int err_flag = 0;
 	tokenizer_t tok;
-	int module_count = 0;
 	module_type_t *mod = &data_base->modules_type[TYPE];
+	int module_count = mod->modules_count;
 
 	while( (module_count < AUTOCODE_MODULE_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
@@ -103,9 +103,8 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 
 	if( module_count == 0 )
 	{
-		msgError("no module ???");
+		msgInfo("no module :");
 		printf("\t in %s\n\n", file_name);
-		err_flag = 1;
 	}
 
 	mod->modules_count = module_count;

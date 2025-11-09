@@ -26,7 +26,7 @@
 #include <util/atomic.h>
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
-#include "arch/avr8/timer1.h"
+#include "arch/avr8/atmega2560/arduino_mega/timer1.h"
 
 static uint8_t system_status = 0;
 

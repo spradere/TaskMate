@@ -24,10 +24,12 @@ SRC_DIR_LIST += ${SRC_DIR}/sysCore/
 SRC_DIR_LIST += ${SRC_DIR}/tasks/
 SRC_DIR_LIST += ${SRC_DIR}/libc/
 
-# Automatically gather all sources files
-SRCS != find ${SRC_DIR_LIST} -name "*.c"
-.include "mk/${ARCH}_hal_srcs.mk"
+SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/
+SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/${MCU}/
+SRC_DIR_LIST += ${SRC_DIR}/arch/${ARCH}/${MCU}/${BOARD}/
 
+# Automatically gather all sources files
+SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -name "*.h"
 
 # Build files and directory
@@ -46,6 +48,9 @@ AUTOCODE_SRC != find utility/autoCode_src/ -name "*.c"
 
 # Initrc files for autocode
 FILES_INIT_RC = src/arch/${ARCH}/drivers_init.rc
+FILES_INIT_RC = src/arch/${ARCH}/${MCU}/drivers_init.rc
+FILES_INIT_RC = src/arch/${ARCH}/${MCU}/${BOARD}/drivers_init.rc
+
 FILES_INIT_RC += src/services/services_init.rc
 FILES_INIT_RC += src/tasks/tasks_init.rc
 

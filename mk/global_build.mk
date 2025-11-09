@@ -42,7 +42,7 @@ header_check:
 # Test if autoCode and initrc files was modified
 .autoCode_stamp: ${AUTOCODE_TARGET} ${FILES_INIT_RC}
 	@printf "\n\033[1;33minitrc have changed or autoCode.c -> run autoCode\033[0m\n\n"
-	./${AUTOCODE_TARGET} ${ARCH}
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD}
 	touch .autoCode_stamp
 
 # Special rule for autoCode with clang, not avr-gcc
