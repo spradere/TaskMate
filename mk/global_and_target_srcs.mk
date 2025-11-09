@@ -42,6 +42,8 @@ OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
 DEPS = ${OBJS:.o=.d}
 DEPS_FILE = .deps.d
 
+.sinclude "${DEPS_FILE}"
+
 # autoCode
 AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
