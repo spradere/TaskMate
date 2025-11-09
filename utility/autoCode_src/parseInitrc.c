@@ -19,10 +19,10 @@
  * @todo add check module -> file.c exist
  */
 
-#include "utility/autoCode2_src/autoCode.h"
-#include "utility/autoCode2_src/parseInitrc.h"
-#include "utility/autoCode2_src/tokenizer.h"
-#include "utility/autoCode2_src/initrcCmdDispatch.h"
+#include "utility/autoCode_src/autoCode.h"
+#include "utility/autoCode_src/parseInitrc.h"
+#include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode_src/initrcCmdDispatch.h"
 
 void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const char *file_name)
 {

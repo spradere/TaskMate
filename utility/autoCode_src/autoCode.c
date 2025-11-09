@@ -34,16 +34,26 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo concat 3 parseInitrc in 1
+ * @todo add dry run
  */
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * autoCode is a critical component: if it generates incorrect code,
+ * TaskMate may still compile but will behave unpredictably at runtime.
+ * Any change to autoCode must be considered system-critical and tested accordingly.
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * */
 
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/parseInitrc.h"
 #include "utility/autoCode_src/printModules.h"
+#include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/writeInclude.h"
 #include "utility/autoCode_src/writeAlloc.h"
-#include "utility/autoCode_src/parseTag.h"
+
+static void setupDB(modules_database_t *data_base);
+static void checkModulesCount(modules_database_t *data_base);
 
 int main(int argn, char *argv[])
 {
@@ -54,36 +64,88 @@ int main(int argn, char *argv[])
 		msgError("Bad argn for autoCode, forget arch ?");
 		exit(0);
 	}
-	char *arch_name = argv[1];
+	const char *arch_name = argv[1];
 	msgInfo("arch_name");
 	printf("\t <%s>\n\n", arch_name);
 
-	// setup modules
-	module_t modules;
+	// setup data_base
+	modules_database_t data_base;
+	setupDB(&data_base);
 
-	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
-	{
-		modules.run_level_threads_count[i] = 0;
-		modules.run_level_drivers_count[i] = 0;
-	}
-
-	// read init.rc file and store data in modules[]
+	// read init.rc file and store data in data_base[]
 	char arch_initrc_path[256];
 	sprintf(arch_initrc_path, "src/arch/%s/drivers_init.rc", arch_name);
 
-	parseInitrcDrivers(&modules, arch_initrc_path);
-	parseInitrcServices(&modules, "src/services/services_init.rc");
-	parseInitrcTasks(&modules, "src/tasks/tasks_init.rc");
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
+	parseInitrc(MODULES_SERVICES_ID, &data_base, "src/services/services_init.rc");
+	parseInitrc(MODULES_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
+
+	// check module count autoCode <-> TaskMate
+	checkModulesCount(&data_base);
 
 	// parse tag and generate code for init
-	parseTag(&modules, "src/sysCore/initSys.c");
+	parseTag(&data_base, "src/sysCore/initSys.c");
+	parseTag(&data_base, "src/sysCore/runLevel.c");
+
 
 	// write headers
-	writeInclude(&modules, "src/sysCore/autoInclude.h", arch_name);
-	writeAlloc(&modules, "src/sysCore/autoAlloc.h");
+	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name);
+	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules
-	printModules(&modules);
+	printModules(&data_base);
 
 	return 0;
+}
+
+static void setupDB(modules_database_t *data_base)
+{
+	for( int i = 0; i < MODULES_TYPE_COUNT; i++ )
+	{
+		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
+	}
+
+	data_base->modules_type[MODULES_DRIVERS_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[MODULES_DRIVERS_ID].modules_count = 0;
+	data_base->modules_type[MODULES_DRIVERS_ID].name = "Drivers";
+	data_base->modules_type[MODULES_DRIVERS_ID].status_default = RUN_DRIVER;
+
+	data_base->modules_type[MODULES_SERVICES_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[MODULES_SERVICES_ID].modules_count = 0;
+	data_base->modules_type[MODULES_SERVICES_ID].name = "Sevices";
+	data_base->modules_type[MODULES_SERVICES_ID].status_default = RUN_SERVICE;
+
+	data_base->modules_type[MODULES_TASKS_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[MODULES_TASKS_ID].modules_count = 0;
+	data_base->modules_type[MODULES_TASKS_ID].name = "Task";
+	data_base->modules_type[MODULES_TASKS_ID].status_default = RUN_USER;
+}
+
+static void checkModulesCount(modules_database_t *data_base)
+{
+	int module_count[MODULES_TYPE_COUNT][2];
+	int id;
+
+	id = MODULES_DRIVERS_ID;
+	module_count[id][0] = data_base->modules_type[id].modules_count;
+	module_count[id][1] = MODULES_DRIVERS_COUNT_MAX;
+
+	id = MODULES_SERVICES_ID;
+	module_count[id][0] = data_base->modules_type[id].modules_count;
+	module_count[id][1] = MODULES_SERVICES_COUNT_MAX;
+
+	id = MODULES_TASKS_ID;
+	module_count[id][0] = data_base->modules_type[id].modules_count;
+	module_count[id][1] = MODULES_TASKS_COUNT_MAX;
+
+	for( int i = 0; i < MODULES_TYPE_COUNT; i++ )
+	{
+		if( module_count[i][0] > module_count[i][1] )
+		{
+			msgError("Too many modules !");
+			printf("\t %s count = %i > TaskMate max %i\n\n", data_base->modules_type[i].name,
+				   module_count[i][0], module_count[i][1]);
+			exit(0);
+		}
+	}
 }

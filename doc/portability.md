@@ -20,29 +20,29 @@ This rule prevents:
 ## 🧩 Adding a New Hardware Target (ARCH / MCU / BOARD)
 
 Thanks to the existing build and directory structure, adding support for
-a new architecture, microcontroller, or board **does not require** changes to
+a new architecture, microcontroller or board **does not require** changes to
 the core system.
 
 
 1️⃣ **New architecture (ARCH)**
 
-Example: adding armv7m
+Example: adding arm32v7m
 
 
-- Create a new architecture directory: `src/hal/arch/armv7m/`
+- Create a new architecture directory: `src/arch/arm32v7m/`
 
 - Implement:
 	- context switching,
 	- atomic operations,
 	- low-level interrupt handling.
 
-- Extend the Makefile to accept: `ARCH=armv7m`
+- Extend the Makefile to accept: `ARCH=arm32v7m`
 
 2️⃣ **New microcontroller (MCU)**
 
 Example: adding stm32g474
 
-- Create: `src/hal/mcu/stm32g474/`
+- Create: `src/arch/arm32v7-m4/stm32g474/`
 
 - Implement MCU-specific peripherals:
 
@@ -56,19 +56,18 @@ Example: adding stm32g474
 
 Example: adding nucleoG474RE
 
-- Create: `src/hal/board/nucleoG474RE/`
+- Create: `src/arch/arm32v7-m4/stm32g474/nucleoG474RE/`
 
 - Implement:
-	- pin mapping (LEDs, buttons, debug UART),
-	- board-specific initialization,
-	- drivers_init.rc entries for drivers and services.
+	- pin mapping (LEDs, buttons, debug UART)
+	- board-specific initialization
+	- driver_init.rc entries for new drivers
 
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 
-4️⃣ **Update drivers_init.rc file to set up and load the new drivers**
 
 Once these directories and source files are in place, you can build TaskMate for the new target with:
 
 `make ARCH=<arch> MCU=<mcu> BOARD=<board>`
 
-**No changes to sysCore, no #ifdef, no hidden side effects.**
+**No changes to core system, no `#ifdef` and no hidden side effects.**
