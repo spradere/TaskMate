@@ -26,8 +26,8 @@
 #include "libc/string.h"
 
 // Send message to :
-#include "arch/avr8/atmega2560/arduino_mega/lcdAMC2004.h"
-#include "arch/avr8/atmega2560/arduino_mega/usart1.h"
+#include "hal/board/arduino_mega/lcdAMC2004.h"
+#include "hal/board/arduino_mega/usart1.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : arch_mcu_board", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : archMcuBoard 3", MSG_TO_LCD);
 	}
 
 	msgProcess();
