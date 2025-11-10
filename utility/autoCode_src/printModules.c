@@ -77,9 +77,9 @@ void printModules(const modules_database_t *data_base)
 				break;
 		}
 
-		printf("\trun_level_threads_count[%s] = %i\n", name,
-			   data_base->run_level_module_count[MODULES_SERVICES_ID][i] +
-				   data_base->run_level_module_count[MODULES_TASKS_ID][i]);
+		printf("\trun_level_threads_count[%s] = %i\n", name, data_base->threads_count[i]);
+
+
 	}
 	printf("\n");
 }

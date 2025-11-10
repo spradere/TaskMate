@@ -30,9 +30,10 @@ Miscellaneous commands :
 | `make doc` | Generate Doxygen documentation |
 | `make dump` | Disassemble machine code |
 | `make cloc` | Count lines of code |
-| `make tidy` | C code static analysis with clang-tidy tool, config file .clang-tidy |
+| `make tidy` | C code static analysis with clang-tidy tool, config file /.clang-tidy |
+| `make note` | find todo / fix / hack in sources files |
 | `make check` | C code static analysis with cppcheck tool |
-| `make format` | C code formating with clang-format tool, config file .clang-format|
+| `make format` | C code formating with clang-format tool, config file /.clang-format|
 
 ---
 

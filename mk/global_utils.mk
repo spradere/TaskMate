@@ -39,6 +39,8 @@ cloc:
 TIDY_SRC = ${AUTOCODE_SRC}
 TIDY_SRC += ${SRCS}
 
+# todo : fix tidy with multiples targets
+
 tidy:
 	@printf "\n\033[1;33mTidy static test code, config in .clang-tidy\033[0m\n\n"
 	@clang-tidy $(TIDY_SRC) -- \
@@ -55,7 +57,7 @@ note:
 	@printf "**********************************************************\n"
 	@printf "* todo / fix / hack\n"
 	@printf "**********************************************************\n\n"
-	@grep -r -n -E 'todo|fix|hack' ${TIDY_SRC}
+	@grep -r -n -i -E 'todo|fix|hack' ${TIDY_SRC}
 
 .PHONY: note
 

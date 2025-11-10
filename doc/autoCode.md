@@ -42,12 +42,14 @@ for the target architecture and how they should be initialized.
 
 | Type        | Typical Path                          | Description                              |
 |--------------|----------------------------------------|------------------------------------------|
-| Drivers      | `src/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, UART…)  |
+| Drivers      | `src/hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, UART…)  |
+| | `src/hal/mcu/<mcu_name>/drivers_init.rc` | |
+| | `src/hal/board/<borad_name>/drivers_init.rc` | |
 | Services     | `src/services/services_init.rc`        | System-level services (CLI, msg server)  |
 | User Tasks   | `src/tasks/tasks_init.rc`              | User-level or application tasks          |
 
 The target architecture is usually passed from the Makefile,
-and determines which folder under `src/arch/` is parsed.
+and determines which folder under `/src/hal/` is parsed.
 
 ---
 
@@ -68,29 +70,37 @@ and determines which folder under `src/arch/` is parsed.
 A typical autoCode run looks like this:
 
 ```
-[autoCode.c:61] info : arch_name
-         <avr8>
+[autoCode.c:71] info : target :
+         avr8 -> atmega2560 -> arduino_mega
 
-[parseInitrc.c:30] info : open init.rc file for parsing
-         <src/arch/avr8/drivers_init.rc>
+[parseInitrc.c:31] info : open init.rc file for parsing
+         <src/hal/arch/avr8/drivers_init.rc>
+[parseInitrc.c:107] info : no module
 
-[parseInitrc.c:30] info : open init.rc file for parsing
+[parseInitrc.c:31] info : open init.rc file for parsing
+         <src/hal/mcu/atmega2560/drivers_init.rc>
+[parseInitrc.c:107] info : no module
+
+[parseInitrc.c:31] info : open init.rc file for parsing
+         <src/hal/board/arduino_mega/drivers_init.rc>
+
+[parseInitrc.c:31] info : open init.rc file for parsing
          <src/services/services_init.rc>
 
-[parseInitrc.c:30] info : open init.rc file for parsing
+[parseInitrc.c:31] info : open init.rc file for parsing
          <src/tasks/tasks_init.rc>
 
-[parseTag.c:80] info : found tag :
+[parseTag.c:81] info : found tag :
          threads init
-[parseTag.c:104] info : end tag
+[parseTag.c:105] info : end tag
 
-[parseTag.c:80] info : found tag :
+[parseTag.c:81] info : found tag :
          drivers init
-[parseTag.c:104] info : end tag
+[parseTag.c:105] info : end tag
 
-[parseTag.c:80] info : found tag :
+[parseTag.c:81] info : found tag :
          run levels
-[parseTag.c:104] info : end tag
+[parseTag.c:105] info : end tag
 
 [printModules.c:27] info : found drivers :
         drivers[0] "timer1" status=1
@@ -112,7 +122,7 @@ A typical autoCode run looks like this:
         run_level_threads_count[RUN_CORE] = 0
         run_level_threads_count[RUN_DRIVER] = 0
         run_level_threads_count[RUN_SERVICE] = 2
-        run_level_threads_count[RUN_USER] = 2
+        run_level_threads_count[RUN_USER] = 4
 
 touch .autoCode_stamp
 ```

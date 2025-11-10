@@ -50,8 +50,8 @@ AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
 
 # Initrc files for autocode
 FILES_INIT_RC = ${SRC_DIR}/hal/arch/${ARCH}/drivers_init.rc
-FILES_INIT_RC = ${SRC_DIR}/hal/mcu/${MCU}/drivers_init.rc
-FILES_INIT_RC = ${SRC_DIR}/hal/board/${BOARD}/drivers_init.rc
+FILES_INIT_RC += ${SRC_DIR}/hal/mcu/${MCU}/drivers_init.rc
+FILES_INIT_RC += ${SRC_DIR}/hal/board/${BOARD}/drivers_init.rc
 
 FILES_INIT_RC += ${SRC_DIR}/services/services_init.rc
 FILES_INIT_RC += ${SRC_DIR}/tasks/tasks_init.rc
