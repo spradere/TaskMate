@@ -55,6 +55,7 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 	int tag_section = 0;
 	int file_line_number = 0;
 	tokenizer_t tok;
+	printf("\n");
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src) )
 	{

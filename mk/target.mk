@@ -13,6 +13,9 @@
 #
 ################################################################################
 
+################################################################################
+# Target selection and test
+################################################################################
 
 # Default target
 ARCH ?= avr8
@@ -32,7 +35,7 @@ VALID_MCUS.amd64 = amd64
 VALID_MCUS.arm32v7-m4 = stm32g474
 
 .if empty(VALID_MCUS.${ARCH}:M${MCU})
-.error Invalid MCU="${MCU}" for ARCH="${ARCH}". Valid values: ${VALID_MCUS}.${ARCH}
+.error Invalid MCU="${MCU}" for ARCH="${ARCH}". Valid values: ${VALID_MCUS.${ARCH}}
 .endif
 
 # Valid boards for .mcu
