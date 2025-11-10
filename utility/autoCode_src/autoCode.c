@@ -69,7 +69,7 @@ int main(int argn, char *argv[])
 	const char *board_name = argv[3];
 
 	msgInfo("target : ");
-	printf("\t %s/%s/%s \n\n", arch_name, mcu_name, board_name);
+	printf("\t %s -> %s -> %s \n", arch_name, mcu_name, board_name);
 
 	// setup data_base
 	modules_database_t data_base;

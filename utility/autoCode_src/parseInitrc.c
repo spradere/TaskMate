@@ -27,8 +27,9 @@
 void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const char *file_name)
 {
 	// open list files
+	printf("\n");
 	msgInfo("open init.rc file for parsing");
-	printf("\t <%s> \n\n", file_name);
+	printf("\t <%s> \n", file_name);
 
 	FILE *file_initrc = fopen(file_name, "r");
 	if( file_initrc == NULL )
@@ -103,8 +104,7 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 
 	if( module_count == 0 )
 	{
-		msgInfo("no module :");
-		printf("\t in %s\n\n", file_name);
+		msgInfo("no module");
 	}
 
 	mod->modules_count = module_count;
