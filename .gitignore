@@ -19,7 +19,7 @@ utility/autoCode2
 *.elf
 *.map
 *.hex
-.autoCode_stamp
+.autoCode_stamp*
 
 # Ignore html documentation folder
 html/

@@ -59,8 +59,8 @@ and determines which folder under `/src/hal/` is parsed.
 
 | File                        | Role                                                                 |
 |------------------------------|----------------------------------------------------------------------|
-| `include/autoInclude.h`      | Centralized header including all driver/service/task headers.        |
-| `include/autoAlloc.h`        | Static allocation tables for modules.                                |
+| `scr/sysCore/autoInclude.h`      | Centralized header including all driver/service/task headers.        |
+| `src/sysCore/include/autoAlloc.h`        | Static allocation tables for modules.                                |
 | `src/sysCore/initSys.c`      | Low-level initialization routines executed during system startup.    |
 
 ---
@@ -124,7 +124,7 @@ A typical autoCode run looks like this:
         run_level_threads_count[RUN_SERVICE] = 2
         run_level_threads_count[RUN_USER] = 4
 
-touch .autoCode_stamp
+touch build/.autoCode_stamp_avr8_atmega2560_arduino_mega
 ```
 
 This log demonstrates that:

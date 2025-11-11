@@ -19,59 +19,57 @@
  * @todo nothing
  */
 
-#include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/initrcCmdDispatch.h"
 
-static void funcRunNone(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
-{
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_NONE;
-	(*count)[RUN_NONE] = 0;
+static void funcRunNone(module_status_t *status,
+                        run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]) {
+  *status &= !RUN_LEVEL_MASK;
+  *status |= RUN_NONE;
+  (*count)[RUN_NONE] = 0;
 }
-static void funcRunCore(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
-{
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_CORE;
-	(*count)[RUN_CORE]++;
+static void funcRunCore(module_status_t *status,
+                        run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]) {
+  *status &= !RUN_LEVEL_MASK;
+  *status |= RUN_CORE;
+  (*count)[RUN_CORE]++;
 }
-static void funcRunDriver(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
-{
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_DRIVER;
-	(*count)[RUN_DRIVER]++;
+static void funcRunDriver(module_status_t *status,
+                          run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]) {
+  *status &= !RUN_LEVEL_MASK;
+  *status |= RUN_DRIVER;
+  (*count)[RUN_DRIVER]++;
 }
-static void funcRunService(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
-{
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_SERVICE;
-	(*count)[RUN_SERVICE]++;
+static void
+funcRunService(module_status_t *status,
+               run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]) {
+  *status &= !RUN_LEVEL_MASK;
+  *status |= RUN_SERVICE;
+  (*count)[RUN_SERVICE]++;
 }
-static void funcRunUser(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
-{
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_USER;
-	(*count)[RUN_USER]++;
+static void funcRunUser(module_status_t *status,
+                        run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]) {
+  *status &= !RUN_LEVEL_MASK;
+  *status |= RUN_USER;
+  (*count)[RUN_USER]++;
 }
 
 const initrc_cmd_t initrc_cmds[] = {{"-RUN_NONE", funcRunNone},
-									{"-RUN_CORE", funcRunCore},
-									{"-RUN_DRIVER", funcRunDriver},
-									{"-RUN_SERVICE", funcRunService},
-									{"-RUN_USER", funcRunUser},
-									{NULL, NULL}
+                                    {"-RUN_CORE", funcRunCore},
+                                    {"-RUN_DRIVER", funcRunDriver},
+                                    {"-RUN_SERVICE", funcRunService},
+                                    {"-RUN_USER", funcRunUser},
+                                    {NULL, NULL}
 
 };
 
-int initrcCmdDispatch(const char *cmd, module_status_t *status,
-					  run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT])
-{
-	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
-	{
-		if( strcmp(cmd, initrc_cmds[i].name) == 0 )
-		{
-			(*initrc_cmds[i].func)(status, level_count);
-			return 0;
-		}
-	}
-	return -1;
+int initrcCmdDispatch(
+    const char *cmd, module_status_t *status,
+    run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT]) {
+  for (int i = 0; initrc_cmds[i].name != NULL; i++) {
+    if (strcmp(cmd, initrc_cmds[i].name) == 0) {
+      (*initrc_cmds[i].func)(status, level_count);
+      return 0;
+    }
+  }
+  return -1;
 }
