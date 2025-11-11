@@ -56,103 +56,106 @@
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
 
-int main(int argn, char *argv[]) {
+int main(int argn, char *argv[])
+{
 
-  // test command line arguments
-  if (argn != 4) {
-    msgError("Bad argn for autoCode, forget arch / mcu / board ?");
-    exit(0);
-  }
-  const char *arch_name = argv[1];
-  const char *mcu_name = argv[2];
-  const char *board_name = argv[3];
+	// test command line arguments
+	if( argn != 4 )
+	{
+		msgError("Bad argn for autoCode, forget arch / mcu / board ?");
+		exit(0);
+	}
+	const char *arch_name = argv[1];
+	const char *mcu_name = argv[2];
+	const char *board_name = argv[3];
 
-  msgInfo("target : ");
-  printf("\t %s -> %s -> %s \n", arch_name, mcu_name, board_name);
+	msgInfo("target : ");
+	printf("\t %s -> %s -> %s \n", arch_name, mcu_name, board_name);
 
-  // setup data_base
-  modules_database_t data_base;
-  setupDB(&data_base);
+	// setup data_base
+	modules_database_t data_base;
+	setupDB(&data_base);
 
-  // read init.rc file and store data in data_base[]
-  char arch_initrc_path[256];
-  char mcu_initrc_path[256];
-  char board_initrc_path[256];
+	// read init.rc file and store data in data_base[]
+	char arch_initrc_path[256];
+	char mcu_initrc_path[256];
+	char board_initrc_path[256];
 
-  sprintf(arch_initrc_path, "src/hal/arch/%s/drivers_init.rc", arch_name);
-  sprintf(mcu_initrc_path, "src/hal/mcu/%s/drivers_init.rc", mcu_name);
-  sprintf(board_initrc_path, "src/hal/board/%s/drivers_init.rc", board_name);
+	sprintf(arch_initrc_path, "src/hal/arch/%s/drivers_init.rc", arch_name);
+	sprintf(mcu_initrc_path, "src/hal/mcu/%s/drivers_init.rc", mcu_name);
+	sprintf(board_initrc_path, "src/hal/board/%s/drivers_init.rc", board_name);
 
-  parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
-  parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);
-  parseInitrc(MODULES_DRIVERS_ID, &data_base, board_initrc_path);
-  parseInitrc(MODULES_SERVICES_ID, &data_base, "src/services/services_init.rc");
-  parseInitrc(MODULES_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, board_initrc_path);
+	parseInitrc(MODULES_SERVICES_ID, &data_base, "src/services/services_init.rc");
+	parseInitrc(MODULES_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
 
-  // check module count autoCode <-> TaskMate
-  checkModulesCount(&data_base);
+	// check module count autoCode <-> TaskMate
+	checkModulesCount(&data_base);
 
-  // parse tag and generate code for init
-  parseTag(&data_base, "src/sysCore/initSys.c");
-  parseTag(&data_base, "src/sysCore/runLevel.c");
+	// parse tag and generate code for init
+	parseTag(&data_base, "src/sysCore/initSys.c");
+	parseTag(&data_base, "src/sysCore/runLevel.c");
 
-  // write headers
-  writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name, mcu_name,
-               board_name);
-  writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
+	// write headers
+	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name, mcu_name, board_name);
+	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
-  // print all info about modules
-  printModules(&data_base);
+	// print all info about modules
+	printModules(&data_base);
 
-  return 0;
+	return 0;
 }
 
-static void setupDB(modules_database_t *data_base) {
-  for (int i = 0; i < MODULES_TYPE_COUNT; i++) {
-    for (int j = 0; j < RUN_LEVEL_COUNT; j++) {
-      data_base->run_level_module_count[i][j] = 0;
-    }
-  }
+static void setupDB(modules_database_t *data_base)
+{
+	for( int i = 0; i < MODULES_TYPE_COUNT; i++ )
+	{
+		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
+	}
 
-  data_base->modules_type[MODULES_DRIVERS_ID].initrc_arg_count_max = 2;
-  data_base->modules_type[MODULES_DRIVERS_ID].modules_count = 0;
-  data_base->modules_type[MODULES_DRIVERS_ID].name = "Drivers";
-  data_base->modules_type[MODULES_DRIVERS_ID].status_default = RUN_DRIVER;
+	data_base->modules_type[MODULES_DRIVERS_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[MODULES_DRIVERS_ID].modules_count = 0;
+	data_base->modules_type[MODULES_DRIVERS_ID].name = "Drivers";
+	data_base->modules_type[MODULES_DRIVERS_ID].status_default = RUN_DRIVER;
 
-  data_base->modules_type[MODULES_SERVICES_ID].initrc_arg_count_max = 2;
-  data_base->modules_type[MODULES_SERVICES_ID].modules_count = 0;
-  data_base->modules_type[MODULES_SERVICES_ID].name = "Sevices";
-  data_base->modules_type[MODULES_SERVICES_ID].status_default = RUN_SERVICE;
+	data_base->modules_type[MODULES_SERVICES_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[MODULES_SERVICES_ID].modules_count = 0;
+	data_base->modules_type[MODULES_SERVICES_ID].name = "Sevices";
+	data_base->modules_type[MODULES_SERVICES_ID].status_default = RUN_SERVICE;
 
-  data_base->modules_type[MODULES_TASKS_ID].initrc_arg_count_max = 2;
-  data_base->modules_type[MODULES_TASKS_ID].modules_count = 0;
-  data_base->modules_type[MODULES_TASKS_ID].name = "Task";
-  data_base->modules_type[MODULES_TASKS_ID].status_default = RUN_USER;
+	data_base->modules_type[MODULES_TASKS_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[MODULES_TASKS_ID].modules_count = 0;
+	data_base->modules_type[MODULES_TASKS_ID].name = "Task";
+	data_base->modules_type[MODULES_TASKS_ID].status_default = RUN_USER;
 }
 
-static void checkModulesCount(modules_database_t *data_base) {
-  int module_count[MODULES_TYPE_COUNT][2];
-  int id;
+static void checkModulesCount(modules_database_t *data_base)
+{
+	int module_count[MODULES_TYPE_COUNT][2];
+	int id;
 
-  id = MODULES_DRIVERS_ID;
-  module_count[id][0] = data_base->modules_type[id].modules_count;
-  module_count[id][1] = MODULES_DRIVERS_COUNT_MAX;
+	id = MODULES_DRIVERS_ID;
+	module_count[id][0] = data_base->modules_type[id].modules_count;
+	module_count[id][1] = MODULES_DRIVERS_COUNT_MAX;
 
-  id = MODULES_SERVICES_ID;
-  module_count[id][0] = data_base->modules_type[id].modules_count;
-  module_count[id][1] = MODULES_SERVICES_COUNT_MAX;
+	id = MODULES_SERVICES_ID;
+	module_count[id][0] = data_base->modules_type[id].modules_count;
+	module_count[id][1] = MODULES_SERVICES_COUNT_MAX;
 
-  id = MODULES_TASKS_ID;
-  module_count[id][0] = data_base->modules_type[id].modules_count;
-  module_count[id][1] = MODULES_TASKS_COUNT_MAX;
+	id = MODULES_TASKS_ID;
+	module_count[id][0] = data_base->modules_type[id].modules_count;
+	module_count[id][1] = MODULES_TASKS_COUNT_MAX;
 
-  for (int i = 0; i < MODULES_TYPE_COUNT; i++) {
-    if (module_count[i][0] > module_count[i][1]) {
-      msgError("Too many modules !");
-      printf("\t %s count = %i > TaskMate max %i\n\n",
-             data_base->modules_type[i].name, module_count[i][0],
-             module_count[i][1]);
-      exit(0);
-    }
-  }
+	for( int i = 0; i < MODULES_TYPE_COUNT; i++ )
+	{
+		if( module_count[i][0] > module_count[i][1] )
+		{
+			msgError("Too many modules !");
+			printf("\t %s count = %i > TaskMate max %i\n\n", data_base->modules_type[i].name,
+				   module_count[i][0], module_count[i][1]);
+			exit(0);
+		}
+	}
 }
