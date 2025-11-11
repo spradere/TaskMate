@@ -18,9 +18,11 @@
  * @todo nothing
  */
 
- #ifndef WRITE_ALLOC_H
- #define WRITE_ALLOC_H
+#ifndef WRITE_ALLOC_H
+#define WRITE_ALLOC_H
 
- void writeAlloc(const modules_database_t *data_base, const char *file_name);
+#include "utility/autoCode_src/autoCode.h"
 
- #endif
+void writeAlloc(const modules_database_t *data_base, const char *file_name);
+
+#endif

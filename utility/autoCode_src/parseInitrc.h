@@ -21,6 +21,8 @@
 #ifndef PARSEINITRC_H
 #define PARSEINITRC_H
 
+#include "utility/autoCode_src/autoCode.h"
+
 // type of file to parce
 typedef enum {INITRC_DRIVERS, INITRC_SERVICES, INITRC_TASK} parse_init_rc_type_t;
 

@@ -21,6 +21,8 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
+#include "utility/autoCode_src/autoCode.h"
+
 // sizes for tokenizer
 #define TOKEN_LINE_SIZE_MAX 256
 #define TOKEN_COUNT_MAX 4

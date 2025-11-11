@@ -18,9 +18,11 @@
  * @todo nothing
  */
 
- #ifndef PRINTMODULES_H
- #define PRINTMODULES_H
+#ifndef PRINTMODULES_H
+#define PRINTMODULES_H
 
- void printModules(const modules_database_t *data_base);
+#include "utility/autoCode_src/autoCode.h"
 
- #endif
+void printModules(const modules_database_t *data_base);
+
+#endif

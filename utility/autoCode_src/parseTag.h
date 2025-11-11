@@ -18,9 +18,10 @@
  * @todo nothing
  */
 
- #ifndef PARSETAG_H
- #define PARSETAG_H
+#ifndef PARSETAG_H
+#define PARSETAG_H
 
+#include "utility/autoCode_src/autoCode.h"
 void parseTag(modules_database_t *data_base, const char *name_src);
 
 static void writeDriversInit(modules_database_t *data_base, FILE *file);
@@ -28,4 +29,4 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsInit(modules_database_t *data_base, FILE *file);
 
 
- #endif
+#endif
