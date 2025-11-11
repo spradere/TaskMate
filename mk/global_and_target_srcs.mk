@@ -40,13 +40,16 @@ OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
 
 # Dependency files
 DEPS = ${OBJS:.o=.d}
-DEPS_FILE = .deps.d
+DEPS_FILE = build/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
 # autoCode
 AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
+
+AUTOCODE_STAMP = build/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
+AUTO_HEADERS =autoInclude.h autoAlloc.h
 
 # Initrc files for autocode
 FILES_INIT_RC = ${SRC_DIR}/hal/arch/${ARCH}/drivers_init.rc
