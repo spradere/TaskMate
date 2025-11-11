@@ -13,4 +13,4 @@
 
 #include "hal/hal_api.h"
 
-void hal_boardInit(){}
+void hal_boardInit() {}

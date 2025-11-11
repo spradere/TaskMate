@@ -18,10 +18,12 @@
  * @todo nothing
  */
 
- #ifndef WRITE_INCLUDE_H
- #define WRITE_INCLUDE_H
+#ifndef WRITE_INCLUDE_H
+#define WRITE_INCLUDE_H
 
- void writeInclude(const modules_database_t *data_base, const char *file_name,
+#include "utility/autoCode_src/autoCode.h"
+
+void writeInclude(const modules_database_t *data_base, const char *file_name,
 		const char *arch, const char *mcu, const char *board);
 
- #endif
+#endif

@@ -85,50 +85,32 @@ void initDrivers(void)
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] drivers init
 	const char *driver0_name = "timer1";
-	modules.drivers[0]=(driver_item_t)
-	{
-		.name = (uint8_t *)driver0_name,
-		.status = 1,
-		.init = timer1Init,
-		.start = timer1Start,
-		.stop = timer1Stop
-	};
+	modules.drivers[0] = (driver_item_t){.name = (uint8_t *)driver0_name,
+										 .status = 1,
+										 .init = timer1Init,
+										 .start = timer1Start,
+										 .stop = timer1Stop};
 	const char *driver1_name = "timer3";
-	modules.drivers[1]=(driver_item_t)
-	{
-		.name = (uint8_t *)driver1_name,
-		.status = 1,
-		.init = timer3Init,
-		.start = timer3Start,
-		.stop = timer3Stop
-	};
+	modules.drivers[1] = (driver_item_t){.name = (uint8_t *)driver1_name,
+										 .status = 1,
+										 .init = timer3Init,
+										 .start = timer3Start,
+										 .stop = timer3Stop};
 	const char *driver2_name = "i2c";
-	modules.drivers[2]=(driver_item_t)
-	{
-		.name = (uint8_t *)driver2_name,
-		.status = 1,
-		.init = i2cInit,
-		.start = i2cStart,
-		.stop = i2cStop
-	};
+	modules.drivers[2] = (driver_item_t){
+		.name = (uint8_t *)driver2_name, .status = 1, .init = i2cInit, .start = i2cStart, .stop = i2cStop};
 	const char *driver3_name = "usart1";
-	modules.drivers[3]=(driver_item_t)
-	{
-		.name = (uint8_t *)driver3_name,
-		.status = 1,
-		.init = usart1Init,
-		.start = usart1Start,
-		.stop = usart1Stop
-	};
+	modules.drivers[3] = (driver_item_t){.name = (uint8_t *)driver3_name,
+										 .status = 1,
+										 .init = usart1Init,
+										 .start = usart1Start,
+										 .stop = usart1Stop};
 	const char *driver4_name = "lcdAMC2004";
-	modules.drivers[4]=(driver_item_t)
-	{
-		.name = (uint8_t *)driver4_name,
-		.status = 2,
-		.init = lcdAMC2004Init,
-		.start = lcdAMC2004Start,
-		.stop = lcdAMC2004Stop
-	};
+	modules.drivers[4] = (driver_item_t){.name = (uint8_t *)driver4_name,
+										 .status = 2,
+										 .init = lcdAMC2004Init,
+										 .start = lcdAMC2004Start,
+										 .stop = lcdAMC2004Stop};
 	// [/tag]
 }
 

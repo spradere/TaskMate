@@ -282,10 +282,10 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 
 **Example:**
 ```
-[listToTable.c:101] error : missing -user or -system for task
+[parseInitrc.c:101] error : missing -user or -system for task
          [utility/tasks_list:15] task3
 
-[listToTable.c:69] error : wrong task token count
+[parseInitrc.c:69] error : wrong task token count
          [utility/tasks_list:19] is 1, should be [2,3]
 ```
 
@@ -327,12 +327,13 @@ This is the hard part—but it’s also what makes a system satisfying to build 
 Commit messages must be **short, clear, and action-oriented**.
 Each message should begin with a **verb prefix** followed by a short description of the change.
 
-### Accepted prefixes:
+### Possible prefixes:
 - `add` — for new files, features, or logic
 - `remove` — for deleted code, features, or cleanup
 - `fix` — for bug fixes or corrections
 - `change` — for modifications, refactors, or renames
 - `upgrade`
+- `replace`
 
 ### Examples:
 - add command parser for task input
