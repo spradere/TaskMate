@@ -53,7 +53,7 @@ using conditional macros (#ifdef).
 
 **Portability is achieved by build selection, not by preprocessor logic.**
 
-See : [Makefile Features & Usage](doc/Makefile_summary.md)
+See : [Makefile & build system](doc/build_system.md)
 
 ---
 
