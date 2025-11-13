@@ -49,7 +49,7 @@ AUTOCODE_TARGET = utility/autoCode
 AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
 
 AUTOCODE_STAMP = build/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
-AUTO_HEADERS =autoInclude.h autoAlloc.h
+AUTO_HEADERS = autoInclude.h autoAlloc.h
 
 # Initrc files for autocode
 FILES_INIT_RC = ${SRC_DIR}/hal/arch/${ARCH}/drivers_init.rc

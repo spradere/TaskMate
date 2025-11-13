@@ -1,6 +1,6 @@
 /**
- * @file scli.c
- * @brief implementation of serial command line interface
+ * @file
+ * @brief
  *
- * @todo Implement commands, before develop error handler
+ * @todo
  */
