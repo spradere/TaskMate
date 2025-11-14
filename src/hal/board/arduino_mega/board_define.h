@@ -12,14 +12,21 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#ifndef LCD1602_H
-#define LCD1602_H
+/**
+ * @file board_define.h
+ * @brief arduino mega definitions
+ *
+ * @todo nothing
+ */
 
-void lcd1602(void);
+#ifndef BOARD_DEFINE_H
+#define BOARD_DEFINE_H
 
-void lcd1602Init(void);
-void lcd1602Clear(void);
-void lcd1602SetCursor(uint8_t row, uint8_t col);
-void lcd1602WriteString(const char *str);
+#include <avr/io.h>
+
+// arduino in board LED pin 13
+#define IN_BOARD_LED_DDR DDRB /**< Arduino in board led, direction port*/
+#define IN_BOARD_LED_PORT PORTB /**< Arduino in board led, data port*/
+#define IN_BOARD_LED_PIN PB7 /**< Arduino in board led, pin*/
 
 #endif

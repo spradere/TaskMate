@@ -12,13 +12,13 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#ifndef TIMER1_H
-#define TIMER1_H
+/**
+ * @file hal_api.c
+ * @brief hal api for fallback
+ *
+ * @todo nothing
+ */
 
-void timer1Init(void);
-void timer1Start(void);
-void timer1Stop(void);
+#include "hal/hal_api.h"
 
-void timer1LoadOverflow(void);
-
-#endif
+__attribute__((weak)) void hal_inBoardLed(uint8_t action){}
