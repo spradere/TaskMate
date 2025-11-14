@@ -22,8 +22,16 @@
 #ifndef HAL_API_H
 #define HAL_API_H
 
+#include <stdint.h>
+
 void hal_archInit();
 void hal_mcuInit();
 void hal_boardInit();
+
+#define HAL_IN_BOARD_LED_OFF 0
+#define HAL_IN_BOARD_LED_ON 1
+#define HAL_IN_BOARD_LED_TOGGLE 2
+
+void hal_inBoardLed(uint8_t action);
 
 #endif

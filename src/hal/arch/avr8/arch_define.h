@@ -12,20 +12,9 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#ifndef USART1_H
-#define USART1_H
-
-#include "sysCore/error.h"
-
-void usart1Init(void);
-void usart1Start(void);
-void usart1Stop(void);
-
-errorCode_t usart1Read(uint8_t *data);
-errorCode_t usart1WriteChar(uint8_t data);
-void usart1SendTXBuffer(void);
-
-errorCode_t usart1TestBufferRx(void);
-errorCode_t usart1WriteString(const char *str);
-
-#endif
+/**
+ * @file hal_arch_define.h
+ * @brief hal achr header
+ *
+ * @todo nothing
+ */
