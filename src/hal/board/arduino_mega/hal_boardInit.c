@@ -11,6 +11,20 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/hal_api.h"
+/**
+ * @file hal_boardinit.c
+ * @brief board init arduino mega implematation
+ *
+ * @todo nothing
+ */
 
-void hal_boardInit() {}
+#include "hal/hal_api.h"
+#include "hal/board/arduino_mega/board_define.h"
+
+void hal_boardInit()
+{
+	// Set pin output for in board led
+	IN_BOARD_LED_DDR |= (1 << IN_BOARD_LED_PIN);
+}
+
+

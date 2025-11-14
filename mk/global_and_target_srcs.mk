@@ -24,6 +24,7 @@ SRC_DIR_LIST += ${SRC_DIR}/sysCore/
 SRC_DIR_LIST += ${SRC_DIR}/tasks/
 SRC_DIR_LIST += ${SRC_DIR}/libc/
 
+SRC_DIR_LIST += ${SRC_DIR}/hal/
 SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}/
 SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}/
 SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}/

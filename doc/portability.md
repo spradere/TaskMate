@@ -13,7 +13,7 @@ This rule prevents:
 - hard-to-read code paths
 - and platform-specific hacks scattered all over the codebase.
 
-**If you think you need an `#ifdef`, you are probably putting the code in the wrong place.**
+<span style="color:orange">**If you think you need an `#ifdef`, you are probably putting the code in the wrong place.**</span>
 
 ---
 
@@ -29,12 +29,13 @@ the core system.
 Example: adding arm32v7m
 
 
-- Create a new architecture directory: `src/arch/arm32v7m/`
+- Create a new architecture directory: `src/hal/arch/arm32v7m/`
 
 - Implement:
 	- context switching,
 	- atomic operations,
 	- low-level interrupt handling.
+	- driver_init.rc entries for new drivers
 
 - Extend the Makefile to accept: `ARCH=arm32v7m`
 
@@ -42,11 +43,12 @@ Example: adding arm32v7m
 
 Example: adding stm32g474
 
-- Create: `src/arch/arm32v7-m4/stm32g474/`
+- Create: `src/hal/mcu/stm32g474/`
 
 - Implement MCU-specific peripherals:
 
 	- timers, UART, GPIO, I²C, ADC, …
+	- driver_init.rc entries for new drivers
 
 - Use the common HAL API headers from: `src/hal/api/`
 
@@ -56,7 +58,7 @@ Example: adding stm32g474
 
 Example: adding nucleoG474RE
 
-- Create: `src/arch/arm32v7-m4/stm32g474/nucleoG474RE/`
+- Create: `src/hal/board/nucleoG474RE/`
 
 - Implement:
 	- pin mapping (LEDs, buttons, debug UART)
@@ -66,8 +68,8 @@ Example: adding nucleoG474RE
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 
 
-Once these directories and source files are in place, you can build TaskMate for the new target with:
+4️⃣ Once these directories and source files are in place, you can build TaskMate for the new target with:
 
 `make ARCH=<arch> MCU=<mcu> BOARD=<board>`
 
-**No changes to core system, no `#ifdef` and no hidden side effects.**
+<span style="color:green">**No changes to core system, no `#ifdef` and no hidden side effects.**</span>

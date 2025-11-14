@@ -12,11 +12,9 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#ifndef TIMER3_H
-#define TIMER3_H
-
-void timer3Init(void);
-void timer3Start(void);
-void timer3Stop(void);
-
-#endif
+/**
+ * @file hal_mcu_define.h
+ * @brief hal mcu header
+ *
+ * @todo nothing
+ */

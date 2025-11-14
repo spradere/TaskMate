@@ -22,11 +22,6 @@
 #ifndef TASKMATE_DEFINE_H
 #define TASKMATE_DEFINE_H
 
-// arduino in board LED 13
-#define LED_DDR DDRB /**< Arduino in board led pin 13, direction port*/
-#define LED_PORT PORTB /**< Arduino in board led pin 13, data port*/
-#define LED_PIN PB7 /**< Arduino in board led pin 13, pin*/
-
 // AVR register push and pop
 #define PUSH_ALL_REGS                                                                                        \
 	"push r0 \n\t"                                                                                           \
