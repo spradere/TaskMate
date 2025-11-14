@@ -32,6 +32,8 @@
 #include <avr/interrupt.h>
 #include <util/atomic.h>
 
+#include <hal/hal_api.h>
+
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/sysCall.h"
 #include "sysCore/initSys.h"
@@ -45,12 +47,19 @@ modules_t modules;
 
 int main(void)
 {
+////////////////////////////////////////////////////////////////////////////////
+// new HAL implementation
+
+	hal_archInit();
+	hal_mcuInit();
+	hal_boardInit();
+
+////////////////////////////////////////////////////////////////////////////////
+// old implementation
+
 	initDrivers();
 	initThreads();
 	runLevelInit();
-
-	// Set output for in board led 13
-	LED_DDR |= (1 << LED_PIN);
 
 	// start driver
 	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
@@ -80,9 +89,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// enable global INT to let run timer3 RTC and usart1 sCLI
 	sei();
 
-// stop timer1 prevent preemption of the scheduler itself -> panic
-// prevent scheduler eat thread time slice
-#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
+	// stop timer1 prevent preemption of the scheduler itself -> panic
+	// prevent scheduler eat thread time slice
+	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
 
 	uint8_t timer1_CS = TCCR1B;
 	timer1_CS &= TIMER1_CS_MASK;
@@ -99,7 +108,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	static uint8_t alive_cnt = 0;
 	if( ++alive_cnt > 250 )
 	{
-		LED_PORT ^= (1 << LED_PIN);
+		hal_inBoardLed(HAL_IN_BOARD_LED_TOGGLE);
 		alive_cnt = 0;
 	}
 
