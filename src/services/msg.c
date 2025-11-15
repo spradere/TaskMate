@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : HAL 2", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : timer 1", MSG_TO_LCD);
 	}
 
 	msgProcess();
