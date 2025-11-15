@@ -91,11 +91,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 
 	// stop timer1 prevent preemption of the scheduler itself -> panic
 	// prevent scheduler eat thread time slice
-	#define TIMER1_CS_MASK 0x07 // 3 lsb bits of TCCR are CS
-
-	uint8_t timer1_CS = TCCR1B;
-	timer1_CS &= TIMER1_CS_MASK;
-	TCCR1B &= ~TIMER1_CS_MASK; // CS12 CS11 CS10 = 0 0 0 no source, timer stopped
+	timer1Stop();
 
 	// todo -> add stack overflow test
 
@@ -115,9 +111,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// cooperative handling
 	sysCallClearFlag(FLAG_COOP);
 
-	// reset / resart timer1
-	TCNT1 = 0;
-	TCCR1B |= timer1_CS;
+	timer1Start();
 
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)

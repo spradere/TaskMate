@@ -22,19 +22,23 @@ const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^
 void timer1Init(void)
 {
 	// Set up timer1 interrupt for scheduler
-	TCCR1B |= (1 << WGM12) | (1 << CS11); // CTC mode, prescaler 8
+	TCCR1A = 0; // WGM11 = 0 WGM10 = 0
+	TCCR1B = (1 << WGM12) | (1 << CS11); // prescaler = 8
 	OCR1A = TIMER1_OVERFLOW_COUNT;
+	TIMSK1 |= (1 << OCIE1A);
 }
 
 void timer1Start(void)
 {
-	// start by enable INT
-	TIMSK1 |= (1 << OCIE1A);
+	TCNT1 = 0;
+	// start by enabling source
+	TCCR1B |= (1 << WGM12); //WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> CTC mode
+
 }
 
 void timer1Stop(void)
 {
-	// nothing to do, will stop all system.
+	TCCR1B &= ~(1 << WGM12); // no source -> timer stopped
 }
 
 void timer1LoadOverflow(void)
