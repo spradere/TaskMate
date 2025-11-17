@@ -18,3 +18,9 @@
  *
  * @todo nothing
  */
+
+
+#ifndef BOARD_DEFINE_H
+#define BOARD_DEFINE_H
+
+#endif
