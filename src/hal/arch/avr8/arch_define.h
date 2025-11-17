@@ -18,3 +18,13 @@
  *
  * @todo nothing
  */
+
+#ifndef ARCH_DEFINE_H
+#define ARCH_DEFINE_H
+
+#include <stdint.h>
+
+// stack related size
+typedef uint8_t stack_word_t;
+
+#endif

@@ -42,6 +42,7 @@
 #include "sysCore/autoAlloc.h"
 #include "sysCore/runLevel.h"
 
+
 // system core wide variables
 modules_t modules;
 
@@ -70,7 +71,7 @@ int main(void)
 
 	// jump to current thread for first call and start system by enabling INT
 	modules.thread_current = 0;
-	SP = (uint16_t)modules.threads[modules.thread_current].stack_pointer;
+	SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
 	asm volatile(POP_ALL_REGS "sei \n\t"
 							  "ret \n\t");
 
@@ -83,7 +84,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
 		asm volatile(PUSH_ALL_REGS);
-		modules.threads[modules.thread_current].stack_pointer = (uint8_t *)SP;
+		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)SP;
 	}
 
 	// enable global INT to let run timer3 RTC and usart1 sCLI
@@ -116,7 +117,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		SP = (uint16_t)modules.threads[modules.thread_current].stack_pointer;
+		SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
 		asm volatile(POP_ALL_REGS "reti \n\t");
 	}
 }
