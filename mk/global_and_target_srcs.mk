@@ -53,9 +53,9 @@ AUTOCODE_STAMP = build/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 AUTO_HEADERS = autoInclude.h autoAlloc.h
 
 # Initrc files for autocode
-FILES_INIT_RC = ${SRC_DIR}/hal/arch/${ARCH}/drivers_init.rc
-FILES_INIT_RC += ${SRC_DIR}/hal/mcu/${MCU}/drivers_init.rc
-FILES_INIT_RC += ${SRC_DIR}/hal/board/${BOARD}/drivers_init.rc
+FILES_INIT_RC = ${SRC_DIR}/hal/arch/${ARCH}/arch_init.rc
+FILES_INIT_RC += ${SRC_DIR}/hal/mcu/${MCU}/mcu_init.rc
+FILES_INIT_RC += ${SRC_DIR}/hal/board/${BOARD}/board_init.rc
 
 FILES_INIT_RC += ${SRC_DIR}/services/services_init.rc
 FILES_INIT_RC += ${SRC_DIR}/tasks/tasks_init.rc
