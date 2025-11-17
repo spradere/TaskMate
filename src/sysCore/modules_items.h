@@ -28,6 +28,7 @@
 #define MODULES_ITEMS_H
 
 #include "sysCore/modules_define.h"
+#include "sysCore/autoInclude.h"
 
 // thread
 #define THREAD_STACK_SIZE 256 /**< Thread stack size*/
@@ -41,8 +42,9 @@ typedef struct
 
 	volatile uint16_t time_counter; /**< Thread's Time Counter */
 
-	uint8_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
-	uint8_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
+	stack_word_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
+	stack_word_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
+
 } thread_item_t;
 
 /**

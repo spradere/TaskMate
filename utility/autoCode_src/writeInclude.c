@@ -32,8 +32,14 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 		exit(1);
 	}
 
+	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	fprintf(file_include, "// Auto generated code, do not edit !\n");
-	fprintf(file_include, "// any changes will be lost\n\n");
+	fprintf(file_include, "// any changes will be lost\n");
+	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+
+	fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n",arch);
+	fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
+	fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);
 
 	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
 

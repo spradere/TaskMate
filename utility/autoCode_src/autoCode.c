@@ -77,13 +77,15 @@ int main(int argn, char *argv[])
 	setupDB(&data_base);
 
 	// read init.rc file and store data in data_base[]
-	char arch_initrc_path[256];
-	char mcu_initrc_path[256];
-	char board_initrc_path[256];
+	const int BUFFER_SIZE = 256;
 
-	sprintf(arch_initrc_path, "src/hal/arch/%s/drivers_init.rc", arch_name);
-	sprintf(mcu_initrc_path, "src/hal/mcu/%s/drivers_init.rc", mcu_name);
-	sprintf(board_initrc_path, "src/hal/board/%s/drivers_init.rc", board_name);
+	char arch_initrc_path[BUFFER_SIZE];
+	char mcu_initrc_path[BUFFER_SIZE];
+	char board_initrc_path[BUFFER_SIZE];
+
+	snprintf(arch_initrc_path, BUFFER_SIZE, "src/hal/arch/%s/arch_init.rc", arch_name);
+	snprintf(mcu_initrc_path, BUFFER_SIZE, "src/hal/mcu/%s/mcu_init.rc", mcu_name);
+	snprintf(board_initrc_path, BUFFER_SIZE, "src/hal/board/%s/board_init.rc", board_name);
 
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);

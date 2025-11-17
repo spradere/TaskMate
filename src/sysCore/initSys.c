@@ -39,8 +39,8 @@ void threadCreate(void (*func)(void), uint8_t num)
 	// stack init
 	modules.threads[num].stack_pointer =
 		&modules.threads[num].stack[THREAD_STACK_SIZE - 1]; // get top of stack
-	*(modules.threads[num].stack_pointer--) = (uint16_t)func & 0xFF; // PCL;
-	*(modules.threads[num].stack_pointer--) = ((uint16_t)func >> 8) & 0xFF; // PCH
+	*(modules.threads[num].stack_pointer--) = (uintptr_t)func & 0xFF; // PCL;
+	*(modules.threads[num].stack_pointer--) = ((uintptr_t)func >> 8) & 0xFF; // PCH
 	*(modules.threads[num].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
 	*(modules.threads[num].stack_pointer--) = 0x00; // R0
 	*(modules.threads[num].stack_pointer--) = SREG;
