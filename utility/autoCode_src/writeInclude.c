@@ -37,6 +37,9 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 	fprintf(file_include, "// any changes will be lost\n");
 	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 
+	fprintf(file_include, "#ifndef AUTOINCLUDE_H\n");
+	fprintf(file_include, "#define AUTOINCLUDE_H\n\n");
+
 	fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n",arch);
 	fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
 	fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);
@@ -63,6 +66,8 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 	{
 		fprintf(file_include, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
 	}
+
+	fprintf(file_include,"\n#endif\n");
 
 	fclose(file_include);
 }
