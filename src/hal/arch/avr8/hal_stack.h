@@ -14,14 +14,14 @@
 
 /**
  * @file hal_stack.h
- * @brief hal stack
+ * @brief hal stack handling
  *
  * @todo nothing
  */
 
 #include <avr/io.h>
 
-inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp)
+static inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp)
 {
     /*__asm__ __volatile__(
         "out __SP_L__, %A0    \n\t"
@@ -32,7 +32,7 @@ inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp)
     SP = sp;
 }
 
-inline __attribute__((always_inline)) uintptr_t hal_getStackPointer(void)
+static inline __attribute__((always_inline)) uintptr_t hal_getStackPointer(void)
 {
     /*uintptr_t sp;
     __asm__ __volatile__(

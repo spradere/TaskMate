@@ -35,6 +35,7 @@
 #include <hal/hal_api.h>
 // test inline
 #include "hal/arch/avr8/hal_stack.h"
+#include "hal/arch/avr8/hal_context.h"
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/sysCall.h"
@@ -77,8 +78,12 @@ int main(void)
 	//SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
 	hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
 
-	asm volatile(POP_ALL_REGS "sei \n\t"
-							  "ret \n\t");
+	/*asm volatile(POP_ALL_REGS "sei \n\t"
+							  "ret \n\t");*/
+
+	hal_contextRestore();
+	hal_setGlobalInterupt();
+	hal_returnFromInterupt();
 
 	return 0; // You should never get here
 }
@@ -88,7 +93,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// save current thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		asm volatile(PUSH_ALL_REGS);
+		//asm volatile(PUSH_ALL_REGS);
+		hal_contextSave();
 		//modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)SP;
 		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
 	}
@@ -125,6 +131,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	{
 		//SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
 		hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
-		asm volatile(POP_ALL_REGS "reti \n\t");
+		//asm volatile(POP_ALL_REGS "reti \n\t");
+		hal_contextRestore();
+		hal_returnFromInterupt();
 	}
 }
