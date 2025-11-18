@@ -35,7 +35,7 @@ Example: adding arm32v7m
 	- context switching,
 	- atomic operations,
 	- low-level interrupt handling.
-	- driver_init.rc entries for new drivers
+	- arch_init.rc entries for new drivers
 
 - Extend the Makefile to accept: `ARCH=arm32v7m`
 
@@ -48,7 +48,7 @@ Example: adding stm32g474
 - Implement MCU-specific peripherals:
 
 	- timers, UART, GPIO, I²C, ADC, …
-	- driver_init.rc entries for new drivers
+	- mcu_init.rc entries for new drivers
 
 - Use the common HAL API headers from: `src/hal/api/`
 
@@ -63,7 +63,7 @@ Example: adding nucleoG474RE
 - Implement:
 	- pin mapping (LEDs, buttons, debug UART)
 	- board-specific initialization
-	- driver_init.rc entries for new drivers
+	- board_init.rc entries for new drivers
 
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 

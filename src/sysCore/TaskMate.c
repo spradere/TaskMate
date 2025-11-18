@@ -33,6 +33,8 @@
 #include <util/atomic.h>
 
 #include <hal/hal_api.h>
+// test inline
+#include "hal/arch/avr8/hal_stack.h"
 
 #include "sysCore/TaskMate_define.h"
 #include "sysCore/sysCall.h"
@@ -71,7 +73,10 @@ int main(void)
 
 	// jump to current thread for first call and start system by enabling INT
 	modules.thread_current = 0;
-	SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
+
+	//SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
+	hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
+
 	asm volatile(POP_ALL_REGS "sei \n\t"
 							  "ret \n\t");
 
@@ -84,7 +89,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
 		asm volatile(PUSH_ALL_REGS);
-		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)SP;
+		//modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)SP;
+		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
 	}
 
 	// enable global INT to let run timer3 RTC and usart1 sCLI
@@ -117,7 +123,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
+		//SP = (uintptr_t)modules.threads[modules.thread_current].stack_pointer;
+		hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
 		asm volatile(POP_ALL_REGS "reti \n\t");
 	}
 }

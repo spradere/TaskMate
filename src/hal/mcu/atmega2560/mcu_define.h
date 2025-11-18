@@ -20,7 +20,7 @@
  */
 
 
-#ifndef BOARD_DEFINE_H
-#define BOARD_DEFINE_H
+#ifndef MCU_DEFINE_H
+#define MCU_DEFINE_H
 
 #endif

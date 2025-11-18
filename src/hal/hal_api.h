@@ -23,6 +23,7 @@
 #define HAL_API_H
 
 #include <stdint.h>
+//#include "sysCore/autoInclude.h"
 
 void hal_archInit();
 void hal_mcuInit();
@@ -33,5 +34,8 @@ void hal_boardInit();
 #define HAL_IN_BOARD_LED_TOGGLE 2
 
 void hal_inBoardLed(uint8_t action);
+
+void hal_setStackPointer(uintptr_t);
+uintptr_t hal_getStackPointer();
 
 #endif
