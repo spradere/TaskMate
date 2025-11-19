@@ -40,6 +40,7 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 	fprintf(file_include, "#ifndef AUTOINCLUDE_H\n");
 	fprintf(file_include, "#define AUTOINCLUDE_H\n\n");
 
+	fprintf(file_include, "#include \"hal/hal_api.h\"\n",arch);
 	fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n",arch);
 	fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
 	fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);
@@ -48,7 +49,21 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file_include, "#include \"hal/board/%s/%s.h\"\n", board, mod->modules[i].name);
+		if(mod->modules[i].hal_source == HAL_ARCH)
+		{
+			//fprintf(file_include, "#include \"hal/arch/%s/%s.h\"\n", arch, mod->modules[i].name);
+		}
+
+		if(mod->modules[i].hal_source == HAL_MCU)
+		{
+			//fprintf(file_include, "#include \"hal/mcu/%s/%s.h\"\n", mcu, mod->modules[i].name);
+		}
+
+		if(mod->modules[i].hal_source == HAL_BOARD)
+		{
+			fprintf(file_include, "#include \"hal/board/%s/%s.h\"\n", board, mod->modules[i].name);
+		}
+
 	}
 	fprintf(file_include, "\n");
 

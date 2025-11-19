@@ -34,4 +34,10 @@ void hal_boardInit();
 
 void hal_inBoardLed(uint8_t action);
 
+void hal_timerSchedulerInit();
+void hal_timerSchedulerStart();
+void hal_timerSchedulerStop();
+void hal_timerSchedulerLoad();
+
+
 #endif
