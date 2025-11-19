@@ -14,7 +14,13 @@
 
 #include <avr/io.h>
 #include <util/atomic.h>
-#include "sysCore/TaskMate_public.h"
+#include <avr/interrupt.h>
+
+#include "sysCore/TaskMate_private_extern.h"
+
+#include "sysCore/scheduler.h"
+
+
 //#include "hal/board/arduino_mega/timer1.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
@@ -52,4 +58,24 @@ void hal_timerSchedulerLoad(void)
 	sysCallSetFlag(FLAG_COOP);
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1 = TIMER1_OVERFLOW_COUNT - 1; }
 	while( sysCallGetFlag(FLAG_COOP) == 1 );
+}
+
+ISR(TIMER1_COMPA_vect, ISR_NAKED)
+{
+	// save current thread context
+	ATOMIC_BLOCK(ATOMIC_FORCEON)
+	{
+		hal_contextSave();
+		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
+	}
+
+	scheduler();
+
+	// restore next thread context
+	ATOMIC_BLOCK(ATOMIC_FORCEON)
+	{
+		hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
+		hal_contextRestore();
+		hal_returnFromInterupt();
+	}
 }

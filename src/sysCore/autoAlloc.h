@@ -1,8 +1,10 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Auto generated code, do not edit !
 // any changes will be lost
-
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+#ifndef AUTOALLOC_H
+#define AUTOALLOC_H
 
 #include "sysCore/modules_items.h"
 
@@ -34,3 +36,4 @@ typedef struct
 	uint8_t next;
 } run_levels_t;
 
+#endif
