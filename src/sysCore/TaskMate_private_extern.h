@@ -22,7 +22,6 @@
 #ifndef TASKMATE_PRIVATE_EXTERN_H
 #define TASKMATE_PRIVATE_EXTERN_H
 
-#include "sysCore/TaskMate_define.h"
 #include "sysCore/error.h"
 #include "sysCore/autoAlloc.h"
 

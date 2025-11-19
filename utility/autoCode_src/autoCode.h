@@ -33,6 +33,9 @@
 #define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
 #define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
 
+// hal directory for drivers
+typedef enum {HAL_NONE, HAL_ARCH, HAL_MCU, HAL_BOARD} hal_source_t;
+
 typedef unsigned char module_status_t;
 typedef int run_level_modules_count_t;
 
@@ -40,6 +43,7 @@ typedef struct
 {
 	char name[MODULES_NAME_SIZE_MAX];
 	module_status_t status;
+	int hal_source;
 
 } module_item_t;
 
