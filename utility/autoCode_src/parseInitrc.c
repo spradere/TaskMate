@@ -23,7 +23,7 @@
 #include "utility/autoCode_src/initrcCmdDispatch.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const char *file_name)
+void parseInitrc(const int TYPE, const hal_source_t SOURCE, modules_database_t *data_base, const char *file_name)
 {
 	// open list files
 	printf("\n");
@@ -48,6 +48,7 @@ void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const
 	{
 		// start
 		mod->modules[module_count].status = mod->status_default;
+		mod->modules[module_count].hal_source = SOURCE;
 		file_line_number++;
 		tokenizer(&tok);
 

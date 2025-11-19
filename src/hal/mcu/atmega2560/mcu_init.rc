@@ -2,3 +2,4 @@
 # default run level RUN_DRIVER
 
 
+hal_timerScheduler -RUN_CORE

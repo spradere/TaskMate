@@ -15,33 +15,38 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 #include "sysCore/TaskMate_public.h"
-#include "hal/board/arduino_mega/timer1.h"
+//#include "hal/board/arduino_mega/timer1.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
-void timer1Init(void)
+void hal_timerSchedulerInit(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TCCR1A = 0; // WGM11 = 0 WGM10 = 0
-	TCCR1B = (1 << WGM12) | (1 << CS11); // prescaler = 8
+	TCCR1B = (1 << CS11); // prescaler = 8
 	OCR1A = TIMER1_OVERFLOW_COUNT;
 	TIMSK1 |= (1 << OCIE1A);
 }
 
-void timer1Start(void)
+void hal_timerSchedulerStart(void)
 {
 	TCNT1 = 0;
 	// start by enabling source
-	TCCR1B |= (1 << WGM12); //WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> CTC mode
+	//WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> CTC mode
+	TCCR1A &= ~( (1 << WGM11) | (1 << WGM10) );
+	TCCR1B |= (1 << WGM12);
+	TCCR1B &= ~(1 << WGM13);
 
 }
 
-void timer1Stop(void)
+void hal_timerSchedulerStop(void)
 {
-	TCCR1B &= ~(1 << WGM12); // no source -> timer stopped
+	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> no source, timer stopped
+	TCCR1A &= ~( (1 << WGM11) | (1 << WGM10) );
+	TCCR1B &= ~( (1 << WGM13) | (1 << WGM12) );
 }
 
-void timer1LoadOverflow(void)
+void hal_timerSchedulerLoad(void)
 {
 	// used for cooperative yield hand to scheduler
 	sysCallSetFlag(FLAG_COOP);

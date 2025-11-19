@@ -26,7 +26,9 @@
 #include <util/atomic.h>
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
-#include "hal/board/arduino_mega/timer1.h"
+//#include "hal/board/arduino_mega/timer1.h"
+#include "hal/hal_api.h"
+
 
 static uint8_t system_status = 0;
 
@@ -42,7 +44,7 @@ uint16_t sysCallGetThreadTC(void)
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].time_counter); }
 }
 
-void sysCallYieldHand(void) { timer1LoadOverflow(); }
+void sysCallYieldHand(void) { hal_timerSchedulerLoad(); }
 
 void sysCallClearFlag(uint8_t flag) { system_status &= ~flag; }
 void sysCallSetFlag(uint8_t flag) { system_status |= flag; }

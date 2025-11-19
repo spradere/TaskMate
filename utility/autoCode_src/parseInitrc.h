@@ -23,9 +23,6 @@
 
 #include "utility/autoCode_src/autoCode.h"
 
-// type of file to parce
-typedef enum {INITRC_DRIVERS, INITRC_SERVICES, INITRC_TASK} parse_init_rc_type_t;
-
-void parseInitrc(parse_init_rc_type_t TYPE, modules_database_t *data_base, const char *file_name);
+void parseInitrc(const int TYPE, const hal_source_t SOURCE, modules_database_t *data_base, const char *file_name);
 
 #endif

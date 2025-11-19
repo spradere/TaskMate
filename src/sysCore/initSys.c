@@ -84,14 +84,14 @@ void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] drivers init
-	const char *driver0_name = "timer1";
+	const char *driver0_name = "hal_timerScheduler";
 	modules.drivers[0]=(driver_item_t)
 	{
 		.name = (uint8_t *)driver0_name,
 		.status = 1,
-		.init = timer1Init,
-		.start = timer1Start,
-		.stop = timer1Stop
+		.init = hal_timerSchedulerInit,
+		.start = hal_timerSchedulerStart,
+		.stop = hal_timerSchedulerStop
 	};
 	const char *driver1_name = "timer3";
 	modules.drivers[1]=(driver_item_t)
