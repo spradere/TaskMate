@@ -22,12 +22,9 @@
  *
  */
 
-#include <avr/io.h>
 #include <util/atomic.h>
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/sysCall.h"
-//#include "hal/board/arduino_mega/timer1.h"
-#include "hal/hal_api.h"
 
 
 static uint8_t system_status = 0;

@@ -41,6 +41,9 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 	fprintf(file_include, "#define AUTOINCLUDE_H\n\n");
 
 	fprintf(file_include, "#include \"hal/hal_api.h\"\n",arch);
+
+	fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n",arch);
+	fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n",arch);
 	fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n",arch);
 	fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
 	fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);

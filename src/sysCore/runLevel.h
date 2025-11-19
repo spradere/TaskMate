@@ -19,8 +19,8 @@
  * @todo Nothing
  */
 
-#ifndef RUN_LEVEL_DEFINE_H
-#define RUN_LEVEL_DEFINE_H
+#ifndef RUNLEVEL_H
+#define RUNLEVEL_H
 
 // run levels definitions
 #define RUN_NONE 0 /**< no start, could be started later via sCLI */

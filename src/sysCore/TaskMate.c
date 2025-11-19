@@ -28,20 +28,12 @@
  * sysCallPreemptProtected(timeout, driver);
  */
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <util/atomic.h>
-
-// test inline
-// todo add this to autoInclude.h
-#include "hal/arch/avr8/hal_stack.h"
-#include "hal/arch/avr8/hal_context.h"
-
-#include "sysCore/sysCall.h"
-#include "sysCore/initSys.h"
-#include "sysCore/modules_items.h"
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
+
+#include "sysCore/modules_items.h"
+
+#include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
 
 
@@ -50,16 +42,12 @@ modules_t modules;
 
 int main(void)
 {
-////////////////////////////////////////////////////////////////////////////////
-// new HAL implementation
-
+	// hal hardware init
 	hal_archInit();
 	hal_mcuInit();
 	hal_boardInit();
 
-////////////////////////////////////////////////////////////////////////////////
-// old implementation
-
+	// system static allocation init
 	initDrivers();
 	initThreads();
 	runLevelInit();
@@ -83,50 +71,7 @@ int main(void)
 	return 0; // You should never get here
 }
 
-ISR(TIMER1_COMPA_vect, ISR_NAKED)
-{
-	// save current thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_contextSave();
-		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
-	}
-
-	// enable global INT to let run timer3 RTC and usart1 sCLI
-	hal_setGlobalInterupt();
-
-	// stop timer1 prevent preemption of the scheduler itself -> panic
-	// prevent scheduler eat thread time slice
-	//**timer1Stop();
-	hal_timerSchedulerStop();
 
 
-	// todo -> add stack overflow test
 
-	// todo -> add system wide error handler
 
-	// switch context
-	if( ++modules.thread_current == THREADS_COUNT ) { modules.thread_current = 0; }
-
-	// I'm alive blink in board led
-	static uint8_t alive_cnt = 0;
-	if( ++alive_cnt > 250 )
-	{
-		hal_inBoardLed(HAL_IN_BOARD_LED_TOGGLE);
-		alive_cnt = 0;
-	}
-
-	// cooperative handling
-	sysCallClearFlag(FLAG_COOP);
-
-	//**timer1Start();
-	hal_timerSchedulerStart();
-
-	// restore next thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
-		hal_contextRestore();
-		hal_returnFromInterupt();
-	}
-}

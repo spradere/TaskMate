@@ -13,19 +13,15 @@
  */
 
 /**
- * @file initSys.h
- * @brief Header for init system
+ * @file scheduler.h
+ * @brief scheduler header
  *
- * @todo Nothing
+ * @todo add free channel
  */
 
-#ifndef INITSYS_H
-#define INITSYS_H
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 
-void threadCreate(void (*func)(void), uint8_t num);
-
-void initThreads(void);
-void initDrivers(void);
-void initRunLevels(void);
+void scheduler();
 
 #endif
