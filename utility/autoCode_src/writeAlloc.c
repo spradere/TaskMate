@@ -34,8 +34,11 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 	// write modules
 	fprintf(file_alloc, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	fprintf(file_alloc, "// Auto generated code, do not edit !\n");
-	fprintf(file_alloc, "// any changes will be lost\n\n");
+	fprintf(file_alloc, "// any changes will be lost\n");
 	fprintf(file_alloc, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+
+	fprintf(file_alloc, "#ifndef AUTOALLOC_H\n");
+	fprintf(file_alloc, "#define AUTOALLOC_H\n\n");
 
 	fprintf(file_alloc, "#include \"sysCore/modules_items.h\"\n");
 	fprintf(file_alloc, "\n");
@@ -73,6 +76,8 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 	fprintf(file_alloc, "\tuint8_t current;\n");
 	fprintf(file_alloc, "\tuint8_t next;\n");
 	fprintf(file_alloc, "} run_levels_t;\n\n");
+
+	fprintf(file_alloc, "#endif\n");
 
 	fclose(file_alloc);
 }

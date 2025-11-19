@@ -22,10 +22,11 @@
 #ifndef TASKMATE_PRIVATE_EXTERN_H
 #define TASKMATE_PRIVATE_EXTERN_H
 
-#include "sysCore/error.h"
 #include "sysCore/autoAlloc.h"
+#include "sysCore/autoInclude.h"
+#include "sysCore/sysCall.h"
+#include "sysCore/error.h"
 
 extern modules_t modules;
-// to delete extern run_levels_t to_run;
 
 #endif
