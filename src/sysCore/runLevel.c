@@ -19,10 +19,9 @@
  * @todo Nothing
  */
 
-#include <avr/io.h>
-
+#include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/runLevel.h"
-#include "sysCore/autoAlloc.h"
+
 
 static run_levels_t to_run;
 

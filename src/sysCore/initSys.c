@@ -20,10 +20,8 @@
  */
 
 #include <avr/io.h>
-
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/initSys.h"
-#include "sysCore/autoInclude.h"
 
 #define AVR_REGISTER_COUNT 32 // from R0 to R31
 

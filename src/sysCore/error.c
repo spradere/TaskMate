@@ -20,7 +20,7 @@
  * @todo Timeout routine, critical/fatal errors handling
  */
 
-#include <avr/io.h>
+#include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/error.h"
 
 volatile errorCode_t system_last_critical_error = ERR_SUCCESS;
