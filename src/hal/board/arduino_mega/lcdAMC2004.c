@@ -13,7 +13,7 @@
  */
 
 #include <util/delay.h>
-#include "sysCore/TaskMate_public.h"
+#include "sysCall/TaskMate_public.h"
 #include "hal/board/arduino_mega/i2c.h"
 #include "hal/board/arduino_mega/lcdAMC2004.h"
 

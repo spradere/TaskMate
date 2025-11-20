@@ -14,7 +14,7 @@
 
 #include <avr/io.h>
 #include <util/twi.h>
-#include "sysCore/TaskMate_public.h"
+#include "sysCall/TaskMate_public.h"
 #include "hal/board/arduino_mega/i2c.h"
 
 void i2cInit(void)

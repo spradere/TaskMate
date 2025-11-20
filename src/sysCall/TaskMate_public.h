@@ -26,7 +26,7 @@
 #ifndef TASKMATE_PUBLIC_H
 #define TASKMATE_PUBLIC_H
 
-#include "sysCore/error.h"
-#include "sysCore/sysCall.h"
+#include "sysCall/sysCall.h"
+#include "sysCall/error.h"
 
 #endif

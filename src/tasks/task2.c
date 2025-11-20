@@ -1,5 +1,5 @@
 #include <avr/io.h>
-#include "sysCore/TaskMate_public.h"
+#include "sysCall/TaskMate_public.h"
 #include "tasks/task2.h"
 
 void task2(void)
