@@ -29,6 +29,7 @@
 // NOLINT(readability-magic-numbers)
 
 // initailize thread memory
+// todo move threadCreate() -> hal/arch/hal_treadCreate()
 void threadCreate(void (*func)(void), uint8_t num)
 {
 
@@ -83,7 +84,7 @@ void initDrivers(void)
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] drivers init
 	const char *driver0_name = "hal_timerScheduler";
-	modules.drivers[0]=(driver_item_t)
+	modules.drivers[0]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver0_name,
 		.status = 1,
@@ -92,7 +93,7 @@ void initDrivers(void)
 		.stop = hal_timerSchedulerStop
 	};
 	const char *driver1_name = "timer3";
-	modules.drivers[1]=(driver_item_t)
+	modules.drivers[1]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver1_name,
 		.status = 1,
@@ -101,7 +102,7 @@ void initDrivers(void)
 		.stop = timer3Stop
 	};
 	const char *driver2_name = "i2c";
-	modules.drivers[2]=(driver_item_t)
+	modules.drivers[2]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver2_name,
 		.status = 1,
@@ -110,7 +111,7 @@ void initDrivers(void)
 		.stop = i2cStop
 	};
 	const char *driver3_name = "usart1";
-	modules.drivers[3]=(driver_item_t)
+	modules.drivers[3]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver3_name,
 		.status = 1,
@@ -119,7 +120,7 @@ void initDrivers(void)
 		.stop = usart1Stop
 	};
 	const char *driver4_name = "lcdAMC2004";
-	modules.drivers[4]=(driver_item_t)
+	modules.drivers[4]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver4_name,
 		.status = 2,

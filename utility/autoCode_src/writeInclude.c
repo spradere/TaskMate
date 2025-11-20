@@ -40,7 +40,7 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 	fprintf(file_include, "#ifndef AUTOINCLUDE_H\n");
 	fprintf(file_include, "#define AUTOINCLUDE_H\n\n");
 
-	fprintf(file_include, "#include \"hal/hal_api.h\"\n",arch);
+	fprintf(file_include, "#include \"hal/hal_api.h\"\n");
 
 	fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n",arch);
 	fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n",arch);
