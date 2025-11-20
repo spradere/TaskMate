@@ -19,8 +19,9 @@
 
 # Source directory
 SRC_DIR = src
-SRC_DIR_LIST = ${SRC_DIR}/services/
-SRC_DIR_LIST += ${SRC_DIR}/sysCore/
+SRC_DIR_LIST = ${SRC_DIR}/sysCore/
+SRC_DIR_LIST += ${SRC_DIR}/sysCall/
+SRC_DIR_LIST += ${SRC_DIR}/services/
 SRC_DIR_LIST += ${SRC_DIR}/tasks/
 SRC_DIR_LIST += ${SRC_DIR}/libc/
 
