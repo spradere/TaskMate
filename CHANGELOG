@@ -68,3 +68,4 @@ TaskMate 0.20
 	refactor autoCode -> autoCode2
 	add tree structure for arch/mcu/board
 	modify makefile and autoCode for arch/mcu/board
+	remove avr code from TaskMate.c -> scheduler.c / hal_timerScheduler.c

@@ -15,7 +15,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "sysCore/TaskMate_public.h"
+#include "sysCall/TaskMate_public.h"
 #include "hal/board/arduino_mega/usart1.h"
 
 #define USART1_BAUD_RATE 9600

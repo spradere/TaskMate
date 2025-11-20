@@ -21,7 +21,7 @@
 
 #include <avr/io.h>
 
-#include "sysCore/TaskMate_public.h"
+#include "sysCall/TaskMate_public.h"
 #include "services/msg.h"
 #include "libc/string.h"
 
@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : TM headers", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : new sysCall/", MSG_TO_LCD);
 	}
 
 	msgProcess();
