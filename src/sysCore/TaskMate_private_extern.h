@@ -24,8 +24,8 @@
 
 #include "sysCore/autoAlloc.h"
 #include "sysCore/autoInclude.h"
-#include "sysCore/sysCall.h"
-#include "sysCore/error.h"
+#include "sysCall/sysCall.h"
+#include "sysCall/error.h"
 
 extern modules_t modules;
 

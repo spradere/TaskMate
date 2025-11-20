@@ -24,7 +24,7 @@
 
 #include <util/atomic.h>
 #include "sysCore/TaskMate_private_extern.h"
-#include "sysCore/sysCall.h"
+#include "sysCall/sysCall.h"
 
 
 static uint8_t system_status = 0;
