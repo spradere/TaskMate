@@ -28,7 +28,7 @@
 #define MODULES_ITEMS_H
 
 #include "sysCore/modules_define.h"
-#include "sysCore/autoInclude.h"
+#include "sysCore/autoInclude.h" // get stack_word_t from selected arch
 
 // thread
 #define THREAD_STACK_SIZE 256 /**< Thread stack size*/
@@ -45,7 +45,7 @@ typedef struct
 	stack_word_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
 	stack_word_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
 
-} thread_item_t;
+} module_item_thread_t;
 
 /**
  * @struct driver_item_t
@@ -62,6 +62,6 @@ typedef struct
 	void (*start)(void); /**< Start driver function  */
 	void (*stop)(void); /**< Stop driver function  */
 
-} driver_item_t;
+} module_item_driver_t;
 
 #endif

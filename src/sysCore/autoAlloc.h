@@ -13,8 +13,8 @@
 
 typedef struct
 {
-	driver_item_t drivers[DRIVERS_COUNT];
-	thread_item_t threads[THREADS_COUNT];
+	module_item_driver_t drivers[DRIVERS_COUNT];
+	module_item_thread_t threads[THREADS_COUNT];
 	uint8_t thread_current;
 } modules_t;
 
