@@ -53,8 +53,8 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 
 	fprintf(file_alloc, "typedef struct\n");
 	fprintf(file_alloc, "{\n");
-	fprintf(file_alloc, "\tdriver_item_t drivers[DRIVERS_COUNT];\n");
-	fprintf(file_alloc, "\tthread_item_t threads[THREADS_COUNT];\n");
+	fprintf(file_alloc, "\tmodule_item_driver_t drivers[DRIVERS_COUNT];\n");
+	fprintf(file_alloc, "\tmodule_item_thread_t threads[THREADS_COUNT];\n");
 	fprintf(file_alloc, "\tuint8_t thread_current;\n");
 	fprintf(file_alloc, "} modules_t;\n\n");
 

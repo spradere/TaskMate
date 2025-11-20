@@ -31,14 +31,10 @@
 #include "sysCore/autoInclude.h"
 #include "sysCore/autoAlloc.h"
 
-#include "sysCore/modules_items.h"
+#include "sysCore/TaskMate_private_extern.h"
 
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
-
-
-// system core wide variables
-modules_t modules;
 
 int main(void)
 {
