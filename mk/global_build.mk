@@ -19,7 +19,7 @@
 
 .MAIN: all
 
-all: ${AUTOCODE_STAMP} header_check ${TARGET}
+all: ${AUTOCODE_STAMP} dependency_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n"
 
 # Link
@@ -35,8 +35,8 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	${CC} ${CFLAGS} -c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
 # Include dependency files used to compile *.c if related header was edited
-header_check:
-	@printf "\n\033[1;33mCheck header files\033[0m\n\n"
+dependency_check:
+	@printf "\n\033[1;33mCheck dependency files\033[0m\n\n"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test if autoCode and initrc files was modified

@@ -13,23 +13,15 @@
  */
 
 /**
- * @file rtc.c
- * @brief Implements internal/external RTC.
+ * @file rtc.h
+ * @brief header for RTC
  *
- * @todo Add I2C external clock
+ * @todo Nothings
  */
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
+#ifndef RTC_H
+#define RTC_H
 
-#include "TaskMate_private_extern.h"
-#include "sysCore/rtc.h"
+void realTimeClock();
 
-ISR(TIMER3_COMPA_vect)
-{
-	// RTC decrement
-	for( uint8_t i = 0; i < THREADS_COUNT; i++ )
-	{
-		if( modules.threads[i].time_counter > 0 ) { modules.threads[i].time_counter--; }
-	}
-}
+#endif
