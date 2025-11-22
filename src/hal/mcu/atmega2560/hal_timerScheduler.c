@@ -17,11 +17,7 @@
 #include <avr/interrupt.h>
 
 #include "sysCore/TaskMate_private_extern.h"
-
 #include "sysCore/scheduler.h"
-
-
-//#include "hal/board/arduino_mega/timer1.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
