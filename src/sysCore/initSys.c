@@ -22,56 +22,37 @@
 #include <avr/io.h>
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/initSys.h"
-
-#define AVR_REGISTER_COUNT 32 // from R0 to R31
+#include "hal/hal_api.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
-
-// initailize thread memory
-// todo move threadCreate() -> hal/arch/hal_treadCreate()
-void threadCreate(void (*func)(void), uint8_t num)
-{
-
-	modules.threads[num].time_counter = 0;
-
-	// stack init
-	modules.threads[num].stack_pointer =
-		&modules.threads[num].stack[THREAD_STACK_SIZE - 1]; // get top of stack
-	*(modules.threads[num].stack_pointer--) = (uintptr_t)func & 0xFF; // PCL;
-	*(modules.threads[num].stack_pointer--) = ((uintptr_t)func >> 8) & 0xFF; // PCH
-	*(modules.threads[num].stack_pointer--) = 0x00; // PCHH always 0 if code size < 128k
-	*(modules.threads[num].stack_pointer--) = 0x00; // R0
-	*(modules.threads[num].stack_pointer--) = SREG;
-
-	// Registers R1-R31
-	for( int i = 1; i < AVR_REGISTER_COUNT; i++ ) { *(modules.threads[num].stack_pointer--) = 0x00; }
-}
 
 void initThreads(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [tag] threads init
 
-	threadCreate(scli, 0);
+	hal_threadContextInit(scli, &modules.threads[0].stack_pointer, &modules.threads[0].stack[THREAD_STACK_SIZE -1 ]);
+	modules.threads[0].real_time_counter = 0;
 	const char *thread0_name = "scli";
 	modules.threads[0].name = (uint8_t *)thread0_name;
 	modules.threads[0].status = 19;
 	modules.threads[0].main = scli;
 
-	threadCreate(msg, 1);
+	hal_threadContextInit(msg, &modules.threads[1].stack_pointer, &modules.threads[1].stack[THREAD_STACK_SIZE -1 ]);
+	modules.threads[1].real_time_counter = 0;
 	const char *thread1_name = "msg";
 	modules.threads[1].name = (uint8_t *)thread1_name;
 	modules.threads[1].status = 19;
 	modules.threads[1].main = msg;
 
-	threadCreate(task1, 2);
+	hal_threadContextInit(task1, &modules.threads[2].stack_pointer, &modules.threads[2].stack[THREAD_STACK_SIZE -1 ]);
 	const char *thread2_name = "task1";
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].status = 12;
 	modules.threads[2].main = task1;
 
-	threadCreate(task2, 3);
+	hal_threadContextInit(task2, &modules.threads[3].stack_pointer, &modules.threads[3].stack[THREAD_STACK_SIZE -1 ]);
 	const char *thread3_name = "task2";
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].status = 12;

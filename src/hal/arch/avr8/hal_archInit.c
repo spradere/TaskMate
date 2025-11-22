@@ -11,6 +11,6 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/hal_api.h"
+#include "sysCore/autoInclude.h"
 
 void hal_archInit() {}
