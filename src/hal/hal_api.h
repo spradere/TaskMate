@@ -39,5 +39,8 @@ void hal_timerSchedulerStart();
 void hal_timerSchedulerStop();
 void hal_timerSchedulerLoad();
 
+void hal_timerRTCInit();
+void hal_timerRTCStart();
+void hal_timerRTCStop();
 
 #endif
