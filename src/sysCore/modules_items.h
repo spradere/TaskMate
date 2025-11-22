@@ -40,7 +40,7 @@ typedef struct
 
 	void (*main)(void); /**< Thread main function for first start and resart */
 
-	volatile uint16_t time_counter; /**< Thread's Time Counter */
+	volatile uint16_t real_time_counter; /**< Thread's Time Counter */
 
 	stack_word_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
 	stack_word_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */

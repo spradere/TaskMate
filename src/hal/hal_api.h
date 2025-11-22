@@ -43,4 +43,6 @@ void hal_timerRTCInit();
 void hal_timerRTCStart();
 void hal_timerRTCStop();
 
+void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t  *stack_top);
+
 #endif

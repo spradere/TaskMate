@@ -12,6 +12,13 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
+/**
+ * @file hal_timerRTC.c
+ * @brief hal real time cloc
+ *
+ * @todo nothing
+ */
+
 #include <avr/io.h>
 #include <util/atomic.h>
 #include <avr/interrupt.h>
