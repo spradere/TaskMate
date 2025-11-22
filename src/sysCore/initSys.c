@@ -92,14 +92,14 @@ void initDrivers(void)
 		.start = hal_timerSchedulerStart,
 		.stop = hal_timerSchedulerStop
 	};
-	const char *driver1_name = "timer3";
+	const char *driver1_name = "hal_timerRTC";
 	modules.drivers[1]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver1_name,
 		.status = 1,
-		.init = timer3Init,
-		.start = timer3Start,
-		.stop = timer3Stop
+		.init = hal_timerRTCInit,
+		.start = hal_timerRTCStart,
+		.stop = hal_timerRTCStop
 	};
 	const char *driver2_name = "i2c";
 	modules.drivers[2]=(module_item_driver_t)
