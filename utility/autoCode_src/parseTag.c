@@ -134,8 +134,10 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\n\tthreadCreate(%s, %i);\n", mod->modules[i].name, threads_count);
+		fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
+				mod->modules[i].name,threads_count, threads_count );
 
+		fprintf(file, "\tmodules.threads[%i].real_time_counter = 0;\n", threads_count);
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
@@ -153,8 +155,9 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\n\tthreadCreate(%s, %i);\n", mod->modules[i].name, threads_count);
-
+		//fprintf(file, "\n\tthreadCreate(%s, %i);\n", mod->modules[i].name, threads_count);
+		fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
+				mod->modules[i].name,threads_count, threads_count );
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
 		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,

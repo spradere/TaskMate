@@ -33,12 +33,12 @@ uint8_t sysCallGetThreadID(void) { return modules.thread_current; }
 
 void sysCallSetThreadTC(uint16_t count)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].time_counter = count; }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
 }
 
 uint16_t sysCallGetThreadTC(void)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].time_counter); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].real_time_counter); }
 }
 
 void sysCallYieldHand(void) { hal_timerSchedulerLoad(); }

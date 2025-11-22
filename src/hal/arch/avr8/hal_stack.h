@@ -23,22 +23,10 @@
 
 static inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp)
 {
-    /*__asm__ __volatile__(
-        "out __SP_L__, %A0    \n\t"
-        "out __SP_H__, %B0    \n\t"
-        :
-        : "r"(sp)
-    );*/
     SP = sp;
 }
 
 static inline __attribute__((always_inline)) uintptr_t hal_getStackPointer(void)
 {
-    /*uintptr_t sp;
-    __asm__ __volatile__(
-        "in %A0, __SP_L__     \n\t"
-        "in %B0, __SP_H__     \n\t"
-        : "=r"(sp)
-    );*/
     return SP;
 }
