@@ -19,6 +19,7 @@
  * @todo nothing
  */
 
-#include "hal/hal_api.h"
+
+#include "sysCore/autoInclude.h"
 
 __attribute__((weak)) void hal_inBoardLed(uint8_t action){}

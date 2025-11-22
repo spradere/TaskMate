@@ -18,7 +18,7 @@
  * @todo nothing
  */
 
-#include "hal/hal_api.h"
+#include "sysCore/autoInclude.h"
 #include "hal/board/arduino_mega/board_define.h"
 
 

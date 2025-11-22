@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : RTC move -> hal", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : context 0", MSG_TO_LCD);
 	}
 
 	msgProcess();

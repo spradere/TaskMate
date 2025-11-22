@@ -31,6 +31,6 @@ void realTimeClock()
 	// RTC decrement
 	for( uint8_t i = 0; i < THREADS_COUNT; i++ )
 	{
-		if( modules.threads[i].time_counter > 0 ) { modules.threads[i].time_counter--; }
+		if( modules.threads[i].real_time_counter > 0 ) { modules.threads[i].real_time_counter--; }
 	}
 }
