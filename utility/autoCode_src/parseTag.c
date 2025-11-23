@@ -61,7 +61,7 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 		file_line_number++;
 		tokenizer(&tok);
 
-		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[tag]")) )
+		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[autoCode_tag]")) )
 		{
 			if( tok.count != 4 )
 			{
@@ -130,32 +130,38 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 {
 	int threads_count = 0;
-	const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
+	const module_type_t *mod;
+	int type;
 
-	for( int i = 0; i < mod->modules_count; i++ )
+	for(int j=0; j<2; j++)
 	{
-		fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
+		if( j == 0 ){mod = &data_base->modules_type[MODULES_SERVICES_ID]; type = (1 << MODULES_THREAD_TYPE_SYSTEM); }
+		if( j == 1 ){mod = &data_base->modules_type[MODULES_TASKS_ID]; type = (1 << MODULES_THREAD_TYPE_USER); }
+
+		for( int i = 0; i < mod->modules_count; i++ )
+		{
+			fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
 				mod->modules[i].name,threads_count, threads_count );
 
-		fprintf(file, "\tmodules.threads[%i].real_time_counter = 0;\n", threads_count);
-		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
+			fprintf(file, "\tmodules.threads[%i].real_time_counter = 0;\n", threads_count);
+			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
-		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
+			fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
 				threads_count);
 
-		fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
-				mod->modules[i].status | (1 << MODULES_THREAD_TYPE_SYSTEM));
+			fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
+				mod->modules[i].status | type);
 
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
+			fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
 
-		threads_count++;
+			threads_count++;
+		}
 	}
 
-	mod = &data_base->modules_type[MODULES_TASKS_ID];
+	/*mod = &data_base->modules_type[MODULES_TASKS_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		//fprintf(file, "\n\tthreadCreate(%s, %i);\n", mod->modules[i].name, threads_count);
 		fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
 				mod->modules[i].name,threads_count, threads_count );
 		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
@@ -169,7 +175,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 		fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);
 
 		threads_count++;
-	}
+	}*/
 }
 
 static void writeDriversInit(modules_database_t *data_base, FILE *file)
