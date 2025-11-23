@@ -3,16 +3,11 @@
 // any changes will be lost
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTOINCLUDE_H
-#define AUTOINCLUDE_H
+#ifndef AUTOINCLUDE_SYSTEM_H
+#define AUTOINCLUDE_SYSTEM_H
 
-#include "hal/arch/avr8/hal_stack.h"
-#include "hal/arch/avr8/hal_context.h"
-#include "hal/arch/avr8/arch_define.h"
-#include "hal/mcu/atmega2560/mcu_define.h"
-#include "hal/board/arduino_mega/board_define.h"
+#include <stdint.h>
 
-#include "hal/hal_api.h"
 #include "hal/board/arduino_mega/i2c.h"
 #include "hal/board/arduino_mega/usart1.h"
 #include "hal/board/arduino_mega/lcdAMC2004.h"

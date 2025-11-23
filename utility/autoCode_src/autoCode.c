@@ -102,7 +102,8 @@ int main(int argn, char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c");
 
 	// write headers
-	writeInclude(&data_base, "src/sysCore/autoInclude.h", arch_name, mcu_name, board_name);
+	writeInclude(&data_base, INCLUDE_SYSTEM_PART, "src/sysCore/autoInclude_system.h", arch_name, mcu_name, board_name);
+	writeInclude(&data_base, INCLUDE_HAL_PART, "src/hal/autoInclude_hal.h", arch_name, mcu_name, board_name);
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules

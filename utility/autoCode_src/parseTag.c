@@ -152,30 +152,11 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 			fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
 				mod->modules[i].status | type);
 
-			fprintf(file, "\tmodules.threads[%i].main = %s;\n", i, mod->modules[i].name);
+			fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);
 
 			threads_count++;
 		}
 	}
-
-	/*mod = &data_base->modules_type[MODULES_TASKS_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
-				mod->modules[i].name,threads_count, threads_count );
-		fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
-
-		fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
-				threads_count);
-
-		fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
-				mod->modules[i].status | (1 << MODULES_THREAD_TYPE_USER));
-
-		fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);
-
-		threads_count++;
-	}*/
 }
 
 static void writeDriversInit(modules_database_t *data_base, FILE *file)
@@ -205,6 +186,7 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
 
+		// count thread (services + task) for run level
 		int thread_count = 0;
 
 		for( int i = 1; i <= level; i++ )
@@ -220,28 +202,23 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 
 		fprintf(file, "\t\t.level%i = {%i", level, data_base->threads_count[level]);
 
+		// write threads list for run level
 		int threads_count = 0;
+		const module_type_t *mod;
 
-		const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
-
-		for( int i = 0; i < mod->modules_count; i++ )
+		for( int j=0; j<2; j++)
 		{
-			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
+			if( j == 0 ){mod = &data_base->modules_type[MODULES_SERVICES_ID];}
+			if( j == 1 ){mod = &data_base->modules_type[MODULES_TASKS_ID];}
+
+			for( int i = 0; i < mod->modules_count; i++ )
 			{
-				fprintf(file, ",%i", threads_count++);
+				if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
+				{
+					fprintf(file, ",%i", threads_count++);
+				}
 			}
 		}
-
-		mod = &data_base->modules_type[MODULES_TASKS_ID];
-
-		for( int i = 0; i < mod->modules_count; i++ )
-		{
-			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
-			{
-				fprintf(file, ",%i", threads_count++);
-			}
-		}
-
 		fprintf(file, "},\n");
 	}
 

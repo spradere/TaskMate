@@ -51,14 +51,14 @@ void initThreads(void)
 	const char *thread2_name = "task1";
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].status = 12;
-	modules.threads[0].main = task1;
+	modules.threads[2].main = task1;
 
 	hal_threadContextInit(task2, &modules.threads[3].stack_pointer, &modules.threads[3].stack[THREAD_STACK_SIZE -1 ]);
 	modules.threads[3].real_time_counter = 0;
 	const char *thread3_name = "task2";
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].status = 12;
-	modules.threads[1].main = task2;
+	modules.threads[3].main = task2;
 	// [/tag]
 }
 
