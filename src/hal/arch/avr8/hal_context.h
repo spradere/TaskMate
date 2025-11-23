@@ -19,6 +19,8 @@
  * @todo nothing
  */
 
+#include <avr/io.h>
+
 #define AVR8_PUSH_ALL_REGS                                                                                        \
 	"push r0 \n\t"                                                                                           \
 	"in r0, __SREG__ \n\t"                                                                                   \

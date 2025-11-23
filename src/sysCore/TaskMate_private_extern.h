@@ -23,7 +23,9 @@
 #define TASKMATE_PRIVATE_EXTERN_H
 
 #include "sysCore/autoAlloc.h"
-#include "sysCore/autoInclude.h"
+#include "sysCore/autoInclude_system.h"
+#include "hal/autoInclude_hal.h"
+
 #include "sysCall/sysCall.h"
 #include "sysCall/error.h"
 
