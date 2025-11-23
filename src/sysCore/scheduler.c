@@ -19,6 +19,8 @@
  * @todo add free channel
  */
 
+#include "hal/hal_api.h"
+
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/scheduler.h"
 
