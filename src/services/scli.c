@@ -22,8 +22,9 @@
 #include <avr/io.h>
 #include <stdint.h>
 #include "sysCall/TaskMate_public.h"
-#include "hal/board/arduino_mega/usart1.h"
+//#include "hal/board/arduino_mega/usart1.h"
 #include "services/scli.h"
+#include "hal/hal_api.h"
 
 void scli(void)
 {
@@ -40,14 +41,14 @@ void scliEcho(void)
 {
 	uint8_t data;
 
-	if( usart1TestBufferRx() != ERR_USART1_RX_BUFFER_EMPTY )
+	if( hal_usartTestBufferRx() != ERR_USART1_RX_BUFFER_EMPTY )
 	{
-		usart1WriteString("scli.c : ");
+		hal_usartWriteString("scli.c : ");
 
-		while( usart1Read(&data) != ERR_USART1_RX_BUFFER_EMPTY )
+		while( hal_usartRead(&data) != ERR_USART1_RX_BUFFER_EMPTY )
 		{
-			if( usart1WriteChar(data) == ERR_USART1_TX_BUFFER_FULL ) { break; }
+			if( hal_usartWriteChar(data) == ERR_USART1_TX_BUFFER_FULL ) { break; }
 		}
-		usart1SendTXBuffer();
+		hal_usartSendTXBuffer();
 	}
 }

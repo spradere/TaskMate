@@ -8,7 +8,6 @@
 
 #include <stdint.h>
 
-#include "hal/board/arduino_mega/usart1.h"
 #include "hal/board/arduino_mega/hal_lcd.h"
 
 #include "services/scli.h"

@@ -21,7 +21,10 @@
 
 #ifndef MSG_H
 #define MSG_H
+
 #include <stdint.h>
+#include "sysCall/error.h"
+
 // bits [2 1 0] is destination
 #define MSG_TO_MASK 0x07
 #define MSG_TO_NULL 0x00
