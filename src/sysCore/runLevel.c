@@ -31,7 +31,7 @@ static run_levels_t to_run;
 void runLevelInit(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] run levels
+	// [autoCode_tag] run levels
 	to_run = (run_levels_t){
 		.level0 = {0},
 		.level1 = {0},
