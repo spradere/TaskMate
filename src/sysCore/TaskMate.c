@@ -28,7 +28,7 @@
  * sysCallPreemptProtected(timeout, driver);
  */
 
-#include "sysCore/autoInclude.h"
+#include "sysCore/autoInclude_system.h"
 #include "sysCore/autoAlloc.h"
 
 #include "sysCore/TaskMate_private_extern.h"

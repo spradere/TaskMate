@@ -22,8 +22,6 @@
 #ifndef HAL_API_H
 #define HAL_API_H
 
-#include <stdint.h>
-
 void hal_archInit();
 void hal_mcuInit();
 void hal_boardInit();
