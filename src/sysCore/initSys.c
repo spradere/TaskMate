@@ -30,7 +30,7 @@
 void initThreads(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] threads init
+	// [autoCode_tag] threads init
 
 	hal_threadContextInit(scli, &modules.threads[0].stack_pointer, &modules.threads[0].stack[THREAD_STACK_SIZE -1 ]);
 	modules.threads[0].real_time_counter = 0;
@@ -47,23 +47,25 @@ void initThreads(void)
 	modules.threads[1].main = msg;
 
 	hal_threadContextInit(task1, &modules.threads[2].stack_pointer, &modules.threads[2].stack[THREAD_STACK_SIZE -1 ]);
+	modules.threads[2].real_time_counter = 0;
 	const char *thread2_name = "task1";
 	modules.threads[2].name = (uint8_t *)thread2_name;
 	modules.threads[2].status = 12;
-	modules.threads[2].main = task1;
+	modules.threads[0].main = task1;
 
 	hal_threadContextInit(task2, &modules.threads[3].stack_pointer, &modules.threads[3].stack[THREAD_STACK_SIZE -1 ]);
+	modules.threads[3].real_time_counter = 0;
 	const char *thread3_name = "task2";
 	modules.threads[3].name = (uint8_t *)thread3_name;
 	modules.threads[3].status = 12;
-	modules.threads[3].main = task2;
+	modules.threads[1].main = task2;
 	// [/tag]
 }
 
 void initDrivers(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [tag] drivers init
+	// [autoCode_tag] drivers init
 	const char *driver0_name = "hal_timerScheduler";
 	modules.drivers[0]=(module_item_driver_t)
 	{
