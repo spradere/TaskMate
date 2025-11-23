@@ -27,8 +27,7 @@ void printModules(const modules_database_t *data_base)
 	const module_type_t *driver = &data_base->modules_type[MODULES_DRIVERS_ID];
 	for( int i = 0; i < driver->modules_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" status=%i from hal %i\n", i,
-				driver->modules[i].name, driver->modules[i].status, driver->modules[i].hal_source);
+		printf("\tdrivers[%i] \"%s\" status=%i\n", i, driver->modules[i].name, driver->modules[i].status);
 	}
 	printf("\n");
 
