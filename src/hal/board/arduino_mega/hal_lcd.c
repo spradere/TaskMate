@@ -22,7 +22,7 @@
 
 #include "hal/hal_api.h"
 
-void lcdAMC2004SendCommand(uint8_t command);
+static void lcdAMC2004SendCommand(uint8_t command);
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
