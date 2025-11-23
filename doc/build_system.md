@@ -31,10 +31,10 @@ Miscellaneous commands :
 | `make doc` | Generate Doxygen documentation |
 | `make dump` | Disassemble machine code |
 | `make cloc` | Count lines of code |
-| `make tidy` | C code static analysis with clang-tidy tool, config file scr/.clang-tidy |
+| `make tidy` | C code static analysis with clang-tidy tool, config file /.clang-tidy |
 | `make note` | find todo / fix / hack in sources files |
 | `make check` | C code static analysis with cppcheck tool |
-| `make format` | C code formating with clang-format tool, config file src/.clang-format|
+| `make format` | C code formating with clang-format tool, config file /.clang-format|
 
 ---
 
@@ -53,7 +53,7 @@ Short, intuitive commands for development, deployment, and backup.
                          |
                          | selects architecture, MCU, board
                          | and all relevant source files
-                         | manage dependencies .c .h
+                         | manage dependencies .c <-> .h
                          | provides utilities
                          |
                          v
@@ -63,8 +63,8 @@ Short, intuitive commands for development, deployment, and backup.
               +-----------------------+
                          |
                          | parses drivers_init.rc and tasks_init.rc
-                         | generates autoInclude.h, autoAlloc.h,
-                         | and initSys.c, runLevel.c
+                         | generates autoInclude_system.h, autoInclude_hal.h and autoAlloc.h
+                         | generate code ine initSys.c and runLevel.c
                          |
                          | autoCode check configuration validity:
                          |   - files name

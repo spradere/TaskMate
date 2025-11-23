@@ -13,7 +13,7 @@
  */
 
 /**
- * @file rtc.h
+ * @file realTimeClock.h
  * @brief header for RTC
  *
  * @todo Nothings

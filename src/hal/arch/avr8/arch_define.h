@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_arch_define.h
+ * @file arch_define.h
  * @brief hal achr header
  *
  * @todo nothing

@@ -15,8 +15,8 @@ to separate build logic, system logic, and hardware dependencies.
 
 > <span style="color:green"> **Project Stats (v0.20)**</span>
 >
->  <span style="color:green">182 commits • 91 source files • 2582 lines of code •
-> binary size : 3355 bytes (Flash) • ram usage : 1911 bytes</span>
+>  <span style="color:green">192 commits • 91 source files • 2589 lines of code •
+> binary size : 3352 bytes (Flash) • ram usage : 1911 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -92,7 +92,7 @@ See : [Future improvements](doc/RTOS_improvements.md)
 
 ### ⬆️ Layers
 
-![System Layer Diagram](doc/TaskMate_layers_v3.png)
+![System Layer Diagram](doc/TaskMate_layers_v5.png)
 
 The new TaskMate layer configuration provides a **stronger isolation between system components**.
 Each layer communicates through **well-defined interfaces**,
@@ -102,8 +102,6 @@ User tasks can still **benefit from all system features** —
 such as messaging, timing, I/O, and services —
 but always through indirect calls via the SysCall, SysServices and HAL layers.
 This design significantly improves **stability** and **portability**.
-
-See : [Info about run level](doc/run_level.md)
 
 ---
 
@@ -123,6 +121,7 @@ This mechanism defines system initialization and resource mapping
 **without manually hardcoding** any configuration.
 
 See : [More about autoCode](doc/autoCode.md)
+See : [Info about run level](doc/run_level.md)
 
 ---
 
@@ -153,7 +152,7 @@ See the `LICENSE` file for full details.
 
 ---
 
-### 📟  Hardware setup
+### 📟  Hardware setup : avr atmega2560 on Arduino mega board
 
 ![So called wired hardware](doc/hardware_mega.jpg)
 
@@ -163,7 +162,7 @@ See the `LICENSE` file for full details.
 
 - **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
-- **C Style Guide** — best practices (pointers, errors, etc.): see [code best pratices](./doc/code_best_practices.md)
+- **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/code_best_practices.md)
 
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6

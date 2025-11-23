@@ -49,7 +49,7 @@ for the target architecture and how they should be initialized.
 | User Tasks   | `src/tasks/tasks_init.rc`              | User-level or application tasks          |
 
 The target architecture is usually passed from the Makefile,
-and determines which folder under `/src/hal/` is parsed.
+and determines which folder under `hal/` is parsed.
 
 ---
 
@@ -59,9 +59,11 @@ and determines which folder under `/src/hal/` is parsed.
 
 | File                        | Role                                                                 |
 |------------------------------|----------------------------------------------------------------------|
-| `scr/sysCore/autoInclude.h`      | Centralized header including all driver/service/task headers.        |
-| `src/sysCore/include/autoAlloc.h`        | Static allocation tables for modules.                                |
-| `src/sysCore/initSys.c`      | Low-level initialization routines executed during system startup.    |
+| `scr/sysCore/autoInclude_system.h`	| Centralized header including all service/task headers.        |
+| `scr/hal/autoInclude_hal.h`      		| Centralized header including target hal/arch hal/mcu hal/board. |
+| `src/sysCore/include/autoAlloc.h`     | Static allocation tables for modules.                                |
+| `src/sysCore/initSys.c`      			| modules data base initialization routines executed during system startup.    |
+| `src/sysCore/runLevel.c`      		| run level initialization routines executed during system startup.    |
 
 ---
 
