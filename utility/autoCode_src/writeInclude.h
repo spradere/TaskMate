@@ -23,7 +23,10 @@
 
 #include "utility/autoCode_src/autoCode.h"
 
-void writeInclude(const modules_database_t *data_base, const char *file_name,
+#define INCLUDE_SYSTEM_PART 1
+#define INCLUDE_HAL_PART 2
+
+void writeInclude(const modules_database_t *data_base, const int type ,const char *file_name,
 		const char *arch, const char *mcu, const char *board);
 
 #endif

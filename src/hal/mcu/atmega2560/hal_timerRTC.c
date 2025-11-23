@@ -23,7 +23,8 @@
 #include <util/atomic.h>
 #include <avr/interrupt.h>
 
-#include "sysCore/TaskMate_private_extern.h"
+#include "hal/autoInclude_hal.h"
+//#include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/realTimeClock.h"
 
 const int hal_timerRTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625

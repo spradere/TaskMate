@@ -21,9 +21,10 @@
 
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(const modules_database_t *data_base, const char *file_name, const char *arch,
+void writeInclude(const modules_database_t *data_base, const int type, const char *file_name, const char *arch,
 				  const char *mcu, const char *board)
 {
+	// open file
 	FILE *file_include = fopen(file_name, "w");
 	if( file_include == NULL )
 	{
@@ -32,57 +33,93 @@ void writeInclude(const modules_database_t *data_base, const char *file_name, co
 		exit(1);
 	}
 
+	// generate multiple include guard name
+	char cmd[512];
+	char guard_name[512];
+
+	snprintf(cmd, sizeof(cmd),
+             "printf \"%s\" | sed 's#.*/##' | tr a-z A-Z | sed 's/[^A-Z0-9_]/_/g'",
+             file_name);
+
+    FILE *fp = popen(cmd, "r");
+    if (!fp){msgError("failed open cmd output"); exit(0);}
+
+    if (!fgets(guard_name, sizeof(guard_name), fp))
+    {
+        pclose(fp);
+		msgError("failed get string form cmd output");
+		exit(0);
+    }
+
+	msgInfo("generated guard name :");
+	printf("\t %s\n",guard_name);
+
+	// write code
 	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	fprintf(file_include, "// Auto generated code, do not edit !\n");
 	fprintf(file_include, "// any changes will be lost\n");
 	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 
-	fprintf(file_include, "#ifndef AUTOINCLUDE_H\n");
-	fprintf(file_include, "#define AUTOINCLUDE_H\n\n");
-
-	fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n",arch);
-	fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n",arch);
-	fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n",arch);
-	fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
-	fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);
-
-	fprintf(file_include, "#include \"hal/hal_api.h\"\n");
-
-	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
+	if( type == INCLUDE_HAL_PART)
 	{
-		if(mod->modules[i].hal_source == HAL_ARCH)
-		{
-			//fprintf(file_include, "#include \"hal/arch/%s/%s.h\"\n", arch, mod->modules[i].name);
-		}
+		fprintf(file_include, "#ifndef %s\n", guard_name);
+		fprintf(file_include, "#define %s\n\n", guard_name);
 
-		if(mod->modules[i].hal_source == HAL_MCU)
-		{
-			//fprintf(file_include, "#include \"hal/mcu/%s/%s.h\"\n", mcu, mod->modules[i].name);
-		}
+		fprintf(file_include, "#include <stdint.h>\n\n");
 
-		if(mod->modules[i].hal_source == HAL_BOARD)
-		{
-			fprintf(file_include, "#include \"hal/board/%s/%s.h\"\n", board, mod->modules[i].name);
-		}
+		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n",arch);
+		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n",arch);
+		fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n",arch);
+		fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
+		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);
 
+		fprintf(file_include, "#include \"hal/hal_api.h\"\n");
 	}
-	fprintf(file_include, "\n");
 
-	mod = &data_base->modules_type[MODULES_SERVICES_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
+	if( type == INCLUDE_SYSTEM_PART)
 	{
-		fprintf(file_include, "#include \"services/%s.h\"\n", mod->modules[i].name);
-	}
-	fprintf(file_include, "\n");
+		fprintf(file_include, "#ifndef %s\n", guard_name);
+		fprintf(file_include, "#define %s\n\n",guard_name);
 
-	mod = &data_base->modules_type[MODULES_TASKS_ID];
+		fprintf(file_include, "#include <stdint.h>\n\n");
 
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(file_include, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+		const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
+
+		// todo remove this code when hal is done
+		for( int i = 0; i < mod->modules_count; i++ )
+		{
+			if(mod->modules[i].hal_source == HAL_ARCH)
+			{
+				//fprintf(file_include, "#include \"hal/arch/%s/%s.h\"\n", arch, mod->modules[i].name);
+			}
+
+			if(mod->modules[i].hal_source == HAL_MCU)
+			{
+				//fprintf(file_include, "#include \"hal/mcu/%s/%s.h\"\n", mcu, mod->modules[i].name);
+			}
+
+			if(mod->modules[i].hal_source == HAL_BOARD)
+			{
+				fprintf(file_include, "#include \"hal/board/%s/%s.h\"\n", board, mod->modules[i].name);
+			}
+
+		}
+		fprintf(file_include, "\n");
+
+		mod = &data_base->modules_type[MODULES_SERVICES_ID];
+
+		for( int i = 0; i < mod->modules_count; i++ )
+		{
+			fprintf(file_include, "#include \"services/%s.h\"\n", mod->modules[i].name);
+		}
+		fprintf(file_include, "\n");
+
+		mod = &data_base->modules_type[MODULES_TASKS_ID];
+
+		for( int i = 0; i < mod->modules_count; i++ )
+		{
+			fprintf(file_include, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+		}
 	}
 
 	fprintf(file_include,"\n#endif\n");
