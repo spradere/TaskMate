@@ -2,23 +2,24 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License
- * v1.0. See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a
- * separate license. Commercial licensing inquiries:
- * https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a separate license.
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include <avr/io.h>
+/**
+ * @file hal_usart.c
+ * @brief hal usart implemetation
+ *
+ * @todo nothing
+ */
+
 #include <avr/interrupt.h>
-
-#include "sysCall/TaskMate_public.h"
-#include "hal/board/arduino_mega/usart1.h"
-
-#define USART1_BAUD_RATE 9600
+#include "hal/hal_api.h"
 
 // Circular buffers
 #define USART1_BUFFER_SIZE 128
@@ -28,7 +29,7 @@ static volatile uint8_t buffer_tx[USART1_BUFFER_SIZE];
 static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 
-void usart1Init(void)
+void hal_usartInit(void)
 {
 	uint16_t ubrr = (F_CPU / (16UL * USART1_BAUD_RATE)) - 1;
 
@@ -39,12 +40,12 @@ void usart1Init(void)
 	UCSR1C = (1 << UCSZ11) | (1 << UCSZ10); // 8-bit data, 1 stop bit, no parity
 }
 
-void usart1Start(void)
+void hal_usartStart(void)
 {
 	UCSR1B |= (1 << RXCIE1); // enable Rx interrupt
 }
 
-void usart1Stop(void)
+void hal_usartStop(void)
 {
 	// nothing to do ?
 }
@@ -63,7 +64,7 @@ ISR(USART1_RX_vect)
 }
 
 // Read a character from Rx buffer (non-blocking)
-errorCode_t usart1Read(uint8_t *data)
+errorCode_t hal_usartRead(uint8_t *data)
 {
 	if( buffer_rx_tail == buffer_rx_head ) { return ERR_USART1_RX_BUFFER_EMPTY; }
 
@@ -73,7 +74,7 @@ errorCode_t usart1Read(uint8_t *data)
 }
 
 // Write a character to Tx buffer
-errorCode_t usart1WriteChar(uint8_t data)
+errorCode_t hal_usartWriteChar(uint8_t data)
 {
 	uint8_t next_head = (buffer_tx_head + 1) % USART1_BUFFER_SIZE;
 	if( next_head == buffer_tx_tail ) { return ERR_USART1_TX_BUFFER_FULL; }
@@ -84,7 +85,7 @@ errorCode_t usart1WriteChar(uint8_t data)
 }
 
 // send Tx buffer to usart
-void usart1SendTXBuffer(void)
+void hal_usartSendTXBuffer(void)
 {
 	while( buffer_tx_tail != buffer_tx_head ) // test if tx buffer empty
 	{
@@ -96,18 +97,18 @@ void usart1SendTXBuffer(void)
 }
 
 // test if Rx buffer is empty
-errorCode_t usart1TestBufferRx(void)
+errorCode_t hal_usartTestBufferRx(void)
 {
 	if( buffer_rx_tail == buffer_rx_head ) { return ERR_USART1_RX_BUFFER_EMPTY; }
 	return ERR_SUCCESS;
 }
 
 // write string to Tx buffer
-errorCode_t usart1WriteString(const char *str)
+errorCode_t hal_usartWriteString(const char *str)
 {
 	while( *str )
 	{
-		if( usart1WriteChar(*str++) == ERR_USART1_TX_BUFFER_FULL ) { break; };
+		if( hal_usartWriteChar(*str++) == ERR_USART1_TX_BUFFER_FULL ) { break; };
 	}
 	return ERR_SUCCESS;
 }

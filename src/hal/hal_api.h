@@ -22,7 +22,9 @@
 #ifndef HAL_API_H
 #define HAL_API_H
 
+#include "sysCall/error.h"
 #include "hal/autoInclude_hal.h"
+
 
 void hal_archInit();
 void hal_mcuInit();
@@ -58,6 +60,15 @@ void hal_lcdStop(void);
 void hal_lcdClear(void);
 void hal_lcdSetCursor(uint8_t row, uint8_t col);
 void hal_lcdWriteString(const char *str);
+
+void hal_usartInit(void);
+void hal_usartStart(void);
+void hal_usartStop(void);
+errorCode_t hal_usartRead(uint8_t *data);
+errorCode_t hal_usartWriteChar(uint8_t data);
+void hal_usartSendTXBuffer(void);
+errorCode_t hal_usartTestBufferRx(void);
+errorCode_t hal_usartWriteString(const char *str);
 
 // board
 void hal_inBoardLed(uint8_t action);
