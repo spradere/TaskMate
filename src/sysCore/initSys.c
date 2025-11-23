@@ -93,14 +93,14 @@ void initDrivers(void)
 		.start = hal_i2cStart,
 		.stop = hal_i2cStop
 	};
-	const char *driver3_name = "usart1";
+	const char *driver3_name = "hal_usart";
 	modules.drivers[3]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver3_name,
 		.status = 1,
-		.init = usart1Init,
-		.start = usart1Start,
-		.stop = usart1Stop
+		.init = hal_usartInit,
+		.start = hal_usartStart,
+		.stop = hal_usartStop
 	};
 	const char *driver4_name = "hal_lcd";
 	modules.drivers[4]=(module_item_driver_t)

@@ -29,7 +29,7 @@
 // Send message to :
 //#include "hal/board/arduino_mega/lcdAMC2004.h"
 #include "hal/hal_api.h"
-#include "hal/board/arduino_mega/usart1.h"
+//#include "hal/board/arduino_mega/usart1.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -54,7 +54,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : lcd -> hal", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : usart -> hal", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -113,16 +113,16 @@ void msgProcess(void)
 
 				case MSG_TO_USART1:
 
-					usart1WriteString(channels[channel].text);
-					usart1SendTXBuffer();
+					hal_usartWriteString(channels[channel].text);
+					hal_usartSendTXBuffer();
 					break;
 
 				case MSG_TO_NULL:
 					break;
 
 				default:
-					usart1WriteString("[msg.c 118] error unknow destination\n");
-					usart1SendTXBuffer();
+					hal_usartWriteString("[msg.c 118] error unknow destination\n");
+					hal_usartSendTXBuffer();
 			}
 			channels[channel].status &= ~(1 << MSG_FLAG_IN_USE);
 		}
