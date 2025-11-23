@@ -48,7 +48,4 @@ void hal_timerRTCStop(void)
 	TIMSK3 &= ~(1 << OCIE3A);
 }
 
-ISR(TIMER3_COMPA_vect)
-{
-	realTimeClock();
-}
+ISR(TIMER3_COMPA_vect) { realTimeClock(); }

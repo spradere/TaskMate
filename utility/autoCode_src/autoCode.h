@@ -43,7 +43,6 @@ typedef struct
 {
 	char name[MODULES_NAME_SIZE_MAX];
 	module_status_t status;
-	int hal_source;
 
 } module_item_t;
 

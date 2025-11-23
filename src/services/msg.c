@@ -19,17 +19,12 @@
  * @todo add free channel
  */
 
-//#include <avr/io.h>
-
 #include "sysCall/TaskMate_public.h"
 #include "services/msg.h"
 #include "libc/string.h"
 
-
 // Send message to :
-//#include "hal/board/arduino_mega/lcdAMC2004.h"
 #include "hal/hal_api.h"
-//#include "hal/board/arduino_mega/usart1.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -54,7 +49,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : usart -> hal", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : hal clean", MSG_TO_LCD);
 	}
 
 	msgProcess();

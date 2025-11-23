@@ -38,7 +38,6 @@ void scheduler()
 	//**timer1Stop();
 	hal_timerSchedulerStop();
 
-
 	// todo -> add stack overflow test
 
 	// todo -> add system wide error handler
