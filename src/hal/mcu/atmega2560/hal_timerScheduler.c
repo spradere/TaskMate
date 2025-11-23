@@ -43,18 +43,17 @@ void hal_timerSchedulerStart(void)
 {
 	TCNT1 = 0;
 	// start by enabling source
-	//WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> CTC mode
-	TCCR1A &= ~( (1 << WGM11) | (1 << WGM10) );
+	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> CTC mode
+	TCCR1A &= ~((1 << WGM11) | (1 << WGM10));
 	TCCR1B |= (1 << WGM12);
 	TCCR1B &= ~(1 << WGM13);
-
 }
 
 void hal_timerSchedulerStop(void)
 {
 	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> no source, timer stopped
-	TCCR1A &= ~( (1 << WGM11) | (1 << WGM10) );
-	TCCR1B &= ~( (1 << WGM13) | (1 << WGM12) );
+	TCCR1A &= ~((1 << WGM11) | (1 << WGM10));
+	TCCR1B &= ~((1 << WGM13) | (1 << WGM12));
 }
 
 void hal_timerSchedulerLoad(void)

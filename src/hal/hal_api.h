@@ -25,7 +25,6 @@
 #include "sysCall/error.h"
 #include "hal/autoInclude_hal.h"
 
-
 void hal_archInit();
 void hal_mcuInit();
 void hal_boardInit();
@@ -35,7 +34,7 @@ void hal_boardInit();
 #define HAL_IN_BOARD_LED_TOGGLE 2
 
 // arch
-void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t  *stack_top);
+void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top);
 
 // mcu
 void hal_timerSchedulerInit();

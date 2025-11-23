@@ -21,7 +21,7 @@
 
 #include <avr/io.h>
 
-#define AVR8_PUSH_ALL_REGS                                                                                        \
+#define AVR8_PUSH_ALL_REGS                                                                                   \
 	"push r0 \n\t"                                                                                           \
 	"in r0, __SREG__ \n\t"                                                                                   \
 	"push r0 \n\t"                                                                                           \
@@ -57,7 +57,7 @@
 	"push r30 \n\t"                                                                                          \
 	"push r31 \n\t"
 
-#define AVR8_POP_ALL_REGS                                                                                         \
+#define AVR8_POP_ALL_REGS                                                                                    \
 	"pop r31 \n\t"                                                                                           \
 	"pop r30 \n\t"                                                                                           \
 	"pop r29 \n\t"                                                                                           \
@@ -93,27 +93,12 @@
 	"out __SREG__, r0 \n\t"                                                                                  \
 	"pop r0	\n\t"
 
-static inline __attribute__((always_inline)) void hal_contextSave()
-{
-	asm volatile( AVR8_PUSH_ALL_REGS );
-}
+static inline __attribute__((always_inline)) void hal_contextSave() { asm volatile(AVR8_PUSH_ALL_REGS); }
 
-static inline __attribute__((always_inline)) void hal_contextRestore()
-{
-	asm volatile( AVR8_POP_ALL_REGS );
-}
+static inline __attribute__((always_inline)) void hal_contextRestore() { asm volatile(AVR8_POP_ALL_REGS); }
 
-static inline __attribute__((always_inline)) void hal_returnFromInterupt()
-{
-	asm volatile("reti \n\t");
-}
+static inline __attribute__((always_inline)) void hal_returnFromInterupt() { asm volatile("reti \n\t"); }
 
-static inline __attribute__((always_inline)) void hal_setGlobalInterupt()
-{
-	asm volatile("sei \n\t");
-}
+static inline __attribute__((always_inline)) void hal_setGlobalInterupt() { asm volatile("sei \n\t"); }
 
-static inline __attribute__((always_inline)) void hal_clearGlobalInterupt()
-{
-	asm volatile("cli \n\t");
-}
+static inline __attribute__((always_inline)) void hal_clearGlobalInterupt() { asm volatile("cli \n\t"); }
