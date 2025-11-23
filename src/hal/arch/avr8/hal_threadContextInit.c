@@ -20,7 +20,7 @@
  */
 
 #include <avr/io.h>
-#include "hal/autoInclude_hal.h"
+#include "hal/hal_api.h"
 
 #define AVR_REGISTER_COUNT 32 // from R0 to R31
 

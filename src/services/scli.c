@@ -20,7 +20,7 @@
  */
 
 #include <avr/io.h>
-
+#include <stdint.h>
 #include "sysCall/TaskMate_public.h"
 #include "hal/board/arduino_mega/usart1.h"
 #include "services/scli.h"

@@ -23,7 +23,8 @@
 #include <util/atomic.h>
 #include <avr/interrupt.h>
 
-#include "hal/autoInclude_hal.h"
+#include "hal/hal_api.h"
+
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/scheduler.h"
 

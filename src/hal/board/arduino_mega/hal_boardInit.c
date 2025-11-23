@@ -18,8 +18,7 @@
  * @todo nothing
  */
 
-#include "hal/autoInclude_hal.h"
-#include "hal/board/arduino_mega/board_define.h"
+#include "hal/hal_api.h"
 
 void hal_boardInit()
 {

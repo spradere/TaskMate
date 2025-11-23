@@ -19,6 +19,6 @@
  * @todo nothing
  */
 
-#include "hal/autoInclude_hal.h"
+#include "hal/hal_api.h"
 
 __attribute__((weak)) void hal_inBoardLed(uint8_t action){}

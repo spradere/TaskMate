@@ -73,7 +73,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n",mcu);
 		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n",board);
 
-		fprintf(file_include, "#include \"hal/hal_api.h\"\n");
+		//fprintf(file_include, "#include \"hal/hal_api.h\"\n");
 	}
 
 	if( type == INCLUDE_SYSTEM_PART)

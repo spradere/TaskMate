@@ -26,6 +26,9 @@
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCall/sysCall.h"
 
+#include "hal/autoInclude_hal.h"
+#include "hal/hal_api.h"
+
 
 static uint8_t system_status = 0;
 
