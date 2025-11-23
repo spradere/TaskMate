@@ -3,4 +3,4 @@
 
 usart1 -RUN_CORE
 
-lcdAMC2004
+hal_lcd

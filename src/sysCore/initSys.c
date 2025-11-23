@@ -88,7 +88,7 @@ void initDrivers(void)
 	modules.drivers[2]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver2_name,
-		.status = 2,
+		.status = 1,
 		.init = hal_i2cInit,
 		.start = hal_i2cStart,
 		.stop = hal_i2cStop
@@ -102,14 +102,14 @@ void initDrivers(void)
 		.start = usart1Start,
 		.stop = usart1Stop
 	};
-	const char *driver4_name = "lcdAMC2004";
+	const char *driver4_name = "hal_lcd";
 	modules.drivers[4]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver4_name,
 		.status = 2,
-		.init = lcdAMC2004Init,
-		.start = lcdAMC2004Start,
-		.stop = lcdAMC2004Stop
+		.init = hal_lcdInit,
+		.start = hal_lcdStart,
+		.stop = hal_lcdStop
 	};
 	// [/tag]
 }

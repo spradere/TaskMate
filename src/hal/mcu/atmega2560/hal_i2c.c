@@ -22,7 +22,7 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "hal/autoInclude_hal.h"
+#include "hal/hal_api.h"
 
 void hal_i2cInit(void)
 {
