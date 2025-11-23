@@ -14,7 +14,8 @@
 
 #include <util/delay.h>
 #include "sysCall/TaskMate_public.h"
-#include "hal/board/arduino_mega/i2c.h"
+//#include "hal/board/arduino_mega/i2c.h"
+#include "hal/autoInclude_hal.h"
 #include "hal/board/arduino_mega/lcdAMC2004.h"
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
@@ -50,10 +51,10 @@ void lcdAMC2004Stop(void)
 
 void lcdAMC2004SendCommand(uint8_t command)
 {
-	i2cCommStart(LCDAMC2004_I2C_ADDR);
-	i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
-	i2cWrite(command);
-	i2cCommStop();
+	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
+	hal_i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
+	hal_i2cWrite(command);
+	hal_i2cCommStop();
 	_delay_us(200); // Small delay for LCD to process the command
 }
 
@@ -71,9 +72,9 @@ void lcdAMC2004SetCursor(uint8_t row, uint8_t col)
 
 void lcdAMC2004WriteString(const char *str)
 {
-	i2cCommStart(LCDAMC2004_I2C_ADDR);
-	i2cWrite(LCDAMC2004_DATA);
+	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
+	hal_i2cWrite(LCDAMC2004_DATA);
 
-	while( *str ) { i2cWrite(*str++); }
-	i2cCommStop();
+	while( *str ) { hal_i2cWrite(*str++); }
+	hal_i2cCommStop();
 }

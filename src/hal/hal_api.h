@@ -30,8 +30,10 @@ void hal_boardInit();
 #define HAL_IN_BOARD_LED_ON 1
 #define HAL_IN_BOARD_LED_TOGGLE 2
 
-void hal_inBoardLed(uint8_t action);
+// arch
+void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t  *stack_top);
 
+// mcu
 void hal_timerSchedulerInit();
 void hal_timerSchedulerStart();
 void hal_timerSchedulerStop();
@@ -41,6 +43,15 @@ void hal_timerRTCInit();
 void hal_timerRTCStart();
 void hal_timerRTCStop();
 
-void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t  *stack_top);
+void hal_i2cInit(void);
+void hal_i2cStart(void);
+void hal_i2cStop(void);
+uint8_t hal_i2cCommStart(uint8_t address);
+void hal_i2cCommStop(void);
+uint8_t hal_i2cWrite(uint8_t data);
+
+
+// board
+void hal_inBoardLed(uint8_t action);
 
 #endif

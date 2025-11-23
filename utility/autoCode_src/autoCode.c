@@ -49,7 +49,6 @@
 #include "utility/autoCode_src/parseInitrc.h"
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/printModules.h"
-#include "utility/autoCode_src/tokenizer.h"
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/writeInclude.h"
 

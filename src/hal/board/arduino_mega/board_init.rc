@@ -1,7 +1,6 @@
 # drivers init.rc
 # default run level RUN_DRIVER
 
-i2c -RUN_CORE
 usart1 -RUN_CORE
 
 lcdAMC2004
