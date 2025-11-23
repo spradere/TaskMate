@@ -133,24 +133,34 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 	const module_type_t *mod;
 	int type;
 
-	for(int j=0; j<2; j++)
+	for( int j = 0; j < 2; j++ )
 	{
-		if( j == 0 ){mod = &data_base->modules_type[MODULES_SERVICES_ID]; type = (1 << MODULES_THREAD_TYPE_SYSTEM); }
-		if( j == 1 ){mod = &data_base->modules_type[MODULES_TASKS_ID]; type = (1 << MODULES_THREAD_TYPE_USER); }
+		if( j == 0 )
+		{
+			mod = &data_base->modules_type[MODULES_SERVICES_ID];
+			type = (1 << MODULES_THREAD_TYPE_SYSTEM);
+		}
+		if( j == 1 )
+		{
+			mod = &data_base->modules_type[MODULES_TASKS_ID];
+			type = (1 << MODULES_THREAD_TYPE_USER);
+		}
 
 		for( int i = 0; i < mod->modules_count; i++ )
 		{
-			fprintf(file, "\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, &modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
-				mod->modules[i].name,threads_count, threads_count );
+			fprintf(file,
+					"\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, "
+					"&modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
+					mod->modules[i].name, threads_count, threads_count);
 
 			fprintf(file, "\tmodules.threads[%i].real_time_counter = 0;\n", threads_count);
 			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
 			fprintf(file, "\tmodules.threads[%i].name = (uint8_t *)thread%i_name;\n", threads_count,
-				threads_count);
+					threads_count);
 
 			fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
-				mod->modules[i].status | type);
+					mod->modules[i].status | type);
 
 			fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);
 
@@ -206,10 +216,10 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 		int threads_count = 0;
 		const module_type_t *mod;
 
-		for( int j=0; j<2; j++)
+		for( int j = 0; j < 2; j++ )
 		{
-			if( j == 0 ){mod = &data_base->modules_type[MODULES_SERVICES_ID];}
-			if( j == 1 ){mod = &data_base->modules_type[MODULES_TASKS_ID];}
+			if( j == 0 ) { mod = &data_base->modules_type[MODULES_SERVICES_ID]; }
+			if( j == 1 ) { mod = &data_base->modules_type[MODULES_TASKS_ID]; }
 
 			for( int i = 0; i < mod->modules_count; i++ )
 			{

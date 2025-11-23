@@ -86,12 +86,11 @@ int main(int argn, char *argv[])
 	snprintf(mcu_initrc_path, BUFFER_SIZE, "src/hal/mcu/%s/mcu_init.rc", mcu_name);
 	snprintf(board_initrc_path, BUFFER_SIZE, "src/hal/board/%s/board_init.rc", board_name);
 
-// todo remove hal_source_t when hal is done
-	parseInitrc(MODULES_DRIVERS_ID, HAL_ARCH, &data_base, arch_initrc_path);
-	parseInitrc(MODULES_DRIVERS_ID, HAL_MCU, &data_base, mcu_initrc_path);
-	parseInitrc(MODULES_DRIVERS_ID, HAL_BOARD, &data_base, board_initrc_path);
-	parseInitrc(MODULES_SERVICES_ID, HAL_NONE, &data_base, "src/services/services_init.rc");
-	parseInitrc(MODULES_TASKS_ID, HAL_NONE, &data_base, "src/tasks/tasks_init.rc");
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);
+	parseInitrc(MODULES_DRIVERS_ID, &data_base, board_initrc_path);
+	parseInitrc(MODULES_SERVICES_ID, &data_base, "src/services/services_init.rc");
+	parseInitrc(MODULES_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
 
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
@@ -101,7 +100,8 @@ int main(int argn, char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c");
 
 	// write headers
-	writeInclude(&data_base, INCLUDE_SYSTEM_PART, "src/sysCore/autoInclude_system.h", arch_name, mcu_name, board_name);
+	writeInclude(&data_base, INCLUDE_SYSTEM_PART, "src/sysCore/autoInclude_system.h", arch_name, mcu_name,
+				 board_name);
 	writeInclude(&data_base, INCLUDE_HAL_PART, "src/hal/autoInclude_hal.h", arch_name, mcu_name, board_name);
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 

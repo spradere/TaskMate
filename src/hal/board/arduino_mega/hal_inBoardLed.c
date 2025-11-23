@@ -24,11 +24,18 @@
 void hal_inBoardLed(uint8_t action)
 {
 
-switch(action)
+	switch( action )
 	{
-		case HAL_IN_BOARD_LED_OFF: IN_BOARD_LED_PORT &= ~(1 << IN_BOARD_LED_PIN); break;
-		case HAL_IN_BOARD_LED_ON: IN_BOARD_LED_PORT |= (1 << IN_BOARD_LED_PIN); break;
-		case HAL_IN_BOARD_LED_TOGGLE: IN_BOARD_LED_PORT ^= (1 << IN_BOARD_LED_PIN); break;
-		default: break;
+		case HAL_IN_BOARD_LED_OFF:
+			IN_BOARD_LED_PORT &= ~(1 << IN_BOARD_LED_PIN);
+			break;
+		case HAL_IN_BOARD_LED_ON:
+			IN_BOARD_LED_PORT |= (1 << IN_BOARD_LED_PIN);
+			break;
+		case HAL_IN_BOARD_LED_TOGGLE:
+			IN_BOARD_LED_PORT ^= (1 << IN_BOARD_LED_PIN);
+			break;
+		default:
+			break;
 	}
 }
