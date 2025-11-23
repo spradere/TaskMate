@@ -22,6 +22,8 @@
 #ifndef HAL_API_H
 #define HAL_API_H
 
+#include "hal/autoInclude_hal.h"
+
 void hal_archInit();
 void hal_mcuInit();
 void hal_boardInit();
@@ -50,6 +52,12 @@ uint8_t hal_i2cCommStart(uint8_t address);
 void hal_i2cCommStop(void);
 uint8_t hal_i2cWrite(uint8_t data);
 
+void hal_lcdInit(void);
+void hal_lcdStart(void);
+void hal_lcdStop(void);
+void hal_lcdClear(void);
+void hal_lcdSetCursor(uint8_t row, uint8_t col);
+void hal_lcdWriteString(const char *str);
 
 // board
 void hal_inBoardLed(uint8_t action);

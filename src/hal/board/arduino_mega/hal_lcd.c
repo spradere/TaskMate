@@ -2,21 +2,27 @@
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License
- * v1.0. See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a
- * separate license. Commercial licensing inquiries:
- * https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a separate license.
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
+/**
+ * @file hal_lcd.c
+ * @brief hal lcd implemetation
+ *
+ * @todo nothing
+ */
+
 #include <util/delay.h>
-#include "sysCall/TaskMate_public.h"
-//#include "hal/board/arduino_mega/i2c.h"
-#include "hal/autoInclude_hal.h"
-#include "hal/board/arduino_mega/lcdAMC2004.h"
+
+#include "hal/hal_api.h"
+
+void lcdAMC2004SendCommand(uint8_t command);
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
@@ -24,7 +30,7 @@
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-void lcdAMC2004Init(void)
+void hal_lcdInit(void)
 {
 	_delay_ms(50); // Wait for LCD to power up
 
@@ -38,13 +44,13 @@ void lcdAMC2004Init(void)
 	_delay_us(110);
 }
 
-void lcdAMC2004Start(void)
+void hal_lcdStart(void)
 {
-	lcdAMC2004Clear();
-	lcdAMC2004WriteString("lcdAMC2004 ready");
+	hal_lcdClear();
+	hal_lcdWriteString("lcdAMC2004 ready");
 }
 
-void lcdAMC2004Stop(void)
+void hal_lcdStop(void)
 {
 	// nothing to do.
 }
@@ -58,19 +64,19 @@ void lcdAMC2004SendCommand(uint8_t command)
 	_delay_us(200); // Small delay for LCD to process the command
 }
 
-void lcdAMC2004Clear(void)
+void hal_lcdClear(void)
 {
 	lcdAMC2004SendCommand(0x01);
 	_delay_ms(2);
 }
 
-void lcdAMC2004SetCursor(uint8_t row, uint8_t col)
+void hal_lcdSetCursor(uint8_t row, uint8_t col)
 {
 	const uint8_t row_offsets[] = {0x00, 0x40, 0x14, 0x54};
 	lcdAMC2004SendCommand(0x80 | (col + row_offsets[row]));
 }
 
-void lcdAMC2004WriteString(const char *str)
+void hal_lcdWriteString(const char *str)
 {
 	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
 	hal_i2cWrite(LCDAMC2004_DATA);

@@ -19,14 +19,16 @@
  * @todo add free channel
  */
 
-#include <avr/io.h>
+//#include <avr/io.h>
 
 #include "sysCall/TaskMate_public.h"
 #include "services/msg.h"
 #include "libc/string.h"
 
+
 // Send message to :
-#include "hal/board/arduino_mega/lcdAMC2004.h"
+//#include "hal/board/arduino_mega/lcdAMC2004.h"
+#include "hal/hal_api.h"
 #include "hal/board/arduino_mega/usart1.h"
 
 // variables
@@ -52,7 +54,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : i2c -> hal", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : lcd -> hal", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -97,7 +99,7 @@ void msgProcess(void)
 			{
 				case MSG_TO_LCD:
 
-					lcdAMC2004SetCursor(channels[channel].text[0], 0);
+					hal_lcdSetCursor(channels[channel].text[0], 0);
 					// Zap escape code for LCD line select
 					uint8_t i_src, i_dest = 0;
 					for( i_src = 1; channels[channel].text[i_dest] != 0; i_src++ )
@@ -106,7 +108,7 @@ void msgProcess(void)
 					}
 					channels[channel].text[i_dest] = 0;
 
-					lcdAMC2004WriteString(channels[channel].text);
+					hal_lcdWriteString(channels[channel].text);
 					break;
 
 				case MSG_TO_USART1:

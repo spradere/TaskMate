@@ -25,6 +25,7 @@
 #ifndef SYSCALL_H
 #define SYSCALL_H
 
+#include <stdint.h>
 /**
  * @brief Get thread ID
  *
