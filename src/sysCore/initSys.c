@@ -84,14 +84,14 @@ void initDrivers(void)
 		.start = hal_timerRTCStart,
 		.stop = hal_timerRTCStop
 	};
-	const char *driver2_name = "i2c";
+	const char *driver2_name = "hal_i2c";
 	modules.drivers[2]=(module_item_driver_t)
 	{
 		.name = (uint8_t *)driver2_name,
-		.status = 1,
-		.init = i2cInit,
-		.start = i2cStart,
-		.stop = i2cStop
+		.status = 2,
+		.init = hal_i2cInit,
+		.start = hal_i2cStart,
+		.stop = hal_i2cStop
 	};
 	const char *driver3_name = "usart1";
 	modules.drivers[3]=(module_item_driver_t)

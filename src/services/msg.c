@@ -52,7 +52,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : autoCode hal", MSG_TO_LCD);
+		msgWritreText(channel, "\3msg : i2c -> hal", MSG_TO_LCD);
 	}
 
 	msgProcess();

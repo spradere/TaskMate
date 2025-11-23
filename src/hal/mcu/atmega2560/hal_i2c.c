@@ -12,28 +12,35 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
+/**
+ * @file hal_i2c.c
+ * @brief hal i2c serial comm
+ *
+ * @todo nothing
+ */
+
 #include <avr/io.h>
 #include <util/twi.h>
-#include "sysCall/TaskMate_public.h"
-#include "hal/board/arduino_mega/i2c.h"
 
-void i2cInit(void)
+#include "hal/autoInclude_hal.h"
+
+void hal_i2cInit(void)
 {
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Prescaler = 1
 }
 
-void i2cStart(void)
+void hal_i2cStart(void)
 {
 	TWCR = (1 << TWEN); // Enable TWI
 }
 
-void i2cStop(void)
+void hal_i2cStop(void)
 {
 	TWCR &= ~(1 << TWEN); // Stop TWI
 }
 
-uint8_t i2cCommStart(uint8_t address)
+uint8_t hal_i2cCommStart(uint8_t address)
 {
 	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT); // | (1 << TWEA);
 	while( !(TWCR & (1 << TWINT)) );
@@ -54,9 +61,9 @@ uint8_t i2cCommStart(uint8_t address)
 	return 0; // Success
 }
 
-void i2cCommStop(void) { TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); }
+void hal_i2cCommStop(void) { TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); }
 
-uint8_t i2cWrite(uint8_t data)
+uint8_t hal_i2cWrite(uint8_t data)
 {
 	TWDR = data;
 	TWCR = (1 << TWEN) | (1 << TWINT);
