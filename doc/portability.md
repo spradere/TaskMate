@@ -37,6 +37,7 @@ Example: adding arm32v7m
 	- low-level interrupt handling.
 	- arch_init.rc entries for new drivers
 
+- Use the common HAL API headers from: `hal/halp_api.h`
 - Extend the Makefile to accept: `ARCH=arm32v7m`
 
 2️⃣ **New microcontroller (MCU)**
@@ -50,8 +51,7 @@ Example: adding stm32g474
 	- timers, UART, GPIO, I²C, ADC, …
 	- mcu_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `src/hal/api/`
-
+- Use the common HAL API headers from: `hal/halp_api.h`
 - Extend the Makefile to map: `MCU=stm32g474`
 
 3️⃣ **New board / platform (BOARD)**
@@ -65,6 +65,7 @@ Example: adding nucleoG474RE
 	- board-specific initialization
 	- board_init.rc entries for new drivers
 
+- Use the common HAL API headers from: `hal/halp_api.h`
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 
 

@@ -13,8 +13,8 @@
  */
 
 /**
- * @file hal_mcu_define.h
- * @brief hal mcu header
+ * @file mcu_define.h
+ * @brief mcu header
  *
  * @todo nothing
  */
