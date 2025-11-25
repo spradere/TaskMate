@@ -49,7 +49,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3msg : no global", MSG_TO_LCD);
+		msgWritreText(channel, "\3no global TaskMate 4", MSG_TO_LCD);
 	}
 
 	msgProcess();

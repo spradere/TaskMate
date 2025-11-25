@@ -1,8 +1,6 @@
 # Ignore compiled object files
 *.o
 utility/autoCode
-utility/autoCode2
-
 
 # Ignore dependency files
 *.d
@@ -21,5 +19,6 @@ utility/autoCode2
 *.hex
 .autoCode_stamp*
 
-# Ignore html documentation folder
+# Ignore folder
 html/
+buid/
