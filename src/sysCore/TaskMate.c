@@ -28,39 +28,49 @@
  * sysCallPreemptProtected(timeout, driver);
  */
 
-//#include "sysCore/autoInclude_system.h"
 #include "hal/hal_api.h"
 
+//#include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/autoAlloc.h"
-
-#include "sysCore/TaskMate_private_extern.h"
+#include "sysCore/modules.h"
 
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
 
 int main(void)
 {
-	// hal hardware init
-	hal_archInit();
-	hal_mcuInit();
-	hal_boardInit();
-
 	// system static allocation init
 	initDrivers();
 	initThreads();
 	runLevelInit();
 
+	// hal hardware init
+	hal_archInit();
+	hal_mcuInit();
+	hal_boardInit();
+
 	// start driver
+	// todo remove this code when run level is implemented
+	module_item_driver_t *mod_d;
+
 	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
 	{
-		(*modules.drivers[i].init)();
-		(*modules.drivers[i].start)();
+		//(*modules.drivers[i].init)();
+		//(*modules.drivers[i].start)();
+		mod_d = moduleDriverGetPointer(i);
+		(*(mod_d->init))();
+		(*(mod_d->start))();
 	}
 
 	// jump to current thread for first call and start system by enabling INT
-	modules.thread_current = 0;
+	//modules.thread_current = 0;
+	moduleThreadSetCurrent(0);
+	module_item_thread_t *mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
 
-	hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
+
+	//hal_setStackPointer((uintptr_t)modules.threads[modulesGetCurrent()].stack_pointer);
+	hal_setStackPointer((uintptr_t)mod_t->stack_pointer);
+
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();

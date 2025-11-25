@@ -19,7 +19,14 @@
  * @todo modules will be static + implement functions to acces module data base
  */
 
-#include "sysCore/modules.h"
 #include "sysCore/autoAlloc.h"
+#include "sysCore/modules.h"
 
+// todo static when all done
 modules_t modules;
+
+void moduleThreadSetCurrent(uint8_t n){ modules.thread_current = n;}
+uint8_t moduleThreadGetCurrent(){ return modules.thread_current; }
+
+module_item_driver_t *moduleDriverGetPointer(uint8_t id){ return &modules.drivers[id]; }
+module_item_thread_t *moduleThreadGetPointer(uint8_t id){ return &modules.threads[id]; }
