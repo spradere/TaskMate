@@ -28,7 +28,7 @@
  * sysCallPreemptProtected(timeout, driver);
  */
 
-#include "sysCore/autoInclude_system.h"
+//#include "sysCore/autoInclude_system.h"
 #include "hal/hal_api.h"
 
 #include "sysCore/autoAlloc.h"
