@@ -19,11 +19,6 @@
  * @todo Nothing
  */
 
-/**
- * @struct thread_item_t
- * @brief Represents a thread in TaskMate.
- */
-
 #ifndef MODULES_DEFINE_H
 #define MODULES_DEFINE_H
 
