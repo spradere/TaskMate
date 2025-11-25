@@ -55,7 +55,8 @@ backup:
 
 	# Run rsync
 	@printf "\033[0;33mRun rsync, output logged in log/rsync.log\033[0m\n"
-	rsync -av * --progress --delete --exclude "*.o" --exclude="html" "${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
+	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" \
+		"${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
 
 	# Umount
 	@printf "\033[0;33mUmount ${USB_DIR}\033[0m\n"

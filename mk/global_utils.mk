@@ -21,7 +21,7 @@
 clean:
 	@printf "\n\033[1;31mRemove files\033[0m\n\n"
 	rm -f ${OBJS} ${DEPS} build/TaskMate.*
-	rm -f ${AUTOCODE_TARGET} build/.autoCode_stamp*
+	rm -f ${AUTOCODE_TARGET} build/.autoCode_stamp* build/autoCode_*
 
 .PHONY: clean
 

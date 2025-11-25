@@ -26,14 +26,6 @@
 #define SYSCALL_H
 
 #include <stdint.h>
-/**
- * @brief Get thread ID
- *
- * @param none, calling thread is deternined by sysCall, not by the thread
- * itself.
- * @return thread ID
- */
-uint8_t sysCallGetThreadID(void);
 
 /** @defgroup RTC Real Time Clock
  *
@@ -71,7 +63,7 @@ uint16_t sysCallGetThreadTC(void);
  */
 void sysCallYieldHand(void);
 
-// system stauts flags
+// system status flags
 #define FLAG_COOP 0x01
 
 void sysCallClearFlag(uint8_t flag);

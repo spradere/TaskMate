@@ -26,12 +26,9 @@
 #include "sysCore/TaskMate_private_extern.h"
 #include "sysCall/sysCall.h"
 
-#include "hal/autoInclude_hal.h"
 #include "hal/hal_api.h"
 
 static uint8_t system_status = 0;
-
-uint8_t sysCallGetThreadID(void) { return modules.thread_current; }
 
 void sysCallSetThreadTC(uint16_t count)
 {
