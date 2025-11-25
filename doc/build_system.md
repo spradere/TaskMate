@@ -64,7 +64,7 @@ Short, intuitive commands for development, deployment, and backup.
                          |
                          | parses drivers_init.rc and tasks_init.rc
                          | generates autoInclude_system.h, autoInclude_hal.h and autoAlloc.h
-                         | generate code ine initSys.c and runLevel.c
+                         | generate code in initSys.c and runLevel.c
                          |
                          | autoCode check configuration validity:
                          |   - files name

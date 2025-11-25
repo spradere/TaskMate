@@ -44,7 +44,7 @@ ${AUTO_HEADERS}: ${AUTOCODE_STAMP}
 
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC}
 	@printf "\n\033[1;33minitrc have changed or autoCode.c -> run autoCode\033[0m\n\n"
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD}
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} > build/autoCode_${AUTOCODE_TIMESTAMP}
 	touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not avr-gcc
