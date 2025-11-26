@@ -10,7 +10,7 @@ void task1(void)
 	while( 1 )
 	{
 		PORTA ^= (1 << PA0);
-		sysCallSetThreadTC(50);
-		while( sysCallGetThreadTC() > 0 );
+		sysCallSetThreadRTC(50);
+		while( sysCallGetThreadRTC() > 0 );
 	}
 }
