@@ -19,18 +19,23 @@
  * @todo Add I2C external clock
  */
 
-#include "TaskMate_private_extern.h"
+#include "sysCore/autoAlloc.h"
+#include "sysCore/modules.h"
 #include "sysCore/realTimeClock.h"
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// realTimeClock is called by timer interupt sub routine
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// realTimeClock is called by hal_timerRTC interupt sub routine
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 void realTimeClock()
 {
 	// RTC decrement
+
+	module_item_thread_t *mod_t;
+
 	for( uint8_t i = 0; i < THREADS_COUNT; i++ )
 	{
-		if( modules.threads[i].real_time_counter > 0 ) { modules.threads[i].real_time_counter--; }
+		mod_t = moduleThreadGetPointer(i);
+		if( mod_t->real_time_counter > 0 ) { mod_t->real_time_counter--; }
 	}
 }

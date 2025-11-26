@@ -30,7 +30,6 @@
 
 #include "hal/hal_api.h"
 
-//#include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 
@@ -55,22 +54,15 @@ int main(void)
 
 	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
 	{
-		//(*modules.drivers[i].init)();
-		//(*modules.drivers[i].start)();
 		mod_d = moduleDriverGetPointer(i);
 		(*(mod_d->init))();
 		(*(mod_d->start))();
 	}
 
 	// jump to current thread for first call and start system by enabling INT
-	//modules.thread_current = 0;
 	moduleThreadSetCurrent(0);
 	module_item_thread_t *mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
-
-
-	//hal_setStackPointer((uintptr_t)modules.threads[modulesGetCurrent()].stack_pointer);
 	hal_setStackPointer((uintptr_t)mod_t->stack_pointer);
-
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();
