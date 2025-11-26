@@ -24,9 +24,8 @@
 
 #include "hal/hal_api.h"
 #include <util/atomic.h>
-//#include "sysCore/TaskMate_private_extern.h"
-#include "sysCore/modules.h"
 
+#include "sysCore/modules.h"
 #include "sysCall/sysCall.h"
 
 
