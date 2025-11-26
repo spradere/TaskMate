@@ -133,6 +133,8 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 	const module_type_t *mod;
 	int type;
 
+	fprintf(file,"\tmodule_item_thread_t *mod_t;\n");
+
 	for( int j = 0; j < 2; j++ )
 	{
 		if( j == 0 )
@@ -148,7 +150,10 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 		for( int i = 0; i < mod->modules_count; i++ )
 		{
-			fprintf(file,
+
+			fprintf(file,"\n\tmod_t = moduleThreadGetPointer(%i);\n", threads_count);
+
+			/*fprintf(file,
 					"\n\thal_threadContextInit(%s, &modules.threads[%i].stack_pointer, "
 					"&modules.threads[%i].stack[THREAD_STACK_SIZE -1 ]);\n",
 					mod->modules[i].name, threads_count, threads_count);
@@ -162,7 +167,21 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 			fprintf(file, "\tmodules.threads[%i].status = %i;\n", threads_count,
 					mod->modules[i].status | type);
 
-			fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);
+			fprintf(file, "\tmodules.threads[%i].main = %s;\n", threads_count, mod->modules[i].name);*/
+
+			fprintf(file,
+					"\n\thal_threadContextInit(%s, &(mod_t->stack_pointer), "
+					"&(mod_t->stack[THREAD_STACK_SIZE -1 ]) );\n",
+					mod->modules[i].name );
+
+			fprintf(file, "\tmod_t->real_time_counter = 0;\n");
+			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
+
+			fprintf(file, "\tmod_t->name = (uint8_t *)thread%i_name;\n", threads_count);
+
+			fprintf(file, "\tmod_t->status = %i;\n", mod->modules[i].status | type);
+
+			fprintf(file, "\tmod_t->main = %s;\n", mod->modules[i].name);
 
 			threads_count++;
 		}
@@ -173,11 +192,24 @@ static void writeDriversInit(modules_database_t *data_base, FILE *file)
 {
 	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
 
+	fprintf(file,"\tmodule_item_driver_t *mod_d;\n");
+
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
+		fprintf(file,"\n\tmod_d = moduleDriverGetPointer(%i);\n", i);
+
 		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
 
-		fprintf(file, "\tmodules.drivers[%i]=(module_item_driver_t)\n", i);
+		/*fprintf(file, "\tmodules.drivers[%i]=(module_item_driver_t)\n", i);
+		fprintf(file, "\t{\n");
+		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
+		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
+		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
+		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
+		fprintf(file, "\t\t.stop = %sStop\n", mod->modules[i].name);
+		fprintf(file, "\t};\n");*/
+
+		fprintf(file, "\t*(mod_d) = (module_item_driver_t)\n");
 		fprintf(file, "\t{\n");
 		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
 		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
@@ -185,6 +217,8 @@ static void writeDriversInit(modules_database_t *data_base, FILE *file)
 		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
 		fprintf(file, "\t\t.stop = %sStop\n", mod->modules[i].name);
 		fprintf(file, "\t};\n");
+
+
 	}
 }
 
