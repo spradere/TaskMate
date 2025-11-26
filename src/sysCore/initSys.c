@@ -19,12 +19,11 @@
  * @todo nothing
  */
 
-//#include <avr/io.h>
-#include "hal/hal_api.h"
-#include "sysCore/autoInclude_system.h"
-//#include "sysCore/TaskMate_private_extern.h"
-#include "sysCore/modules.h"
 
+#include "hal/hal_api.h"
+
+#include "sysCore/autoInclude_system.h"
+#include "sysCore/modules.h"
 #include "sysCore/initSys.h"
 
 

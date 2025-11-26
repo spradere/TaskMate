@@ -19,7 +19,7 @@
  * @todo Nothing
  */
 
-#include "sysCore/TaskMate_private_extern.h"
+#include "sysCore/autoAlloc.h"
 #include "sysCore/runLevel.h"
 
 static run_levels_t to_run;
