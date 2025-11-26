@@ -21,8 +21,12 @@
 
 #include "hal/hal_api.h"
 
-#include "sysCore/TaskMate_private_extern.h"
+//#include "sysCore/TaskMate_private_extern.h"
+#include "sysCore/modules.h"
+#include "sysCore/autoAlloc.h" // get THREADS_COUNT
+
 #include "sysCore/scheduler.h"
+#include "sysCall/sysCall.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // scheduler is called by timer interupt sub routine
@@ -30,20 +34,21 @@
 
 void scheduler()
 {
-	// enable global INT to let run timer3 RTC and usart1 sCLI
+	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	hal_setGlobalInterupt();
 
-	// stop timer1 prevent preemption of the scheduler itself -> panic
+	// stop hal_timerScheduler prevent preemption of the scheduler itself -> panic
 	// prevent scheduler eat thread time slice
-	//**timer1Stop();
 	hal_timerSchedulerStop();
 
 	// todo -> add stack overflow test
 
 	// todo -> add system wide error handler
 
-	// switch context
-	if( ++modules.thread_current == THREADS_COUNT ) { modules.thread_current = 0; }
+	// switch thread
+	uint8_t current = moduleThreadGetCurrent();
+	if( ++current == THREADS_COUNT ){ moduleThreadSetCurrent(0); }
+	else{ moduleThreadSetCurrent(current);}
 
 	// I'm alive blink in board led
 	static uint8_t alive_cnt = 0;
@@ -56,6 +61,5 @@ void scheduler()
 	// cooperative handling
 	sysCallClearFlag(FLAG_COOP);
 
-	//**timer1Start();
 	hal_timerSchedulerStart();
 }

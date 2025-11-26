@@ -31,7 +31,7 @@
 #include "hal/hal_api.h"
 
 //#include "sysCore/TaskMate_private_extern.h"
-#include "sysCore/autoAlloc.h"
+#include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 
 #include "sysCore/initSys.h"

@@ -22,22 +22,27 @@
  *
  */
 
+#include "hal/hal_api.h"
 #include <util/atomic.h>
-#include "sysCore/TaskMate_private_extern.h"
+//#include "sysCore/TaskMate_private_extern.h"
+#include "sysCore/modules.h"
+
 #include "sysCall/sysCall.h"
 
-#include "hal/hal_api.h"
+
 
 static uint8_t system_status = 0;
 
-void sysCallSetThreadTC(uint16_t count)
+void sysCallSetThreadRTC(uint16_t count)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
+	//ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetRTC( count ); }
 }
 
-uint16_t sysCallGetThreadTC(void)
+uint16_t sysCallGetThreadRTC(void)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].real_time_counter); }
+	//ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].real_time_counter); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { return moduleThreadGetRTC(); }
 }
 
 void sysCallYieldHand(void) { hal_timerSchedulerLoad(); }
