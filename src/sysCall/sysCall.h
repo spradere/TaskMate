@@ -16,9 +16,6 @@
  * @file sysCall.h
  * @brief sysCall header
  *
- * - This file contains sys call for threads.
- * - This layer prevent thread to mess up system.
- *
  * @todo Nothing
  */
 
@@ -27,40 +24,9 @@
 
 #include <stdint.h>
 
-/** @defgroup RTC Real Time Clock
- *
- * Each thread have one 16 bits time counter sycronized wtih other tasks.
- * If not zero the counter is decremented at 10 ms rate.
- */
-/** @{ */
+void sysCallSetThreadRTC(uint16_t count);
+uint16_t sysCallGetThreadRTC(void);
 
-/**
- * @brief set TC sys call
- *
- * @param RTC counter value.
- * @return nothing.
- */
-void sysCallSetThreadTC(uint16_t count);
-
-/**
- * @brief get RTC sys call
- *
- * @param none, calling thread is deternined by sysCall, not the thread itself.
- * @return TC counter load value.
- */
-
-uint16_t sysCallGetThreadTC(void);
-/** @} */
-
-/**
- * @brief yield hand to scheduler
- *
- * Used for cooperative mode, yield hand to scheduler by overflowing timer couter,
- * so the next thread will have a full time slice without adding more code.
- *
- * @param none.
- * @return nothing.
- */
 void sysCallYieldHand(void);
 
 // system status flags

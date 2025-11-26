@@ -28,5 +28,8 @@ modules_t modules;
 void moduleThreadSetCurrent(uint8_t n){ modules.thread_current = n;}
 uint8_t moduleThreadGetCurrent(){ return modules.thread_current; }
 
+void moduleThreadSetRTC(uint16_t count){modules.threads[modules.thread_current].real_time_counter = count; }
+uint16_t moduleThreadGetRTC(){ return modules.threads[modules.thread_current].real_time_counter; }
+
 module_item_driver_t *moduleDriverGetPointer(uint8_t id){ return &modules.drivers[id]; }
 module_item_thread_t *moduleThreadGetPointer(uint8_t id){ return &modules.threads[id]; }
