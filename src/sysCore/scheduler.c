@@ -21,16 +21,15 @@
 
 #include "hal/hal_api.h"
 
-//#include "sysCore/TaskMate_private_extern.h"
 #include "sysCore/modules.h"
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 
 #include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// scheduler is called by timer interupt sub routine
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// scheduler is called by hal_timerScheduler interupt sub routine
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 void scheduler()
 {
