@@ -16,7 +16,6 @@
  * @file modules.h
  * @brief module data base header
  *
- * @todo Nothing
  */
 
 #ifndef MODULES_H

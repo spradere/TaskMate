@@ -19,17 +19,14 @@
  * This file contains :
  * - system, drivers and thread initialisation
  *
- * @todo finish run level : add init service for startup
+ * @todo finish run level
  *
  * Now or later I will have to write a very lightweight libc,
  * designed for embedded systems with MCU. Not POSIX compliant.
  *
- *
- * sysCallPreemptProtected(timeout, driver);
  */
 
 #include "hal/hal_api.h"
-
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 

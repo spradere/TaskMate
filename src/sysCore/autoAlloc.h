@@ -6,17 +6,10 @@
 #ifndef AUTOALLOC_H
 #define AUTOALLOC_H
 
-#include "sysCore/modules_items.h"
+#include <stdint.h>
 
 #define DRIVERS_COUNT 5
 #define THREADS_COUNT 4
-
-typedef struct
-{
-	module_item_driver_t drivers[DRIVERS_COUNT];
-	module_item_thread_t threads[THREADS_COUNT];
-	uint8_t thread_current;
-} modules_t;
 
 #define RUN_LEVEL0_THREADS_COUNT 0
 #define RUN_LEVEL1_THREADS_COUNT 0

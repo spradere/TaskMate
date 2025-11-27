@@ -16,7 +16,6 @@
  * @file string.h
  * @brief header of libc string
  *
- * @todo nothing
  */
 
 #ifndef STRING_H

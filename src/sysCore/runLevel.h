@@ -16,7 +16,6 @@
  * @file runLevel.h
  * @brief run level header
  *
- * @todo Nothing
  */
 
 #ifndef RUNLEVEL_H

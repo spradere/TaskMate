@@ -15,7 +15,6 @@
  * @file printModules.h
  * @brief print table header
  *
- * @todo nothing
  */
 
 #ifndef PRINTMODULES_H

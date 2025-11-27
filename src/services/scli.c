@@ -16,7 +16,6 @@
  * @file scli.c
  * @brief implementation of serial command line interface
  *
- * @todo Implement commands, before develop error handler
  */
 
 #include <avr/io.h>

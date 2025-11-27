@@ -16,7 +16,6 @@
  * @file scheduler.h
  * @brief scheduler header
  *
- * @todo add free channel
  */
 
 #ifndef SCHEDULER_H

@@ -15,7 +15,6 @@
  * @file writeAlloc.h
  * @brief write alloc code header
  *
- * @todo nothing
  */
 
 #ifndef WRITE_ALLOC_H

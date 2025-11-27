@@ -16,7 +16,6 @@
  * @file hal_timerScheduler.c
  * @brief hal part of schuduler
  *
- * @todo nothing
  */
 
 #include <avr/io.h>
@@ -24,9 +23,9 @@
 #include <avr/interrupt.h>
 
 #include "hal/hal_api.h"
-
-#include "sysCore/TaskMate_private_extern.h"
+#include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
+#include "sysCall/sysCall.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
@@ -66,11 +65,15 @@ void hal_timerSchedulerLoad(void)
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
+	module_item_thread_t *mod_t;
+
 	// save current thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
 		hal_contextSave();
-		modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
+		mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
+		mod_t->stack_pointer = (stack_word_t *)hal_getStackPointer();
+		//modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
 	}
 
 	scheduler();
@@ -78,7 +81,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
+		mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
+		hal_setStackPointer((uintptr_t)mod_t->stack_pointer);
+		//hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
 		hal_contextRestore();
 		hal_returnFromInterupt();
 	}

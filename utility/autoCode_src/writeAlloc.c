@@ -16,7 +16,6 @@
  * @file writeAlloc.c
  * @brief write alloc code implemetation
  *
- * @todo nothing
  */
 
 #include "utility/autoCode_src/writeInclude.h"
@@ -40,8 +39,7 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 	fprintf(file_alloc, "#ifndef AUTOALLOC_H\n");
 	fprintf(file_alloc, "#define AUTOALLOC_H\n\n");
 
-	fprintf(file_alloc, "#include \"sysCore/modules_items.h\"\n");
-	fprintf(file_alloc, "\n");
+	fprintf(file_alloc, "#include <stdint.h>\n\n");
 
 	fprintf(file_alloc, "#define DRIVERS_COUNT %i\n",
 			data_base->modules_type[MODULES_DRIVERS_ID].modules_count);
@@ -50,13 +48,6 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 			 data_base->modules_type[MODULES_TASKS_ID].modules_count));
 
 	fprintf(file_alloc, "\n");
-
-	fprintf(file_alloc, "typedef struct\n");
-	fprintf(file_alloc, "{\n");
-	fprintf(file_alloc, "\tmodule_item_driver_t drivers[DRIVERS_COUNT];\n");
-	fprintf(file_alloc, "\tmodule_item_thread_t threads[THREADS_COUNT];\n");
-	fprintf(file_alloc, "\tuint8_t thread_current;\n");
-	fprintf(file_alloc, "} modules_t;\n\n");
 
 	// write run level
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )

@@ -16,10 +16,9 @@
  * @file runLevel.c
  * @brief run level code
  *
- * @todo Nothing
  */
 
-#include "sysCore/autoAlloc.h"
+#include "sysCore/autoAlloc.h" // get run_levels_t
 #include "sysCore/runLevel.h"
 
 static run_levels_t to_run;
