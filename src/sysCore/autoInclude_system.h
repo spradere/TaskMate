@@ -6,8 +6,6 @@
 #ifndef AUTOINCLUDE_SYSTEM_H
 #define AUTOINCLUDE_SYSTEM_H
 
-#include <stdint.h>
-
 #include "services/scli.h"
 #include "services/msg.h"
 

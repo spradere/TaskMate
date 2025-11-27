@@ -16,7 +16,6 @@
  * @file printf.c
  * @brief implementation of libc print formated
  *
- * @todo nothing
  */
 
 #include <avr/io.h>

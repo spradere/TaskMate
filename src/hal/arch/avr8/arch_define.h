@@ -16,7 +16,6 @@
  * @file arch_define.h
  * @brief hal achr header
  *
- * @todo nothing
  */
 
 #ifndef ARCH_DEFINE_H

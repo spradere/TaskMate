@@ -16,7 +16,6 @@
  * @file initSys.c
  * @brief Implementation for init system
  *
- * @todo nothing
  */
 
 

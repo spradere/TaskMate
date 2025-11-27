@@ -16,7 +16,6 @@
  * @file stdio.h
  * @brief header of libc stdio
  *
- * @todo nothing
  */
 
 #ifndef STDIO_H

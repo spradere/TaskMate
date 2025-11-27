@@ -19,7 +19,7 @@
  * @todo Add I2C external clock
  */
 
-#include "sysCore/autoAlloc.h"
+#include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
 #include "sysCore/realTimeClock.h"
 

@@ -16,7 +16,6 @@
  * @file mcu_define.h
  * @brief mcu header
  *
- * @todo nothing
  */
 
 #ifndef MCU_DEFINE_H

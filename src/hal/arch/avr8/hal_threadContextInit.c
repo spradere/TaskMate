@@ -16,7 +16,6 @@
  * @file hal_threadContextinit.c
  * @brief hal thread context init
  *
- * @todo nothing
  */
 
 #include <avr/io.h>

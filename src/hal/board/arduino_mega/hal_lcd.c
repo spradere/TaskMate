@@ -15,7 +15,6 @@
  * @file hal_lcd.c
  * @brief hal lcd implemetation
  *
- * @todo nothing
  */
 
 #include <util/delay.h>

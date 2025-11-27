@@ -15,7 +15,6 @@
  * @file writeInclude.h
  * @brief write include code header
  *
- * @todo nothing
  */
 
 #ifndef WRITE_INCLUDE_H

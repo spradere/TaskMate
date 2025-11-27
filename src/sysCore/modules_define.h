@@ -16,7 +16,6 @@
  * @file modules_define.h
  * @brief thread and driver definitions
  *
- * @todo Nothing
  */
 
 #ifndef MODULES_DEFINE_H

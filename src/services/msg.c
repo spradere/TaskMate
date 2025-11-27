@@ -49,7 +49,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3no global hal_sched 1", MSG_TO_LCD);
+		msgWritreText(channel, "\3noglobal hal_sched 7", MSG_TO_LCD);
 	}
 
 	msgProcess();

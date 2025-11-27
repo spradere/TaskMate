@@ -15,7 +15,6 @@
  * @file parseTag.h
  * @brief read tag header
  *
- * @todo nothing
  */
 
 #ifndef PARSETAG_H

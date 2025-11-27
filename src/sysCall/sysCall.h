@@ -16,7 +16,6 @@
  * @file sysCall.h
  * @brief sysCall header
  *
- * @todo Nothing
  */
 
 #ifndef SYSCALL_H

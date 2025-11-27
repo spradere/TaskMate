@@ -15,7 +15,6 @@
  * @file autoCode.h
  * @brief autoCode header definitions
  *
- * @todo
  */
 
 #ifndef AUTOCODE_H
