@@ -15,7 +15,6 @@
  * @file initrcCmdDispatch.h
  * @brief command dispatch header
  *
- * @todo nothing
  */
 
 #ifndef INITRC_CMD_DISPATCH_H

@@ -16,7 +16,6 @@
  * @file modules_items.h
  * @brief thread and driver struct
  *
- * @todo Nothing
  */
 
 /**

@@ -16,14 +16,17 @@
  * @file modules.c
  * @brief module data base
  *
- * @todo modules will be static + implement functions to acces module data base
  */
 
-#include "sysCore/autoAlloc.h"
+#include "sysCore/autoAlloc.h" // get DRIVERS_COUNT & THREADS_COUNT
 #include "sysCore/modules.h"
 
-// todo static when all done
-modules_t modules;
+static struct
+{
+	module_item_driver_t drivers[DRIVERS_COUNT];
+	module_item_thread_t threads[THREADS_COUNT];
+	uint8_t thread_current;
+} modules;
 
 void moduleThreadSetCurrent(uint8_t n){ modules.thread_current = n;}
 uint8_t moduleThreadGetCurrent(){ return modules.thread_current; }

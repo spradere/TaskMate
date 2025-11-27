@@ -16,7 +16,6 @@
  * @file hal_api.c
  * @brief hal api for fallback
  *
- * @todo nothing
  */
 
 #include "hal/hal_api.h"

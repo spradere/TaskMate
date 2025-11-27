@@ -16,7 +16,6 @@
  * @file hal_inBoardLed.h
  * @brief hal in board led arduino mega implematation
  *
- * @todo nothing
  */
 
 #include "hal/hal_api.h"

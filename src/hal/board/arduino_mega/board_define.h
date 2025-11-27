@@ -16,7 +16,6 @@
  * @file board_define.h
  * @brief arduino mega definitions
  *
- * @todo nothing
  */
 
 #ifndef BOARD_DEFINE_H

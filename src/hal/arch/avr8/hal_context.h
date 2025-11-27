@@ -16,7 +16,6 @@
  * @file hal_context.h
  * @brief hal context save / restore
  *
- * @todo nothing
  */
 
 #include <avr/io.h>

@@ -16,7 +16,6 @@
  * @file msg.h
  * @brief header of message display server
  *
- * @todo all
  */
 
 #ifndef MSG_H

@@ -19,8 +19,6 @@
  * - This file contains the headers for user tasks, system services and drivers
  * - Not the internal system core, forbinds.
  *
- * @todo Nothing
- *
  */
 
 #ifndef TASKMATE_PUBLIC_H

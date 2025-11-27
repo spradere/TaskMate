@@ -15,7 +15,6 @@
  * @file parseInitrc.h
  * @brief read init.rc file header
  *
- * @todo nothing
  */
 
 #ifndef PARSEINITRC_H

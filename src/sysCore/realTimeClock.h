@@ -16,7 +16,6 @@
  * @file realTimeClock.h
  * @brief header for RTC
  *
- * @todo Nothings
  */
 
 #ifndef RTC_H

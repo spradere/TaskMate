@@ -16,7 +16,6 @@
  * @file string.c
  * @brief implementation of libc string
  *
- * @todo nothing
  */
 
 #include <avr/io.h>

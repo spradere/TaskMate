@@ -16,7 +16,6 @@
  * @file initSys.h
  * @brief Header for init system
  *
- * @todo Nothing
  */
 
 #ifndef INITSYS_H

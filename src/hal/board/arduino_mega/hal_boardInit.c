@@ -15,7 +15,6 @@
  * @file hal_boardinit.c
  * @brief board init arduino mega implematation
  *
- * @todo nothing
  */
 
 #include "hal/hal_api.h"

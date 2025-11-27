@@ -15,7 +15,6 @@
  * @file hal_usart.c
  * @brief hal usart implemetation
  *
- * @todo nothing
  */
 
 #include <avr/interrupt.h>

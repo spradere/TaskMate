@@ -21,9 +21,8 @@
 
 #include "hal/hal_api.h"
 
-#include "sysCore/modules.h"
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
-
+#include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
 

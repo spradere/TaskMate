@@ -16,7 +16,6 @@
  * @file hal_stack.h
  * @brief hal stack handling
  *
- * @todo nothing
  */
 
 #include <avr/io.h>

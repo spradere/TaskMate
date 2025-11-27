@@ -16,7 +16,6 @@
  * @file parseTagDriversInit.c
  * @brief read tag witre code in file implemetation
  *
- * @todo nothing
  */
 
 #include "utility/autoCode_src/parseTag.h"
