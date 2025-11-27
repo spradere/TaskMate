@@ -15,7 +15,6 @@
  * @file tokenizer.h
  * @brief tokenizer header
  *
- * @todo nothing
  */
 
 #ifndef TOKENIZER_H

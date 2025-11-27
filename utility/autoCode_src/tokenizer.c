@@ -16,7 +16,6 @@
  * @file tokenizer.c
  * @brief tokenizer implementation, cut one line into tokens
  *
- * @todo Nothing
  */
 
 #include "utility/autoCode_src/tokenizer.h"

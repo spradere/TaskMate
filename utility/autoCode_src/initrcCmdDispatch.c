@@ -16,7 +16,6 @@
  * @file initrcCmdDispatch.c
  * @brief command parser for list file options
  *
- * @todo nothing
  */
 
 #include "utility/autoCode_src/initrcCmdDispatch.h"

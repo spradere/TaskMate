@@ -16,14 +16,15 @@
  * @file hal_api.h
  * @brief hal header api
  *
- * @todo nothing
  */
 
 #ifndef HAL_API_H
 #define HAL_API_H
 
-#include "sysCall/error.h"
+#include <stdint.h>
+
 #include "hal/autoInclude_hal.h"
+#include "sysCall/error.h"
 
 void hal_archInit();
 void hal_mcuInit();

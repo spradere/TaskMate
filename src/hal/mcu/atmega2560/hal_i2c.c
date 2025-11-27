@@ -16,7 +16,6 @@
  * @file hal_i2c.c
  * @brief hal i2c serial comm
  *
- * @todo nothing
  */
 
 #include <avr/io.h>

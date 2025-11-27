@@ -6,8 +6,6 @@
 #ifndef AUTOINCLUDE_HAL_H
 #define AUTOINCLUDE_HAL_H
 
-#include <stdint.h>
-
 #include "hal/arch/avr8/hal_stack.h"
 #include "hal/arch/avr8/hal_context.h"
 #include "hal/arch/avr8/arch_define.h"

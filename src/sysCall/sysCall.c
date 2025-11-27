@@ -18,8 +18,6 @@
  *
  * @warning This file contains ATOMIC material !
  *
- * @todo Add system call for driver lock, add runLevel() boot sequence
- *
  */
 
 #include "hal/hal_api.h"

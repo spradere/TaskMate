@@ -16,7 +16,6 @@
  * @file writeInclude.c
  * @brief write include code implemetation
  *
- * @todo nothing
  */
 
 #include "utility/autoCode_src/writeInclude.h"
@@ -55,7 +54,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	}
 
 	msgInfo("generated guard name :");
-	printf("\t %s\n", guard_name);
+	printf("\t %s\n\n", guard_name);
 
 	// write code
 	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
@@ -68,8 +67,6 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);
 
-		fprintf(file_include, "#include <stdint.h>\n\n");
-
 		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n", arch);
 		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n", arch);
 		fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n", arch);
@@ -81,8 +78,6 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	{
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);
-
-		fprintf(file_include, "#include <stdint.h>\n\n");
 
 		const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
 

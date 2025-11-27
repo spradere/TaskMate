@@ -16,7 +16,6 @@
  * @file printModules.c
  * @brief print modules content implemetation
  *
- * @todo nothing
  */
 
 #include "utility/autoCode_src/printModules.h"
