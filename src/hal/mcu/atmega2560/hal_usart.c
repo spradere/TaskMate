@@ -18,7 +18,7 @@
  */
 
 #include <avr/interrupt.h>
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 
 // Circular buffers
 #define USART1_BUFFER_SIZE 128

@@ -18,7 +18,7 @@
  *
  */
 
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 
 void hal_inBoardLed(uint8_t action)
 {
