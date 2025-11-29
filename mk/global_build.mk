@@ -19,7 +19,7 @@
 
 .MAIN: all
 
-all: ${AUTOCODE_STAMP} dependency_check ${TARGET}
+all: system_critical_check ${AUTOCODE_STAMP} dependency_check ${TARGET}
 	@printf "\n\033[1;33mAll done\033[0m\n\n"
 
 # Link
@@ -32,7 +32,9 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
 	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	${CC} ${CFLAGS} -c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
+	#${CC} ${CFLAGS} -c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
+	${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
+		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
 # Include dependency files used to compile *.c if related header was edited
 dependency_check:
@@ -51,3 +53,18 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC}
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
 	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
+
+system_critical_check:
+	@printf "\n\033[1;33mChecking forbidden system critical includes ...\033[0m\n\n"
+
+	@files="`grep -R -l ${HAL_SYSTEM_CRITICAL_PATTERN} ${SRC_DIR} || true`"; \
+	for f in $$files; do \
+	    allowed=no; \
+	    for ok in ${HAL_SYSTEM_CRITICAL_ALLOWED}; do \
+	        [ "$$f" = "$$ok" ] && allowed=yes; \
+	    done; \
+	    if [ "$$allowed" = "no" ]; then \
+	        printf "\033[1;31mForbidden include detected in: $$f\033[0m\n"; \
+	        exit 1; \
+	    fi; \
+	done
