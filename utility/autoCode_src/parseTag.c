@@ -132,7 +132,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 	const module_type_t *mod;
 	int type;
 
-	fprintf(file,"\tmodule_item_thread_t *mod_t;\n");
+	fprintf(file, "\tmodule_item_thread_t *mod_t;\n");
 
 	for( int j = 0; j < 2; j++ )
 	{
@@ -150,12 +150,12 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 		for( int i = 0; i < mod->modules_count; i++ )
 		{
 
-			fprintf(file,"\n\tmod_t = moduleThreadGetPointer(%i);\n", threads_count);
+			fprintf(file, "\n\tmod_t = moduleThreadGetPointer(%i);\n", threads_count);
 
 			fprintf(file,
 					"\n\thal_threadContextInit(%s, &(mod_t->stack_pointer), "
 					"&(mod_t->stack[THREAD_STACK_SIZE -1 ]) );\n",
-					mod->modules[i].name );
+					mod->modules[i].name);
 
 			fprintf(file, "\tmod_t->real_time_counter = 0;\n");
 			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
@@ -175,11 +175,11 @@ static void writeDriversInit(modules_database_t *data_base, FILE *file)
 {
 	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
 
-	fprintf(file,"\tmodule_item_driver_t *mod_d;\n");
+	fprintf(file, "\tmodule_item_driver_t *mod_d;\n");
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file,"\n\tmod_d = moduleDriverGetPointer(%i);\n", i);
+		fprintf(file, "\n\tmod_d = moduleDriverGetPointer(%i);\n", i);
 
 		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
 
@@ -191,8 +191,6 @@ static void writeDriversInit(modules_database_t *data_base, FILE *file)
 		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
 		fprintf(file, "\t\t.stop = %sStop\n", mod->modules[i].name);
 		fprintf(file, "\t};\n");
-
-
 	}
 }
 

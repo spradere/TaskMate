@@ -18,14 +18,12 @@
  *
  */
 
-
 #include "hal/hal_api.h"
-#include "hal/autoInclude_hal_system_critical.h"
+#include "hal/hal_system_critical_api.h"
 
 #include "sysCore/autoInclude_threads.h"
 #include "sysCore/modules.h"
 #include "sysCore/initSys.h"
-
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)

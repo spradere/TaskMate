@@ -65,12 +65,7 @@ int main(int argn, char *argv[])
 		exit(0);
 	}
 
-	target_t target =
-	{
-		.arch_name = argv[1],
-		.mcu_name = argv[2],
-		.board_name = argv[3]
-	};
+	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
 
 	msgInfo("target : ");
 	printf("\t %s -> %s -> %s \n", target.arch_name, target.mcu_name, target.board_name);
@@ -105,8 +100,9 @@ int main(int argn, char *argv[])
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_PART, "src/hal/autoInclude_hal.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_TARGET_PART, "src/hal/autoInclude_hal_target.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h",
+				 &target);
 
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
