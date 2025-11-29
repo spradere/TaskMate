@@ -24,7 +24,7 @@
 #include "libc/string.h"
 
 // Send message to :
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];

@@ -22,7 +22,7 @@
 #include <util/atomic.h>
 #include <avr/interrupt.h>
 
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 #include "hal/autoInclude_hal_system_critical.h"
 
 #include "sysCore/modules.h"
