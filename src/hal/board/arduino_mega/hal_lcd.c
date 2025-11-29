@@ -19,7 +19,7 @@
 
 #include <util/delay.h>
 
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 
 static void lcdAMC2004SendCommand(uint8_t command);
 

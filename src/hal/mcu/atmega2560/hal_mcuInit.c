@@ -11,6 +11,6 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 
 void hal_mcuInit() {}

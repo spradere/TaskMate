@@ -21,7 +21,7 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "hal/hal_api.h"
+#include "hal/hal_user_api.h"
 
 void hal_i2cInit(void)
 {
