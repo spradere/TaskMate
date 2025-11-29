@@ -20,6 +20,7 @@
  */
 
 #include "hal/hal_api.h"
+#include "hal/autoInclude_hal_system_critical.h"
 
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"

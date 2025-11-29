@@ -22,10 +22,11 @@
 
 #include "utility/autoCode_src/autoCode.h"
 
-#define INCLUDE_SYSTEM_PART 1
+#define INCLUDE_THREAD_PART 1
 #define INCLUDE_HAL_PART 2
+#define INCLUDE_HAL_SYSTEM_CRITICAL_PART 3
 
-void writeInclude(const modules_database_t *data_base, const int type ,const char *file_name,
-		const char *arch, const char *mcu, const char *board);
+
+void writeInclude(const modules_database_t *data_base, const int type ,const char *file_name, const target_t *target);
 
 #endif
