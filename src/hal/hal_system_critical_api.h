@@ -20,6 +20,10 @@
 
 #include <stdint.h>
 
+#ifndef HAL_SYSTEM_CRITICAL_ALLOWED
+	#error "hal system critical not allowed"
+#endif
+
 #include "hal/autoInclude_hal_target.h"
 #include "hal/autoInclude_hal_system_critical.h"
 

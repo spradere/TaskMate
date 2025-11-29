@@ -80,6 +80,10 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);
 
+		fprintf(file_include, "#ifndef HAL_SYSTEM_CRITICAL_ALLOWED\n");
+		fprintf(file_include, "\t#error \"hal system critical not allowed\"\n");
+		fprintf(file_include, "#endif\n\n");
+
 		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
 		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n\n", target->arch_name);
 	}
