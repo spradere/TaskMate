@@ -20,8 +20,7 @@
 
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(const modules_database_t *data_base, const int type, const char *file_name,
-				  const char *arch, const char *mcu, const char *board)
+void writeInclude(const modules_database_t *data_base, const int type, const char *file_name, const target_t *target)
 {
 	// open file
 	FILE *file_include = fopen(file_name, "w");
@@ -64,17 +63,27 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 	if( type == INCLUDE_HAL_PART )
 	{
+		fprintf(file_include,"// info : build target is %s/%s/%s\n\n",
+			target->arch_name, target->mcu_name, target->board_name);
+
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);
 
-		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n", arch);
-		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n", arch);
-		fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n", arch);
-		fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n", mcu);
-		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n", board);
+		fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
+		fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
+		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
 	}
 
-	if( type == INCLUDE_SYSTEM_PART )
+	if( type == INCLUDE_HAL_SYSTEM_CRITICAL_PART )
+	{
+		fprintf(file_include, "#ifndef %s\n", guard_name);
+		fprintf(file_include, "#define %s\n\n", guard_name);
+
+		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
+		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n\n", target->arch_name);
+	}
+
+	if( type == INCLUDE_THREAD_PART )
 	{
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);

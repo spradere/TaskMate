@@ -64,27 +64,31 @@ int main(int argn, char *argv[])
 		msgError("Bad argn for autoCode, forget arch / mcu / board ?");
 		exit(0);
 	}
-	const char *arch_name = argv[1];
-	const char *mcu_name = argv[2];
-	const char *board_name = argv[3];
+
+	target_t target =
+	{
+		.arch_name = argv[1],
+		.mcu_name = argv[2],
+		.board_name = argv[3]
+	};
 
 	msgInfo("target : ");
-	printf("\t %s -> %s -> %s \n", arch_name, mcu_name, board_name);
+	printf("\t %s -> %s -> %s \n", target.arch_name, target.mcu_name, target.board_name);
 
-	// setup data_base
+	// setup data base
 	modules_database_t data_base;
 	setupDB(&data_base);
 
-	// read init.rc file and store data in data_base[]
+	// read init.rc file and store data in data base
 	const int BUFFER_SIZE = 256;
 
 	char arch_initrc_path[BUFFER_SIZE];
 	char mcu_initrc_path[BUFFER_SIZE];
 	char board_initrc_path[BUFFER_SIZE];
 
-	snprintf(arch_initrc_path, BUFFER_SIZE, "src/hal/arch/%s/arch_init.rc", arch_name);
-	snprintf(mcu_initrc_path, BUFFER_SIZE, "src/hal/mcu/%s/mcu_init.rc", mcu_name);
-	snprintf(board_initrc_path, BUFFER_SIZE, "src/hal/board/%s/board_init.rc", board_name);
+	snprintf(arch_initrc_path, BUFFER_SIZE, "src/hal/arch/%s/arch_init.rc", target.arch_name);
+	snprintf(mcu_initrc_path, BUFFER_SIZE, "src/hal/mcu/%s/mcu_init.rc", target.mcu_name);
+	snprintf(board_initrc_path, BUFFER_SIZE, "src/hal/board/%s/board_init.rc", target.board_name);
 
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);
@@ -100,9 +104,10 @@ int main(int argn, char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c");
 
 	// write headers
-	writeInclude(&data_base, INCLUDE_SYSTEM_PART, "src/sysCore/autoInclude_system.h", arch_name, mcu_name,
-				 board_name);
-	writeInclude(&data_base, INCLUDE_HAL_PART, "src/hal/autoInclude_hal.h", arch_name, mcu_name, board_name);
+	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_PART, "src/hal/autoInclude_hal.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h", &target);
+
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules

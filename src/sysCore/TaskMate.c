@@ -27,6 +27,8 @@
  */
 
 #include "hal/hal_api.h"
+#include "hal/autoInclude_hal_system_critical.h"
+
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 

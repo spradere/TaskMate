@@ -3,8 +3,8 @@
 // any changes will be lost
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTOINCLUDE_SYSTEM_H
-#define AUTOINCLUDE_SYSTEM_H
+#ifndef AUTOINCLUDE_THREADS_H
+#define AUTOINCLUDE_THREADS_H
 
 #include "services/scli.h"
 #include "services/msg.h"
