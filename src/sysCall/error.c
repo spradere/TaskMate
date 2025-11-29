@@ -20,7 +20,6 @@
  * @todo Timeout routine, critical/fatal errors handling
  */
 
-
 #include "sysCall/error.h"
 
 volatile errorCode_t system_last_critical_error = ERR_SUCCESS;

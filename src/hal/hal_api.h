@@ -23,30 +23,16 @@
 
 #include <stdint.h>
 
-#include "hal/autoInclude_hal.h"
+#include "hal/autoInclude_hal_target.h"
 #include "sysCall/error.h"
 
-void hal_archInit();
-void hal_mcuInit();
-void hal_boardInit();
 
 #define HAL_IN_BOARD_LED_OFF 0
 #define HAL_IN_BOARD_LED_ON 1
 #define HAL_IN_BOARD_LED_TOGGLE 2
 
-// arch
-void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top);
 
 // mcu
-void hal_timerSchedulerInit();
-void hal_timerSchedulerStart();
-void hal_timerSchedulerStop();
-void hal_timerSchedulerLoad();
-
-void hal_timerRTCInit();
-void hal_timerRTCStart();
-void hal_timerRTCStop();
-
 void hal_i2cInit(void);
 void hal_i2cStart(void);
 void hal_i2cStop(void);
