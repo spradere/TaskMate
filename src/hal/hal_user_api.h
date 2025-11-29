@@ -26,12 +26,6 @@
 #include "hal/autoInclude_hal_target.h"
 #include "sysCall/error.h"
 
-
-#define HAL_IN_BOARD_LED_OFF 0
-#define HAL_IN_BOARD_LED_ON 1
-#define HAL_IN_BOARD_LED_TOGGLE 2
-
-
 // mcu
 void hal_i2cInit(void);
 void hal_i2cStart(void);
@@ -57,6 +51,10 @@ errorCode_t hal_usartTestBufferRx(void);
 errorCode_t hal_usartWriteString(const char *str);
 
 // board
+#define HAL_IN_BOARD_LED_OFF 0
+#define HAL_IN_BOARD_LED_ON 1
+#define HAL_IN_BOARD_LED_TOGGLE 2
+
 void hal_inBoardLed(uint8_t action);
 
 #endif
