@@ -61,3 +61,18 @@ FILES_INIT_RC += ${SRC_DIR}/hal/board/${BOARD}/board_init.rc
 
 FILES_INIT_RC += ${SRC_DIR}/services/services_init.rc
 FILES_INIT_RC += ${SRC_DIR}/tasks/tasks_init.rc
+
+# allowed source acess system critical
+CFLAGS_${SRC_DIR}/sysCore/TaskMate.c += -DHAL_SYSTEM_CRITICAL_ALLOWED
+CFLAGS_${SRC_DIR}/sysCore/scheduler.c += -DHAL_SYSTEM_CRITICAL_ALLOWED
+CFLAGS_${SRC_DIR}/sysCore/initSys.c += -DHAL_SYSTEM_CRITICAL_ALLOWED
+CFLAGS_${SRC_DIR}/sysCall/sysCall.c += -DHAL_SYSTEM_CRITICAL_ALLOWED
+CFLAGS_${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c += -DHAL_SYSTEM_CRITICAL_ALLOWED
+
+HAL_SYSTEM_CRITICAL_PATTERN = 'hal/hal_system_critical_api.h'
+
+HAL_SYSTEM_CRITICAL_ALLOWED = 'src/hal/mcu/${MCU}/hal_timerScheduler.c'
+HAL_SYSTEM_CRITICAL_ALLOWED += 'src/sysCore/TaskMate.c'
+HAL_SYSTEM_CRITICAL_ALLOWED += 'src/sysCore/scheduler.c'
+HAL_SYSTEM_CRITICAL_ALLOWED += 'src/sysCore/initSys.c'
+HAL_SYSTEM_CRITICAL_ALLOWED += 'src/sysCall/sysCall.c'
