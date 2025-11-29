@@ -23,7 +23,7 @@
 #include "utility/autoCode_src/autoCode.h"
 
 #define INCLUDE_THREAD_PART 1
-#define INCLUDE_HAL_PART 2
+#define INCLUDE_HAL_TARGET_PART 2
 #define INCLUDE_HAL_SYSTEM_CRITICAL_PART 3
 
 

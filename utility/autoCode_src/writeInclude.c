@@ -20,7 +20,8 @@
 
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(const modules_database_t *data_base, const int type, const char *file_name, const target_t *target)
+void writeInclude(const modules_database_t *data_base, const int type, const char *file_name,
+				  const target_t *target)
 {
 	// open file
 	FILE *file_include = fopen(file_name, "w");
@@ -61,10 +62,10 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	fprintf(file_include, "// any changes will be lost\n");
 	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 
-	if( type == INCLUDE_HAL_PART )
+	if( type == INCLUDE_HAL_TARGET_PART )
 	{
-		fprintf(file_include,"// info : build target is %s/%s/%s\n\n",
-			target->arch_name, target->mcu_name, target->board_name);
+		fprintf(file_include, "// info : build target is %s/%s/%s\n\n", target->arch_name, target->mcu_name,
+				target->board_name);
 
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);
