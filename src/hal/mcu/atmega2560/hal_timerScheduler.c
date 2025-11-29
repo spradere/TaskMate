@@ -23,6 +23,8 @@
 #include <avr/interrupt.h>
 
 #include "hal/hal_api.h"
+#include "hal/autoInclude_hal_system_critical.h"
+
 #include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
@@ -73,7 +75,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 		hal_contextSave();
 		mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
 		mod_t->stack_pointer = (stack_word_t *)hal_getStackPointer();
-		//modules.threads[modules.thread_current].stack_pointer = (stack_word_t *)hal_getStackPointer();
 	}
 
 	scheduler();
@@ -83,7 +84,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	{
 		mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
 		hal_setStackPointer((uintptr_t)mod_t->stack_pointer);
-		//hal_setStackPointer((uintptr_t)modules.threads[modules.thread_current].stack_pointer);
 		hal_contextRestore();
 		hal_returnFromInterupt();
 	}

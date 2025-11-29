@@ -20,8 +20,9 @@
 
 
 #include "hal/hal_api.h"
+#include "hal/autoInclude_hal_system_critical.h"
 
-#include "sysCore/autoInclude_system.h"
+#include "sysCore/autoInclude_threads.h"
 #include "sysCore/modules.h"
 #include "sysCore/initSys.h"
 
