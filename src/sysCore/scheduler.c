@@ -20,7 +20,7 @@
  */
 
 #include "hal/hal_api.h"
-#include "hal/autoInclude_hal_system_critical.h"
+#include "hal/hal_system_critical_api.h"
 
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
@@ -46,8 +46,8 @@ void scheduler()
 
 	// switch thread
 	uint8_t current = moduleThreadGetCurrent();
-	if( ++current == THREADS_COUNT ){ moduleThreadSetCurrent(0); }
-	else{ moduleThreadSetCurrent(current);}
+	if( ++current == THREADS_COUNT ) { moduleThreadSetCurrent(0); }
+	else { moduleThreadSetCurrent(current); }
 
 	// I'm alive blink in board led
 	static uint8_t alive_cnt = 0;

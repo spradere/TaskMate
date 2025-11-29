@@ -21,24 +21,24 @@
  */
 
 #include "hal/hal_api.h"
+#include "hal/hal_system_critical_api.h"
+
 #include <util/atomic.h>
 
 #include "sysCore/modules.h"
 #include "sysCall/sysCall.h"
 
-
-
 static uint8_t system_status = 0;
 
 void sysCallSetThreadRTC(uint16_t count)
 {
-	//ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetRTC( count ); }
+	// ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetRTC(count); }
 }
 
 uint16_t sysCallGetThreadRTC(void)
 {
-	//ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].real_time_counter); }
+	// ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].real_time_counter); }
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { return moduleThreadGetRTC(); }
 }
 
