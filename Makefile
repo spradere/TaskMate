@@ -19,6 +19,7 @@
 # Make global process
 
 .include "mk/global_and_target_srcs.mk"
+.include "mk/allow.mk"
 .include "mk/global_build.mk"
 .include "mk/global_utils.mk"
 .include "mk/global_backup.mk"
