@@ -54,17 +54,47 @@ ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
 	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
 
-system_critical_check:
-	@printf "\n\033[1;33mChecking forbidden system critical includes ...\033[0m\n\n"
 
-	@files="`grep -R -l ${HAL_SYSTEM_CRITICAL_PATTERN} ${SRC_DIR} || true`"; \
+system_critical_check:
+	@printf "\n\033[1;33mChecking forbidden system critical includes ...\033[0m\n"
+
+.for index in ${GREP_LIST}
+	@allowed="${GREP_ALLOWED${index}}"; \
+	pattern="${GREP_PATTERN${index}}"; \
+	printf "\nChecking pattern %s...\n" "$$pattern"; \
+	files="`grep -R -l "$$pattern" ${SRC_DIR} 2>/dev/null || true`"; \
 	for f in $$files; do \
-	    allowed=no; \
-	    for ok in ${HAL_SYSTEM_CRITICAL_ALLOWED}; do \
-	        [ "$$f" = "$$ok" ] && allowed=yes; \
+	    test=no; \
+	   for ok in $$allowed; do \
+	        [ "$$f" = "$$ok" ] && test=yes; \
 	    done; \
-	    if [ "$$allowed" = "no" ]; then \
-	        printf "\033[1;31mForbidden include detected in: $$f\033[0m\n"; \
-	        exit 1; \
+	    if [ "$$test" = "no" ]; then \
+	       printf "\033[1;31m[ FAIL ] Forbidden include detected in: $$f\033[0m\n"; \
+	       exit 1; \
+		else \
+			printf "\033[1;32m[  OK  ]\033[0m %s\n" "$$f"; \
 	    fi; \
 	done
+.endfor
+
+	#@i=1; \
+	#for pat in ${GREP_PATTERN_LIST}; do \
+	#	printf "Checking pattern $$pat...\n"; \
+	#	files="`grep -R -l $$pat ${SRC_DIR} 2>/dev/null || true`"; \
+	#	allowed=`awk 'BEGIN{print ENVIRON["GREP\_ALLOWED" i]}' i=$$i`; \
+	#	printf "awk output < $$allowed >\n"; \
+	#	for f in $$files; do \
+	#		allowed=no; \
+	#		for ok in ${GREP_ALLOWED_LIST:[$index]}; do \
+	#			[ "$$f" = "$$ok" ] && allowed=yes; \
+	#		done; \
+	#		if [ "$$allowed" = no ]; then \
+	#			printf "\033[1;31m[ FAIL ] Forbidden include <%s> in: %s\033[0m\n" "$$pat" "$$f"; \
+	#			exit 1; \
+	#		else \
+	#			printf "\033[1;32m[  OK  ]\033[0m %s\n" "$$f"; \
+	#		fi; \
+	#	done; \
+	#	i=`expr $$i + 1`; \
+	#done
+
