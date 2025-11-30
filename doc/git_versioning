@@ -1,0 +1,33 @@
+1. Créate branch :
+
+git switch main_new
+git pull
+git switch -c feat/preempt-protected-i2c
+
+2. Work, commit :
+
+git add .
+git commit -m "Implement sysCallPreemptProtected() for I2C"
+
+or make push M="Implement sysCallPreemptProtected() for I2C"
+
+3. Work done -> test ok -> merge :
+
+git switch main_new
+git merge --no-ff feat/preempt-protected-i2c
+git push origin main_new
+
+4. Delete branch :
+
+git branch -d feat/preempt-protected-i2c
+git push origin --delete feat/preempt-protected-i2c
+
+5. close a version
+
+update file version.h
+git switch main_new
+git commit -am "Bump version to 0.7"
+git tag -a v0.7 -m "TaskMate 0.7 - HAL + no_global stable"
+git push origin main_new
+git push origin --tags
+
