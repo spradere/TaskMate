@@ -11,3 +11,9 @@ list last commits :
 
 list local / remonte branch
 	git branch -a --sort=-committerdate
+
+check tag
+	git ls-remote --tags origin
+
+check commits
+	git rev-list --count v0.5

@@ -39,16 +39,16 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	snprintf(cmd, sizeof(cmd), "printf \"%s\" | sed 's#.*/##' | tr a-z A-Z | sed 's/[^A-Z0-9_]/_/g'",
 			 file_name);
 
-	FILE *fp = popen(cmd, "r");
-	if( !fp )
+	FILE *p_cmd = popen(cmd, "r");
+	if( !p_cmd )
 	{
 		msgError("failed open cmd output");
 		exit(0);
 	}
 
-	if( !fgets(guard_name, sizeof(guard_name), fp) )
+	if( !fgets(guard_name, sizeof(guard_name), p_cmd) )
 	{
-		pclose(fp);
+		pclose(p_cmd);
 		msgError("failed get string form cmd output");
 		exit(0);
 	}

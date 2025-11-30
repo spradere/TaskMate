@@ -21,6 +21,9 @@
 
 #include "hal/hal_user_api.h"
 
+// NOLINTBEGIN
+// NOLINT(readability-magic-numbers)
+
 static void lcdAMC2004SendCommand(uint8_t command);
 
 #define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
@@ -83,3 +86,5 @@ void hal_lcdWriteString(const char *str)
 	while( *str ) { hal_i2cWrite(*str++); }
 	hal_i2cCommStop();
 }
+
+// NOLINTEND
