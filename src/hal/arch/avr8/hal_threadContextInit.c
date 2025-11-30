@@ -21,6 +21,9 @@
 #include <avr/io.h>
 #include "hal/hal_user_api.h"
 
+// NOLINTBEGIN
+// NOLINT(readability-magic-numbers)
+
 #define AVR_REGISTER_COUNT 32 // from R0 to R31
 
 void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top)
@@ -38,3 +41,4 @@ void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, sta
 
 	*stack_pointer = sp;
 }
+// NOLINTEND

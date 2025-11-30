@@ -45,6 +45,7 @@ void snprintf(char *buf, uint8_t n, const char *format, ...)
 				case '%': /*uart_putc('%');*/
 					break;
 				default: /*uart_putc('?');*/
+					break;
 			}
 		}
 		else { /*uart_putc(*format);*/ }

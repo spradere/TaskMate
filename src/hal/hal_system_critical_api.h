@@ -24,7 +24,7 @@
 #include <stdint.h>
 
 #ifndef HAL_SYSTEM_CRITICAL_API_ALLOWED
-	#error "include hal system critical api not allowed"
+#error "include hal system critical api not allowed"
 #endif
 
 #include "hal/autoInclude_hal_target.h"
