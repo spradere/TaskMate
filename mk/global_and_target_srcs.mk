@@ -62,27 +62,4 @@ FILES_INIT_RC += ${SRC_DIR}/hal/board/${BOARD}/board_init.rc
 FILES_INIT_RC += ${SRC_DIR}/services/services_init.rc
 FILES_INIT_RC += ${SRC_DIR}/tasks/tasks_init.rc
 
-# allowed source acess system critical
-CFLAGS_${SRC_DIR}/sysCore/TaskMate.c += -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/sysCore/scheduler.c += -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/sysCore/initSys.c += -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/sysCall/sysCall.c += -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c += -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 
-
-GREP_PATTERN1 = hal/hal_system_critical_api.h
-GREP_ALLOWED1 = src/hal/mcu/${MCU}/hal_timerScheduler.c \
-	src/sysCore/TaskMate.c \
-	src/sysCore/scheduler.c \
-	src/sysCore/initSys.c \
-	src/sysCall/sysCall.c
-
-GREP_PATTERN2 = hal/autoInclude_hal_system_critical.h
-GREP_ALLOWED2 = src/hal/hal_system_critical_api.h \
-
-GREP_LIST = 1 2
