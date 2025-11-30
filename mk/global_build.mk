@@ -76,25 +76,3 @@ system_critical_check:
 	    fi; \
 	done
 .endfor
-
-	#@i=1; \
-	#for pat in ${GREP_PATTERN_LIST}; do \
-	#	printf "Checking pattern $$pat...\n"; \
-	#	files="`grep -R -l $$pat ${SRC_DIR} 2>/dev/null || true`"; \
-	#	allowed=`awk 'BEGIN{print ENVIRON["GREP\_ALLOWED" i]}' i=$$i`; \
-	#	printf "awk output < $$allowed >\n"; \
-	#	for f in $$files; do \
-	#		allowed=no; \
-	#		for ok in ${GREP_ALLOWED_LIST:[$index]}; do \
-	#			[ "$$f" = "$$ok" ] && allowed=yes; \
-	#		done; \
-	#		if [ "$$allowed" = no ]; then \
-	#			printf "\033[1;31m[ FAIL ] Forbidden include <%s> in: %s\033[0m\n" "$$pat" "$$f"; \
-	#			exit 1; \
-	#		else \
-	#			printf "\033[1;32m[  OK  ]\033[0m %s\n" "$$f"; \
-	#		fi; \
-	#	done; \
-	#	i=`expr $$i + 1`; \
-	#done
-
