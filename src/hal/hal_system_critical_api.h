@@ -18,10 +18,13 @@
  *
  */
 
+#ifndef HAL_SYSTEM_CRITICAL_API_H
+#define HAL_SYSTEM_CRITICAL_API_H
+
 #include <stdint.h>
 
-#ifndef HAL_SYSTEM_CRITICAL_ALLOWED
-	#error "hal system critical not allowed"
+#ifndef HAL_SYSTEM_CRITICAL_API_ALLOWED
+	#error "include hal system critical api not allowed"
 #endif
 
 #include "hal/autoInclude_hal_target.h"
@@ -45,3 +48,5 @@ void hal_timerSchedulerLoad();
 void hal_timerRTCInit();
 void hal_timerRTCStart();
 void hal_timerRTCStop();
+
+#endif
