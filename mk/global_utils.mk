@@ -37,10 +37,8 @@ cloc:
 .PHONY: cloc
 
 # clang-tidy
-TIDY_SRC = ${AUTOCODE_SRC}
-TIDY_SRC += ${SRCS}
-
-# todo : fix tidy with multiples targets
+#TIDY_SRC = ${AUTOCODE_SRC}
+#TIDY_SRC += ${SRCS}
 
 #tidy:
 #	@printf "\n\033[1;33mTidy static test code, config in src/.clang-tidy\033[0m\n\n"
