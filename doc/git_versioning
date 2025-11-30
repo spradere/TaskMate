@@ -25,9 +25,9 @@ git push origin --delete feat/preempt-protected-i2c
 5. close a version
 
 update file version.h
-git switch main_new
 git commit -am "Bump version to 0.7"
 git tag -a v0.7 -m "TaskMate 0.7 - HAL + no_global stable"
-git push origin main_new
 git push origin --tags
+
+
 

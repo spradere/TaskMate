@@ -21,6 +21,9 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
+// NOLINTBEGIN
+// NOLINT(readability-magic-numbers)
+
 #include "hal/hal_user_api.h"
 
 void hal_i2cInit(void)
@@ -74,3 +77,4 @@ uint8_t hal_i2cWrite(uint8_t data)
 	}
 	return 0; // Success
 }
+// NOLINTEND
