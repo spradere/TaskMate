@@ -54,7 +54,7 @@ void scheduler()
 	static uint8_t alive_cnt = 0;
 	if( ++alive_cnt > 250 )
 	{
-		//hal_inBoardLed(HAL_IN_BOARD_LED_TOGGLE);
+		// hal_inBoardLed(HAL_IN_BOARD_LED_TOGGLE);
 		gpioSignalToggle(GPIO_SIGNAL_INBOARD_LED);
 		alive_cnt = 0;
 	}

@@ -22,51 +22,48 @@
 #include <avr/io.h>
 #include "hal/hal_user_api.h"
 
-static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] =
-{
-	[GPIO_PORT_A] = (gpio_mcu_port_t){(volatile uint8_t*) _SFR_MEM_ADDR(DDRA),(volatile uint8_t*) _SFR_MEM_ADDR(PORTA), (volatile uint8_t*) _SFR_MEM_ADDR(PINA) },
-	[GPIO_PORT_B] = (gpio_mcu_port_t){(volatile uint8_t*) _SFR_MEM_ADDR(DDRB),(volatile uint8_t*) _SFR_MEM_ADDR(PORTB), (volatile uint8_t*) _SFR_MEM_ADDR(PINB) }/*,
-	[GPIO_PORT_C] = { DDRC, PORTC, PINC },
-	[GPIO_PORT_D] = { DDRD, PORTD, PIND },
-	[GPIO_PORT_E] = { DDRE, PORTE, PINE },
-	[GPIO_PORT_F] = { DDRF, PORTF, PINF },
-	[GPIO_PORT_G] = { DDRG, PORTG, PING },
-	[GPIO_PORT_H] = { DDRH, PORTH, PINH },
-	[GPIO_PORT_I] = { DDRI, PORTI, PINI },
-	[GPIO_PORT_J] = { DDRJ, PORTJ, PINJ },
-	[GPIO_PORT_K] = { DDRK, PORTK, PINK },
-	[GPIO_PORT_L] = { DDRL, PORTL, PINL }*/
+static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] = {
+	[GPIO_PORT_A] =
+		(gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA), (volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
+						  (volatile uint8_t *)_SFR_MEM_ADDR(PINA)},
+	[GPIO_PORT_B] =
+		(gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB), (volatile uint8_t *)_SFR_MEM_ADDR(PORTB),
+						  (volatile uint8_t *)_SFR_MEM_ADDR(PINB)} /*,
+[GPIO_PORT_C] = { DDRC, PORTC, PINC },
+[GPIO_PORT_D] = { DDRD, PORTD, PIND },
+[GPIO_PORT_E] = { DDRE, PORTE, PINE },
+[GPIO_PORT_F] = { DDRF, PORTF, PINF },
+[GPIO_PORT_G] = { DDRG, PORTG, PING },
+[GPIO_PORT_H] = { DDRH, PORTH, PINH },
+[GPIO_PORT_I] = { DDRI, PORTI, PINI },
+[GPIO_PORT_J] = { DDRJ, PORTJ, PINJ },
+[GPIO_PORT_K] = { DDRK, PORTK, PINK },
+[GPIO_PORT_L] = { DDRL, PORTL, PINL }*/
 
 };
 
 void hal_gpioInitPin(gpio_pin_item_t *pin)
 {
 
-	if( pin->mode == GPIO_PIN_MODE_INPUT )
-	{
-		*(gpioMcuPorts[pin->port_index].ddr) &= ~(1 << pin->number);
-	}
-	if( pin->mode == GPIO_PIN_MODE_OUTPUT_PP )
-	{
-		*(gpioMcuPorts[pin->port_index].ddr) |= (1 << pin->number);
-	}
+	if( pin->mode == GPIO_PIN_MODE_INPUT ) { *(gpioMcuPorts[pin->port_index].ddr) &= ~(1 << pin->number); }
+	if( pin->mode == GPIO_PIN_MODE_OUTPUT_PP ) { *(gpioMcuPorts[pin->port_index].ddr) |= (1 << pin->number); }
 
-	if( pin->pull == GPIO_PIN_PULL_UP){ *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number);}
+	if( pin->pull == GPIO_PIN_PULL_UP ) { *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number); }
 
-	DDRB |= (1<<PB7);
+	DDRB |= (1 << PB7);
 }
 
 void hal_gpioWritePin(gpio_pin_item_t *pin, bool value)
 {
-	if( value ){ *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number); }
+	if( value ) { *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number); }
 	else { *(gpioMcuPorts[pin->port_index].port) &= ~(1 << pin->number); }
-	//if( value ){ PORTB |= (1 << PB7); }
-	//else { PORTB &= ~(1 << PB7); }
+	// if( value ){ PORTB |= (1 << PB7); }
+	// else { PORTB &= ~(1 << PB7); }
 }
 
 bool hal_gpioReadPin(gpio_pin_item_t *pin)
 {
 	return (*(gpioMcuPorts[pin->port_index].port) & (1 << pin->number)) >> pin->number;
-	//uint8_t val = (PORTB & (1 << pin->number)) >> pin->number;
-	//return val;
+	// uint8_t val = (PORTB & (1 << pin->number)) >> pin->number;
+	// return val;
 }
