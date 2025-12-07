@@ -31,11 +31,9 @@ void realTimeClock()
 {
 	// RTC decrement
 
-	module_item_thread_t *mod_t;
-
 	for( uint8_t i = 0; i < THREADS_COUNT; i++ )
 	{
-		mod_t = moduleThreadGetPointer(i);
+		module_item_thread_t *mod_t = moduleThreadGetPointer(i);
 		if( mod_t->real_time_counter > 0 ) { mod_t->real_time_counter--; }
 	}
 }
