@@ -20,4 +20,4 @@
 
 #include "hal/hal_user_api.h"
 
-__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}

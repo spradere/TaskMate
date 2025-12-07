@@ -26,6 +26,7 @@
 #include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
+#include "sysCall/gpio.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // scheduler is called by hal_timerScheduler interupt sub routine
@@ -53,7 +54,7 @@ void scheduler()
 	static uint8_t alive_cnt = 0;
 	if( ++alive_cnt > 250 )
 	{
-		hal_inBoardLed(HAL_IN_BOARD_LED_TOGGLE);
+		gpioSignalToggle(GPIO_SIGNAL_INBOARD_LED);
 		alive_cnt = 0;
 	}
 

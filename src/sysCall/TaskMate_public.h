@@ -16,7 +16,7 @@
  * @file TaskMate_public.h
  * @brief public header of TaskMate.
  *
- * - This file contains the headers for user tasks, system services and drivers
+ * - This file contains the headers for user tasks, system services
  * - Not the internal system core, forbinds.
  *
  */
@@ -26,5 +26,6 @@
 
 #include "sysCall/sysCall.h"
 #include "sysCall/error.h"
+#include "sysCall/gpio.h"
 
 #endif
