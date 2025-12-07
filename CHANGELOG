@@ -70,6 +70,8 @@ TaskMate 0.20
 	modify makefile and autoCode for arch/mcu/board
 	remove all avr code from sysCore -> hal
 	change makefile for system critical include guard
-	change versioning scheme 
+	change versioning scheme
+
 TaskMate 0.21
 
+	sysCall/gpio and hal/gpio
