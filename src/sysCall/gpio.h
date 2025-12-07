@@ -20,7 +20,7 @@
 #define GPIO_H
 
 #include <stdbool.h>
-#include "hal/autoInclude_hal_target.h" // get gpio_signal_t
+#include "hal/autoInclude_hal_target.h" // get : gpio_port_index_t gpio_signal_t
 
 typedef enum
 {
@@ -38,8 +38,7 @@ typedef enum
 
 typedef struct
 {
-	uint8_t	port;
-	uint8_t direction;
+	gpio_port_index_t port_index;
 	uint8_t	number;
 	gpio_pin_mode_t	mode;
 	gpio_pin_pull_t	pull;
@@ -54,5 +53,6 @@ typedef struct
 void gpioSignalInit(gpio_signal_t signal, gpio_signal_item_t *sig);
 void gpioSignalSet(gpio_signal_t signal, bool on);
 bool gpioSignalGet(gpio_signal_t signal);
+void gpioSignalToggle(gpio_signal_t signal);
 
 #endif
