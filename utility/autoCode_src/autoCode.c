@@ -55,7 +55,7 @@
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
 
-int main(int argn, char *argv[])
+int main(int argn, const char *argv[])
 {
 
 	// test command line arguments

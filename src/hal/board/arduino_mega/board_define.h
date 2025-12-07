@@ -14,7 +14,7 @@
 
 /**
  * @file board_define.h
- * @brief arduino mega definitions
+ * @brief arduino mega board definitions
  *
  */
 
@@ -27,5 +27,14 @@
 #define IN_BOARD_LED_DDR DDRB /**< Arduino in board led, direction port*/
 #define IN_BOARD_LED_PORT PORTB /**< Arduino in board led, data port*/
 #define IN_BOARD_LED_PIN PB7 /**< Arduino in board led, pin*/
+
+// gpio arduino mega board + LCD4x20 signals
+typedef enum
+{
+	GPIO_SIGNAL_INBOARD_LED,
+	GPIO_SIGNAL_TASK1_LED,
+	GPIO_SIGNAL_TASK2_LED,
+	GPIO_SIGNAL_COUNT
+} gpio_signal_t;
 
 #endif
