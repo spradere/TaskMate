@@ -52,14 +52,9 @@ errorCode_t hal_usartTestBufferRx(void);
 errorCode_t hal_usartWriteString(const char *str);
 
 // board
-#define HAL_IN_BOARD_LED_OFF 0
-#define HAL_IN_BOARD_LED_ON 1
-#define HAL_IN_BOARD_LED_TOGGLE 2
 
-void hal_inBoardLed(uint8_t action);
-
-void hal_gpioInitPin(gpio_pin_item_t *pin);
-void hal_gpioWritePin(gpio_pin_item_t *pin, bool value);
-bool hal_gpioReadPin(gpio_pin_item_t *pin);
+void hal_gpioInitPin(const gpio_pin_item_t *pin);
+void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
+bool hal_gpioReadPin(const gpio_pin_item_t *pin);
 
 #endif
