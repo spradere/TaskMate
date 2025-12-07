@@ -49,11 +49,10 @@ int main(void)
 
 	// start driver
 	// todo remove this code when run level is implemented
-	module_item_driver_t *mod_d;
 
 	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
 	{
-		mod_d = moduleDriverGetPointer(i);
+		module_item_driver_t *mod_d = moduleDriverGetPointer(i);
 		(*(mod_d->init))();
 		(*(mod_d->start))();
 	}
