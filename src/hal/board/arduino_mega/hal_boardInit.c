@@ -22,9 +22,6 @@
 
 void hal_boardInit()
 {
-	// Set pin output for in board led
-	// IN_BOARD_LED_DDR |= (1 << IN_BOARD_LED_PIN);
-
 	// gpio pin definition
 	gpio_signal_item_t sig;
 
