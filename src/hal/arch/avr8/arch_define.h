@@ -14,7 +14,7 @@
 
 /**
  * @file arch_define.h
- * @brief hal achr header
+ * @brief avr8 definitions
  *
  */
 
@@ -23,5 +23,13 @@
 
 // stack related size
 typedef uint8_t stack_word_t;
+
+// gpio avr8 regs structure
+typedef struct
+{
+	volatile uint8_t *ddr;
+	volatile uint8_t *port;
+	volatile uint8_t *pin;
+} gpio_mcu_port_t;
 
 #endif

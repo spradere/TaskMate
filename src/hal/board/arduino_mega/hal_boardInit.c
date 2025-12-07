@@ -23,13 +23,12 @@
 void hal_boardInit()
 {
 	// Set pin output for in board led
-	IN_BOARD_LED_DDR |= (1 << IN_BOARD_LED_PIN);
+	//IN_BOARD_LED_DDR |= (1 << IN_BOARD_LED_PIN);
 
 	// gpio pin definition
 	gpio_signal_item_t sig;
 
-	sig.pin.port = PORTB;
-	sig.pin.direction = DDRB;
+	sig.pin.port_index = GPIO_PORT_B;
 	sig.pin.number = PB7;
 	sig.pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
 	sig.pin.pull = GPIO_PIN_PULL_NONE;
