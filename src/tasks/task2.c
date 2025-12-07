@@ -4,12 +4,11 @@
 
 void task2(void)
 {
-	// Set PA1 as an output
-	DDRA |= (1 << PA1);
 
 	while( 1 )
 	{
-		PORTA ^= (1 << PA1);
+		gpioSignalToggle(GPIO_SIGNAL_TASK2_LED);
+
 		sysCallSetThreadRTC(50);
 		while( sysCallGetThreadRTC() > 0 );
 	}

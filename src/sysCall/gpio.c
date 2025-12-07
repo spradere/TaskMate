@@ -11,7 +11,7 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
- /**
+/**
  * @file gpio.c
  * @brief gpio implementation
  */
@@ -31,7 +31,7 @@ void gpioSignalInit(gpio_signal_t signal, gpio_signal_item_t *sig)
 void gpioSignalSet(gpio_signal_t signal, bool on)
 {
 	bool val = gpio_signals_table[signal].active_high ? on : !on;
-	hal_gpioWritePin(&(gpio_signals_table[signal].pin), on);
+	hal_gpioWritePin(&(gpio_signals_table[signal].pin), val);
 }
 
 bool gpioSignalGet(gpio_signal_t signal)
@@ -40,7 +40,4 @@ bool gpioSignalGet(gpio_signal_t signal)
 	return gpio_signals_table[signal].active_high ? val : !val;
 }
 
-void gpioSignalToggle(gpio_signal_t signal)
-{
-	gpioSignalSet(signal, !gpioSignalGet(signal));
-}
+void gpioSignalToggle(gpio_signal_t signal) { gpioSignalSet(signal, !gpioSignalGet(signal)); }

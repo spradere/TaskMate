@@ -21,7 +21,7 @@
 #ifndef INITSYS_H
 #define INITSYS_H
 
-//void threadCreate(void (*func)(void), uint8_t num);
+// void threadCreate(void (*func)(void), uint8_t num);
 
 void initThreads(void);
 void initDrivers(void);

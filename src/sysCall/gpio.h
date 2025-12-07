@@ -25,8 +25,8 @@
 typedef enum
 {
 	GPIO_PIN_MODE_INPUT,
-	GPIO_PIN_MODE_OUTPUT_PP,	// push-pull
-	GPIO_PIN_MODE_OUTPUT_OD,	// open-drain
+	GPIO_PIN_MODE_OUTPUT_PP, // push-pull
+	GPIO_PIN_MODE_OUTPUT_OD, // open-drain
 } gpio_pin_mode_t;
 
 typedef enum
@@ -39,16 +39,16 @@ typedef enum
 typedef struct
 {
 	gpio_port_index_t port_index;
-	uint8_t	number;
-	gpio_pin_mode_t	mode;
-	gpio_pin_pull_t	pull;
+	uint8_t number;
+	gpio_pin_mode_t mode;
+	gpio_pin_pull_t pull;
 } gpio_pin_item_t;
 
 typedef struct
 {
 	gpio_pin_item_t pin;
 	bool active_high;
-}gpio_signal_item_t;
+} gpio_signal_item_t;
 
 void gpioSignalInit(gpio_signal_t signal, gpio_signal_item_t *sig);
 void gpioSignalSet(gpio_signal_t signal, bool on);
