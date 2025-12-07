@@ -49,7 +49,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3 test gpio 2", MSG_TO_LCD);
+		msgWritreText(channel, "\3 test gpio tasks", MSG_TO_LCD);
 	}
 
 	msgProcess();
