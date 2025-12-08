@@ -59,16 +59,13 @@ See : [Makefile & build system](doc/build_system.md)
 
 ### 🧱 HAL and Architecture Support
 
-TaskMate is currently undergoing major development to improve portability.
-A **Hardware Abstraction Layer (HAL)** is being implemented to isolate the system core from hardware-specific code.
-This will allow TaskMate to run on multiple architectures:
+The HAL provide a **clean interface** between the system and the hardware.
+Ensures true portability across hardware families.
+This allow TaskMate to run on multiple architectures:
 
 - **avr8** - the historical beginning of TaskMate
 - **amd64** - for testing and faster development cycles
 - **arm32v7-m4** - planned for future hardware performance upgrades
-
-The HAL will provide a **clean interface** between the system and the hardware.
-Ensures true portability across hardware families.
 
 See : [Portability](doc/portability.md)
 

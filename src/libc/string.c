@@ -18,7 +18,7 @@
  *
  */
 
-#include <avr/io.h>
+#include <stdint.h>
 
 void strncpy(char *dest, uint8_t n, const char *src)
 {
