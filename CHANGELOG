@@ -75,3 +75,6 @@ TaskMate 0.20
 TaskMate 0.21
 
 	sysCall/gpio and hal/gpio
+	hal end
+
+TaskMate 0.22
