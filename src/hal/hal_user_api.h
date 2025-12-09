@@ -50,6 +50,7 @@ errorCode_t hal_usartWriteChar(uint8_t data);
 void hal_usartSendTXBuffer(void);
 errorCode_t hal_usartTestBufferRx(void);
 errorCode_t hal_usartWriteString(const char *str);
+errorCode_t hal_usartWriteChar(uint8_t data);
 
 // board
 
