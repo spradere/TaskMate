@@ -44,12 +44,13 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "msg : Essai USART1 \n", MSG_TO_USART1);
+		msgWritreText(channel, "\nmsg : Essai USART1 \n", MSG_TO_USART1);
 	}
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3 test gpio tasks", MSG_TO_LCD);
+		msgWritreText(channel, "\3 test snprintf", MSG_TO_LCD);
+
 	}
 
 	msgProcess();
