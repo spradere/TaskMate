@@ -31,9 +31,9 @@
 
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
-
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
+#include "libc/stdio.h"
 
 int main(void)
 {
@@ -56,6 +56,21 @@ int main(void)
 		(*(mod_d->init))();
 		(*(mod_d->start))();
 	}
+
+
+	// log test
+	//char format[] = "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> ";
+	char dest[128];
+	char test[]="string test";
+	uint16_t i=1023;
+
+	snprintf(dest,128,"[%s:%i] Boot ...\n", __FILE__,__LINE__);
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
+	snprintf(dest, 128, "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> ",'@',test,i,i,i,i,i);
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
 
 	// jump to current thread for first call and start system by enabling INT
 	moduleThreadSetCurrent(0);

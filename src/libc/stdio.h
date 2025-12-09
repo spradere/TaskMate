@@ -20,7 +20,7 @@
 
 #ifndef STDIO_H
 #define STDIO_H
-
-void snprintf(char *buf, uint8_t n, const char *format, ...);
+#include <stddef.h>
+void snprintf(char * buff, size_t buff_size, const char *format, ...);
 
 #endif

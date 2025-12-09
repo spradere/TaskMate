@@ -22,22 +22,22 @@
 #include <stdarg.h>
 #include <stdint.h>
 
+#include "hal/hal_user_api.h"
 
-void baseConvert(char *buff,  uintptr_t *buff_index, size_t buff_size, uint32_t val, uint8_t base );
+#define SNPRINFT_BUFF_TEMP_SIZE 32
 
-void tm_snprintf(char * buff, size_t buff_size, const char *format, ...);
 
-void baseConvert(char *buff_data, uintptr_t *buff_index, size_t buff_size, uint32_t value, uint8_t base )
+void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size, uint32_t value, uint8_t base )
 {
 	static const char digits[] = "0123456789abcdef";
 
-	char tmp[32];
+	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
 	// reverse order convert
-	while (value != 0 && pos < (int)sizeof(tmp))
+	while (value != 0 && pos < SNPRINFT_BUFF_TEMP_SIZE)
 	{
-		unsigned int d = (unsigned int)(value % base);
+		uint32_t d = (uint32_t)(value % base);
 		value /= base;
 		tmp[pos++] = digits[d];
 	}
@@ -54,10 +54,9 @@ void baseConvert(char *buff_data, uintptr_t *buff_index, size_t buff_size, uint3
 // !! use this macro only in tm_snprinf()
 #define put_char(ch) do{ if(buff_index +1 < buff_size){buff[buff_index++]=(char)ch;}}while(0)
 
-void tm_snprintf(char * buff, size_t buff_size, const char *format, ...)
+void snprintf(char *buff, size_t buff_size, const char *format, ...)
 {
-	uintptr_t buff_index = 0;
-	buff[0] = 0;
+	uint16_t buff_index = 0;
 
 	va_list args;
 	va_start(args, format);
@@ -78,11 +77,13 @@ void tm_snprintf(char * buff, size_t buff_size, const char *format, ...)
 				}
 				case 's':
 				{
-					char *s = va_arg(args, const char *);
-					if (!s) {s = "(null)";}
+					char *s = va_arg(args, char *);
 					while (*s)
 					{
-						put_char((*s)++);
+						//hal_usartWriteChar(*s);
+						//hal_usartSendTXBuffer();
+						put_char(*s);
+						s++;
 					}
 					break;
 				}
@@ -92,7 +93,7 @@ void tm_snprintf(char * buff, size_t buff_size, const char *format, ...)
 				case 'b':
 				{
 					int value = va_arg(args, int);
-					int base;
+					uint8_t base;
 
 					switch(*format)
 					{
