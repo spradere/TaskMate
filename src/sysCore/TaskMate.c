@@ -64,13 +64,33 @@ int main(void)
 	char test[]="string test";
 	uint16_t i=1023;
 
-	snprintf(dest,128,"[%s:%i] Boot ...\n", __FILE__,__LINE__);
+	snprintf(dest,128,"[%s:%i] \n\nBoot ...\n", __FILE__,__LINE__);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
-	snprintf(dest, 128, "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> ",'@',test,i,i,i,i,i);
+	snprintf(dest, 128, "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> \n",'@',test,i,i,i,i,i);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
+
+	// rtc time test
+
+	hal_rtc_time_t t;
+	t.day = 10;
+	t.hours = 22;
+	t.minutes = 47;
+	t.month = 12;
+	t.seconds = 15;
+	t.weekday = 3;
+	t.year = 25;
+
+	hal_ZS_042Write(&t);
+
+	hal_ZS_042Read(&t);
+
+	snprintf(dest, 128, "[time] %i/%i/20%i %i:%i\n",t.day,t.month,t.year,t.hours,t.minutes );
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
 
 	// jump to current thread for first call and start system by enabling INT
 	moduleThreadSetCurrent(0);

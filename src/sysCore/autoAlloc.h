@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-#define DRIVERS_COUNT 5
+#define DRIVERS_COUNT 6
 #define THREADS_COUNT 4
 
 #define RUN_LEVEL0_THREADS_COUNT 0
