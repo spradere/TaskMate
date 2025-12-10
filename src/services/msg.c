@@ -49,7 +49,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_SUCCESS )
 	{
-		msgWritreText(channel, "\3 test snprintf", MSG_TO_LCD);
+		msgWritreText(channel, "\3 add RTC module", MSG_TO_LCD);
 
 	}
 
