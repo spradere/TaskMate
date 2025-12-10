@@ -132,6 +132,17 @@ void initDrivers(void)
 		.start = hal_lcdStart,
 		.stop = hal_lcdStop
 	};
+
+	mod_d = moduleDriverGetPointer(5);
+	const char *driver5_name = "hal_ZS_042";
+	*(mod_d) = (module_item_driver_t)
+	{
+		.name = (uint8_t *)driver5_name,
+		.status = 2,
+		.init = hal_ZS_042Init,
+		.start = hal_ZS_042Start,
+		.stop = hal_ZS_042Stop
+	};
 	// [/tag]
 }
 
