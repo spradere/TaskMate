@@ -22,6 +22,7 @@
 #define HAL_API_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "hal/autoInclude_hal_target.h"
 #include "sysCall/error.h"
@@ -34,6 +35,7 @@ void hal_i2cStop(void);
 uint8_t hal_i2cCommStart(uint8_t address);
 void hal_i2cCommStop(void);
 uint8_t hal_i2cWrite(uint8_t data);
+uint8_t hal_i2cRead(bool ack);
 
 void hal_lcdInit(void);
 void hal_lcdStart(void);
@@ -57,5 +59,23 @@ errorCode_t hal_usartWriteChar(uint8_t data);
 void hal_gpioInitPin(const gpio_pin_item_t *pin);
 void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
 bool hal_gpioReadPin(const gpio_pin_item_t *pin);
+
+typedef struct
+{
+	uint8_t seconds;  // 0-59
+	uint8_t minutes;  // 0-59
+	uint8_t hours;    // 0-23
+	uint8_t weekday;  // 1-7
+	uint8_t day;      // 1-31
+	uint8_t month;    // 1-12
+	uint8_t year;     // 0-99
+} hal_rtc_time_t;
+
+void hal_ZS_042Init();
+void hal_ZS_042Start();
+void hal_ZS_042Stop();
+uint8_t hal_ZS_042Read(hal_rtc_time_t *t);
+uint8_t hal_ZS_042Write(const hal_rtc_time_t *t);
+
 
 #endif
