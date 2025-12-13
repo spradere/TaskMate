@@ -62,4 +62,6 @@ FILES_INIT_RC += ${SRC_DIR}/hal/board/${BOARD}/board_init.rc
 FILES_INIT_RC += ${SRC_DIR}/services/services_init.rc
 FILES_INIT_RC += ${SRC_DIR}/tasks/tasks_init.rc
 
-
+# glabal errors
+ERROR_ALL = build/errors_all.err
+ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
