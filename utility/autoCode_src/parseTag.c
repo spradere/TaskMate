@@ -37,7 +37,7 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 	if( name_tmp == NULL )
 	{
 		msgError("malloc name_tmp");
-		exit(0);
+		exit(1);
 	}
 	sprintf(name_tmp, "%s.tmp", name_src);
 
@@ -111,7 +111,7 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 	{
 		msgError("missing end tag [/tag]");
 		printf("\t [%s:%i]\n\n", name_src, file_line_number);
-		exit(0);
+		exit(1);
 	}
 
 	// Replace original file with the modified version
