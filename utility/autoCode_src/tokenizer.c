@@ -20,26 +20,26 @@
 
 #include "utility/autoCode_src/tokenizer.h"
 
-void tokenizer(tokenizer_t *data)
+void tokenizer(tokenizer_t *tok)
 {
 	int index_line = 0;
-	int tokens_count;
+	int token_current;
 
 	// reset tokens
-	for( tokens_count = 0; tokens_count < TOKEN_COUNT_MAX; tokens_count++ )
+	for( token_current = 0; token_current < TOKEN_COUNT_MAX; token_current++ )
 	{
-		data->tokens[tokens_count][0] = 0;
+		tok->tokens[token_current][0] = 0;
 	}
 
 	// start reading line to extract arguments
-	tokens_count = 0;
-	data->count = 0;
+	token_current = 0;
+	tok->count = 0;
 
-	while( (data->line[index_line] != '\n') && (data->line[index_line] != 0) &&
-		   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (tokens_count < TOKEN_COUNT_MAX) )
+	while( (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
+		   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (token_current < TOKEN_COUNT_MAX) )
 	{
 		// get off leading space or tab
-		while( ((data->line[index_line] == ' ') || (data->line[index_line] == '\t')) &&
+		while( ((tok->line[index_line] == ' ') || (tok->line[index_line] == '\t')) &&
 			   (index_line < TOKEN_LINE_SIZE_MAX - 1) )
 		{
 			index_line++;
@@ -47,17 +47,17 @@ void tokenizer(tokenizer_t *data)
 
 		// read and store one token
 		int index_token = 0;
-		while( (data->line[index_line] != ' ') && (data->line[index_line] != '\t') &&
-			   (data->line[index_line] != '\n') && (data->line[index_line] != 0) &&
+		while( (tok->line[index_line] != ' ') && (tok->line[index_line] != '\t') &&
+			   (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
 			   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)) )
 		{
-			data->tokens[tokens_count][index_token++] = data->line[index_line++];
+			tok->tokens[token_current][index_token++] = tok->line[index_line++];
 		}
 
-		data->tokens[tokens_count][index_token] = 0;
+		tok->tokens[token_current][index_token] = 0;
 
-		if( data->tokens[tokens_count][0] != 0 ) { tokens_count++; }
+		if( tok->tokens[token_current][0] != 0 ) { token_current++; }
 	}
 
-	data->count = tokens_count;
+	tok->count = token_current;
 }

@@ -16,7 +16,6 @@
  * @file parseInitrc.c
  * @brief read init.rc file and write data to modules
  *
- * @todo add check module -> file.c exist
  */
 
 #include "utility/autoCode_src/parseInitrc.h"
@@ -34,7 +33,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 	if( file_initrc == NULL )
 	{
 		msgError("file not found");
-		exit(0);
+		exit(1);
 	}
 
 	// variables
@@ -107,5 +106,5 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 
 	fclose(file_initrc);
 
-	if( err_flag == 1 ) { exit(0); }
+	if( err_flag == 1 ) { exit(1); }
 }

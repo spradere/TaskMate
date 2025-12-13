@@ -1,8 +1,9 @@
-add RTC external module
+fix RTC external module
+
+add global error system
 
 porting slab form amd64 to avr
 
 finish implementation of run level
 
-develop system wide error management
 

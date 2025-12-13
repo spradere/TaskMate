@@ -71,7 +71,7 @@ void printModules(const modules_database_t *data_base)
 			default:
 				msgError("unknow run level");
 				printf("\t =%i ?\n", i);
-				exit(0);
+				exit(1);
 				break;
 		}
 

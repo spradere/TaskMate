@@ -12,30 +12,16 @@
  */
 
 /**
- * @file tokenizer.h
- * @brief tokenizer header
+ * @file global_error.h
+ * @brief global error header
  *
  */
 
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
+#ifndef GLOBAL_ERROR_H
+#define GLOBAL_ERROR_H
 
 #include "utility/autoCode_src/autoCode.h"
 
-// sizes for tokenizer
-#define TOKEN_LINE_SIZE_MAX 256
-#define TOKEN_COUNT_MAX 4
-#define TOKEN_SIZE_MAX 64
-
-typedef struct
-{
-	char line[TOKEN_LINE_SIZE_MAX];
-	char tokens[TOKEN_COUNT_MAX][TOKEN_SIZE_MAX];
-	int count;
-
-}tokenizer_t;
-
-
-void tokenizer(tokenizer_t *tok);
+void globalError(const char *file_name);
 
 #endif
