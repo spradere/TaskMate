@@ -51,6 +51,8 @@
 #include "utility/autoCode_src/printModules.h"
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/writeInclude.h"
+#include "utility/autoCode_src/globalError.h"
+
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -59,10 +61,10 @@ int main(int argn, const char *argv[])
 {
 
 	// test command line arguments
-	if( argn != 4 )
+	if( argn != 5 )
 	{
-		msgError("Bad argn for autoCode, forget arch / mcu / board ?");
-		exit(0);
+		msgError("Bad argn for autoCode, use autoCode ach mcu board error_file.err");
+		exit(1);
 	}
 
 	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
@@ -105,6 +107,9 @@ int main(int argn, const char *argv[])
 				 &target);
 
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
+
+	// global error system
+	globalError(argv[4]);
 
 	// print all info about modules
 	printModules(&data_base);
@@ -159,7 +164,7 @@ static void checkModulesCount(modules_database_t *data_base)
 			msgError("Too many modules !");
 			printf("\t %s count = %i > TaskMate max %i\n\n", data_base->modules_type[i].name,
 				   module_count[i][0], module_count[i][1]);
-			exit(0);
+			exit(1);
 		}
 	}
 }

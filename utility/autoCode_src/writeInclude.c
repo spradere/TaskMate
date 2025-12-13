@@ -43,14 +43,14 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	if( !p_cmd )
 	{
 		msgError("failed open cmd output");
-		exit(0);
+		exit(1);
 	}
 
 	if( !fgets(guard_name, sizeof(guard_name), p_cmd) )
 	{
 		pclose(p_cmd);
 		msgError("failed get string form cmd output");
-		exit(0);
+		exit(1);
 	}
 
 	msgInfo("generated guard name :");

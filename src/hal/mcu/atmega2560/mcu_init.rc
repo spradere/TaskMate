@@ -5,3 +5,4 @@ hal_timerScheduler -RUN_CORE
 hal_timerRTC -RUN_CORE
 hal_i2c -RUN_CORE
 hal_usart -RUN_CORE
+
