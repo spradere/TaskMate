@@ -57,6 +57,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	printf("\t %s\n\n", guard_name);
 
 	// write code
+	printLicenceHeader(file_include);
 	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	fprintf(file_include, "// Auto generated code, do not edit !\n");
 	fprintf(file_include, "// any changes will be lost\n");
@@ -72,7 +73,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 		fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
 		fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
-		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
+		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n", target->board_name);
 	}
 
 	if( type == INCLUDE_HAL_SYSTEM_CRITICAL_PART )
@@ -85,7 +86,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_include, "#endif\n\n");
 
 		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
-		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n\n", target->arch_name);
+		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);
 	}
 
 	if( type == INCLUDE_THREAD_PART )

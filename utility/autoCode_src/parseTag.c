@@ -118,7 +118,7 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 	if( (remove(name_src) != 0) || (rename(name_tmp, name_src) != 0) )
 	{
 		msgError("replacing tmp / src");
-		exit(2);
+		exit(1);
 	}
 
 	fclose(file_src);
