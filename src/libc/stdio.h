@@ -21,6 +21,6 @@
 #ifndef STDIO_H
 #define STDIO_H
 #include <stddef.h>
-void snprintf(char * buff, size_t buff_size, const char *format, ...);
+void snprintf(char *buff, size_t buff_size, const char *format, ...);
 
 #endif

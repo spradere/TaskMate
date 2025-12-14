@@ -31,6 +31,7 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 	}
 
 	// write modules
+	printLicenceHeader(file_alloc);
 	fprintf(file_alloc, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	fprintf(file_alloc, "// Auto generated code, do not edit !\n");
 	fprintf(file_alloc, "// any changes will be lost\n");

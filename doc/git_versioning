@@ -1,7 +1,7 @@
 1. Créate branch :
 
 git switch main_new
-git pull
+(git pull)
 git switch -c feat/preempt-protected-i2c
 git push -u origin HEAD:refs/heads/feat/preempt-protected-i2c
 
