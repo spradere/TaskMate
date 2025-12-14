@@ -63,24 +63,24 @@ ISR(USART1_RX_vect)
 }
 
 // Read a character from Rx buffer (non-blocking)
-errorCode_t hal_usartRead(uint8_t *data)
+error_codes_t hal_usartRead(uint8_t *data)
 {
 	if( buffer_rx_tail == buffer_rx_head ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 
 	*data = buffer_rx[buffer_rx_tail]; // Read from buffer
 	buffer_rx_tail = (buffer_rx_tail + 1) % HAL_USART_BUFFER_SIZE; // Move tail forward
-	return ERR_SUCCESS;
+	return ERR_NO_ERROR;
 }
 
 // Write a character to Tx buffer
-errorCode_t hal_usartWriteChar(uint8_t data)
+error_codes_t hal_usartWriteChar(uint8_t data)
 {
 	uint8_t next_head = (buffer_tx_head + 1) % HAL_USART_BUFFER_SIZE;
 	if( next_head == buffer_tx_tail ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
 
 	buffer_tx[buffer_tx_head] = data;
 	buffer_tx_head = next_head;
-	return ERR_SUCCESS;
+	return ERR_NO_ERROR;
 }
 
 // send Tx buffer to usart
@@ -96,18 +96,18 @@ void hal_usartSendTXBuffer(void)
 }
 
 // test if Rx buffer is empty
-errorCode_t hal_usartTestBufferRx(void)
+error_codes_t hal_usartTestBufferRx(void)
 {
 	if( buffer_rx_tail == buffer_rx_head ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
-	return ERR_SUCCESS;
+	return ERR_NO_ERROR;
 }
 
 // write string to Tx buffer
-errorCode_t hal_usartWriteString(const char *str)
+error_codes_t hal_usartWriteString(const char *str)
 {
 	while( *str )
 	{
 		if( hal_usartWriteChar(*str++) == ERR_HAL_USART_TX_BUFFER_FULL ) { break; };
 	}
-	return ERR_SUCCESS;
+	return ERR_NO_ERROR;
 }

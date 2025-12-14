@@ -45,7 +45,7 @@ typedef struct
 
 void msg(void);
 
-errorCode_t msgRequestChannel(uint8_t *channel_id);
+error_codes_t msgRequestChannel(uint8_t *channel_id);
 void msgWritreText(uint8_t channel_id, const char *msg, uint8_t dest);
 
 void msgProcess(void);

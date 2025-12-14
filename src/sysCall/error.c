@@ -22,22 +22,4 @@
 
 #include "sysCall/error.h"
 
-volatile errorCode_t system_last_critical_error = ERR_SUCCESS;
 
-void setCriticalError(errorCode_t err)
-{
-	system_last_critical_error = err;
-
-	// Take immediate action for critical errors
-	/*switch (err)
-	{
-		case ERR_FATAL_STACK_OVERFLOW:
-		case ERR_FATAL_MEMORY_CORRUPTION:
-		case ERR_FATAL_HW_FAILURE:
-			printf("[FATAL ERROR] System killing thread ...\n");
-			threadKillCurrent();
-			break;
-		default:
-			break;
-	}*/
-}
