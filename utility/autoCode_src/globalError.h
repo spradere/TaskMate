@@ -22,6 +22,6 @@
 
 #include "utility/autoCode_src/autoCode.h"
 
-void globalError(const char *file_name);
+void globalError(const char *file_err_in_name);
 
 #endif

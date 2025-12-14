@@ -45,6 +45,8 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * */
 
+// todo add licence header print function
+
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/parseInitrc.h"
 #include "utility/autoCode_src/parseTag.h"
@@ -52,7 +54,6 @@
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/writeInclude.h"
 #include "utility/autoCode_src/globalError.h"
-
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -167,4 +168,27 @@ static void checkModulesCount(modules_database_t *data_base)
 			exit(1);
 		}
 	}
+}
+
+void printLicenceHeader(FILE *file)
+{
+	char header_path[] = "templates/licence_header";
+	FILE *header_file = fopen(header_path,"r");
+	if( header_file == NULL )
+	{
+		msgError("open error file :");
+		printf("\t <%s>\n", header_path);
+		exit(1);
+	}
+
+	char c;
+	do
+	{
+		c = fgetc(header_file);
+		if ( c!= EOF) {fputc(c, file);}
+	}while( c != EOF );
+
+	fputc('\n', file);
+
+	fclose(header_file);
 }

@@ -47,11 +47,26 @@ void tokenizer(tokenizer_t *tok)
 
 		// read and store one token
 		int index_token = 0;
-		while( (tok->line[index_line] != ' ') && (tok->line[index_line] != '\t') &&
+		char cut_charter = ' ';
+
+		if(tok->line[index_line] == '"')
+		{
+			cut_charter = '"';
+			index_line++;
+			tok->tokens[token_current][index_token++] = '"';
+		}
+
+		while( (tok->line[index_line] != cut_charter ) && (tok->line[index_line] != '\t') &&
 			   (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
 			   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)) )
 		{
 			tok->tokens[token_current][index_token++] = tok->line[index_line++];
+		}
+
+		if(tok->line[index_line] == '"')
+		{
+			index_line++;
+			tok->tokens[token_current][index_token++] = '"';
 		}
 
 		tok->tokens[token_current][index_token] = 0;

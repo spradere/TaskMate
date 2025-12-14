@@ -33,6 +33,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 	if( file_initrc == NULL )
 	{
 		msgError("file not found");
+		printf("\t <%s>\n",file_name);
 		exit(1);
 	}
 
