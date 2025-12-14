@@ -47,12 +47,12 @@ void hal_lcdWriteString(const char *str);
 void hal_usartInit(void);
 void hal_usartStart(void);
 void hal_usartStop(void);
-errorCode_t hal_usartRead(uint8_t *data);
-errorCode_t hal_usartWriteChar(uint8_t data);
+error_codes_t hal_usartRead(uint8_t *data);
+error_codes_t hal_usartWriteChar(uint8_t data);
 void hal_usartSendTXBuffer(void);
-errorCode_t hal_usartTestBufferRx(void);
-errorCode_t hal_usartWriteString(const char *str);
-errorCode_t hal_usartWriteChar(uint8_t data);
+error_codes_t hal_usartTestBufferRx(void);
+error_codes_t hal_usartWriteString(const char *str);
+error_codes_t hal_usartWriteChar(uint8_t data);
 
 // board
 

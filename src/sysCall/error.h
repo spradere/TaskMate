@@ -1,46 +1,47 @@
-
 /*
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License
- * v1.0. See the LICENSE file for full license terms.
+ * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * See the LICENSE file for full license terms.
  *
- * Non-commercial use permitted under conditions. Commercial use requires a
- * separate license. Commercial licensing inquiries:
- * https://codeberg.org/Doul09/TaskMate/issues
+ * Non-commercial use permitted under conditions. Commercial use requires a separate license.
+ * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-/**
- * @file error.h
- * @brief System wide error definitions
- *
- * @todo Add event more error codes
- */
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Auto generated code, do not edit !
+// any changes will be lost
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef TASKMATE_ERROR_H
-#define TASKMATE_ERROR_H
+#ifndef ERROR_H
+#define ERROR_H
 
 typedef enum
 {
-	ERR_SUCCESS = 0, // No error
-	ERR_INVALID_ARG = 1, // Non-critical: Task should handle it
-	ERR_TIMEOUT = 2, // Non-critical: Task can retry or abort
+	ERROR_LOW,
+	ERROR_MID,
+	ERROR_HIGH
+} error_critical_t;
 
-	ERR_HAL_USART_TX_BUFFER_EMPTY = 100,
-	ERR_HAL_USART_RX_BUFFER_EMPTY = 101,
-	ERR_HAL_USART_TX_BUFFER_FULL = 102,
-	ERR_HAL_USART_RX_BUFFER_FULL = 103,
+typedef enum
+{
+	ERR_NO_ERROR,
+	ERR_HAL_USART_TX_BUFFER_EMPTY,
+	ERR_HAL_USART_RX_BUFFER_EMPTY,
+	ERR_HAL_USART_TX_BUFFER_FULL,
+	ERR_HAL_USART_RX_BUFFER_FULL,
+	ERR_MSG_OUT_OF_FREE_CHANNEL,
+	ERROR_COUNT
+} error_codes_t;
 
-	ERR_MSG_OUT_OF_FREE_CHANNEL = 104,
+typedef struct
+{
+	char *name;
+	error_critical_t critical;
+} error_item_t;
 
-	ERR_FATAL_STACK_OVERFLOW = 200, // Critical: OS must take action
-	ERR_FATAL_MEMORY_CORRUPTION = 201, // Critical: OS must kill thread
-	ERR_FATAL_HW_FAILURE = 202 // Critical: OS must halt or reboot
-} errorCode_t;
-
-void setCriticalError(errorCode_t err);
 
 #endif

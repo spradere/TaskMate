@@ -45,8 +45,6 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * */
 
-// todo add licence header print function
-
 #include "utility/autoCode_src/autoCode.h"
 #include "utility/autoCode_src/parseInitrc.h"
 #include "utility/autoCode_src/parseTag.h"
