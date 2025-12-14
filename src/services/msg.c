@@ -49,7 +49,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 Global error 1", MSG_TO_LCD);
+		msgWritreText(channel, "\3 Global error 3", MSG_TO_LCD);
 	}
 
 	msgProcess();

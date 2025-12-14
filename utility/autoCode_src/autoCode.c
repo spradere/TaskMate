@@ -75,6 +75,8 @@ int main(int argn, const char *argv[])
 	modules_database_t data_base;
 	setupDB(&data_base);
 
+	error_catalog_t errors_catalog;
+
 	// read init.rc file and store data in data base
 	const int BUFFER_SIZE = 256;
 
@@ -95,9 +97,14 @@ int main(int argn, const char *argv[])
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 
+	// global error system
+	globalError(argv[4], &errors_catalog);
+
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/initSys.c");
-	parseTag(&data_base, "src/sysCore/runLevel.c");
+	parseTag(&data_base, "src/sysCore/initSys.c",NULL);
+	parseTag(&data_base, "src/sysCore/runLevel.c",NULL);
+	parseTag(&data_base, "src/sysCall/error.c",&errors_catalog);
+
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
@@ -106,9 +113,6 @@ int main(int argn, const char *argv[])
 				 &target);
 
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
-
-	// global error system
-	globalError(argv[4]);
 
 	// print all info about modules
 	printModules(&data_base);
