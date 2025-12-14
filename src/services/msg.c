@@ -47,11 +47,7 @@ void msg(void)
 		msgWritreText(channel, "\nmsg : Essai USART1 \n", MSG_TO_USART1);
 	}
 
-	if( msgRequestChannel(&channel) == ERR_SUCCESS )
-	{
-		msgWritreText(channel, "\3 Bonjour Eve", MSG_TO_LCD);
-
-	}
+	if( msgRequestChannel(&channel) == ERR_SUCCESS ) { msgWritreText(channel, "\3 Bonjour Eve", MSG_TO_LCD); }
 
 	msgProcess();
 

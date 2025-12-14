@@ -57,18 +57,17 @@ int main(void)
 		(*(mod_d->start))();
 	}
 
-
 	// log test
-	//char format[] = "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> ";
+	// char format[] = "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> ";
 	char dest[128];
-	char test[]="string test";
-	uint16_t i=1023;
+	char test[] = "string test";
+	uint16_t i = 1023;
 
-	snprintf(dest,128,"[%s:%i] \n\nBoot ...\n", __FILE__,__LINE__);
+	snprintf(dest, 128, "[%s:%i] \n\nBoot ...\n", __FILE__, __LINE__);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
-	snprintf(dest, 128, "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> \n",'@',test,i,i,i,i,i);
+	snprintf(dest, 128, "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> \n", '@', test, i, i, i, i, i);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
@@ -87,10 +86,9 @@ int main(void)
 
 	hal_ZS_042Read(&t);
 
-	snprintf(dest, 128, "[time] %i/%i/20%i %i:%i\n",t.day,t.month,t.year,t.hours,t.minutes );
+	snprintf(dest, 128, "[time] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
-
 
 	// jump to current thread for first call and start system by enabling INT
 	moduleThreadSetCurrent(0);
