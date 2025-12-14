@@ -82,6 +82,15 @@ void globalError(const char *file_err_in_name, error_catalog_t *errors)
 
 		printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
 
+		for(int i = 0; i < error_current; i++)
+		{
+			if(strcmp(tok.tokens[0], errors->catalog[1].name) == 0)
+			{
+				msgError("Duplicate error name :");
+				printf("\t<%s>\n", errors->catalog[1].name);
+				exit(1);
+			}
+		}
 		strncpy(errors->catalog[error_current].name, tok.tokens[0],256);
 		strncpy(errors->catalog[error_current].message, tok.tokens[1],256);
 
