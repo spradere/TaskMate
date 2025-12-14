@@ -19,25 +19,9 @@
 
 #include "globalError.h"
 #include "tokenizer.h"
-typedef enum
-{
-	ERROR_NOT_DEFINED,
-	ERROR_LOW,
-	ERROR_MID,
-	ERROR_HIGH
-}error_critical_t;
-
-typedef struct
-{
-	char name[256];
-	char message[256];
-	error_critical_t critical;
-} error_item_t;
-
-error_item_t error_catalog[256];
 
 
-void globalError(const char *file_err_in_name)
+void globalError(const char *file_err_in_name, error_catalog_t *errors)
 {
 	msgInfo("open error file :");
 	printf("\t <%s>\n", file_err_in_name);
@@ -78,13 +62,12 @@ void globalError(const char *file_err_in_name)
 	// read form source
 	int file_line_number = 0;
 	int error_current = 0;
-	int error_count = 0;
 	tokenizer_t tok;
 	printf("\n");
 
-	strncpy(error_catalog[error_current].name, "ERR_NO_ERROR",256);
-	strncpy(error_catalog[error_current].message, "\"No error\"",256);
-	error_catalog[error_current].critical = ERROR_LOW;
+	strncpy(errors->catalog[error_current].name, "ERR_NO_ERROR",256);
+	strncpy(errors->catalog[error_current].message, "\"No error\"",256);
+	errors->catalog[error_current].critical = ERROR_LOW;
 	error_current++;
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_err_in) )
@@ -99,14 +82,14 @@ void globalError(const char *file_err_in_name)
 
 		printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
 
-		strncpy(error_catalog[error_current].name, tok.tokens[0],256);
-		strncpy(error_catalog[error_current].message, tok.tokens[1],256);
+		strncpy(errors->catalog[error_current].name, tok.tokens[0],256);
+		strncpy(errors->catalog[error_current].message, tok.tokens[1],256);
 
-		error_catalog[error_current].critical = ERROR_NOT_DEFINED;
-		if(strcmp( tok.tokens[2], "LOW") == 0){error_catalog[error_current].critical = ERROR_LOW;}
-		if(strcmp( tok.tokens[2], "MID") == 0){error_catalog[error_current].critical = ERROR_MID;}
-		if(strcmp( tok.tokens[2], "HIGH") == 0){error_catalog[error_current].critical = ERROR_HIGH;}
-		if( error_catalog[error_current].critical == ERROR_NOT_DEFINED)
+		errors->catalog[error_current].critical = ERROR_NOT_DEFINED;
+		if(strcmp( tok.tokens[2], "LOW") == 0){errors->catalog[error_current].critical = ERROR_LOW;}
+		if(strcmp( tok.tokens[2], "MID") == 0){errors->catalog[error_current].critical = ERROR_MID;}
+		if(strcmp( tok.tokens[2], "HIGH") == 0){errors->catalog[error_current].critical = ERROR_HIGH;}
+		if( errors->catalog[error_current].critical == ERROR_NOT_DEFINED)
 		{
 			msgError("wrong citical argument :");
 			printf("\t<%s>\n",tok.tokens[2]);
@@ -120,16 +103,16 @@ void globalError(const char *file_err_in_name)
 			msgError("Too many errors > 256");
 			exit(1);
 		}
-		error_count = error_current;
+		errors->error_count = error_current;
 	}
 
-	// write errors
+	// write errors enum
 	fprintf(file_err_out,"typedef enum\n");
 	fprintf(file_err_out,"{\n");
 
-	for(int i=0; i< error_count; i++)
+	for(int i=0; i< errors->error_count; i++)
 	{
-		fprintf(file_err_out,"\t%s,\n",error_catalog[i].name);
+		fprintf(file_err_out,"\t%s,\n",errors->catalog[i].name);
 	}
 	fprintf(file_err_out,"\tERROR_COUNT\n");
 	fprintf(file_err_out,"} error_codes_t;\n\n");
@@ -139,16 +122,6 @@ void globalError(const char *file_err_in_name)
 	fprintf(file_err_out,"\tchar *name;\n");
 	fprintf(file_err_out,"\terror_critical_t critical;\n");
 	fprintf(file_err_out,"} error_item_t;\n\n");
-
-	/*fprintf(file_err_out,"const error_item_t error_catalog[] = \n{\n");
-
-	for(int i=0; i< error_count-1; i++)
-	{
-		fprintf(file_err_out,"\t{%s, %i},\n", error_catalog[i].message, error_catalog[i].critical);
-	}
-	fprintf(file_err_out,"\t{%s, %i}\n",
-		error_catalog[error_count-1].message, error_catalog[error_count-1].critical);
-	fprintf(file_err_out,"};\n");*/
 
 	// end
 	fprintf(file_err_out,"\n#endif\n");
