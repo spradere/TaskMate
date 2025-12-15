@@ -25,8 +25,7 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 	FILE *file_alloc = fopen(file_name, "w");
 	if( file_alloc == NULL )
 	{
-		msgError("creating file");
-		printf("\t <%s>\n", file_name);
+		msgError("creating file <%s>", file_name);
 		exit(1);
 	}
 

@@ -25,15 +25,12 @@
 void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_name)
 {
 	// open list files
-	printf("\n");
-	msgInfo("open init.rc file for parsing");
-	printf("\t <%s> \n", file_name);
+	msgInfo("open init.rc file for parsing <%s>", file_name);
 
 	FILE *file_initrc = fopen(file_name, "r");
 	if( file_initrc == NULL )
 	{
-		msgError("file not found");
-		printf("\t <%s>\n",file_name);
+		msgError("file not found <%s>",file_name);
 		exit(1);
 	}
 
@@ -56,9 +53,8 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 		{
 			if( tok.count > mod->initrc_arg_count_max )
 			{
-				msgError("wrong token count");
-				printf("\t [%s:%i] is %i, should be max(%i)\n\n", file_name, file_line_number, tok.count,
-					   mod->initrc_arg_count_max);
+				msgError("wrong token count [%s:%i] is %i, should be max(%i)",
+					file_name, file_line_number, tok.count, mod->initrc_arg_count_max);
 				err_flag = 1;
 			}
 
@@ -66,8 +62,8 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 			{
 				if( strcmp(mod->modules[j].name, tok.tokens[0]) == 0 )
 				{
-					msgError("duplicate name");
-					printf("\t [%s:%i] %s\n\n", file_name, file_line_number, tok.tokens[0]);
+					msgError("duplicate name [%s:%i] %s\n\n",
+						file_name, file_line_number, tok.tokens[0]);
 					err_flag = 1;
 				}
 			}
@@ -82,8 +78,8 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 											&data_base->run_level_module_count[TYPE]);
 				if( err != 0 )
 				{
-					msgError("unknown command");
-					printf("\t [%s:%i] %s\n\n", file_name, file_line_number, tok.tokens[i]);
+					msgError("unknown command [%s:%i] %s",
+						file_name, file_line_number, tok.tokens[i]);
 					err_flag = 1;
 				}
 			}
@@ -91,8 +87,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 			// proceed name
 			if( strlen(tok.tokens[0]) > MODULES_NAME_SIZE_MAX )
 			{
-				msgError("Name too long");
-				printf("\t <%s> is over %i\n\n", tok.tokens[0], MODULES_NAME_SIZE_MAX);
+				msgError("Name too long <%s> is over %i", tok.tokens[0], MODULES_NAME_SIZE_MAX);
 				err_flag = 1;
 			}
 

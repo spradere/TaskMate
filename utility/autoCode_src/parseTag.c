@@ -28,8 +28,7 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 	FILE *file_src = fopen(name_src, "r");
 	if( file_src == NULL )
 	{
-		msgError("opening file");
-		printf("\t <%s>\n", name_src);
+		msgError("opening file <%s>", name_src);
 		exit(1);
 	}
 
@@ -45,8 +44,7 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 	FILE *file_tmp = fopen(name_tmp, "w");
 	if( file_tmp == NULL )
 	{
-		msgError("creating file");
-		printf("\t <%s>\n", name_tmp);
+		msgError("creating file <%s>", name_tmp);
 		exit(1);
 	}
 
@@ -54,7 +52,6 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 	int tag_section = 0;
 	int file_line_number = 0;
 	tokenizer_t tok;
-	printf("\n");
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src) )
 	{
@@ -65,20 +62,18 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 		{
 			if( tok.count != 4 )
 			{
-				msgError("token count != 4 tok.line :");
-				printf("\t [%s:%i] %s\n\n", name_src, file_line_number, tok.line);
+				msgError("token count != 4 tok.line [%s:%i] %s", name_src, file_line_number, tok.line);
 				break;
 			}
 
 			if( tag_section == 1 )
 			{
-				msgError("Start new tag section without previous end tag [/tag]");
-				printf("\t [%s:%i] %s\n\n", name_src, file_line_number, tok.line);
+				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s",
+					name_src, file_line_number, tok.line);
 				break;
 			}
 
-			msgInfo("found tag :");
-			printf("\t %s %s\n", tok.tokens[2], tok.tokens[3]);
+			msgInfo("found tag %s %s", tok.tokens[2], tok.tokens[3]);
 
 			fprintf(file_tmp, "%s", tok.line);
 			tag_section = 1;
@@ -106,7 +101,7 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
 		{
-			msgInfo("end tag\n");
+			msgInfo("end tag");
 			tag_section = 0;
 		}
 
@@ -115,8 +110,7 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 
 	if( tag_section == 1 )
 	{
-		msgError("missing end tag [/tag]");
-		printf("\t [%s:%i]\n\n", name_src, file_line_number);
+		msgError("missing end tag [/tag] [%s:%i]", name_src, file_line_number);
 		exit(1);
 	}
 
