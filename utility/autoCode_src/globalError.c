@@ -84,10 +84,10 @@ void globalError(const char *file_err_in_name, error_catalog_t *errors)
 
 		for(int i = 0; i < error_current; i++)
 		{
-			if(strcmp(tok.tokens[0], errors->catalog[1].name) == 0)
+			if(strcmp(tok.tokens[0], errors->catalog[i].name) == 0)
 			{
 				msgError("Duplicate error name :");
-				printf("\t<%s>\n", errors->catalog[1].name);
+				printf("\t<%s>\n", tok.tokens[0]);
 				exit(1);
 			}
 		}
