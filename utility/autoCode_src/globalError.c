@@ -23,15 +23,13 @@
 
 void globalError(const char *file_err_in_name, error_catalog_t *errors)
 {
-	msgInfo("open error file :");
-	printf("\t <%s>\n", file_err_in_name);
+	msgInfo("open error file <%s>", file_err_in_name);
 
 	// open file
 	FILE *file_err_in = fopen(file_err_in_name, "r");
 	if( file_err_in == NULL )
 	{
-		msgError("open error file :");
-		printf("\t <%s>\n", file_err_in_name);
+		msgError("open error file <%s>", file_err_in_name);
 		exit(1);
 	}
 
@@ -63,7 +61,6 @@ void globalError(const char *file_err_in_name, error_catalog_t *errors)
 	int file_line_number = 0;
 	int error_current = 0;
 	tokenizer_t tok;
-	printf("\n");
 
 	strncpy(errors->catalog[error_current].name, "ERR_NO_ERROR",256);
 	strncpy(errors->catalog[error_current].message, "\"No error\"",256);
@@ -76,18 +73,17 @@ void globalError(const char *file_err_in_name, error_catalog_t *errors)
 		tokenizer(&tok);
 		if( tok.count != 3 )
 		{
-			msgError("wrong token count != 3 tok.line :");
-			printf("\t [%s:%i] %s\n\n", file_err_in_name, file_line_number, tok.line);
+			msgError("wrong token count != 3 tok.line [%s:%i] %s",
+				file_err_in_name, file_line_number, tok.line);
 		}
 
-		printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
+		//printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
 
 		for(int i = 0; i < error_current; i++)
 		{
 			if(strcmp(tok.tokens[0], errors->catalog[i].name) == 0)
 			{
-				msgError("Duplicate error name :");
-				printf("\t<%s>\n", tok.tokens[0]);
+				msgError("Duplicate error name <%s>", tok.tokens[0]);
 				exit(1);
 			}
 		}
@@ -100,8 +96,7 @@ void globalError(const char *file_err_in_name, error_catalog_t *errors)
 		if(strcmp( tok.tokens[2], "HIGH") == 0){errors->catalog[error_current].critical = ERROR_HIGH;}
 		if( errors->catalog[error_current].critical == ERROR_NOT_DEFINED)
 		{
-			msgError("wrong citical argument :");
-			printf("\t<%s>\n",tok.tokens[2]);
+			msgError("wrong citical argument <%s>",tok.tokens[2]);
 			exit(1);
 		}
 

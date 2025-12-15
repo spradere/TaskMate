@@ -31,7 +31,6 @@ const error_item_t error_catalog[] =
 	{"RX buffer is empty", 1},
 	{"TX buffer is full", 1},
 	{"RX buffer is full", 1},
-	{"RX buffer is full", 1},
 	{"No more free channels", 1}
 };
 // [/tag]
