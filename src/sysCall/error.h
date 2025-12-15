@@ -43,5 +43,4 @@ typedef struct
 	error_critical_t critical;
 } error_item_t;
 
-
 #endif

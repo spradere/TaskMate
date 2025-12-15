@@ -21,25 +21,24 @@
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-
-void parseTag(modules_database_t *data_base, const char *name_src, error_catalog_t *errors)
+void parseTag(modules_database_t *data_base, const char *file_src_name, error_catalog_t *errors)
 {
 	// open source and tmp file
-	FILE *file_src = fopen(name_src, "r");
+	FILE *file_src = fopen(file_src_name, "r");
 	if( file_src == NULL )
 	{
-		msgError("opening file <%s>", name_src);
+		msgError("opening file <%s>", file_src_name);
 		exit(1);
 	}
 
 	char *name_tmp;
-	name_tmp = malloc(strlen(name_src) + strlen(".tmp") + 1);
+	name_tmp = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
 	if( name_tmp == NULL )
 	{
 		msgError("malloc name_tmp");
 		exit(1);
 	}
-	sprintf(name_tmp, "%s.tmp", name_src);
+	sprintf(name_tmp, "%s.tmp", file_src_name);
 
 	FILE *file_tmp = fopen(name_tmp, "w");
 	if( file_tmp == NULL )
@@ -62,14 +61,14 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 		{
 			if( tok.count != 4 )
 			{
-				msgError("token count != 4 tok.line [%s:%i] %s", name_src, file_line_number, tok.line);
+				msgError("token count != 4 tok.line [%s:%i] %s", file_src_name, file_line_number, tok.line);
 				break;
 			}
 
 			if( tag_section == 1 )
 			{
-				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s",
-					name_src, file_line_number, tok.line);
+				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s", file_src_name,
+						 file_line_number, tok.line);
 				break;
 			}
 
@@ -110,12 +109,12 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 
 	if( tag_section == 1 )
 	{
-		msgError("missing end tag [/tag] [%s:%i]", name_src, file_line_number);
+		msgError("missing end tag [/tag] [%s:%i]", file_src_name, file_line_number);
 		exit(1);
 	}
 
 	// Replace original file with the modified version
-	if( (remove(name_src) != 0) || (rename(name_tmp, name_src) != 0) )
+	if( (remove(file_src_name) != 0) || (rename(name_tmp, file_src_name) != 0) )
 	{
 		msgError("replacing tmp / src");
 		exit(1);
@@ -248,13 +247,13 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 
 static void writeErrorCatalog(error_catalog_t *errors, FILE *file)
 {
-	fprintf(file,"const error_item_t error_catalog[] = \n{\n");
+	fprintf(file, "const error_item_t error_catalog[] = \n{\n");
 
-	for(int i=0; i< errors->error_count-1; i++)
+	for( int i = 0; i < errors->error_count - 1; i++ )
 	{
-		fprintf(file,"\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
+		fprintf(file, "\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
 	}
-	fprintf(file,"\t{%s, %i}\n",
-		errors->catalog[errors->error_count-1].message, errors->catalog[errors->error_count-1].critical);
-	fprintf(file,"};\n");
+	fprintf(file, "\t{%s, %i}\n", errors->catalog[errors->error_count - 1].message,
+			errors->catalog[errors->error_count - 1].critical);
+	fprintf(file, "};\n");
 }
