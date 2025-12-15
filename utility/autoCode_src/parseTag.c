@@ -21,7 +21,8 @@
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/tokenizer.h"
 
-void parseTag(modules_database_t *data_base, const char *name_src)
+
+void parseTag(modules_database_t *data_base, const char *name_src, error_catalog_t *errors)
 {
 	// open source and tmp file
 	FILE *file_src = fopen(name_src, "r");
@@ -37,7 +38,7 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 	if( name_tmp == NULL )
 	{
 		msgError("malloc name_tmp");
-		exit(0);
+		exit(1);
 	}
 	sprintf(name_tmp, "%s.tmp", name_src);
 
@@ -96,6 +97,11 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 			{
 				writeRunLevelsInit(data_base, file_tmp);
 			}
+
+			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "catalog") == 0) )
+			{
+				writeErrorCatalog(errors, file_tmp);
+			}
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
@@ -111,14 +117,14 @@ void parseTag(modules_database_t *data_base, const char *name_src)
 	{
 		msgError("missing end tag [/tag]");
 		printf("\t [%s:%i]\n\n", name_src, file_line_number);
-		exit(0);
+		exit(1);
 	}
 
 	// Replace original file with the modified version
 	if( (remove(name_src) != 0) || (rename(name_tmp, name_src) != 0) )
 	{
 		msgError("replacing tmp / src");
-		exit(2);
+		exit(1);
 	}
 
 	fclose(file_src);
@@ -244,4 +250,17 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 
 	fprintf(file, "\tto_run.current=RUN_CORE;\n");
 	fprintf(file, "\tto_run.next=RUN_CORE;\n");
+}
+
+static void writeErrorCatalog(error_catalog_t *errors, FILE *file)
+{
+	fprintf(file,"const error_item_t error_catalog[] = \n{\n");
+
+	for(int i=0; i< errors->error_count-1; i++)
+	{
+		fprintf(file,"\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
+	}
+	fprintf(file,"\t{%s, %i}\n",
+		errors->catalog[errors->error_count-1].message, errors->catalog[errors->error_count-1].critical);
+	fprintf(file,"};\n");
 }

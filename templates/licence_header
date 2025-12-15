@@ -10,19 +10,3 @@
  *
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Auto generated code, do not edit !
-// any changes will be lost
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-#ifndef ERROR_H
-#define ERROR_H
-
-typedef enum
-{
-	ERROR_LOW,
-	ERROR_MID,
-	ERROR_HIGH
-} error_critical_t;
-

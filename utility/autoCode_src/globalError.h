@@ -11,18 +11,38 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Auto generated code, do not edit !
-// any changes will be lost
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/**
+ * @file global_error.h
+ * @brief global error header
+ *
+ */
 
-#ifndef ERROR_H
-#define ERROR_H
+#ifndef GLOBAL_ERROR_H
+#define GLOBAL_ERROR_H
+
+#include "utility/autoCode_src/autoCode.h"
 
 typedef enum
 {
+	ERROR_NOT_DEFINED,
 	ERROR_LOW,
 	ERROR_MID,
 	ERROR_HIGH
-} error_critical_t;
+}error_critical_t;
 
+typedef struct
+{
+	char name[256];
+	char message[256];
+	error_critical_t critical;
+} error_item_t;
+
+typedef struct
+{
+	error_item_t catalog[256];
+	int error_count;
+}error_catalog_t;
+
+void globalError(const char *file_err_in_name, error_catalog_t *errors);
+
+#endif

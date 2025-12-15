@@ -36,7 +36,7 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
-# Include dependency files used to compile *.c if related header was edited
+# dependency files used to compile *.c if related header or source was edited
 dependency_check:
 	@printf "\n\033[1;33mCheck dependency files\033[0m\n\n"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
@@ -44,10 +44,11 @@ dependency_check:
 # Test if autoCode and initrc files was modified
 ${AUTO_HEADERS}: ${AUTOCODE_STAMP}
 
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC}
-	@printf "\n\033[1;33minitrc have changed or autoCode.c -> run autoCode\033[0m\n\n"
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} > build/autoCode_${AUTOCODE_TIMESTAMP}
-	touch ${AUTOCODE_STAMP}
+${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL}
+	@printf "\n\033[1;33minitrc, autocode or error files have changed -> run autoCode\033[0m\n\n"
+	@rm -f build/autoCode_*
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > build/autoCode_${AUTOCODE_TIMESTAMP}
+	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not avr-gcc
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
@@ -76,3 +77,14 @@ system_critical_check:
 	    fi; \
 	done
 .endfor
+
+# global errors
+${ERROR_ALL}: ${ERROR_FILES}
+	@printf "\n\033[1;33mCat all *.err in one file for autoCode\033[0m\n"
+	@cat ${ERROR_FILES} > ${ERROR_ALL}
+
+# special rule for autoCode alone, test purpose
+autoCode_alone:
+	@printf "\n\033[1;33mCompiling and running autoCode alone\033[0m\n\n"
+	@clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
+	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL}

@@ -16,7 +16,6 @@
  * @file scheduler.c
  * @brief scheduler implementation
  *
- * @todo add free channel
  */
 
 #include "hal/hal_user_api.h"
