@@ -36,6 +36,6 @@ typedef struct
 }tokenizer_t;
 
 
-void tokenizer(tokenizer_t *data);
+void tokenizer(tokenizer_t *tok);
 
 #endif
