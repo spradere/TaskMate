@@ -20,12 +20,12 @@
 
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeAlloc(const modules_database_t *data_base, const char *file_name)
+void writeAlloc(const modules_database_t *data_base, const char *file_alloc_name)
 {
-	FILE *file_alloc = fopen(file_name, "w");
+	FILE *file_alloc = fopen(file_alloc_name, "w");
 	if( file_alloc == NULL )
 	{
-		msgError("creating file <%s>", file_name);
+		msgError("creating file <%s>", file_alloc_name);
 		exit(1);
 	}
 

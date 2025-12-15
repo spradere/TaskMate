@@ -20,14 +20,14 @@
 
 #include "utility/autoCode_src/writeInclude.h"
 
-void writeInclude(const modules_database_t *data_base, const int type, const char *file_name,
+void writeInclude(const modules_database_t *data_base, const int type, const char *file_include_name,
 				  const target_t *target)
 {
 	// open file
-	FILE *file_include = fopen(file_name, "w");
+	FILE *file_include = fopen(file_include_name, "w");
 	if( file_include == NULL )
 	{
-		msgError("creating file <%s>", file_name);
+		msgError("creating file <%s>", file_include_name);
 		exit(1);
 	}
 
@@ -36,7 +36,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	char guard_name[512];
 
 	snprintf(cmd, sizeof(cmd), "printf \"%s\" | sed 's#.*/##' | tr a-z A-Z | sed 's/[^A-Z0-9_]/_/g'",
-			 file_name);
+			 file_include_name);
 
 	FILE *p_cmd = popen(cmd, "r");
 	if( !p_cmd )

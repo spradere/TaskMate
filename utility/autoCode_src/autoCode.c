@@ -100,10 +100,9 @@ int main(int argn, const char *argv[])
 	globalError(argv[4], &errors_catalog);
 
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/initSys.c",NULL);
-	parseTag(&data_base, "src/sysCore/runLevel.c",NULL);
-	parseTag(&data_base, "src/sysCall/error.c",&errors_catalog);
-
+	parseTag(&data_base, "src/sysCore/initSys.c", NULL);
+	parseTag(&data_base, "src/sysCore/runLevel.c", NULL);
+	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog);
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
@@ -163,8 +162,8 @@ static void checkModulesCount(modules_database_t *data_base)
 	{
 		if( module_count[i][0] > module_count[i][1] )
 		{
-			msgError("Too many modules ! %s count = %i > TaskMate max %i",
-				data_base->modules_type[i].name, module_count[i][0], module_count[i][1]);
+			msgError("Too many modules ! %s count = %i > TaskMate max %i", data_base->modules_type[i].name,
+					 module_count[i][0], module_count[i][1]);
 			exit(1);
 		}
 	}
@@ -173,7 +172,8 @@ static void checkModulesCount(modules_database_t *data_base)
 void printLicenceHeader(FILE *file)
 {
 	char header_path[] = "templates/licence_header";
-	FILE *header_file = fopen(header_path,"r");
+	FILE *header_file = fopen(header_path, "r");
+
 	if( header_file == NULL )
 	{
 		msgError("open error file <%s>", header_path);
@@ -181,11 +181,10 @@ void printLicenceHeader(FILE *file)
 	}
 
 	char c;
-	do
-	{
+	do {
 		c = fgetc(header_file);
-		if ( c!= EOF) {fputc(c, file);}
-	}while( c != EOF );
+		if( c != EOF ) { fputc(c, file); }
+	} while( c != EOF );
 
 	fputc('\n', file);
 
