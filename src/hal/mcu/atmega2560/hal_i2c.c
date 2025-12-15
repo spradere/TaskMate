@@ -80,17 +80,17 @@ uint8_t hal_i2cWrite(uint8_t data)
 
 uint8_t hal_i2cRead(bool ack)
 {
-	if (ack)
+	if( ack )
 		TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
 	else
 		TWCR = (1 << TWEN) | (1 << TWINT);
 
-	while (!(TWCR & (1 << TWINT)));
+	while( !(TWCR & (1 << TWINT)) );
 
 	uint8_t status = TWSR & 0xF8;
 
-	if (ack && status != TW_MR_DATA_ACK)   return 0xFF;
-	if (!ack && status != TW_MR_DATA_NACK) return 0xFF;
+	if( ack && status != TW_MR_DATA_ACK ) return 0xFF;
+	if( !ack && status != TW_MR_DATA_NACK ) return 0xFF;
 
 	return TWDR;
 }

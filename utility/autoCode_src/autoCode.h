@@ -34,11 +34,12 @@
 
 // target name struture
 typedef struct
-	{
-		const char * const arch_name;
-		const char * const mcu_name;
-		const char * const board_name;
-	} target_t;
+{
+	const char * const arch_name;
+	const char * const mcu_name;
+	const char * const board_name;
+} target_t;
+
 typedef unsigned char module_status_t;
 typedef int run_level_modules_count_t;
 
@@ -69,5 +70,7 @@ typedef struct
 	int threads_count[RUN_LEVEL_COUNT];
 
 } modules_database_t;
+
+void printLicenceHeader(FILE *file);
 
 #endif

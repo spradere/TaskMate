@@ -51,6 +51,7 @@
 #include "utility/autoCode_src/printModules.h"
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/writeInclude.h"
+#include "utility/autoCode_src/globalError.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -59,10 +60,10 @@ int main(int argn, const char *argv[])
 {
 
 	// test command line arguments
-	if( argn != 4 )
+	if( argn != 5 )
 	{
-		msgError("Bad argn for autoCode, forget arch / mcu / board ?");
-		exit(0);
+		msgError("Bad argn for autoCode, use autoCode ach mcu board error_file.err");
+		exit(1);
 	}
 
 	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
@@ -73,6 +74,8 @@ int main(int argn, const char *argv[])
 	// setup data base
 	modules_database_t data_base;
 	setupDB(&data_base);
+
+	error_catalog_t errors_catalog;
 
 	// read init.rc file and store data in data base
 	const int BUFFER_SIZE = 256;
@@ -94,9 +97,14 @@ int main(int argn, const char *argv[])
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 
+	// global error system
+	globalError(argv[4], &errors_catalog);
+
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/initSys.c");
-	parseTag(&data_base, "src/sysCore/runLevel.c");
+	parseTag(&data_base, "src/sysCore/initSys.c",NULL);
+	parseTag(&data_base, "src/sysCore/runLevel.c",NULL);
+	parseTag(&data_base, "src/sysCall/error.c",&errors_catalog);
+
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
@@ -159,7 +167,30 @@ static void checkModulesCount(modules_database_t *data_base)
 			msgError("Too many modules !");
 			printf("\t %s count = %i > TaskMate max %i\n\n", data_base->modules_type[i].name,
 				   module_count[i][0], module_count[i][1]);
-			exit(0);
+			exit(1);
 		}
 	}
+}
+
+void printLicenceHeader(FILE *file)
+{
+	char header_path[] = "templates/licence_header";
+	FILE *header_file = fopen(header_path,"r");
+	if( header_file == NULL )
+	{
+		msgError("open error file :");
+		printf("\t <%s>\n", header_path);
+		exit(1);
+	}
+
+	char c;
+	do
+	{
+		c = fgetc(header_file);
+		if ( c!= EOF) {fputc(c, file);}
+	}while( c != EOF );
+
+	fputc('\n', file);
+
+	fclose(header_file);
 }
