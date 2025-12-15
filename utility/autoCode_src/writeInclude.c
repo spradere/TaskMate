@@ -27,8 +27,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	FILE *file_include = fopen(file_name, "w");
 	if( file_include == NULL )
 	{
-		msgError("creating file");
-		printf("\t <%s>\n", file_name);
+		msgError("creating file <%s>", file_name);
 		exit(1);
 	}
 
@@ -53,8 +52,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		exit(1);
 	}
 
-	msgInfo("generated guard name :");
-	printf("\t %s\n\n", guard_name);
+	msgInfo("generated guard name %s", guard_name);
 
 	// write code
 	printLicenceHeader(file_include);
