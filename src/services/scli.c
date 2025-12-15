@@ -39,13 +39,13 @@ void scliEcho(void)
 {
 	uint8_t data;
 
-	if( hal_usartTestBufferRx() != ERR_USART1_RX_BUFFER_EMPTY )
+	if( hal_usartTestBufferRx() != ERR_HAL_USART_RX_BUFFER_EMPTY )
 	{
 		hal_usartWriteString("scli.c : ");
 
-		while( hal_usartRead(&data) != ERR_USART1_RX_BUFFER_EMPTY )
+		while( hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY )
 		{
-			if( hal_usartWriteChar(data) == ERR_USART1_TX_BUFFER_FULL ) { break; }
+			if( hal_usartWriteChar(data) == ERR_HAL_USART_TX_BUFFER_FULL ) { break; }
 		}
 		hal_usartSendTXBuffer();
 	}

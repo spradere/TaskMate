@@ -15,8 +15,8 @@ to separate build logic, system logic, and hardware dependencies.
 
 > <span style="color:green"> **Project Stats (v0.20)**</span>
 >
->  <span style="color:green">192 commits • 91 source files • 2589 lines of code •
-> binary size : 3352 bytes (Flash) • ram usage : 1911 bytes</span>
+>  <span style="color:green">22 commits • 100 source files • 3303 lines of code •
+> binary size : 6070 bytes (Flash) • ram usage : 2306 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >

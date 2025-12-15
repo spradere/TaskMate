@@ -42,15 +42,14 @@ void msg(void)
 
 	uint8_t channel;
 
-	if( msgRequestChannel(&channel) == ERR_SUCCESS )
+	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
 		msgWritreText(channel, "\nmsg : Essai USART1 \n", MSG_TO_USART1);
 	}
 
-	if( msgRequestChannel(&channel) == ERR_SUCCESS )
+	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 add RTC module", MSG_TO_LCD);
-
+		msgWritreText(channel, "\3 Global error 3", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -62,7 +61,7 @@ void msg(void)
 	}
 }
 
-errorCode_t msgRequestChannel(uint8_t *channel)
+error_codes_t msgRequestChannel(uint8_t *channel)
 {
 	for( uint8_t i = 0; i < MSG_CHANNELS_MAX; i++ )
 	{
@@ -70,7 +69,7 @@ errorCode_t msgRequestChannel(uint8_t *channel)
 		{
 			channels[i].status |= (1 << MSG_FLAG_IN_USE);
 			*channel = i;
-			return ERR_SUCCESS;
+			return ERR_NO_ERROR;
 		}
 	}
 	return ERR_MSG_OUT_OF_FREE_CHANNEL;

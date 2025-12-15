@@ -47,12 +47,12 @@ void hal_lcdWriteString(const char *str);
 void hal_usartInit(void);
 void hal_usartStart(void);
 void hal_usartStop(void);
-errorCode_t hal_usartRead(uint8_t *data);
-errorCode_t hal_usartWriteChar(uint8_t data);
+error_codes_t hal_usartRead(uint8_t *data);
+error_codes_t hal_usartWriteChar(uint8_t data);
 void hal_usartSendTXBuffer(void);
-errorCode_t hal_usartTestBufferRx(void);
-errorCode_t hal_usartWriteString(const char *str);
-errorCode_t hal_usartWriteChar(uint8_t data);
+error_codes_t hal_usartTestBufferRx(void);
+error_codes_t hal_usartWriteString(const char *str);
+error_codes_t hal_usartWriteChar(uint8_t data);
 
 // board
 
@@ -62,13 +62,13 @@ bool hal_gpioReadPin(const gpio_pin_item_t *pin);
 
 typedef struct
 {
-	uint8_t seconds;  // 0-59
-	uint8_t minutes;  // 0-59
-	uint8_t hours;    // 0-23
-	uint8_t weekday;  // 1-7
-	uint8_t day;      // 1-31
-	uint8_t month;    // 1-12
-	uint8_t year;     // 0-99
+	uint8_t seconds; // 0-59
+	uint8_t minutes; // 0-59
+	uint8_t hours; // 0-23
+	uint8_t weekday; // 1-7
+	uint8_t day; // 1-31
+	uint8_t month; // 1-12
+	uint8_t year; // 0-99
 } hal_rtc_time_t;
 
 void hal_ZS_042Init();
@@ -76,6 +76,5 @@ void hal_ZS_042Start();
 void hal_ZS_042Stop();
 uint8_t hal_ZS_042Read(hal_rtc_time_t *t);
 uint8_t hal_ZS_042Write(const hal_rtc_time_t *t);
-
 
 #endif
