@@ -30,16 +30,15 @@ void runLevelInit(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
 	// [autoCode_tag] run levels
-	to_run = (run_levels_t){
-		.level0 = {0},
-		.level1 = {0},
-		.level2 = {0},
-		.level3 = {2,0,1},
-		.level4 = {4,0,1,2,3},
-		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
-	};
-	to_run.current=RUN_CORE;
-	to_run.next=RUN_CORE;
+	to_run =
+		(run_levels_t){.level0 = {0},
+					   .level1 = {0},
+					   .level2 = {0},
+					   .level3 = {2, 0, 1},
+					   .level4 = {4, 0, 1, 2, 3},
+					   .levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}};
+	to_run.current = RUN_CORE;
+	to_run.next = RUN_CORE;
 	// [/tag]
 }
 

@@ -22,6 +22,6 @@
 
 #include "utility/autoCode_src/autoCode.h"
 
-void writeAlloc(const modules_database_t *data_base, const char *file_name);
+void writeAlloc(const modules_database_t *data_base, const char *file_alloc_name);
 
 #endif
