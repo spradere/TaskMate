@@ -62,14 +62,13 @@ int main(int argn, const char *argv[])
 	// test command line arguments
 	if( argn != 5 )
 	{
-		msgError("Bad argn for autoCode, use autoCode ach mcu board error_file.err");
+		msgError("Bad argn (is %i, not 5) for autoCode\n\tuse autoCode ach mcu board error_file.err", argn);
 		exit(1);
 	}
 
 	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
 
-	msgInfo("target : ");
-	printf("\t %s -> %s -> %s \n", target.arch_name, target.mcu_name, target.board_name);
+	msgInfo("target %s -> %s -> %s", target.arch_name, target.mcu_name, target.board_name);
 
 	// setup data base
 	modules_database_t data_base;
@@ -164,9 +163,8 @@ static void checkModulesCount(modules_database_t *data_base)
 	{
 		if( module_count[i][0] > module_count[i][1] )
 		{
-			msgError("Too many modules !");
-			printf("\t %s count = %i > TaskMate max %i\n\n", data_base->modules_type[i].name,
-				   module_count[i][0], module_count[i][1]);
+			msgError("Too many modules ! %s count = %i > TaskMate max %i",
+				data_base->modules_type[i].name, module_count[i][0], module_count[i][1]);
 			exit(1);
 		}
 	}
@@ -178,8 +176,7 @@ void printLicenceHeader(FILE *file)
 	FILE *header_file = fopen(header_path,"r");
 	if( header_file == NULL )
 	{
-		msgError("open error file :");
-		printf("\t <%s>\n", header_path);
+		msgError("open error file <%s>", header_path);
 		exit(1);
 	}
 

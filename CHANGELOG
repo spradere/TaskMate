@@ -78,3 +78,7 @@ TaskMate 0.21
 	hal end
 
 TaskMate 0.22
+
+	add global error system
+
+TaskMate 0.23

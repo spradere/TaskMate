@@ -17,3 +17,7 @@ check tag
 
 check commits
 	git rev-list --count v0.5
+
+temp save/restore modified files
+	git stash
+	git stash pop
