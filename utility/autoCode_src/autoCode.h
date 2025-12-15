@@ -33,7 +33,7 @@
 	fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
 #define msgInfo(format, ...) \
-	fprintf(stderr, "[%s:%d] info : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+	fprintf(stdout, "[%s:%d] info : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
 // target name struture
 typedef struct

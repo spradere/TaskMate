@@ -20,7 +20,7 @@
 #define AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
 
 #ifndef AUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-	#error "autoInclude system critical not allowed"
+#error "autoInclude system critical not allowed"
 #endif
 
 #include "hal/arch/avr8/hal_stack.h"
