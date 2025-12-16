@@ -28,12 +28,14 @@
 
 #include "hal/hal_user_api.h"
 #include "hal/hal_system_critical_api.h"
+#include "hal/autoInclude_hal_target.h"
 
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
 #include "libc/stdio.h"
+
 
 int main(void)
 {
@@ -63,7 +65,11 @@ int main(void)
 	char test[] = "string test";
 	uint16_t i = 1023;
 
-	snprintf(dest, 128, "[%s:%i] \n\nBoot ...\n", __FILE__, __LINE__);
+	snprintf(dest, 128, "[%s] \n\nBoot ...\n", __FILE__);
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
+	snprintf(dest, 128, "[%s] taget : %s-%s-%s\n", __FILE__, target.arch, target.mcu, target.board);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 

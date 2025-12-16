@@ -24,7 +24,13 @@
 
 // do not edit code between tag : automatic generated code by autoCode
 // [autoCode_tag] error catalog
-const error_item_t error_catalog[] = {{"No error", 1},			 {"TX buffer is empty", 1},
-									  {"RX buffer is empty", 1}, {"TX buffer is full", 1},
-									  {"RX buffer is full", 1},	 {"No more free channels", 1}};
+const error_item_t error_catalog[] = 
+{
+	{"No error", 1},
+	{"TX buffer is empty", 1},
+	{"RX buffer is empty", 1},
+	{"TX buffer is full", 1},
+	{"RX buffer is full", 1},
+	{"No more free channels", 1}
+};
 // [/tag]

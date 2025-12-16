@@ -56,10 +56,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 	// write code
 	printLicenceHeader(file_include);
-	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	fprintf(file_include, "// Auto generated code, do not edit !\n");
-	fprintf(file_include, "// any changes will be lost\n");
-	fprintf(file_include, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+	printWarningHeader(file_include);
 
 	if( type == INCLUDE_HAL_TARGET_PART )
 	{
@@ -69,9 +66,24 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_include, "#ifndef %s\n", guard_name);
 		fprintf(file_include, "#define %s\n\n", guard_name);
 
+		fprintf(file_include, "#include \"hal/hal_target_type.h\"\n");
+		fprintf(file_include, "extern const target_info_t target;\n\n");
+
 		fprintf(file_include, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
 		fprintf(file_include, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
 		fprintf(file_include, "#include \"hal/board/%s/board_define.h\"\n", target->board_name);
+		fprintf(file_include, "\n#endif\n");
+	}
+
+	if( type == INCLUDE_HAL_TARGET_NAME_PART)
+	{
+		fprintf(file_include, "#include \"hal/hal_target_type.h\"\n\n");
+		fprintf(file_include, "const target_info_t target =\n");
+		fprintf(file_include, "{\n");
+		fprintf(file_include, ".arch = \"%s\",\n",target->arch_name);
+		fprintf(file_include, ".mcu = \"%s\",\n",target->mcu_name);
+		fprintf(file_include, ".board = \"%s\"\n\n",target->board_name);
+		fprintf(file_include, "};");
 	}
 
 	if( type == INCLUDE_HAL_SYSTEM_CRITICAL_PART )
@@ -85,6 +97,8 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 		fprintf(file_include, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
 		fprintf(file_include, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);
+
+		fprintf(file_include, "\n#endif\n");
 	}
 
 	if( type == INCLUDE_THREAD_PART )
@@ -106,9 +120,8 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		{
 			fprintf(file_include, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
 		}
+		fprintf(file_include, "\n#endif\n");
 	}
-
-	fprintf(file_include, "\n#endif\n");
 
 	fclose(file_include);
 }
