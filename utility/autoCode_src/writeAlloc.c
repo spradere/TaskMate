@@ -31,10 +31,7 @@ void writeAlloc(const modules_database_t *data_base, const char *file_alloc_name
 
 	// write modules
 	printLicenceHeader(file_alloc);
-	fprintf(file_alloc, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	fprintf(file_alloc, "// Auto generated code, do not edit !\n");
-	fprintf(file_alloc, "// any changes will be lost\n");
-	fprintf(file_alloc, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+	printWarningHeader(file_alloc);
 
 	fprintf(file_alloc, "#ifndef AUTOALLOC_H\n");
 	fprintf(file_alloc, "#define AUTOALLOC_H\n\n");

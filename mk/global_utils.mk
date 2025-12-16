@@ -36,20 +36,6 @@ cloc:
 	@cloc * --exclude-dir=html --exclude-lang=D --exclude-ext=rc
 .PHONY: cloc
 
-# clang-tidy
-#TIDY_SRC = ${AUTOCODE_SRC}
-#TIDY_SRC += ${SRCS}
-
-#tidy:
-#	@printf "\n\033[1;33mTidy static test code, config in src/.clang-tidy\033[0m\n\n"
-#	@clang-tidy $(TIDY_SRC) -- \
-#		-I/root/code/TaskMate/TaskMate_current/src \
-#		-I/root/code/TaskMate/TaskMate_current/ \
-#		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
-#		-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-#		-DF_CPU=${F_CPU}
-#.PHONY: tidy
-
 # Check annotations
 note:
 	@printf "\n\033[1;33mCheck code\033[0m\n\n"
