@@ -11,10 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Auto generated code, do not edit !
-// any changes will be lost
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// ! Auto generated code, do not edit !
+// ! any changes will be lost         !
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #ifndef ERROR_H
 #define ERROR_H
@@ -42,5 +42,6 @@ typedef struct
 	char *name;
 	error_critical_t critical;
 } error_item_t;
+
 
 #endif

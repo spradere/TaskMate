@@ -16,14 +16,12 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
-#define AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
+#include "hal/hal_target_type.h"
 
-#ifndef AUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-	#error "autoInclude system critical not allowed"
-#endif
+const target_info_t target =
+{
+.arch = "avr8",
+.mcu = "atmega2560",
+.board = "arduino_mega"
 
-#include "hal/arch/avr8/hal_stack.h"
-#include "hal/arch/avr8/hal_context.h"
-
-#endif
+};

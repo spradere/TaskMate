@@ -107,6 +107,8 @@ int main(int argn, const char *argv[])
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
 	writeInclude(&data_base, INCLUDE_HAL_TARGET_PART, "src/hal/autoInclude_hal_target.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_TARGET_NAME_PART, "src/hal/autoInclude_hal_target.c", &target);
+
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h",
 				 &target);
 
@@ -189,4 +191,12 @@ void printLicenceHeader(FILE *file)
 	fputc('\n', file);
 
 	fclose(header_file);
+}
+
+void printWarningHeader(FILE *file)
+{
+	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	fprintf(file, "// ! Auto generated code, do not edit !\n");
+	fprintf(file, "// ! any changes will be lost         !\n");
+	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 }
