@@ -40,11 +40,7 @@ void globalError(const char *file_in_name, error_catalog_t *errors)
 	}
 
 	printLicenceHeader(file_out);
-
-	fprintf(file_out, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	fprintf(file_out, "// Auto generated code, do not edit !\n");
-	fprintf(file_out, "// any changes will be lost\n");
-	fprintf(file_out, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+	printWarningHeader(file_out);
 
 	fprintf(file_out, "#ifndef ERROR_H\n");
 	fprintf(file_out, "#define ERROR_H\n\n");

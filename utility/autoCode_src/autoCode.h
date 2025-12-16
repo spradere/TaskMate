@@ -75,5 +75,6 @@ typedef struct
 } modules_database_t;
 
 void printLicenceHeader(FILE *file);
+void printWarningHeader(FILE *file);
 
 #endif

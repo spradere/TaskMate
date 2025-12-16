@@ -22,6 +22,8 @@
 #include "sysCall/TaskMate_public.h"
 #include "services/msg.h"
 #include "libc/string.h"
+#include "libc/stdio.h"
+
 
 // Send message to :
 #include "hal/hal_user_api.h"
@@ -47,7 +49,10 @@ void msg(void)
 		msgWritreText(channel, "\nmsg : Essai USART1 \n", MSG_TO_USART1);
 	}
 
-	if( msgRequestChannel(&channel) == ERR_NO_ERROR ) { msgWritreText(channel, "\3 autoCode 1", MSG_TO_LCD); }
+	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
+	{
+		msgWritreText(channel, "\3 autoCode 1", MSG_TO_LCD);
+	}
 
 	msgProcess();
 
