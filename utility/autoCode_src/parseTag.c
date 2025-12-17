@@ -153,7 +153,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 			fprintf(file,
 					"\n\thal_threadContextInit(%s, &(mod_t->stack_pointer), "
-					"&(mod_t->stack[THREAD_STACK_SIZE -1 ]) );\n",
+					"&(mod_t->stack[THREAD_STACK_SIZE - 1 ]));\n",
 					mod->modules[i].name);
 
 			fprintf(file, "\tmod_t->real_time_counter = 0;\n");

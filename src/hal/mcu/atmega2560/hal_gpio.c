@@ -50,7 +50,7 @@ void hal_gpioInitPin(const gpio_pin_item_t *pin)
 
 	if( pin->pull == GPIO_PIN_PULL_UP ) { *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number); }
 
-	DDRB |= (1 << PB7);
+	//DDRB |= (1 << PB7);
 }
 
 void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value)

@@ -36,7 +36,7 @@ void initThreads(void)
 
 	mod_t = moduleThreadGetPointer(0);
 
-	hal_threadContextInit(scli, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(scli, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread0_name = "scli";
 	mod_t->name = (uint8_t *)thread0_name;
@@ -45,7 +45,7 @@ void initThreads(void)
 
 	mod_t = moduleThreadGetPointer(1);
 
-	hal_threadContextInit(msg, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(msg, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread1_name = "msg";
 	mod_t->name = (uint8_t *)thread1_name;
@@ -54,7 +54,7 @@ void initThreads(void)
 
 	mod_t = moduleThreadGetPointer(2);
 
-	hal_threadContextInit(task1, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(task1, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread2_name = "task1";
 	mod_t->name = (uint8_t *)thread2_name;
@@ -63,7 +63,7 @@ void initThreads(void)
 
 	mod_t = moduleThreadGetPointer(3);
 
-	hal_threadContextInit(task2, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(task2, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread3_name = "task2";
 	mod_t->name = (uint8_t *)thread3_name;
