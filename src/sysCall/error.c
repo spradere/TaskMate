@@ -27,10 +27,10 @@
 const error_item_t error_catalog[] = 
 {
 	{"No error", 1},
-	{"TX buffer is empty", 1},
-	{"RX buffer is empty", 1},
-	{"TX buffer is full", 1},
-	{"RX buffer is full", 1},
-	{"No more free channels", 1}
+	{"hal USART TX buffer empty", 1},
+	{"hal USART RX buffer empty", 1},
+	{"hal USART TX buffer full", 1},
+	{"hal USART RX buffer full", 1},
+	{"msg no more free channels", 1}
 };
 // [/tag]

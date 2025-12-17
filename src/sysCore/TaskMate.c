@@ -39,12 +39,35 @@
 
 int main(void)
 {
+	// log start
+	char dest[128];
+
+	hal_usartInit();
+	hal_usartStart();
+
+	snprintf(dest, 128, "\n\n[%s] Boot ...\n", __FILE__);
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
+	snprintf(dest, 128, "[boot] target : %s-%s-%s\n", target.arch, target.mcu, target.board);
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
+
 	// system static allocation init
+	snprintf(dest, 128, "[boot] system static allocation\n");
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
 	initDrivers();
 	initThreads();
 	runLevelInit();
 
 	// hal hardware init
+	snprintf(dest, 128, "[boot] hal hardware init\n");
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
 	hal_archInit();
 	hal_mcuInit();
 	hal_boardInit();
@@ -59,29 +82,14 @@ int main(void)
 		(*(mod_d->start))();
 	}
 
-	// log test
-	// char format[] = "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> ";
-	char dest[128];
-	char test[] = "string test";
-	uint16_t i = 1023;
 
-	snprintf(dest, 128, "[%s] \n\nBoot ...\n", __FILE__);
-	hal_usartWriteString(dest);
-	hal_usartSendTXBuffer();
 
-	snprintf(dest, 128, "[%s] taget : %s-%s-%s\n", __FILE__, target.arch, target.mcu, target.board);
-	hal_usartWriteString(dest);
-	hal_usartSendTXBuffer();
-
-	snprintf(dest, 128, "Hello <%c> <%s> <%i> <%x> <%b> <%%> <%w> \n", '@', test, i, i, i, i, i);
-	hal_usartWriteString(dest);
-	hal_usartSendTXBuffer();
 
 	// rtc time test
 
 	hal_rtc_time_t t;
-	t.day = 10;
-	t.hours = 22;
+	t.day = 17;
+	t.hours = 20;
 	t.minutes = 47;
 	t.month = 12;
 	t.seconds = 15;
@@ -89,14 +97,17 @@ int main(void)
 	t.year = 25;
 
 	hal_ZS_042Write(&t);
-
 	hal_ZS_042Read(&t);
 
-	snprintf(dest, 128, "[time] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	snprintf(dest, 128, "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
 	// jump to current thread for first call and start system by enabling INT
+	snprintf(dest, 128, "[boot] start round-robin scheduler\n");
+	hal_usartWriteString(dest);
+	hal_usartSendTXBuffer();
+
 	moduleThreadSetCurrent(0);
 	module_item_thread_t *mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
 	hal_setStackPointer((uintptr_t)mod_t->stack_pointer);
