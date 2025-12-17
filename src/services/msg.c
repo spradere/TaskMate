@@ -46,12 +46,12 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\nmsg : Essai USART1 \n", MSG_TO_USART1);
+		msgWritreText(channel, "[msg server] : test USART1 \n", MSG_TO_USART1);
 	}
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 autoCode 1", MSG_TO_LCD);
+		msgWritreText(channel, "\3 boot log", MSG_TO_LCD);
 	}
 
 	msgProcess();
