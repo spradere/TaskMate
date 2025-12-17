@@ -32,8 +32,8 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	}
 
 	// generate multiple include guard name
-	char cmd[512];
-	char guard_name[512];
+	char cmd[256];
+	char guard_name[256];
 
 	snprintf(cmd, sizeof(cmd), "printf \"%s\" | sed 's#.*/##' | tr a-z A-Z | sed 's/[^A-Z0-9_]/_/g'",
 			 file_include_name);
@@ -41,14 +41,14 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	FILE *p_cmd = popen(cmd, "r");
 	if( !p_cmd )
 	{
-		msgError("failed open cmd output");
+		msgError("failed open command pipe");
 		exit(1);
 	}
 
 	if( !fgets(guard_name, sizeof(guard_name), p_cmd) )
 	{
 		pclose(p_cmd);
-		msgError("failed get string form cmd output");
+		msgError("failed get string form command pipe");
 		exit(1);
 	}
 

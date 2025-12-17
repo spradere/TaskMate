@@ -1,1 +1,2 @@
-ERR_MSG_OUT_OF_FREE_CHANNEL "No more free channels" LOW
+# message server
+ERR_MSG_OUT_OF_FREE_CHANNEL "msg no more free channels" LOW

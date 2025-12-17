@@ -64,44 +64,49 @@ void globalError(const char *file_in_name, error_catalog_t *errors)
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_in) )
 	{
+
 		file_line_number++;
 		tokenizer(&tok);
-		if( tok.count != 3 )
-		{
-			msgError("wrong token count != 3 tok.line [%s:%i] %s", file_in_name, file_line_number, tok.line);
-		}
 
-		// printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
-
-		for( int i = 0; i < error_current; i++ )
+		if((tok.tokens[0][0] != '\n') && (tok.tokens[0][0] != '#') && (tok.count != 0))
 		{
-			if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
+			if( tok.count != 3 )
 			{
-				msgError("Duplicate error name <%s>", tok.tokens[0]);
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", file_in_name, file_line_number, tok.line);
+			}
+
+			// printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
+
+			for( int i = 0; i < error_current; i++ )
+			{
+				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
+				{
+					msgError("Duplicate error name <%s>", tok.tokens[0]);
+					exit(1);
+				}
+			}
+			strncpy(errors->catalog[error_current].name, tok.tokens[0], 256);
+			strncpy(errors->catalog[error_current].message, tok.tokens[1], 256);
+
+			errors->catalog[error_current].critical = ERROR_NOT_DEFINED;
+			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_current].critical = ERROR_LOW; }
+			if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_current].critical = ERROR_MID; }
+			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_current].critical = ERROR_HIGH; }
+			if( errors->catalog[error_current].critical == ERROR_NOT_DEFINED )
+			{
+				msgError("wrong citical argument <%s>", tok.tokens[2]);
 				exit(1);
 			}
-		}
-		strncpy(errors->catalog[error_current].name, tok.tokens[0], 256);
-		strncpy(errors->catalog[error_current].message, tok.tokens[1], 256);
 
-		errors->catalog[error_current].critical = ERROR_NOT_DEFINED;
-		if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_current].critical = ERROR_LOW; }
-		if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_current].critical = ERROR_MID; }
-		if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_current].critical = ERROR_HIGH; }
-		if( errors->catalog[error_current].critical == ERROR_NOT_DEFINED )
-		{
-			msgError("wrong citical argument <%s>", tok.tokens[2]);
-			exit(1);
-		}
+			error_current++;
 
-		error_current++;
-
-		if( error_current == 256 )
-		{
-			msgError("Too many errors > 256");
-			exit(1);
+			if( error_current == 256 )
+			{
+				msgError("Too many errors > 256");
+				exit(1);
+			}
+			errors->error_count = error_current;
 		}
-		errors->error_count = error_current;
 	}
 
 	// write errors enum
