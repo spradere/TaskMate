@@ -33,7 +33,7 @@
 	fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 
 #define msgInfo(format, ...) \
-	fprintf(stdout, "[%s:%d] info : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
 // target name struture
 typedef struct
@@ -73,8 +73,5 @@ typedef struct
 	int threads_count[RUN_LEVEL_COUNT];
 
 } modules_database_t;
-
-void printLicenceHeader(FILE *file);
-void printWarningHeader(FILE *file);
 
 #endif
