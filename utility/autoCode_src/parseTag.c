@@ -31,19 +31,19 @@ void parseTag(modules_database_t *data_base, const char *file_src_name, error_ca
 		exit(1);
 	}
 
-	char *name_tmp;
-	name_tmp = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
-	if( name_tmp == NULL )
+	char *file_tmp_name;
+	file_tmp_name = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
+	if( file_tmp_name == NULL )
 	{
-		msgError("malloc name_tmp");
+		msgError("malloc file_tmp_name");
 		exit(1);
 	}
-	sprintf(name_tmp, "%s.tmp", file_src_name);
+	sprintf(file_tmp_name, "%s.tmp", file_src_name);
 
-	FILE *file_tmp = fopen(name_tmp, "w");
+	FILE *file_tmp = fopen(file_tmp_name, "w");
 	if( file_tmp == NULL )
 	{
-		msgError("creating file <%s>", name_tmp);
+		msgError("creating file <%s>", file_tmp_name);
 		exit(1);
 	}
 
@@ -113,16 +113,17 @@ void parseTag(modules_database_t *data_base, const char *file_src_name, error_ca
 		exit(1);
 	}
 
+	fclose(file_src);
+	fclose(file_tmp);
+
 	// Replace original file with the modified version
-	if( (remove(file_src_name) != 0) || (rename(name_tmp, file_src_name) != 0) )
+	if( (remove(file_src_name) != 0) || (rename(file_tmp_name, file_src_name) != 0) )
 	{
 		msgError("replacing tmp / src");
 		exit(1);
 	}
 
-	fclose(file_src);
-	fclose(file_tmp);
-	free(name_tmp);
+	free(file_tmp_name);
 }
 
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)

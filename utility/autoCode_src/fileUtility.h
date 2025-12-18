@@ -12,40 +12,23 @@
  */
 
 /**
- * @file global_error.h
- * @brief global error header
+ * @file fileUtility.h
+ * @brief file utility header
  *
  */
 
-#ifndef GLOBAL_ERROR_H
-#define GLOBAL_ERROR_H
+ #ifndef FILE_H
+ #define FILE_H
 
 #include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/fileUtility.h"
-
-typedef enum
-{
-	ERROR_NOT_DEFINED,
-	ERROR_LOW,
-	ERROR_MID,
-	ERROR_HIGH
-}error_critical_t;
 
 typedef struct
 {
-	char name[256];
-	char message[256];
-	error_critical_t critical;
-} error_item_t;
+	FILE *stream;
+	char *name;
+} file_t;
 
-typedef struct
-{
-	error_item_t catalog[256];
-	int error_count;
-	file_t file_src;
-	file_t file_dest;
-}error_catalog_t;
+void printLicenceHeader(FILE *file);
+void printWarningHeader(FILE *file);
 
-void globalError(error_catalog_t *errors);
-
-#endif
+ #endif
