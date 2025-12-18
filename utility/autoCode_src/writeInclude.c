@@ -19,6 +19,7 @@
  */
 
 #include "utility/autoCode_src/writeInclude.h"
+#include "utility/autoCode_src/fileUtility.h"
 
 void writeInclude(const modules_database_t *data_base, const int type, const char *file_include_name,
 				  const target_t *target)

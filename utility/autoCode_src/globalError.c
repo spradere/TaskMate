@@ -20,64 +20,64 @@
 #include "globalError.h"
 #include "tokenizer.h"
 
-void globalError(const char *file_in_name, error_catalog_t *errors)
+void globalError(error_catalog_t *errors)
 {
-	msgInfo("open error file <%s>", file_in_name);
+	msgInfo("open file.err <%s>", errors->file_src.name);
 
 	// open file
-	FILE *file_in = fopen(file_in_name, "r");
-	if( file_in == NULL )
+	errors->file_src.stream = fopen(errors->file_src.name, "r");
+	if( errors->file_src.stream == NULL )
 	{
-		msgError("open error file <%s>", file_in_name);
+		msgError("open error file <%s>", errors->file_src.name);
 		exit(1);
 	}
 
-	FILE *file_out = fopen("src/sysCall/error.h", "w");
-	if( file_out == NULL )
+	errors->file_dest.stream = fopen(errors->file_dest.name, "w");
+	if( errors->file_dest.stream == NULL )
 	{
-		msgError("open error file : scr/sysCall/error_new.h");
+		msgError("open error file : %s", errors->file_dest.name);
 		exit(1);
 	}
 
-	printLicenceHeader(file_out);
-	printWarningHeader(file_out);
+	printLicenceHeader(errors->file_dest.stream);
+	printWarningHeader(errors->file_dest.stream);
 
-	fprintf(file_out, "#ifndef ERROR_H\n");
-	fprintf(file_out, "#define ERROR_H\n\n");
+	fprintf(errors->file_dest.stream, "#ifndef ERROR_H\n");
+	fprintf(errors->file_dest.stream, "#define ERROR_H\n\n");
 
-	fprintf(file_out, "typedef enum\n");
-	fprintf(file_out, "{\n");
-	fprintf(file_out, "\tERROR_LOW,\n");
-	fprintf(file_out, "\tERROR_MID,\n");
-	fprintf(file_out, "\tERROR_HIGH\n");
-	fprintf(file_out, "} error_critical_t;\n\n");
+	fprintf(errors->file_dest.stream, "typedef enum\n");
+	fprintf(errors->file_dest.stream, "{\n");
+	fprintf(errors->file_dest.stream, "\tERROR_LOW,\n");
+	fprintf(errors->file_dest.stream, "\tERROR_MID,\n");
+	fprintf(errors->file_dest.stream, "\tERROR_HIGH\n");
+	fprintf(errors->file_dest.stream, "} error_critical_t;\n\n");
 
 	// read form source
-	int file_line_number = 0;
-	int error_current = 0;
+	int file_src_line_number = 0;
+	int error_index = 0;
 	tokenizer_t tok;
 
-	strncpy(errors->catalog[error_current].name, "ERR_NO_ERROR", 256);
-	strncpy(errors->catalog[error_current].message, "\"No error\"", 256);
-	errors->catalog[error_current].critical = ERROR_LOW;
-	error_current++;
+	strncpy(errors->catalog[error_index].name, "ERR_NO_ERROR", 256);
+	strncpy(errors->catalog[error_index].message, "\"No error\"", 256);
+	errors->catalog[error_index].critical = ERROR_LOW;
+	error_index++;
 
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_in) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, errors->file_src.stream) )
 	{
 
-		file_line_number++;
+		file_src_line_number++;
 		tokenizer(&tok);
 
 		if((tok.tokens[0][0] != '\n') && (tok.tokens[0][0] != '#') && (tok.count != 0))
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", file_in_name, file_line_number, tok.line);
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", errors->file_src.name, file_src_line_number, tok.line);
 			}
 
 			// printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
 
-			for( int i = 0; i < error_current; i++ )
+			for( int i = 0; i < error_index; i++ )
 			{
 				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
 				{
@@ -85,46 +85,46 @@ void globalError(const char *file_in_name, error_catalog_t *errors)
 					exit(1);
 				}
 			}
-			strncpy(errors->catalog[error_current].name, tok.tokens[0], 256);
-			strncpy(errors->catalog[error_current].message, tok.tokens[1], 256);
+			strncpy(errors->catalog[error_index].name, tok.tokens[0], 256);
+			strncpy(errors->catalog[error_index].message, tok.tokens[1], 256);
 
-			errors->catalog[error_current].critical = ERROR_NOT_DEFINED;
-			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_current].critical = ERROR_LOW; }
-			if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_current].critical = ERROR_MID; }
-			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_current].critical = ERROR_HIGH; }
-			if( errors->catalog[error_current].critical == ERROR_NOT_DEFINED )
+			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
+			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_index].critical = ERROR_LOW; }
+			if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_index].critical = ERROR_MID; }
+			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_index].critical = ERROR_HIGH; }
+			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
 			{
 				msgError("wrong citical argument <%s>", tok.tokens[2]);
 				exit(1);
 			}
 
-			error_current++;
+			error_index++;
 
-			if( error_current == 256 )
+			if( error_index == 256 )
 			{
 				msgError("Too many errors > 256");
 				exit(1);
 			}
-			errors->error_count = error_current;
+			errors->error_count = error_index;
 		}
 	}
 
 	// write errors enum
-	fprintf(file_out, "typedef enum\n");
-	fprintf(file_out, "{\n");
+	fprintf(errors->file_dest.stream, "typedef enum\n");
+	fprintf(errors->file_dest.stream, "{\n");
 
-	for( int i = 0; i < errors->error_count; i++ ) { fprintf(file_out, "\t%s,\n", errors->catalog[i].name); }
-	fprintf(file_out, "\tERROR_COUNT\n");
-	fprintf(file_out, "} error_codes_t;\n\n");
+	for( int i = 0; i < errors->error_count; i++ ) { fprintf(errors->file_dest.stream, "\t%s,\n", errors->catalog[i].name); }
+	fprintf(errors->file_dest.stream, "\tERROR_COUNT\n");
+	fprintf(errors->file_dest.stream, "} error_codes_t;\n\n");
 
-	fprintf(file_out, "typedef struct\n");
-	fprintf(file_out, "{\n");
-	fprintf(file_out, "\tchar *name;\n");
-	fprintf(file_out, "\terror_critical_t critical;\n");
-	fprintf(file_out, "} error_item_t;\n\n");
+	fprintf(errors->file_dest.stream, "typedef struct\n");
+	fprintf(errors->file_dest.stream, "{\n");
+	fprintf(errors->file_dest.stream, "\tchar *name;\n");
+	fprintf(errors->file_dest.stream, "\terror_critical_t critical;\n");
+	fprintf(errors->file_dest.stream, "} error_item_t;\n\n");
 
 	// end
-	fprintf(file_out, "\n#endif\n");
-	fclose(file_in);
-	fclose(file_out);
+	fprintf(errors->file_dest.stream, "\n#endif\n");
+	fclose(errors->file_src.stream);
+	fclose(errors->file_dest.stream);
 }

@@ -67,14 +67,15 @@ int main(int argn, const char *argv[])
 	}
 
 	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
-
 	msgInfo("target %s -> %s -> %s", target.arch_name, target.mcu_name, target.board_name);
+
+	error_catalog_t errors_catalog;
+	errors_catalog.file_src.name = (char*)argv[4];
+	errors_catalog.file_dest.name = "src/sysCall/error.h";
 
 	// setup data base
 	modules_database_t data_base;
 	setupDB(&data_base);
-
-	error_catalog_t errors_catalog;
 
 	// read init.rc file and store data in data base
 	const int BUFFER_SIZE = 256;
@@ -97,7 +98,7 @@ int main(int argn, const char *argv[])
 	checkModulesCount(&data_base);
 
 	// global error system
-	globalError(argv[4], &errors_catalog);
+	globalError(&errors_catalog);
 
 	// parse tag and generate code for init
 	parseTag(&data_base, "src/sysCore/initSys.c", NULL);
@@ -169,34 +170,4 @@ static void checkModulesCount(modules_database_t *data_base)
 			exit(1);
 		}
 	}
-}
-
-void printLicenceHeader(FILE *file)
-{
-	char header_path[] = "templates/licence_header";
-	FILE *header_file = fopen(header_path, "r");
-
-	if( header_file == NULL )
-	{
-		msgError("open error file <%s>", header_path);
-		exit(1);
-	}
-
-	char c;
-	do {
-		c = fgetc(header_file);
-		if( c != EOF ) { fputc(c, file); }
-	} while( c != EOF );
-
-	fputc('\n', file);
-
-	fclose(header_file);
-}
-
-void printWarningHeader(FILE *file)
-{
-	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	fprintf(file, "// ! Auto generated code, do not edit !\n");
-	fprintf(file, "// ! any changes will be lost         !\n");
-	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 }
