@@ -19,6 +19,46 @@
 
 #include "utility/autoCode_src/fileUtility.h"
 
+void fileInit(file_t *file)
+{
+	file->name = NULL;
+	file->name_alloc = false;
+	file->stream = NULL;
+	file->stream_open = false;
+}
+
+void fileOpen(file_t *file, const char *mode, const char *caller)
+{
+	file->stream = fopen(file->name, mode);
+	if( file->stream == NULL )
+	{
+		msgError("from %s opening file <%s>", caller, file->name);
+		exit(1);
+	}
+	file->stream_open = true;
+}
+
+void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller)
+{
+	file_tmp->name = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
+	if( file_tmp->name == NULL )
+	{
+		msgError("fromm %s malloc <%s>", caller, file_src_name);
+		exit(1);
+	}
+	file_tmp->name_alloc = true;
+	sprintf(file_tmp->name, "%s.tmp", file_src_name);
+	msgInfo("generated name : <%s> ", file_tmp->name);
+
+	file_tmp->stream = fopen(file_tmp->name, "w");
+	if( file_tmp->stream == NULL )
+	{
+		msgError("from %s creating file <%s>",caller, file_tmp->name);
+		exit(1);
+	}
+	file_tmp->stream_open = true;
+}
+
 void printLicenceHeader(FILE *file)
 {
 	char header_path[] = "templates/licence_header";

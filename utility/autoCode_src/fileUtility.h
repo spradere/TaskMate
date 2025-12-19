@@ -21,13 +21,19 @@
  #define FILE_H
 
 #include "utility/autoCode_src/autoCode.h"
+#include <stdbool.h>
 
 typedef struct
 {
 	FILE *stream;
+	bool stream_open; // allow fclose()
 	char *name;
+	bool name_alloc; // free() ?
 } file_t;
 
+void fileInit(file_t *file);
+void fileOpen( file_t *file, const char *mode, const char *caller);
+void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller);
 void printLicenceHeader(FILE *file);
 void printWarningHeader(FILE *file);
 
