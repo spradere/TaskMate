@@ -24,7 +24,7 @@ void globalError(error_catalog_t *errors)
 {
 	msgInfo("open file.err <%s>", errors->file_src.name);
 
-	// open file
+	// open files
 	errors->file_src.stream = fopen(errors->file_src.name, "r");
 	if( errors->file_src.stream == NULL )
 	{

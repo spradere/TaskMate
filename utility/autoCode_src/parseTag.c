@@ -20,39 +20,27 @@
 
 #include "utility/autoCode_src/parseTag.h"
 #include "utility/autoCode_src/tokenizer.h"
+#include "utility/autoCode_src/fileUtility.h"
 
-void parseTag(modules_database_t *data_base, const char *file_src_name, error_catalog_t *errors)
+
+void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors)
 {
 	// open source and tmp file
-	FILE *file_src = fopen(file_src_name, "r");
-	if( file_src == NULL )
-	{
-		msgError("opening file <%s>", file_src_name);
-		exit(1);
-	}
+	file_t file_src;
+	fileInit(&file_src);
+	file_src.name = (char*)file_name;
+	fileOpen(&file_src, "r", __FILE__);
 
-	char *file_tmp_name;
-	file_tmp_name = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
-	if( file_tmp_name == NULL )
-	{
-		msgError("malloc file_tmp_name");
-		exit(1);
-	}
-	sprintf(file_tmp_name, "%s.tmp", file_src_name);
-
-	FILE *file_tmp = fopen(file_tmp_name, "w");
-	if( file_tmp == NULL )
-	{
-		msgError("creating file <%s>", file_tmp_name);
-		exit(1);
-	}
+	file_t file_tmp;
+	fileInit(&file_tmp);
+	fileMakeTmp(file_src.name, &file_tmp, __FILE__);
 
 	// read form source
 	int tag_section = 0;
 	int file_line_number = 0;
 	tokenizer_t tok;
 
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_line_number++;
 		tokenizer(&tok);
@@ -61,40 +49,40 @@ void parseTag(modules_database_t *data_base, const char *file_src_name, error_ca
 		{
 			if( tok.count != 4 )
 			{
-				msgError("token count != 4 tok.line [%s:%i] %s", file_src_name, file_line_number, tok.line);
+				msgError("token count != 4 tok.line [%s:%i] %s", file_src.name, file_line_number, tok.line);
 				break;
 			}
 
 			if( tag_section == 1 )
 			{
-				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s", file_src_name,
+				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s", file_src.name,
 						 file_line_number, tok.line);
 				break;
 			}
 
 			msgInfo("found tag %s %s", tok.tokens[2], tok.tokens[3]);
 
-			fprintf(file_tmp, "%s", tok.line);
+			fprintf(file_tmp.stream, "%s", tok.line);
 			tag_section = 1;
 
 			if( (strcmp(tok.tokens[2], "threads") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeThreadsInit(data_base, file_tmp);
+				writeThreadsInit(data_base, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "drivers") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeDriversInit(data_base, file_tmp);
+				writeDriversInit(data_base, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "run") == 0) && (strcmp(tok.tokens[3], "levels") == 0) )
 			{
-				writeRunLevelsInit(data_base, file_tmp);
+				writeRunLevelsInit(data_base, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "catalog") == 0) )
 			{
-				writeErrorCatalog(errors, file_tmp);
+				writeErrorCatalog(errors, file_tmp.stream);
 			}
 		}
 
@@ -104,26 +92,26 @@ void parseTag(modules_database_t *data_base, const char *file_src_name, error_ca
 			tag_section = 0;
 		}
 
-		if( tag_section == 0 ) { fprintf(file_tmp, "%s", tok.line); }
+		if( tag_section == 0 ) { fprintf(file_tmp.stream, "%s", tok.line); }
 	}
 
 	if( tag_section == 1 )
 	{
-		msgError("missing end tag [/tag] [%s:%i]", file_src_name, file_line_number);
+		msgError("missing end tag [/tag] [%s:%i]", file_src.name, file_line_number);
 		exit(1);
 	}
 
-	fclose(file_src);
-	fclose(file_tmp);
 
 	// Replace original file with the modified version
-	if( (remove(file_src_name) != 0) || (rename(file_tmp_name, file_src_name) != 0) )
+	if( (remove(file_src.name) != 0) || (rename(file_tmp.name, file_src.name) != 0) )
 	{
 		msgError("replacing tmp / src");
 		exit(1);
 	}
 
-	free(file_tmp_name);
+	fclose(file_src.stream);
+	fclose(file_tmp.stream);
+	free(file_tmp.name);
 }
 
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)
