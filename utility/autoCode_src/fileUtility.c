@@ -22,7 +22,7 @@
 static int file_updated = 0;
 static int file_unchanged = 0;
 
-void filePrintTouch()
+void filePrintTouch(void)
 {
 	msgInfo("summary of modified files : %i updated, %i unchanged", file_updated, file_unchanged);
 }
@@ -123,7 +123,7 @@ void printLicenceHeader(FILE *file)
 		exit(1);
 	}
 
-	char c;
+	int c;
 	do {
 		c = fgetc(header_file);
 		if( c != EOF ) { fputc(c, file); }

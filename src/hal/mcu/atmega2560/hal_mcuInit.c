@@ -13,4 +13,4 @@
 
 #include "hal/hal_user_api.h"
 
-void hal_mcuInit() {}
+void hal_mcuInit(void) {}

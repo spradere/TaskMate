@@ -92,12 +92,12 @@
 	"out __SREG__, r0 \n\t"                                                                                  \
 	"pop r0	\n\t"
 
-static inline __attribute__((always_inline)) void hal_contextSave() { asm volatile(AVR8_PUSH_ALL_REGS); }
+static inline __attribute__((always_inline)) void hal_contextSave(void) { asm volatile(AVR8_PUSH_ALL_REGS); }
 
-static inline __attribute__((always_inline)) void hal_contextRestore() { asm volatile(AVR8_POP_ALL_REGS); }
+static inline __attribute__((always_inline)) void hal_contextRestore(void) { asm volatile(AVR8_POP_ALL_REGS); }
 
-static inline __attribute__((always_inline)) void hal_returnFromInterupt() { asm volatile("reti \n\t"); }
+static inline __attribute__((always_inline)) void hal_returnFromInterupt(void) { asm volatile("reti \n\t"); }
 
-static inline __attribute__((always_inline)) void hal_setGlobalInterupt() { asm volatile("sei \n\t"); }
+static inline __attribute__((always_inline)) void hal_setGlobalInterupt(void) { asm volatile("sei \n\t"); }
 
-static inline __attribute__((always_inline)) void hal_clearGlobalInterupt() { asm volatile("cli \n\t"); }
+static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void) { asm volatile("cli \n\t"); }

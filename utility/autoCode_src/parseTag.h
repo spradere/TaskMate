@@ -25,9 +25,4 @@
 
 void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors);
 
-static void writeDriversInit(modules_database_t *data_base, FILE *file);
-static void writeThreadsInit(modules_database_t *data_base, FILE *file);
-static void writeRunLevelsInit(modules_database_t *data_base, FILE *file);
-static void writeErrorCatalog(error_catalog_t *errors, FILE *file);
-
 #endif
