@@ -106,7 +106,6 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c", NULL);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog);
 
-
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
 	writeInclude(&data_base, INCLUDE_HAL_TARGET_PART, "src/hal/autoInclude_hal_target.h", &target);

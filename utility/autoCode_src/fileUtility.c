@@ -24,7 +24,7 @@ static int file_unchanged = 0;
 
 void filePrintTouch()
 {
-	msgInfo("Modified files after tag parsing : %i updated, %i unchanged", file_updated, file_unchanged);
+	msgInfo("summary of modified files : %i updated, %i unchanged", file_updated, file_unchanged);
 }
 
 void fileCmpReplace(file_t *file_old, file_t *file_new)
