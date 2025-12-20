@@ -31,7 +31,7 @@
 // scheduler is called by hal_timerScheduler interupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void scheduler()
+void scheduler(void)
 {
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	hal_setGlobalInterupt();

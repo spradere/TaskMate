@@ -27,7 +27,7 @@
 // realTimeClock is called by hal_timerRTC interupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void realTimeClock()
+void realTimeClock(void)
 {
 	// RTC decrement
 

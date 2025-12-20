@@ -32,21 +32,21 @@
 
 #include "sysCall/error.h"
 
-void hal_archInit();
-void hal_mcuInit();
-void hal_boardInit();
+void hal_archInit(void);
+void hal_mcuInit(void);
+void hal_boardInit(void);
 
 // arch
 void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top);
 
 // mcu
-void hal_timerSchedulerInit();
-void hal_timerSchedulerStart();
-void hal_timerSchedulerStop();
-void hal_timerSchedulerLoad();
+void hal_timerSchedulerInit(void);
+void hal_timerSchedulerStart(void);
+void hal_timerSchedulerStop(void);
+void hal_timerSchedulerLoad(void);
 
-void hal_timerRTCInit();
-void hal_timerRTCStart();
-void hal_timerRTCStop();
+void hal_timerRTCInit(void);
+void hal_timerRTCStart(void);
+void hal_timerRTCStop(void);
 
 #endif
