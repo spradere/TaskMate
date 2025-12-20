@@ -19,6 +19,60 @@
 
 #include "utility/autoCode_src/fileUtility.h"
 
+static int file_updated = 0;
+static int file_unchanged = 0;
+
+void filePrintTouch()
+{
+	msgInfo("Modified files after tag parsing : %i updated, %i unchanged", file_updated, file_unchanged);
+}
+
+void fileCmpReplace(file_t *file_old, file_t *file_new)
+{
+	char old[256];
+	char new[256];
+	bool same = true;
+
+	rewind(file_old->stream);
+	rewind(file_new->stream);
+
+	while( !feof(file_old->stream) && !feof(file_new->stream))
+	{
+		fgets(old, 256, file_old->stream);
+		fgets(new, 256, file_new->stream);
+		if(strcmp(old,new) != 0){same = false;}
+	}
+
+	if(same == true)
+	{
+		msgInfo("files are the same, keep the old one <%s>",file_old->name);
+		remove(file_new->name);
+		file_unchanged++;
+	}
+	else
+	{
+		msgInfo("files are not the same, change for the new one .tmp -> <%s>",file_old->name);
+		remove(file_old->name);
+		rename(file_new->name, file_old->name);
+		file_updated++;
+	}
+}
+
+void fileClose(file_t *file, const char *caller)
+{
+	if(file->stream_open)
+	{
+		int err= fclose(file->stream);
+		if(err !=0)
+			{
+				msgError("from %s close file <%s>", caller, file->name);
+				exit(1);
+			}
+		if(file->name_alloc){ free(file->name); }
+		fileInit(file);
+	}
+}
+
 void fileInit(file_t *file)
 {
 	file->name = NULL;
@@ -48,9 +102,8 @@ void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller
 	}
 	file_tmp->name_alloc = true;
 	sprintf(file_tmp->name, "%s.tmp", file_src_name);
-	msgInfo("generated name : <%s> ", file_tmp->name);
 
-	file_tmp->stream = fopen(file_tmp->name, "w");
+	file_tmp->stream = fopen(file_tmp->name, "w+");
 	if( file_tmp->stream == NULL )
 	{
 		msgError("from %s creating file <%s>",caller, file_tmp->name);

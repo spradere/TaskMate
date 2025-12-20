@@ -25,7 +25,7 @@
 void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_initrc_name)
 {
 	// open list files
-	msgInfo("open init.rc file for parsing <%s>", file_initrc_name);
+	msgInfo("open <%s> for parsing", file_initrc_name);
 
 	FILE *file_initrc = fopen(file_initrc_name, "r");
 	if( file_initrc == NULL )
