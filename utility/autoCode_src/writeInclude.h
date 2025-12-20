@@ -27,6 +27,6 @@
 #define INCLUDE_HAL_TARGET_NAME_PART 3
 #define INCLUDE_HAL_SYSTEM_CRITICAL_PART 4
 
-void writeInclude(const modules_database_t *data_base, const int type ,const char *file_include_name, const target_t *target);
+void writeInclude(const modules_database_t *data_base, const int type ,const char *file_name, const target_t *target);
 
 #endif
