@@ -31,6 +31,9 @@ typedef struct
 	bool name_alloc; // free() ?
 } file_t;
 
+void filePrintTouch();
+void fileCmpReplace(file_t *file_old, file_t *file_new);
+void fileClose(file_t *file, const char *caller);
 void fileInit(file_t *file);
 void fileOpen( file_t *file, const char *mode, const char *caller);
 void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller);

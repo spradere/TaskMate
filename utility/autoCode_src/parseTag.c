@@ -26,6 +26,8 @@
 void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors)
 {
 	// open source and tmp file
+	msgInfo("open <%s> for parsing tag section", file_name);
+
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char*)file_name;
@@ -101,17 +103,11 @@ void parseTag(modules_database_t *data_base, const char *file_name, error_catalo
 		exit(1);
 	}
 
+	fileCmpReplace(&file_src, &file_tmp);
 
-	// Replace original file with the modified version
-	if( (remove(file_src.name) != 0) || (rename(file_tmp.name, file_src.name) != 0) )
-	{
-		msgError("replacing tmp / src");
-		exit(1);
-	}
+	fileClose(&file_src,__FILE__);
+	fileClose(&file_tmp,__FILE__);
 
-	fclose(file_src.stream);
-	fclose(file_tmp.stream);
-	free(file_tmp.name);
 }
 
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)
