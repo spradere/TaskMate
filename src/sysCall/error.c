@@ -1,4 +1,3 @@
-
 /*
  * TaskMate Project
  * (c) 2025 PRADERE Sebastien
