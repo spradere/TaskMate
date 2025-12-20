@@ -21,6 +21,6 @@
 #ifndef RTC_H
 #define RTC_H
 
-void realTimeClock();
+void realTimeClock(void);
 
 #endif

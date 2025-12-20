@@ -61,7 +61,7 @@ typedef struct
 	module_item_t modules[AUTOCODE_MODULE_COUNT_MAX];
 	int modules_count;
 	int initrc_arg_count_max;
-	int status_default;
+	module_status_t status_default;
 	char *name;
 
 } module_type_t;

@@ -21,6 +21,6 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-void scheduler();
+void scheduler(void);
 
 #endif

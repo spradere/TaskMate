@@ -16,7 +16,8 @@
 # Compiler
 CC = avr-gcc
 
-CFLAGS += -Os -Wall -Wextra -MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
+CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
+	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src
 
 # Files
