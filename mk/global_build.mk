@@ -85,5 +85,6 @@ ${ERROR_ALL}: ${ERROR_FILES}
 # special rule for autoCode alone, test purpose
 autoCode_alone:
 	@printf "\n\033[1;33mCompiling and running autoCode alone\033[0m\n\n"
-	@clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
+	@clang -I/root/code/TaskMate/TaskMate_current/ -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
+		-Wno-gnu-zero-variadic-macro-arguments ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
 	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL}

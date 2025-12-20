@@ -20,7 +20,7 @@
 #include <stdbool.h>
 #include "hal/hal_user_api.h"
 
-void hal_boardInit()
+void hal_boardInit(void)
 {
 	// gpio pin definition
 	gpio_signal_item_t sig;

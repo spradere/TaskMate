@@ -25,9 +25,9 @@ static uint8_t bcdToUint8(uint8_t bcd) { return ((bcd >> 4) * 10u) + (bcd & 0x0F
 
 static uint8_t uint8ToBcd(uint8_t val) { return ((val / 10u) << 4) | (val % 10u); }
 
-void hal_ZS_042Init() {}
-void hal_ZS_042Start() {}
-void hal_ZS_042Stop() {}
+void hal_ZS_042Init(void) {}
+void hal_ZS_042Start(void) {}
+void hal_ZS_042Stop(void) {}
 
 uint8_t hal_ZS_042Read(hal_rtc_time_t *t)
 {
