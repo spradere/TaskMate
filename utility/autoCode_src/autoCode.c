@@ -52,6 +52,7 @@
 #include "utility/autoCode_src/writeAlloc.h"
 #include "utility/autoCode_src/writeInclude.h"
 #include "utility/autoCode_src/globalError.h"
+#include "utility/autoCode_src/fileUtility.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -105,6 +106,7 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c", NULL);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog);
 
+
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
 	writeInclude(&data_base, INCLUDE_HAL_TARGET_PART, "src/hal/autoInclude_hal_target.h", &target);
@@ -116,6 +118,7 @@ int main(int argn, const char *argv[])
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules
+	filePrintTouch();
 	printModules(&data_base);
 
 	return 0;
