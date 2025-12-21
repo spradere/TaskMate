@@ -95,7 +95,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 		}
 	}
 
-	msgInfo("found %i module",module_count);
+	msgInfo("found %i module", module_count);
 
 	mod->modules_count = module_count;
 

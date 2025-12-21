@@ -38,13 +38,13 @@ void hal_timerRTCInit(void)
 void hal_timerRTCStart(void)
 {
 	// start by enabling INT
-	TIMSK3 |= (1 << OCIE3A);
+	TIMSK3 |= (uint8_t)(1u << OCIE3A);
 }
 
 void hal_timerRTCStop(void)
 {
 	// stop by disabling INT
-	TIMSK3 &= ~(1 << OCIE3A);
+	TIMSK3 &= (uint8_t)~(1u << OCIE3A);
 }
 
 ISR(TIMER3_COMPA_vect) { realTimeClock(); }

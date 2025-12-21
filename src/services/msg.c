@@ -24,7 +24,6 @@
 #include "libc/string.h"
 #include "libc/stdio.h"
 
-
 // Send message to :
 #include "hal/hal_user_api.h"
 
@@ -51,7 +50,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 boot log", MSG_TO_LCD);
+		msgWritreText(channel, "\3 fix type / cast 3", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -81,9 +80,9 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
 	strncpy(channels[channel].text, MSG_SIZE_MAX, msg);
 
-	channels[channel].status &= ~(1 << MSG_TO_MASK);
+	channels[channel].status &= (uint8_t)(~(1u << MSG_TO_MASK));
 	channels[channel].status |= dest;
-	channels[channel].status |= (1 << MSG_FLAG_SEND);
+	channels[channel].status |= (uint8_t)(1u << MSG_FLAG_SEND);
 }
 
 void msgProcess(void)
@@ -96,7 +95,7 @@ void msgProcess(void)
 			{
 				case MSG_TO_LCD:
 
-					hal_lcdSetCursor(channels[channel].text[0], 0);
+					hal_lcdSetCursor((uint8_t)channels[channel].text[0], 0);
 					// Zap escape code for LCD line select
 					uint8_t i_src, i_dest = 0;
 					for( i_src = 1; channels[channel].text[i_dest] != 0; i_src++ )
@@ -121,7 +120,7 @@ void msgProcess(void)
 					hal_usartWriteString("[msg.c 118] error unknow destination\n");
 					hal_usartSendTXBuffer();
 			}
-			channels[channel].status &= ~(1 << MSG_FLAG_IN_USE);
+			channels[channel].status &= (uint8_t)(~(1u << MSG_FLAG_IN_USE));
 		}
 	}
 }
