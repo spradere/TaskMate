@@ -71,7 +71,7 @@ int main(int argn, const char *argv[])
 	msgInfo("target %s -> %s -> %s", target.arch_name, target.mcu_name, target.board_name);
 
 	error_catalog_t errors_catalog;
-	errors_catalog.file_src.name = (char*)argv[4];
+	errors_catalog.file_src.name = (char *)argv[4];
 	errors_catalog.file_dest.name = "src/sysCall/error.h";
 
 	// setup data base

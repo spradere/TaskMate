@@ -23,7 +23,7 @@
 
 static uint8_t bcdToUint8(uint8_t bcd) { return (uint8_t)((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
 
-static uint8_t uint8ToBcd(uint8_t val) { return ((val / 10u) << 4) | (val % 10u); }
+static uint8_t uint8ToBcd(uint8_t val) { return (uint8_t)((val / 10u) << 4) | (val % 10u); }
 
 void hal_ZS_042Init(void) {}
 void hal_ZS_042Start(void) {}

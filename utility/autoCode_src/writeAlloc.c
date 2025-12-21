@@ -27,7 +27,7 @@ void writeAlloc(const modules_database_t *data_base, const char *file_name)
 	msgInfo("generate allocation tables in <%s> ", file_name);
 	file_t file_alloc;
 	fileInit(&file_alloc);
-	file_alloc.name = (char*)file_name;
+	file_alloc.name = (char *)file_name;
 	fileOpen(&file_alloc, "r", __FILE__);
 
 	file_t file_tmp;

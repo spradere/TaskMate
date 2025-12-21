@@ -36,22 +36,22 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 	rewind(file_old->stream);
 	rewind(file_new->stream);
 
-	while( !feof(file_old->stream) && !feof(file_new->stream))
+	while( !feof(file_old->stream) && !feof(file_new->stream) )
 	{
 		fgets(old, 256, file_old->stream);
 		fgets(new, 256, file_new->stream);
-		if(strcmp(old,new) != 0){same = false;}
+		if( strcmp(old, new) != 0 ) { same = false; }
 	}
 
-	if(same == true)
+	if( same == true )
 	{
-		msgInfo("files are the same, keep the old one <%s>",file_old->name);
+		msgInfo("files are the same, keep the old one <%s>", file_old->name);
 		remove(file_new->name);
 		file_unchanged++;
 	}
 	else
 	{
-		msgInfo("files are not the same, change for the new one .tmp -> <%s>",file_old->name);
+		msgInfo("files are not the same, change for the new one .tmp -> <%s>", file_old->name);
 		remove(file_old->name);
 		rename(file_new->name, file_old->name);
 		file_updated++;
@@ -60,15 +60,15 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 
 void fileClose(file_t *file, const char *caller)
 {
-	if(file->stream_open)
+	if( file->stream_open )
 	{
-		int err= fclose(file->stream);
-		if(err !=0)
-			{
-				msgError("from %s close file <%s>", caller, file->name);
-				exit(1);
-			}
-		if(file->name_alloc){ free(file->name); }
+		int err = fclose(file->stream);
+		if( err != 0 )
+		{
+			msgError("from %s close file <%s>", caller, file->name);
+			exit(1);
+		}
+		if( file->name_alloc ) { free(file->name); }
 		fileInit(file);
 	}
 }
@@ -106,7 +106,7 @@ void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller
 	file_tmp->stream = fopen(file_tmp->name, "w+");
 	if( file_tmp->stream == NULL )
 	{
-		msgError("from %s creating file <%s>",caller, file_tmp->name);
+		msgError("from %s creating file <%s>", caller, file_tmp->name);
 		exit(1);
 	}
 	file_tmp->stream_open = true;

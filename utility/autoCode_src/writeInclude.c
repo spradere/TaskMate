@@ -28,7 +28,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	msgInfo("generate include statements in <%s>", file_name);
 	file_t file_include;
 	fileInit(&file_include);
-	file_include.name = (char*)file_name;
+	file_include.name = (char *)file_name;
 	fileOpen(&file_include, "r", __FILE__);
 
 	file_t file_tmp;
@@ -69,8 +69,8 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 	if( type == INCLUDE_HAL_TARGET_PART )
 	{
-		fprintf(file_tmp.stream, "// info : build target is %s/%s/%s\n\n", target->arch_name, target->mcu_name,
-				target->board_name);
+		fprintf(file_tmp.stream, "// info : build target is %s/%s/%s\n\n", target->arch_name,
+				target->mcu_name, target->board_name);
 
 		fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 		fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
@@ -84,14 +84,14 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_tmp.stream, "\n#endif\n");
 	}
 
-	if( type == INCLUDE_HAL_TARGET_NAME_PART)
+	if( type == INCLUDE_HAL_TARGET_NAME_PART )
 	{
 		fprintf(file_tmp.stream, "#include \"hal/hal_target_type.h\"\n\n");
 		fprintf(file_tmp.stream, "const target_info_t target =\n");
 		fprintf(file_tmp.stream, "{\n");
-		fprintf(file_tmp.stream, ".arch = \"%s\",\n",target->arch_name);
-		fprintf(file_tmp.stream, ".mcu = \"%s\",\n",target->mcu_name);
-		fprintf(file_tmp.stream, ".board = \"%s\"\n\n",target->board_name);
+		fprintf(file_tmp.stream, ".arch = \"%s\",\n", target->arch_name);
+		fprintf(file_tmp.stream, ".mcu = \"%s\",\n", target->mcu_name);
+		fprintf(file_tmp.stream, ".board = \"%s\"\n\n", target->board_name);
 		fprintf(file_tmp.stream, "};");
 	}
 
@@ -136,5 +136,4 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 	fileClose(&file_include, __FILE__);
 	fileClose(&file_tmp, __FILE__);
-
 }
