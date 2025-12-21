@@ -34,7 +34,6 @@
  * - <driver name>Start()
  * - <driver name>Stop()
  *
- * @todo add dry run
  */
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -45,14 +44,14 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * */
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/parseInitrc.h"
-#include "utility/autoCode_src/parseTag.h"
-#include "utility/autoCode_src/printModules.h"
-#include "utility/autoCode_src/writeAlloc.h"
-#include "utility/autoCode_src/writeInclude.h"
-#include "utility/autoCode_src/globalError.h"
-#include "utility/autoCode_src/fileUtility.h"
+#include "autoCode.h"
+#include "parseInitrc.h"
+#include "parseTag.h"
+#include "printModules.h"
+#include "writeAlloc.h"
+#include "writeInclude.h"
+#include "globalError.h"
+#include "fileUtility.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);

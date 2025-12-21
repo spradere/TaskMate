@@ -18,9 +18,9 @@
  *
  */
 
-#include "utility/autoCode_src/parseInitrc.h"
-#include "utility/autoCode_src/initrcCmdDispatch.h"
-#include "utility/autoCode_src/tokenizer.h"
+#include "parseInitrc.h"
+#include "initrcCmdDispatch.h"
+#include "tokenizer.h"
 
 void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_initrc_name)
 {

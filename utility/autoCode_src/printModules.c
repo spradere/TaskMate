@@ -18,7 +18,7 @@
  *
  */
 
-#include "utility/autoCode_src/printModules.h"
+#include "printModules.h"
 
 void printModules(const modules_database_t *data_base)
 {

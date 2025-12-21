@@ -18,8 +18,8 @@
  *
  */
 
-#include "utility/autoCode_src/writeInclude.h"
-#include "utility/autoCode_src/fileUtility.h"
+#include "writeInclude.h"
+#include "fileUtility.h"
 
 void writeInclude(const modules_database_t *data_base, const int type, const char *file_name,
 				  const target_t *target)
@@ -34,13 +34,6 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 	file_t file_tmp;
 	fileInit(&file_tmp);
 	fileMakeTmp(file_name, &file_tmp, __FILE__);
-
-	/*FILE *file_include = fopen(file_include_name, "w");
-	if( file_include == NULL )
-	{
-		msgError("creating file <%s>", file_include_name);
-		exit(1);
-	}*/
 
 	// generate multiple include guard name
 	char cmd[256];
@@ -105,10 +98,15 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_tmp.stream, "#endif\n\n");
 
 		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
-		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);
+		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_context.h\"\n\n", target->arch_name);
+
 		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
 		fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
-		fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n", target->board_name);
+		fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
+
+		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_threadContextInit.h\"\n", target->arch_name);
+		fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_timerScheduler.h\"\n", target->mcu_name);
+		fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_timerRTC.h\"\n\n", target->mcu_name);
 
 		fprintf(file_tmp.stream, "\n#endif\n");
 	}
