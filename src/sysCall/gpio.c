@@ -16,7 +16,6 @@
  * @brief gpio implementation
  */
 
-#include "sysCall/TaskMate_public.h"
 #include "sysCall/gpio.h"
 #include "hal/autoInclude_hal_user.h"
 

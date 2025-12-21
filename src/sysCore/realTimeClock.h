@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef RTC_H
-#define RTC_H
+#ifndef REALTIMECLOCK_H
+#define REALTIMECLOCK_H
 
 void realTimeClock(void);
 

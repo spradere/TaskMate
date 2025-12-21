@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef HAL_USART_H
+#define HAL_USART_H
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "sysCall/error.h"
@@ -29,4 +32,5 @@ error_codes_t hal_usartWriteChar(uint8_t data);
 void hal_usartSendTXBuffer(void);
 error_codes_t hal_usartTestBufferRx(void);
 error_codes_t hal_usartWriteString(const char *str);
-error_codes_t hal_usartWriteChar(uint8_t data);
+
+#endif

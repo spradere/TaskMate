@@ -18,9 +18,14 @@
  *
  */
 
+#ifndef HAL_TARGET_TYPE_H
+#define HAL_TARGET_TYPE_H
+
 typedef struct
 {
 	const char *arch;
 	const char *mcu;
 	const char *board;
 } target_info_t;
+
+#endif

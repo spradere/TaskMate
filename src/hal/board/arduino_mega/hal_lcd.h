@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef HAL_LCD_H
+#define HAL_LCD_H
+
 #include <stdint.h>
 
 void hal_lcdInit(void);
@@ -25,3 +28,5 @@ void hal_lcdStop(void);
 void hal_lcdClear(void);
 void hal_lcdSetCursor(uint8_t row, uint8_t col);
 void hal_lcdWriteString(const char *str);
+
+#endif

@@ -17,8 +17,8 @@
  *
  */
 
-#include <avr/interrupt.h>
 #include "hal/mcu/atmega2560/hal_usart.h"
+#include <avr/interrupt.h>
 #include "hal/mcu/atmega2560/mcu_define.h"
 
 // Circular buffers

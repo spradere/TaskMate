@@ -21,6 +21,8 @@
 #ifndef STRING_H
 #define STRING_H
 
+#include <stdint.h>
+
 void strncpy(char *dest, uint8_t n, const char *src);
 
 #endif
