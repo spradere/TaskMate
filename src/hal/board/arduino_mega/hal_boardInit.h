@@ -11,6 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/mcu/atmega2560/hal_mcuInit.h"
+/**
+ * @file hal_boardInit.h
+ * @brief board init arduino mega implematation
+ *
+ */
 
-void hal_mcuInit(void) {}
+void hal_boardInit(void);

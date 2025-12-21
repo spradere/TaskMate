@@ -19,7 +19,8 @@
  */
 
 #include <avr/io.h>
-#include "hal/hal_user_api.h"
+#include "hal/arch/avr8/hal_threadContextInit.h"
+
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)

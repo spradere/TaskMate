@@ -11,6 +11,5 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/mcu/atmega2560/hal_mcuInit.h"
 
-void hal_mcuInit(void) {}
+void hal_archInit(void);
