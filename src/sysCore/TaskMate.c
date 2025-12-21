@@ -29,13 +29,25 @@
 #include <stdint.h>
 
 #include "hal/autoInclude_hal_system_critical.h"
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
 #include "libc/stdio.h"
+
+// [autoCode_tag] target name
+#include "hal/hal_target_type.h"
+
+const target_info_t target =
+{
+.arch = "avr8",
+.mcu = "atmega2560",
+.board = "arduino_mega"
+
+};
+// [/tag]
 
 int main(void)
 {

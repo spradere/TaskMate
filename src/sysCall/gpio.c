@@ -18,7 +18,7 @@
 
 #include "sysCall/TaskMate_public.h"
 #include "sysCall/gpio.h"
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
 static gpio_signal_item_t gpio_signals_table[GPIO_SIGNAL_COUNT];
 

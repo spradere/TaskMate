@@ -22,12 +22,13 @@
 #include "tokenizer.h"
 #include "fileUtility.h"
 
+static void writeTaget(const target_t *target, FILE *file);
 static void writeDriversInit(modules_database_t *data_base, FILE *file);
 static void writeThreadsInit(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsInit(modules_database_t *data_base, FILE *file);
 static void writeErrorCatalog(error_catalog_t *errors, FILE *file);
 
-void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors)
+void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors, const target_t *target)
 {
 	// open source and tmp file
 	msgInfo("open <%s> for parsing tag section", file_name);
@@ -90,6 +91,11 @@ void parseTag(modules_database_t *data_base, const char *file_name, error_catalo
 			{
 				writeErrorCatalog(errors, file_tmp.stream);
 			}
+
+			if( (strcmp(tok.tokens[2], "target") == 0) && (strcmp(tok.tokens[3], "name") == 0) )
+			{
+				writeTaget(target, file_tmp.stream);
+			}
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
@@ -111,6 +117,18 @@ void parseTag(modules_database_t *data_base, const char *file_name, error_catalo
 
 	fileClose(&file_src, __FILE__);
 	fileClose(&file_tmp, __FILE__);
+}
+
+static void writeTaget(const target_t *target, FILE *file)
+{
+	// write target name
+	fprintf(file, "#include \"hal/hal_target_type.h\"\n\n");
+	fprintf(file, "const target_info_t target =\n");
+	fprintf(file, "{\n");
+	fprintf(file, ".arch = \"%s\",\n", target->arch_name);
+	fprintf(file, ".mcu = \"%s\",\n", target->mcu_name);
+	fprintf(file, ".board = \"%s\"\n\n", target->board_name);
+	fprintf(file, "};\n");
 }
 
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)

@@ -23,6 +23,6 @@
 #include "autoCode.h"
 #include "globalError.h"
 
-void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors);
+void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors, const target_t *target);
 
 #endif
