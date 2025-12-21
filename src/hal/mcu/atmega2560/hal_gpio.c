@@ -45,25 +45,19 @@ static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] = {
 void hal_gpioInitPin(const gpio_pin_item_t *pin)
 {
 
-	if( pin->mode == GPIO_PIN_MODE_INPUT ) { *(gpioMcuPorts[pin->port_index].ddr) &= ~(1 << pin->number); }
+	if( pin->mode == GPIO_PIN_MODE_INPUT ) { *(gpioMcuPorts[pin->port_index].ddr) &= (uint8_t)~(1 << pin->number); }
 	if( pin->mode == GPIO_PIN_MODE_OUTPUT_PP ) { *(gpioMcuPorts[pin->port_index].ddr) |= (1 << pin->number); }
 
 	if( pin->pull == GPIO_PIN_PULL_UP ) { *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number); }
-
-	//DDRB |= (1 << PB7);
 }
 
 void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value)
 {
 	if( value ) { *(gpioMcuPorts[pin->port_index].port) |= (1 << pin->number); }
-	else { *(gpioMcuPorts[pin->port_index].port) &= ~(1 << pin->number); }
-	// if( value ){ PORTB |= (1 << PB7); }
-	// else { PORTB &= ~(1 << PB7); }
+	else { *(gpioMcuPorts[pin->port_index].port) &= (uint8_t)~(1 << pin->number); }
 }
 
 bool hal_gpioReadPin(const gpio_pin_item_t *pin)
 {
 	return (*(gpioMcuPorts[pin->port_index].port) & (1 << pin->number)) >> pin->number;
-	// uint8_t val = (PORTB & (1 << pin->number)) >> pin->number;
-	// return val;
 }
