@@ -1,0 +1,3 @@
+- few general type have to be replaced with custom typedef, to follow hardware portability
+
+- hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit acces to SRF registers

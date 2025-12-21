@@ -83,7 +83,7 @@ void hal_lcdWriteString(const char *str)
 	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
 	hal_i2cWrite(LCDAMC2004_DATA);
 
-	while( *str ) { hal_i2cWrite(*str++); }
+	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
 	hal_i2cCommStop();
 }
 
