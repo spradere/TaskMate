@@ -22,7 +22,7 @@
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
-void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size, uint32_t value, uint8_t base)
+static void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size, uint32_t value, uint8_t base)
 {
 	static const char digits[] = "0123456789abcdef";
 
@@ -71,7 +71,7 @@ void snprintf(char *buff, size_t buff_size, const char *format, ...)
 				}
 				case 's':
 				{
-					char *s = va_arg(args, char *);
+					const char *s = va_arg(args, char *);
 					while( *s )
 					{
 						put_char(*s);

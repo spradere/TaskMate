@@ -21,7 +21,6 @@
 #include "sysCore/modules.h"
 #include "sysCore/autoAlloc.h" // get DRIVERS_COUNT & THREADS_COUNT
 
-
 static struct
 {
 	module_item_driver_t drivers[DRIVERS_COUNT];
