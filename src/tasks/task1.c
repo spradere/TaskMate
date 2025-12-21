@@ -3,7 +3,6 @@
 #include "sysCall/sysCall.h"
 #include "sysCall/gpio.h"
 
-
 void task1(void)
 {
 

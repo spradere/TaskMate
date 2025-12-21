@@ -23,7 +23,6 @@
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
 
-
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // realTimeClock is called by hal_timerRTC interupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

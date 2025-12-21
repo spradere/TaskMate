@@ -22,7 +22,6 @@
 #include <stdbool.h>
 #include <avr/io.h>
 
-
 static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] = {
 	[GPIO_PORT_A] =
 		(gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA), (volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
