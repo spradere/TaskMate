@@ -20,7 +20,6 @@
 
 #include "libc/string.h"
 
-
 void strncpy(char *dest, uint8_t n, const char *src)
 {
 	uint8_t i = 0;

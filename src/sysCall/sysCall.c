@@ -26,7 +26,6 @@
 #include "hal/autoInclude_hal_system_critical.h"
 #include "sysCore/modules.h"
 
-
 static uint8_t system_status = 0;
 
 void sysCallSetThreadRTC(uint16_t count)
