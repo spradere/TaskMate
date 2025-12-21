@@ -55,7 +55,6 @@ error_codes_t hal_usartWriteString(const char *str);
 error_codes_t hal_usartWriteChar(uint8_t data);
 
 // board
-
 void hal_gpioInitPin(const gpio_pin_item_t *pin);
 void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
 bool hal_gpioReadPin(const gpio_pin_item_t *pin);

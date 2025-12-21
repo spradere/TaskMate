@@ -16,9 +16,11 @@
  * @brief board init arduino mega implematation
  *
  */
+
 #include <avr/io.h>
 #include <stdbool.h>
 #include "hal/hal_user_api.h"
+#include "hal/board/arduino_mega/hal_boardInit.h"
 
 void hal_boardInit(void)
 {

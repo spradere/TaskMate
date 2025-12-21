@@ -106,6 +106,9 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 
 		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
 		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);
+		fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
+		fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
+		fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n", target->board_name);
 
 		fprintf(file_tmp.stream, "\n#endif\n");
 	}
