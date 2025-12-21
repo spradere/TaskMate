@@ -17,7 +17,8 @@
  *
  */
 
-#include "hal/hal_user_api.h"
+#include "hal/board/arduino_mega/hal_ZS_042.h"
+#include "hal/mcu/atmega2560/hal_i2c.h"
 
 #define ZS_042_I2C_ADDR 0x68
 
