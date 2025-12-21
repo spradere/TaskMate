@@ -86,3 +86,6 @@ TaskMate 0.23
 	refactor autoCode message macro info/error with varg
 	refactor autoCode variables name
 	add taget name in TaskMate
+	refactor autoCode file_t struct for file name/stream/error handle
+	refactor autoCode write in tmp file
+	add warnings to clang / avr-gcc and fix code
