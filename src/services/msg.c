@@ -50,7 +50,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 fix type / cast 3", MSG_TO_LCD);
+		msgWritreText(channel, "\3 fix type / cast 4", MSG_TO_LCD);
 	}
 
 	msgProcess();

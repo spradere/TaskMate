@@ -22,7 +22,7 @@
 #include <util/atomic.h>
 #include <avr/interrupt.h>
 
-#include "hal/hal_user_api.h"
+#include "hal/mcu/atmega2560/hal_timerScheduler.h"
 #include "hal/hal_system_critical_api.h"
 
 #include "sysCore/modules.h"
