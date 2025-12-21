@@ -36,7 +36,6 @@
 #include "sysCore/runLevel.h"
 #include "libc/stdio.h"
 
-
 int main(void)
 {
 	// log start
@@ -52,7 +51,6 @@ int main(void)
 	snprintf(dest, 128, "[boot] target : %s-%s-%s\n", target.arch, target.mcu, target.board);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
-
 
 	// system static allocation init
 	snprintf(dest, 128, "[boot] system static allocation\n");
@@ -81,9 +79,6 @@ int main(void)
 		(*(mod_d->init))();
 		(*(mod_d->start))();
 	}
-
-
-
 
 	// rtc time test
 

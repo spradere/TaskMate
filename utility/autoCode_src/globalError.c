@@ -68,11 +68,12 @@ void globalError(error_catalog_t *errors)
 		file_src_line_number++;
 		tokenizer(&tok);
 
-		if((tok.tokens[0][0] != '\n') && (tok.tokens[0][0] != '#') && (tok.count != 0))
+		if( (tok.tokens[0][0] != '\n') && (tok.tokens[0][0] != '#') && (tok.count != 0) )
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", errors->file_src.name, file_src_line_number, tok.line);
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", errors->file_src.name,
+						 file_src_line_number, tok.line);
 			}
 
 			// printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
@@ -113,7 +114,10 @@ void globalError(error_catalog_t *errors)
 	fprintf(errors->file_dest.stream, "typedef enum\n");
 	fprintf(errors->file_dest.stream, "{\n");
 
-	for( int i = 0; i < errors->error_count; i++ ) { fprintf(errors->file_dest.stream, "\t%s,\n", errors->catalog[i].name); }
+	for( int i = 0; i < errors->error_count; i++ )
+	{
+		fprintf(errors->file_dest.stream, "\t%s,\n", errors->catalog[i].name);
+	}
 	fprintf(errors->file_dest.stream, "\tERROR_COUNT\n");
 	fprintf(errors->file_dest.stream, "} error_codes_t;\n\n");
 
