@@ -21,14 +21,11 @@
 #ifndef HAL_SYSTEM_CRITICAL_API_H
 #define HAL_SYSTEM_CRITICAL_API_H
 
-#include <stdint.h>
-
 #ifndef HAL_SYSTEM_CRITICAL_API_ALLOWED
 #error "include hal system critical api not allowed"
 #endif
 
 // hal autoInclude
-#include "hal/autoInclude_hal_target.h"
 #include "hal/autoInclude_hal_system_critical.h"
 
 // arch

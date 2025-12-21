@@ -13,24 +13,19 @@
  */
 
 /**
- * @file hal_api.h
- * @brief hal header api
+ * @file hal_i2c.h
+ * @brief header hal i2c serial comm
  *
  */
 
-#ifndef HAL_API_H
-#define HAL_API_H
+#include <stdint.h>
+#include <stdbool.h>
 
-// hal autoInclude
-#include "hal/autoInclude_hal_target.h"
 
-// mcu
-#include "hal/mcu/atmega2560/hal_i2c.h"
-#include "hal/mcu/atmega2560/hal_usart.h"
-#include "hal/mcu/atmega2560/hal_gpio.h"
-
-// board
-#include "hal/board/arduino_mega/hal_lcd.h"
-#include "hal/board/arduino_mega/hal_ZS_042.h"
-
-#endif
+void hal_i2cInit(void);
+void hal_i2cStart(void);
+void hal_i2cStop(void);
+uint8_t hal_i2cCommStart(uint8_t address);
+void hal_i2cCommStop(void);
+uint8_t hal_i2cWrite(uint8_t data);
+uint8_t hal_i2cRead(bool ack);
