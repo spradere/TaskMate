@@ -18,9 +18,9 @@
  *
  */
 
-#include "utility/autoCode_src/parseTag.h"
-#include "utility/autoCode_src/tokenizer.h"
-#include "utility/autoCode_src/fileUtility.h"
+#include "parseTag.h"
+#include "tokenizer.h"
+#include "fileUtility.h"
 
 static void writeDriversInit(modules_database_t *data_base, FILE *file);
 static void writeThreadsInit(modules_database_t *data_base, FILE *file);

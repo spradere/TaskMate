@@ -18,8 +18,8 @@
  *
  */
 
-#include "utility/autoCode_src/writeInclude.h"
-#include "utility/autoCode_src/fileUtility.h"
+#include "writeInclude.h"
+#include "fileUtility.h"
 
 void writeAlloc(const modules_database_t *data_base, const char *file_name)
 {
