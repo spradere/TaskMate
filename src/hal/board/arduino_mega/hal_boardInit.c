@@ -19,7 +19,7 @@
 
 #include <avr/io.h>
 #include <stdbool.h>
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 #include "hal/board/arduino_mega/hal_boardInit.h"
 
 void hal_boardInit(void)

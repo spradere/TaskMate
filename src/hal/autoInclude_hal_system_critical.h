@@ -19,10 +19,6 @@
 #ifndef AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
 #define AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
 
-#ifndef AUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-	#error "autoInclude system critical not allowed"
-#endif
-
 #include "hal/arch/avr8/hal_stack.h"
 #include "hal/arch/avr8/hal_context.h"
 
@@ -33,6 +29,10 @@
 #include "hal/arch/avr8/hal_threadContextInit.h"
 #include "hal/mcu/atmega2560/hal_timerScheduler.h"
 #include "hal/mcu/atmega2560/hal_timerRTC.h"
+
+#include "hal/arch/avr8/arch_define.h"
+#include "hal/mcu/atmega2560/mcu_define.h"
+#include "hal/board/arduino_mega/board_define.h"
 
 
 #endif

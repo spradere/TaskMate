@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include "sysCall/TaskMate_public.h"
 #include "services/scli.h"
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
 void scli(void)
 {

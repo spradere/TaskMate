@@ -22,7 +22,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 

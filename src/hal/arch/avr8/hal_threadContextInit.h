@@ -21,10 +21,6 @@
 #ifndef HAL_THREADCONTEXTINIT_H
 #define HAL_THREADCONTEXTINIT_H
 
- #ifndef HAL_SYSTEM_CRITICAL_ALLOWED
-	#error "hal system critical not allowed"
-#endif
-
 #include "hal/arch/avr8/arch_define.h" // get stack_word_t
 
 void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top);

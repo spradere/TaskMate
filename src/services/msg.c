@@ -25,7 +25,7 @@
 #include "libc/stdio.h"
 
 // Send message to :
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -50,7 +50,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 fix #include 20", MSG_TO_LCD);
+		msgWritreText(channel, "\3 fix #include 30", MSG_TO_LCD);
 	}
 
 	msgProcess();
