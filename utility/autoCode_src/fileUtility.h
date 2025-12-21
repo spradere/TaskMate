@@ -20,8 +20,7 @@
  #ifndef FILE_H
  #define FILE_H
 
-#include "utility/autoCode_src/autoCode.h"
-#include <stdbool.h>
+#include "autoCode.h"
 
 typedef struct
 {

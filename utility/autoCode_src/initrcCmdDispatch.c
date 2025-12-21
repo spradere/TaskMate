@@ -18,7 +18,7 @@
  *
  */
 
-#include "utility/autoCode_src/initrcCmdDispatch.h"
+#include "initrcCmdDispatch.h"
 
 static void funcRunNone(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
 {

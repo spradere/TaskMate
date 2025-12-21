@@ -17,7 +17,7 @@
  *
  */
 
-#include "utility/autoCode_src/fileUtility.h"
+#include "fileUtility.h"
 
 static int file_updated = 0;
 static int file_unchanged = 0;

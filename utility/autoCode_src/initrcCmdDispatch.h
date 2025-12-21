@@ -20,7 +20,7 @@
 #ifndef INITRC_CMD_DISPATCH_H
 #define INITRC_CMD_DISPATCH_H
 
-#include "utility/autoCode_src/autoCode.h"
+#include "autoCode.h"
 
 typedef struct
 {

@@ -20,7 +20,7 @@
 #ifndef WRITE_INCLUDE_H
 #define WRITE_INCLUDE_H
 
-#include "utility/autoCode_src/autoCode.h"
+#include "autoCode.h"
 
 #define INCLUDE_THREAD_PART 1
 #define INCLUDE_HAL_TARGET_PART 2

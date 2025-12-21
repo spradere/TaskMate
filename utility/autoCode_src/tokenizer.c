@@ -18,7 +18,7 @@
  *
  */
 
-#include "utility/autoCode_src/tokenizer.h"
+#include "tokenizer.h"
 
 void tokenizer(tokenizer_t *tok)
 {
