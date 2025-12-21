@@ -20,8 +20,8 @@
 #ifndef PARSETAG_H
 #define PARSETAG_H
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/globalError.h"
+#include "autoCode.h"
+#include "globalError.h"
 
 void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors);
 

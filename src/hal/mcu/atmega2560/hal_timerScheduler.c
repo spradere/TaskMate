@@ -23,7 +23,7 @@
 #include <avr/interrupt.h>
 
 #include "hal/mcu/atmega2560/hal_timerScheduler.h"
-#include "hal/hal_system_critical_api.h"
+#include "hal/autoInclude_hal_system_critical.h"
 
 #include "sysCore/modules.h"
 #include "sysCore/scheduler.h"

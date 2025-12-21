@@ -20,8 +20,8 @@
 #ifndef GLOBAL_ERROR_H
 #define GLOBAL_ERROR_H
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/fileUtility.h"
+#include "autoCode.h"
+#include "fileUtility.h"
 
 typedef enum
 {
