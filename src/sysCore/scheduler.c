@@ -18,8 +18,10 @@
  *
  */
 
-#include "hal/hal_user_api.h"
+#include <stdint.h>
+
 #include "hal/hal_system_critical_api.h"
+#include "hal/hal_user_api.h"
 
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"

@@ -18,7 +18,8 @@
  */
 
 #include <avr/interrupt.h>
-#include "hal/hal_user_api.h"
+#include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/mcu/atmega2560/mcu_define.h"
 
 // Circular buffers
 #define HAL_USART_BUFFER_SIZE 128

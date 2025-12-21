@@ -19,7 +19,8 @@
 
 #include <util/delay.h>
 
-#include "hal/hal_user_api.h"
+#include "hal/board/arduino_mega/hal_lcd.h"
+#include "hal/mcu/atmega2560/hal_i2c.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
