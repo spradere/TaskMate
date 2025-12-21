@@ -25,5 +25,8 @@
 
 #include "hal/arch/avr8/hal_stack.h"
 #include "hal/arch/avr8/hal_context.h"
+#include "hal/arch/avr8/hal_archInit.h"
+#include "hal/mcu/atmega2560/hal_mcuInit.h"
+#include "hal/board/arduino_mega/hal_boardInit.h"
 
 #endif
