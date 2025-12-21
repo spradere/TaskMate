@@ -18,11 +18,10 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_timerRTC.h"
 #include <avr/io.h>
 #include <util/atomic.h>
 #include <avr/interrupt.h>
-
-#include "hal/mcu/atmega2560/hal_timerRTC.h"
 #include "sysCore/realTimeClock.h"
 
 const int hal_timerRTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625

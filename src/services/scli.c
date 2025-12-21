@@ -18,10 +18,10 @@
  *
  */
 
+#include "services/scli.h"
 #include <avr/io.h>
 #include <stdint.h>
-#include "sysCall/TaskMate_public.h"
-#include "services/scli.h"
+#include "sysCall/sysCall.h"
 #include "hal/autoInclude_hal_user.h"
 
 void scli(void)

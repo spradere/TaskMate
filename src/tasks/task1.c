@@ -1,6 +1,8 @@
-#include <avr/io.h>
-#include "sysCall/TaskMate_public.h"
 #include "tasks/task1.h"
+#include <avr/io.h>
+#include "sysCall/sysCall.h"
+#include "sysCall/gpio.h"
+
 
 void task1(void)
 {
