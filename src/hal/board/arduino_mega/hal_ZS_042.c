@@ -32,7 +32,7 @@ void hal_ZS_042Stop(void) {}
 
 uint8_t hal_ZS_042Read(hal_rtc_time_t *t)
 {
-	uint8_t buf[7];
+	uint8_t buf[8];
 
 	hal_i2cCommStart(ZS_042_I2C_ADDR);
 	hal_i2cWrite(0); // command ???

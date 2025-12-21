@@ -21,7 +21,6 @@
 #include <util/delay.h>
 #include "hal/board/arduino_mega/hal_lcd.h"
 
-
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 

@@ -26,9 +26,9 @@ static void writeTaget(const target_t *target, FILE *file);
 static void writeDriversInit(modules_database_t *data_base, FILE *file);
 static void writeThreadsInit(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsInit(modules_database_t *data_base, FILE *file);
-static void writeErrorCatalog(error_catalog_t *errors, FILE *file);
+static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
 
-void parseTag(modules_database_t *data_base, const char *file_name, error_catalog_t *errors,
+void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const target_t *target)
 {
 	// open source and tmp file
@@ -252,7 +252,7 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 	fprintf(file, "\tto_run.next=RUN_CORE;\n");
 }
 
-static void writeErrorCatalog(error_catalog_t *errors, FILE *file)
+static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 {
 	fprintf(file, "const error_item_t error_catalog[] = \n{\n");
 

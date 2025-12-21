@@ -22,7 +22,6 @@
 #include <stdbool.h>
 #include "hal/autoInclude_hal_user.h"
 
-
 void hal_boardInit(void)
 {
 	// gpio pin definition
