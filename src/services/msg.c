@@ -19,8 +19,8 @@
  * @todo add free channel
  */
 
-#include "sysCall/TaskMate_public.h"
 #include "services/msg.h"
+#include "sysCall/sysCall.h"
 #include "libc/string.h"
 #include "libc/stdio.h"
 
@@ -50,7 +50,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 fix #include 30", MSG_TO_LCD);
+		msgWritreText(channel, "\3 fix #include 40", MSG_TO_LCD);
 	}
 
 	msgProcess();

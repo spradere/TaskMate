@@ -71,7 +71,7 @@ void writeInclude(const modules_database_t *data_base, const int type, const cha
 		fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_gpio.h\"\n\n", target->mcu_name);
 
 		fprintf(file_tmp.stream, "// board\n");
-		fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_lcd.h\"\n",target->board_name);
+		fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_lcd.h\"\n", target->board_name);
 		fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_ZS_042.h\"\n\n", target->board_name);
 
 		fprintf(file_tmp.stream, "\n#endif\n");

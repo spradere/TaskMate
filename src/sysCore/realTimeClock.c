@@ -19,9 +19,10 @@
  * @todo Add I2C external clock
  */
 
+#include "sysCore/realTimeClock.h"
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
-#include "sysCore/realTimeClock.h"
+
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // realTimeClock is called by hal_timerRTC interupt sub routine

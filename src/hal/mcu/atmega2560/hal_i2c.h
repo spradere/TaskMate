@@ -18,9 +18,11 @@
  *
  */
 
+#ifndef HAL_I2C_H
+#define HAL_I2C_H
+
 #include <stdint.h>
 #include <stdbool.h>
-
 
 void hal_i2cInit(void);
 void hal_i2cStart(void);
@@ -29,3 +31,5 @@ uint8_t hal_i2cCommStart(uint8_t address);
 void hal_i2cCommStop(void);
 uint8_t hal_i2cWrite(uint8_t data);
 uint8_t hal_i2cRead(bool ack);
+
+#endif

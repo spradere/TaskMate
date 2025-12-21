@@ -18,15 +18,13 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_i2c.h"
 #include <avr/io.h>
 #include <util/twi.h>
-
-#include "hal/mcu/atmega2560/hal_i2c.h"
 #include "hal/mcu/atmega2560/mcu_define.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
-
 
 void hal_i2cInit(void)
 {

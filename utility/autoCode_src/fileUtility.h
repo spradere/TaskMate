@@ -17,8 +17,8 @@
  *
  */
 
- #ifndef FILE_H
- #define FILE_H
+ #ifndef FILEUTILITY_H
+ #define FILEUTILITY_H
 
 #include "autoCode.h"
 

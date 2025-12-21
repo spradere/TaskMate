@@ -18,7 +18,8 @@
  *
  */
 
-#include <stdint.h>
+#include "libc/string.h"
+
 
 void strncpy(char *dest, uint8_t n, const char *src)
 {

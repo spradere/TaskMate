@@ -20,13 +20,10 @@
 
 #include "sysCore/initSys.h"
 #include <stdint.h>
-
 #include "hal/autoInclude_hal_system_critical.h"
 #include "hal/autoInclude_hal_user.h"
-
 #include "sysCore/autoInclude_threads.h"
 #include "sysCore/modules.h"
-
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)

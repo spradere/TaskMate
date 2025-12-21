@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef HAL_ZS_042_H
+#define HAL_ZS_042_H
+
 #include <stdint.h>
 
 typedef struct
@@ -35,3 +38,5 @@ void hal_ZS_042Start(void);
 void hal_ZS_042Stop(void);
 uint8_t hal_ZS_042Read(hal_rtc_time_t *t);
 uint8_t hal_ZS_042Write(const hal_rtc_time_t *t);
+
+#endif
