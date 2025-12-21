@@ -101,14 +101,14 @@ int main(int argn, const char *argv[])
 	globalError(&errors_catalog);
 
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/initSys.c", NULL);
-	parseTag(&data_base, "src/sysCore/runLevel.c", NULL);
-	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog);
+	parseTag(&data_base, "src/sysCore/initSys.c", NULL, NULL);
+	parseTag(&data_base, "src/sysCore/runLevel.c", NULL, NULL);
+	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, NULL);
+	parseTag(&data_base, "src/sysCore/TaskMate.c", NULL, &target);
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_TARGET_PART, "src/hal/autoInclude_hal_target.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_TARGET_NAME_PART, "src/hal/autoInclude_hal_target.c", &target);
+	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/autoInclude_hal_user.h", &target);
 
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h",
 				 &target);

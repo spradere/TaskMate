@@ -16,12 +16,17 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#include "hal/hal_target_type.h"
+#ifndef AUTOINCLUDE_HAL_USER_H
+#define AUTOINCLUDE_HAL_USER_H
 
-const target_info_t target =
-{
-.arch = "avr8",
-.mcu = "atmega2560",
-.board = "arduino_mega"
+// mcu
+#include "hal/mcu/atmega2560/hal_i2c.h"
+#include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/mcu/atmega2560/hal_gpio.h"
 
-};
+// board
+#include "hal/board/arduino_mega/hal_lcd.h"
+#include "hal/board/arduino_mega/hal_ZS_042.h"
+
+
+#endif

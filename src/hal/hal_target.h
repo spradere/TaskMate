@@ -11,21 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ! Auto generated code, do not edit !
-// ! any changes will be lost         !
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-// info : build target is avr8/atmega2560/arduino_mega
-
-#ifndef AUTOINCLUDE_HAL_TARGET_H
-#define AUTOINCLUDE_HAL_TARGET_H
+#ifndef HAL_TARGET_H
+#define HAL_TARGET_H
 
 #include "hal/hal_target_type.h"
 extern const target_info_t target;
-
-#include "hal/arch/avr8/arch_define.h"
-#include "hal/mcu/atmega2560/mcu_define.h"
-#include "hal/board/arduino_mega/board_define.h"
 
 #endif
