@@ -17,6 +17,12 @@
  * @brief hal context save / restore
  *
  */
+#ifndef HAL_CONTEXT_H
+#define HAL_CONTEXT_H
+
+#ifndef HAL_SYSTEM_CRITICAL_ALLOWED
+	#error "hal system critical not allowed"
+#endif
 
 #include <avr/io.h>
 
@@ -104,3 +110,5 @@ static inline __attribute__((always_inline)) void hal_returnFromInterupt(void) {
 static inline __attribute__((always_inline)) void hal_setGlobalInterupt(void) { asm volatile("sei \n\t"); }
 
 static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void) { asm volatile("cli \n\t"); }
+
+#endif

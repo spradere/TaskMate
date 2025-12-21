@@ -18,8 +18,17 @@
  *
  */
 
+#ifndef HAL_STACK_H
+#define HAL_STACK_H
+
+#ifndef HAL_SYSTEM_CRITICAL_ALLOWED
+	#error "hal system critical not allowed"
+#endif
+
 #include <avr/io.h>
 
 static inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp) { SP = sp; }
 
 static inline __attribute__((always_inline)) uintptr_t hal_getStackPointer(void) { return SP; }
+
+#endif
