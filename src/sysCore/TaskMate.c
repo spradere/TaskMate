@@ -26,9 +26,10 @@
  *
  */
 
-#include "hal/hal_user_api.h"
+#include <stdint.h>
+
 #include "hal/hal_system_critical_api.h"
-#include "hal/autoInclude_hal_target.h"
+#include "hal/hal_user_api.h"
 
 #include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"

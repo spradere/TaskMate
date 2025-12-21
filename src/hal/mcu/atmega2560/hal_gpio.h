@@ -13,24 +13,14 @@
  */
 
 /**
- * @file hal_api.h
- * @brief hal header api
+ * @file hal_gpio.h
+ * @brief header hal gpio implementation
  *
  */
 
-#ifndef HAL_API_H
-#define HAL_API_H
+#include <stdbool.h>
+#include "sysCall/gpio.h"
 
-// hal autoInclude
-#include "hal/autoInclude_hal_target.h"
-
-// mcu
-#include "hal/mcu/atmega2560/hal_i2c.h"
-#include "hal/mcu/atmega2560/hal_usart.h"
-#include "hal/mcu/atmega2560/hal_gpio.h"
-
-// board
-#include "hal/board/arduino_mega/hal_lcd.h"
-#include "hal/board/arduino_mega/hal_ZS_042.h"
-
-#endif
+void hal_gpioInitPin(const gpio_pin_item_t *pin);
+void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
+bool hal_gpioReadPin(const gpio_pin_item_t *pin);
