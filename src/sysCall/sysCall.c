@@ -20,7 +20,7 @@
  *
  */
 
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 #include "hal/autoInclude_hal_system_critical.h"
 
 #include <util/atomic.h>
