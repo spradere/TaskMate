@@ -89,3 +89,4 @@ TaskMate 0.23
 	refactor autoCode file_t struct for file name/stream/error handle
 	refactor autoCode write in tmp file
 	add warnings to clang / avr-gcc and fix code
+	refactor all .h

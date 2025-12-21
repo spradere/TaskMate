@@ -13,19 +13,19 @@
  */
 
 /**
- * @file TaskMate_public.h
- * @brief public header of TaskMate.
- *
- * - This file contains the headers for user tasks, system services
- * - Not the internal system core, forbinds.
+ * @file snprintf.h
+ * @brief header of libc formated print in string
  *
  */
 
-#ifndef TASKMATE_PUBLIC_H
-#define TASKMATE_PUBLIC_H
+#ifndef SNPRINTF_H
+#define SNPRINTF_H
 
-#include "sysCall/sysCall.h"
-#include "sysCall/error.h"
-#include "sysCall/gpio.h"
+#include <stddef.h>
+#include <stdarg.h>
+#include <stdint.h>
+
+void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size, uint32_t value, uint8_t base);
+void snprintf(char *buff, size_t buff_size, const char *format, ...);
 
 #endif

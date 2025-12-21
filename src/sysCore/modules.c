@@ -18,8 +18,9 @@
  *
  */
 
-#include "sysCore/autoAlloc.h" // get DRIVERS_COUNT & THREADS_COUNT
 #include "sysCore/modules.h"
+#include "sysCore/autoAlloc.h" // get DRIVERS_COUNT & THREADS_COUNT
+
 
 static struct
 {

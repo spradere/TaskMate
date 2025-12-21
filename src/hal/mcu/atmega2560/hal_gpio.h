@@ -18,9 +18,14 @@
  *
  */
 
+#ifndef HAL_GPIO_H
+#define HAL_GPIO_H
+
 #include <stdbool.h>
 #include "sysCall/gpio.h"
 
 void hal_gpioInitPin(const gpio_pin_item_t *pin);
 void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
 bool hal_gpioReadPin(const gpio_pin_item_t *pin);
+
+#endif

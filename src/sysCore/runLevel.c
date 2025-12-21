@@ -18,8 +18,9 @@
  *
  */
 
-#include "sysCore/autoAlloc.h" // get run_levels_t
 #include "sysCore/runLevel.h"
+#include "sysCore/autoAlloc.h" // get run_levels_t
+
 
 static run_levels_t to_run;
 

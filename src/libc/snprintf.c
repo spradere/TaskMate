@@ -18,11 +18,7 @@
  *
  */
 
-#include <stddef.h>
-#include <stdarg.h>
-#include <stdint.h>
-
-#include "hal/autoInclude_hal_user.h"
+#include "libc/snprintf.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
