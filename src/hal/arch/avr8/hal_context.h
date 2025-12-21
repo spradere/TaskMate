@@ -94,7 +94,10 @@
 
 static inline __attribute__((always_inline)) void hal_contextSave(void) { asm volatile(AVR8_PUSH_ALL_REGS); }
 
-static inline __attribute__((always_inline)) void hal_contextRestore(void) { asm volatile(AVR8_POP_ALL_REGS); }
+static inline __attribute__((always_inline)) void hal_contextRestore(void)
+{
+	asm volatile(AVR8_POP_ALL_REGS);
+}
 
 static inline __attribute__((always_inline)) void hal_returnFromInterupt(void) { asm volatile("reti \n\t"); }
 

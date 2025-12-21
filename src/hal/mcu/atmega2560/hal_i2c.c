@@ -39,7 +39,7 @@ void hal_i2cStart(void)
 
 void hal_i2cStop(void)
 {
-	TWCR &= ~(1 << TWEN); // Stop TWI
+	TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
 }
 
 uint8_t hal_i2cCommStart(uint8_t address)

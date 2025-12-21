@@ -34,7 +34,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, error_catalo
 
 	file_t file_src;
 	fileInit(&file_src);
-	file_src.name = (char*)file_name;
+	file_src.name = (char *)file_name;
 	fileOpen(&file_src, "r", __FILE__);
 
 	file_t file_tmp;
@@ -109,9 +109,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, error_catalo
 
 	fileCmpReplace(&file_src, &file_tmp);
 
-	fileClose(&file_src,__FILE__);
-	fileClose(&file_tmp,__FILE__);
-
+	fileClose(&file_src, __FILE__);
+	fileClose(&file_tmp, __FILE__);
 }
 
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)
@@ -148,7 +147,7 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 			fprintf(file, "\tmod_t->real_time_counter = 0;\n");
 			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
-			fprintf(file, "\tmod_t->name = (uint8_t *)thread%i_name;\n", threads_count);
+			fprintf(file, "\tmod_t->name = thread%i_name;\n", threads_count);
 
 			fprintf(file, "\tmod_t->status = %i;\n", mod->modules[i].status | type);
 
@@ -173,7 +172,7 @@ static void writeDriversInit(modules_database_t *data_base, FILE *file)
 
 		fprintf(file, "\t*(mod_d) = (module_item_driver_t)\n");
 		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
+		fprintf(file, "\t\t.name = driver%i_name,\n", i);
 		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
 		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
 		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);

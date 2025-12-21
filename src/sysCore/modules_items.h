@@ -34,7 +34,7 @@
 
 typedef struct
 {
-	uint8_t *name; /**< Thread name */
+	const char *name; /**< Thread name */
 	uint8_t status; /**< flag | run level */
 
 	void (*main)(void); /**< Thread main function for first start and resart */
@@ -54,7 +54,7 @@ typedef struct
 // driver
 typedef struct
 {
-	uint8_t *name; /**< Driver name */
+	const char *name; /**< Driver name */
 	uint8_t status; /**< flag | run level */
 
 	void (*init)(void); /**< Initialize driver function  */

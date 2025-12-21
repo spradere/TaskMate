@@ -78,8 +78,6 @@ void snprintf(char *buff, size_t buff_size, const char *format, ...)
 					char *s = va_arg(args, char *);
 					while( *s )
 					{
-						// hal_usartWriteChar(*s);
-						// hal_usartSendTXBuffer();
 						put_char(*s);
 						s++;
 					}
@@ -90,7 +88,7 @@ void snprintf(char *buff, size_t buff_size, const char *format, ...)
 				case 'x':
 				case 'b':
 				{
-					int value = va_arg(args, int);
+					uint32_t value = va_arg(args, uint32_t);
 					uint8_t base;
 
 					switch( *format )

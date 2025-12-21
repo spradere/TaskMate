@@ -20,7 +20,7 @@
 
 typedef struct
 {
-    const char *arch;
-    const char *mcu;
-    const char *board;
+	const char *arch;
+	const char *mcu;
+	const char *board;
 } target_info_t;
