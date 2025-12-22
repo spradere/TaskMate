@@ -23,17 +23,6 @@
  * @note
  * tag format are one line C comment // [tag] <task|driver> <init>
  *
- * @warning
- * do not edit code between tag, it will be deleted by automatic generated code
- * ! tasks file name must match with function, lcd.c -> void lcd(void), drivers
- * functions name must match to generic driver layout :
- * - <driver name>SetStatus()
- * - <driver name>GetStatus()
- * - <driver name>GetName()
- * - <driver name>Init()
- * - <driver name>Start()
- * - <driver name>Stop()
- *
  */
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -69,9 +58,9 @@ int main(int argn, const char *argv[])
 	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
 	msgInfo("target %s -> %s -> %s", target.arch_name, target.mcu_name, target.board_name);
 
+	// global error system
 	error_catalog_t errors_catalog;
-	errors_catalog.file_src.name = (char *)argv[4];
-	errors_catalog.file_dest.name = "src/sysCall/error.h";
+	globalError(argv[4], "src/sysCall/error.h", &errors_catalog);
 
 	// setup data base
 	modules_database_t data_base;
@@ -96,9 +85,6 @@ int main(int argn, const char *argv[])
 
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
-
-	// global error system
-	globalError(&errors_catalog);
 
 	// parse tag and generate code for init
 	parseTag(&data_base, "src/sysCore/initSys.c", &errors_catalog, &target);

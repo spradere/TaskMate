@@ -83,6 +83,12 @@ void fileInit(file_t *file)
 
 void fileOpen(file_t *file, const char *mode, const char *caller)
 {
+	if( file->name == NULL )
+	{
+		msgError("from %s NULL name ", caller);
+		exit(1);
+	}
+
 	file->stream = fopen(file->name, mode);
 	if( file->stream == NULL )
 	{

@@ -19,38 +19,40 @@
 
 #include "globalError.h"
 #include "tokenizer.h"
+#include "fileUtility.h"
 
-void globalError(error_catalog_t *errors)
+void globalError(const char *src_name, const char *dest_name, error_catalog_t *errors)
 {
-	msgInfo("open file.err <%s>", errors->file_src.name);
+	msgInfo("open file.err <%s>", src_name);
 
 	// open files
-	errors->file_src.stream = fopen(errors->file_src.name, "r");
-	if( errors->file_src.stream == NULL )
-	{
-		msgError("open error file <%s>", errors->file_src.name);
-		exit(1);
-	}
+	file_t file_src;
+	fileInit(&file_src);
+	file_src.name = (char *)src_name;
+	fileOpen(&file_src, "r", __FILE__);
 
-	errors->file_dest.stream = fopen(errors->file_dest.name, "w");
-	if( errors->file_dest.stream == NULL )
-	{
-		msgError("open error file : %s", errors->file_dest.name);
-		exit(1);
-	}
+	file_t file_dest;
+	fileInit(&file_dest);
+	file_dest.name = (char *)dest_name;
+	fileOpen(&file_dest, "r", __FILE__);
 
-	printLicenceHeader(errors->file_dest.stream);
-	printWarningHeader(errors->file_dest.stream);
+	file_t file_tmp;
+	fileInit(&file_tmp);
+	fileMakeTmp(dest_name, &file_tmp, __FILE__);
 
-	fprintf(errors->file_dest.stream, "#ifndef ERROR_H\n");
-	fprintf(errors->file_dest.stream, "#define ERROR_H\n\n");
+	// write statements
+	printLicenceHeader(file_tmp.stream);
+	printWarningHeader(file_tmp.stream);
 
-	fprintf(errors->file_dest.stream, "typedef enum\n");
-	fprintf(errors->file_dest.stream, "{\n");
-	fprintf(errors->file_dest.stream, "\tERROR_LOW,\n");
-	fprintf(errors->file_dest.stream, "\tERROR_MID,\n");
-	fprintf(errors->file_dest.stream, "\tERROR_HIGH\n");
-	fprintf(errors->file_dest.stream, "} error_critical_t;\n\n");
+	fprintf(file_tmp.stream, "#ifndef ERROR_H\n");
+	fprintf(file_tmp.stream, "#define ERROR_H\n\n");
+
+	fprintf(file_tmp.stream, "typedef enum\n");
+	fprintf(file_tmp.stream, "{\n");
+	fprintf(file_tmp.stream, "\tERROR_LOW,\n");
+	fprintf(file_tmp.stream, "\tERROR_MID,\n");
+	fprintf(file_tmp.stream, "\tERROR_HIGH\n");
+	fprintf(file_tmp.stream, "} error_critical_t;\n\n");
 
 	// read form source
 	int file_src_line_number = 0;
@@ -62,9 +64,8 @@ void globalError(error_catalog_t *errors)
 	errors->catalog[error_index].critical = ERROR_LOW;
 	error_index++;
 
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, errors->file_src.stream) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
-
 		file_src_line_number++;
 		tokenizer(&tok);
 
@@ -72,11 +73,9 @@ void globalError(error_catalog_t *errors)
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", errors->file_src.name,
-						 file_src_line_number, tok.line);
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", file_src.name, file_src_line_number,
+						 tok.line);
 			}
-
-			// printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
 
 			for( int i = 0; i < error_index; i++ )
 			{
@@ -111,24 +110,28 @@ void globalError(error_catalog_t *errors)
 	}
 
 	// write errors enum
-	fprintf(errors->file_dest.stream, "typedef enum\n");
-	fprintf(errors->file_dest.stream, "{\n");
+	fprintf(file_tmp.stream, "typedef enum\n");
+	fprintf(file_tmp.stream, "{\n");
 
 	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(errors->file_dest.stream, "\t%s,\n", errors->catalog[i].name);
+		fprintf(file_tmp.stream, "\t%s,\n", errors->catalog[i].name);
 	}
-	fprintf(errors->file_dest.stream, "\tERROR_COUNT\n");
-	fprintf(errors->file_dest.stream, "} error_codes_t;\n\n");
+	fprintf(file_tmp.stream, "\tERROR_COUNT\n");
+	fprintf(file_tmp.stream, "} error_codes_t;\n\n");
 
-	fprintf(errors->file_dest.stream, "typedef struct\n");
-	fprintf(errors->file_dest.stream, "{\n");
-	fprintf(errors->file_dest.stream, "\tchar *name;\n");
-	fprintf(errors->file_dest.stream, "\terror_critical_t critical;\n");
-	fprintf(errors->file_dest.stream, "} error_item_t;\n\n");
+	fprintf(file_tmp.stream, "typedef struct\n");
+	fprintf(file_tmp.stream, "{\n");
+	fprintf(file_tmp.stream, "\tchar *name;\n");
+	fprintf(file_tmp.stream, "\terror_critical_t critical;\n");
+	fprintf(file_tmp.stream, "} error_item_t;\n\n");
 
 	// end
-	fprintf(errors->file_dest.stream, "\n#endif\n");
-	fclose(errors->file_src.stream);
-	fclose(errors->file_dest.stream);
+	fprintf(file_tmp.stream, "\n#endif\n");
+
+	fileCmpReplace(&file_dest, &file_tmp);
+
+	fileClose(&file_src, __FILE__);
+	fileClose(&file_dest, __FILE__);
+	fileClose(&file_tmp, __FILE__);
 }
