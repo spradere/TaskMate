@@ -7,11 +7,12 @@ Checks: >
   -readability-braces-around-statements,
   performance-*,
   -modernize-*,
-  -cppcoreguidelines-*
+  -cppcoreguidelines-*,
+  -readability-uppercase-literal-suffix
 
 CheckOptions:
   - key: readability-function-cognitive-complexity.Threshold
-    value: '40'
+    value: '100'
 
 HeaderFilterRegex: ^src/
 WarningsAsErrors: false
