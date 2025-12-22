@@ -50,7 +50,7 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 fix #include 40", MSG_TO_LCD);
+		msgWritreText(channel, "\3 autoCode 50", MSG_TO_LCD);
 	}
 
 	msgProcess();
