@@ -32,9 +32,9 @@ static void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size,
 	// reverse order convert
 	while( value != 0 && pos < SNPRINFT_BUFF_TEMP_SIZE )
 	{
-		uint32_t d = (uint32_t)(value % base);
+		uint32_t data = (uint32_t)(value % base);
 		value /= base;
-		tmp[pos++] = digits[d];
+		tmp[pos++] = digits[data];
 	}
 
 	// reverse order
@@ -45,7 +45,7 @@ static void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size,
 // !! use this macro only in tm_snprinf()
 #define put_char(ch)                                                                                         \
 	do {                                                                                                     \
-		if( buff_index + 1 < buff_size ) { buff[buff_index++] = (char)ch; }                                  \
+		if( (buff_index + 1) < buff_size ) { buff[buff_index++] = (char)ch; }                                  \
 	} while( 0 )
 
 void snprintf(char *buff, size_t buff_size, const char *format, ...)

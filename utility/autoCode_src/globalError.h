@@ -44,6 +44,6 @@ typedef struct
 	int error_count;
 }error_catalog_t;
 
-void globalError(const char *scr_name, const char *dest_name, error_catalog_t *errors);
+void globalError(const char *src_name, error_catalog_t *errors, const char *dest_name );
 
 #endif
