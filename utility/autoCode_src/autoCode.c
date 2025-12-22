@@ -60,7 +60,7 @@ int main(int argn, const char *argv[])
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(argv[4], "src/sysCall/error.h", &errors_catalog);
+	globalError(argv[4],  &errors_catalog, "src/sysCall/error.h");
 
 	// setup data base
 	modules_database_t data_base;
