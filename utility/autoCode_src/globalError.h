@@ -42,10 +42,8 @@ typedef struct
 {
 	error_item_t catalog[256];
 	int error_count;
-	file_t file_src;
-	file_t file_dest;
 }error_catalog_t;
 
-void globalError(error_catalog_t *errors);
+void globalError(const char *scr_name, const char *dest_name, error_catalog_t *errors);
 
 #endif
