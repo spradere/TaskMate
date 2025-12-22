@@ -33,10 +33,22 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 	char new[256];
 	bool same = true;
 
-	rewind(file_old->stream);
-	rewind(file_new->stream);
+	if(fseek(file_old->stream, 0L, SEEK_SET) != 0)
+	{
+		msgError("fseek file <%s>", file_old->name);
+		exit(1);
+	}
 
-	while( !feof(file_old->stream) && !feof(file_new->stream) )
+	if(fseek(file_new->stream, 0L, SEEK_SET) != 0)
+	{
+		msgError("fseek file <%s>", file_new->name);
+		exit(1);
+	}
+
+	//rewind(file_old->stream);
+	//rewind(file_new->stream);
+
+	while( (feof(file_old->stream) ==0) && (feof(file_new->stream) ==0) )
 	{
 		fgets(old, 256, file_old->stream);
 		fgets(new, 256, file_new->stream);
@@ -129,7 +141,7 @@ void printLicenceHeader(FILE *file)
 		exit(1);
 	}
 
-	int c;
+	char  c;
 	do {
 		c = fgetc(header_file);
 		if( c != EOF ) { fputc(c, file); }

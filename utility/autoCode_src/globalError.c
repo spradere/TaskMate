@@ -21,7 +21,7 @@
 #include "tokenizer.h"
 #include "fileUtility.h"
 
-void globalError(const char *src_name, const char *dest_name, error_catalog_t *errors)
+void globalError(const char *src_name, error_catalog_t *errors, const char *dest_name)
 {
 	msgInfo("open file.err <%s>", src_name);
 
