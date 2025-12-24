@@ -32,7 +32,7 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
 	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
 # dependency files used to compile *.c if related header or source was edited
@@ -40,17 +40,15 @@ dependency_check:
 	@printf "\n\033[1;33mCheck dependency files\033[0m\n\n"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
-# Test if autoCode and initrc files was modified
-${AUTO_HEADERS}: ${AUTOCODE_STAMP}
-
+# Test if autoCode, initrc and error files was modified
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL}
-	@printf "\n\033[1;33minitrc, autocode or error files have changed -> run autoCode\033[0m\n\n"
+	@printf "\n\033[1;33mautoCode, init_rc or error files have changed -> run autoCode\033[0m\n\n"
 	@rm -f build/autoCode_*
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > build/autoCode_${AUTOCODE_TIMESTAMP}
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > build/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}
 
-# Special rule for autoCode with clang, not avr-gcc
-${AUTOCODE_TARGET}: ${AUTOCODE_SRCS}
+# Special rule for autoCode with clang, not mcu specialized compiler
+${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 
@@ -89,3 +87,4 @@ autoCode_alone:
 		-Wswitch -Wenum-conversion \
 		-Wno-gnu-zero-variadic-macro-arguments ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL}
+.PHONY: autoCode_alone
