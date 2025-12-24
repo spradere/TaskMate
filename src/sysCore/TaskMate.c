@@ -57,16 +57,16 @@ int main(void)
 	hal_usartInit();
 	hal_usartStart();
 
-	snprintf(dest, 128, "\n\n[%s] Boot ...\n", __FILE__);
+	snprintf(dest, sizeof(dest), "\n\n[%s] Boot ...\n", __FILE__);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
-	snprintf(dest, 128, "[boot] target : %s-%s-%s\n", target.arch, target.mcu, target.board);
+	snprintf(dest, sizeof(dest), "[boot] target : %s-%s-%s\n", target.arch, target.mcu, target.board);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
 	// system static allocation init
-	snprintf(dest, 128, "[boot] system static allocation\n");
+	snprintf(dest, sizeof(dest), "[boot] system static allocation\n");
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
@@ -107,12 +107,13 @@ int main(void)
 	hal_ZS_042Write(&t);
 	hal_ZS_042Read(&t);
 
-	snprintf(dest, 128, "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	snprintf(dest, sizeof(dest), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours,
+			 t.minutes);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
 	// jump to current thread for first call and start system by enabling INT
-	snprintf(dest, 128, "[boot] start round-robin scheduler\n");
+	snprintf(dest, sizeof(dest), "[boot] start round-robin scheduler\n");
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 

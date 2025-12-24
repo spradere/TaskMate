@@ -23,6 +23,8 @@
 #include "autoCode.h"
 #include "fileUtility.h"
 
+#define ERROR_COUNT_MAX 256
+
 typedef enum
 {
 	ERROR_NOT_DEFINED,
@@ -33,14 +35,14 @@ typedef enum
 
 typedef struct
 {
-	char name[256];
-	char message[256];
+	char name[BYTE_INDEX];
+	char message[BYTE_INDEX];
 	error_critical_t critical;
 } error_item_t;
 
 typedef struct
 {
-	error_item_t catalog[256];
+	error_item_t catalog[ERROR_COUNT_MAX];
 	int error_count;
 }error_catalog_t;
 

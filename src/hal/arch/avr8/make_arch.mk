@@ -19,6 +19,7 @@ CC = avr-gcc
 CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 	-Wcast-align -Wundef -Wnull-dereference -Wpointer-arith -Wcast-qual \
 	-Wmissing-prototypes -Wmissing-declarations -Wredundant-decls \
+	-Wswitch -Wenum-conversion \
 	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
 	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src
@@ -49,18 +50,16 @@ dump:all
 .PHONY: dump
 
 # clang-tidy
-TIDY_SRC = ${AUTOCODE_SRC}
-TIDY_SRC += ${SRCS}
-
-tidy:
-	@printf "\n\033[1;33mTidy static test code, config in src/.clang-tidy\033[0m\n\n"
-	@clang-tidy $(TIDY_SRC) -- \
-		-I/root/code/TaskMate/TaskMate_current/src \
-		-I/root/code/TaskMate/TaskMate_current/ \
-		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
-		-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-		-DF_CPU=${F_CPU} \
-		-DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-		-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
+tidy_TaskMate:
+	@printf "\n\033[1;33mTidy TaskMate static test code, config in src/.clang-tidy\033[0m\n\n"
+	@clang-tidy $(SRCS) ${SRCS_H} --\
+	-I/root/code/TaskMate/TaskMate_current/ \
+	-I/root/code/TaskMate/TaskMate_current/src/ \
+	-isystem /usr/local/avr/include \
+	-isystem /usr/local/lib/gcc/avr/14.1.0 \
+	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
+	-DF_CPU=${F_CPU} \
+	-DHAL_SYSTEM_CRITICAL_API_ALLOWED \
+	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 
 .PHONY: tidy
