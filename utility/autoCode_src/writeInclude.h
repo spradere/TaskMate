@@ -22,10 +22,14 @@
 
 #include "autoCode.h"
 
-#define INCLUDE_THREAD_PART 1
-#define INCLUDE_HAL_USER_PART 2
-#define INCLUDE_HAL_SYSTEM_CRITICAL_PART 3
+typedef enum
+{
+	INCLUDE_THREAD_PART,
+	INCLUDE_HAL_USER_PART,
+	INCLUDE_HAL_SYSTEM_CRITICAL_PART,
+	INCLUDE_TYPE_COUNT
+	} include_type_t;
 
-void writeInclude(const modules_database_t *data_base, const int type ,const char *file_name, const target_t *target);
+void writeInclude(const modules_database_t *data_base, include_type_t type ,const char *file_name, const target_t *target);
 
 #endif

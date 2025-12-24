@@ -20,6 +20,8 @@
 #ifndef AUTOCODE_H
 #define AUTOCODE_H
 
+#define BYTE_INDEX 256
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
