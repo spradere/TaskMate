@@ -45,9 +45,6 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 		exit(1);
 	}
 
-	// rewind(file_old->stream);
-	// rewind(file_new->stream);
-
 	while( (feof(file_old->stream) == 0) && (feof(file_new->stream) == 0) )
 	{
 		fgets(old, sizeof(old), file_old->stream);

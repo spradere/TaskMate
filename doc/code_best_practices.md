@@ -25,6 +25,20 @@
 **Define once. Define clearly. Define where it makes sense.**
 Promotes clarity, avoids duplication, and keeps logic in the right layer.
 
+**A Commonly Overlooked Truth**
+
+The *best* systems are not the ones:
+
+* that allow you to do everything
+
+But rather the ones:
+
+* that prevent you from doing just anything
+* and that **reduce the space of possible errors**
+
+Modularity, strict APIs, and clean headers
+👉 are cognitive guardrails.
+
 ---
 
 ## 2. 📖 Readability: Clarity over cleverness
@@ -132,7 +146,9 @@ Your future self will thank you.
 
 ### 8.1. Comment “why”, not “what”
 
-The code shows what happens. Your job is to write why it happens. Self-documenting code over excessive comments. Write code so clear it needs fewer comments. Use comments to explain **why**, not **what**.
+The code shows what happens. Your job is to write why it happens. Self-documenting
+code over excessive comments. Write code so clear it needs fewer comments.
+Use comments to explain **why**, not **what**.
 
 * Don’t: `timeout = 1000; // set timeout to 1000`
 * Do: `timeout = 1000; // 1 second max wait before watchdog reset`
