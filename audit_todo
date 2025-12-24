@@ -1,6 +1,6 @@
 - few general type have to be replaced with custom typedef, to follow hardware portability
 - check << or >> for constant typing
 - check type for strings / data ->  char for text, uint8_t for data
-- hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit acces to SRF registers
+- hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit acces to SFR registers
 - non-ASM statement in naked function is not supported
 - #define -> typedef enum
