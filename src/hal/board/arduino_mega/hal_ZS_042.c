@@ -20,6 +20,9 @@
 #include "hal/board/arduino_mega/hal_ZS_042.h"
 #include "hal/mcu/atmega2560/hal_i2c.h"
 
+// NOLINTBEGIN
+// NOLINT(readability-magic-numbers)
+
 #define ZS_042_I2C_ADDR 0x68
 
 static uint8_t bcdToUint8(uint8_t bcd) { return (uint8_t)((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
@@ -71,3 +74,4 @@ uint8_t hal_ZS_042Write(const hal_rtc_time_t *t)
 
 	return 0;
 }
+// NOLINTEND

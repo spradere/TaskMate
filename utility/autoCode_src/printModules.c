@@ -48,25 +48,25 @@ void printModules(const modules_database_t *data_base)
 	printf("\n");
 
 	msgInfo("threads (services + tasks) by run level :");
-	char name[256];
+	char name[BYTE_INDEX];
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
 		switch( i )
 		{
 			case RUN_NONE:
-				strcpy(name, "RUN_NONE");
+				strncpy(name, "RUN_NONE", sizeof(name));
 				break;
 			case RUN_CORE:
-				strcpy(name, "RUN_CORE");
+				strncpy(name, "RUN_CORE", sizeof(name));
 				break;
 			case RUN_DRIVER:
-				strcpy(name, "RUN_DRIVER");
+				strncpy(name, "RUN_DRIVER", sizeof(name));
 				break;
 			case RUN_SERVICE:
-				strcpy(name, "RUN_SERVICE");
+				strncpy(name, "RUN_SERVICE", sizeof(name));
 				break;
 			case RUN_USER:
-				strcpy(name, "RUN_USER");
+				strncpy(name, "RUN_USER", sizeof(name));
 				break;
 			default:
 				msgError("unknow run level");

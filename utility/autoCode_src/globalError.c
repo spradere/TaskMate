@@ -59,8 +59,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	int error_index = 0;
 	tokenizer_t tok;
 
-	strncpy(errors->catalog[error_index].name, "ERR_NO_ERROR", 256);
-	strncpy(errors->catalog[error_index].message, "\"No error\"", 256);
+	strncpy(errors->catalog[error_index].name, "ERR_NO_ERROR", BYTE_INDEX);
+	strncpy(errors->catalog[error_index].message, "\"No error\"", BYTE_INDEX);
 	errors->catalog[error_index].critical = ERROR_LOW;
 	error_index++;
 
@@ -85,8 +85,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 					exit(1);
 				}
 			}
-			strncpy(errors->catalog[error_index].name, tok.tokens[0], 256);
-			strncpy(errors->catalog[error_index].message, tok.tokens[1], 256);
+			strncpy(errors->catalog[error_index].name, tok.tokens[0], BYTE_INDEX);
+			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
 
 			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
 			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_index].critical = ERROR_LOW; }
@@ -100,9 +100,9 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 			error_index++;
 
-			if( error_index == 256 )
+			if( error_index == ERROR_COUNT_MAX )
 			{
-				msgError("Too many errors > 256");
+				msgError("Too many errors > %i", ERROR_COUNT_MAX);
 				exit(1);
 			}
 			errors->error_count = error_index;
