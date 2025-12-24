@@ -45,11 +45,13 @@
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
 
+#define AUTOCODE_ARG_COUNT 5
+
 int main(int argn, const char *argv[])
 {
 
 	// test command line arguments
-	if( argn != 5 )
+	if( argn != AUTOCODE_ARG_COUNT )
 	{
 		msgError("Bad argn (is %i, not 5) for autoCode\n\tuse autoCode ach mcu board error_file.err", argn);
 		exit(1);
@@ -60,22 +62,20 @@ int main(int argn, const char *argv[])
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(argv[4],  &errors_catalog, "src/sysCall/error.h");
+	globalError(argv[4], &errors_catalog, "src/sysCall/error.h");
 
 	// setup data base
 	modules_database_t data_base;
 	setupDB(&data_base);
 
 	// read init.rc file and store data in data base
-	const int BUFFER_SIZE = 256;
+	char arch_initrc_path[BYTE_INDEX];
+	char mcu_initrc_path[BYTE_INDEX];
+	char board_initrc_path[BYTE_INDEX];
 
-	char arch_initrc_path[BUFFER_SIZE];
-	char mcu_initrc_path[BUFFER_SIZE];
-	char board_initrc_path[BUFFER_SIZE];
-
-	snprintf(arch_initrc_path, BUFFER_SIZE, "src/hal/arch/%s/arch_init.rc", target.arch_name);
-	snprintf(mcu_initrc_path, BUFFER_SIZE, "src/hal/mcu/%s/mcu_init.rc", target.mcu_name);
-	snprintf(board_initrc_path, BUFFER_SIZE, "src/hal/board/%s/board_init.rc", target.board_name);
+	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", target.arch_name);
+	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", target.mcu_name);
+	snprintf(board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", target.board_name);
 
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);

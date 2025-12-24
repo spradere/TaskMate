@@ -22,6 +22,6 @@
 
 #include "autoCode.h"
 
-void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_initrc_name);
+void parseInitrc(int TYPE, modules_database_t *data_base, const char *file_initrc_name);
 
 #endif

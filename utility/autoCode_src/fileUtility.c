@@ -29,29 +29,29 @@ void filePrintTouch(void)
 
 void fileCmpReplace(file_t *file_old, file_t *file_new)
 {
-	char old[256];
-	char new[256];
+	char old[BYTE_INDEX];
+	char new[BYTE_INDEX];
 	bool same = true;
 
-	if(fseek(file_old->stream, 0L, SEEK_SET) != 0)
+	if( fseek(file_old->stream, 0L, SEEK_SET) != 0 )
 	{
 		msgError("fseek file <%s>", file_old->name);
 		exit(1);
 	}
 
-	if(fseek(file_new->stream, 0L, SEEK_SET) != 0)
+	if( fseek(file_new->stream, 0L, SEEK_SET) != 0 )
 	{
 		msgError("fseek file <%s>", file_new->name);
 		exit(1);
 	}
 
-	//rewind(file_old->stream);
-	//rewind(file_new->stream);
+	// rewind(file_old->stream);
+	// rewind(file_new->stream);
 
-	while( (feof(file_old->stream) ==0) && (feof(file_new->stream) ==0) )
+	while( (feof(file_old->stream) == 0) && (feof(file_new->stream) == 0) )
 	{
-		fgets(old, 256, file_old->stream);
-		fgets(new, 256, file_new->stream);
+		fgets(old, sizeof(old), file_old->stream);
+		fgets(new, sizeof(new), file_new->stream);
 		if( strcmp(old, new) != 0 ) { same = false; }
 	}
 
@@ -141,7 +141,7 @@ void printLicenceHeader(FILE *file)
 		exit(1);
 	}
 
-	char  c;
+	int c;
 	do {
 		c = fgetc(header_file);
 		if( c != EOF ) { fputc(c, file); }
