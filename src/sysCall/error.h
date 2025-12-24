@@ -11,10 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Auto generated code, do not edit !
-// any changes will be lost
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// ! Auto generated code, do not edit !
+// ! any changes will be lost         !
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #ifndef ERROR_H
 #define ERROR_H
@@ -26,3 +26,22 @@ typedef enum
 	ERROR_HIGH
 } error_critical_t;
 
+typedef enum
+{
+	ERR_NO_ERROR,
+	ERR_HAL_USART_TX_BUFFER_EMPTY,
+	ERR_HAL_USART_RX_BUFFER_EMPTY,
+	ERR_HAL_USART_TX_BUFFER_FULL,
+	ERR_HAL_USART_RX_BUFFER_FULL,
+	ERR_MSG_OUT_OF_FREE_CHANNEL,
+	ERROR_COUNT
+} error_codes_t;
+
+typedef struct
+{
+	char *name;
+	error_critical_t critical;
+} error_item_t;
+
+
+#endif

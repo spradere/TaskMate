@@ -18,8 +18,13 @@
  *
  */
 
+#ifndef HAL_STACK_H
+#define HAL_STACK_H
+
 #include <avr/io.h>
 
 static inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp) { SP = sp; }
 
 static inline __attribute__((always_inline)) uintptr_t hal_getStackPointer(void) { return SP; }
+
+#endif

@@ -18,8 +18,8 @@
  *
  */
 
+#include "hal/arch/avr8/hal_threadContextInit.h"
 #include <avr/io.h>
-#include "hal/hal_user_api.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -30,8 +30,8 @@ void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, sta
 {
 	// stack init
 	stack_word_t *sp = stack_top; // get top of stack
-	*(sp--) = (uintptr_t)func & 0xFF; // PCL;
-	*(sp--) = ((uintptr_t)func >> 8) & 0xFF; // PCH
+	*(sp--) = (uint8_t)((uintptr_t)func & 0xFF); // PCL;
+	*(sp--) = (uint8_t)(((uintptr_t)func >> 8u) & 0xFF); // PCH
 	*(sp--) = 0x00; // PCHH always 0 if code size < 128k
 	*(sp--) = 0x00; // R0
 	*(sp--) = SREG;

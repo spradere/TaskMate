@@ -20,17 +20,23 @@
 #ifndef AUTOCODE_H
 #define AUTOCODE_H
 
+#define BYTE_INDEX 256
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // get TaskMate define
 #include "src/sysCore/modules_define.h"
 #include "src/sysCore/runLevel.h"
 
 // message macro
-#define msgError(msg)  fprintf(stderr, "[%s:%d] error : %s\n", __FILE_NAME__, __LINE__, msg)
-#define msgInfo(msg)  fprintf(stdout, "[%s:%d] info : %s\n", __FILE_NAME__, __LINE__, msg)
+#define msgError(format, ...) \
+	fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__); perror("\t")
+
+#define msgInfo(format, ...) \
+	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
 // target name struture
 typedef struct
@@ -58,7 +64,7 @@ typedef struct
 	module_item_t modules[AUTOCODE_MODULE_COUNT_MAX];
 	int modules_count;
 	int initrc_arg_count_max;
-	int status_default;
+	module_status_t status_default;
 	char *name;
 
 } module_type_t;
@@ -70,7 +76,5 @@ typedef struct
 	int threads_count[RUN_LEVEL_COUNT];
 
 } modules_database_t;
-
-void printLicenceHeader(FILE *file);
 
 #endif

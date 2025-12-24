@@ -13,19 +13,16 @@
  */
 
 /**
- * @file TaskMate_public.h
- * @brief public header of TaskMate.
- *
- * - This file contains the headers for user tasks, system services
- * - Not the internal system core, forbinds.
+ * @file hal_timerRTC.h
+ * @brief header hal real time cloc
  *
  */
 
-#ifndef TASKMATE_PUBLIC_H
-#define TASKMATE_PUBLIC_H
+#ifndef HAL_TIMERRTC_H
+#define HAL_TIMERRTC_H
 
-#include "sysCall/sysCall.h"
-#include "sysCall/error.h"
-#include "sysCall/gpio.h"
+void hal_timerRTCInit(void);
+void hal_timerRTCStart(void);
+void hal_timerRTCStop(void);
 
 #endif

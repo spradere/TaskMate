@@ -20,7 +20,10 @@
 #ifndef GLOBAL_ERROR_H
 #define GLOBAL_ERROR_H
 
-#include "utility/autoCode_src/autoCode.h"
+#include "autoCode.h"
+#include "fileUtility.h"
+
+#define ERROR_COUNT_MAX 256
 
 typedef enum
 {
@@ -32,17 +35,17 @@ typedef enum
 
 typedef struct
 {
-	char name[256];
-	char message[256];
+	char name[BYTE_INDEX];
+	char message[BYTE_INDEX];
 	error_critical_t critical;
 } error_item_t;
 
 typedef struct
 {
-	error_item_t catalog[256];
+	error_item_t catalog[ERROR_COUNT_MAX];
 	int error_count;
 }error_catalog_t;
 
-void globalError(const char *file_err_in_name, error_catalog_t *errors);
+void globalError(const char *src_name, error_catalog_t *errors, const char *dest_name );
 
 #endif

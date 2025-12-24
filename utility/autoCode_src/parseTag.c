@@ -18,45 +18,37 @@
  *
  */
 
-#include "utility/autoCode_src/parseTag.h"
-#include "utility/autoCode_src/tokenizer.h"
+#include "parseTag.h"
+#include "tokenizer.h"
+#include "fileUtility.h"
 
+static void writeTaget(const target_t *target, FILE *file);
+static void writeDriversInit(modules_database_t *data_base, FILE *file);
+static void writeThreadsInit(modules_database_t *data_base, FILE *file);
+static void writeRunLevelsInit(modules_database_t *data_base, FILE *file);
+static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
 
-void parseTag(modules_database_t *data_base, const char *name_src, error_catalog_t *errors)
+void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
+			  const target_t *target)
 {
 	// open source and tmp file
-	FILE *file_src = fopen(name_src, "r");
-	if( file_src == NULL )
-	{
-		msgError("opening file");
-		printf("\t <%s>\n", name_src);
-		exit(1);
-	}
+	msgInfo("open <%s> for parsing tag section", file_name);
 
-	char *name_tmp;
-	name_tmp = malloc(strlen(name_src) + strlen(".tmp") + 1);
-	if( name_tmp == NULL )
-	{
-		msgError("malloc name_tmp");
-		exit(1);
-	}
-	sprintf(name_tmp, "%s.tmp", name_src);
+	file_t file_src;
+	fileInit(&file_src);
+	file_src.name = (char *)file_name;
+	fileOpen(&file_src, "r", __FILE__);
 
-	FILE *file_tmp = fopen(name_tmp, "w");
-	if( file_tmp == NULL )
-	{
-		msgError("creating file");
-		printf("\t <%s>\n", name_tmp);
-		exit(1);
-	}
+	file_t file_tmp;
+	fileInit(&file_tmp);
+	fileMakeTmp(file_src.name, &file_tmp, __FILE__);
 
 	// read form source
 	int tag_section = 0;
 	int file_line_number = 0;
 	tokenizer_t tok;
-	printf("\n");
 
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_line_number++;
 		tokenizer(&tok);
@@ -65,71 +57,79 @@ void parseTag(modules_database_t *data_base, const char *name_src, error_catalog
 		{
 			if( tok.count != 4 )
 			{
-				msgError("token count != 4 tok.line :");
-				printf("\t [%s:%i] %s\n\n", name_src, file_line_number, tok.line);
+				msgError("token count != 4 tok.line [%s:%i] %s", file_src.name, file_line_number, tok.line);
 				break;
 			}
 
 			if( tag_section == 1 )
 			{
-				msgError("Start new tag section without previous end tag [/tag]");
-				printf("\t [%s:%i] %s\n\n", name_src, file_line_number, tok.line);
+				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s", file_src.name,
+						 file_line_number, tok.line);
 				break;
 			}
 
-			msgInfo("found tag :");
-			printf("\t %s %s\n", tok.tokens[2], tok.tokens[3]);
+			msgInfo("found tag %s %s", tok.tokens[2], tok.tokens[3]);
 
-			fprintf(file_tmp, "%s", tok.line);
+			fprintf(file_tmp.stream, "%s", tok.line);
 			tag_section = 1;
 
 			if( (strcmp(tok.tokens[2], "threads") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeThreadsInit(data_base, file_tmp);
+				writeThreadsInit(data_base, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "drivers") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeDriversInit(data_base, file_tmp);
+				writeDriversInit(data_base, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "run") == 0) && (strcmp(tok.tokens[3], "levels") == 0) )
 			{
-				writeRunLevelsInit(data_base, file_tmp);
+				writeRunLevelsInit(data_base, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "catalog") == 0) )
 			{
-				writeErrorCatalog(errors, file_tmp);
+				writeErrorCatalog(errors, file_tmp.stream);
+			}
+
+			if( (strcmp(tok.tokens[2], "target") == 0) && (strcmp(tok.tokens[3], "name") == 0) )
+			{
+				writeTaget(target, file_tmp.stream);
 			}
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
 		{
-			msgInfo("end tag\n");
+			msgInfo("end tag");
 			tag_section = 0;
 		}
 
-		if( tag_section == 0 ) { fprintf(file_tmp, "%s", tok.line); }
+		if( tag_section == 0 ) { fprintf(file_tmp.stream, "%s", tok.line); }
 	}
 
 	if( tag_section == 1 )
 	{
-		msgError("missing end tag [/tag]");
-		printf("\t [%s:%i]\n\n", name_src, file_line_number);
+		msgError("missing end tag [/tag] [%s:%i]", file_src.name, file_line_number);
 		exit(1);
 	}
 
-	// Replace original file with the modified version
-	if( (remove(name_src) != 0) || (rename(name_tmp, name_src) != 0) )
-	{
-		msgError("replacing tmp / src");
-		exit(1);
-	}
+	fileCmpReplace(&file_src, &file_tmp);
 
-	fclose(file_src);
-	fclose(file_tmp);
-	free(name_tmp);
+	fileClose(&file_src, __FILE__);
+	fileClose(&file_tmp, __FILE__);
+}
+
+static void writeTaget(const target_t *target, FILE *file)
+{
+	// write target name
+	fprintf(file, "#include \"hal/hal_target_type.h\"\n\n");
+	fprintf(file, "const target_info_t target =\n");
+	fprintf(file, "{\n");
+	fprintf(file, ".arch = \"%s\",\n", target->arch_name);
+	fprintf(file, ".mcu = \"%s\",\n", target->mcu_name);
+	fprintf(file, ".board = \"%s\"\n\n", target->board_name);
+	fprintf(file, "};\n");
 }
 
 static void writeThreadsInit(modules_database_t *data_base, FILE *file)
@@ -160,13 +160,13 @@ static void writeThreadsInit(modules_database_t *data_base, FILE *file)
 
 			fprintf(file,
 					"\n\thal_threadContextInit(%s, &(mod_t->stack_pointer), "
-					"&(mod_t->stack[THREAD_STACK_SIZE -1 ]) );\n",
+					"&(mod_t->stack[THREAD_STACK_SIZE - 1 ]));\n",
 					mod->modules[i].name);
 
 			fprintf(file, "\tmod_t->real_time_counter = 0;\n");
 			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
-			fprintf(file, "\tmod_t->name = (uint8_t *)thread%i_name;\n", threads_count);
+			fprintf(file, "\tmod_t->name = thread%i_name;\n", threads_count);
 
 			fprintf(file, "\tmod_t->status = %i;\n", mod->modules[i].status | type);
 
@@ -191,7 +191,7 @@ static void writeDriversInit(modules_database_t *data_base, FILE *file)
 
 		fprintf(file, "\t*(mod_d) = (module_item_driver_t)\n");
 		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.name = (uint8_t *)driver%i_name,\n", i);
+		fprintf(file, "\t\t.name = driver%i_name,\n", i);
 		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
 		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
 		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
@@ -252,15 +252,15 @@ static void writeRunLevelsInit(modules_database_t *data_base, FILE *file)
 	fprintf(file, "\tto_run.next=RUN_CORE;\n");
 }
 
-static void writeErrorCatalog(error_catalog_t *errors, FILE *file)
+static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 {
-	fprintf(file,"const error_item_t error_catalog[] = \n{\n");
+	fprintf(file, "const error_item_t error_catalog[] = \n{\n");
 
-	for(int i=0; i< errors->error_count-1; i++)
+	for( int i = 0; i < errors->error_count - 1; i++ )
 	{
-		fprintf(file,"\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
+		fprintf(file, "\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
 	}
-	fprintf(file,"\t{%s, %i}\n",
-		errors->catalog[errors->error_count-1].message, errors->catalog[errors->error_count-1].critical);
-	fprintf(file,"};\n");
+	fprintf(file, "\t{%s, %i}\n", errors->catalog[errors->error_count - 1].message,
+			errors->catalog[errors->error_count - 1].critical);
+	fprintf(file, "};\n");
 }
