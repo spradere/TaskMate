@@ -20,13 +20,11 @@
  *
  */
 
-#include "hal/hal_user_api.h"
-#include "hal/hal_system_critical_api.h"
-
-#include <util/atomic.h>
-
-#include "sysCore/modules.h"
 #include "sysCall/sysCall.h"
+#include <util/atomic.h>
+#include "hal/autoInclude_hal_user.h"
+#include "hal/autoInclude_hal_system_critical.h"
+#include "sysCore/modules.h"
 
 static uint8_t system_status = 0;
 

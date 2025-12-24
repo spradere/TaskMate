@@ -13,11 +13,17 @@
  */
 
 /**
- * @file hal_api.c
- * @brief hal api for fallback
+ * @file hal_timerScheduler.h
+ * @brief header hal part of schuduler
  *
  */
 
-#include "hal/autoInclude_hal_user.h"
+#ifndef HAL_TIMERSCHEDULER_H
+#define HAL_TIMERSCHEDULER_H
 
-//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+void hal_timerSchedulerInit(void);
+void hal_timerSchedulerStart(void);
+void hal_timerSchedulerStop(void);
+void hal_timerSchedulerLoad(void);
+
+#endif

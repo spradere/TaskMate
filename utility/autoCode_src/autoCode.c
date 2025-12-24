@@ -23,18 +23,6 @@
  * @note
  * tag format are one line C comment // [tag] <task|driver> <init>
  *
- * @warning
- * do not edit code between tag, it will be deleted by automatic generated code
- * ! tasks file name must match with function, lcd.c -> void lcd(void), drivers
- * functions name must match to generic driver layout :
- * - <driver name>SetStatus()
- * - <driver name>GetStatus()
- * - <driver name>GetName()
- * - <driver name>Init()
- * - <driver name>Start()
- * - <driver name>Stop()
- *
- * @todo add dry run
  */
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -45,48 +33,49 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * */
 
-#include "utility/autoCode_src/autoCode.h"
-#include "utility/autoCode_src/parseInitrc.h"
-#include "utility/autoCode_src/parseTag.h"
-#include "utility/autoCode_src/printModules.h"
-#include "utility/autoCode_src/writeAlloc.h"
-#include "utility/autoCode_src/writeInclude.h"
-#include "utility/autoCode_src/globalError.h"
+#include "autoCode.h"
+#include "parseInitrc.h"
+#include "parseTag.h"
+#include "printModules.h"
+#include "writeAlloc.h"
+#include "writeInclude.h"
+#include "globalError.h"
+#include "fileUtility.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
+
+#define AUTOCODE_ARG_COUNT 5
 
 int main(int argn, const char *argv[])
 {
 
 	// test command line arguments
-	if( argn != 5 )
+	if( argn != AUTOCODE_ARG_COUNT )
 	{
-		msgError("Bad argn for autoCode, use autoCode ach mcu board error_file.err");
+		msgError("Bad argn (is %i, not 5) for autoCode\n\tuse autoCode ach mcu board error_file.err", argn);
 		exit(1);
 	}
 
 	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
+	msgInfo("target %s -> %s -> %s", target.arch_name, target.mcu_name, target.board_name);
 
-	msgInfo("target : ");
-	printf("\t %s -> %s -> %s \n", target.arch_name, target.mcu_name, target.board_name);
+	// global error system
+	error_catalog_t errors_catalog;
+	globalError(argv[4], &errors_catalog, "src/sysCall/error.h");
 
 	// setup data base
 	modules_database_t data_base;
 	setupDB(&data_base);
 
-	error_catalog_t errors_catalog;
-
 	// read init.rc file and store data in data base
-	const int BUFFER_SIZE = 256;
+	char arch_initrc_path[BYTE_INDEX];
+	char mcu_initrc_path[BYTE_INDEX];
+	char board_initrc_path[BYTE_INDEX];
 
-	char arch_initrc_path[BUFFER_SIZE];
-	char mcu_initrc_path[BUFFER_SIZE];
-	char board_initrc_path[BUFFER_SIZE];
-
-	snprintf(arch_initrc_path, BUFFER_SIZE, "src/hal/arch/%s/arch_init.rc", target.arch_name);
-	snprintf(mcu_initrc_path, BUFFER_SIZE, "src/hal/mcu/%s/mcu_init.rc", target.mcu_name);
-	snprintf(board_initrc_path, BUFFER_SIZE, "src/hal/board/%s/board_init.rc", target.board_name);
+	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", target.arch_name);
+	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", target.mcu_name);
+	snprintf(board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", target.board_name);
 
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MODULES_DRIVERS_ID, &data_base, mcu_initrc_path);
@@ -97,24 +86,23 @@ int main(int argn, const char *argv[])
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 
-	// global error system
-	globalError(argv[4], &errors_catalog);
-
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/initSys.c",NULL);
-	parseTag(&data_base, "src/sysCore/runLevel.c",NULL);
-	parseTag(&data_base, "src/sysCall/error.c",&errors_catalog);
-
+	parseTag(&data_base, "src/sysCore/initSys.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/TaskMate.c", &errors_catalog, &target);
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_TARGET_PART, "src/hal/autoInclude_hal_target.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/autoInclude_hal_user.h", &target);
+
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h",
 				 &target);
 
 	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules
+	filePrintTouch();
 	printModules(&data_base);
 
 	return 0;
@@ -164,33 +152,9 @@ static void checkModulesCount(modules_database_t *data_base)
 	{
 		if( module_count[i][0] > module_count[i][1] )
 		{
-			msgError("Too many modules !");
-			printf("\t %s count = %i > TaskMate max %i\n\n", data_base->modules_type[i].name,
-				   module_count[i][0], module_count[i][1]);
+			msgError("Too many modules ! %s count = %i > TaskMate max %i", data_base->modules_type[i].name,
+					 module_count[i][0], module_count[i][1]);
 			exit(1);
 		}
 	}
-}
-
-void printLicenceHeader(FILE *file)
-{
-	char header_path[] = "templates/licence_header";
-	FILE *header_file = fopen(header_path,"r");
-	if( header_file == NULL )
-	{
-		msgError("open error file :");
-		printf("\t <%s>\n", header_path);
-		exit(1);
-	}
-
-	char c;
-	do
-	{
-		c = fgetc(header_file);
-		if ( c!= EOF) {fputc(c, file);}
-	}while( c != EOF );
-
-	fputc('\n', file);
-
-	fclose(header_file);
 }

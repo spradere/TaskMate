@@ -12,24 +12,21 @@
  */
 
 /**
- * @file writeInclude.h
- * @brief write include code header
+ * @file hal_lcd.h
+ * @brief header hal lcd implemetation
  *
  */
 
-#ifndef WRITE_INCLUDE_H
-#define WRITE_INCLUDE_H
+#ifndef HAL_LCD_H
+#define HAL_LCD_H
 
-#include "autoCode.h"
+#include <stdint.h>
 
-typedef enum
-{
-	INCLUDE_THREAD_PART,
-	INCLUDE_HAL_USER_PART,
-	INCLUDE_HAL_SYSTEM_CRITICAL_PART,
-	INCLUDE_TYPE_COUNT
-	} include_type_t;
-
-void writeInclude(const modules_database_t *data_base, include_type_t type ,const char *file_name, const target_t *target);
+void hal_lcdInit(void);
+void hal_lcdStart(void);
+void hal_lcdStop(void);
+void hal_lcdClear(void);
+void hal_lcdSetCursor(uint8_t row, uint8_t col);
+void hal_lcdWriteString(const char *str);
 
 #endif

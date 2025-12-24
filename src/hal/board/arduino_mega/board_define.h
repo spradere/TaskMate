@@ -23,11 +23,6 @@
 
 #include <avr/io.h>
 
-// arduino in board LED pin 13
-#define IN_BOARD_LED_DDR DDRB /**< Arduino in board led, direction port*/
-#define IN_BOARD_LED_PORT PORTB /**< Arduino in board led, data port*/
-#define IN_BOARD_LED_PIN PB7 /**< Arduino in board led, pin*/
-
 // gpio arduino mega board + LCD4x20 signals
 typedef enum
 {

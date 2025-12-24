@@ -13,11 +13,23 @@
  */
 
 /**
- * @file hal_api.c
- * @brief hal api for fallback
+ * @file hal_i2c.h
+ * @brief header hal i2c serial comm
  *
  */
 
-#include "hal/autoInclude_hal_user.h"
+#ifndef HAL_I2C_H
+#define HAL_I2C_H
 
-//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+#include <stdint.h>
+#include <stdbool.h>
+
+void hal_i2cInit(void);
+void hal_i2cStart(void);
+void hal_i2cStop(void);
+uint8_t hal_i2cCommStart(uint8_t address);
+void hal_i2cCommStop(void);
+uint8_t hal_i2cWrite(uint8_t data);
+uint8_t hal_i2cRead(bool ack);
+
+#endif

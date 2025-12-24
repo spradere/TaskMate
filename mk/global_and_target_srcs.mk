@@ -48,7 +48,8 @@ DEPS_FILE = build/.deps.d
 
 # autoCode
 AUTOCODE_TARGET = utility/autoCode
-AUTOCODE_SRC != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
+AUTOCODE_SRCS != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.c"
+AUTOCODE_SRCS_H != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.h"
 
 AUTOCODE_STAMP = build/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 AUTO_HEADERS = autoInclude.h autoAlloc.h
