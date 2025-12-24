@@ -13,11 +13,19 @@
  */
 
 /**
- * @file hal_api.c
- * @brief hal api for fallback
+ * @file hal_taget_type.h
+ * @brief hal header api
  *
  */
 
-#include "hal/autoInclude_hal_user.h"
+#ifndef HAL_TARGET_TYPE_H
+#define HAL_TARGET_TYPE_H
 
-//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+typedef struct
+{
+	const char *arch;
+	const char *mcu;
+	const char *board;
+} target_info_t;
+
+#endif

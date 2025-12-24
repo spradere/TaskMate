@@ -17,8 +17,9 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_usart.h"
 #include <avr/interrupt.h>
-#include "hal/hal_user_api.h"
+#include "hal/mcu/atmega2560/mcu_define.h"
 
 // Circular buffers
 #define HAL_USART_BUFFER_SIZE 128
@@ -41,7 +42,7 @@ void hal_usartInit(void)
 
 void hal_usartStart(void)
 {
-	UCSR1B |= (1 << RXCIE1); // enable Rx interrupt
+	UCSR1B |= (uint8_t)(1u << RXCIE1); // enable Rx interrupt
 }
 
 void hal_usartStop(void)
@@ -52,7 +53,7 @@ void hal_usartStop(void)
 // USART1 Rx Interrupt Handler (Triggered when data is received)
 ISR(USART1_RX_vect)
 {
-	uint8_t next_head = (buffer_rx_head + 1) % HAL_USART_BUFFER_SIZE;
+	uint8_t next_head = (uint8_t)((buffer_rx_head + 1) % HAL_USART_BUFFER_SIZE);
 	uint8_t data = UDR1; // Read the received byte
 
 	if( next_head != buffer_rx_tail ) // Check for buffer overflow
@@ -68,14 +69,14 @@ error_codes_t hal_usartRead(uint8_t *data)
 	if( buffer_rx_tail == buffer_rx_head ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 
 	*data = buffer_rx[buffer_rx_tail]; // Read from buffer
-	buffer_rx_tail = (buffer_rx_tail + 1) % HAL_USART_BUFFER_SIZE; // Move tail forward
+	buffer_rx_tail = (uint8_t)((buffer_rx_tail + 1) % HAL_USART_BUFFER_SIZE); // Move tail forward
 	return ERR_NO_ERROR;
 }
 
 // Write a character to Tx buffer
 error_codes_t hal_usartWriteChar(uint8_t data)
 {
-	uint8_t next_head = (buffer_tx_head + 1) % HAL_USART_BUFFER_SIZE;
+	uint8_t next_head = (uint8_t)((buffer_tx_head + 1) % HAL_USART_BUFFER_SIZE);
 	if( next_head == buffer_tx_tail ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
 
 	buffer_tx[buffer_tx_head] = data;
@@ -91,7 +92,7 @@ void hal_usartSendTXBuffer(void)
 		while( !(UCSR1A & (1 << UDRE1)) ); // Wait for empty transmit buffer
 		UDR1 = buffer_tx[buffer_tx_tail]; // Put data into buffer, sends the data
 
-		buffer_tx_tail = (buffer_tx_tail + 1) % HAL_USART_BUFFER_SIZE; // Move tail forward
+		buffer_tx_tail = (uint8_t)((buffer_tx_tail + 1) % HAL_USART_BUFFER_SIZE); // Move tail forward
 	}
 }
 
@@ -107,7 +108,7 @@ error_codes_t hal_usartWriteString(const char *str)
 {
 	while( *str )
 	{
-		if( hal_usartWriteChar(*str++) == ERR_HAL_USART_TX_BUFFER_FULL ) { break; };
+		if( hal_usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL ) { break; };
 	}
 	return ERR_NO_ERROR;
 }

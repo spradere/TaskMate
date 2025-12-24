@@ -11,10 +11,10 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Auto generated code, do not edit !
-// any changes will be lost
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// ! Auto generated code, do not edit !
+// ! any changes will be lost         !
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #ifndef AUTOALLOC_H
 #define AUTOALLOC_H

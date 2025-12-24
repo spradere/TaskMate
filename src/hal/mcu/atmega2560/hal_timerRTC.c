@@ -18,11 +18,10 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_timerRTC.h"
 #include <avr/io.h>
 #include <util/atomic.h>
 #include <avr/interrupt.h>
-
-#include "hal/hal_user_api.h"
 #include "sysCore/realTimeClock.h"
 
 const int hal_timerRTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
@@ -38,13 +37,13 @@ void hal_timerRTCInit(void)
 void hal_timerRTCStart(void)
 {
 	// start by enabling INT
-	TIMSK3 |= (1 << OCIE3A);
+	TIMSK3 |= (uint8_t)(1u << OCIE3A);
 }
 
 void hal_timerRTCStop(void)
 {
 	// stop by disabling INT
-	TIMSK3 &= ~(1 << OCIE3A);
+	TIMSK3 &= (uint8_t)~(1u << OCIE3A);
 }
 
 ISR(TIMER3_COMPA_vect) { realTimeClock(); }

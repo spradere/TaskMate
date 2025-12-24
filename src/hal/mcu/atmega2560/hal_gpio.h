@@ -13,11 +13,19 @@
  */
 
 /**
- * @file hal_api.c
- * @brief hal api for fallback
+ * @file hal_gpio.h
+ * @brief header hal gpio implementation
  *
  */
 
-#include "hal/autoInclude_hal_user.h"
+#ifndef HAL_GPIO_H
+#define HAL_GPIO_H
 
-//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+#include <stdbool.h>
+#include "sysCall/gpio.h"
+
+void hal_gpioInitPin(const gpio_pin_item_t *pin);
+void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
+bool hal_gpioReadPin(const gpio_pin_item_t *pin);
+
+#endif

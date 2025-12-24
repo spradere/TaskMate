@@ -18,13 +18,11 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_timerScheduler.h"
 #include <avr/io.h>
 #include <util/atomic.h>
 #include <avr/interrupt.h>
-
-#include "hal/hal_user_api.h"
-#include "hal/hal_system_critical_api.h"
-
+#include "hal/autoInclude_hal_system_critical.h"
 #include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
@@ -35,9 +33,9 @@ void hal_timerSchedulerInit(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TCCR1A = 0; // WGM11 = 0 WGM10 = 0
-	TCCR1B = (1 << CS11); // prescaler = 8
+	TCCR1B = (uint8_t)(1u << CS11); // prescaler = 8
 	OCR1A = TIMER1_OVERFLOW_COUNT;
-	TIMSK1 |= (1 << OCIE1A);
+	TIMSK1 |= (uint8_t)(1u << OCIE1A);
 }
 
 void hal_timerSchedulerStart(void)
@@ -45,16 +43,16 @@ void hal_timerSchedulerStart(void)
 	TCNT1 = 0;
 	// start by enabling source
 	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> CTC mode
-	TCCR1A &= ~((1 << WGM11) | (1 << WGM10));
-	TCCR1B |= (1 << WGM12);
-	TCCR1B &= ~(1 << WGM13);
+	TCCR1A &= (uint8_t)~((1u << WGM11) | (1u << WGM10));
+	TCCR1B |= (uint8_t)(1u << WGM12);
+	TCCR1B &= (uint8_t)~(1u << WGM13);
 }
 
 void hal_timerSchedulerStop(void)
 {
 	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> no source, timer stopped
-	TCCR1A &= ~((1 << WGM11) | (1 << WGM10));
-	TCCR1B &= ~((1 << WGM13) | (1 << WGM12));
+	TCCR1A &= (uint8_t)~((1u << WGM11) | (1u << WGM10));
+	TCCR1B &= (uint8_t)~((1u << WGM13) | (1u << WGM12));
 }
 
 void hal_timerSchedulerLoad(void)

@@ -20,7 +20,7 @@
 #ifndef PRINTMODULES_H
 #define PRINTMODULES_H
 
-#include "utility/autoCode_src/autoCode.h"
+#include "autoCode.h"
 
 void printModules(const modules_database_t *data_base);
 

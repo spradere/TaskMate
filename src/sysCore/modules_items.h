@@ -18,48 +18,38 @@
  *
  */
 
-/**
- * @struct thread_item_t
- * @brief Represents a thread in TaskMate.
- */
-
 #ifndef MODULES_ITEMS_H
 #define MODULES_ITEMS_H
 
 #include "sysCore/modules_define.h"
-#include "hal/autoInclude_hal_target.h" // get stack_word_t from selected arch
+#include "hal/autoInclude_hal_system_critical.h" // get stack_word_t from selected arch
 
 // thread
-#define THREAD_STACK_SIZE 256 /**< Thread stack size*/
+#define THREAD_STACK_SIZE 256
 
 typedef struct
 {
-	uint8_t *name; /**< Thread name */
-	uint8_t status; /**< flag | run level */
+	const char *name;
+	uint8_t status;
 
-	void (*main)(void); /**< Thread main function for first start and resart */
+	void (*main)(void);
 
-	volatile uint16_t real_time_counter; /**< Thread's Time Counter */
+	volatile uint16_t real_time_counter;
 
-	stack_word_t *stack_pointer; /**< Thread stack Pointer, pointer to stack array items*/
-	stack_word_t stack[THREAD_STACK_SIZE]; /**< Thread stack array */
+	stack_word_t *stack_pointer;
+	stack_word_t stack[THREAD_STACK_SIZE];
 
 } module_item_thread_t;
-
-/**
- * @struct driver_item_t
- * @brief Represents a driver in TaskMate.
- */
 
 // driver
 typedef struct
 {
-	uint8_t *name; /**< Driver name */
-	uint8_t status; /**< flag | run level */
+	const char *name;
+	uint8_t status;
 
-	void (*init)(void); /**< Initialize driver function  */
-	void (*start)(void); /**< Start driver function  */
-	void (*stop)(void); /**< Stop driver function  */
+	void (*init)(void);
+	void (*start)(void);
+	void (*stop)(void);
 
 } module_item_driver_t;
 

@@ -19,12 +19,13 @@
  * @todo add free channel
  */
 
-#include "sysCall/TaskMate_public.h"
 #include "services/msg.h"
+#include "sysCall/sysCall.h"
 #include "libc/string.h"
+#include "libc/stdio.h"
 
 // Send message to :
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -44,12 +45,12 @@ void msg(void)
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\nmsg : Essai USART1 \n", MSG_TO_USART1);
+		msgWritreText(channel, "[msg server] : test USART1 \n", MSG_TO_USART1);
 	}
 
 	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "\3 Global error 3", MSG_TO_LCD);
+		msgWritreText(channel, "\3 autoCode 50", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -79,9 +80,9 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
 	strncpy(channels[channel].text, MSG_SIZE_MAX, msg);
 
-	channels[channel].status &= ~(1 << MSG_TO_MASK);
+	channels[channel].status &= (uint8_t)(~(1u << MSG_TO_MASK));
 	channels[channel].status |= dest;
-	channels[channel].status |= (1 << MSG_FLAG_SEND);
+	channels[channel].status |= (uint8_t)(1u << MSG_FLAG_SEND);
 }
 
 void msgProcess(void)
@@ -94,7 +95,7 @@ void msgProcess(void)
 			{
 				case MSG_TO_LCD:
 
-					hal_lcdSetCursor(channels[channel].text[0], 0);
+					hal_lcdSetCursor((uint8_t)channels[channel].text[0], 0);
 					// Zap escape code for LCD line select
 					uint8_t i_src, i_dest = 0;
 					for( i_src = 1; channels[channel].text[i_dest] != 0; i_src++ )
@@ -119,7 +120,7 @@ void msgProcess(void)
 					hal_usartWriteString("[msg.c 118] error unknow destination\n");
 					hal_usartSendTXBuffer();
 			}
-			channels[channel].status &= ~(1 << MSG_FLAG_IN_USE);
+			channels[channel].status &= (uint8_t)(~(1u << MSG_FLAG_IN_USE));
 		}
 	}
 }
