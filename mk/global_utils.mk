@@ -72,3 +72,4 @@ tidy_autoCode:
 	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/src/
+.PHONY:tidy_autoCode

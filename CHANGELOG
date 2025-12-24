@@ -90,3 +90,5 @@ TaskMate 0.23
 	refactor autoCode write in tmp file
 	add warnings to clang / avr-gcc and fix code
 	refactor all .h
+
+TaskMate 0.24
