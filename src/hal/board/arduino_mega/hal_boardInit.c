@@ -16,11 +16,13 @@
  * @brief board init arduino mega implematation
  *
  */
+
+#include "hal/board/arduino_mega/hal_boardInit.h"
 #include <avr/io.h>
 #include <stdbool.h>
-#include "hal/hal_user_api.h"
+#include "hal/autoInclude_hal_user.h"
 
-void hal_boardInit()
+void hal_boardInit(void)
 {
 	// gpio pin definition
 	gpio_signal_item_t sig;

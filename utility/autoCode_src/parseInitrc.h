@@ -20,8 +20,8 @@
 #ifndef PARSEINITRC_H
 #define PARSEINITRC_H
 
-#include "utility/autoCode_src/autoCode.h"
+#include "autoCode.h"
 
-void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_name);
+void parseInitrc(int TYPE, modules_database_t *data_base, const char *file_initrc_name);
 
 #endif

@@ -13,11 +13,18 @@
  */
 
 /**
- * @file hal_api.c
- * @brief hal api for fallback
+ * @file snprintf.h
+ * @brief header of libc formated print in string
  *
  */
 
-#include "hal/autoInclude_hal_user.h"
+#ifndef SNPRINTF_H
+#define SNPRINTF_H
 
-//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+#include <stddef.h>
+#include <stdarg.h>
+#include <stdint.h>
+
+void snprintf(char *buff, size_t buff_size, const char *format, ...);
+
+#endif

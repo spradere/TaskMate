@@ -17,26 +17,32 @@
 # allowed source acess system critical
 ################################################################################
 
-CFLAGS_${SRC_DIR}/sysCore/TaskMate.c = -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
+CFLAGS_${SRC_DIR}/sysCore/TaskMate.c = \
+	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/sysCore/scheduler.c = -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
+CFLAGS_${SRC_DIR}/sysCore/scheduler.c = \
+	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/sysCore/initSys.c = -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
+CFLAGS_${SRC_DIR}/sysCore/initSys.c = \
+	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/sysCall/sysCall.c = -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
+CFLAGS_${SRC_DIR}/sysCall/sysCall.c = \
+	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-CFLAGS_${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c = -DHAL_SYSTEM_CRITICAL_API_ALLOWED \
+CFLAGS_${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c = \
+	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 
-GREP_PATTERN1 = hal/hal_system_critical_api.h
+GREP_PATTERN1 = hal/autoInclude_hal_system_critical.h
 GREP_ALLOWED1 = src/hal/mcu/${MCU}/hal_timerScheduler.c \
 	src/sysCore/TaskMate.c \
 	src/sysCore/scheduler.c \
 	src/sysCore/initSys.c \
-	src/sysCall/sysCall.c
-
-GREP_PATTERN2 = hal/autoInclude_hal_system_critical.h
-GREP_ALLOWED2 = src/hal/hal_system_critical_api.h \
+	src/sysCall/sysCall.c \
+	src/hal/mcu/${MCU}/hal_timerScheduler.c \
+	src/sysCall/gpio.h \
+	src/sysCall/sysCall.c \
+	src/sysCore/modules_items.h
 
 GREP_LIST != cat mk/allow.mk \
 	| grep '^[[:space:]]*GREP_PATTERN[0-9][0-9]*[[:space:]]*=' \

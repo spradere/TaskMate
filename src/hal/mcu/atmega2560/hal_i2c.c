@@ -18,13 +18,13 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_i2c.h"
 #include <avr/io.h>
 #include <util/twi.h>
+#include "hal/mcu/atmega2560/mcu_define.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
-
-#include "hal/hal_user_api.h"
 
 void hal_i2cInit(void)
 {
@@ -39,7 +39,7 @@ void hal_i2cStart(void)
 
 void hal_i2cStop(void)
 {
-	TWCR &= ~(1 << TWEN); // Stop TWI
+	TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
 }
 
 uint8_t hal_i2cCommStart(uint8_t address)

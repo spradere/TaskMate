@@ -11,6 +11,9 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/hal_api.h"
+#ifndef HAL_MCUINIT_H
+#define HAL_MCUINIT_H
 
-void hal_mcuInit(){}
+void hal_mcuInit(void);
+
+#endif

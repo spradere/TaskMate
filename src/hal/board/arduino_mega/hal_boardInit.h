@@ -11,6 +11,15 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/hal_api.h"
+/**
+ * @file hal_boardInit.h
+ * @brief board init arduino mega implematation
+ *
+ */
 
-void hal_archInit(){}
+#ifndef HAL_BOARDINIT_H
+#define HAL_BOARDINIT_H
+
+void hal_boardInit(void);
+
+#endif

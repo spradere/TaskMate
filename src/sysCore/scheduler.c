@@ -18,12 +18,12 @@
  *
  */
 
-#include "hal/hal_user_api.h"
-#include "hal/hal_system_critical_api.h"
-
+#include "sysCore/scheduler.h"
+#include <stdint.h>
+#include "hal/autoInclude_hal_system_critical.h"
+#include "hal/autoInclude_hal_user.h"
 #include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
-#include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
 #include "sysCall/gpio.h"
 
@@ -31,7 +31,7 @@
 // scheduler is called by hal_timerScheduler interupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void scheduler()
+void scheduler(void)
 {
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	hal_setGlobalInterupt();

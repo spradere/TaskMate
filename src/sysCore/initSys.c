@@ -18,12 +18,12 @@
  *
  */
 
-#include "hal/hal_user_api.h"
-#include "hal/hal_system_critical_api.h"
-
+#include "sysCore/initSys.h"
+#include <stdint.h>
+#include "hal/autoInclude_hal_system_critical.h"
+#include "hal/autoInclude_hal_user.h"
 #include "sysCore/autoInclude_threads.h"
 #include "sysCore/modules.h"
-#include "sysCore/initSys.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -36,37 +36,37 @@ void initThreads(void)
 
 	mod_t = moduleThreadGetPointer(0);
 
-	hal_threadContextInit(scli, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(scli, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread0_name = "scli";
-	mod_t->name = (uint8_t *)thread0_name;
+	mod_t->name = thread0_name;
 	mod_t->status = 19;
 	mod_t->main = scli;
 
 	mod_t = moduleThreadGetPointer(1);
 
-	hal_threadContextInit(msg, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(msg, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread1_name = "msg";
-	mod_t->name = (uint8_t *)thread1_name;
+	mod_t->name = thread1_name;
 	mod_t->status = 19;
 	mod_t->main = msg;
 
 	mod_t = moduleThreadGetPointer(2);
 
-	hal_threadContextInit(task1, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(task1, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread2_name = "task1";
-	mod_t->name = (uint8_t *)thread2_name;
+	mod_t->name = thread2_name;
 	mod_t->status = 12;
 	mod_t->main = task1;
 
 	mod_t = moduleThreadGetPointer(3);
 
-	hal_threadContextInit(task2, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE -1 ]) );
+	hal_threadContextInit(task2, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
 	mod_t->real_time_counter = 0;
 	const char *thread3_name = "task2";
-	mod_t->name = (uint8_t *)thread3_name;
+	mod_t->name = thread3_name;
 	mod_t->status = 12;
 	mod_t->main = task2;
 	// [/tag]
@@ -82,7 +82,7 @@ void initDrivers(void)
 	const char *driver0_name = "hal_timerScheduler";
 	*(mod_d) = (module_item_driver_t)
 	{
-		.name = (uint8_t *)driver0_name,
+		.name = driver0_name,
 		.status = 1,
 		.init = hal_timerSchedulerInit,
 		.start = hal_timerSchedulerStart,
@@ -93,7 +93,7 @@ void initDrivers(void)
 	const char *driver1_name = "hal_timerRTC";
 	*(mod_d) = (module_item_driver_t)
 	{
-		.name = (uint8_t *)driver1_name,
+		.name = driver1_name,
 		.status = 1,
 		.init = hal_timerRTCInit,
 		.start = hal_timerRTCStart,
@@ -104,7 +104,7 @@ void initDrivers(void)
 	const char *driver2_name = "hal_i2c";
 	*(mod_d) = (module_item_driver_t)
 	{
-		.name = (uint8_t *)driver2_name,
+		.name = driver2_name,
 		.status = 1,
 		.init = hal_i2cInit,
 		.start = hal_i2cStart,
@@ -115,7 +115,7 @@ void initDrivers(void)
 	const char *driver3_name = "hal_usart";
 	*(mod_d) = (module_item_driver_t)
 	{
-		.name = (uint8_t *)driver3_name,
+		.name = driver3_name,
 		.status = 1,
 		.init = hal_usartInit,
 		.start = hal_usartStart,
@@ -126,7 +126,7 @@ void initDrivers(void)
 	const char *driver4_name = "hal_lcd";
 	*(mod_d) = (module_item_driver_t)
 	{
-		.name = (uint8_t *)driver4_name,
+		.name = driver4_name,
 		.status = 2,
 		.init = hal_lcdInit,
 		.start = hal_lcdStart,
@@ -137,7 +137,7 @@ void initDrivers(void)
 	const char *driver5_name = "hal_ZS_042";
 	*(mod_d) = (module_item_driver_t)
 	{
-		.name = (uint8_t *)driver5_name,
+		.name = driver5_name,
 		.status = 2,
 		.init = hal_ZS_042Init,
 		.start = hal_ZS_042Start,

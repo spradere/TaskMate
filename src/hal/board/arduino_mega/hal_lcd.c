@@ -17,9 +17,9 @@
  *
  */
 
+#include "hal/mcu/atmega2560/hal_i2c.h"
 #include <util/delay.h>
-
-#include "hal/hal_user_api.h"
+#include "hal/board/arduino_mega/hal_lcd.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -83,7 +83,7 @@ void hal_lcdWriteString(const char *str)
 	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
 	hal_i2cWrite(LCDAMC2004_DATA);
 
-	while( *str ) { hal_i2cWrite(*str++); }
+	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
 	hal_i2cCommStop();
 }
 

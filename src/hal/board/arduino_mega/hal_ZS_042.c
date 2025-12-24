@@ -17,21 +17,25 @@
  *
  */
 
-#include "hal/hal_user_api.h"
+#include "hal/board/arduino_mega/hal_ZS_042.h"
+#include "hal/mcu/atmega2560/hal_i2c.h"
+
+// NOLINTBEGIN
+// NOLINT(readability-magic-numbers)
 
 #define ZS_042_I2C_ADDR 0x68
 
-static uint8_t bcdToUint8(uint8_t bcd) { return ((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
+static uint8_t bcdToUint8(uint8_t bcd) { return (uint8_t)((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
 
-static uint8_t uint8ToBcd(uint8_t val) { return ((val / 10u) << 4) | (val % 10u); }
+static uint8_t uint8ToBcd(uint8_t val) { return (uint8_t)((val / 10u) << 4) | (val % 10u); }
 
-void hal_ZS_042Init() {}
-void hal_ZS_042Start() {}
-void hal_ZS_042Stop() {}
+void hal_ZS_042Init(void) {}
+void hal_ZS_042Start(void) {}
+void hal_ZS_042Stop(void) {}
 
 uint8_t hal_ZS_042Read(hal_rtc_time_t *t)
 {
-	uint8_t buf[7];
+	uint8_t buf[8];
 
 	hal_i2cCommStart(ZS_042_I2C_ADDR);
 	hal_i2cWrite(0); // command ???
@@ -58,7 +62,7 @@ uint8_t hal_ZS_042Write(const hal_rtc_time_t *t)
 	buf[0] = 0x00; // adresse registre de départ
 	buf[1] = uint8ToBcd(t->seconds & 0x7F); // CH=0 (clock ON)
 	buf[2] = uint8ToBcd(t->minutes);
-	buf[3] = uint8ToBcd(t->hours) & 0x3F; // forcer mode 24h
+	buf[3] = uint8ToBcd(t->hours) & 0x3F; // mode 24h
 	buf[4] = uint8ToBcd(t->weekday);
 	buf[5] = uint8ToBcd(t->day);
 	buf[6] = uint8ToBcd(t->month & 0x1F);
@@ -70,3 +74,4 @@ uint8_t hal_ZS_042Write(const hal_rtc_time_t *t)
 
 	return 0;
 }
+// NOLINTEND

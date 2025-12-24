@@ -36,20 +36,6 @@ cloc:
 	@cloc * --exclude-dir=html --exclude-lang=D --exclude-ext=rc
 .PHONY: cloc
 
-# clang-tidy
-#TIDY_SRC = ${AUTOCODE_SRC}
-#TIDY_SRC += ${SRCS}
-
-#tidy:
-#	@printf "\n\033[1;33mTidy static test code, config in src/.clang-tidy\033[0m\n\n"
-#	@clang-tidy $(TIDY_SRC) -- \
-#		-I/root/code/TaskMate/TaskMate_current/src \
-#		-I/root/code/TaskMate/TaskMate_current/ \
-#		-isystem /usr/local/avr/include -isystem /usr/local/lib/gcc/avr/14.1.0 \
-#		-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-#		-DF_CPU=${F_CPU}
-#.PHONY: tidy
-
 # Check annotations
 note:
 	@printf "\n\033[1;33mCheck code\033[0m\n\n"
@@ -70,12 +56,19 @@ check:
 		--suppress=missingIncludeSystem \
 		--suppress=missingInclude \
 		--check-level=exhaustive \
-		${TIDY_SRC}
-
+		${SRCS} \
+		${AUTOCODE_SRCS}
 .PHONY: check
 
 # clang-format
 format:
 	@printf "\033[1;33mAuto formatting code, config in src/.clang-format\033[0m\n\n"
-	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRC}
+	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS}
 .PHONY: format
+
+# clang-tidy for autoCode
+tidy_autoCode:
+	@printf "\n\033[1;33mTidy autoCode static test code, config in src/.clang-tidy\033[0m\n\n"
+	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
+	-I/root/code/TaskMate/TaskMate_current/ \
+	-I/root/code/TaskMate/TaskMate_current/src/

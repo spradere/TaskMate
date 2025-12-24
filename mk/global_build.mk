@@ -32,7 +32,6 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
 	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	#${CC} ${CFLAGS} -c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 	${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
@@ -51,9 +50,9 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not avr-gcc
-${AUTOCODE_TARGET}: ${AUTOCODE_SRC}
+${AUTOCODE_TARGET}: ${AUTOCODE_SRCS}
 	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
-	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
+	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 
 # check #include for system critical features
 system_critical_check:
@@ -86,5 +85,7 @@ ${ERROR_ALL}: ${ERROR_FILES}
 # special rule for autoCode alone, test purpose
 autoCode_alone:
 	@printf "\n\033[1;33mCompiling and running autoCode alone\033[0m\n\n"
-	@clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRC} -o ${AUTOCODE_TARGET}
+	@clang -I/root/code/TaskMate/TaskMate_current/ -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
+		-Wswitch -Wenum-conversion \
+		-Wno-gnu-zero-variadic-macro-arguments ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL}

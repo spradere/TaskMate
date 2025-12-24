@@ -11,6 +11,6 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
-#include "hal/hal_user_api.h"
+#include "hal/mcu/atmega2560/hal_mcuInit.h"
 
-void hal_mcuInit() {}
+void hal_mcuInit(void) {}

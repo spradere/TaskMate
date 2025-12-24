@@ -19,121 +19,119 @@
 
 #include "globalError.h"
 #include "tokenizer.h"
+#include "fileUtility.h"
 
-
-void globalError(const char *file_err_in_name, error_catalog_t *errors)
+void globalError(const char *src_name, error_catalog_t *errors, const char *dest_name)
 {
-	msgInfo("open error file :");
-	printf("\t <%s>\n", file_err_in_name);
+	msgInfo("open file.err <%s>", src_name);
 
-	// open file
-	FILE *file_err_in = fopen(file_err_in_name, "r");
-	if( file_err_in == NULL )
-	{
-		msgError("open error file :");
-		printf("\t <%s>\n", file_err_in_name);
-		exit(1);
-	}
+	// open files
+	file_t file_src;
+	fileInit(&file_src);
+	file_src.name = (char *)src_name;
+	fileOpen(&file_src, "r", __FILE__);
 
-	FILE *file_err_out = fopen("src/sysCall/error.h", "w");
-	if( file_err_out == NULL )
-	{
-		msgError("open error file : scr/sysCall/error_new.h");
-		exit(1);
-	}
+	file_t file_dest;
+	fileInit(&file_dest);
+	file_dest.name = (char *)dest_name;
+	fileOpen(&file_dest, "r", __FILE__);
 
-	printLicenceHeader(file_err_out);
+	file_t file_tmp;
+	fileInit(&file_tmp);
+	fileMakeTmp(dest_name, &file_tmp, __FILE__);
 
-	fprintf(file_err_out, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	fprintf(file_err_out, "// Auto generated code, do not edit !\n");
-	fprintf(file_err_out, "// any changes will be lost\n");
-	fprintf(file_err_out, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+	// write statements
+	printLicenceHeader(file_tmp.stream);
+	printWarningHeader(file_tmp.stream);
 
-	fprintf(file_err_out,"#ifndef ERROR_H\n");
-	fprintf(file_err_out,"#define ERROR_H\n\n");
+	fprintf(file_tmp.stream, "#ifndef ERROR_H\n");
+	fprintf(file_tmp.stream, "#define ERROR_H\n\n");
 
-	fprintf(file_err_out,"typedef enum\n");
-	fprintf(file_err_out,"{\n");
-	fprintf(file_err_out,"\tERROR_LOW,\n");
-	fprintf(file_err_out,"\tERROR_MID,\n");
-	fprintf(file_err_out,"\tERROR_HIGH\n");
-	fprintf(file_err_out,"} error_critical_t;\n\n");
+	fprintf(file_tmp.stream, "typedef enum\n");
+	fprintf(file_tmp.stream, "{\n");
+	fprintf(file_tmp.stream, "\tERROR_LOW,\n");
+	fprintf(file_tmp.stream, "\tERROR_MID,\n");
+	fprintf(file_tmp.stream, "\tERROR_HIGH\n");
+	fprintf(file_tmp.stream, "} error_critical_t;\n\n");
 
 	// read form source
-	int file_line_number = 0;
-	int error_current = 0;
+	int file_src_line_number = 0;
+	int error_index = 0;
 	tokenizer_t tok;
-	printf("\n");
 
-	strncpy(errors->catalog[error_current].name, "ERR_NO_ERROR",256);
-	strncpy(errors->catalog[error_current].message, "\"No error\"",256);
-	errors->catalog[error_current].critical = ERROR_LOW;
-	error_current++;
+	strncpy(errors->catalog[error_index].name, "ERR_NO_ERROR", BYTE_INDEX);
+	strncpy(errors->catalog[error_index].message, "\"No error\"", BYTE_INDEX);
+	errors->catalog[error_index].critical = ERROR_LOW;
+	error_index++;
 
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_err_in) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
-		file_line_number++;
+		file_src_line_number++;
 		tokenizer(&tok);
-		if( tok.count != 3 )
-		{
-			msgError("wrong token count != 3 tok.line :");
-			printf("\t [%s:%i] %s\n\n", file_err_in_name, file_line_number, tok.line);
-		}
 
-		printf("<%s><%s><%s>\n",tok.tokens[0],tok.tokens[1],tok.tokens[2]);
-
-		for(int i = 0; i < error_current; i++)
+		if( (tok.tokens[0][0] != '\n') && (tok.tokens[0][0] != '#') && (tok.count != 0) )
 		{
-			if(strcmp(tok.tokens[0], errors->catalog[i].name) == 0)
+			if( tok.count != 3 )
 			{
-				msgError("Duplicate error name :");
-				printf("\t<%s>\n", tok.tokens[0]);
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", file_src.name, file_src_line_number,
+						 tok.line);
+			}
+
+			for( int i = 0; i < error_index; i++ )
+			{
+				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
+				{
+					msgError("Duplicate error name <%s>", tok.tokens[0]);
+					exit(1);
+				}
+			}
+			strncpy(errors->catalog[error_index].name, tok.tokens[0], BYTE_INDEX);
+			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
+
+			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
+			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_index].critical = ERROR_LOW; }
+			if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_index].critical = ERROR_MID; }
+			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_index].critical = ERROR_HIGH; }
+			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
+			{
+				msgError("wrong citical argument <%s>", tok.tokens[2]);
 				exit(1);
 			}
-		}
-		strncpy(errors->catalog[error_current].name, tok.tokens[0],256);
-		strncpy(errors->catalog[error_current].message, tok.tokens[1],256);
 
-		errors->catalog[error_current].critical = ERROR_NOT_DEFINED;
-		if(strcmp( tok.tokens[2], "LOW") == 0){errors->catalog[error_current].critical = ERROR_LOW;}
-		if(strcmp( tok.tokens[2], "MID") == 0){errors->catalog[error_current].critical = ERROR_MID;}
-		if(strcmp( tok.tokens[2], "HIGH") == 0){errors->catalog[error_current].critical = ERROR_HIGH;}
-		if( errors->catalog[error_current].critical == ERROR_NOT_DEFINED)
-		{
-			msgError("wrong citical argument :");
-			printf("\t<%s>\n",tok.tokens[2]);
-			exit(1);
-		}
+			error_index++;
 
-		error_current++;
-
-		if(error_current == 256)
-		{
-			msgError("Too many errors > 256");
-			exit(1);
+			if( error_index == ERROR_COUNT_MAX )
+			{
+				msgError("Too many errors > %i", ERROR_COUNT_MAX);
+				exit(1);
+			}
+			errors->error_count = error_index;
 		}
-		errors->error_count = error_current;
 	}
 
 	// write errors enum
-	fprintf(file_err_out,"typedef enum\n");
-	fprintf(file_err_out,"{\n");
+	fprintf(file_tmp.stream, "typedef enum\n");
+	fprintf(file_tmp.stream, "{\n");
 
-	for(int i=0; i< errors->error_count; i++)
+	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(file_err_out,"\t%s,\n",errors->catalog[i].name);
+		fprintf(file_tmp.stream, "\t%s,\n", errors->catalog[i].name);
 	}
-	fprintf(file_err_out,"\tERROR_COUNT\n");
-	fprintf(file_err_out,"} error_codes_t;\n\n");
+	fprintf(file_tmp.stream, "\tERROR_COUNT\n");
+	fprintf(file_tmp.stream, "} error_codes_t;\n\n");
 
-	fprintf(file_err_out,"typedef struct\n");
-	fprintf(file_err_out,"{\n");
-	fprintf(file_err_out,"\tchar *name;\n");
-	fprintf(file_err_out,"\terror_critical_t critical;\n");
-	fprintf(file_err_out,"} error_item_t;\n\n");
+	fprintf(file_tmp.stream, "typedef struct\n");
+	fprintf(file_tmp.stream, "{\n");
+	fprintf(file_tmp.stream, "\tchar *name;\n");
+	fprintf(file_tmp.stream, "\terror_critical_t critical;\n");
+	fprintf(file_tmp.stream, "} error_item_t;\n\n");
 
 	// end
-	fprintf(file_err_out,"\n#endif\n");
-	fclose(file_err_in);
-	fclose(file_err_out);
+	fprintf(file_tmp.stream, "\n#endif\n");
+
+	fileCmpReplace(&file_dest, &file_tmp);
+
+	fileClose(&file_src, __FILE__);
+	fileClose(&file_dest, __FILE__);
+	fileClose(&file_tmp, __FILE__);
 }
