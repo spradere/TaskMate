@@ -13,7 +13,7 @@
 #
 ################################################################################
 
-# Compiler to add : -Wredundant-decls
+# Compiler for arch avr8
 CC = avr-gcc
 
 CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
@@ -29,8 +29,10 @@ HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
 
 # Flash Gordon
-upload:all
-	@printf "\n\033[1;33mUpload binary to AVR flash\033[0m\n\n"
+upload: all
+#@ [avr8] Upload firmware to mcu via Arduino board.
+	@printf "\n%sUpload binary to AVR flash%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	# ELF to hex format
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# RAM usage
@@ -41,9 +43,11 @@ upload:all
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload
 
-# Disassemble machine code in two formats
-dump:all
-	@printf "\n\033[1;33mGenerate debugging informations\033[0m\n\n"
+# Disassemble machine code
+dump: all
+#@ [avr8] Disassemble machine code in .hex and .elf
+	@printf "\n%sGenerate debugging informations%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	avr-objdump -D -m avr6 ${HEX} > ${BUILD_DIR}/hex.txt
 	avr-objdump -D -m avr6 ${ELF} > ${BUILD_DIR}/elf.txt
@@ -51,7 +55,9 @@ dump:all
 
 # clang-tidy
 tidy_TaskMate:
-	@printf "\n\033[1;33mTidy TaskMate static test code, config in src/.clang-tidy\033[0m\n\n"
+#@ [avr8] tidy static code analysis for TaskMate, config /.clang-tidy.
+	@printf "\n%sTidy TaskMate static code test%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/src/ \
@@ -63,3 +69,11 @@ tidy_TaskMate:
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 
 .PHONY: tidy_TaskMate
+
+# list modules size
+module_size: all
+#@ [avr8] List module size sorted from highest.
+	@printf "\n%sList module size%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	avr-nm --size-sort -r build/TaskMate.elf | head -20
+.PHONY: module_size

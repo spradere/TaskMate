@@ -59,3 +59,9 @@ FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 # glabal errors
 ERROR_ALL = build/errors_all.err
 ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
+
+# mk file -> target help
+MK_FILES_MK != find ./mk -maxdepth 1 -type f -name "*.mk"
+MK_FILES_HAL != find ./src/hal -maxdepth 3 -type f -name "*.mk"
+
+MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}

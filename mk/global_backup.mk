@@ -24,42 +24,52 @@ GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
 
-# Git push, use command line : # make push M="message"
+# Git push
 push:
-	@printf "\n\033[1;33mGit routine for \"${M}\" commit\033[0m\n\n"
+#@ [global] Git push routine, use command line : # make push M="message"
+	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@git add .
 	@git commit -m "${M}"
 	@git push
 	@printf "\n"
 .PHONY: push
 
-# USB key backup with current tag in directory
+# USB key backup
 backup:
-	@printf "\n\033[1;33mBackup to <${USB_DIR}${TASKMATE_DIR}>\033[0m\n\n"
-	@printf "\033[0;33mInsert USB key and press ENTER to continue ... \033[0m\n"
+#@ [global] USB key backup with current tag in directory.
+	@printf "\n%sBackup to <${USB_DIR}${TASKMATE_DIR}>%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \
+		"${COLOR_BACKUP}" "${COLOR_RESET}"
 	@read DUMMY_VAR
 
 	#Test if USB key is mount, do if not
 	@if mount | grep "/media/usbkey" > /dev/null; then \
-		printf "\033[0;33mUSB key already mounted ${USB_DIR}\033[0m\n"; \
+		printf "%sUSB key already mounted ${USB_DIR}%s\n"; \
+			"${COLOR_BACKUP}" "${COLOR_RESET}" \
 	else \
-		printf "\033[0;33mMount USB key ${USB_DIR}\033[0m\n"; \
+		printf "%sMount USB key ${USB_DIR}%s\n"; \
+			"${COLOR_BACKUP}" "${COLOR_RESET}" \
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 
 	# Test if dest directory exist, create if not
 	@if [ -d "${USB_DIR}${TASKMATE_DIR}" ]; then \
+		"${COLOR_BACKUP}" "${COLOR_RESET}" \
 	else \
 		mkdir ${USB_DIR}${TASKMATE_DIR}; \
 	fi
 
 	# Run rsync
-	@printf "\033[0;33mRun rsync, output logged in log/rsync.log\033[0m\n"
+	@printf "%sRun rsync, output logged in log/rsync.log%s\n"
+		"${COLOR_BACKUP}" "${COLOR_RESET}"
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" \
 		"${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
 
 	# Umount
-	@printf "\033[0;33mUmount ${USB_DIR}\033[0m\n"
+	@printf "%sUmount ${USB_DIR}%s\n" \
+		"${COLOR_BACKUP}" "${COLOR_RESET}"
 	@umount ${USB_DIR}
 	@printf "\n"
 .PHONY: backup

@@ -19,7 +19,9 @@
 
 # Heavy sweep
 clean:
-	@printf "\n\033[1;31mRemove files\033[0m\n\n"
+#@ [global] Remove all build files.
+	@printf "\n%sRemove files%s\n\n" \
+		"${COLOR_CLEAN}" "${COLOR_RESET}"
 	rm -f ${OBJS} ${DEPS} build/TaskMate.*
 	rm -f ${AUTOCODE_TARGET} build/.autoCode_stamp* build/autoCode_*
 
@@ -27,30 +29,35 @@ clean:
 
 # Make doxygen documentation
 doc:
-	@printf "\n\033[1;36mMake Doxygen documentation\033[0m\n\n"
+#@ [global] Generate Doxygen documentation.
+	@printf "\n%sMake Doxygen documentation%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	doxygen doc/Doxyfile
 .PHONY: doc
 
 # Count lines of code
 cloc:
-	@cloc * --exclude-dir=html --exclude-lang=D --exclude-ext=rc
+#@ [global] Count lines of codes.
+	@printf "\n%sCount lines of codes%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	@cloc * --exclude-dir=build,html,log,templates\
+		--exclude-lang=D --exclude-ext=rc
 .PHONY: cloc
 
 # Check annotations
 note:
-	@printf "\n\033[1;33mCheck code\033[0m\n\n"
-	@printf "**********************************************************\n"
-	@printf "* todo / fix / hack\n"
-	@printf "**********************************************************\n\n"
-	@grep -r -n -i -E 'todo|fix|hack' ${TIDY_SRC}
+#@ [global] Look for todo / fix / hack comments in code.
+	@printf "\n%sLook for todo / fix / hack%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	@grep -r -n -i -E 'todo|fix|hack' ${SRCS} ${SRCS_h } ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 
 .PHONY: note
 
 # cppcheck
-check:
-	@printf "\n**********************************************************\n"
-	@printf "* cppcheck \n"
-	@printf "**********************************************************\n\n"
+cppcheck:
+#@ [global] cppcheck static code analysis for autoCode and TaskMate.
+	@printf "\n%sCount lines of codes%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@cppcheck -I/root/code/TaskMate/TaskMate_current/ \
 		--enable=all --inconclusive --force \
 		--suppress=missingIncludeSystem \
@@ -61,15 +68,31 @@ check:
 .PHONY: check
 
 # clang-format
-format:
-	@printf "\033[1;33mAuto formatting code, config in src/.clang-format\033[0m\n\n"
+clang_format:
+#@ [global] Formating code with clang-format, config /.clang-format.
+	@printf "%sAuto formatting code%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS}
 .PHONY: format
 
 # clang-tidy for autoCode
 tidy_autoCode:
-	@printf "\n\033[1;33mTidy autoCode static test code, config in src/.clang-tidy\033[0m\n\n"
+#@ [global] tidy static code analysis for autoCode, config /.clang-tidy.
+	@printf "\n%sTidy autoCode static code test%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/src/
 .PHONY:tidy_autoCode
+
+# dispay targets
+help:
+#@ [global] List all utility targets, not the system ones.
+	@printf "%sPrint all utility targets%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	@sed -n \
+		-e 's/^\([A-Za-z0-9][A-Za-z0-9_-]*\)[[:space:]]*:.*$$/${COLOR_HELP_TARGET}\1${COLOR_RESET}/p' \
+		-e 's/^#@ \(\[[^]]*\]\)/    -> ${COLOR_HELP_TAG}\1${COLOR_RESET}/p' \
+		-e 's/^#@ /    -> /p' \
+		${MK_FILES}
+.PHONY: help
