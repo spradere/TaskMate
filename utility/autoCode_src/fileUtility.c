@@ -24,7 +24,9 @@ static int file_unchanged = 0;
 
 void filePrintTouch(void)
 {
+	msgInfo("*****************************************************");
 	msgInfo("summary of modified files : %i updated, %i unchanged", file_updated, file_unchanged);
+	msgInfo("*****************************************************");
 }
 
 void fileCmpReplace(file_t *file_old, file_t *file_new)

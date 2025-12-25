@@ -46,7 +46,7 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
-- Automatic recompilation based on file changes, including headers and initrc.
+- Automatic recompilation based on file changes, including headers and initrc startup config.
 - CLI commands like `make upload`, `make push` and `make backup`.
 - architecture-specific and board-specific code is compiled without
 using conditional macros (#ifdef).
@@ -57,7 +57,7 @@ See : [Makefile & build system](doc/build_system.md)
 
 ---
 
-### 🧱 HAL and Architecture Support
+### 🧱 Hardware Abstraction Layer and architecture support
 
 The HAL provide a **clean interface** between the system and the hardware.
 Ensures true portability across hardware families.
@@ -126,10 +126,10 @@ See : [Info about run level](doc/run_level.md)
 
 Upcoming features:
 
-- HAL
-- system-wide error handling
-- Stack usage monitoring
+- real time clock
 - serial CLI command parser
+- Stack usage monitoring
+
 
 See : [Road map](doc/check_list.md)
 
@@ -149,7 +149,7 @@ See the `LICENSE` file for full details.
 
 ---
 
-### 📟  Hardware setup : avr atmega2560 on Arduino mega board
+### 📟  Hardware setup : avr8 - atmega2560 - Arduino mega board
 
 ![So called wired hardware](doc/hardware_mega.jpg)
 
@@ -160,7 +160,6 @@ See the `LICENSE` file for full details.
 - **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/code_best_practices.md)
-
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
