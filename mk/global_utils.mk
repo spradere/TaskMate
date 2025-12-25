@@ -85,7 +85,7 @@ tidy_autoCode:
 	-I/root/code/TaskMate/TaskMate_current/src/
 .PHONY:tidy_autoCode
 
-# dispay targets
+# display targets
 help:
 #@ [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
