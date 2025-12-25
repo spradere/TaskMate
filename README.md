@@ -13,6 +13,10 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
+**Whether or not this project ever reaches production, it has already fulfilled its purpose:**
+
+- it enabled deep, sustained progress, solid C expertise, and real embedded systems experience.
+
 > <span style="color:green"> **Project Stats (v0.23)**</span>
 >
 >  <span style="color:green">245 commits • 109 source files • 3491 lines of code •
@@ -122,16 +126,33 @@ See : [Info about run level](doc/run_level.md)
 
 ---
 
-### 🔜 Project progress ...
+### 🚩 Global Error Management System
 
-Upcoming features:
+TaskMate introduces a unified **global error management** system designed to replace
+scattered, module-local error handling with a coherent, **system-wide architecture**.
+Each module declares its errors in a dedicated .err initialization file using a strict
+naming convention, ensuring namespace safety and **long-term maintainability**.
+During the build process, autoCode tool **validates** error definitions,
+detects duplicates, assigns **unique identifiers**, and generates a centralized error
+database. At runtime, all errors are raised through a **single system interface**,
+allowing consistent handling of logging, severity levels, return values, and
+optional system actions. This approach minimizes **code duplication**, reduces
+**memory usage**, and provides a solid foundation for diagnostics, robustness, and
+future extensibility, while remaining **lightweight** and suitable for constrained
+embedded systems.
 
-- real time clock
-- serial CLI command parser
-- Stack usage monitoring
+- exemple : file hal_usart.err
+- layout : ERROR_NAME "message" critical[LOW, MID, HIGH]
 
 
-See : [Road map](doc/check_list.md)
+```
+# hal usart
+ERR_HAL_USART_TX_BUFFER_EMPTY "hal USART TX buffer empty" LOW
+ERR_HAL_USART_RX_BUFFER_EMPTY "hal USART RX buffer empty" LOW
+ERR_HAL_USART_TX_BUFFER_FULL "hal USART TX buffer full" LOW
+ERR_HAL_USART_RX_BUFFER_FULL "hal USART RX buffer full" LOW
+```
+
 
 ---
 
@@ -160,6 +181,7 @@ See the `LICENSE` file for full details.
 - **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/code_best_practices.md)
+- **Project progress** — see road map -> [Road map](doc/check_list.md)
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
