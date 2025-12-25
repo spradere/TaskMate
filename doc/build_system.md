@@ -4,15 +4,15 @@
 ## ✨ Makefile features
 
 - **Automatic Dependency Handling**: Only recompiles modified source files.
-- **Header Dependency Tracking**: Detects changes in `.h` files and recompiles affected `.c` files.
+- **Header Dependency Tracking**: Detects changes in `.c .h` files and recompiles affected `.c` files.
 - **Automated Code Generation**:
-  - If any *_init.rc have been updated run autoCode before compilation.
+  - If any *_init.rc have been updated autoCode is launched before compilation.
 - **Colorized Output**: Improved readability with `@printf` messages.
 - **POSIX-Compliant**: Works without requiring GNU Make.
 
 ---
 
-## ✍️ Makefile Usage
+## ✍️ Makefile usage
 
 Main workflow :
 
@@ -62,9 +62,9 @@ Short, intuitive commands for development, deployment, and backup.
               |Dynamic Code Generation|
               +-----------------------+
                          |
-                         | parses drivers_init.rc and tasks_init.rc
-                         | generates autoInclude_system.h, autoInclude_hal.h and autoAlloc.h
-                         | generate code in initSys.c and runLevel.c
+                         | parses all *_init.rc files
+                         | generates headers autoInclude_*.h
+                         | generate code in .c files via tag system
                          |
                          | autoCode check configuration validity:
                          |   - files name
@@ -93,7 +93,6 @@ Short, intuitive commands for development, deployment, and backup.
                          | resolves symbols:
                          |   - strong vs weak definitions
                          |   - missing symbols
-                         |   - dead code removal (LTO)
                          |
                          | detects errors such as:
                          |   undefined reference
