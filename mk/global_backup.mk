@@ -45,24 +45,23 @@ backup:
 	@read DUMMY_VAR
 
 	#Test if USB key is mount, do if not
-	@if mount | grep "/media/usbkey" > /dev/null; then \
-		printf "%sUSB key already mounted ${USB_DIR}%s\n"; \
-			"${COLOR_BACKUP}" "${COLOR_RESET}" \
+	@if mount | grep -q "${USB_DIR}"; then \
+		printf "%sUSB key already mounted ${USB_DIR}%s\n" \
+			"${COLOR_BACKUP}" "${COLOR_RESET}"; \
 	else \
-		printf "%sMount USB key ${USB_DIR}%s\n"; \
-			"${COLOR_BACKUP}" "${COLOR_RESET}" \
+		printf "%sMount USB key ${USB_DIR}%s\n" \
+			"${COLOR_BACKUP}" "${COLOR_RESET}"; \
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 
 	# Test if dest directory exist, create if not
 	@if [ -d "${USB_DIR}${TASKMATE_DIR}" ]; then \
-		"${COLOR_BACKUP}" "${COLOR_RESET}" \
 	else \
 		mkdir ${USB_DIR}${TASKMATE_DIR}; \
 	fi
 
 	# Run rsync
-	@printf "%sRun rsync, output logged in log/rsync.log%s\n"
+	@printf "%sRun rsync, output logged in log/rsync.log%s\n" \
 		"${COLOR_BACKUP}" "${COLOR_RESET}"
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" \
 		"${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
