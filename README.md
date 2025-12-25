@@ -17,10 +17,10 @@ to separate build logic, system logic, and hardware dependencies.
 
 - it enabled deep, sustained progress, solid C expertise, and real embedded systems experience.
 
-> <span style="color:green"> **Project Stats (v0.23)**</span>
+> <span style="color:green"> **Project Stats (v0.24)**</span>
 >
->  <span style="color:green">245 commits • 109 source files • 3491 lines of code •
-> binary size : 6070 bytes (Flash) • ram usage : 2306 bytes</span>
+>  <span style="color:green">253 commits • 109 source files • 3628 lines of code •
+> binary size : 5940 bytes (Flash) • ram usage : 2306 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
