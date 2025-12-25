@@ -17,7 +17,7 @@
 .include "mk/target.mk"
 
 # Make global process
-
+.include "mk/colors.mk"
 .include "mk/global_and_target_srcs.mk"
 .include "mk/allow.mk"
 .include "mk/global_build.mk"
