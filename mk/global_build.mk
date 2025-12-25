@@ -19,42 +19,53 @@
 
 .MAIN: all
 
-all: system_critical_check ${AUTOCODE_STAMP} dependency_check ${TARGET}
-	@printf "\n\033[1;33mAll done\033[0m\n\n"
+# Targets begins with '_' and ${} are internal system only
+# They'll not be displayed in help: target
+
+all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
+#@ [global] System build.
+	@printf "\n%sAll done%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 
 # Link
 ${TARGET}: ${OBJS}
-	@printf "\n\033[1;33mLinking\033[0m\n\n"
-	${CC} ${CFLAGS} -o ${ELF} ${OBJS}
+	@printf "\n%sLinking%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	${CC} ${CFLAGS} -ffunction-sections -fdata-sections -Wl,--gc-sections -flto -o ${ELF} ${OBJS}
 
 # Compile
 ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
-	@printf "\n\033[1;33mCompilation ...\033[0m\n\n"
+	@printf "\n%sCompilation ...%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
 	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
 # dependency files used to compile *.c if related header or source was edited
-dependency_check:
-	@printf "\n\033[1;33mCheck dependency files\033[0m\n\n"
+_dependency_check:
+	@printf "\n%sCheck dependency files%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test if autoCode, initrc and error files was modified
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL}
-	@printf "\n\033[1;33mautoCode, init_rc or error files have changed -> run autoCode\033[0m\n\n"
+	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@rm -f build/autoCode_*
 	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > build/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
-	@printf "\n\033[1;33mCompiling autoCode\033[0m\n\n"
+	@printf "\n%sCompiling autoCode%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 
 # check #include for system critical features
-system_critical_check:
-	@printf "\n\033[1;33mChecking forbidden system critical includes ...\033[0m\n"
+_system_critical_check:
+	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 
 .for index in ${GREP_LIST}
 	@allowed="${GREP_ALLOWED${index}}"; \
@@ -67,22 +78,25 @@ system_critical_check:
 	        [ "$$f" = "$$ok" ] && test=yes; \
 	    done; \
 	    if [ "$$test" = "no" ]; then \
-	       printf "\033[1;31m[ FAIL ] Forbidden include detected in: $$f\033[0m\n"; \
+	       printf "\033[1;31m[ FAIL ] Forbidden include detected in: $$f%s\n"; \
 	       exit 1; \
 		else \
-			printf "\033[1;32m[  OK  ]\033[0m %s\n" "$$f"; \
+			printf "\033[1;32m[  OK  ]%s %s\n" "$$f"; \
 	    fi; \
 	done
 .endfor
 
 # global errors
 ${ERROR_ALL}: ${ERROR_FILES}
-	@printf "\n\033[1;33mCat all *.err in one file for autoCode\033[0m\n"
+	@printf "\n%sCat all *.err in one file for autoCode%s\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@cat ${ERROR_FILES} > ${ERROR_ALL}
 
-# special rule for autoCode alone, test purpose
+# special rule for autoCode alone
 autoCode_alone:
-	@printf "\n\033[1;33mCompiling and running autoCode alone\033[0m\n\n"
+#@ [global] Build and run autoCode alone.
+	@printf "\n%sCompiling and running autoCode alone%s\n\n" \
+		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@clang -I/root/code/TaskMate/TaskMate_current/ -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 		-Wswitch -Wenum-conversion \
 		-Wno-gnu-zero-variadic-macro-arguments ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}

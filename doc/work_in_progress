@@ -1,7 +1,5 @@
 fix RTC external module
 
-add global error system
-
 porting slab form amd64 to avr
 
 finish implementation of run level
