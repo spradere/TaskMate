@@ -59,11 +59,14 @@ and determines which folder under `hal/` is parsed.
 
 | File                        | Role                                                                 |
 |------------------------------|----------------------------------------------------------------------|
-| `scr/sysCore/autoInclude_system.h`	| Centralized header including all service/task headers.        |
-| `scr/hal/autoInclude_hal.h`      		| Centralized header including target hal/arch hal/mcu hal/board. |
-| `src/sysCore/include/autoAlloc.h`     | Static allocation tables for modules.                                |
-| `src/sysCore/initSys.c`      			| modules data base initialization routines executed during system startup.    |
-| `src/sysCore/runLevel.c`      		| run level initialization routines executed during system startup.    |
+| `src/sysCore/initSys.c`      					| modules data base initialization routines executed during system startup.    |
+| `src/sysCore/runLevel.c`      				| run level initialization routines executed during system startup.    |
+| `src/sysCore/TaskMate.c`      				| write target information arch/mcu/board.    |
+| `src/sysCall/error.c`      					| Global error catalog.    |
+| `scr/sysCore/autoInclude_threads.h`			| Centralized header including all service/task.        |
+| `scr/hal/autoInclude_hal_user.h`      		| Centralized header including user hal calls. |
+| `scr/hal/autoInclude_hal_system_critical.h` 	| Centralized header including system only hal calls. |
+| `src/sysCore/include/autoAlloc.h`     		| Static allocation tables for modules.                                |
 
 ---
 
@@ -72,61 +75,70 @@ and determines which folder under `hal/` is parsed.
 A typical autoCode run looks like this:
 
 ```
-[autoCode.c:71] info : target :
-         avr8 -> atmega2560 -> arduino_mega
+[autoCode.c] info : target avr8 -> atmega2560 -> arduino_mega
+[globalError.c] info : open file.err <build/errors_all.err>
+[fileUtility.c] info : files are the same, keep the old one <src/sysCall/error.h>
+[parseInitrc.c] info : open <src/hal/arch/avr8/arch_init.rc> for parsing
+[parseInitrc.c] info : found 0 module
+[parseInitrc.c] info : open <src/hal/mcu/atmega2560/mcu_init.rc> for parsing
+[parseInitrc.c] info : found 4 module
+[parseInitrc.c] info : open <src/hal/board/arduino_mega/board_init.rc> for parsing
+[parseInitrc.c] info : found 6 module
+[parseInitrc.c] info : open <src/services/services_init.rc> for parsing
+[parseInitrc.c] info : found 2 module
+[parseInitrc.c] info : open <src/tasks/tasks_init.rc> for parsing
+[parseInitrc.c] info : found 2 module
+[parseTag.c] info : open <src/sysCore/initSys.c> for parsing tag section
+[parseTag.c] info : found tag threads init
+[parseTag.c] info : end tag
+[parseTag.c] info : found tag drivers init
+[parseTag.c] info : end tag
+[fileUtility.c] info : files are the same, keep the old one <src/sysCore/initSys.c>
+[parseTag.c] info : open <src/sysCore/runLevel.c> for parsing tag section
+[parseTag.c] info : found tag run levels
+[parseTag.c] info : end tag
+[fileUtility.c] info : files are the same, keep the old one <src/sysCore/runLevel.c>
+[parseTag.c] info : open <src/sysCall/error.c> for parsing tag section
+[parseTag.c] info : found tag error catalog
+[parseTag.c] info : end tag
+[fileUtility.c] info : files are the same, keep the old one <src/sysCall/error.c>
+[parseTag.c] info : open <src/sysCore/TaskMate.c> for parsing tag section
+[parseTag.c] info : found tag target name
+[parseTag.c] info : end tag
+[fileUtility.c] info : files are the same, keep the old one <src/sysCore/TaskMate.c>
+[writeInclude.c] info : generate include statements in <src/sysCore/autoInclude_threads.h>
+[fileUtility.c] info : files are the same, keep the old one <src/sysCore/autoInclude_threads.h>
+[writeInclude.c] info : generate include statements in <src/hal/autoInclude_hal_user.h>
+[fileUtility.c] info : files are the same, keep the old one <src/hal/autoInclude_hal_user.h>
+[writeInclude.c] info : generate include statements in <src/hal/autoInclude_hal_system_critical.h>
+[fileUtility.c] info : files are the same, keep the old one <src/hal/autoInclude_hal_system_critical.h>
+[writeAlloc.c] info : generate allocation tables in <src/sysCore/autoAlloc.h>
+[fileUtility.c] info : files are the same, keep the old one <src/sysCore/autoAlloc.h>
+[fileUtility.c] info : *****************************************************
+[fileUtility.c] info : summary of modified files : 0 updated, 9 unchanged
+[fileUtility.c] info : *****************************************************
+[printModules.c] info : found drivers :
+	drivers[0] "hal_timerScheduler" status=1
+	drivers[1] "hal_timerRTC" status=1
+	drivers[2] "hal_i2c" status=1
+	drivers[3] "hal_usart" status=1
+	drivers[4] "hal_lcd" status=2
+	drivers[5] "hal_ZS_042" status=2
 
-[parseInitrc.c:31] info : open init.rc file for parsing
-         <src/hal/arch/avr8/drivers_init.rc>
-[parseInitrc.c:107] info : no module
+[printModules.c] info : found services :
+	services[0] "scli" status=3
+	services[1] "msg" status=3
 
-[parseInitrc.c:31] info : open init.rc file for parsing
-         <src/hal/mcu/atmega2560/drivers_init.rc>
-[parseInitrc.c:107] info : no module
+[printModules.c] info : found tasks :
+	tasks[0] "task1" status=4
+	tasks[1] "task2" status=4
 
-[parseInitrc.c:31] info : open init.rc file for parsing
-         <src/hal/board/arduino_mega/drivers_init.rc>
-
-[parseInitrc.c:31] info : open init.rc file for parsing
-         <src/services/services_init.rc>
-
-[parseInitrc.c:31] info : open init.rc file for parsing
-         <src/tasks/tasks_init.rc>
-
-[parseTag.c:81] info : found tag :
-         threads init
-[parseTag.c:105] info : end tag
-
-[parseTag.c:81] info : found tag :
-         drivers init
-[parseTag.c:105] info : end tag
-
-[parseTag.c:81] info : found tag :
-         run levels
-[parseTag.c:105] info : end tag
-
-[printModules.c:27] info : found drivers :
-        drivers[0] "timer1" status=1
-        drivers[1] "timer3" status=1
-        drivers[2] "i2c" status=1
-        drivers[3] "usart1" status=1
-        drivers[4] "lcdAMC2004" status=2
-
-[printModules.c:35] info : found services :
-        services[0] "scli" status=3
-        services[1] "msg" status=3
-
-[printModules.c:44] info : found tasks :
-        tasks[0] "task1" status=4
-        tasks[1] "task2" status=4
-
-[printModules.c:52] info : threads (services + tasks) by run level :
-        run_level_threads_count[RUN_NONE] = 0
-        run_level_threads_count[RUN_CORE] = 0
-        run_level_threads_count[RUN_DRIVER] = 0
-        run_level_threads_count[RUN_SERVICE] = 2
-        run_level_threads_count[RUN_USER] = 4
-
-touch build/.autoCode_stamp_avr8_atmega2560_arduino_mega
+[printModules.c] info : threads (services + tasks) by run level :
+	run_level_threads_count[RUN_NONE] = 0
+	run_level_threads_count[RUN_CORE] = 0
+	run_level_threads_count[RUN_DRIVER] = 0
+	run_level_threads_count[RUN_SERVICE] = 2
+	run_level_threads_count[RUN_USER] = 4
 ```
 
 This log demonstrates that:
@@ -144,4 +156,4 @@ This log demonstrates that:
 - ✔️ Detailed logging with file and line number
 - ✔️ Timestamped .autoCode_stamp file for Makefile dependency tracking
 - ⚙️ Optional dry-run mode (--dry-run) for safe regeneration into .tmp files
-- 🔒 Only replaces generated files when all steps complete successfully
+- 🔒 Only replaces generated files when all steps complete successfully and if the new file differs from the old one
