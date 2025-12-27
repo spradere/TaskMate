@@ -27,7 +27,6 @@
 #define MODULES_THREAD_COUNT 4
 // [/tag]
 
-
 void moduleThreadSetCurrent(uint8_t n);
 uint8_t moduleThreadGetCurrent(void);
 
