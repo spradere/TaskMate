@@ -19,13 +19,21 @@
  */
 
 #include "services/scli.h"
-#include <avr/io.h>
 #include <stdint.h>
 #include "sysCall/sysCall.h"
 #include "hal/autoInclude_hal_user.h"
+#include "services/msg.h"
+
+uint8_t scli_msg_channel;
+
 
 void scli(void)
 {
+	if( msgRequestChannel(&scli_msg_channel) == ERR_NO_ERROR )
+	{
+		msgWritreText(scli_msg_channel, "[scli] ready to work\n", MSG_TO_USART);
+	}
+
 	while( 1 )
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo
@@ -38,15 +46,23 @@ void scli(void)
 void scliEcho(void)
 {
 	uint8_t data;
+	char line[128];
+	uint8_t i;
 
 	if( hal_usartTestBufferRx() != ERR_HAL_USART_RX_BUFFER_EMPTY )
 	{
-		hal_usartWriteString("scli.c : ");
+		i=0;
+		msgWritreText(scli_msg_channel, "[scli] recive :", MSG_TO_USART);
+		// todo add a test to ensure message was proceed
 
-		while( hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY )
+		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line)-2)) )
 		{
-			if( hal_usartWriteChar(data) == ERR_HAL_USART_TX_BUFFER_FULL ) { break; }
+			line[i++]=(char)data;
 		}
-		hal_usartSendTXBuffer();
+		line[i++] = '\n';
+		line[i] = 0;
+
+		msgWritreText(scli_msg_channel, line, MSG_TO_USART);
+
 	}
 }

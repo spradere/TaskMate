@@ -30,6 +30,8 @@
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
 
+void msgProcess(void);
+
 void msg(void)
 {
 	// init channels
@@ -40,25 +42,33 @@ void msg(void)
 	}
 
 	// run
+	hal_usartWriteString("[msg] stating message server\n");
+	hal_usartSendTXBuffer();
 
-	uint8_t channel;
+	uint8_t chan;
 
-	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(channel, "[msg server] : test USART1 \n", MSG_TO_USART1);
-	}
-
-	if( msgRequestChannel(&channel) == ERR_NO_ERROR )
-	{
-		msgWritreText(channel, "\3refactor runlevel 3", MSG_TO_LCD);
+		msgWritreText(chan, "[msg] canal test to USART\n", MSG_TO_USART);
 	}
 
 	msgProcess();
+	msgFreeChannel(chan);
+
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
+	{
+		msgWritreText(chan, "\1msg server test LCD", MSG_TO_LCD);
+	}
+
+	msgProcess();
+	msgFreeChannel(chan);
+
 
 	while( 1 )
 	{
-		sysCallSetThreadRTC(10);
+		sysCallSetThreadRTC(100);
 		while( sysCallGetThreadRTC() > 0 ) { sysCallYieldHand(); };
+	msgProcess();
 	}
 }
 
@@ -66,9 +76,9 @@ error_codes_t msgRequestChannel(uint8_t *channel)
 {
 	for( uint8_t i = 0; i < MSG_CHANNELS_MAX; i++ )
 	{
-		if( (channels[i].status & (1 << MSG_FLAG_IN_USE)) == 0 )
+		if( (channels[i].status & (uint8_t)(1u << MSG_FLAG_IN_USE)) == 0 )
 		{
-			channels[i].status |= (1 << MSG_FLAG_IN_USE);
+			channels[i].status |= (uint8_t)(1u << MSG_FLAG_IN_USE);
 			*channel = i;
 			return ERR_NO_ERROR;
 		}
@@ -76,11 +86,16 @@ error_codes_t msgRequestChannel(uint8_t *channel)
 	return ERR_MSG_OUT_OF_FREE_CHANNEL;
 }
 
+void msgFreeChannel(uint8_t channel)
+{
+	channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_IN_USE);
+}
+
 void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
 	strncpy(channels[channel].text, MSG_SIZE_MAX, msg);
 
-	channels[channel].status &= (uint8_t)(~(1u << MSG_TO_MASK));
+	channels[channel].status &= (uint8_t)~MSG_TO_MASK;
 	channels[channel].status |= dest;
 	channels[channel].status |= (uint8_t)(1u << MSG_FLAG_SEND);
 }
@@ -91,13 +106,14 @@ void msgProcess(void)
 	{
 		if( (channels[channel].status & (1 << MSG_FLAG_SEND)) != 0 )
 		{
+			channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
 			switch( channels[channel].status & MSG_TO_MASK )
 			{
 				case MSG_TO_LCD:
 
 					hal_lcdSetCursor((uint8_t)channels[channel].text[0], 0);
-					// Zap escape code for LCD line select
 					uint8_t i_src, i_dest = 0;
+					// i_src = 1 zap escape code for LCD line select
 					for( i_src = 1; channels[channel].text[i_dest] != 0; i_src++ )
 					{
 						channels[channel].text[i_dest++] = channels[channel].text[i_src];
@@ -107,7 +123,7 @@ void msgProcess(void)
 					hal_lcdWriteString(channels[channel].text);
 					break;
 
-				case MSG_TO_USART1:
+				case MSG_TO_USART:
 
 					hal_usartWriteString(channels[channel].text);
 					hal_usartSendTXBuffer();
@@ -117,10 +133,9 @@ void msgProcess(void)
 					break;
 
 				default:
-					hal_usartWriteString("[msg.c 118] error unknow destination\n");
+					hal_usartWriteString("[msg.c:118] error unknow destination\n");
 					hal_usartSendTXBuffer();
 			}
-			channels[channel].status &= (uint8_t)(~(1u << MSG_FLAG_IN_USE));
 		}
 	}
 }

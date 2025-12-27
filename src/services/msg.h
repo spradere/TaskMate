@@ -26,9 +26,9 @@
 
 // bits [2 1 0] is destination
 #define MSG_TO_MASK 0x07
-#define MSG_TO_NULL 0x00
-#define MSG_TO_LCD 0x01
-#define MSG_TO_USART1 0x02
+#define MSG_TO_NULL 0
+#define MSG_TO_LCD 1
+#define MSG_TO_USART 2
 
 #define MSG_FLAG_IN_USE 3
 #define MSG_FLAG_SEND 4
@@ -47,7 +47,7 @@ void msg(void);
 
 error_codes_t msgRequestChannel(uint8_t *channel_id);
 void msgWritreText(uint8_t channel_id, const char *msg, uint8_t dest);
+void msgFreeChannel(uint8_t channel);
 
-void msgProcess(void);
 
 #endif

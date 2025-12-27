@@ -109,7 +109,6 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 			{
 				writeRunlevelAlloc(data_base, file_tmp.stream);
 			}
-
 		}
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
@@ -145,10 +144,10 @@ static void writeRunlevelAlloc(modules_database_t *data_base, FILE *file)
 
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(file, "\tuint16_t level%i[RUN_LEVEL%i_THREADS_COUNT + 1];\n", i, i);
+		fprintf(file, "\tuint8_t level%i[RUN_LEVEL%i_THREADS_COUNT + 1];\n", i, i);
 	}
 
-	fprintf(file, "\tuint16_t *levels[%i];\n", RUN_LEVEL_COUNT);
+	fprintf(file, "\tuint8_t *levels[%i];\n", RUN_LEVEL_COUNT);
 	fprintf(file, "\tuint8_t current;\n");
 	fprintf(file, "\tuint8_t next;\n");
 	fprintf(file, "} run_levels_t;\n\n");
@@ -157,10 +156,10 @@ static void writeRunlevelAlloc(modules_database_t *data_base, FILE *file)
 static void writeModulesCount(modules_database_t *data_base, FILE *file)
 {
 	fprintf(file, "#define MODULES_DRIVER_COUNT %i\n",
-		data_base->modules_type[MODULES_DRIVERS_ID].modules_count);
+			data_base->modules_type[MODULES_DRIVERS_ID].modules_count);
 	fprintf(file, "#define MODULES_THREAD_COUNT %i\n",
-		(data_base->modules_type[MODULES_SERVICES_ID].modules_count +
-		 data_base->modules_type[MODULES_TASKS_ID].modules_count));
+			(data_base->modules_type[MODULES_SERVICES_ID].modules_count +
+			 data_base->modules_type[MODULES_TASKS_ID].modules_count));
 }
 
 static void writeTaget(const target_t *target, FILE *file)
