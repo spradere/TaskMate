@@ -19,7 +19,6 @@
  */
 
 #include "sysCore/runLevel.h"
-#include "sysCore/autoAlloc.h" // get run_levels_t
 
 static run_levels_t to_run;
 
@@ -29,7 +28,7 @@ static run_levels_t to_run;
 void runLevelInit(void)
 {
 	// do not edit code between tag : automatic generated code by autoCode
-	// [autoCode_tag] run levels
+	// [autoCode_tag] run_levels init
 	to_run = (run_levels_t){
 		.level0 = {0},
 		.level1 = {0},

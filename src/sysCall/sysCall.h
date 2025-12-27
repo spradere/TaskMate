@@ -30,7 +30,7 @@ typedef struct
 	const char *board;
 } target_info_t;
 
-void sysCallGetTargetInfo(target_info_t **target);
+void sysCallGetTargetInfo(const target_info_t **target);
 
 void sysCallSetThreadRTC(uint16_t count);
 uint16_t sysCallGetThreadRTC(void);

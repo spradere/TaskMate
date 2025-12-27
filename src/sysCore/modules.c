@@ -19,12 +19,11 @@
  */
 
 #include "sysCore/modules.h"
-#include "sysCore/autoAlloc.h" // get DRIVERS_COUNT & THREADS_COUNT
 
 static struct
 {
-	module_item_driver_t drivers[DRIVERS_COUNT];
-	module_item_thread_t threads[THREADS_COUNT];
+	module_item_driver_t drivers[MODULES_DRIVER_COUNT];
+	module_item_thread_t threads[MODULES_THREAD_COUNT];
 	uint8_t thread_current;
 } modules;
 

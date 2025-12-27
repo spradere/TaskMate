@@ -37,13 +37,13 @@
 #include "parseInitrc.h"
 #include "parseTag.h"
 #include "printModules.h"
-#include "writeAlloc.h"
 #include "writeInclude.h"
 #include "globalError.h"
 #include "fileUtility.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
+static void threadCountLevel(modules_database_t *data_base);
 
 #define AUTOCODE_ARG_COUNT 5
 
@@ -86,11 +86,16 @@ int main(int argn, const char *argv[])
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 
+	// count thread for each level
+	threadCountLevel(&data_base);
+
 	// parse tag and generate code for init
 	parseTag(&data_base, "src/sysCore/initSys.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/modules.h", &errors_catalog, &target);
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
@@ -98,8 +103,6 @@ int main(int argn, const char *argv[])
 
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h",
 				 &target);
-
-	writeAlloc(&data_base, "src/sysCore/autoAlloc.h");
 
 	// print all info about modules
 	filePrintTouch();
@@ -156,5 +159,26 @@ static void checkModulesCount(modules_database_t *data_base)
 					 module_count[i][0], module_count[i][1]);
 			exit(1);
 		}
+	}
+}
+
+static void threadCountLevel(modules_database_t *data_base)
+{
+	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
+	{
+
+		// count thread (services + task) for run level
+		int thread_count = 0;
+
+		for( int i = 1; i <= level; i++ )
+		{
+			thread_count += data_base->run_level_module_count[MODULES_SERVICES_ID][i];
+		}
+		for( int i = 1; i <= level; i++ )
+		{
+			thread_count += data_base->run_level_module_count[MODULES_TASKS_ID][i];
+		}
+
+		data_base->threads_count[level] = thread_count;
 	}
 }

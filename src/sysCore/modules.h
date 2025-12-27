@@ -15,13 +15,18 @@
 /**
  * @file modules.h
  * @brief module data base header
- *
  */
 
 #ifndef MODULES_H
 #define MODULES_H
 
 #include "sysCore/modules_items.h"
+
+// [autoCode_tag] modules count
+#define MODULES_DRIVER_COUNT 6
+#define MODULES_THREAD_COUNT 4
+// [/tag]
+
 
 void moduleThreadSetCurrent(uint8_t n);
 uint8_t moduleThreadGetCurrent(void);
