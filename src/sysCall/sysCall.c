@@ -28,6 +28,20 @@
 
 static uint8_t system_status = 0;
 
+// [autoCode_tag] target name
+const target_info_t target_info =
+{
+.arch = "avr8",
+.mcu = "atmega2560",
+.board = "arduino_mega"
+};
+// [/tag]
+
+void sysCallGetTargetInfo(target_info_t **target)
+{
+	*target = &target_info;
+}
+
 void sysCallSetThreadRTC(uint16_t count)
 {
 	// ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
