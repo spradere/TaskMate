@@ -90,7 +90,7 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/initSys.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCore/TaskMate.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &target);
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
