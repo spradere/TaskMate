@@ -45,13 +45,11 @@ static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
 static void threadCountLevel(modules_database_t *data_base);
 
-#define AUTOCODE_ARG_COUNT 5
-
 int main(int argn, const char *argv[])
 {
 
 	// test command line arguments
-	if( argn != AUTOCODE_ARG_COUNT )
+	if( argn != 5 )
 	{
 		msgError("Bad argn (is %i, not 5) for autoCode\n\tuse autoCode ach mcu board error_file.err", argn);
 		exit(1);

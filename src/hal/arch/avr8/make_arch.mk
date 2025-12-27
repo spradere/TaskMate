@@ -37,7 +37,7 @@ upload: all
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# RAM usage
 	@printf "\nStatic RAM usage : "
-	avr-size -B ${ELF}
+	avr-size -A build/TaskMate.elf
 	@printf "\n"
 	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D

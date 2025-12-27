@@ -42,12 +42,12 @@
 
 typedef struct
 {
-	uint16_t level0[RUN_LEVEL0_THREADS_COUNT + 1];
-	uint16_t level1[RUN_LEVEL1_THREADS_COUNT + 1];
-	uint16_t level2[RUN_LEVEL2_THREADS_COUNT + 1];
-	uint16_t level3[RUN_LEVEL3_THREADS_COUNT + 1];
-	uint16_t level4[RUN_LEVEL4_THREADS_COUNT + 1];
-	uint16_t *levels[5];
+	uint8_t level0[RUN_LEVEL0_THREADS_COUNT + 1];
+	uint8_t level1[RUN_LEVEL1_THREADS_COUNT + 1];
+	uint8_t level2[RUN_LEVEL2_THREADS_COUNT + 1];
+	uint8_t level3[RUN_LEVEL3_THREADS_COUNT + 1];
+	uint8_t level4[RUN_LEVEL4_THREADS_COUNT + 1];
+	uint8_t *levels[5];
 	uint8_t current;
 	uint8_t next;
 } run_levels_t;
