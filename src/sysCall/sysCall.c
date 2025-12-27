@@ -37,10 +37,7 @@ const target_info_t target_info =
 };
 // [/tag]
 
-void sysCallGetTargetInfo(const target_info_t **target)
-{
-	*target = &target_info;
-}
+void sysCallGetTargetInfo(const target_info_t **target) { *target = &target_info; }
 
 void sysCallSetThreadRTC(uint16_t count)
 {
