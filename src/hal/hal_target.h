@@ -14,6 +14,7 @@
 #ifndef HAL_TARGET_H
 #define HAL_TARGET_H
 
+// todo refactor this to delete global variable -> function in sysCall to get target info
 #include "hal/hal_target_type.h"
 extern const target_info_t target;
 

@@ -23,7 +23,7 @@
 
 #include <avr/io.h>
 
-// gpio arduino mega board + LCD4x20 signals
+// gpio arduino mega board + LCD4x20 + ZS-042 RTC signals
 typedef enum
 {
 	GPIO_SIGNAL_INBOARD_LED,

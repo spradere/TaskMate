@@ -36,18 +36,7 @@
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
 #include "libc/stdio.h"
-
-// [autoCode_tag] target name
-#include "hal/hal_target_type.h"
-
-const target_info_t target =
-{
-.arch = "avr8",
-.mcu = "atmega2560",
-.board = "arduino_mega"
-
-};
-// [/tag]
+#include "sysCall/sysCall.h"
 
 int main(void)
 {
@@ -61,7 +50,9 @@ int main(void)
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 
-	snprintf(dest, sizeof(dest), "[boot] target : %s-%s-%s\n", target.arch, target.mcu, target.board);
+	target_info_t *target;
+	sysCallGetTargetInfo(&target);
+	snprintf(dest, sizeof(dest), "[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
 	hal_usartWriteString(dest);
 	hal_usartSendTXBuffer();
 

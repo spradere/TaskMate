@@ -21,7 +21,6 @@
 #define GLOBAL_ERROR_H
 
 #include "autoCode.h"
-#include "fileUtility.h"
 
 #define ERROR_COUNT_MAX 256
 

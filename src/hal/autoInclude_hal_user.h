@@ -19,6 +19,11 @@
 #ifndef AUTOINCLUDE_HAL_USER_H
 #define AUTOINCLUDE_HAL_USER_H
 
+// target define
+#include "hal/arch/avr8/arch_define.h"
+#include "hal/mcu/atmega2560/mcu_define.h"
+#include "hal/board/arduino_mega/board_define.h"
+
 // mcu
 #include "hal/mcu/atmega2560/hal_i2c.h"
 #include "hal/mcu/atmega2560/hal_usart.h"
