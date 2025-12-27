@@ -37,7 +37,7 @@ const target_info_t target_info =
 };
 // [/tag]
 
-void sysCallGetTargetInfo(target_info_t **target)
+void sysCallGetTargetInfo(const target_info_t **target)
 {
 	*target = &target_info;
 }

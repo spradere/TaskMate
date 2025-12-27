@@ -31,7 +31,6 @@
 #include "hal/autoInclude_hal_system_critical.h"
 #include "hal/autoInclude_hal_user.h"
 
-#include "sysCore/autoAlloc.h" // get DRIVERS_CONT
 #include "sysCore/modules.h"
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
@@ -41,24 +40,24 @@
 int main(void)
 {
 	// log start
-	char dest[128];
+	char log[128];
 
 	hal_usartInit();
 	hal_usartStart();
 
-	snprintf(dest, sizeof(dest), "\n\n[%s] Boot ...\n", __FILE__);
-	hal_usartWriteString(dest);
+	snprintf(log, sizeof(log), "\n\n[%s] Boot ...\n", __FILE__);
+	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
-	target_info_t *target;
+	const target_info_t *target;
 	sysCallGetTargetInfo(&target);
-	snprintf(dest, sizeof(dest), "[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
-	hal_usartWriteString(dest);
+	snprintf(log, sizeof(log), "[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
+	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
 	// system static allocation init
-	snprintf(dest, sizeof(dest), "[boot] system static allocation\n");
-	hal_usartWriteString(dest);
+	snprintf(log, sizeof(log), "[boot] system static allocation\n");
+	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
 	initDrivers();
@@ -66,8 +65,8 @@ int main(void)
 	runLevelInit();
 
 	// hal hardware init
-	snprintf(dest, 128, "[boot] hal hardware init\n");
-	hal_usartWriteString(dest);
+	snprintf(log, 128, "[boot] hal hardware init\n");
+	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
 	hal_archInit();
@@ -77,7 +76,7 @@ int main(void)
 	// start driver
 	// todo remove this code when run level is implemented
 
-	for( uint8_t i = 0; i < DRIVERS_COUNT; i++ )
+	for( uint8_t i = 0; i < MODULES_DRIVER_COUNT; i++ )
 	{
 		module_item_driver_t *mod_d = moduleDriverGetPointer(i);
 		(*(mod_d->init))();
@@ -98,14 +97,14 @@ int main(void)
 	hal_ZS_042Write(&t);
 	hal_ZS_042Read(&t);
 
-	snprintf(dest, sizeof(dest), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours,
+	snprintf(log, sizeof(log), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours,
 			 t.minutes);
-	hal_usartWriteString(dest);
+	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
 	// jump to current thread for first call and start system by enabling INT
-	snprintf(dest, sizeof(dest), "[boot] start round-robin scheduler\n");
-	hal_usartWriteString(dest);
+	snprintf(log, sizeof(log), "[boot] start round-robin scheduler\n");
+	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
 	moduleThreadSetCurrent(0);
