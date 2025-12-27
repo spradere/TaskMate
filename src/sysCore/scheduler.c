@@ -22,7 +22,6 @@
 #include <stdint.h>
 #include "hal/autoInclude_hal_system_critical.h"
 #include "hal/autoInclude_hal_user.h"
-#include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
 #include "sysCall/sysCall.h"
 #include "sysCall/gpio.h"
@@ -46,7 +45,7 @@ void scheduler(void)
 
 	// switch thread
 	uint8_t current = moduleThreadGetCurrent();
-	if( ++current == THREADS_COUNT ) { moduleThreadSetCurrent(0); }
+	if( ++current == MODULES_THREAD_COUNT ) { moduleThreadSetCurrent(0); }
 	else { moduleThreadSetCurrent(current); }
 
 	// I'm alive blink in board led

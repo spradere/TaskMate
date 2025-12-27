@@ -20,7 +20,6 @@
  */
 
 #include "sysCore/realTimeClock.h"
-#include "sysCore/autoAlloc.h" // get THREADS_COUNT
 #include "sysCore/modules.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -31,7 +30,7 @@ void realTimeClock(void)
 {
 	// RTC decrement
 
-	for( uint8_t i = 0; i < THREADS_COUNT; i++ )
+	for( uint8_t i = 0; i < MODULES_THREAD_COUNT; i++ )
 	{
 		module_item_thread_t *mod_t = moduleThreadGetPointer(i);
 		if( mod_t->real_time_counter > 0 ) { mod_t->real_time_counter--; }
