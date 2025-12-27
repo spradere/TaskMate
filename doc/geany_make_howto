@@ -1,0 +1,11 @@
+open a file a a given line :
+	geany +NUM_LINE file.c
+
+using ~/bin/go select/paste error from compiler output
+	go path/file.c:48
+
+open all files
+	geany $(find . -type f -name '*.h')
+
+display a make variable
+	make -V VAR_NAME

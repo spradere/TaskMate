@@ -123,12 +123,12 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 static void writeTaget(const target_t *target, FILE *file)
 {
 	// write target name
-	fprintf(file, "#include \"hal/hal_target_type.h\"\n\n");
-	fprintf(file, "const target_info_t target =\n");
+	//fprintf(file, "#include \"hal/hal_target_type.h\"\n\n");
+	fprintf(file, "const target_info_t target_info =\n");
 	fprintf(file, "{\n");
 	fprintf(file, ".arch = \"%s\",\n", target->arch_name);
 	fprintf(file, ".mcu = \"%s\",\n", target->mcu_name);
-	fprintf(file, ".board = \"%s\"\n\n", target->board_name);
+	fprintf(file, ".board = \"%s\"\n", target->board_name);
 	fprintf(file, "};\n");
 }
 

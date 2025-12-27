@@ -23,6 +23,15 @@
 
 #include <stdint.h>
 
+typedef struct
+{
+	const char *arch;
+	const char *mcu;
+	const char *board;
+} target_info_t;
+
+void sysCallGetTargetInfo(target_info_t **target);
+
 void sysCallSetThreadRTC(uint16_t count);
 uint16_t sysCallGetThreadRTC(void);
 
