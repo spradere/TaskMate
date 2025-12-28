@@ -22,13 +22,16 @@
 #include "hal/mcu/atmega2560/mcu_define.h"
 
 // Circular buffers
-// allways use a power of 2 for buffer size to avoid use of modulo
+// allways use a power of two for buffer size to avoid use of modulo
 #define HAL_USART_BUFFER_SIZE 128
+
+_Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
+			   "HAL_USART_BUFFER_SIZE must be a power of two");
 
 #define CB_MASK (HAL_USART_BUFFER_SIZE - 1)
 #define CB_NEXT(index) (((index) + 1) & CB_MASK)
-#define CB_FULL(head,tail) (CB_NEXT(head) == (tail))
-#define CB_EMPTY(head,tail) ((head) == (tail))
+#define CB_FULL(head, tail) (CB_NEXT(head) == (tail))
+#define CB_EMPTY(head, tail) ((head) == (tail))
 
 static volatile uint8_t buffer_rx[HAL_USART_BUFFER_SIZE];
 static volatile uint8_t buffer_tx[HAL_USART_BUFFER_SIZE];
@@ -72,7 +75,7 @@ ISR(USART1_RX_vect)
 // Read a character from Rx buffer (non-blocking)
 error_codes_t hal_usartRead(uint8_t *data)
 {
-	if( CB_EMPTY(buffer_rx_head,buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
+	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 
 	*data = buffer_rx[buffer_rx_tail];
 	buffer_rx_tail = CB_NEXT(buffer_rx_tail);
@@ -125,7 +128,10 @@ error_codes_t hal_usartWriteString(const char *str)
 {
 	while( *str )
 	{
-		if( hal_usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL ) { return ERR_HAL_USART_TX_BUFFER_FULL; };
+		if( hal_usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL )
+		{
+			return ERR_HAL_USART_TX_BUFFER_FULL;
+		};
 	}
 	return ERR_NO_ERROR;
 }

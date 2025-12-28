@@ -94,8 +94,8 @@ int main(void)
 	t.weekday = 3;
 	t.year = 25;
 
-	//hal_ZS_042Write(&t);
-	//hal_ZS_042Read(&t);
+	// hal_ZS_042Write(&t);
+	// hal_ZS_042Read(&t);
 
 	snprintf(log, sizeof(log), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
 	hal_usartWriteString(log);
