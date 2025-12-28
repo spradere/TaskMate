@@ -5,3 +5,5 @@
 - non-ASM statement in naked function is not supported
 - #define -> typedef enum
 - libc/snprintf() module memory size 0x270 is too high
+- setBit clearBit function / macro ?
+- circulars buffers usart
