@@ -93,6 +93,19 @@ void msgFreeChannel(uint8_t channel)
 
 void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
+	// todo wait here MSG_FLAG_SEND to don't overwrite sessage
+	//char debug[64];
+	//uint8_t flag = channels[channel].status & (1 << MSG_FLAG_SEND);
+	//snprintf(debug,64,"[msg:write] debug satus=%i flag=<%i>\n",channels[channel].status, flag );
+
+	//hal_usartWriteString(debug);
+	//hal_usartSendTXBuffer();
+
+	while( (channels[channel].status & ((uint8_t)(1u << MSG_FLAG_SEND))) == MSG_FLAG_SEND )
+	{
+		sysCallYieldHand();
+	}
+
 	strncpy(channels[channel].text, MSG_SIZE_MAX, msg);
 
 	channels[channel].status &= (uint8_t)~MSG_TO_MASK;
@@ -106,7 +119,6 @@ void msgProcess(void)
 	{
 		if( (channels[channel].status & (1 << MSG_FLAG_SEND)) != 0 )
 		{
-			channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
 			switch( channels[channel].status & MSG_TO_MASK )
 			{
 				case MSG_TO_LCD:
@@ -127,6 +139,8 @@ void msgProcess(void)
 
 					hal_usartWriteString(channels[channel].text);
 					hal_usartSendTXBuffer();
+					// todo wait usart buffer empty
+					channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
 					break;
 
 				case MSG_TO_NULL:
@@ -136,6 +150,8 @@ void msgProcess(void)
 					hal_usartWriteString("[msg.c:118] error unknow destination\n");
 					hal_usartSendTXBuffer();
 			}
+		// todo wait usart buffer empty
+		channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
 		}
 	}
 }

@@ -22,7 +22,13 @@
 #include "hal/mcu/atmega2560/mcu_define.h"
 
 // Circular buffers
+// allways use a power of 2 for buffer size to avoid use of modulo
 #define HAL_USART_BUFFER_SIZE 128
+
+#define CB_MASK (HAL_USART_BUFFER_SIZE - 1)
+#define CB_NEXT(index) (((index) + 1) & CB_MASK)
+#define CB_FULL(head,tail) (CB_NEXT(head) == (tail))
+#define CB_EMPTY(head,tail) ((head) == (tail))
 
 static volatile uint8_t buffer_rx[HAL_USART_BUFFER_SIZE];
 static volatile uint8_t buffer_tx[HAL_USART_BUFFER_SIZE];
@@ -53,31 +59,31 @@ void hal_usartStop(void)
 // USART1 Rx Interrupt Handler (Triggered when data is received)
 ISR(USART1_RX_vect)
 {
-	uint8_t next_head = (uint8_t)((buffer_rx_head + 1) % HAL_USART_BUFFER_SIZE);
+	uint8_t next_head = CB_NEXT(buffer_rx_head);
 	uint8_t data = UDR1; // Read the received byte
 
-	if( next_head != buffer_rx_tail ) // Check for buffer overflow
+	if( !CB_FULL(buffer_rx_head, buffer_rx_tail) )
 	{
 		buffer_rx[buffer_rx_head] = data;
-		buffer_rx_head = next_head; // Move head pointer forward
+		buffer_rx_head = next_head;
 	}
 }
 
 // Read a character from Rx buffer (non-blocking)
 error_codes_t hal_usartRead(uint8_t *data)
 {
-	if( buffer_rx_tail == buffer_rx_head ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
+	if( CB_EMPTY(buffer_rx_head,buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 
-	*data = buffer_rx[buffer_rx_tail]; // Read from buffer
-	buffer_rx_tail = (uint8_t)((buffer_rx_tail + 1) % HAL_USART_BUFFER_SIZE); // Move tail forward
+	*data = buffer_rx[buffer_rx_tail];
+	buffer_rx_tail = CB_NEXT(buffer_rx_tail);
 	return ERR_NO_ERROR;
 }
 
 // Write a character to Tx buffer
 error_codes_t hal_usartWriteChar(uint8_t data)
 {
-	uint8_t next_head = (uint8_t)((buffer_tx_head + 1) % HAL_USART_BUFFER_SIZE);
-	if( next_head == buffer_tx_tail ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
+	uint8_t next_head = CB_NEXT(buffer_tx_head);
+	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
 
 	buffer_tx[buffer_tx_head] = data;
 	buffer_tx_head = next_head;
@@ -87,19 +93,30 @@ error_codes_t hal_usartWriteChar(uint8_t data)
 // send Tx buffer to usart
 void hal_usartSendTXBuffer(void)
 {
-	while( buffer_tx_tail != buffer_tx_head ) // test if tx buffer empty
+	while( !CB_EMPTY(buffer_tx_head, buffer_tx_tail) )
 	{
 		while( !(UCSR1A & (1 << UDRE1)) ); // Wait for empty transmit buffer
 		UDR1 = buffer_tx[buffer_tx_tail]; // Put data into buffer, sends the data
 
-		buffer_tx_tail = (uint8_t)((buffer_tx_tail + 1) % HAL_USART_BUFFER_SIZE); // Move tail forward
+		buffer_tx_tail = CB_NEXT(buffer_tx_tail);
 	}
 }
 
 // test if Rx buffer is empty
 error_codes_t hal_usartTestBufferRx(void)
 {
-	if( buffer_rx_tail == buffer_rx_head ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
+	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
+	if( CB_FULL(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
+
+	return ERR_NO_ERROR;
+}
+
+// test if Tx buffer is empty
+error_codes_t hal_usartTestBufferTx(void)
+{
+	if( CB_EMPTY(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
+	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
+
 	return ERR_NO_ERROR;
 }
 
@@ -108,7 +125,7 @@ error_codes_t hal_usartWriteString(const char *str)
 {
 	while( *str )
 	{
-		if( hal_usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL ) { break; };
+		if( hal_usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL ) { return ERR_HAL_USART_TX_BUFFER_FULL; };
 	}
 	return ERR_NO_ERROR;
 }

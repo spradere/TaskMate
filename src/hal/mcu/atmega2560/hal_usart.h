@@ -31,6 +31,7 @@ error_codes_t hal_usartRead(uint8_t *data);
 error_codes_t hal_usartWriteChar(uint8_t data);
 void hal_usartSendTXBuffer(void);
 error_codes_t hal_usartTestBufferRx(void);
+error_codes_t hal_usartTestBufferTx(void);
 error_codes_t hal_usartWriteString(const char *str);
 
 #endif

@@ -22,17 +22,19 @@
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
-static void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size, uint32_t value, uint8_t base)
+static void baseConvert(char *buff_data, uint8_t *buff_index, size_t buff_size, uint16_t value, uint8_t base)
 {
-	static const char digits[] = "0123456789abcdef";
+	const char digits[] = "0123456789abcdef";
 
 	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
+	if(value == 0) {buff_data[(*buff_index)++] = '0'; return;}
+
 	// reverse order convert
-	while( value != 0 && pos < SNPRINFT_BUFF_TEMP_SIZE )
+	while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
 	{
-		uint32_t data = (uint32_t)(value % base);
+		uint16_t data = (value % base);
 		value /= base;
 		tmp[pos++] = digits[data];
 	}
@@ -50,7 +52,7 @@ static void baseConvert(char *buff_data, uint16_t *buff_index, size_t buff_size,
 
 void snprintf(char *buff, size_t buff_size, const char *format, ...)
 {
-	uint16_t buff_index = 0;
+	uint8_t buff_index = 0;
 
 	va_list args;
 	va_start(args, format);
@@ -84,7 +86,7 @@ void snprintf(char *buff, size_t buff_size, const char *format, ...)
 				case 'x':
 				case 'b':
 				{
-					uint32_t value = va_arg(args, uint32_t);
+					uint16_t value = va_arg(args, uint16_t);
 					uint8_t base;
 
 					switch( *format )
@@ -102,7 +104,6 @@ void snprintf(char *buff, size_t buff_size, const char *format, ...)
 							base = 10;
 							break;
 					}
-
 					baseConvert(buff, &buff_index, buff_size, value, base);
 					break;
 				}
