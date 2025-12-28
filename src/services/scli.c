@@ -26,7 +26,6 @@
 
 uint8_t scli_msg_channel;
 
-
 void scli(void)
 {
 	if( msgRequestChannel(&scli_msg_channel) == ERR_NO_ERROR )
@@ -51,19 +50,17 @@ void scliEcho(void)
 
 	if( hal_usartTestBufferRx() != ERR_HAL_USART_RX_BUFFER_EMPTY )
 	{
-		i=0;
+		i = 0;
 		//msgWritreText(scli_msg_channel, "[scli] recive :", MSG_TO_USART);
-		// todo add a test to ensure message was proceed
-		// or snprintf return writed charter number
+		//  todo add a test to ensure message was proceed
+		//  or snprintf return writed charter number
 
-		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line)-2)) )
+		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line) - 1)) )
 		{
-			line[i++]=(char)data;
+			line[i++] = (char)data;
 		}
-		line[i++] = '\n';
 		line[i] = 0;
 
 		msgWritreText(scli_msg_channel, line, MSG_TO_USART);
-
 	}
 }

@@ -4,6 +4,6 @@
 - hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit acces to SFR registers
 - non-ASM statement in naked function is not supported
 - #define -> typedef enum
-- libc/snprintf() module memory size 0x270 is too high
+- libc/snprintf() module memory size 0x270 is too high - atomicity issues
 - setBit clearBit function / macro ?
 - circulars buffers usart

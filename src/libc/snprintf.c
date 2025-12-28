@@ -29,7 +29,11 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, size_t buff_size, 
 	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
-	if(value == 0) {buff_data[(*buff_index)++] = '0'; return;}
+	if( value == 0 )
+	{
+		buff_data[(*buff_index)++] = '0';
+		return;
+	}
 
 	// reverse order convert
 	while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
