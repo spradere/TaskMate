@@ -92,10 +92,10 @@ TaskMate 0.23
 	refactor all .h
 
 TaskMate 0.24
-	
+
 	refactor colors in makefiles
 	add automated help taget with help text
 	move target info to sysCall
 	refactor run level
 	upgrade message server
-
+	refactor hal_usart with macro for circular buffer handling
