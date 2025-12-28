@@ -45,7 +45,7 @@ void msg(void)
 	hal_usartWriteString("[msg] stating message server\n");
 	hal_usartSendTXBuffer();
 
-	uint8_t chan;
+	/*uint8_t chan;
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
@@ -61,14 +61,13 @@ void msg(void)
 	}
 
 	msgProcess();
-	msgFreeChannel(chan);
-
+	msgFreeChannel(chan);*/
 
 	while( 1 )
 	{
 		sysCallSetThreadRTC(100);
 		while( sysCallGetThreadRTC() > 0 ) { sysCallYieldHand(); };
-	msgProcess();
+		msgProcess();
 	}
 }
 
@@ -86,10 +85,7 @@ error_codes_t msgRequestChannel(uint8_t *channel)
 	return ERR_MSG_OUT_OF_FREE_CHANNEL;
 }
 
-void msgFreeChannel(uint8_t channel)
-{
-	channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_IN_USE);
-}
+void msgFreeChannel(uint8_t channel) { channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_IN_USE); }
 
 void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
@@ -101,10 +97,17 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 	//hal_usartWriteString(debug);
 	//hal_usartSendTXBuffer();
 
-	while( (channels[channel].status & ((uint8_t)(1u << MSG_FLAG_SEND))) == MSG_FLAG_SEND )
+	/*if(flag == MSG_FLAG_SEND)
 	{
-		sysCallYieldHand();
-	}
+		do
+		{
+			//sysCallYieldHand();
+			flag = channels[channel].status & (1 << MSG_FLAG_SEND);
+			//hal_usartWriteChar('#');
+			//hal_usartSendTXBuffer();
+		}
+		while(flag == MSG_FLAG_SEND);
+	}*/
 
 	strncpy(channels[channel].text, MSG_SIZE_MAX, msg);
 
@@ -139,7 +142,6 @@ void msgProcess(void)
 
 					hal_usartWriteString(channels[channel].text);
 					hal_usartSendTXBuffer();
-					// todo wait usart buffer empty
 					channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
 					break;
 
@@ -150,8 +152,6 @@ void msgProcess(void)
 					hal_usartWriteString("[msg.c:118] error unknow destination\n");
 					hal_usartSendTXBuffer();
 			}
-		// todo wait usart buffer empty
-		channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
 		}
 	}
 }
