@@ -22,6 +22,25 @@
 static int file_updated = 0;
 static int file_unchanged = 0;
 
+
+int fileGetToken(file_t *file)
+{
+	int i=0;
+
+	char c = (char)fgetc(file->stream);
+
+	while( (i < (FILE_TOKEN_SIZE-1)) && (c != ' ') )
+	{
+		printf("debug %i<%c>\n",i,c);
+		file->token[i++]= c;
+		c = (char)fgetc(file->stream);
+		if((feof(file->stream) != 0)){file->token[i]=0; return 0;}
+	}
+	file->token[i]=0;
+	return 1;
+}
+
+
 void filePrintTouch(void)
 {
 	msgInfo("*****************************************************");
