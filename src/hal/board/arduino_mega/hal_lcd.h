@@ -17,6 +17,8 @@
  *
  */
 
+// @hal_user
+
 #ifndef HAL_LCD_H
 #define HAL_LCD_H
 

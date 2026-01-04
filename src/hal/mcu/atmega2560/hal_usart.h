@@ -17,6 +17,8 @@
  *
  */
 
+// @hal_user
+
 #ifndef HAL_USART_H
 #define HAL_USART_H
 

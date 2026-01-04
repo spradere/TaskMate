@@ -28,9 +28,7 @@
 _Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
 			   "HAL_USART_BUFFER_SIZE must be a power of two");
 
-_Static_assert((HAL_USART_BUFFER_SIZE <= 256),
-			   "HAL_USART_BUFFER_SIZE must be 256 max");
-
+_Static_assert((HAL_USART_BUFFER_SIZE <= 256), "HAL_USART_BUFFER_SIZE must be 256 max");
 
 #define CB_MASK (HAL_USART_BUFFER_SIZE - 1)
 #define CB_NEXT(index) (((index) + 1) & CB_MASK)
