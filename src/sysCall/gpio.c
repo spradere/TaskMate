@@ -17,7 +17,7 @@
  */
 
 #include "sysCall/gpio.h"
-#include "hal/autoInclude_hal_user.h"
+#include "hal/auto_hal_user.h"
 
 static gpio_signal_item_t gpio_signals_table[GPIO_SIGNAL_COUNT];
 

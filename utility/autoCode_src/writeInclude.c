@@ -29,11 +29,11 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	file_t file_include;
 	fileInit(&file_include);
 	file_include.name = (char *)file_name;
-	fileOpen(&file_include, "r", __FILE__);
+	fileOpen(&file_include, "r", __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
-	fileMakeTmp(file_name, &file_tmp, __FILE__);
+	fileMakeTmp(file_name, &file_tmp, __FILE__, __LINE__);
 
 	// generate multiple include guard name
 	char cmd[BYTE_INDEX];
@@ -82,7 +82,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fprintf(file_tmp.stream, "\n#endif\n");
 			break;
 
-		case INCLUDE_HAL_SYSTEM_CRITICAL_PART:
+		case INCLUDE_HAL_SYSTEM_PART:
 			fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 			fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
@@ -98,14 +98,13 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_threadContextInit.h\"\n", target->arch_name);
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_timerScheduler.h\"\n", target->mcu_name);
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_timerRTC.h\"\n\n", target->mcu_name);
 
 			fprintf(file_tmp.stream, "\n#endif\n");
 			break;
 
-		case INCLUDE_THREAD_PART:
+		case INCLUDE_THREAD_LIST:
 			fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 			fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
@@ -132,6 +131,6 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	}
 	fileCmpReplace(&file_include, &file_tmp);
 
-	fileClose(&file_include, __FILE__);
-	fileClose(&file_tmp, __FILE__);
+	fileClose(&file_include, __FILE__, __LINE__);
+	fileClose(&file_tmp, __FILE__, __LINE__);
 }

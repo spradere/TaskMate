@@ -29,16 +29,16 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
-	fileOpen(&file_src, "r", __FILE__);
+	fileOpen(&file_src, "r", __FILE__, __LINE__);
 
 	file_t file_dest;
 	fileInit(&file_dest);
 	file_dest.name = (char *)dest_name;
-	fileOpen(&file_dest, "r", __FILE__);
+	fileOpen(&file_dest, "r", __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
-	fileMakeTmp(dest_name, &file_tmp, __FILE__);
+	fileMakeTmp(dest_name, &file_tmp, __FILE__, __LINE__);
 
 	// write statements
 	printLicenceHeader(file_tmp.stream);
@@ -131,7 +131,7 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 	fileCmpReplace(&file_dest, &file_tmp);
 
-	fileClose(&file_src, __FILE__);
-	fileClose(&file_dest, __FILE__);
-	fileClose(&file_tmp, __FILE__);
+	fileClose(&file_src, __FILE__, __LINE__);
+	fileClose(&file_dest, __FILE__, __LINE__);
+	fileClose(&file_tmp, __FILE__, __LINE__);
 }

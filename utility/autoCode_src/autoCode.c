@@ -96,10 +96,11 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/modules.h", &errors_catalog, &target);
 
 	// write headers
-	writeInclude(&data_base, INCLUDE_THREAD_PART, "src/sysCore/autoInclude_threads.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/autoInclude_hal_user.h", &target);
+	writeInclude(&data_base, INCLUDE_THREAD_LIST, "src/sysCore/auto_threads_list.h", &target);
 
-	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_CRITICAL_PART, "src/hal/autoInclude_hal_system_critical.h",
+	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_PART, "src/hal/auto_hal_system.h", &target);
+
+	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h",
 				 &target);
 
 	// print all info about modules

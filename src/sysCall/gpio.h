@@ -20,7 +20,7 @@
 #define GPIO_H
 
 #include <stdbool.h>
-#include "hal/autoInclude_hal_system_critical.h" // get : gpio_port_index_t gpio_signal_t
+#include "hal/auto_hal_system.h" // get : gpio_port_index_t gpio_signal_t
 
 typedef enum
 {
