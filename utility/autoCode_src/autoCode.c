@@ -100,8 +100,7 @@ int main(int argn, const char *argv[])
 
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_PART, "src/hal/auto_hal_system.h", &target);
 
-	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h",
-				 &target);
+	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h", &target);
 
 	// print all info about modules
 	filePrintTouch();

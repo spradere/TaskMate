@@ -59,6 +59,10 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	// write code
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
+
+	file_t file_hal;
+	int ret;
+
 	switch( type )
 	{
 		case INCLUDE_HAL_USER_PART:
@@ -69,6 +73,16 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
 			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
+
+			fileInit(&file_hal);
+			file_hal.name = "build/files_hal_user";
+			fileOpen(&file_hal, "r", __FILE__, __LINE__);
+
+			do
+			{
+				ret = fileGetToken(&file_hal);
+				fprintf(file_tmp.stream, "// #include \"%s\"\n",file_hal.token);
+			}while( ret != 0);
 
 			fprintf(file_tmp.stream, "// mcu\n");
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_i2c.h\"\n", target->mcu_name);
@@ -95,6 +109,16 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
 			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
+
+			fileInit(&file_hal);
+			file_hal.name = "build/files_hal_system";
+			fileOpen(&file_hal, "r", __FILE__, __LINE__);
+
+			do
+			{
+				ret = fileGetToken(&file_hal);
+				fprintf(file_tmp.stream, "// #include \"%s\"\n",file_hal.token);
+			}while( ret != 0);
 
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);

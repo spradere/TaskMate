@@ -42,8 +42,8 @@ void msg(void)
 	}
 
 	// run
-	//hal_usartWriteString("[msg] stating message server\n");
-	//hal_usartSendTXBuffer();
+	// hal_usartWriteString("[msg] stating message server\n");
+	// hal_usartSendTXBuffer();
 
 	uint8_t chan;
 
@@ -55,10 +55,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
-	{
-		msgWritreText(chan, "\1refactor .h 20", MSG_TO_LCD);
-	}
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1refactor .h 20", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);

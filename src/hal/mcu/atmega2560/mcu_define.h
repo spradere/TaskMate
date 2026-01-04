@@ -21,7 +21,6 @@
 #ifndef MCU_DEFINE_H
 #define MCU_DEFINE_H
 
-
 // gpio atmega2560 ports
 typedef enum
 {

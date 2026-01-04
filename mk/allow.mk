@@ -33,7 +33,7 @@ CFLAGS_${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 
-GREP_PATTERN1 = hal/autoInclude_hal_system_critical.h
+GREP_PATTERN1 = hal/auto_hal_system.h
 GREP_ALLOWED1 = src/hal/mcu/${MCU}/hal_timerScheduler.c \
 	src/sysCore/TaskMate.c \
 	src/sysCore/scheduler.c \
