@@ -21,14 +21,16 @@
 #include "hal/mcu/atmega2560/hal_i2c.h"
 #include <avr/io.h>
 #include <util/twi.h>
-#include "hal/autoInclude_hal_user.h"
+//#include "hal/autoInclude_hal_user.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
+#define HAL_I2C_TWBR_VALUE ((F_CPU / HAL_I2C_FREQ - 16) / 2)
+
 void hal_i2cInit(void)
 {
-	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
+	TWBR = (uint8_t)HAL_I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Prescaler = 1
 }
 

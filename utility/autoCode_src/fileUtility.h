@@ -32,10 +32,10 @@ typedef struct
 
 void filePrintTouch(void);
 void fileCmpReplace(file_t *file_old, file_t *file_new);
-void fileClose(file_t *file, const char *caller);
+void fileClose(file_t *file, const char *caller, const int line);
 void fileInit(file_t *file);
-void fileOpen( file_t *file, const char *mode, const char *caller);
-void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller);
+void fileOpen( file_t *file, const char *mode, const char *caller, const int line);
+void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, const int line);
 void printLicenceHeader(FILE *file);
 void printWarningHeader(FILE *file);
 

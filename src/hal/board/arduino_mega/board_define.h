@@ -21,8 +21,6 @@
 #ifndef BOARD_DEFINE_H
 #define BOARD_DEFINE_H
 
-#include <avr/io.h>
-
 // gpio arduino mega board + LCD4x20 + ZS-042 RTC signals
 typedef enum
 {

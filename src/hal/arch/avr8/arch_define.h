@@ -23,6 +23,8 @@
 
 #include <stdint.h>
 
+#define AVR8_REGISTER_COUNT 32 // from R0 to R31
+
 // stack related size
 typedef uint8_t stack_word_t;
 

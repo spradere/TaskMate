@@ -69,14 +69,14 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 	}
 }
 
-void fileClose(file_t *file, const char *caller)
+void fileClose(file_t *file, const char *caller, const int line)
 {
 	if( file->stream_open )
 	{
 		int err = fclose(file->stream);
 		if( err != 0 )
 		{
-			msgError("from %s close file <%s>", caller, file->name);
+			msgError("from [%s:%i] close file <%s>", caller, line, file->name);
 			exit(1);
 		}
 		if( file->name_alloc ) { free(file->name); }
@@ -92,29 +92,29 @@ void fileInit(file_t *file)
 	file->stream_open = false;
 }
 
-void fileOpen(file_t *file, const char *mode, const char *caller)
+void fileOpen(file_t *file, const char *mode, const char *caller, const int line)
 {
 	if( file->name == NULL )
 	{
-		msgError("from %s NULL name ", caller);
+		msgError("from [%s:%i] NULL name ", caller, line);
 		exit(1);
 	}
 
 	file->stream = fopen(file->name, mode);
 	if( file->stream == NULL )
 	{
-		msgError("from %s opening file <%s>", caller, file->name);
+		msgError("from [%s:%i] opening file <%s>", caller, line, file->name);
 		exit(1);
 	}
 	file->stream_open = true;
 }
 
-void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller)
+void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, const int line)
 {
 	file_tmp->name = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
 	if( file_tmp->name == NULL )
 	{
-		msgError("fromm %s malloc <%s>", caller, file_src_name);
+		msgError("from [%s:%i] malloc <%s>", caller, line, file_src_name);
 		exit(1);
 	}
 	file_tmp->name_alloc = true;
@@ -123,7 +123,7 @@ void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller
 	file_tmp->stream = fopen(file_tmp->name, "w+");
 	if( file_tmp->stream == NULL )
 	{
-		msgError("from %s creating file <%s>", caller, file_tmp->name);
+		msgError("from [%s:%i] creating file <%s>", caller, line, file_tmp->name);
 		exit(1);
 	}
 	file_tmp->stream_open = true;

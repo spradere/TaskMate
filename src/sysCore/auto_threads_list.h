@@ -16,8 +16,8 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTOINCLUDE_THREADS_H
-#define AUTOINCLUDE_THREADS_H
+#ifndef AUTO_THREADS_LIST_H
+#define AUTO_THREADS_LIST_H
 
 #include "services/scli.h"
 #include "services/msg.h"

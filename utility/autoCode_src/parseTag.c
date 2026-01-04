@@ -39,11 +39,11 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)file_name;
-	fileOpen(&file_src, "r", __FILE__);
+	fileOpen(&file_src, "r", __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
-	fileMakeTmp(file_src.name, &file_tmp, __FILE__);
+	fileMakeTmp(file_src.name, &file_tmp, __FILE__, __LINE__);
 
 	// read form source
 	int tag_section = 0;
@@ -128,8 +128,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 	fileCmpReplace(&file_src, &file_tmp);
 
-	fileClose(&file_src, __FILE__);
-	fileClose(&file_tmp, __FILE__);
+	fileClose(&file_src, __FILE__, __LINE__);
+	fileClose(&file_tmp, __FILE__, __LINE__);
 }
 
 static void writeRunlevelAlloc(modules_database_t *data_base, FILE *file)
