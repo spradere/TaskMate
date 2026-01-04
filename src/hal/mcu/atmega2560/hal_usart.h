@@ -24,6 +24,8 @@
 #include <stdbool.h>
 #include "sysCall/error.h"
 
+#define HAL_USART_BAUD_RATE 9600
+
 void hal_usartInit(void);
 void hal_usartStart(void);
 void hal_usartStop(void);

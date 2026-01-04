@@ -18,6 +18,6 @@
  *
  */
 
-#include "hal/autoInclude_hal_user.h"
+#include "hal/auto_hal_user.h"
 
 //__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}

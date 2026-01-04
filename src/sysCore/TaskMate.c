@@ -28,9 +28,8 @@
 
 #include <stdint.h>
 
-#include "hal/autoInclude_hal_system_critical.h"
-#include "hal/autoInclude_hal_user.h"
-
+#include "hal/auto_hal_system.h"
+#include "hal/auto_hal_user.h"
 #include "sysCore/modules.h"
 #include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
@@ -65,7 +64,7 @@ int main(void)
 	runLevelInit();
 
 	// hal hardware init
-	snprintf(log, 128, "[boot] hal hardware init\n");
+	snprintf(log, sizeof(log), "[boot] hal hardware init\n");
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 

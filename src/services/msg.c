@@ -25,7 +25,7 @@
 #include "libc/stdio.h"
 
 // Send message to :
-#include "hal/autoInclude_hal_user.h"
+#include "hal/auto_hal_user.h"
 
 // variables
 channel_item_t channels[MSG_CHANNELS_MAX];
@@ -42,10 +42,10 @@ void msg(void)
 	}
 
 	// run
-	hal_usartWriteString("[msg] stating message server\n");
-	hal_usartSendTXBuffer();
+	//hal_usartWriteString("[msg] stating message server\n");
+	//hal_usartSendTXBuffer();
 
-	/*uint8_t chan;
+	uint8_t chan;
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
@@ -57,11 +57,11 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\1msg server test LCD", MSG_TO_LCD);
+		msgWritreText(chan, "\1refactor .h 20", MSG_TO_LCD);
 	}
 
 	msgProcess();
-	msgFreeChannel(chan);*/
+	msgFreeChannel(chan);
 
 	while( 1 )
 	{
@@ -90,12 +90,12 @@ void msgFreeChannel(uint8_t channel) { channels[channel].status &= (uint8_t)~(1u
 void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
 	// todo wait here MSG_FLAG_SEND to don't overwrite sessage
-	//char debug[64];
-	//uint8_t flag = channels[channel].status & (1 << MSG_FLAG_SEND);
-	//snprintf(debug,64,"[msg:write] debug satus=%i flag=<%i>\n",channels[channel].status, flag );
+	// char debug[64];
+	// uint8_t flag = channels[channel].status & (1 << MSG_FLAG_SEND);
+	// snprintf(debug,64,"[msg:write] debug satus=%i flag=<%i>\n",channels[channel].status, flag );
 
-	//hal_usartWriteString(debug);
-	//hal_usartSendTXBuffer();
+	// hal_usartWriteString(debug);
+	// hal_usartSendTXBuffer();
 
 	/*if(flag == MSG_FLAG_SEND)
 	{
@@ -120,7 +120,8 @@ void msgProcess(void)
 {
 	for( uint8_t channel = 0; channel < MSG_CHANNELS_MAX; channel++ )
 	{
-		if( (channels[channel].status & (1 << MSG_FLAG_SEND)) != 0 )
+		if( ((channels[channel].status & (1 << MSG_FLAG_SEND)) != 0) &&
+			((channels[channel].status & (1 << MSG_FLAG_IN_USE)) != 0) )
 		{
 			switch( channels[channel].status & MSG_TO_MASK )
 			{

@@ -19,14 +19,18 @@
 
 #include "hal/mcu/atmega2560/hal_usart.h"
 #include <avr/interrupt.h>
-#include "hal/mcu/atmega2560/mcu_define.h"
+#include "hal/auto_hal_user.h"
 
 // Circular buffers
-// allways use a power of two for buffer size to avoid use of modulo
+// always use a power of two for buffer size to avoid use of modulo
 #define HAL_USART_BUFFER_SIZE 128
 
 _Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
 			   "HAL_USART_BUFFER_SIZE must be a power of two");
+
+_Static_assert((HAL_USART_BUFFER_SIZE <= 256),
+			   "HAL_USART_BUFFER_SIZE must be 256 max");
+
 
 #define CB_MASK (HAL_USART_BUFFER_SIZE - 1)
 #define CB_NEXT(index) (((index) + 1) & CB_MASK)
@@ -105,7 +109,7 @@ void hal_usartSendTXBuffer(void)
 	}
 }
 
-// test if Rx buffer is empty
+// test Rx buffer
 error_codes_t hal_usartTestBufferRx(void)
 {
 	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
@@ -114,7 +118,7 @@ error_codes_t hal_usartTestBufferRx(void)
 	return ERR_NO_ERROR;
 }
 
-// test if Tx buffer is empty
+// test Tx buffer
 error_codes_t hal_usartTestBufferTx(void)
 {
 	if( CB_EMPTY(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
