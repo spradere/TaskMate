@@ -37,7 +37,7 @@ push:
 
 # USB key backup
 backup:
-#@ [global] USB key backup with current tag in directory.
+#@ [global] USB key backup with current git tag in directory.
 	@printf "\n%sBackup to <${USB_DIR}${TASKMATE_DIR}>%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \

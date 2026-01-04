@@ -18,13 +18,11 @@
  *
  */
 
-#include "hal/arch/avr8/hal_threadContextInit.h"
+#include "hal/arch/avr8/hal_context.h"
 #include <avr/io.h>
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
-
-#define AVR_REGISTER_COUNT 32 // from R0 to R31
 
 void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top)
 {
@@ -37,7 +35,7 @@ void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, sta
 	*(sp--) = SREG;
 
 	// Registers R1-R31
-	for( int i = 1; i < AVR_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
+	for( int i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
 
 	*stack_pointer = sp;
 }

@@ -20,9 +20,9 @@
 
 #include "sysCore/initSys.h"
 #include <stdint.h>
-#include "hal/autoInclude_hal_system_critical.h"
-#include "hal/autoInclude_hal_user.h"
-#include "sysCore/autoInclude_threads.h"
+#include "hal/auto_hal_system.h"
+#include "hal/auto_hal_user.h"
+#include "sysCore/auto_threads_list.h"
 #include "sysCore/modules.h"
 
 // NOLINTBEGIN

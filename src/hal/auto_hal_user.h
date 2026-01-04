@@ -16,24 +16,22 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
-#define AUTOINCLUDE_HAL_SYSTEM_CRITICAL_H
+#ifndef AUTO_HAL_USER_H
+#define AUTO_HAL_USER_H
 
 // target define
 #include "hal/arch/avr8/arch_define.h"
 #include "hal/mcu/atmega2560/mcu_define.h"
 #include "hal/board/arduino_mega/board_define.h"
 
-// target init
-#include "hal/arch/avr8/hal_archInit.h"
-#include "hal/mcu/atmega2560/hal_mcuInit.h"
-#include "hal/board/arduino_mega/hal_boardInit.h"
+// mcu
+#include "hal/mcu/atmega2560/hal_i2c.h"
+#include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/mcu/atmega2560/hal_gpio.h"
 
-#include "hal/arch/avr8/hal_stack.h"
-#include "hal/arch/avr8/hal_context.h"
-#include "hal/arch/avr8/hal_threadContextInit.h"
-#include "hal/mcu/atmega2560/hal_timerScheduler.h"
-#include "hal/mcu/atmega2560/hal_timerRTC.h"
+// board
+#include "hal/board/arduino_mega/hal_lcd.h"
+#include "hal/board/arduino_mega/hal_ZS_042.h"
 
 
 #endif

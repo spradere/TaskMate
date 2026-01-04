@@ -22,7 +22,7 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 #include <avr/interrupt.h>
-#include "hal/autoInclude_hal_system_critical.h"
+#include "hal/auto_hal_system.h"
 #include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
 #include "sysCall/sysCall.h"
