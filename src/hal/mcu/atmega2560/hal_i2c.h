@@ -18,6 +18,8 @@
  *
  */
 
+// @hal_user
+
 #ifndef HAL_I2C_H
 #define HAL_I2C_H
 

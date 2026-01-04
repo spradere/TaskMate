@@ -18,6 +18,8 @@
  *
  */
 
+// @hal_system
+
 #ifndef HAL_TIMERSCHEDULER_H
 #define HAL_TIMERSCHEDULER_H
 

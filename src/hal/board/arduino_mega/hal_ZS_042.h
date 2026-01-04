@@ -17,6 +17,8 @@
  *
  */
 
+// @hal_user
+
 #ifndef HAL_ZS_042_H
 #define HAL_ZS_042_H
 

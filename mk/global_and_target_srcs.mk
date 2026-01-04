@@ -53,6 +53,9 @@ AUTOCODE_SRCS_H != find utility/autoCode_src/ -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = build/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 AUTOCODE_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 
+FILES_HAL_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
+FILES_HAL_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
+
 # Initrc files for autocode
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 

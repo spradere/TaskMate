@@ -18,6 +18,8 @@
  *
  */
 
+// @hal_system
+
 #ifndef HAL_TIMERRTC_H
 #define HAL_TIMERRTC_H
 
