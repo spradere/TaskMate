@@ -29,14 +29,10 @@
 #include "hal/mcu/atmega2560/hal_mcuInit.h"
 #include "hal/board/arduino_mega/hal_boardInit.h"
 
-// #include "./src/hal/arch/avr8/hal_context.h"
-// #include "./src/hal/arch/avr8/hal_stack.h"
-// #include "./src/hal/mcu/atmega2560/hal_timerRTC.h"
-// #include "./src/hal/mcu/atmega2560/hal_timerScheduler.h"
-#include "hal/arch/avr8/hal_stack.h"
+// autoInclude hal headers tagged with // @hal_system
 #include "hal/arch/avr8/hal_context.h"
-#include "hal/mcu/atmega2560/hal_timerScheduler.h"
+#include "hal/arch/avr8/hal_stack.h"
 #include "hal/mcu/atmega2560/hal_timerRTC.h"
-
+#include "hal/mcu/atmega2560/hal_timerScheduler.h"
 
 #endif
