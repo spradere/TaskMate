@@ -24,19 +24,11 @@
 #include "hal/mcu/atmega2560/mcu_define.h"
 #include "hal/board/arduino_mega/board_define.h"
 
-// #include "./src/hal/board/arduino_mega/hal_ZS_042.h"
-// #include "./src/hal/board/arduino_mega/hal_lcd.h"
-// #include "./src/hal/mcu/atmega2560/hal_gpio.h"
-// #include "./src/hal/mcu/atmega2560/hal_i2c.h"
-// #include "./src/hal/mcu/atmega2560/hal_usart.h"
-// mcu
+// autoInclude hal headers tagged with // @hal_user
+#include "hal/board/arduino_mega/hal_ZS_042.h"
+#include "hal/board/arduino_mega/hal_lcd.h"
+#include "hal/mcu/atmega2560/hal_gpio.h"
 #include "hal/mcu/atmega2560/hal_i2c.h"
 #include "hal/mcu/atmega2560/hal_usart.h"
-#include "hal/mcu/atmega2560/hal_gpio.h"
-
-// board
-#include "hal/board/arduino_mega/hal_lcd.h"
-#include "hal/board/arduino_mega/hal_ZS_042.h"
-
 
 #endif
