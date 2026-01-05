@@ -72,7 +72,7 @@ ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-
+# todo use colors.mk
 .for index in ${GREP_LIST}
 	@allowed="${GREP_ALLOWED${index}}"; \
 	pattern="${GREP_PATTERN${index}}"; \
@@ -84,10 +84,10 @@ _system_critical_check:
 	        [ "$$f" = "$$ok" ] && test=yes; \
 	    done; \
 	    if [ "$$test" = "no" ]; then \
-	       printf "\033[1;31m[ FAIL ] Forbidden include detected in: $$f%s\n"; \
+	       printf "%s[ FAIL ] Forbidden include detected in: %s%s\n" "${COLOR_FAIL}" "$$f" "${COLOR_RESET}"; \
 	       exit 1; \
 		else \
-			printf "\033[1;32m[  OK  ]%s %s\n" "$$f"; \
+			printf "%s[  OK  ]%s %s\n" "${COLOR_OK}" "${COLOR_RESET}" "$$f"; \
 	    fi; \
 	done
 .endfor

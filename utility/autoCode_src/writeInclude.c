@@ -60,49 +60,58 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
 
+	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
+	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
+
+
 	switch( type )
 	{
-		case INCLUDE_HAL_USER_PART:
-		case INCLUDE_HAL_SYSTEM_PART:
-
-			fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
-			fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
+		case INCLUDE_HAL_DEFINE:
 
 			fprintf(file_tmp.stream, "// target define\n");
 			fprintf(file_tmp.stream, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
 			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
+			break;
 
-			if( type == INCLUDE_HAL_SYSTEM_PART)
-			{
-				fprintf(file_tmp.stream, "// target init\n");
-				fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
-				fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
-				fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
-			}
+		case INCLUDE_HAL_INIT:
+
+			fprintf(file_tmp.stream, "// target init\n");
+			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
+			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
+			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
+			break;
+
+		case INCLUDE_HAL_USER_PART:
+		case INCLUDE_HAL_SYSTEM_PART:
 
 			file_t file_hal;
 			fileInit(&file_hal);
-			if( type == INCLUDE_HAL_USER_PART){file_hal.name = "build/files_hal_user";}
-			if( type == INCLUDE_HAL_SYSTEM_PART){file_hal.name = "build/files_hal_system";}
+			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = "build/files_hal_user"; }
+			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
 			fileOpen(&file_hal, "r", __FILE__, __LINE__);
 			int ret;
 
-			if( type == INCLUDE_HAL_USER_PART){fprintf(file_tmp.stream, "// autoInclude hal headers tagged with // @hal_user\n");}
-			if( type == INCLUDE_HAL_SYSTEM_PART){fprintf(file_tmp.stream, "// autoInclude hal headers tagged with // @hal_system\n");}
-
-			do
+			if( type == INCLUDE_HAL_USER_PART )
 			{
-				ret = fileGetToken(&file_hal);
-				if( strlen(file_hal.token) != 0){fprintf(file_tmp.stream, "#include \"%s\"\n",file_hal.token);}
-			}while( ret != 0);
+				fprintf(file_tmp.stream, "// autoInclude hal user headers\n");
+			}
+			if( type == INCLUDE_HAL_SYSTEM_PART )
+			{
+				fprintf(file_tmp.stream, "// autoInclude hal system headers\n");
+			}
 
-			fprintf(file_tmp.stream, "\n#endif\n");
+			do {
+				ret = fileGetToken(&file_hal);
+				if( strlen(file_hal.token) != 0 )
+				{
+					fprintf(file_tmp.stream, "#include \"%s\"\n", file_hal.token);
+				}
+			} while( ret != 0 );
+
 			break;
 
 		case INCLUDE_THREAD_LIST:
-			fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
-			fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
 			const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
 
@@ -118,13 +127,14 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			{
 				fprintf(file_tmp.stream, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
 			}
-			fprintf(file_tmp.stream, "\n#endif\n");
 			break;
 
 		default:
 			msgError("unrecognized type %i", type);
 			exit(1);
 	}
+	fprintf(file_tmp.stream, "\n#endif\n");
+
 	fileCmpReplace(&file_include, &file_tmp);
 
 	fileClose(&file_include, __FILE__, __LINE__);
