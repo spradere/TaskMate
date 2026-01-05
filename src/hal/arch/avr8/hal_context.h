@@ -110,7 +110,7 @@ static inline __attribute__((always_inline)) void hal_setGlobalInterupt(void) { 
 
 static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void) { asm volatile("cli \n\t"); }
 
-#include "hal/auto_hal_system.h" // get stack_word_t
+#include "hal/auto_hal_define.h" // get stack_word_t
 
 void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top);
 
