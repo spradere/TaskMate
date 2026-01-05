@@ -53,8 +53,12 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${FILES_HAL_
 	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@rm -f build/autoCode_*
+
 	@printf "%s" "${FILES_HAL_USER}" > build/files_hal_user
+	@sed -i '' 's|src/||g' build/files_hal_user
 	@printf "%s" "${FILES_HAL_SYSTEM}" > build/files_hal_system
+	@sed -i '' 's|src/||g' build/files_hal_system
+
 	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > build/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}
 
