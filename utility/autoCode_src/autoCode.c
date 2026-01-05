@@ -97,10 +97,10 @@ int main(int argn, const char *argv[])
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_LIST, "src/sysCore/auto_threads_list.h", &target);
-
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_PART, "src/hal/auto_hal_system.h", &target);
-
 	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/auto_hal_define.h", &target);
+	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &target);
 
 	// print all info about modules
 	filePrintTouch();

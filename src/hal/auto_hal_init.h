@@ -16,14 +16,13 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTO_HAL_USER_H
-#define AUTO_HAL_USER_H
+#ifndef AUTO_HAL_INIT_H
+#define AUTO_HAL_INIT_H
 
-// autoInclude hal user headers
-#include "hal/board/arduino_mega/hal_ZS_042.h"
-#include "hal/board/arduino_mega/hal_lcd.h"
-#include "hal/mcu/atmega2560/hal_gpio.h"
-#include "hal/mcu/atmega2560/hal_i2c.h"
-#include "hal/mcu/atmega2560/hal_usart.h"
+// target init
+#include "hal/arch/avr8/hal_archInit.h"
+#include "hal/mcu/atmega2560/hal_mcuInit.h"
+#include "hal/board/arduino_mega/hal_boardInit.h"
+
 
 #endif

@@ -22,7 +22,7 @@
 #define MODULES_ITEMS_H
 
 #include "sysCore/modules_define.h"
-#include "hal/auto_hal_system.h" // get stack_word_t from selected arch
+#include "hal/auto_hal_define.h" // get stack_word_t from selected arch
 
 // thread
 #define THREAD_STACK_SIZE 256

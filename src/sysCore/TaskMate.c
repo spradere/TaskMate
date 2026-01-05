@@ -27,7 +27,8 @@
  */
 
 #include <stdint.h>
-
+#include "hal/auto_hal_define.h"
+#include "hal/auto_hal_init.h"
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
 #include "sysCore/modules.h"
