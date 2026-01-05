@@ -42,7 +42,8 @@ GREP_ALLOWED1 = src/hal/mcu/${MCU}/hal_timerScheduler.c \
 	src/hal/mcu/${MCU}/hal_timerScheduler.c \
 	src/sysCall/gpio.h \
 	src/sysCall/sysCall.c \
-	src/sysCore/modules_items.h
+	src/sysCore/modules_items.h \
+	src/hal/arch/avr8/hal_context.h
 
 GREP_LIST != cat mk/allow.mk \
 	| grep '^[[:space:]]*GREP_PATTERN[0-9][0-9]*[[:space:]]*=' \

@@ -60,43 +60,11 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
 
-	file_t file_hal;
-	int ret;
-
 	switch( type )
 	{
 		case INCLUDE_HAL_USER_PART:
-			fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
-			fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
-
-			fprintf(file_tmp.stream, "// target define\n");
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
-
-			fileInit(&file_hal);
-			file_hal.name = "build/files_hal_user";
-			fileOpen(&file_hal, "r", __FILE__, __LINE__);
-
-			do
-			{
-				ret = fileGetToken(&file_hal);
-				fprintf(file_tmp.stream, "// #include \"%s\"\n",file_hal.token);
-			}while( ret != 0);
-
-			fprintf(file_tmp.stream, "// mcu\n");
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_i2c.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_usart.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_gpio.h\"\n\n", target->mcu_name);
-
-			fprintf(file_tmp.stream, "// board\n");
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_lcd.h\"\n", target->board_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_ZS_042.h\"\n\n", target->board_name);
-
-			fprintf(file_tmp.stream, "\n#endif\n");
-			break;
-
 		case INCLUDE_HAL_SYSTEM_PART:
+
 			fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 			fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
@@ -105,25 +73,29 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
 			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
 
-			fprintf(file_tmp.stream, "// target init\n");
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
+			if( type == INCLUDE_HAL_SYSTEM_PART)
+			{
+				fprintf(file_tmp.stream, "// target init\n");
+				fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
+				fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
+				fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
+			}
 
+			file_t file_hal;
 			fileInit(&file_hal);
-			file_hal.name = "build/files_hal_system";
+			if( type == INCLUDE_HAL_USER_PART){file_hal.name = "build/files_hal_user";}
+			if( type == INCLUDE_HAL_SYSTEM_PART){file_hal.name = "build/files_hal_system";}
 			fileOpen(&file_hal, "r", __FILE__, __LINE__);
+			int ret;
+
+			if( type == INCLUDE_HAL_USER_PART){fprintf(file_tmp.stream, "// autoInclude hal headers tagged with // @hal_user\n");}
+			if( type == INCLUDE_HAL_SYSTEM_PART){fprintf(file_tmp.stream, "// autoInclude hal headers tagged with // @hal_system\n");}
 
 			do
 			{
 				ret = fileGetToken(&file_hal);
-				fprintf(file_tmp.stream, "// #include \"%s\"\n",file_hal.token);
+				if( strlen(file_hal.token) != 0){fprintf(file_tmp.stream, "#include \"%s\"\n",file_hal.token);}
 			}while( ret != 0);
-
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_stack.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_context.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_timerScheduler.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_timerRTC.h\"\n\n", target->mcu_name);
 
 			fprintf(file_tmp.stream, "\n#endif\n");
 			break;
