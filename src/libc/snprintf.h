@@ -25,6 +25,6 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-void snprintf(char *buff, size_t buff_size, const char *format, ...);
+void snprintf(char *buff, uint8_t buff_size, const char *format, ...);
 
 #endif

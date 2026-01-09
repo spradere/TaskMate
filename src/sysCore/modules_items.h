@@ -34,7 +34,7 @@ typedef struct
 
 	void (*main)(void);
 
-	volatile uint16_t real_time_counter;
+	volatile uint16_t software_time_counter;
 
 	stack_word_t *stack_pointer;
 	stack_word_t stack[THREAD_STACK_SIZE];
