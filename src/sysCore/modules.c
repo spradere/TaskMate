@@ -34,8 +34,8 @@ static struct
 void moduleThreadSetCurrent(uint8_t n) { modules.thread_current = n; }
 uint8_t moduleThreadGetCurrent(void) { return modules.thread_current; }
 
-void moduleThreadSetRTC(uint16_t count) { modules.threads[modules.thread_current].real_time_counter = count; }
-uint16_t moduleThreadGetRTC(void) { return modules.threads[modules.thread_current].real_time_counter; }
+void moduleThreadSetRTC(uint16_t count) { modules.threads[modules.thread_current].software_time_counter = count; }
+uint16_t moduleThreadGetRTC(void) { return modules.threads[modules.thread_current].software_time_counter; }
 
 module_item_driver_t *moduleDriverGetPointer(uint8_t id) { return &modules.drivers[id]; }
 module_item_thread_t *moduleThreadGetPointer(uint8_t id) { return &modules.threads[id]; }
@@ -57,7 +57,7 @@ void modulesThreadsAlloc(void)
 	mod_t = moduleThreadGetPointer(0);
 
 	hal_threadContextInit(scli, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
-	mod_t->real_time_counter = 0;
+	mod_t->software_time_counter = 0;
 	const char *thread0_name = "scli";
 	mod_t->name = thread0_name;
 	mod_t->status = 19;
@@ -66,7 +66,7 @@ void modulesThreadsAlloc(void)
 	mod_t = moduleThreadGetPointer(1);
 
 	hal_threadContextInit(msg, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
-	mod_t->real_time_counter = 0;
+	mod_t->software_time_counter = 0;
 	const char *thread1_name = "msg";
 	mod_t->name = thread1_name;
 	mod_t->status = 19;
@@ -75,7 +75,7 @@ void modulesThreadsAlloc(void)
 	mod_t = moduleThreadGetPointer(2);
 
 	hal_threadContextInit(task1, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
-	mod_t->real_time_counter = 0;
+	mod_t->software_time_counter = 0;
 	const char *thread2_name = "task1";
 	mod_t->name = thread2_name;
 	mod_t->status = 12;
@@ -84,7 +84,7 @@ void modulesThreadsAlloc(void)
 	mod_t = moduleThreadGetPointer(3);
 
 	hal_threadContextInit(task2, &(mod_t->stack_pointer), &(mod_t->stack[THREAD_STACK_SIZE - 1 ]));
-	mod_t->real_time_counter = 0;
+	mod_t->software_time_counter = 0;
 	const char *thread3_name = "task2";
 	mod_t->name = thread3_name;
 	mod_t->status = 12;

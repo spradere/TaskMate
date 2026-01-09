@@ -16,7 +16,6 @@
  * @file rtc.c
  * @brief Implements internal/external RTC.
  *
- * @todo Add I2C external clock
  */
 
 #include "sysCore/realTimeClock.h"
@@ -33,6 +32,6 @@ void realTimeClock(void)
 	for( uint8_t i = 0; i < MODULES_THREAD_COUNT; i++ )
 	{
 		module_item_thread_t *mod_t = moduleThreadGetPointer(i);
-		if( mod_t->real_time_counter > 0 ) { mod_t->real_time_counter--; }
+		if( mod_t->software_time_counter > 0 ) { mod_t->software_time_counter--; }
 	}
 }

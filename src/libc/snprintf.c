@@ -51,10 +51,10 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, size_t buff_size, 
 // !! use this macro only in TaskMate snprinf()
 #define put_char(ch)                                                                                         \
 	do {                                                                                                     \
-		if( (buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                              \
+		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                              \
 	} while( 0 )
 
-void snprintf(char *buff, size_t buff_size, const char *format, ...)
+void snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 {
 	uint8_t buff_index = 0;
 
