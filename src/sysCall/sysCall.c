@@ -46,13 +46,11 @@ void sysCallGetTargetInfo(const target_info_t **target) { *target = &target_info
 
 void sysCallSetThreadRTC(uint16_t count)
 {
-	// ATOMIC_BLOCK(ATOMIC_FORCEON) { modules.threads[modules.thread_current].real_time_counter = count; }
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetRTC(count); }
 }
 
 uint16_t sysCallGetThreadRTC(void)
 {
-	// ATOMIC_BLOCK(ATOMIC_FORCEON) { return (modules.threads[modules.thread_current].real_time_counter); }
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { return moduleThreadGetRTC(); }
 }
 

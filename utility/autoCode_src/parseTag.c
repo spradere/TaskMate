@@ -210,7 +210,7 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 					"&(mod_t->stack[THREAD_STACK_SIZE - 1 ]));\n",
 					mod->modules[i].name);
 
-			fprintf(file, "\tmod_t->real_time_counter = 0;\n");
+			fprintf(file, "\tmod_t->software_time_counter = 0;\n");
 			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
 			fprintf(file, "\tmod_t->name = thread%i_name;\n", threads_count);
