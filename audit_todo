@@ -5,4 +5,4 @@
 - non-ASM statement in naked function is not supported
 - #define -> typedef enum
 - libc/snprintf() module memory size 0x270 is too high - atomicity issues
-
+- Doxigen documentation : only in .h for API and general operations
