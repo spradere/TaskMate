@@ -32,7 +32,6 @@
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
 #include "sysCore/modules.h"
-#include "sysCore/initSys.h"
 #include "sysCore/runLevel.h"
 #include "libc/stdio.h"
 #include "sysCall/sysCall.h"
@@ -60,9 +59,9 @@ int main(void)
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
-	initDrivers();
-	initThreads();
-	runLevelInit();
+	modulesDriversAlloc();
+	modulesThreadsAlloc();
+	runLevelAlloc();
 
 	// hal hardware init
 	snprintf(log, sizeof(log), "[boot] hal hardware init\n");
