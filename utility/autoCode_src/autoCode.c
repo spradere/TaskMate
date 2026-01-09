@@ -88,12 +88,12 @@ int main(int argn, const char *argv[])
 	threadCountLevel(&data_base);
 
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/initSys.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCore/modules.h", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &target);
 
 	// write headers
 	writeInclude(&data_base, INCLUDE_THREAD_LIST, "src/sysCore/auto_threads_list.h", &target);
