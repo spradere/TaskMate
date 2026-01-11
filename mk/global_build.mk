@@ -53,26 +53,25 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${FILES_HAL_
 	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@rm -f build/autoCode_*
-
-	@printf "%s" "${FILES_HAL_USER}" > build/files_hal_user
+	# list hal sources files
+	@printf "%s" "${FILES_HAL_USER}" > ${BUILD_DIR}/files_hal_user
 	@sed -i '' 's|src/||g' build/files_hal_user
-	@printf "%s" "${FILES_HAL_SYSTEM}" > build/files_hal_system
+	@printf "%s" "${FILES_HAL_SYSTEM}" > ${BUILD_DIR}/files_hal_system
 	@sed -i '' 's|src/||g' build/files_hal_system
 
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > build/autoCode_${AUTOCODE_DATE_TIME}
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > ${BUILD_DIR}/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 	@printf "\n%sCompiling autoCode%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-	clang -I/root/code/TaskMate/TaskMate_current/ ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
+	clang ${AUTOCODE_CFLAGS} ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 
 # check #include for system critical features
 _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-# todo use colors.mk
 .for index in ${GREP_LIST}
 	@allowed="${GREP_ALLOWED${index}}"; \
 	pattern="${GREP_PATTERN${index}}"; \
@@ -99,12 +98,9 @@ ${ERROR_ALL}: ${ERROR_FILES}
 	@cat ${ERROR_FILES} > ${ERROR_ALL}
 
 # special rule for autoCode alone
-autoCode_alone:
+autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Build and run autoCode alone.
 	@printf "\n%sCompiling and running autoCode alone%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-	@clang -I/root/code/TaskMate/TaskMate_current/ -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
-		-Wswitch -Wenum-conversion \
-		-Wno-gnu-zero-variadic-macro-arguments ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL}
 .PHONY: autoCode_alone

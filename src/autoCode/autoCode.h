@@ -28,8 +28,9 @@
 #include <stdbool.h>
 
 // get TaskMate define
-#include "src/sysCore/modules_define.h"
-#include "src/sysCore/runLevel.h"
+#include "sysCore/modules.h"
+#include "sysCore/modules_define.h"
+#include "sysCore/runLevel.h"
 
 // message macro
 #define msgError(format, ...) \

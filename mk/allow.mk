@@ -40,9 +40,12 @@ GREP_ALLOWED1 = \
 	src/sysCore/scheduler.c \
 	src/sysCore/modules.c \
 	src/sysCall/sysCall.c \
+	src/autoCode/autoCode.c
 
 GREP_PATTERN2 = hal/auto_hal_init.h
-GREP_ALLOWED2 = src/sysCore/TaskMate.c
+GREP_ALLOWED2 = \
+	src/sysCore/TaskMate.c \
+	src/autoCode/autoCode.c
 
 GREP_LIST != cat mk/allow.mk \
 	| grep '^[[:space:]]*GREP_PATTERN[0-9][0-9]*[[:space:]]*=' \
