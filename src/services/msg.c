@@ -20,9 +20,10 @@
  */
 
 #include "services/msg.h"
-#include "sysCall/sysCall.h"
-#include "libc/string.h"
+
 #include "libc/stdio.h"
+#include "libc/string.h"
+#include "sysCall/sysCall.h"
 
 // Send message to :
 #include "hal/auto_hal_user.h"
@@ -55,7 +56,10 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1refactor modules 10", MSG_TO_LCD); }
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
+	{
+		msgWritreText(chan, "\1refactor .h 20", MSG_TO_LCD);
+	}
 
 	msgProcess();
 	msgFreeChannel(chan);

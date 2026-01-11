@@ -22,8 +22,9 @@
 #ifndef HAL_USART_H
 #define HAL_USART_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+
 #include "sysCall/error.h"
 
 #define HAL_USART_BAUD_RATE 9600
