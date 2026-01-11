@@ -21,7 +21,6 @@
 #ifndef SNPRINTF_H
 #define SNPRINTF_H
 
-#include <stddef.h>
 #include <stdarg.h>
 #include <stdint.h>
 

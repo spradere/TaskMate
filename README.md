@@ -13,14 +13,10 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
-**Whether or not this project ever reaches production, it has already fulfilled its purpose:**
-
-- it enabled deep, sustained progress, solid C expertise, and real embedded systems experience.
-
 > <span style="color:green"> **Project Stats (v0.24)**</span>
 >
->  <span style="color:green">253 commits • 109 source files • 3628 lines of code •
-> binary size : 5940 bytes (Flash) • ram usage : 2306 bytes</span>
+>  <span style="color:green">265 commits • 104 source files • 3748 lines of code •
+> binary size : 6022 bytes (Flash) • ram usage : 2326 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -141,19 +137,6 @@ optional system actions. This approach minimizes **code duplication**, reduces
 future extensibility, while remaining **lightweight** and suitable for constrained
 embedded systems.
 
-- exemple : file hal_usart.err
-- layout : ERROR_NAME "message" critical[LOW, MID, HIGH]
-
-
-```
-# hal usart
-ERR_HAL_USART_TX_BUFFER_EMPTY "hal USART TX buffer empty" LOW
-ERR_HAL_USART_RX_BUFFER_EMPTY "hal USART RX buffer empty" LOW
-ERR_HAL_USART_TX_BUFFER_FULL "hal USART TX buffer full" LOW
-ERR_HAL_USART_RX_BUFFER_FULL "hal USART RX buffer full" LOW
-```
-
-
 ---
 
 ### ️📜 License
@@ -178,7 +161,7 @@ See the `LICENSE` file for full details.
 
 ### 📑 Documentation & books 📚
 
-- **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](./COMPATIBILITY.md)
+- **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](doc/COMPATIBILITY.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/code_best_practices.md)
 - **Project progress** — see road map -> [Road map](doc/check_list.md)
@@ -187,3 +170,7 @@ See the `LICENSE` file for full details.
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
 - The markdown guide, author Matt Cone, publisher Amazon. ISBN 9798656504492
 - Hands-On RTOS with Microcontrollers, author Brian Amos, publisher Packt. ISBN 978-1-83882-673-4
+- Making Embedded Sysems, author Elecia White, publisher O'Reilly. ISBM 978-1-098-15154-6
+- Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBM 978-1-032-98099-7
+- The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick George V. Neville-Niel Robert N.M. Watson, publisher Addison-Wesley, ISBM 978-0-312-96897-2
+

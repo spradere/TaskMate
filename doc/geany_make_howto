@@ -6,6 +6,7 @@ using ~/bin/go select/paste error from compiler output
 
 open all files
 	geany $(find . -type f -name '*.h')
+	find . -type f \( -name "*.c" -o -name "*.h" \) -print0 | xargs -0 geany &
 
 display a make variable
 	make -V VAR_NAME
