@@ -13,18 +13,18 @@
  */
 
 /**
- * @file hal_timerRTC.h
+ * @file hal_timerSTC.h
  * @brief header hal real time cloc
  *
  */
 
 // @hal_system
 
-#ifndef HAL_TIMERRTC_H
-#define HAL_TIMERRTC_H
+#ifndef HAL_TIMER_STC_H
+#define HAL_TIMER_STC_H
 
-void hal_timerRTCInit(void);
-void hal_timerRTCStart(void);
-void hal_timerRTCStop(void);
+void hal_timerSTCInit(void);
+void hal_timerSTCStart(void);
+void hal_timerSTCStop(void);
 
 #endif

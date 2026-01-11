@@ -35,8 +35,8 @@
 void moduleThreadSetCurrent(uint8_t n);
 uint8_t moduleThreadGetCurrent(void);
 
-void moduleThreadSetRTC(uint16_t count);
-uint16_t moduleThreadGetRTC(void);
+void moduleThreadSetSTC(uint16_t count);
+uint16_t moduleThreadGetSTC(void);
 
 module_item_driver_t *moduleDriverGetPointer(uint8_t id);
 module_item_thread_t *moduleThreadGetPointer(uint8_t id);

@@ -100,4 +100,5 @@ TaskMate 0.24
 	upgrade message server
 	refactor hal_usart with macro for circular buffer handling
 	refactor hal headers .h automatic find sources files
-	
+	sort all headers with clang-format
+
