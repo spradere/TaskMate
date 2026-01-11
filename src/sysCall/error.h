@@ -24,7 +24,7 @@ typedef enum
 	ERROR_LOW,
 	ERROR_MID,
 	ERROR_HIGH
-} error_critical_t;
+} err_critical_t;
 
 typedef enum
 {
@@ -35,13 +35,13 @@ typedef enum
 	ERR_HAL_USART_RX_BUFFER_FULL,
 	ERR_MSG_OUT_OF_FREE_CHANNEL,
 	ERROR_COUNT
-} error_codes_t;
+} err_codes_t;
 
 typedef struct
 {
 	char *name;
-	error_critical_t critical;
-} error_item_t;
+	err_critical_t critical;
+} err_item_t;
 
 
 #endif

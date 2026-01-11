@@ -34,13 +34,13 @@ void hal_boardInit(void)
 	sig.pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
 	sig.pin.pull = GPIO_PIN_PULL_NONE;
 	sig.active_high = true;
-	gpioSignalInit(GPIO_SIGNAL_INBOARD_LED, &sig);
+	gpio_signalInit(GPIO_SIGNAL_INBOARD_LED, &sig);
 
 	sig.pin.port_index = GPIO_PORT_A;
 	sig.pin.number = PA0;
-	gpioSignalInit(GPIO_SIGNAL_TASK1_LED, &sig);
+	gpio_signalInit(GPIO_SIGNAL_TASK1_LED, &sig);
 
 	sig.pin.port_index = GPIO_PORT_A;
 	sig.pin.number = PA1;
-	gpioSignalInit(GPIO_SIGNAL_TASK2_LED, &sig);
+	gpio_signalInit(GPIO_SIGNAL_TASK2_LED, &sig);
 }
