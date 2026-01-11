@@ -19,6 +19,7 @@
  */
 
 #include "hal/arch/avr8/hal_context.h"
+
 #include <avr/io.h>
 
 // NOLINTBEGIN

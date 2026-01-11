@@ -24,6 +24,7 @@
 #define HAL_GPIO_H
 
 #include <stdbool.h>
+
 #include "sysCall/gpio.h"
 
 void hal_gpioInitPin(const gpio_pin_item_t *pin);

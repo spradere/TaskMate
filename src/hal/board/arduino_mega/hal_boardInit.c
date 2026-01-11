@@ -18,8 +18,10 @@
  */
 
 #include "hal/board/arduino_mega/hal_boardInit.h"
+
 #include <avr/io.h>
 #include <stdbool.h>
+
 #include "hal/auto_hal_user.h"
 
 void hal_boardInit(void)

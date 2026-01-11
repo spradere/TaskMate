@@ -23,8 +23,8 @@
 #ifndef HAL_I2C_H
 #define HAL_I2C_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define HAL_I2C_FREQ 100000UL // Standard mode 100 kHz
 

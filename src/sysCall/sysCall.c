@@ -21,9 +21,11 @@
  */
 
 #include "sysCall/sysCall.h"
+
 #include <util/atomic.h>
-#include "hal/auto_hal_user.h"
+
 #include "hal/auto_hal_system.h"
+#include "hal/auto_hal_user.h"
 #include "sysCore/modules.h"
 
 static uint8_t system_status = 0;

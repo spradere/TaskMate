@@ -19,8 +19,9 @@
  */
 
 #include "hal/mcu/atmega2560/hal_gpio.h"
-#include <stdbool.h>
+
 #include <avr/io.h>
+#include <stdbool.h>
 
 static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] = {
 	[GPIO_PORT_A] =

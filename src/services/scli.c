@@ -19,10 +19,12 @@
  */
 
 #include "services/scli.h"
+
 #include <stdint.h>
-#include "sysCall/sysCall.h"
+
 #include "hal/auto_hal_user.h"
 #include "services/msg.h"
+#include "sysCall/sysCall.h"
 
 uint8_t scli_msg_channel;
 

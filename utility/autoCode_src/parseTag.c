@@ -19,8 +19,9 @@
  */
 
 #include "parseTag.h"
-#include "tokenizer.h"
+
 #include "fileUtility.h"
+#include "tokenizer.h"
 
 static void writeRunlevelDefine(modules_database_t *data_base, FILE *file);
 static void writeModulesCount(modules_database_t *data_base, FILE *file);

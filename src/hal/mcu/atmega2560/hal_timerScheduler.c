@@ -19,13 +19,15 @@
  */
 
 #include "hal/mcu/atmega2560/hal_timerScheduler.h"
+
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/atomic.h>
-#include <avr/interrupt.h>
+
 #include "hal/auto_hal_system.h"
+#include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/scheduler.h"
-#include "sysCall/sysCall.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
