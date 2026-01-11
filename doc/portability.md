@@ -1,19 +1,17 @@
 ## 🧱 Portability and Conditional Compilation Policy
 
-TaskMate aims to be portable **without relying on the C preprocessor** for configuration.
 Portability and configuration must be handled by:
 
 - the directory structure (arch/, mcu/, board/)
 - the build system (Makefile variables: ARCH, MCU, BOARD)
-- the autoCode generator for system initialization.
+- autoCode generator for system initialization.
+- C preprocessor conditional statements
 
 This rule prevents:
 
 - configuration spaghetti
 - hard-to-read code paths
 - and platform-specific hacks scattered all over the codebase.
-
-<span style="color:orange">**If you think you need an `#ifdef`, you are probably putting the code in the wrong place.**</span>
 
 ---
 
