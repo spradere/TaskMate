@@ -13,39 +13,39 @@
  */
 
 /**
- * @file hal_timerRTC.c
+ * @file hal_timerSTC.c
  * @brief hal real time cloc
  *
  */
 
-#include "hal/mcu/atmega2560/hal_timerRTC.h"
+#include "hal/mcu/atmega2560/hal_timerSTC.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/atomic.h>
 
-#include "sysCore/realTimeClock.h"
+#include "sysCore/softwareTimeCounter.h"
 
-const int hal_timerRTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
+const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
 
-void hal_timerRTCInit(void)
+void hal_timerSTCInit(void)
 {
 
-	// Set up hal_timerRTC interrupt for RTC
+	// Set up hal_timerSTC interrupt for RTC
 	TCCR3B = (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
-	OCR3A = hal_timerRTC_OVERFLOW_COUNT;
+	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
 }
 
-void hal_timerRTCStart(void)
+void hal_timerSTCStart(void)
 {
 	// start by enabling INT
 	TIMSK3 |= (uint8_t)(1u << OCIE3A);
 }
 
-void hal_timerRTCStop(void)
+void hal_timerSTCStop(void)
 {
 	// stop by disabling INT
 	TIMSK3 &= (uint8_t)~(1u << OCIE3A);
 }
 
-ISR(TIMER3_COMPA_vect) { realTimeClock(); }
+ISR(TIMER3_COMPA_vect) { softwareTimeCounter(); }

@@ -34,11 +34,11 @@ static struct
 void moduleThreadSetCurrent(uint8_t n) { modules.thread_current = n; }
 uint8_t moduleThreadGetCurrent(void) { return modules.thread_current; }
 
-void moduleThreadSetRTC(uint16_t count)
+void moduleThreadSetSTC(uint16_t count)
 {
 	modules.threads[modules.thread_current].software_time_counter = count;
 }
-uint16_t moduleThreadGetRTC(void) { return modules.threads[modules.thread_current].software_time_counter; }
+uint16_t moduleThreadGetSTC(void) { return modules.threads[modules.thread_current].software_time_counter; }
 
 module_item_driver_t *moduleDriverGetPointer(uint8_t id) { return &modules.drivers[id]; }
 module_item_thread_t *moduleThreadGetPointer(uint8_t id) { return &modules.threads[id]; }
@@ -116,14 +116,14 @@ void modulesDriversAlloc(void)
 	};
 
 	mod_d = moduleDriverGetPointer(1);
-	const char *driver1_name = "hal_timerRTC";
+	const char *driver1_name = "hal_timerSTC";
 	*(mod_d) = (module_item_driver_t)
 	{
 		.name = driver1_name,
 		.status = 1,
-		.init = hal_timerRTCInit,
-		.start = hal_timerRTCStart,
-		.stop = hal_timerRTCStop
+		.init = hal_timerSTCInit,
+		.start = hal_timerSTCStart,
+		.stop = hal_timerSTCStop
 	};
 
 	mod_d = moduleDriverGetPointer(2);

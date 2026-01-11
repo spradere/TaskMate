@@ -58,7 +58,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\1refactor .h 20", MSG_TO_LCD);
+		msgWritreText(chan, "\1refactor RTC->STC 3", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -66,8 +66,8 @@ void msg(void)
 
 	while( 1 )
 	{
-		sysCallSetThreadRTC(100);
-		while( sysCallGetThreadRTC() > 0 ) { sysCallYieldHand(); };
+		sysCallSetThreadSTC(100);
+		while( sysCallGetThreadSTC() > 0 ) { sysCallYieldHand(); };
 		msgProcess();
 	}
 }

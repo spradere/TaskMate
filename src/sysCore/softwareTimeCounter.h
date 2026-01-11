@@ -13,14 +13,14 @@
  */
 
 /**
- * @file realTimeClock.h
+ * @file softwareTimeCounter.h
  * @brief header for RTC
  *
  */
 
-#ifndef REALTIMECLOCK_H
-#define REALTIMECLOCK_H
+#ifndef SOFTWARE_TIME_COUNTER_H
+#define SOFTWARE_TIME_COUNTER_H
 
-void realTimeClock(void);
+void softwareTimeCounter(void);
 
 #endif
