@@ -20,7 +20,8 @@
 #ifndef MODULES_H
 #define MODULES_H
 
-#include "sysCore/modules_items.h"
+#include "hal/auto_hal_define.h" // get stack_word_t from selected arch
+#include "sysCore/modules_define.h"
 
 // [autoCode_tag] modules count
 /*
@@ -31,6 +32,65 @@
 #define MODULES_DRIVER_COUNT 6
 #define MODULES_THREAD_COUNT 4
 // [/tag]
+
+#define MODULES_TASKS_COUNT_MAX 128
+#define MODULES_SERVICES_COUNT_MAX 128
+#define MODULES_DRIVERS_COUNT_MAX 256
+
+#define MODULES_DRIVERS_ID 0
+#define MODULES_SERVICES_ID 1
+#define MODULES_TASKS_ID 2
+
+#define MODULES_TYPE_COUNT 3
+#define MODULES_NAME_SIZE_MAX 32
+
+#define THREAD_STACK_SIZE 256
+
+// thread status bits
+// bit [2 1 0 ] is run level
+#define MODULES_THREAD_TYPE_USER 3
+#define MODULES_THREAD_TYPE_SYSTEM 4
+#define MODULES_THREAD_DEAD 5
+
+// driver status bits
+// bit [2 1 0 ] is run level
+#define MODULES_DRIVER_LOCK 3
+#define MODULES_DRIVER_DEAD 4
+#define MODULES_DRIVER_INIT 5
+
+/*
+ * Modules structures
+ */
+
+typedef struct
+{
+	const char *name;
+	uint8_t status;
+
+	void (*main)(void);
+
+	volatile uint16_t software_time_counter;
+
+	stack_word_t *stack_pointer;
+	stack_word_t stack[THREAD_STACK_SIZE];
+
+} module_item_thread_t;
+
+// driver
+typedef struct
+{
+	const char *name;
+	uint8_t status;
+
+	void (*init)(void);
+	void (*start)(void);
+	void (*stop)(void);
+
+} module_item_driver_t;
+
+/*
+ * Modules functions
+ */
 
 void moduleThreadSetCurrent(uint8_t n);
 uint8_t moduleThreadGetCurrent(void);
