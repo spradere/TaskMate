@@ -15,8 +15,6 @@
 /**
  * @file msg.c
  * @brief implementation of message display server
- *
- * @todo add free channel
  */
 
 #include "services/msg.h"
@@ -58,7 +56,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\1move autoCode 10", MSG_TO_LCD);
+		msgWritreText(chan, "\1add prefix_ 10", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -66,8 +64,8 @@ void msg(void)
 
 	while( 1 )
 	{
-		sysCallSetThreadSTC(100);
-		while( sysCallGetThreadSTC() > 0 ) { sysCallYieldHand(); };
+		sc_threadSetSTC(100);
+		while( sc_threadGetSTC() > 0 ) { sc_handYield(); };
 		msgProcess();
 	}
 }
@@ -102,7 +100,7 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 	{
 		do
 		{
-			//sysCallYieldHand();
+			//sc_handYield();
 			flag = channels[channel].status & (1 << MSG_FLAG_SEND);
 			//hal_usartWriteChar('#');
 			//hal_usartSendTXBuffer();

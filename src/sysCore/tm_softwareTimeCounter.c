@@ -13,12 +13,12 @@
  */
 
 /**
- * @file softwareTimeCounter.c
- * @brief Implements internal/external RTC.
+ * @file tm_softwareTimeCounter.c
+ * @brief Implements STC.
  *
  */
 
-#include "sysCore/softwareTimeCounter.h"
+#include "sysCore/tm_softwareTimeCounter.h"
 
 #include "sysCore/modules.h"
 
@@ -26,7 +26,7 @@
 // softwareTimeCounter is called by hal_timerSTC interupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void softwareTimeCounter(void)
+void tm_softwareTimeCounter(void)
 {
 	// RTC decrement
 

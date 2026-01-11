@@ -26,7 +26,7 @@
 
 # Target specific makefiles
 
-.include "src/hal/arch/${ARCH}/make_arch.mk"
-.include "src/hal/mcu/${MCU}/make_mcu.mk"
-.include "src/hal/board/${BOARD}/make_board.mk"
+.include "src/hal/arch/${ARCH}/arch_make.mk"
+.include "src/hal/mcu/${MCU}/mcu_make.mk"
+.include "src/hal/board/${BOARD}/board_make.mk"
 

@@ -13,12 +13,12 @@
  */
 
 /**
- * @file scheduler.c
+ * @file tm_scheduler.c
  * @brief scheduler implementation
  *
  */
 
-#include "sysCore/scheduler.h"
+#include "sysCore/tm_scheduler.h"
 
 #include <stdint.h>
 
@@ -32,7 +32,7 @@
 // scheduler is called by hal_timerScheduler interupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void scheduler(void)
+void tm_scheduler(void)
 {
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	hal_setGlobalInterupt();
@@ -59,7 +59,7 @@ void scheduler(void)
 	}
 
 	// cooperative handling
-	sysCallClearFlag(FLAG_COOP);
+	sc_flagClear(FLAG_COOP);
 
 	hal_timerSchedulerStart();
 }

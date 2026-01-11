@@ -49,8 +49,8 @@ int main(void)
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
-	const target_info_t *target;
-	sysCallGetTargetInfo(&target);
+	const sc_target_info_t *target;
+	sc_targetGetInfo(&target);
 	snprintf(log, sizeof(log), "[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
@@ -78,9 +78,9 @@ int main(void)
 
 	for( uint8_t i = 0; i < MODULES_DRIVER_COUNT; i++ )
 	{
-		module_item_driver_t *mod_d = moduleDriverGetPointer(i);
-		(*(mod_d->init))();
-		(*(mod_d->start))();
+		module_item_driver_t *mod = moduleDriverGetPointer(i);
+		(*(mod->init))();
+		(*(mod->start))();
 	}
 
 	// rtc time test
