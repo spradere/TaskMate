@@ -22,8 +22,8 @@ clean:
 #@ [global] Remove all build files.
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOR_CLEAN}" "${COLOR_RESET}"
-	rm -f ${OBJS} ${DEPS} build/TaskMate.*
-	rm -f ${AUTOCODE_TARGET} build/.autoCode_stamp* build/autoCode_*
+	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate.*
+	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* build/autoCode_*
 
 .PHONY: clean
 
