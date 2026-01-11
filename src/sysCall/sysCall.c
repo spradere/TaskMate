@@ -46,14 +46,14 @@ const target_info_t target_info =
 
 void sysCallGetTargetInfo(const target_info_t **target) { *target = &target_info; }
 
-void sysCallSetThreadRTC(uint16_t count)
+void sysCallSetThreadSTC(uint16_t count)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetRTC(count); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetSTC(count); }
 }
 
-uint16_t sysCallGetThreadRTC(void)
+uint16_t sysCallGetThreadSTC(void)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { return moduleThreadGetRTC(); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { return moduleThreadGetSTC(); }
 }
 
 void sysCallYieldHand(void) { hal_timerSchedulerLoad(); }

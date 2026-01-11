@@ -46,17 +46,12 @@ SortIncludes: true
 IncludeBlocks: Regroup
 
 IncludeCategories:
-  # 1) Translation unit header (ex: foo.c -> "foo.h")
+  # Local headers
   - Regex: '^".*\.h"$'
     Priority: 2
     SortPriority: 2
 
-  # 2) System headers
+  # System headers
   - Regex: '^<.*\.h>$'
     Priority: 1
     SortPriority: 1
-
-  # 3) Local / project headers
-  #- Regex: '^".*"$'
-  #  Priority: 3
-  #  SortPriority: 3

@@ -39,8 +39,8 @@ void scli(void)
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo
 
-		sysCallSetThreadRTC(100);
-		while( sysCallGetThreadRTC() > 0 ) { sysCallYieldHand(); };
+		sysCallSetThreadSTC(100);
+		while( sysCallGetThreadSTC() > 0 ) { sysCallYieldHand(); };
 	}
 }
 

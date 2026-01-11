@@ -18,7 +18,7 @@ void task2(void)
 	{
 		gpioSignalToggle(GPIO_SIGNAL_TASK2_LED);
 
-		sysCallSetThreadRTC(50);
-		while( sysCallGetThreadRTC() > 0 );
+		sysCallSetThreadSTC(50);
+		while( sysCallGetThreadSTC() > 0 );
 	}
 }
