@@ -16,7 +16,7 @@ void task2(void)
 
 	while( 1 )
 	{
-		gpioSignalToggle(GPIO_SIGNAL_TASK2_LED);
+		gpio_signalToggle(GPIO_SIGNAL_TASK2_LED);
 
 		sc_threadSetSTC(50);
 		while( sc_threadGetSTC() > 0 );
