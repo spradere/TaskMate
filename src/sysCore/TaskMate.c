@@ -27,14 +27,15 @@
  */
 
 #include <stdint.h>
+
 #include "hal/auto_hal_define.h"
 #include "hal/auto_hal_init.h"
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
-#include "sysCore/modules.h"
-#include "sysCore/runLevel.h"
 #include "libc/stdio.h"
 #include "sysCall/sysCall.h"
+#include "sysCore/modules.h"
+#include "sysCore/runLevel.h"
 
 int main(void)
 {

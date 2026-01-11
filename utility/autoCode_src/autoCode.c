@@ -34,12 +34,13 @@
  * */
 
 #include "autoCode.h"
+
+#include "fileUtility.h"
+#include "globalError.h"
 #include "parseInitrc.h"
 #include "parseTag.h"
 #include "printModules.h"
 #include "writeInclude.h"
-#include "globalError.h"
-#include "fileUtility.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);

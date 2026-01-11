@@ -18,8 +18,9 @@
  */
 
 #include "globalError.h"
-#include "tokenizer.h"
+
 #include "fileUtility.h"
+#include "tokenizer.h"
 
 void globalError(const char *src_name, error_catalog_t *errors, const char *dest_name)
 {
