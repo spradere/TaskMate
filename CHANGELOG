@@ -99,9 +99,9 @@ TaskMate 0.24
 	refactor run level
 	upgrade message server
 	refactor hal_usart with macro for circular buffer handling
-	refactor hal headers .h automatic find sources files
-	sort all headers with clang-format
+	refactor hal headers .h automatic find sources files, sort all headers with clang-format
 	rename RCT -> STC SoftwareTimeCounter
 	move autoCode sources from utility/autoCode_src -> scr/autoCode
 	gather code about modules in modules.h
-	change mod_t and mod_d -> mod, mod_t is confusing with typedef 
+	change mod_t and mod_d -> mod, mod_t is confusing with typedef
+	add prefix to all poject tm_ sc_ gpio_ err_

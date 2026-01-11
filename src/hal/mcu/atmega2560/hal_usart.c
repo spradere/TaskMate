@@ -77,7 +77,7 @@ ISR(USART1_RX_vect)
 }
 
 // Read a character from Rx buffer (non-blocking)
-error_codes_t hal_usartRead(uint8_t *data)
+err_codes_t hal_usartRead(uint8_t *data)
 {
 	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 
@@ -87,7 +87,7 @@ error_codes_t hal_usartRead(uint8_t *data)
 }
 
 // Write a character to Tx buffer
-error_codes_t hal_usartWriteChar(uint8_t data)
+err_codes_t hal_usartWriteChar(uint8_t data)
 {
 	uint8_t next_head = CB_NEXT(buffer_tx_head);
 	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
@@ -110,7 +110,7 @@ void hal_usartSendTXBuffer(void)
 }
 
 // test Rx buffer
-error_codes_t hal_usartTestBufferRx(void)
+err_codes_t hal_usartTestBufferRx(void)
 {
 	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 	if( CB_FULL(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
@@ -119,7 +119,7 @@ error_codes_t hal_usartTestBufferRx(void)
 }
 
 // test Tx buffer
-error_codes_t hal_usartTestBufferTx(void)
+err_codes_t hal_usartTestBufferTx(void)
 {
 	if( CB_EMPTY(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
@@ -128,7 +128,7 @@ error_codes_t hal_usartTestBufferTx(void)
 }
 
 // write string to Tx buffer
-error_codes_t hal_usartWriteString(const char *str)
+err_codes_t hal_usartWriteString(const char *str)
 {
 	while( *str )
 	{
