@@ -21,7 +21,6 @@
 #define MODULES_H
 
 #include "hal/auto_hal_define.h" // get stack_word_t from selected arch
-#include "sysCore/modules_define.h"
 
 // [autoCode_tag] modules count
 /*

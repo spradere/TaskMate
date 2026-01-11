@@ -186,7 +186,7 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 	const module_type_t *mod;
 	int type;
 
-	fprintf(file, "\tmodule_item_thread_t *mod_t;\n");
+	fprintf(file, "\tmodule_item_thread_t *mod;\n");
 
 	for( int j = 0; j < 2; j++ )
 	{
@@ -204,21 +204,21 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 		for( int i = 0; i < mod->modules_count; i++ )
 		{
 
-			fprintf(file, "\n\tmod_t = moduleThreadGetPointer(%i);\n", threads_count);
+			fprintf(file, "\n\tmod = moduleThreadGetPointer(%i);\n", threads_count);
 
 			fprintf(file,
-					"\n\thal_threadContextInit(%s, &(mod_t->stack_pointer), "
-					"&(mod_t->stack[THREAD_STACK_SIZE - 1 ]));\n",
+					"\n\thal_threadContextInit(%s, &(mod->stack_pointer), "
+					"&(mod->stack[THREAD_STACK_SIZE - 1 ]));\n",
 					mod->modules[i].name);
 
-			fprintf(file, "\tmod_t->software_time_counter = 0;\n");
+			fprintf(file, "\tmod->software_time_counter = 0;\n");
 			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
 
-			fprintf(file, "\tmod_t->name = thread%i_name;\n", threads_count);
+			fprintf(file, "\tmod->name = thread%i_name;\n", threads_count);
 
-			fprintf(file, "\tmod_t->status = %i;\n", mod->modules[i].status | type);
+			fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status | type);
 
-			fprintf(file, "\tmod_t->main = %s;\n", mod->modules[i].name);
+			fprintf(file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 			threads_count++;
 		}
@@ -229,15 +229,15 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file)
 {
 	const module_type_t *mod = &data_base->modules_type[MODULES_DRIVERS_ID];
 
-	fprintf(file, "\tmodule_item_driver_t *mod_d;\n");
+	fprintf(file, "\tmodule_item_driver_t *mod;\n");
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\n\tmod_d = moduleDriverGetPointer(%i);\n", i);
+		fprintf(file, "\n\tmod = moduleDriverGetPointer(%i);\n", i);
 
 		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
 
-		fprintf(file, "\t*(mod_d) = (module_item_driver_t)\n");
+		fprintf(file, "\t*(mod) = (module_item_driver_t)\n");
 		fprintf(file, "\t{\n");
 		fprintf(file, "\t\t.name = driver%i_name,\n", i);
 		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
