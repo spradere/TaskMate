@@ -52,12 +52,12 @@ _dependency_check:
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-	@rm -f build/autoCode_*
+	@rm -f ${BUILD_DIR}/autoCode_*
 	# list hal sources files
 	@printf "%s" "${FILES_HAL_USER}" > ${BUILD_DIR}/files_hal_user
-	@sed -i '' 's|src/||g' build/files_hal_user
+	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_user
 	@printf "%s" "${FILES_HAL_SYSTEM}" > ${BUILD_DIR}/files_hal_system
-	@sed -i '' 's|src/||g' build/files_hal_system
+	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_system
 
 	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > ${BUILD_DIR}/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}

@@ -42,7 +42,7 @@ OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
 
 # Dependency files
 DEPS = ${OBJS:.o=.d}
-DEPS_FILE = build/.deps.d
+DEPS_FILE = ${BUILD_DIR}/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
