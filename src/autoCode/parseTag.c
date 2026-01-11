@@ -172,7 +172,7 @@ static void writeModulesCount(modules_database_t *data_base, FILE *file)
 static void writeTaget(const target_t *target, FILE *file)
 {
 	// write target name
-	fprintf(file, "const target_info_t target_info =\n");
+	fprintf(file, "const sc_target_info_t target_info =\n");
 	fprintf(file, "{\n");
 	fprintf(file, ".arch = \"%s\",\n", target->arch_name);
 	fprintf(file, ".mcu = \"%s\",\n", target->mcu_name);
@@ -288,7 +288,7 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 {
-	fprintf(file, "const error_item_t error_catalog[] = \n{\n");
+	fprintf(file, "const err_item_t error_catalog[] = \n{\n");
 
 	for( int i = 0; i < errors->error_count - 1; i++ )
 	{

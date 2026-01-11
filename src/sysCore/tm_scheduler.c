@@ -54,7 +54,7 @@ void tm_scheduler(void)
 	static uint8_t alive_cnt = 0;
 	if( ++alive_cnt > 250 )
 	{
-		gpioSignalToggle(GPIO_SIGNAL_INBOARD_LED);
+		gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
 		alive_cnt = 0;
 	}
 

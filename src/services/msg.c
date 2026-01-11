@@ -56,7 +56,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\1add prefix_ 10", MSG_TO_LCD);
+		msgWritreText(chan, "\1add prefix_ 30", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -70,7 +70,7 @@ void msg(void)
 	}
 }
 
-error_codes_t msgRequestChannel(uint8_t *channel)
+err_codes_t msgRequestChannel(uint8_t *channel)
 {
 	for( uint8_t i = 0; i < MSG_CHANNELS_MAX; i++ )
 	{

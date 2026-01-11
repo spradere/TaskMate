@@ -53,7 +53,7 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	fprintf(file_tmp.stream, "\tERROR_LOW,\n");
 	fprintf(file_tmp.stream, "\tERROR_MID,\n");
 	fprintf(file_tmp.stream, "\tERROR_HIGH\n");
-	fprintf(file_tmp.stream, "} error_critical_t;\n\n");
+	fprintf(file_tmp.stream, "} err_critical_t;\n\n");
 
 	// read form source
 	int file_src_line_number = 0;
@@ -119,13 +119,13 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 		fprintf(file_tmp.stream, "\t%s,\n", errors->catalog[i].name);
 	}
 	fprintf(file_tmp.stream, "\tERROR_COUNT\n");
-	fprintf(file_tmp.stream, "} error_codes_t;\n\n");
+	fprintf(file_tmp.stream, "} err_codes_t;\n\n");
 
 	fprintf(file_tmp.stream, "typedef struct\n");
 	fprintf(file_tmp.stream, "{\n");
 	fprintf(file_tmp.stream, "\tchar *name;\n");
-	fprintf(file_tmp.stream, "\terror_critical_t critical;\n");
-	fprintf(file_tmp.stream, "} error_item_t;\n\n");
+	fprintf(file_tmp.stream, "\terr_critical_t critical;\n");
+	fprintf(file_tmp.stream, "} err_item_t;\n\n");
 
 	// end
 	fprintf(file_tmp.stream, "\n#endif\n");

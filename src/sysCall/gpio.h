@@ -51,9 +51,9 @@ typedef struct
 	bool active_high;
 } gpio_signal_item_t;
 
-void gpioSignalInit(gpio_signal_t signal, gpio_signal_item_t *sig);
-void gpioSignalSet(gpio_signal_t signal, bool on);
-bool gpioSignalGet(gpio_signal_t signal);
-void gpioSignalToggle(gpio_signal_t signal);
+void gpio_signalInit(gpio_signal_t signal, gpio_signal_item_t *sig);
+void gpio_signalSet(gpio_signal_t signal, bool on);
+bool gpio_signalGet(gpio_signal_t signal);
+void gpio_signalToggle(gpio_signal_t signal);
 
 #endif
