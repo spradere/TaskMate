@@ -32,8 +32,8 @@ typedef struct
 
 void sysCallGetTargetInfo(const target_info_t **target);
 
-void sysCallSetThreadRTC(uint16_t count);
-uint16_t sysCallGetThreadRTC(void);
+void sysCallSetThreadSTC(uint16_t count);
+uint16_t sysCallGetThreadSTC(void);
 
 void sysCallYieldHand(void);
 
