@@ -107,8 +107,8 @@ int main(void)
 	hal_usartSendTXBuffer();
 
 	moduleThreadSetCurrent(0);
-	module_item_thread_t *mod_t = moduleThreadGetPointer(moduleThreadGetCurrent());
-	hal_setStackPointer((uintptr_t)mod_t->stack_pointer);
+	module_item_thread_t *mod = moduleThreadGetPointer(moduleThreadGetCurrent());
+	hal_setStackPointer((uintptr_t)mod->stack_pointer);
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();

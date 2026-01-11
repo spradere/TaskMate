@@ -103,3 +103,4 @@ TaskMate 0.24
 	sort all headers with clang-format
 	rename RCT -> STC SoftwareTimeCounter
 	move autoCode sources from utility/autoCode_src -> scr/autoCode
+	gather code about modules in modules.h
