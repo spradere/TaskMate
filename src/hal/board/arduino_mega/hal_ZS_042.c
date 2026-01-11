@@ -18,6 +18,7 @@
  */
 
 #include "hal/board/arduino_mega/hal_ZS_042.h"
+
 #include "hal/mcu/atmega2560/hal_i2c.h"
 
 // NOLINTBEGIN

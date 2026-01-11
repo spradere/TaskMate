@@ -19,6 +19,7 @@
  */
 
 #include "parseInitrc.h"
+
 #include "initrcCmdDispatch.h"
 #include "tokenizer.h"
 

@@ -1,7 +1,8 @@
 #include "tasks/task1.h"
-#include "sysCall/sysCall.h"
-#include "sysCall/gpio.h"
+
 #include "services/msg.h"
+#include "sysCall/gpio.h"
+#include "sysCall/sysCall.h"
 
 uint8_t task1_msg_channel;
 

@@ -18,7 +18,9 @@
  */
 
 #include "hal/board/arduino_mega/hal_lcd.h"
+
 #include <util/delay.h>
+
 #include "hal/mcu/atmega2560/hal_i2c.h"
 
 // NOLINTBEGIN

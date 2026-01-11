@@ -19,6 +19,7 @@
  */
 
 #include "writeInclude.h"
+
 #include "fileUtility.h"
 
 void writeInclude(const modules_database_t *data_base, include_type_t type, const char *file_name,
@@ -63,7 +64,6 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
-
 	switch( type )
 	{
 		case INCLUDE_HAL_DEFINE:
@@ -84,52 +84,52 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 		case INCLUDE_HAL_USER_PART:
 		case INCLUDE_HAL_SYSTEM_PART:
+		{
+			file_t file_hal;
+			fileInit(&file_hal);
+			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = "build/files_hal_user"; }
+			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
+			fileOpen(&file_hal, "r", __FILE__, __LINE__);
+			int ret;
+
+			if( type == INCLUDE_HAL_USER_PART )
 			{
-				file_t file_hal;
-				fileInit(&file_hal);
-				if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = "build/files_hal_user"; }
-				if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
-				fileOpen(&file_hal, "r", __FILE__, __LINE__);
-				int ret;
-
-				if( type == INCLUDE_HAL_USER_PART )
-				{
-					fprintf(file_tmp.stream, "// autoInclude hal user headers\n");
-				}
-				if( type == INCLUDE_HAL_SYSTEM_PART )
-				{
-					fprintf(file_tmp.stream, "// autoInclude hal system headers\n");
-				}
-
-				do {
-					ret = fileGetToken(&file_hal);
-					if( strlen(file_hal.token) != 0 )
-					{
-						fprintf(file_tmp.stream, "#include \"%s\"\n", file_hal.token);
-					}
-				} while( ret != 0 );
+				fprintf(file_tmp.stream, "// autoInclude hal user headers\n");
+			}
+			if( type == INCLUDE_HAL_SYSTEM_PART )
+			{
+				fprintf(file_tmp.stream, "// autoInclude hal system headers\n");
 			}
 
-			break;
+			do {
+				ret = fileGetToken(&file_hal);
+				if( strlen(file_hal.token) != 0 )
+				{
+					fprintf(file_tmp.stream, "#include \"%s\"\n", file_hal.token);
+				}
+			} while( ret != 0 );
+		}
+
+		break;
 
 		case INCLUDE_THREAD_LIST:
+		{
+			const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
+
+			for( int i = 0; i < mod->modules_count; i++ )
 			{
-				const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
-
-				for( int i = 0; i < mod->modules_count; i++ )
-				{
-					fprintf(file_tmp.stream, "#include \"services/%s.h\"\n", mod->modules[i].name);
-				}
-				fprintf(file_tmp.stream, "\n");
-
-				mod = &data_base->modules_type[MODULES_TASKS_ID];
-
-				for( int i = 0; i < mod->modules_count; i++ )
-				{
-					fprintf(file_tmp.stream, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
-				}
+				fprintf(file_tmp.stream, "#include \"services/%s.h\"\n", mod->modules[i].name);
 			}
-			break;
+			fprintf(file_tmp.stream, "\n");
+
+			mod = &data_base->modules_type[MODULES_TASKS_ID];
+
+			for( int i = 0; i < mod->modules_count; i++ )
+			{
+				fprintf(file_tmp.stream, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+			}
+		}
+		break;
 
 		default:
 			msgError("unrecognized type %i", type);

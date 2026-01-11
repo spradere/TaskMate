@@ -19,12 +19,14 @@
  */
 
 #include "sysCore/scheduler.h"
+
 #include <stdint.h>
+
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
-#include "sysCore/modules.h"
-#include "sysCall/sysCall.h"
 #include "sysCall/gpio.h"
+#include "sysCall/sysCall.h"
+#include "sysCore/modules.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // scheduler is called by hal_timerScheduler interupt sub routine
