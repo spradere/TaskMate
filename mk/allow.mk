@@ -37,7 +37,7 @@ GREP_PATTERN1 = hal/auto_hal_system.h
 GREP_ALLOWED1 = \
 	src/hal/mcu/${MCU}/hal_timerScheduler.c \
 	src/sysCore/TaskMate.c \
-	src/sysCore/scheduler.c \
+	src/sysCore/tm_scheduler.c \
 	src/sysCore/modules.c \
 	src/sysCall/sysCall.c \
 	src/autoCode/autoCode.c
