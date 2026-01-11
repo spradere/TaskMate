@@ -28,20 +28,20 @@ typedef struct
 	const char *arch;
 	const char *mcu;
 	const char *board;
-} target_info_t;
+} sc_target_info_t;
 
-void sysCallGetTargetInfo(const target_info_t **target);
+void sc_targetGetInfo(const sc_target_info_t **target);
 
-void sysCallSetThreadSTC(uint16_t count);
-uint16_t sysCallGetThreadSTC(void);
+void sc_threadSetSTC(uint16_t count);
+uint16_t sc_threadGetSTC(void);
 
-void sysCallYieldHand(void);
+void sc_handYield(void);
 
 // system status flags
 #define FLAG_COOP 0x01
 
-void sysCallClearFlag(uint8_t flag);
-void sysCallSetFlag(uint8_t flag);
-uint8_t sysCallGetFlag(uint8_t flag);
+void sc_flagClear(uint8_t flag);
+void sc_flagSet(uint8_t flag);
+uint8_t sc_flagGet(uint8_t flag);
 
 #endif

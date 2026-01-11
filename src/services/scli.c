@@ -39,8 +39,8 @@ void scli(void)
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo
 
-		sysCallSetThreadSTC(100);
-		while( sysCallGetThreadSTC() > 0 ) { sysCallYieldHand(); };
+		sc_threadSetSTC(100);
+		while( sc_threadGetSTC() > 0 ) { sc_handYield(); };
 	}
 }
 
@@ -53,9 +53,7 @@ void scliEcho(void)
 	if( hal_usartTestBufferRx() != ERR_HAL_USART_RX_BUFFER_EMPTY )
 	{
 		i = 0;
-		// msgWritreText(scli_msg_channel, "[scli] recive :", MSG_TO_USART);
-		//   todo add a test to ensure message was proceed
-		//   or snprintf return writed charter number
+		// fail ! msgWritreText(scli_msg_channel, "[scli] recive :", MSG_TO_USART);
 
 		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line) - 1)) )
 		{

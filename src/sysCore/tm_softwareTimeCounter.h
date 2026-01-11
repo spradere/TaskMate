@@ -13,14 +13,14 @@
  */
 
 /**
- * @file scheduler.h
- * @brief scheduler header
+ * @file tm_softwareTimeCounter.h
+ * @brief header for STC
  *
  */
 
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
+#ifndef SOFTWARE_TIME_COUNTER_H
+#define SOFTWARE_TIME_COUNTER_H
 
-void scheduler(void);
+void tm_softwareTimeCounter(void);
 
 #endif

@@ -13,14 +13,14 @@
  */
 
 /**
- * @file softwareTimeCounter.h
- * @brief header for RTC
+ * @file tm_scheduler.h
+ * @brief scheduler header
  *
  */
 
-#ifndef SOFTWARE_TIME_COUNTER_H
-#define SOFTWARE_TIME_COUNTER_H
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 
-void softwareTimeCounter(void);
+void tm_scheduler(void);
 
 #endif
