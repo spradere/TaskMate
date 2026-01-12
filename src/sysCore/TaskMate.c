@@ -60,8 +60,8 @@ int main(void)
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
-	modulesDriversAlloc();
-	modulesThreadsAlloc();
+	mod_driversAlloc();
+	mod_threadsAlloc();
 	runLevelAlloc();
 
 	// hal hardware init
@@ -78,7 +78,7 @@ int main(void)
 
 	for( uint8_t i = 0; i < MODULES_DRIVER_COUNT; i++ )
 	{
-		module_item_driver_t *mod = moduleDriverGetPointer(i);
+		mod_driver_item_t *mod = mod_driverGetPointer(i);
 		(*(mod->init))();
 		(*(mod->start))();
 	}
@@ -106,8 +106,8 @@ int main(void)
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
-	moduleThreadSetCurrent(0);
-	module_item_thread_t *mod = moduleThreadGetPointer(moduleThreadGetCurrent());
+	mod_threadSetCurrent(0);
+	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
 	hal_setStackPointer((uintptr_t)mod->stack_pointer);
 
 	hal_contextRestore();

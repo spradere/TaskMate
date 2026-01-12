@@ -25,10 +25,10 @@
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
-void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top)
+void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer, hal_stack_word_t *stack_top)
 {
 	// stack init
-	stack_word_t *sp = stack_top; // get top of stack
+	hal_stack_word_t *sp = stack_top; // get top of stack
 	*(sp--) = (uint8_t)((uintptr_t)func & 0xFF); // PCL;
 	*(sp--) = (uint8_t)(((uintptr_t)func >> 8u) & 0xFF); // PCH
 	*(sp--) = 0x00; // PCHH always 0 if code size < 128k

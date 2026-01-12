@@ -32,7 +32,7 @@ void tm_softwareTimeCounter(void)
 
 	for( uint8_t i = 0; i < MODULES_THREAD_COUNT; i++ )
 	{
-		module_item_thread_t *mod = moduleThreadGetPointer(i);
+		mod_thread_item_t *mod = mod_threadGetPointer(i);
 		if( mod->software_time_counter > 0 ) { mod->software_time_counter--; }
 	}
 }

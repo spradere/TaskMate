@@ -112,6 +112,6 @@ static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void) 
 
 #include "hal/auto_hal_define.h" // get stack_word_t
 
-void hal_threadContextInit(void (*func)(void), stack_word_t **stack_pointer, stack_word_t *stack_top);
+void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer, hal_stack_word_t *stack_top);
 
 #endif
