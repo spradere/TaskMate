@@ -26,7 +26,7 @@
 #define AVR8_REGISTER_COUNT 32 // from R0 to R31
 
 // stack related size
-typedef uint8_t stack_word_t;
+typedef uint8_t hal_stack_word_t;
 
 // gpio avr8 regs structure
 typedef struct

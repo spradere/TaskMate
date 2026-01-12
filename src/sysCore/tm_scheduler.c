@@ -46,9 +46,9 @@ void tm_scheduler(void)
 	// todo -> add system wide error handler
 
 	// switch thread
-	uint8_t current = moduleThreadGetCurrent();
-	if( ++current == MODULES_THREAD_COUNT ) { moduleThreadSetCurrent(0); }
-	else { moduleThreadSetCurrent(current); }
+	uint8_t current = mod_threadGetCurrent();
+	if( ++current == MODULES_THREAD_COUNT ) { mod_threadSetCurrent(0); }
+	else { mod_threadSetCurrent(current); }
 
 	// I'm alive blink in board led
 	static uint8_t alive_cnt = 0;

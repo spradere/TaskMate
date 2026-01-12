@@ -20,7 +20,7 @@
 #ifndef MODULES_H
 #define MODULES_H
 
-#include "hal/auto_hal_define.h" // get stack_word_t from selected arch
+#include "hal/auto_hal_define.h" // get hal_stack_word_t from selected arch
 
 // [autoCode_tag] modules count
 /*
@@ -70,10 +70,10 @@ typedef struct
 
 	volatile uint16_t software_time_counter;
 
-	stack_word_t *stack_pointer;
-	stack_word_t stack[THREAD_STACK_SIZE];
+	hal_stack_word_t *stack_pointer;
+	hal_stack_word_t stack[THREAD_STACK_SIZE];
 
-} module_item_thread_t;
+} mod_thread_item_t;
 
 // driver
 typedef struct
@@ -85,22 +85,22 @@ typedef struct
 	void (*start)(void);
 	void (*stop)(void);
 
-} module_item_driver_t;
+} mod_driver_item_t;
 
 /*
  * Modules functions
  */
 
-void moduleThreadSetCurrent(uint8_t n);
-uint8_t moduleThreadGetCurrent(void);
+void mod_threadSetCurrent(uint8_t n);
+uint8_t mod_threadGetCurrent(void);
 
-void moduleThreadSetSTC(uint16_t count);
-uint16_t moduleThreadGetSTC(void);
+void mod_threadSetSTC(uint16_t count);
+uint16_t mod_threadGetSTC(void);
 
-module_item_driver_t *moduleDriverGetPointer(uint8_t id);
-module_item_thread_t *moduleThreadGetPointer(uint8_t id);
+mod_driver_item_t *mod_driverGetPointer(uint8_t id);
+mod_thread_item_t *mod_threadGetPointer(uint8_t id);
 
-void modulesThreadsAlloc(void);
-void modulesDriversAlloc(void);
+void mod_threadsAlloc(void);
+void mod_driversAlloc(void);
 
 #endif
