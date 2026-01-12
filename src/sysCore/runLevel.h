@@ -55,10 +55,10 @@ typedef struct
 	uint8_t *levels[5];
 	uint8_t current;
 	uint8_t next;
-} run_levels_t;
+} rl_data_base_t;
 
 // [/tag]
 
-void runLevelAlloc(void);
+void rl_Alloc(void);
 
 #endif

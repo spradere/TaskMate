@@ -62,7 +62,7 @@ int main(void)
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
-	runLevelAlloc();
+	rl_Alloc();
 
 	// hal hardware init
 	snprintf(log, sizeof(log), "[boot] hal hardware init\n");
