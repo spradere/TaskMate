@@ -43,8 +43,6 @@ void tm_scheduler(void)
 
 	// todo -> add stack overflow test
 
-	// todo -> add system wide error handler
-
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
 	if( ++current == MODULES_THREAD_COUNT ) { mod_threadSetCurrent(0); }
