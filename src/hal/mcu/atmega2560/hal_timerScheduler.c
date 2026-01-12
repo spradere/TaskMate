@@ -67,14 +67,14 @@ void hal_timerSchedulerLoad(void)
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	module_item_thread_t *mod;
+	mod_thread_item_t *mod;
 
 	// save current thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
 		hal_contextSave();
-		mod = moduleThreadGetPointer(moduleThreadGetCurrent());
-		mod->stack_pointer = (stack_word_t *)hal_getStackPointer();
+		mod = mod_threadGetPointer(mod_threadGetCurrent());
+		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
 	}
 
 	tm_scheduler();
@@ -82,7 +82,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		mod = moduleThreadGetPointer(moduleThreadGetCurrent());
+		mod = mod_threadGetPointer(mod_threadGetCurrent());
 		hal_setStackPointer((uintptr_t)mod->stack_pointer);
 		hal_contextRestore();
 		hal_returnFromInterupt();

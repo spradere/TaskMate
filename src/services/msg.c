@@ -56,7 +56,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\1add prefix_ 30", MSG_TO_LCD);
+		msgWritreText(chan, "\1add prefix_ 60", MSG_TO_LCD);
 	}
 
 	msgProcess();
