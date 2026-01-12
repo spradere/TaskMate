@@ -48,12 +48,12 @@ void sc_targetGetInfo(const sc_target_info_t **target) { *target = &target_info;
 
 void sc_threadSetSTC(uint16_t count)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { moduleThreadSetSTC(count); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { mod_threadSetSTC(count); }
 }
 
 uint16_t sc_threadGetSTC(void)
 {
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { return moduleThreadGetSTC(); }
+	ATOMIC_BLOCK(ATOMIC_FORCEON) { return mod_threadGetSTC(); }
 }
 
 void sc_handYield(void) { hal_timerSchedulerLoad(); }
