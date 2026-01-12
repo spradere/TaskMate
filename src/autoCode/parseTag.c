@@ -23,8 +23,8 @@
 #include "fileUtility.h"
 #include "tokenizer.h"
 
-static void writeRunlevelDefine(modules_database_t *data_base, FILE *file);
-static void writeModulesCount(modules_database_t *data_base, FILE *file);
+static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file);
+static void writeModulesCount(const modules_database_t *data_base, FILE *file);
 static void writeTaget(const target_t *target, FILE *file);
 static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
@@ -139,7 +139,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	fileClose(&file_tmp, __FILE__, __LINE__);
 }
 
-static void writeRunlevelDefine(modules_database_t *data_base, FILE *file)
+static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)
 {
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
@@ -157,10 +157,10 @@ static void writeRunlevelDefine(modules_database_t *data_base, FILE *file)
 	fprintf(file, "\tuint8_t *levels[%i];\n", RUN_LEVEL_COUNT);
 	fprintf(file, "\tuint8_t current;\n");
 	fprintf(file, "\tuint8_t next;\n");
-	fprintf(file, "} run_levels_t;\n\n");
+	fprintf(file, "} rl_data_base_t;\n\n");
 }
 
-static void writeModulesCount(modules_database_t *data_base, FILE *file)
+static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 {
 	fprintf(file, "#define MODULES_DRIVER_COUNT %i\n",
 			data_base->modules_type[MODULES_DRIVERS_ID].modules_count);
@@ -251,7 +251,7 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file)
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 {
 	// data
-	fprintf(file, "\tto_run = (run_levels_t){\n");
+	fprintf(file, "\tto_run = (rl_data_base_t){\n");
 
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
