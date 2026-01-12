@@ -54,10 +54,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
-	{
-		msgWritreText(chan, "\1add prefix_ 60", MSG_TO_LCD);
-	}
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1add prefix_ 70", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);
