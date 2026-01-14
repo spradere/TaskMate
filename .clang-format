@@ -33,9 +33,10 @@ SpacesInParensOptions:
 AlignConsecutiveDeclarations: false
 AlignConsecutiveAssignments: false
 AlignTrailingComments: false
+IndentPPDirectives: BeforeHash
+
 
 # General C-style tuning
-#SortIncludes: false
 IndentCaseLabels: true
 
 # ------------------------------------------------------------

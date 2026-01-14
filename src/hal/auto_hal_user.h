@@ -19,11 +19,15 @@
 #ifndef AUTO_HAL_USER_H
 #define AUTO_HAL_USER_H
 
+// clang-format off
+// why ? Auto-generated code
+
 // autoInclude hal user headers
 #include "hal/board/arduino_mega/hal_ZS_042.h"
 #include "hal/board/arduino_mega/hal_lcd.h"
 #include "hal/mcu/atmega2560/hal_gpio.h"
 #include "hal/mcu/atmega2560/hal_i2c.h"
 #include "hal/mcu/atmega2560/hal_usart.h"
+// clang-format off
 
 #endif
