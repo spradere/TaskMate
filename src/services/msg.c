@@ -19,9 +19,9 @@
 
 #include "services/msg.h"
 
+#include "sysCall/sysCall.h"
 #include "tm_libc/stdio.h"
 #include "tm_libc/string.h"
-#include "sysCall/sysCall.h"
 
 // Send message to :
 #include "hal/auto_hal_user.h"
