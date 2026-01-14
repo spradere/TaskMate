@@ -18,7 +18,7 @@
  *
  */
 
-#include "libc/snprintf.h"
+#include "tm_libc/snprintf.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
@@ -54,7 +54,7 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                     \
 	} while( 0 )
 
-void snprintf(char *buff, uint8_t buff_size, const char *format, ...)
+int snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 {
 	uint8_t buff_index = 0;
 
@@ -128,4 +128,5 @@ void snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 
 	put_char(0); // close string
 	buff[buff_size - 1] = 0; // worst case close at the end of buffer
+	return buff_index;
 }

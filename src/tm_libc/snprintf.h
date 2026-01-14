@@ -13,21 +13,17 @@
  */
 
 /**
- * @file string.c
- * @brief implementation of libc string
+ * @file snprintf.h
+ * @brief header of libc formated print in string
  *
  */
 
-#include "libc/string.h"
+#ifndef SNPRINTF_H
+#define SNPRINTF_H
 
-void strncpy(char *dest, uint8_t n, const char *src)
-{
-	uint8_t i = 0;
+#include <stdarg.h>
+#include <stdint.h>
 
-	while( (i < n) && (src[i] != 0) && (i < 255) )
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-}
+int snprintf(char *buff, uint8_t buff_size, const char *format, ...);
+
+#endif
