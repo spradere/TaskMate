@@ -19,9 +19,14 @@
 #ifndef AUTO_HAL_DEFINE_H
 #define AUTO_HAL_DEFINE_H
 
+// clang-format off
+// why ? Auto-generated code
+
 // target define
 #include "hal/arch/avr8/arch_define.h"
-#include "hal/board/arduino_mega/board_define.h"
 #include "hal/mcu/atmega2560/mcu_define.h"
+#include "hal/board/arduino_mega/board_define.h"
+
+// clang-format off
 
 #endif
