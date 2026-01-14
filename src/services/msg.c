@@ -19,8 +19,8 @@
 
 #include "services/msg.h"
 
-#include "libc/stdio.h"
-#include "libc/string.h"
+#include "tm_libc/stdio.h"
+#include "tm_libc/string.h"
 #include "sysCall/sysCall.h"
 
 // Send message to :
@@ -54,7 +54,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1add prefix_ 70", MSG_TO_LCD); }
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1add prefix_ 80", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);

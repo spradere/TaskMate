@@ -21,5 +21,16 @@
 #ifndef STDIO_H
 #define STDIO_H
 
-#include "libc/snprintf.h"
+#include "tm_libc/snprintf.h"
+#include "tm_libc/tm_libc_define.h"
+
+#if TM_LIBC_CSTD
+	#include <stdio.h>
+	#define tm_snprintf snprintf
+#endif
+
+#if TM_LIBC_TASKMATE
+	#include "tm_libc/snprintf.h"
+#endif
+
 #endif

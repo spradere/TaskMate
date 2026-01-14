@@ -23,7 +23,7 @@ SRC_DIR_LIST = ${SRC_DIR}/sysCore/
 SRC_DIR_LIST += ${SRC_DIR}/sysCall/
 SRC_DIR_LIST += ${SRC_DIR}/services/
 SRC_DIR_LIST += ${SRC_DIR}/tasks/
-SRC_DIR_LIST += ${SRC_DIR}/libc/
+SRC_DIR_LIST += ${SRC_DIR}/tm_libc/
 
 SRC_DIR_LIST += ${SRC_DIR}/hal/
 SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}/
@@ -53,8 +53,8 @@ AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode/ -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 AUTOCODE_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 
-FILES_HAL_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
-FILES_HAL_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
+HAL_FILES_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
+HAL_FILES_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
 
 AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/src/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \

@@ -41,8 +41,6 @@ void tm_scheduler(void)
 	// prevent scheduler eat thread time slice
 	hal_timerSchedulerStop();
 
-	// todo -> add stack overflow test
-
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
 	if( ++current == MODULES_THREAD_COUNT ) { mod_threadSetCurrent(0); }
