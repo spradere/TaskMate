@@ -49,14 +49,14 @@ _dependency_check:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test if autoCode, initrc and error files was modified
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
+${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${HAL_FILES_USER} ${HAL_FILES_SYSTEM}
 	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@rm -f ${BUILD_DIR}/autoCode_*
 	# list hal sources files
-	@printf "%s" "${FILES_HAL_USER}" > ${BUILD_DIR}/files_hal_user
+	@printf "%s" "${HAL_FILES_USER}" > ${BUILD_DIR}/hal_files_user
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_user
-	@printf "%s" "${FILES_HAL_SYSTEM}" > ${BUILD_DIR}/files_hal_system
+	@printf "%s" "${HAL_FILES_SYSTEM}" > ${BUILD_DIR}/hal_files_system
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_system
 
 	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > ${BUILD_DIR}/autoCode_${AUTOCODE_DATE_TIME}
