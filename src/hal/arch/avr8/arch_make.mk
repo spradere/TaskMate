@@ -19,7 +19,7 @@ CC = avr-gcc
 CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 	-Wcast-align -Wundef -Wnull-dereference -Wpointer-arith -Wcast-qual \
 	-Wmissing-prototypes -Wmissing-declarations -Wredundant-decls \
-	-Wswitch -Wenum-conversion \
+	-Wswitch -Wenum-conversion -Wundef \
 	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
 	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src

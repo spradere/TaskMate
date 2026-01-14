@@ -19,8 +19,9 @@
 #ifndef AUTO_THREADS_LIST_H
 #define AUTO_THREADS_LIST_H
 
-#include "services/msg.h"
 #include "services/scli.h"
+#include "services/msg.h"
+
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 

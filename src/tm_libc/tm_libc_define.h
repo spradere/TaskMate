@@ -13,17 +13,19 @@
  */
 
 /**
- * @file snprintf.h
+ * @file tm_libc_define.h
  * @brief header of libc formated print in string
  *
  */
 
-#ifndef SNPRINTF_H
-#define SNPRINTF_H
+#ifndef TM_LIBC_DEFINE_H
+#define TM_LIBC_DEFINE_H
 
-#include <stdarg.h>
-#include <stdint.h>
+#define TM_LIBC_TASKMATE 1
+#define TM_LIBC_CSTD 0
 
-void snprintf(char *buff, uint8_t buff_size, const char *format, ...);
+#if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
+	_Static_assert(0,"Select exactly one libc, external or internal");
+#endif
 
 #endif
