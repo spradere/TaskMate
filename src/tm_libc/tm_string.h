@@ -13,16 +13,28 @@
  */
 
 /**
- * @file string.h
+ * @file tm_string.h
  * @brief header of libc string
  *
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef TM_STRING_H
+#define TM_STRING_H
 
-#include <stdint.h>
+#include "hal/auto_hal_define.h" // get libc selection
 
-void strncpy(char *dest, uint8_t n, const char *src);
+#if TM_LIBC_CSTD
+	#include <string.h>
+	#define tm_strncpy strncpy
+#endif
+
+#if TM_LIBC_TASKMATE
+	#include <stdint.h>
+	char *tm_strncpy(char *dest, const char *src, uint8_t n);
+#endif
+
+
+
+
 
 #endif
