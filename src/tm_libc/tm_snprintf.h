@@ -13,17 +13,17 @@
  */
 
 /**
- * @file snprintf.h
+ * @file tm_snprintf.h
  * @brief header of libc formated print in string
  *
  */
 
-#ifndef SNPRINTF_H
-#define SNPRINTF_H
+#ifndef TM_SNPRINTF_H
+#define TM_SNPRINTF_H
 
 #include <stdarg.h>
 #include <stdint.h>
 
-int snprintf(char *buff, uint8_t buff_size, const char *format, ...);
+int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...);
 
 #endif

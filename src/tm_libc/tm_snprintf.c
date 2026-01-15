@@ -13,12 +13,12 @@
  */
 
 /**
- * @file snprintf.c
+ * @file tm_snprintf.c
  * @brief implementation of libc formated print in string
  *
  */
 
-#include "tm_libc/snprintf.h"
+#include "tm_libc/tm_snprintf.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
@@ -54,7 +54,7 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                     \
 	} while( 0 )
 
-int snprintf(char *buff, uint8_t buff_size, const char *format, ...)
+int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 {
 	uint8_t buff_index = 0;
 
