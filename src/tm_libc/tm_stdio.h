@@ -13,16 +13,15 @@
  */
 
 /**
- * @file stdio.h
+ * @file tm_stdio.h
  * @brief header of libc stdio
  *
  */
 
-#ifndef STDIO_H
-#define STDIO_H
+#ifndef TM_STDIO_H
+#define TM_STDIO_H
 
-#include "tm_libc/snprintf.h"
-#include "tm_libc/tm_libc_define.h"
+#include "hal/auto_hal_define.h" // get libc selection
 
 #if TM_LIBC_CSTD
 	#include <stdio.h>
@@ -30,7 +29,7 @@
 #endif
 
 #if TM_LIBC_TASKMATE
-	#include "tm_libc/snprintf.h"
+	#include "tm_libc/tm_snprintf.h"
 #endif
 
 #endif
