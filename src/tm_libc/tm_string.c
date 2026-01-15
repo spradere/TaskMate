@@ -13,19 +13,22 @@
  */
 
 /**
- * @file tm_libc_define.h
- * @brief header of libc formated print in string
+ * @file tm_string.c
+ * @brief implementation of libc string
  *
  */
 
-#ifndef TM_LIBC_DEFINE_H
-#define TM_LIBC_DEFINE_H
+#include "tm_libc/tm_string.h"
 
-#define TM_LIBC_TASKMATE 1
-#define TM_LIBC_CSTD 0
+char *tm_strncpy(char *dest, const char *src, uint8_t n)
+{
+	uint8_t i = 0;
 
-#if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
-_Static_assert(0, "Select exactly one libc, external or internal");
-#endif
-
-#endif
+	// tode remove magic number 255, replace with TM_STRING_SIZE_MAX
+	while( (i < n) && (src[i] != 0) && (i < 255) )
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = 0;
+}
