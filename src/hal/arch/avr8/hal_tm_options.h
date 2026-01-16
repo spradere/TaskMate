@@ -13,8 +13,8 @@
  */
 
 /**
- * @file arch_define.h
- * @brief avr8 definitions
+ * @file hal_tm_options.h
+ * @brief arch avr8 definitions
  *
  */
 

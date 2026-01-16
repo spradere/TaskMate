@@ -14,7 +14,7 @@
 
 /**
  * @file initrcCmdDispatch.c
- * @brief command parser for list file options
+ * @brief initrc dispatcher for initrc files
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file autoCode.h
- * @brief autoCode header definitions
+ * @brief autoCode header
  *
  */
 

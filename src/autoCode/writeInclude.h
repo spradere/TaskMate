@@ -13,7 +13,7 @@
 
 /**
  * @file writeInclude.h
- * @brief write include code header
+ * @brief writeInclude header
  *
  */
 

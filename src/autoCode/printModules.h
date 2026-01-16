@@ -13,7 +13,7 @@
 
 /**
  * @file printModules.h
- * @brief print table header
+ * @brief printModules header
  *
  */
 

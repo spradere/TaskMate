@@ -13,7 +13,7 @@
 
 /**
  * @file initrcCmdDispatch.h
- * @brief command dispatch header
+ * @brief initrc dispatcher header
  *
  */
 

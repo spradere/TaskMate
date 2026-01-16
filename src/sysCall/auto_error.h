@@ -19,6 +19,9 @@
 #ifndef ERROR_H
 #define ERROR_H
 
+// clang-format off
+// why ? Auto-generated code
+
 typedef enum
 {
 	ERROR_LOW,
@@ -43,5 +46,6 @@ typedef struct
 	err_critical_t critical;
 } err_item_t;
 
+// clang-format on
 
 #endif
