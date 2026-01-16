@@ -19,7 +19,7 @@
  * @todo Timeout routine, critical/fatal errors handling
  */
 
-#include "sysCall/error.h"
+#include "sysCall/auto_error.h"
 
 // [autoCode_tag] error catalog
 // clang-format off

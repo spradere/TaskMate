@@ -14,14 +14,14 @@
 
 /**
  * @file autoCode.c
- * @brief helper to generate code for threads and drivers handle in initSys.c
+ * @brief Tool to generate code for threads, drivers and HAL in TaskMate codebase
  *
- * - Simple and reliable, read plain text init.rc file for drivers, system
- * services and user tasks
- * - Write code for #include / static allocation / initialisation in initSys.c
+ * - Simple and reliable, read plain text init.rc files
+ * - Write code for #include / static allocation / initialisation via in code
+ * tag system
  *
  * @note
- * tag format are one line C comment // [tag] <task|driver> <init>
+ * tag format are one line C comment // [tag] <object> <action>
  *
  */
 
@@ -61,7 +61,7 @@ int main(int argn, const char *argv[])
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(argv[4], &errors_catalog, "src/sysCall/error.h");
+	globalError(argv[4], &errors_catalog, "src/sysCall/auto_error.h");
 
 	// setup data base
 	modules_database_t data_base;

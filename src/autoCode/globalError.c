@@ -12,7 +12,7 @@
  */
 
 /**
- * @file global_error.c
+ * @file globalError.c
  * @brief write all error in one file
  *
  */
@@ -47,6 +47,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 	fprintf(file_tmp.stream, "#ifndef ERROR_H\n");
 	fprintf(file_tmp.stream, "#define ERROR_H\n\n");
+
+	printClangFormatOff(file_tmp.stream);
 
 	fprintf(file_tmp.stream, "typedef enum\n");
 	fprintf(file_tmp.stream, "{\n");
@@ -128,6 +130,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	fprintf(file_tmp.stream, "} err_item_t;\n\n");
 
 	// end
+
+	printClangFormatOn(file_tmp.stream);
 	fprintf(file_tmp.stream, "\n#endif\n");
 
 	fileCmpReplace(&file_dest, &file_tmp);

@@ -13,7 +13,7 @@
 
 /**
  * @file hal_boardInit.h
- * @brief board init arduino mega implematation
+ * @brief arduino mega board init arduino mega header
  *
  */
 

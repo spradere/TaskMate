@@ -28,6 +28,6 @@
 #include "hal/mcu/atmega2560/hal_gpio.h"
 #include "hal/mcu/atmega2560/hal_i2c.h"
 #include "hal/mcu/atmega2560/hal_usart.h"
-// clang-format off
+// clang-format on
 
 #endif
