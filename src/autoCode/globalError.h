@@ -12,7 +12,7 @@
  */
 
 /**
- * @file global_error.h
+ * @file globalError.h
  * @brief global error header
  *
  */

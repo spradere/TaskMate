@@ -27,6 +27,6 @@
 
 #include "tasks/task1.h"
 #include "tasks/task2.h"
-// clang-format off
+// clang-format on
 
 #endif

@@ -14,15 +14,9 @@
 
 /**
  * @file TaskMate.c
- * @brief Implements TaskMate preemptive scheduler & RTC.
- *
- * This file contains :
- * - system, drivers and thread initialisation
+ * @brief Implements system init
  *
  * @todo finish run level
- *
- * Now or later I will have to write a very lightweight libc,
- * designed for embedded systems with MCU. Not POSIX compliant.
  *
  */
 

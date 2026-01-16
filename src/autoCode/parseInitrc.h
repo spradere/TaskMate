@@ -13,7 +13,7 @@
 
 /**
  * @file parseInitrc.h
- * @brief read init.rc file header
+ * @brief parseInitrc file header
  *
  */
 

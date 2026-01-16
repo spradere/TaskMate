@@ -25,7 +25,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sysCall/error.h"
+#include "sysCall/auto_error.h"
 
 #define HAL_USART_BAUD_RATE 9600
 

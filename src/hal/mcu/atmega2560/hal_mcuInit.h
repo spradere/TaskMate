@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2025 PRADERE Sebastien
  */
 
+/**
+ * @file hal_mcuInit.h
+ * @brief ATmega2560 init header
+ *
+ */
+
 #ifndef HAL_MCUINIT_H
 #define HAL_MCUINIT_H
 
