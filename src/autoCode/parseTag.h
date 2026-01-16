@@ -13,7 +13,7 @@
 
 /**
  * @file parseTag.h
- * @brief read tag header
+ * @brief parseTag header
  *
  */
 

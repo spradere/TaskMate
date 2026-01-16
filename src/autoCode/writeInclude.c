@@ -14,7 +14,7 @@
 
 /**
  * @file writeInclude.c
- * @brief write include code implemetation
+ * @brief write include files
  *
  */
 
@@ -64,8 +64,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
-	fprintf(file_tmp.stream, "// clang-format off\n");
-	fprintf(file_tmp.stream, "// why ? Auto-generated code\n\n");
+	printClangFormatOff(file_tmp.stream);
 
 	switch( type )
 	{
@@ -138,7 +137,8 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			msgError("unrecognized type %i", type);
 			exit(1);
 	}
-	fprintf(file_tmp.stream, "// clang-format off\n");
+
+	printClangFormatOn(file_tmp.stream);
 	fprintf(file_tmp.stream, "\n#endif\n");
 
 	fileCmpReplace(&file_include, &file_tmp);

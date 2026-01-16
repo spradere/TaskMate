@@ -14,7 +14,7 @@
 
 /**
  * @file printModules.c
- * @brief print modules content implemetation
+ * @brief print modules database content
  *
  */
 

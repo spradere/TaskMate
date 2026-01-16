@@ -42,5 +42,7 @@ void fileOpen( file_t *file, const char *mode, const char *caller, const int lin
 void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, const int line);
 void printLicenceHeader(FILE *file);
 void printWarningHeader(FILE *file);
+void printClangFormatOff(FILE *file);
+void printClangFormatOn(FILE *file);
 
  #endif

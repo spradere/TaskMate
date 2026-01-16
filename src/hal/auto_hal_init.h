@@ -27,6 +27,6 @@
 #include "hal/mcu/atmega2560/hal_mcuInit.h"
 #include "hal/board/arduino_mega/hal_boardInit.h"
 
-// clang-format off
+// clang-format on
 
 #endif
