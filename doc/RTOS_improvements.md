@@ -2,7 +2,7 @@
 
 Future improvements will focus on achieving predictable timing behaviour by addressing key aspects:
 
-- **Latency control:** minimizing the time between an interrupt event and task resumption.
+- **Latency control:** minimising the time between an interrupt event and task resumption.
 - **Jitter reduction:** ensuring consistent timing intervals across scheduler cycles.
 - **Deterministic preemption:** guaranteeing that high-priority tasks always execute within bounded response times.
 - **Protected I/O operations:** introducing mechanisms to temporarily shield critical drivers or sections from preemption.

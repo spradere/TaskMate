@@ -185,7 +185,4 @@ void printClangFormatOff(FILE *file)
 	fprintf(file, "// why ? Auto-generated code\n\n");
 }
 
-void printClangFormatOn(FILE *file)
-{
-	fprintf(file, "// clang-format on\n");
-}
+void printClangFormatOn(FILE *file) { fprintf(file, "// clang-format on\n"); }

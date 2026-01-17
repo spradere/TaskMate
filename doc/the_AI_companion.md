@@ -15,7 +15,7 @@ Yet, the influence is everywhere:
 
 - It helped **structure ideas** when thoughts were too many.
 - It taught **new things** when the path was unknown.
-- It offered **guidance on system design and organization**, keeping complexity under control.
+- It offered **guidance on system design and organisation**, keeping complexity under control.
 - It provided **technical insights** — on a single line of C, a tricky algorithm, or an elusive compiler flag.
 - And it became an **efficient research assistant**, finding just the right pieces of knowledge to keep progress flowing.
 
