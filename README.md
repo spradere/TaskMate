@@ -1,13 +1,13 @@
 # TaskMate RTOS ![](doc/icon_64.png)
-## Micro Controler Unit - Real Time Operating System
+## Micro-controller Unit - Real Time Operating System
 
 ---
 
 ### ▶️ Introduction
 
 **TaskMate** is a lightweight, preemptive real-time operating system.
-Designed specifically for **microcontrollers**.
-It emphasizes **reliability** and **modularity**.
+Designed specifically for **micro-controllers**.
+It emphasises **reliability** and **modularity**.
 Without relying on any external RTOS — everything is built entirely from scratch.
 
 **TaskMate** is structured around a clean and portable architecture designed
@@ -15,7 +15,7 @@ to separate build logic, system logic, and hardware dependencies.
 
 > <span style="color:green"> **Project Stats (v0.24)**</span>
 >
->  <span style="color:green">265 commits • 104 source files • 3748 lines of code •
+>  <span style="color:green">280 commits • 92 source files • 2830 lines of code •
 > binary size : 6022 bytes (Flash) • ram usage : 2326 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
@@ -23,7 +23,7 @@ to separate build logic, system logic, and hardware dependencies.
 > <span style="color:red">TaskMate is currently in active development and
 > should be considered **experimental**. While the core system and architecture are
 > functional, many components are still evolving. It is **not yet suitable for production use**,
-> and both APIs and internal structures may change without notice.</span>
+> and both Pisa and internal structures may change without notice.</span>
 
 
 ---
@@ -35,7 +35,7 @@ tree, the project would never have reached its current level of maturity without
 the assistance of AI. ChatGPT has been an invaluable tool for **structuring ideas,
 learning new concepts, and refining both code and architectural design.** It
 provides **technical guidance**. Moreover, it enables **efficient
-research** on related topics by summarizing and contextualizing complex technical
+research** on related topics by summarising and contextualising complex technical
 information, helping me focus on building rather than endlessly searching.
 
 See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
@@ -107,15 +107,15 @@ This design significantly improves **stability** and **portability**.
 Starting with version 0.10, TaskMate uses a **modular design model**:
 
 - Drivers, system services, and user tasks are placed in dedicated directories.
-- Each directory provides a `*_init.rc` file describing initialization parameters.
+- Each directory provides a `*_init.rc` file describing initialisation parameters.
 - These files are parsed before **compile time** by a custom tool : `autoCode`.
 
 The result is **auto-generated code**, without runtime overhead 👍
 
 This approach keeps the flexibility of a dynamic system but ensures that
- **everything is resolved at compile time**, minimizing Flash and RAM usage.
-This mechanism defines system initialization and resource mapping
-**without manually hardcoding** any configuration.
+ **everything is resolved at compile time**, minimising Flash and RAM usage.
+This mechanism defines system initialisation and resource mapping
+**without manually hard coding** any configuration.
 
 See : [More about autoCode](doc/autoCode.md)
 See : [Info about run level](doc/run_level.md)
@@ -126,13 +126,13 @@ See : [Info about run level](doc/run_level.md)
 
 TaskMate introduces a unified **global error management** system designed to replace
 scattered, module-local error handling with a coherent, **system-wide architecture**.
-Each module declares its errors in a dedicated .err initialization file using a strict
+Each module declares its errors in a dedicated .err initialisation file using a strict
 naming convention, ensuring namespace safety and **long-term maintainability**.
 During the build process, autoCode tool **validates** error definitions,
-detects duplicates, assigns **unique identifiers**, and generates a centralized error
+detects duplicates, assigns **unique identifiers**, and generates a centralised error
 database. At runtime, all errors are raised through a **single system interface**,
 allowing consistent handling of logging, severity levels, return values, and
-optional system actions. This approach minimizes **code duplication**, reduces
+optional system actions. This approach minimises **code duplication**, reduces
 **memory usage**, and provides a solid foundation for diagnostics, robustness, and
 future extensibility, while remaining **lightweight** and suitable for constrained
 embedded systems.
@@ -170,7 +170,7 @@ See the `LICENSE` file for full details.
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
 - The markdown guide, author Matt Cone, publisher Amazon. ISBN 9798656504492
 - Hands-On RTOS with Microcontrollers, author Brian Amos, publisher Packt. ISBN 978-1-83882-673-4
-- Making Embedded Sysems, author Elecia White, publisher O'Reilly. ISBM 978-1-098-15154-6
-- Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBM 978-1-032-98099-7
-- The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick George V. Neville-Niel Robert N.M. Watson, publisher Addison-Wesley, ISBM 978-0-312-96897-2
+- Making Embedded Sysems, author Elecia White, publisher O'Reilly. ISBN 978-1-098-15154-6
+- Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
+- The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 

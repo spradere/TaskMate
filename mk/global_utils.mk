@@ -41,7 +41,7 @@ cloc:
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@cloc * --exclude-dir=build,html,log,templates\
-		--exclude-lang=D --exclude-ext=rc
+		--exclude-lang=D --exclude-ext=rc,md
 .PHONY: cloc
 
 # Check annotations

@@ -4,7 +4,7 @@ Portability and configuration must be handled by:
 
 - the directory structure (arch/, mcu/, board/)
 - the build system (Makefile variables: ARCH, MCU, BOARD)
-- autoCode generator for system initialization.
+- autoCode generator for system initialisation.
 - C preprocessor conditional statements
 
 This rule prevents:
@@ -25,7 +25,7 @@ The GPIO subsystem provides a clean and portable abstraction for all inputs and 
 Its goals are:
 
 - **Portability** across MCUs (AVR, STM32, AMD64 simulation, …)
-- **Board-specific configurability** (each board assigns logical signals to physical pins)
+- **Board-specific configuration** (each board assigns logical signals to physical pins)
 - **Safety checks at runtime** (no unconfigured signal can be used)
 - **Simple API for tasks** (gpioSignalSet(), gpioSignalGet())
 
@@ -46,7 +46,7 @@ The design follows a strict layered model :
 **Role**
 
 This is the **lowest-level** GPIO driver, directly manipulating MCU registers.
-It knows the physical ports of the microcontroller
+It knows the physical ports of the micro-controller
  (`PORTA`, `DDRA`, `PINA` on AVR; `GPIOA->ODR`, `GPIOA->BSRR` on STM32).
 
 **Responsibilities**
@@ -134,7 +134,7 @@ They use only logical signals, which makes them fully portable.
 ## 🧩 Adding a New Hardware Target (ARCH / MCU / BOARD)
 
 Thanks to the existing build and directory structure, adding support for
-a new architecture, microcontroller or board **does not require** changes to
+a new architecture, micro-controller or board **does not require** changes to
 the core system.
 
 
@@ -151,12 +151,12 @@ Example: adding arm32v7m
 	- low-level interrupt handling.
 	- arch_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `hal/halp_api.h`
+- Use the common HAL API headers from: `hal/hal_api.h`
 - Extend the Makefile to accept: `ARCH=arm32v7m`
 
 ---
 
-2️⃣ **New microcontroller (MCU)**
+2️⃣ **New micro-controller (MCU)**
 
 Example: adding stm32g474
 
@@ -164,10 +164,10 @@ Example: adding stm32g474
 
 - Implement MCU-specific peripherals:
 
-	- timers, UART, GPIO, I²C, ADC, …
+	- timers, USART, GPIO, I²C, ADC, …
 	- mcu_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `hal/halp_api.h`
+- Use the common HAL API headers from: `hal/hal_api.h`
 - Extend the Makefile to map: `MCU=stm32g474`
 
 ---
@@ -179,11 +179,11 @@ Example: adding nucleoG474RE
 - Create: `src/hal/board/nucleoG474RE/`
 
 - Implement:
-	- pin mapping (LEDs, buttons, debug UART)
+	- pin mapping (LEDs, buttons, debug USART)
 	- board-specific initialization
 	- board_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `hal/halp_api.h`
+- Use the common HAL API headers from: `hal/hal_api.h`
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 
 ---

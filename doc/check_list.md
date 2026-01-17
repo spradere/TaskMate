@@ -16,7 +16,7 @@
 - [x] Git Workflow (with Codeberg)
 - [x] Backup Strategy (remote, local and USB)
 - [x] Doxygen documentation
-- [x] Powerfull Makefile
+- [x] Powerful Makefile
 
 ---
 
@@ -35,7 +35,7 @@
     - [ ] Start/stop/restart drivers
     - [ ] System status display
 - [ ] Error/Log View via CLI
-- [ ] Driver Lifecycle Control (start/stop/restart from CLI)
+- [ ] Driver Life-cycle Control (start/stop/restart from CLI)
 - [ ] System Config Management (EEPROM/Flash)
     - [ ] Load/save system and driver configurations
 - [ ] CLI Config Management Commands

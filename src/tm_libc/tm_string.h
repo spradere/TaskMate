@@ -30,11 +30,7 @@
 
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
-	char *tm_strncpy(char *dest, const char *src, uint8_t n);
+char *tm_strncpy(char *dest, const char *src, uint8_t n);
 #endif
-
-
-
-
 
 #endif

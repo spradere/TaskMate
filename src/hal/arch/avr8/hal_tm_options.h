@@ -18,10 +18,10 @@
  *
  */
 
- // libc selection
+// libc selection
 #define TM_LIBC_TASKMATE 1
 #define TM_LIBC_CSTD 0
 
 #if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
-	_Static_assert(0, "Select exactly one libc, external or internal");
+_Static_assert(0, "Select exactly one libc, external or internal");
 #endif

@@ -43,7 +43,7 @@ Modularity, strict APIs, and clean headers
 
 ## 2. 📖 Readability: Clarity over cleverness
 
-Code is read more than it is written. Prioritize understandable variable names and structure.
+Code is read more than it is written. Prioritise understandable variable names and structure.
 
 * Code is for humans first, compilers second.
 Don't write clever code. Write code you'd understand a year from now with a hangover.
@@ -51,7 +51,7 @@ Don't write clever code. Write code you'd understand a year from now with a hang
 * Use meaningful names.
 `status_t file_status;` is good. `int fs;` is not.
 
-* Use typedefs and enums for meaning.
+* Use typedef and enum for meaning.
 `typedef enum { STATUS_OK, STATUS_ERR } status_t;` is far clearer than using 0 and 1.
 
 * Be explicit, not implicit.
@@ -71,7 +71,7 @@ status_t task_status; // clear
 
 ## 3. 🛠️ Maintainability: Avoid cryptic names and magic numbers
 
-Use meaningful names, constants, and enums instead of hardcoded values.
+Use meaningful names, constants, and enum instead of hard coded values.
 
 * Avoid magic numbers.
 Use `#define TIMEOUT_MS 1000` instead of `if(t > 1000)`.
@@ -129,7 +129,7 @@ Validate everything—especially in embedded or user-facing code.
 Embedded systems die silently on overflows. Use guards, checks, and tools.
 
 * Defensive coding isn’t paranoia—it’s professionalism.
-Check bounds, handle NULLs, and expect the unexpected.
+Check bounds, handle NULL, and expect the unexpected.
 
 ---
 ## 7. 🔧 Tooling and Process
@@ -167,7 +167,7 @@ When something works only in a specific sequence, say it.
 * Don’t: `enableInterrupts();`
 * Do: `enableInterrupts(); // Must be called after initTimer(), otherwise ISR won’t fire`
 
-### 8.4. Summarize purpose at the start of non-trivial blocks
+### 8.4. Summarise purpose at the start of non-trivial blocks
 
 tell the reader where they are and what this block is about.
 
@@ -180,7 +180,7 @@ for(i = 0; i < MAX_RETRIES; i++)
 }
 ```
 
-### 8.5. Highlight workarounds, hacks, and TODOs
+### 8.5. Highlight workarounds, hacks, and TODO
 
 Comments are a dev diary—use them to flag temporary solutions.
 
@@ -257,8 +257,8 @@ list_table_t *list_table; // unclear
 
 ## 10. 🔤 Abbreviations: Use only when standard or obvious
 
-Avoid cryptic short forms unless they are universally recognized (e.g., UART, ISR).
-Since autocompletion makes long names easy, there’s no excuse for being cryptic in the name of brevity.
+Avoid cryptic short forms unless they are universally recognised (e.g., USART, ISR).
+Since auto-completion makes long names easy, there’s no excuse for being cryptic in the name of brevity.
 
 **Example:**
 ```c
