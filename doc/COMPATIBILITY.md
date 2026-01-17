@@ -16,7 +16,7 @@ The following rules apply to these system components:
 - System calls (`sysCallXXX()`)
 - Driver interfaces (`driverX_init/start/stop`)
 - Exposed data structures
-- Initialization scripts (`*_init.rc`, used by autoCode)
+- Initialisation scripts (`*_init.rc`, used by autoCode)
 - Serial CLI protocol
 
 **Not directly covered** by this policy:
@@ -45,9 +45,9 @@ The following rules apply to these system components:
 
 ### 2.3 Exposed Structures
 
-- Modifications to shared structs (`task_t`, `module_t`, etc.) must be:
+- Modifications to shared struct (`task_t`, `module_t`, etc.) must be:
   - versioned (e.g., `task_v2_t`)
-  - or extended in a non-breaking way (add fields at the end, use paddings)
+  - or extended in a non-breaking way (add fields at the end, use padding)
 
 ### 2.4 Message & Text Protocols
 
@@ -56,7 +56,7 @@ The following rules apply to these system components:
   - include a version field
   - or be auto-detected and backward-compatible
 
-### 2.5 Initialization Scripts (`*_init.rc`)
+### 2.5 Initialisation Scripts (`*_init.rc`)
 
 - All keywords are **reserved and documented**.
 - Removing a keyword is not allowed unless:
@@ -77,7 +77,7 @@ The following rules apply to these system components:
 - Uses **MAJOR.MINOR.PATCH** inspired by [SemVer](https://semver.org/)
 - A **MAJOR** version change (e.g., 1.x → 2.x) allows for breaking changes.
 - **MINOR** versions (e.g., 1.4 → 1.5) must be backward compatible.
-- **PATCH** versions must only include bug fixes, no new features or behavioral changes.
+- **PATCH** versions must only include bug fixes, no new features or behavioural changes.
 
 ---
 
@@ -113,6 +113,6 @@ This document is part of the official TaskMate repository.
 Any modification must:
 
 - be discussed among contributors,
-- be mentioned in the changelog,
+- be mentioned in the CHANGELOG,
 - trigger a major version update if breaking.
 

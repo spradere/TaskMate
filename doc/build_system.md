@@ -3,11 +3,11 @@
 
 ## ✨ Makefile features
 
-- **Automatic Dependency Handling**: Only recompiles modified source files.
-- **Header Dependency Tracking**: Detects changes in `.c .h` files and recompiles affected `.c` files.
+- **Automatic Dependency Handling**: Only recompile modified source files.
+- **Header Dependency Tracking**: Detects changes in `.c .h` files and recompile affected `.c` files.
 - **Automated Code Generation**:
   - If any *_init.rc have been updated autoCode is launched before compilation.
-- **Colorized Output**: Improved readability with `@printf` messages.
+- **Colourised Output**: Improved readability with `@printf` messages.
 - **POSIX-Compliant**: Works without requiring GNU Make.
 
 ---
@@ -34,7 +34,7 @@ Miscellaneous commands :
 | `make tidy` | C code static analysis with clang-tidy tool, config file /.clang-tidy |
 | `make note` | find todo / fix / hack in sources files |
 | `make check` | C code static analysis with cppcheck tool |
-| `make format` | C code formating with clang-format tool, config file /.clang-format|
+| `make format` | C code formatting with clang-format tool, config file /.clang-format|
 
 ---
 
@@ -109,7 +109,7 @@ Short, intuitive commands for development, deployment, and backup.
 ## 🚧 Architecture Boundary Enforcement in the TaskMate Build System
 
 TaskMate implements a lightweight but highly effective *compile-time architecture
-boundary system* designed to prevent accidental or unauthorized access to
+boundary system* designed to prevent accidental or unauthorised access to
 system-critical HAL and sysCore interfaces. This mechanism relies entirely on
 static checks and conventions, adding **zero overhead** to the final binary and no **runtime cost**.
 
@@ -126,7 +126,7 @@ files explicitly listed in the whitelist.
 
 This mechanism automatically extracts the set of `<pattern → allowed>` pairs from
 the `.mk` file, avoiding duplication and ensuring that the configuration itself
-remains the single source of truth. Any unauthorized include immediately stops
+remains the single source of truth. Any unauthorised include immediately stops
 the build, guaranteeing a clean architectural boundary before compilation ever begins.
 
 ---
@@ -141,7 +141,7 @@ Each system-critical header contains a defensive guard such as:
 #endif
 ```
 
-Only the modules explicitly authorized receive the appropriate `-DX_Y_ALLOWED`
+Only the modules explicitly authorised receive the appropriate `-DX_Y_ALLOWED`
 flag from the build system. This ensures that **both direct and recursive includes**
 are kept under strict control, even if a developer manually bypasses the build-time whitelist.
 
@@ -152,7 +152,7 @@ are kept under strict control, even if a developer manually bypasses the build-t
 TaskMate reinforces its internal boundaries through clear file naming
 `(hal_usr_api.h, hal_system_critical_api.h, autoInclude_*.h)` and a consistent
 directory hierarchy `(sysCore/, sysCall/, hal/, services/, tasks/)`. The architecture itself
-makes unauthorized use of privileged interfaces unlikely, and the automated checks
+makes unauthorised use of privileged interfaces unlikely, and the automated checks
 eliminate the remaining risk.
 
 ---
@@ -168,5 +168,5 @@ and user-level components. However, it remains **purely software-based:**
 
 Its purpose is to enforce *architectural discipline*, not to provide hardware-backed
 process isolation. In the context of embedded systems—where the developer
-controls the toolchain and firmware image—this approach provides an excellent
+controls the tool-chain and firmware image—this approach provides an excellent
 balance between **robustness**, **clarity**, **maintainability**, and zero **runtime cost**.

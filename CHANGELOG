@@ -8,12 +8,12 @@ Taskmate0.2
 	main header split (private/public)
 
 TaskMate0.3
-	Realtime counter
+	Real time counter
 	code cosmetics
 	big file split
 
 TaskMate0.4
-	 test USART comm, must use another usart to don't mess with USB bootloader / in situ programer
+	 test USART comm, must use another usart to don't mess with USB bootloader / in situ programmer
 
 TaskMate0.5
 	major code re-organisation with sub-folder
@@ -21,7 +21,7 @@ TaskMate0.5
 	git / codeberg use
 
 TaskMate0.6
-	Driver formated to generic layout (init start stop lock) -> automation
+	Driver formatted to generic layout (init start stop lock) -> automation
 	expand.c program helper to automatically expand task/driver #include/alloc/init in TaskMate.c
 	Doxygen documentation
 
@@ -44,12 +44,12 @@ TaskMate 0.10
 
 TaskMate 0.10_test
 	TaskMate_tag_expand -> utility/autoCode
-	new initSys.c for all system intialisation
+	new initSys.c for all system initialisation
 	Makefile update
-	task formated to a generic layout
+	task formatted to a generic layout
 	autoCode.c spliced in many files
 	autoCode read flags in list file to set system flags
-	autocode style refactoring : vars name, comments, messages
+	autoCode style refactoring : vars name, comments, messages
 
 TaskMate 0.11
 	refactoring TaskMate for modules
@@ -67,9 +67,9 @@ TaskMate 0.20
 	update documentation
 	refactor autoCode -> autoCode2
 	add tree structure for arch/mcu/board
-	modify makefile and autoCode for arch/mcu/board
+	modify Makefile and autoCode for arch/mcu/board
 	remove all avr code from sysCore -> hal
-	change makefile for system critical include guard
+	change Makefile for system critical include guard
 	change versioning scheme
 
 TaskMate 0.21
@@ -85,7 +85,7 @@ TaskMate 0.23
 
 	refactor autoCode message macro info/error with varg
 	refactor autoCode variables name
-	add taget name in TaskMate
+	add target name in TaskMate
 	refactor autoCode file_t struct for file name/stream/error handle
 	refactor autoCode write in tmp file
 	add warnings to clang / avr-gcc and fix code
@@ -93,15 +93,15 @@ TaskMate 0.23
 
 TaskMate 0.24
 
-	refactor colors in makefiles
-	add automated help taget with help text
-	move target info to sysCall
+	refactor colours in Makefile
+	add automated help target with help text
+	move target info to SysCall
 	refactor run level
 	upgrade message server
 	refactor hal_usart with macro for circular buffer handling
 	refactor hal headers .h automatic find sources files, sort all headers with clang-format
 	rename RCT -> STC SoftwareTimeCounter
-	move autoCode sources from utility/autoCode_src -> scr/autoCode
+	move autoCode sources from utility/autoCode_src -> src/autoCode
 	gather code about modules in modules.h
 	change mod_t and mod_d -> mod, mod_t is confusing with typedef
-	add prefix to all poject tm_ sc_ gpio_ err_ mod_ rl_
+	add prefix to all project tm_ sc_ gpio_ err_ mod_ rl_

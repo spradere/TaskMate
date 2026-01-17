@@ -7,7 +7,7 @@
 > Any change to autoCode must be considered system-critical and tested accordingly.</span>
 
 `autoCode` is a **code generation tool** used by TaskMate to automatically build
-the initialization code for drivers, services, and user tasks.
+the initialisation code for drivers, services, and user tasks.
 It consolidates all module definitions from `*_init.rc` configuration files
 into the generated system files that TaskMate uses at runtime.
 
@@ -15,7 +15,7 @@ into the generated system files that TaskMate uses at runtime.
 
 ## ❓ How it's work ?
 
-`autoCode` is responsible for generating dense, low-level initialization
+`autoCode` is responsible for generating dense, low-level initialisation
 code in files like `initSys.c` and a set of auto-generated headers (`autoInclude.h` & `autoAlloc.h`).
 
 This generated code is **not meant to be human-friendly**: it uses indexes,
@@ -29,20 +29,20 @@ Instead of relying on the readability of the generated code, TaskMate trusts the
 
 
 In other words, autoCode acts both as a **configuration validator** and as
-a **single source of truth** for system initialization. As long as autoCode
+a **single source of truth** for system initialisation. As long as autoCode
 is correct and the .rc files are consistent, the generated code can remain
-dense and optimized without impacting maintainability.
+dense and optimised without impacting maintainability.
 
 ---
 
 ## 📁 Input Files
 
-`autoCode` reads `*_init.rc` initialization files describing which modules are active
-for the target architecture and how they should be initialized.
+`autoCode` reads `*_init.rc` initialisation files describing which modules are active
+for the target architecture and how they should be initialised.
 
 | Type        | Typical Path                          | Description                              |
 |--------------|----------------------------------------|------------------------------------------|
-| Drivers      | `src/hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, UART…)  |
+| Drivers      | `src/hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, WART…)  |
 | | `src/hal/mcu/<mcu_name>/drivers_init.rc` | |
 | | `src/hal/board/<borad_name>/drivers_init.rc` | |
 | Services     | `src/services/services_init.rc`        | System-level services (CLI, msg server)  |
@@ -59,13 +59,13 @@ and determines which folder under `hal/` is parsed.
 
 | File                        | Role                                                                 |
 |------------------------------|----------------------------------------------------------------------|
-| `src/sysCore/initSys.c`      					| modules data base initialization routines executed during system startup.    |
-| `src/sysCore/runLevel.c`      				| run level initialization routines executed during system startup.    |
+| `src/sysCore/initSys.c`      					| modules data base initialisation routines executed during system startup.    |
+| `src/sysCore/runLevel.c`      				| run level initialisation routines executed during system startup.    |
 | `src/sysCore/TaskMate.c`      				| write target information arch/mcu/board.    |
 | `src/sysCall/error.c`      					| Global error catalog.    |
-| `scr/sysCore/autoInclude_threads.h`			| Centralized header including all service/task.        |
-| `scr/hal/autoInclude_hal_user.h`      		| Centralized header including user hal calls. |
-| `scr/hal/autoInclude_hal_system_critical.h` 	| Centralized header including system only hal calls. |
+| `scr/sysCore/autoInclude_threads.h`			| Centralised header including all service/task.        |
+| `scr/hal/autoInclude_hal_user.h`      		| Centralised header including user hal calls. |
+| `scr/hal/autoInclude_hal_system_critical.h` 	| Centralised header including system only hal calls. |
 | `src/sysCore/include/autoAlloc.h`     		| Static allocation tables for modules.                                |
 
 ---

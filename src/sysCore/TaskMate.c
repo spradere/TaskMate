@@ -91,7 +91,8 @@ int main(void)
 	// hal_ZS_042Write(&t);
 	// hal_ZS_042Read(&t);
 
-	tm_snprintf(log, sizeof(log), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_snprintf(log, sizeof(log), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours,
+				t.minutes);
 	hal_usartWriteString(log);
 	hal_usartSendTXBuffer();
 
