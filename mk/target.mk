@@ -22,14 +22,14 @@ ARCH ?= avr8
 MCU ?= atmega2560
 BOARD ?= arduino_mega
 
-# Valid archs
+# Valid arch
 VALID_ARCHS = avr8 amd64 arm32v7-m4
 
 .if empty(VALID_ARCHS:M${ARCH})
 .error Invalid ARCH="${ARCH}". Valid values: ${VALID_ARCHS}
 .endif
 
-# Valid MCUs for .arch
+# Valid MCU for .arch
 VALID_MCUS.avr8 = atmega2560
 VALID_MCUS.amd64 = amd64
 VALID_MCUS.arm32v7-m4 = stm32g474

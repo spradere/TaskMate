@@ -124,7 +124,7 @@ static void setupDB(modules_database_t *data_base)
 
 	data_base->modules_type[MODULES_SERVICES_ID].initrc_arg_count_max = 2;
 	data_base->modules_type[MODULES_SERVICES_ID].modules_count = 0;
-	data_base->modules_type[MODULES_SERVICES_ID].name = "Sevices";
+	data_base->modules_type[MODULES_SERVICES_ID].name = "Services";
 	data_base->modules_type[MODULES_SERVICES_ID].status_default = RUN_SERVICE;
 
 	data_base->modules_type[MODULES_TASKS_ID].initrc_arg_count_max = 2;

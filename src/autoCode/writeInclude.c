@@ -134,7 +134,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 		break;
 
 		default:
-			msgError("unrecognized type %i", type);
+			msgError("unrecognised type %i", type);
 			exit(1);
 	}
 

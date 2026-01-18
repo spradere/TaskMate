@@ -14,47 +14,47 @@
 ################################################################################
 
 ################################################################################
-# ANSI colors
+# ANSI colours
 ################################################################################
 
 # TaskMate default style
 
-COLOR_TARGET_INFO = ${COLOR_YELLOW_BOLD}
-COLOR_HELP_TARGET = ${COLOR_WHITE}
-COLOR_HELP_TAG = ${COLOR_CYAN_BOLD}
-COLOR_CLEAN = ${COLOR_RED_BOLD}
-COLOR_BACKUP = ${COLOR_YELLOW}
-COLOR_FAIL = ${COLOR_RED_BOLD}
-COLOR_OK = ${COLOR_GREEN_BOLD}
+COLOUR_TARGET_INFO = ${COLOUR_YELLOW_BOLD}
+COLOUR_HELP_TARGET = ${COLOUR_WHITE}
+COLOUR_HELP_TAG = ${COLOUR_CYAN_BOLD}
+COLOUR_CLEAN = ${COLOUR_RED_BOLD}
+COLOUR_BACKUP = ${COLOUR_YELLOW}
+COLOUR_FAIL = ${COLOUR_RED_BOLD}
+COLOUR_OK = ${COLOUR_GREEN_BOLD}
 
 # styles
-COLOR_RESET            != printf '\033[0m'
-COLOR_BOLD             != printf '\033[1m'
-COLOR_DIM              != printf '\033[2m'
-COLOR_ITALIC           != printf '\033[3m'
-COLOR_UNDERLINE        != printf '\033[4m'
-COLOR_BLINK_SLOW       != printf '\033[5m'
-COLOR_BLINK_FAST       != printf '\033[6m'
-COLOR_REVERSE          != printf '\033[7m'
-COLOR_HIDDEN           != printf '\033[8m'
-COLOR_STRIKETHROUGH    != printf '\033[9m'
+COLOUR_RESET            != printf '\033[0m'
+COLOUR_BOLD             != printf '\033[1m'
+COLOUR_DIM              != printf '\033[2m'
+COLOUR_ITALIC           != printf '\033[3m'
+COLOUR_UNDERLINE        != printf '\033[4m'
+COLOUR_BLINK_SLOW       != printf '\033[5m'
+COLOUR_BLINK_FAST       != printf '\033[6m'
+COLOUR_REVERSE          != printf '\033[7m'
+COLOUR_HIDDEN           != printf '\033[8m'
+COLOUR_STRIKETHROUGH    != printf '\033[9m'
 
-# colors
-COLOR_BLACK            != printf '\033[30m'
-COLOR_RED              != printf '\033[31m'
-COLOR_GREEN            != printf '\033[32m'
-COLOR_YELLOW           != printf '\033[33m'
-COLOR_BLUE             != printf '\033[34m'
-COLOR_MAGENTA          != printf '\033[35m'
-COLOR_CYAN             != printf '\033[36m'
-COLOR_WHITE            != printf '\033[37m'
+# colours
+COLOUR_BLACK            != printf '\033[30m'
+COLOUR_RED              != printf '\033[31m'
+COLOUR_GREEN            != printf '\033[32m'
+COLOUR_YELLOW           != printf '\033[33m'
+COLOUR_BLUE             != printf '\033[34m'
+COLOUR_MAGENTA          != printf '\033[35m'
+COLOUR_CYAN             != printf '\033[36m'
+COLOUR_WHITE            != printf '\033[37m'
 
-# bold colors
-COLOR_BLACK_BOLD       != printf '\033[1;30m'
-COLOR_RED_BOLD         != printf '\033[1;31m'
-COLOR_GREEN_BOLD       != printf '\033[1;32m'
-COLOR_YELLOW_BOLD      != printf '\033[1;33m'
-COLOR_BLUE_BOLD        != printf '\033[1;34m'
-COLOR_MAGENTA_BOLD     != printf '\033[1;35m'
-COLOR_CYAN_BOLD        != printf '\033[1;36m'
-COLOR_WHITE_BOLD       != printf '\033[1;37m'
+# bold colours
+COLOUR_BLACK_BOLD       != printf '\033[1;30m'
+COLOUR_RED_BOLD         != printf '\033[1;31m'
+COLOUR_GREEN_BOLD       != printf '\033[1;32m'
+COLOUR_YELLOW_BOLD      != printf '\033[1;33m'
+COLOUR_BLUE_BOLD        != printf '\033[1;34m'
+COLOUR_MAGENTA_BOLD     != printf '\033[1;35m'
+COLOUR_CYAN_BOLD        != printf '\033[1;36m'
+COLOUR_WHITE_BOLD       != printf '\033[1;37m'
