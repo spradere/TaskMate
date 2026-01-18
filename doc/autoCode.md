@@ -42,7 +42,7 @@ for the target architecture and how they should be initialised.
 
 | Type        | Typical Path                          | Description                              |
 |--------------|----------------------------------------|------------------------------------------|
-| Drivers      | `src/hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, WART…)  |
+| Drivers      | `src/hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, USART…)  |
 | | `src/hal/mcu/<mcu_name>/drivers_init.rc` | |
 | | `src/hal/board/<borad_name>/drivers_init.rc` | |
 | Services     | `src/services/services_init.rc`        | System-level services (CLI, msg server)  |

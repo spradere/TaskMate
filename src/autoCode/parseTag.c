@@ -14,7 +14,7 @@
 
 /**
  * @file parseTagDriversInit.c
- * @brief read tag and witre code in source file
+ * @brief read tag and write code in source file
  *
  */
 

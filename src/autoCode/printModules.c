@@ -69,7 +69,7 @@ void printModules(const modules_database_t *data_base)
 				strncpy(name, "RUN_USER", sizeof(name));
 				break;
 			default:
-				msgError("unknow run level");
+				msgError("unknown run level");
 				printf("\t =%i ?\n", i);
 				exit(1);
 				break;

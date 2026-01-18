@@ -54,7 +54,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1add prefix_ 100", MSG_TO_LCD); }
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\1spellcheck xx", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);
@@ -85,7 +85,7 @@ void msgFreeChannel(uint8_t channel) { channels[channel].status &= (uint8_t)~(1u
 
 void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 {
-	// todo wait here MSG_FLAG_SEND to don't overwrite sessage
+	// todo wait here MSG_FLAG_SEND to don't overwrite message
 	// char debug[64];
 	// uint8_t flag = channels[channel].status & (1 << MSG_FLAG_SEND);
 	// tm_snprintf(debug,64,"[msg:write] debug satus=%i flag=<%i>\n",channels[channel].status, flag );
@@ -146,7 +146,7 @@ void msgProcess(void)
 					break;
 
 				default:
-					hal_usartWriteString("[msg.c:118] error unknow destination\n");
+					hal_usartWriteString("[msg.c:118] error unknown destination\n");
 					hal_usartSendTXBuffer();
 			}
 		}

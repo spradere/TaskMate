@@ -20,6 +20,7 @@
 #ifndef MODULES_H
 #define MODULES_H
 
+#include <stdint.h>
 #include "hal/auto_hal_define.h" // get hal_stack_word_t from selected arch
 
 // [autoCode_tag] modules count

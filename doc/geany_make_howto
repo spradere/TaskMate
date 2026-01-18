@@ -1,4 +1,4 @@
-open a file a a given line :
+open a file at given line :
 	geany +NUM_LINE file.c
 
 using ~/bin/go select/paste error from compiler output

@@ -23,7 +23,7 @@ to separate build logic, system logic, and hardware dependencies.
 > <span style="color:red">TaskMate is currently in active development and
 > should be considered **experimental**. While the core system and architecture are
 > functional, many components are still evolving. It is **not yet suitable for production use**,
-> and both Pisa and internal structures may change without notice.</span>
+> and both API and internal structures may change without notice.</span>
 
 
 ---
@@ -46,10 +46,10 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
-- Automatic recompilation based on file changes, including headers and initrc startup config.
+- Automatic recompilation based on file changes, including headers and initrc startup configuration.
 - CLI commands like `make upload`, `make push` and `make backup`.
-- architecture-specific and board-specific code is compiled without
-using conditional macros (#ifdef).
+- architecture-specific and board-specific code is compiled with
+minimal using conditional macros (#ifdef).
 
 **Portability is achieved by build selection, not by preprocessor logic.**
 
@@ -97,7 +97,7 @@ preventing direct access to the hardware or core system logic.
 
 User tasks can still **benefit from all system features** —
 such as messaging, timing, I/O, and services —
-but always through indirect calls via the SysCall, SysServices and HAL layers.
+but always through indirect calls via the sysCall, services and HAL layers.
 This design significantly improves **stability** and **portability**.
 
 ---

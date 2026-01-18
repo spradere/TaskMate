@@ -1,22 +1,22 @@
 +---------------------+
-|     Code (.text)    | ← Instructions machine (exécutable, read-only)
+|     Code (.text)    | ← Machine instructions (executable, read-only)
 +---------------------+
-|     Constantes      | ← Chaînes "..." en lecture seule (.rodata)
+|     Constants       | ← Read-only strings "..." (.rodata)
 +---------------------+
-|   Données globales  | ← Variables globales initialisées (.data)
+|   Global data       | ← Initialised global variables (.data)
 +---------------------+
-| Données non init.   | ← Variables globales non initialisées (.bss)
+| Uninitialised data  | ← Uninitialised global variables (.bss)
 +---------------------+
-|       Heap          | ← malloc(), calloc(), realloc() (croît vers le haut)
+|       Heap          | ← malloc(), calloc(), realloc() (grows upwards)
 +---------------------+
-|       Stack         | ← variables locales, appels de fonctions (croît vers le bas)
+|       Stack         | ← local variables, function calls (grows downwards)
 +---------------------+
 
-🕹️ Durée de vie et accès
-Type de donnée	Allocation	Durée de vie	Accès
-int a;	Stack	jusqu’à la fin du bloc	rapide (offset)
-static int a;	.data/.bss	jusqu’à la fin du prog	global (adresse)
-char *s = "abc";	.rodata	jusqu’à la fin du prog	lecture seule
-int *p = malloc();	Heap	jusqu’au free()	manuel
-const int c = 4;	.rodata	jusqu’à la fin du prog	lecture seule
-global int g;	.data/.bss	jusqu’à la fin du prog	global
+🕹️ Lifetime and access
+Data type           Allocation   Lifetime                      Access
+int a;              Stack        until the end of the block     fast (offset)
+static int a;       .data/.bss   until the end of the program   global (address)
+char *s = "abc";    .rodata      until the end of the program   read-only
+int *p = malloc();  Heap         until free()                   manual
+const int c = 4;    .rodata      until the end of the program   read-only
+global int g;       .data/.bss   until the end of the program   global
