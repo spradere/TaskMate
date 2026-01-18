@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerScheduler.h
- * @brief header hal part of schuduler
+ * @brief header hal part of scheduler
  *
  */
 

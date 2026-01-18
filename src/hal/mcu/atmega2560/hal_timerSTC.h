@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerSTC.h
- * @brief header hal real time cloc
+ * @brief header hal real time clock
  *
  */
 

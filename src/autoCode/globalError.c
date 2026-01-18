@@ -97,7 +97,7 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_index].critical = ERROR_HIGH; }
 			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
 			{
-				msgError("wrong citical argument <%s>", tok.tokens[2]);
+				msgError("wrong critical argument <%s>", tok.tokens[2]);
 				exit(1);
 			}
 

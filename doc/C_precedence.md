@@ -4,7 +4,7 @@
 |---|---|---|---|
 | 1 | () [] . -> | Function call, array access, struct member | Left-to-right |
 | 1 | ++ -- (postfix) |Post-increment, post-decrement | Left-to-right |
-| 2 | + - ! ~ ++ -- * & sizeof (_type_) | Unary plus/minus, logical/bitwise NOT, pre-inc/dec, dereference, address-of, size-of, cast | Right-to-left |
+| 2 | + - ! ~ ++ -- * & sizeof (_type_) | Unary plus/minus, logical/bitwise NOT, pre-increment/decrement, dereference, address-of, size-of, cast | Right-to-left |
 | 3 | * / % | Multiplication, division, modulo | Left-to-right |
 | 4 | + - | Addition, subtraction | Left-to-right |
 | 5 | << >> | Bitwise left/right shift | Left-to-right |

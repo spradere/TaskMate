@@ -36,6 +36,7 @@ SRCS_H != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.h"
 
 # Build files and directory
 BUILD_DIR = build
+LOG_DIR = log
 TARGET = ${BUILD_DIR}/TaskMate
 
 OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
@@ -61,10 +62,10 @@ AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
 
-# Initrc files for autocode
+# Initrc files for autoCode
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
-# glabal errors
+# global errors
 ERROR_ALL = ${BUILD_DIR}/errors_all.err
 ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 

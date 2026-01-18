@@ -29,7 +29,7 @@
 #include "sysCore/modules.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// scheduler is called by hal_timerScheduler interupt sub routine
+// scheduler is called by hal_timerScheduler interrupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 void tm_scheduler(void)

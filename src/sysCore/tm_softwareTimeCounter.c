@@ -23,7 +23,7 @@
 #include "sysCore/modules.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// softwareTimeCounter is called by hal_timerSTC interupt sub routine
+// softwareTimeCounter is called by hal_timerSTC interrupt sub routine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 void tm_softwareTimeCounter(void)

@@ -31,7 +31,7 @@ void baz(int **b);
 int main(void)
 {
 	int a = 10;
-	printf("level 1 coppy - no change\n[%p] = %i\n",(void*)&a, a);
+	printf("level 1 copy - no change\n[%p] = %i\n",(void*)&a, a);
 	foo(a);
 	printf("[%p] = %i\n\n",(void*)&a, a);
 
