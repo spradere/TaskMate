@@ -1,6 +1,6 @@
 ### 🧭 The Story of TaskMate and the AI Companion
 
-Once upon a time, there was an engineer who wanted to build a small real-time
+Once upon a time, there was an computer enthusiast who wanted to build a small real-time
 operating system — not to conquer the world, but to understand it better. The
 project began humbly, with blinking LEDs and tangled stacks, but soon grew into
 something much deeper: **TaskMate**, a modular kernel where every line of code had

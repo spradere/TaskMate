@@ -36,7 +36,7 @@ But rather the ones:
 * that prevent you from doing just anything
 * and that **reduce the space of possible errors**
 
-Modularity, strict APIs, and clean headers
+Modularity, strict API, and clean headers
 👉 are cognitive guardrails.
 
 ---
@@ -128,7 +128,7 @@ Validate everything—especially in embedded or user-facing code.
 * Watch stack and heap usage.
 Embedded systems die silently on overflows. Use guards, checks, and tools.
 
-* Defensive coding isn’t paranoia—it’s professionalism.
+* Defensive coding isn't paranoia—it's professionalism.
 Check bounds, handle NULL, and expect the unexpected.
 
 ---
@@ -150,26 +150,26 @@ The code shows what happens. Your job is to write why it happens. Self-documenti
 code over excessive comments. Write code so clear it needs fewer comments.
 Use comments to explain **why**, not **what**.
 
-* Don’t: `timeout = 1000; // set timeout to 1000`
+* Don't: `timeout = 1000; // set timeout to 1000`
 * Do: `timeout = 1000; // 1 second max wait before watchdog reset`
 
 ### 8.2. Explain magic numbers and edge cases
 
 If the value isn't self-explanatory, either use a #define or explain why that number.
 
-* Don’t: `if(x == 42)`
+* Don't: `if(x == 42)`
 * Do: `if(x == 42) // 42 is the max sensor reading before overflow`
 
 ### 8.3. Document non-obvious constraints or dependencies
 
 When something works only in a specific sequence, say it.
 
-* Don’t: `enableInterrupts();`
-* Do: `enableInterrupts(); // Must be called after initTimer(), otherwise ISR won’t fire`
+* Don't: `enableInterrupts();`
+* Do: `enableInterrupts(); // Must be called after initTimer(), otherwise ISR won't fire`
 
 ### 8.4. Summarise purpose at the start of non-trivial blocks
 
-tell the reader where they are and what this block is about.
+Tell the reader where they are and what this block is about.
 
 Do:
 ```c
@@ -197,12 +197,12 @@ resetWatchdog();
 
 Especially in embedded or timing-sensitive code—always say what the units are.
 
-* Don’t: `delay = 200;`
+* Don't: `delay = 200;`
 * Do: `delay = 200; // 200 ms delay between measurements`
 
 ### 8.7. Explain why not something was done
 
-Prevent future bugs by documenting why something wasn’t done.
+Prevent future bugs by documenting why something wasn't done.
 Do:
 ```c
 // Do not call free() here: pointer is shared across tasks
@@ -220,24 +220,24 @@ if(flag_ready)
 
 ### 8.9. Describe data formats when working with raw buffers
 
-If you’re decoding binary data, draw the structure in the comments.
+If you're decoding binary data, draw the structure in the comments.
 
 Do:
 ```c
 // Packet format: [0]=start, [1]=cmd, [2]=len, [3..n]=data, [n+1]=CRC
 ```
 
-### 8.10. Don’t repeat what the code already says
+### 8.10. Don't repeat what the code already says
 
 The golden rule: If a comment just rewords the code, delete it.
 
-* Don’t: `index++; // increment index`
+* Don't: `index++; // increment index`
 * Do: `index++; // move to next task in round-robin scheduler`
 
 ### 8.11 Three comment maturity levels
 
 1. Describe what the code does (beginner)
-2. Explain the logic’s purpose (intermediate)
+2. Explain the logic's purpose (intermediate)
 3. Refactor code so comments are often unnecessary (advanced)
 
 ---
@@ -258,7 +258,7 @@ list_table_t *list_table; // unclear
 ## 10. 🔤 Abbreviations: Use only when standard or obvious
 
 Avoid cryptic short forms unless they are universally recognised (e.g., USART, ISR).
-Since auto-completion makes long names easy, there’s no excuse for being cryptic in the name of brevity.
+Since auto-completion makes long names easy, there's no excuse for being cryptic in the name of brevity.
 
 **Example:**
 ```c
@@ -323,14 +323,14 @@ Turning a pile of code into a system.
 
 ### Truths of good code architecture:
 
-* It’s invisible when it works. Bad code screams. Good design whispers.
-* The goal isn’t just to make it run. It’s to make it changeable without fear.
-* Style is structure. Names, indentation, modularity—they aren’t cosmetic. They’re communication.
-* You write for readers, not just compilers. Compilers don’t rage-quit. Humans do.
+* It's invisible when it works. Bad code screams. Good design whispers.
+* The goal isn't just to make it run. It's to make it changeable without fear.
+* Style is structure. Names, indentation, modularity—they aren't cosmetic. They're communication.
+* You write for readers, not just compilers. Compilers don't rage-quit. Humans do.
 
 ### Key points of refactoring
 
-This is the hard part—but it’s also what makes a system satisfying to build and maintain.
+This is the hard part—but it's also what makes a system satisfying to build and maintain.
 
 * Abstraction (layers)
 * Architecture (structuring algorithms/data flow)
@@ -345,7 +345,7 @@ Each message should begin with a **verb prefix** followed by a short description
 
 ### Possible prefixes:
 - `add` — for new files, features, or logic
-- `remove` — for deleted code, features, or cleanup
+- `remove` — for deleted code, features, or clean-up
 - `fix` — for bug fixes or corrections
 - `change` — for modifications, refactors, or renames
 - `upgrade`

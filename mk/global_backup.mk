@@ -28,7 +28,7 @@ TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 push:
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
-		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git add .
 	@git commit -m "${M}"
 	@git push
@@ -39,22 +39,22 @@ push:
 backup:
 #@ [global] USB key backup with current git tag in directory.
 	@printf "\n%sBackup to <${USB_DIR}${TASKMATE_DIR}>%s\n\n" \
-		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \
-		"${COLOR_BACKUP}" "${COLOR_RESET}"
+		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
 	#Test if USB key is mount, do if not
 	@if mount | grep -q "${USB_DIR}"; then \
 		printf "%sUSB key already mounted ${USB_DIR}%s\n" \
-			"${COLOR_BACKUP}" "${COLOR_RESET}"; \
+			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
 	else \
 		printf "%sMount USB key ${USB_DIR}%s\n" \
-			"${COLOR_BACKUP}" "${COLOR_RESET}"; \
+			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 
-	# Test if dest directory exist, create if not
+	# Test if destination directory exist, create if not
 	@if [ -d "${USB_DIR}${TASKMATE_DIR}" ]; then \
 	else \
 		mkdir ${USB_DIR}${TASKMATE_DIR}; \
@@ -62,13 +62,13 @@ backup:
 
 	# Run rsync
 	@printf "%sRun rsync, output logged in log/rsync.log%s\n" \
-		"${COLOR_BACKUP}" "${COLOR_RESET}"
+		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" \
-		"${USB_DIR}${TASKMATE_DIR}/" > log/rsync.log
+		"${USB_DIR}${TASKMATE_DIR}/" > ${LOG_DIR}/rsync.log
 
-	# Umount
+	# umount
 	@printf "%sUmount ${USB_DIR}%s\n" \
-		"${COLOR_BACKUP}" "${COLOR_RESET}"
+		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@umount ${USB_DIR}
 	@printf "\n"
 .PHONY: backup

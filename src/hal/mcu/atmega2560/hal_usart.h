@@ -13,7 +13,7 @@
 
 /**
  * @file hal_usart.h
- * @brief header hal usart implemetation
+ * @brief header hal usart implementation
  *
  */
 

@@ -38,7 +38,7 @@
 #define msgInfo(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
-// target name struture
+// target name structure
 typedef struct
 {
 	const char * const arch_name;

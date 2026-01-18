@@ -32,7 +32,7 @@ void hal_timerSTCInit(void)
 {
 
 	// Set up hal_timerSTC interrupt for RTC
-	TCCR3B = (1 << WGM32) | (1 << CS32); // CTC mode, prescaler 256
+	TCCR3B = (1 << WGM32) | (1 << CS32); // CTC mode, pre scaler 256
 	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
 }
 

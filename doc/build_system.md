@@ -31,10 +31,10 @@ Miscellaneous commands :
 | `make doc` | Generate Doxygen documentation |
 | `make dump` | Disassemble machine code |
 | `make cloc` | Count lines of code |
-| `make tidy` | C code static analysis with clang-tidy tool, config file /.clang-tidy |
-| `make note` | find todo / fix / hack in sources files |
+| `make tidy` | C code static analysis with clang-tidy tool, configuration file /.clang-tidy |
+| `make note` | find TODO / FIX / HACK in sources files |
 | `make check` | C code static analysis with cppcheck tool |
-| `make format` | C code formatting with clang-format tool, config file /.clang-format|
+| `make format` | C code formatting with clang-format tool, configuration file /.clang-format|
 
 ---
 
@@ -120,9 +120,9 @@ The enforcement logic operates at **two complementary levels:**
 ### 1. Build-Time Include Validation
 
 All system-critical headers are declared in a single configuration file `allow.mk`
-as pattern/whitelist pairs. During the build, a dedicated Make rule scans the source
+as pattern / white list pairs. During the build, a dedicated Make rule scans the source
 tree with `grep` and ensures that each critical header is included **only** by source
-files explicitly listed in the whitelist.
+files explicitly listed in the white list.
 
 This mechanism automatically extracts the set of `<pattern → allowed>` pairs from
 the `.mk` file, avoiding duplication and ensuring that the configuration itself
@@ -143,7 +143,7 @@ Each system-critical header contains a defensive guard such as:
 
 Only the modules explicitly authorised receive the appropriate `-DX_Y_ALLOWED`
 flag from the build system. This ensures that **both direct and recursive includes**
-are kept under strict control, even if a developer manually bypasses the build-time whitelist.
+are kept under strict control, even if a developer manually bypasses the build-time white list.
 
 ---
 

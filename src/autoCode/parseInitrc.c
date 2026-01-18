@@ -49,7 +49,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 		file_line_number++;
 		tokenizer(&tok);
 
-		// procced args
+		// proceed args
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
 			if( tok.count > mod->initrc_arg_count_max )
