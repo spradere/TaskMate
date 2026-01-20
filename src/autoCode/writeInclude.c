@@ -116,7 +116,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 		case INCLUDE_THREAD_LIST:
 		{
-			const module_type_t *mod = &data_base->modules_type[MODULES_SERVICES_ID];
+			const module_type_t *mod = &data_base->modules_type[MOD_SERVICES_ID];
 
 			for( int i = 0; i < mod->modules_count; i++ )
 			{
@@ -124,7 +124,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			}
 			fprintf(file_tmp.stream, "\n");
 
-			mod = &data_base->modules_type[MODULES_TASKS_ID];
+			mod = &data_base->modules_type[MOD_TASKS_ID];
 
 			for( int i = 0; i < mod->modules_count; i++ )
 			{
