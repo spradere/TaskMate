@@ -93,7 +93,7 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCore/modules.h", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/modules_define.h", &errors_catalog, &target);
 	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &target);
 
 	// write headers
