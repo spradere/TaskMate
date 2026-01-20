@@ -14,7 +14,7 @@
 
 /**
  * @file hal_gpio.h
- * @brief header hal gpio implementation
+ * @brief header hal gpio
  *
  */
 

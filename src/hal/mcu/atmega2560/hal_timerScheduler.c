@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerScheduler.c
- * @brief hal part of schuduler
+ * @brief hal part of scheduler
  *
  */
 
@@ -34,8 +34,7 @@ const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^
 void hal_timerSchedulerInit(void)
 {
 	// Set up timer1 interrupt for scheduler
-	TCCR1A = 0; // WGM11 = 0 WGM10 = 0
-	TCCR1B = (uint8_t)(1u << CS11); // prescaler = 8
+	TCCR1B = (uint8_t)(1u << CS11); // pre scaler = 8
 	OCR1A = TIMER1_OVERFLOW_COUNT;
 	TIMSK1 |= (uint8_t)(1u << OCIE1A);
 }

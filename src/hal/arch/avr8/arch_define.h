@@ -31,7 +31,7 @@
 // stack related size
 typedef uint8_t hal_stack_word_t;
 
-// gpio avr8 regs structure
+// gpio avr8 registers structure
 typedef struct
 {
 	volatile uint8_t *ddr;

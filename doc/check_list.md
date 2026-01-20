@@ -36,9 +36,9 @@
     - [ ] System status display
 - [ ] Error/Log View via CLI
 - [ ] Driver Life-cycle Control (start/stop/restart from CLI)
-- [ ] System Config Management (EEPROM/Flash)
+- [ ] System configuration Management (EEPROM/Flash)
     - [ ] Load/save system and driver configurations
-- [ ] CLI Config Management Commands
+- [ ] CLI configuration Management Commands
 - [ ] CLI Command History (optional, depending on RAM availability)
 
 ### ♻️ Reliability Testing & Stress Tools

@@ -63,7 +63,7 @@ backup:
 	# Run rsync
 	@printf "%sRun rsync, output logged in log/rsync.log%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" \
+	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" --exclude="log" \
 		"${USB_DIR}${TASKMATE_DIR}/" > ${LOG_DIR}/rsync.log
 
 	# umount

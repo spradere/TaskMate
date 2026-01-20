@@ -12,8 +12,8 @@
  */
 
 /**
- * @file hal_boardinit.c
- * @brief board init arduino mega implematation
+ * @file hal_boardInit.c
+ * @brief board init arduino mega implementation
  *
  */
 
