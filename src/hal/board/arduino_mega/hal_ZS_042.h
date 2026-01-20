@@ -13,7 +13,7 @@
 
 /**
  * @file hal_ZS_042.h
- * @brief header hal lcd implemetation
+ * @brief header hal lcd implementation
  *
  */
 
