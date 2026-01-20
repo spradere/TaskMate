@@ -70,7 +70,7 @@ int main(void)
 	// start driver
 	// TODO remove this code when run level is implemented
 
-	for( uint8_t i = 0; i < MODULES_DRIVER_COUNT; i++ )
+	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *mod = mod_driverGetPointer(i);
 		(*(mod->init))();

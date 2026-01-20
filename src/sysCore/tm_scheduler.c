@@ -43,7 +43,7 @@ void tm_scheduler(void)
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
-	if( ++current == MODULES_THREAD_COUNT ) { mod_threadSetCurrent(0); }
+	if( ++current == MOD_THREAD_COUNT ) { mod_threadSetCurrent(0); }
 	else { mod_threadSetCurrent(current); }
 
 	// I'm alive blink in board led
