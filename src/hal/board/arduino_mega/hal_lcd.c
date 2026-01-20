@@ -13,7 +13,7 @@
 
 /**
  * @file hal_lcd.c
- * @brief hal lcd implemetation
+ * @brief hal lcd implementation
  *
  */
 

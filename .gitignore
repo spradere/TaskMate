@@ -22,3 +22,4 @@ utility/autoCode
 # Ignore folder
 html/
 build/
+log/
