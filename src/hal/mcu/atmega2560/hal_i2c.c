@@ -31,7 +31,7 @@
 void hal_i2cInit(void)
 {
 	TWBR = (uint8_t)HAL_I2C_TWBR_VALUE; // Set baud rate
-	TWSR = 0x00; // Prescaler = 1
+	TWSR = 0x00; // Pre scaler = 1
 }
 
 void hal_i2cStart(void)
