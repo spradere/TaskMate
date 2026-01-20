@@ -24,7 +24,7 @@ char *tm_strncpy(char *dest, const char *src, uint8_t n)
 {
 	uint8_t i = 0;
 
-	// todo remove magic number 255, replace with TM_STRING_SIZE_MAX
+	// TODO remove magic number 255, replace with TM_STRING_SIZE_MAX
 	while( (i < n) && (src[i] != 0) && (i < 255) )
 	{
 		dest[i] = src[i];

@@ -16,7 +16,7 @@
  * @file TaskMate.c
  * @brief Implements system init
  *
- * @todo finish run level
+ * @TODO finish run level
  *
  */
 
@@ -68,7 +68,7 @@ int main(void)
 	hal_boardInit();
 
 	// start driver
-	// todo remove this code when run level is implemented
+	// TODO remove this code when run level is implemented
 
 	for( uint8_t i = 0; i < MODULES_DRIVER_COUNT; i++ )
 	{
