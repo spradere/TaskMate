@@ -85,9 +85,9 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 			}
 
 			// proceed name
-			if( strlen(tok.tokens[0]) > MODULES_NAME_SIZE_MAX )
+			if( strlen(tok.tokens[0]) > MOD_NAME_SIZE_MAX )
 			{
-				msgError("Name too long <%s> is over %i", tok.tokens[0], MODULES_NAME_SIZE_MAX);
+				msgError("Name too long <%s> is over %i", tok.tokens[0], MOD_NAME_SIZE_MAX);
 				err_flag = 1;
 			}
 
