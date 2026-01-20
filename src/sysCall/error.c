@@ -16,7 +16,7 @@
  * @file error.c
  * @brief System wide error implementation
  *
- * @todo Timeout routine, critical/fatal errors handling
+ * @TODO Timeout routine, critical/fatal errors handling
  */
 
 #include "sysCall/auto_error.h"

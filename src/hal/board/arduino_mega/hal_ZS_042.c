@@ -60,7 +60,7 @@ uint8_t hal_ZS_042Write(const hal_rtc_time_t *t)
 {
 	uint8_t buf[8];
 
-	buf[0] = 0x00; // register start address 
+	buf[0] = 0x00; // register start address
 	buf[1] = uint8ToBcd(t->seconds & 0x7F); // CH=0 (clock ON)
 	buf[2] = uint8ToBcd(t->minutes);
 	buf[3] = uint8ToBcd(t->hours) & 0x3F; // mode 24h
