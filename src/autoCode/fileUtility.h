@@ -17,8 +17,8 @@
  *
  */
 
- #ifndef FILEUTILITY_H
- #define FILEUTILITY_H
+#ifndef FILEUTILITY_H
+#define FILEUTILITY_H
 
 #include "autoCode.h"
 
@@ -45,4 +45,4 @@ void printWarningHeader(FILE *file);
 void printClangFormatOff(FILE *file);
 void printClangFormatOn(FILE *file);
 
- #endif
+#endif
