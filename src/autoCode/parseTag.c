@@ -212,7 +212,7 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 
 			fprintf(file,
 					"\n\thal_threadContextInit(%s, &(mod->stack_pointer), "
-					"&(mod->stack[THREAD_STACK_SIZE - 1]));\n",
+					"&(mod->stack[MOD_THREAD_STACK_SIZE - 1]));\n",
 					mod->modules[i].name);
 
 			fprintf(file, "\tmod->software_time_counter = 0;\n");
