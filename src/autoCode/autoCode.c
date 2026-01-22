@@ -37,6 +37,7 @@
 
 #include "fileUtility.h"
 #include "globalError.h"
+#include "options.h"
 #include "parseInitrc.h"
 #include "parseTag.h"
 #include "printModules.h"
@@ -50,18 +51,18 @@ int main(int argn, const char *argv[])
 {
 
 	// test command line arguments
-	if( argn != 5 )
+	if( argn != 4 )
 	{
-		msgError("Bad argn (is %i, not 5) for autoCode\n\tuse autoCode ach mcu board error_file.err", argn);
+		msgError("Bad argn (is %i, not 4) for autoCode\n\tuse autoCode ach mcu board", argn);
 		exit(1);
 	}
 
-	target_t target = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
-	msgInfo("target %s -> %s -> %s", target.arch_name, target.mcu_name, target.board_name);
+	auto_options_t auto_options = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
+	msgInfo("target %s -> %s -> %s", auto_options.arch_name, auto_options.mcu_name, auto_options.board_name);
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(argv[4], &errors_catalog, "src/sysCall/auto_error.h");
+	globalError("build/errors_all.err", &errors_catalog, "src/sysCall/auto_error.h");
 
 	// setup data base
 	modules_database_t data_base;
@@ -72,9 +73,9 @@ int main(int argn, const char *argv[])
 	char mcu_initrc_path[BYTE_INDEX];
 	char board_initrc_path[BYTE_INDEX];
 
-	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", target.arch_name);
-	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", target.mcu_name);
-	snprintf(board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", target.board_name);
+	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", auto_options.arch_name);
+	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", auto_options.mcu_name);
+	snprintf(board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", auto_options.board_name);
 
 	parseInitrc(MOD_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
@@ -89,19 +90,19 @@ int main(int argn, const char *argv[])
 	threadCountLevel(&data_base);
 
 	// parse tag and generate code for init
-	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCore/modules_define.h", &errors_catalog, &target);
-	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &target);
+	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/sysCore/modules_define.h", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &auto_options);
 
 	// write headers
-	writeInclude(&data_base, INCLUDE_THREAD_LIST, "src/sysCore/auto_threads_list.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_PART, "src/hal/auto_hal_system.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/auto_hal_define.h", &target);
-	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &target);
+	writeInclude(&data_base, INCLUDE_THREAD_LIST, "src/sysCore/auto_threads_list.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_PART, "src/hal/auto_hal_system.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/auto_hal_define.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &auto_options);
 
 	// print all info about modules
 	filePrintModified();
