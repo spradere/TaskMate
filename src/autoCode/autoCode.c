@@ -104,7 +104,7 @@ int main(int argn, const char *argv[])
 	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &target);
 
 	// print all info about modules
-	filePrintTouch();
+	filePrintModified();
 	printModules(&data_base);
 
 	return 0;

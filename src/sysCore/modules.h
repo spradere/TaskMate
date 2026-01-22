@@ -39,7 +39,7 @@ typedef struct
 	volatile uint16_t software_time_counter;
 
 	hal_stack_word_t *stack_pointer;
-	hal_stack_word_t stack[THREAD_STACK_SIZE];
+	hal_stack_word_t stack[MOD_THREAD_STACK_SIZE];
 
 } mod_thread_item_t;
 

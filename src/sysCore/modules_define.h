@@ -42,7 +42,7 @@
 #define MOD_TYPE_COUNT 3
 #define MOD_NAME_SIZE_MAX 32
 
-#define THREAD_STACK_SIZE 256
+#define MOD_THREAD_STACK_SIZE 256
 
 // thread status bits
 // bit [2 1 0 ] is run level

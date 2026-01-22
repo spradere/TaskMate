@@ -64,7 +64,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(0);
 
-	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	const char *thread0_name = "scli";
 	mod->name = thread0_name;
@@ -73,7 +73,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(1);
 
-	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	const char *thread1_name = "msg";
 	mod->name = thread1_name;
@@ -82,7 +82,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(2);
 
-	hal_threadContextInit(task1, &(mod->stack_pointer), &(mod->stack[THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(task1, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	const char *thread2_name = "task1";
 	mod->name = thread2_name;
@@ -91,7 +91,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(3);
 
-	hal_threadContextInit(task2, &(mod->stack_pointer), &(mod->stack[THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(task2, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	const char *thread3_name = "task2";
 	mod->name = thread3_name;

@@ -66,7 +66,7 @@ AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # global errors
-ERROR_ALL = ${BUILD_DIR}/errors_all.err
+ERROR_CAT = ${BUILD_DIR}/errors_all.err
 ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 
 # mk file -> target help
