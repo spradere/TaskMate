@@ -23,7 +23,7 @@ clean:
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate.*
-	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* build/autoCode_*
+	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* ${BUILD_DIR}/autoCode_*
 
 .PHONY: clean
 

@@ -1,3 +1,0 @@
-vim $(find . -type f)
-
-vim $(find . -type f \( -name '*.c' -o -name '*.h' -o -name '*.md' \))

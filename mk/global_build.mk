@@ -49,7 +49,7 @@ _dependency_check:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test if autoCode, initrc and error files was modified
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${HAL_FILES_USER} ${HAL_FILES_SYSTEM}
+${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${HAL_FILES_USER} ${HAL_FILES_SYSTEM}
 	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${LOG_DIR}/autoCode_*
@@ -59,7 +59,7 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_ALL} ${HAL_FILES_
 	@printf "%s" "${HAL_FILES_SYSTEM}" > ${BUILD_DIR}/hal_files_system
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_system
 
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL} > ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_CAT} > ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
@@ -92,15 +92,15 @@ _system_critical_check:
 .endfor
 
 # global errors
-${ERROR_ALL}: ${ERROR_FILES}
+${ERROR_CAT}: ${ERROR_FILES}
 	@printf "\n%sCat all *.err in one file for autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cat ${ERROR_FILES} > ${ERROR_ALL}
+	@cat ${ERROR_FILES} > ${ERROR_CAT}
 
 # special rule for autoCode alone
 autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Build and run autoCode alone.
 	@printf "\n%sCompiling and running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_ALL}
+	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_CAT}
 .PHONY: autoCode_alone
