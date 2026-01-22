@@ -42,7 +42,7 @@ int fileGetToken(file_t *file)
 	return 1;
 }
 
-void filePrintTouch(void)
+void filePrintModified(void)
 {
 	msgInfo("*****************************************************");
 	msgInfo("summary of modified files : %i updated, %i unchanged", file_updated, file_unchanged);
