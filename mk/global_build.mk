@@ -1,7 +1,7 @@
 ################################################################################
 #
 # TaskMate Project
-# (c) 2025 PRADERE Sebastien
+# (c) 2026 PRADERE Sebastien
 #
 # This file is part of TaskMate and is distributed under the TaskMate License v1.0.
 # See the LICENSE file for full license terms.
@@ -9,7 +9,7 @@
 # Non-commercial use permitted under conditions. Commercial use requires a separate license.
 # Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
 #
-# Powered by TaskMate, (c) 2025 PRADERE Sebastien
+# Powered by TaskMate, (c) 2026 PRADERE Sebastien
 #
 ################################################################################
 
@@ -50,16 +50,22 @@ _dependency_check:
 
 # Test if autoCode, initrc and error files was modified
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${HAL_FILES_USER} ${HAL_FILES_SYSTEM}
-	@printf "\n%sautoCode, init_rc or error files have changed -> run autoCode%s\n\n" \
+	@printf "\n%sautoCode, init_rc or related srcs files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${LOG_DIR}/autoCode_*
+
+	# set options
+	@printf "\-\-arch %s\n" ${ARCH} > ${AUTOCODE_CONFIG}
+	@printf "\-\-mcu %s\n" ${MCU} >> ${AUTOCODE_CONFIG}
+	@printf "\-\-board %s\n" ${BOARD} >> ${AUTOCODE_CONFIG}
+
 	# list hal sources files
 	@printf "%s" "${HAL_FILES_USER}" > ${BUILD_DIR}/hal_files_user
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_user
 	@printf "%s" "${HAL_FILES_SYSTEM}" > ${BUILD_DIR}/hal_files_system
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_system
 
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_CAT} > ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
+	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} > ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
@@ -99,8 +105,10 @@ ${ERROR_CAT}: ${ERROR_FILES}
 
 # special rule for autoCode alone
 autoCode_alone: ${AUTOCODE_TARGET}
-#@ [global] Build and run autoCode alone.
-	@printf "\n%sCompiling and running autoCode alone%s\n\n" \
+#@ [global] Run autoCode alone.
+	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} ${ERROR_CAT}
+	@rm -f ${AUTOCODE_STAMP}
+	@${MAKE} ${AUTOCODE_STAMP}
+	cat ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
 .PHONY: autoCode_alone

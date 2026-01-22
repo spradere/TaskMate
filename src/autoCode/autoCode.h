@@ -38,14 +38,6 @@
 #define msgInfo(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
-// target name structure
-typedef struct
-{
-	const char * const arch_name;
-	const char * const mcu_name;
-	const char * const board_name;
-} target_t;
-
 typedef unsigned char module_status_t;
 typedef int run_level_modules_count_t;
 

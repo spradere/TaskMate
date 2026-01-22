@@ -1,7 +1,7 @@
 ################################################################################
 #
 # TaskMate Project
-# (c) 2025 PRADERE Sebastien
+# (c) 2026 PRADERE Sebastien
 #
 # This file is part of TaskMate and is distributed under the TaskMate License v1.0.
 # See the LICENSE file for full license terms.
@@ -9,7 +9,7 @@
 # Non-commercial use permitted under conditions. Commercial use requires a separate license.
 # Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
 #
-# Powered by TaskMate, (c) 2025 PRADERE Sebastien
+# Powered by TaskMate, (c) 2026 PRADERE Sebastien
 #
 ################################################################################
 
@@ -53,6 +53,8 @@ AUTOCODE_SRCS != find ${SRC_DIR}/autoCode/ -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode/ -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 AUTOCODE_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
+
+AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
 
 HAL_FILES_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
 HAL_FILES_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
