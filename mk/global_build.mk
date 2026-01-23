@@ -40,9 +40,9 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	@rm -f ${AUTOCODE_LOG_BASE}*
 
 	# set options
-	@printf "\-\-arch %s\n" ${ARCH} > ${AUTOCODE_CONFIG}
-	@printf "\-\-mcu %s\n" ${MCU} >> ${AUTOCODE_CONFIG}
-	@printf "\-\-board %s\n" ${BOARD} >> ${AUTOCODE_CONFIG}
+	@printf "\-\-arch=%s\n" ${ARCH} > ${AUTOCODE_CONFIG}
+	@printf "\-\-mcu=%s\n" ${MCU} >> ${AUTOCODE_CONFIG}
+	@printf "\-\-board=%s\n" ${BOARD} >> ${AUTOCODE_CONFIG}
 
 	# list hal sources files
 	@printf "%s" "${FILES_HAL_USER}" > ${BUILD_DIR}/hal_files_user
@@ -95,5 +95,5 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	cat ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
+	cat ${AUTOCODE_LOG}
 .PHONY: autoCode_alone
