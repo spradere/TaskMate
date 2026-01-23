@@ -92,7 +92,6 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = "build/files_hal_user"; }
 			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
 			fileOpen(&file_hal, "r", __FILE__, __LINE__);
-			int ret;
 
 			if( type == INCLUDE_HAL_USER_PART )
 			{
@@ -103,7 +102,9 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 				fprintf(file_tmp.stream, "// autoInclude hal system headers\n");
 			}
 
-			do {
+			int ret;
+			do
+			{
 				ret = fileGetToken(&file_hal);
 				if( strlen(file_hal.token) != 0 )
 				{
