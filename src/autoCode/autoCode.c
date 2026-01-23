@@ -50,14 +50,16 @@ static void threadCountLevel(modules_database_t *data_base);
 int main(int argn, const char *argv[])
 {
 
-	// test command line arguments
-	if( argn != 4 )
+	// get options
+	if( argn != 2 )
 	{
-		msgError("Bad argn (is %i, not 4) for autoCode\n\tuse autoCode ach mcu board", argn);
+		msgError("autoCode bad argn (is %i, not 2)\n\tuse autoCode config_file", argn);
 		exit(1);
 	}
 
-	auto_options_t auto_options = {.arch_name = argv[1], .mcu_name = argv[2], .board_name = argv[3]};
+	// fixed value while implementing option parser
+	auto_options_t auto_options = {.arch_name = "avr8", .mcu_name = "atmega2560", .board_name = "arduino_mega"};
+
 	msgInfo("target %s -> %s -> %s", auto_options.arch_name, auto_options.mcu_name, auto_options.board_name);
 
 	// global error system
