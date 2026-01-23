@@ -27,21 +27,6 @@ all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 	@printf "\n%sAll done%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
-# Link
-${TARGET}: ${OBJS}
-	@printf "\n%sLinking%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	${CC} ${CFLAGS} -ffunction-sections -fdata-sections -Wl,--gc-sections -flto -o ${ELF} ${OBJS}
-
-# Compile
-${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
-	@printf "\n%sCompilation ...%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
-	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
-		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
-
 # dependency files used to compile *.c if related header or source was edited
 _dependency_check:
 	@printf "\n%sCheck dependency files%s\n\n" \
@@ -49,10 +34,10 @@ _dependency_check:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test if autoCode, initrc and error files was modified
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${HAL_FILES_USER} ${HAL_FILES_SYSTEM}
+${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or related srcs files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f ${LOG_DIR}/autoCode_*
+	@rm -f ${AUTOCODE_LOG_BASE}*
 
 	# set options
 	@printf "\-\-arch %s\n" ${ARCH} > ${AUTOCODE_CONFIG}
@@ -60,12 +45,12 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${HAL_FILES_
 	@printf "\-\-board %s\n" ${BOARD} >> ${AUTOCODE_CONFIG}
 
 	# list hal sources files
-	@printf "%s" "${HAL_FILES_USER}" > ${BUILD_DIR}/hal_files_user
+	@printf "%s" "${FILES_HAL_USER}" > ${BUILD_DIR}/hal_files_user
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_user
-	@printf "%s" "${HAL_FILES_SYSTEM}" > ${BUILD_DIR}/hal_files_system
+	@printf "%s" "${FILES_HAL_SYSTEM}" > ${BUILD_DIR}/hal_files_system
 	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_system
 
-	./${AUTOCODE_TARGET} ${ARCH} ${MCU} ${BOARD} > ${LOG_DIR}/autoCode_${AUTOCODE_DATE_TIME}
+	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
@@ -99,7 +84,7 @@ _system_critical_check:
 
 # global errors
 ${ERROR_CAT}: ${ERROR_FILES}
-	@printf "\n%sCat all *.err in one file for autoCode%s\n" \
+	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cat ${ERROR_FILES} > ${ERROR_CAT}
 

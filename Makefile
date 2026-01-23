@@ -13,18 +13,18 @@
 #
 ################################################################################
 
-# Target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
-.include "mk/target.mk"
+# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
+.include "mk/hardware_target.mk"
 
 # Make global process
-.include "mk/colors.mk"
+.include "mk/make_colours.mk"
 .include "mk/global_and_target_srcs.mk"
-.include "mk/allow.mk"
+.include "mk/header_allow.mk"
 .include "mk/global_build.mk"
 .include "mk/global_utils.mk"
 .include "mk/global_backup.mk"
 
-# Target specific makefiles
+# Hardware specific makefiles
 
 .include "src/hal/arch/${ARCH}/arch_make.mk"
 .include "src/hal/mcu/${MCU}/mcu_make.mk"

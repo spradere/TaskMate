@@ -54,17 +54,19 @@ AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode/ -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 AUTOCODE_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 
+AUTOCODE_LOG_BASE = ${LOG_DIR}/autoCode_log_
+AUTOCODE_LOG = ${AUTOCODE_LOG_BASE}${AUTOCODE_DATE_TIME}
+
 AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
 
-HAL_FILES_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
-HAL_FILES_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
+FILES_HAL_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
+FILES_HAL_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
 
 AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/src/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
 
-# Initrc files for autoCode
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # global errors

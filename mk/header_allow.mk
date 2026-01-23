@@ -14,7 +14,7 @@
 ################################################################################
 
 ################################################################################
-# allowed source access system critical
+# allowed source access system critical headers
 ################################################################################
 
 CFLAGS_${SRC_DIR}/sysCore/TaskMate.c = \
@@ -47,6 +47,6 @@ GREP_ALLOWED2 = \
 	src/sysCore/TaskMate.c \
 	src/autoCode/autoCode.c
 
-GREP_LIST != cat mk/allow.mk \
+GREP_LIST != cat ${.PARSEDIR}/${.PARSEFILE} \
 	| grep '^[[:space:]]*GREP_PATTERN[0-9][0-9]*[[:space:]]*=' \
 	| sed 's/^[[:space:]]*GREP_PATTERN\([0-9]*\)[[:space:]]*=.*/\1/'
