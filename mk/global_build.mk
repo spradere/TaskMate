@@ -40,15 +40,22 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	@rm -f ${AUTOCODE_LOG_BASE}*
 
 	# set options
-	@printf "\-\-arch=%s\n" ${ARCH} > ${AUTOCODE_CONFIG}
-	@printf "\-\-mcu=%s\n" ${MCU} >> ${AUTOCODE_CONFIG}
-	@printf "\-\-board=%s\n" ${BOARD} >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--arch ${ARCH}" > ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
 
 	# list hal sources files
-	@printf "%s" "${FILES_HAL_USER}" > ${BUILD_DIR}/hal_files_user
-	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_user
-	@printf "%s" "${FILES_HAL_SYSTEM}" > ${BUILD_DIR}/hal_files_system
-	@sed -i '' 's|src/||g' ${BUILD_DIR}/files_hal_system
+	@: > ${FILE_HAL_USER_PATH}
+.for file in ${FILES_HAL_USER}
+	@printf "%s\n" "${file}" >> ${FILE_HAL_USER_PATH}
+.endfor
+	@sed -i '' 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
+
+	@:> ${FILE_HAL_SYSTEM_PATH}
+.for file in ${FILES_HAL_SYSTEM}
+	@printf "%s\n" "${file}" >> ${FILE_HAL_SYSTEM_PATH}
+.endfor
+	@sed -i '' 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
 
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG}
 	@touch ${AUTOCODE_STAMP}
