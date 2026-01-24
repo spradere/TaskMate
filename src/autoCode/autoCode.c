@@ -62,7 +62,7 @@ int main(int argn, const char *argv[])
 	options.name = argv[1];
 	fileOpen(&options,"r", __FILE__,__LINE__);
 
-	int ret;
+	/*int ret;
 	int line=0;
 	do
 	{
@@ -72,7 +72,7 @@ int main(int argn, const char *argv[])
 			{
 				printf("option line %i : %s\n",line, options.token);
 			}
-	} while( ret != 0 );
+	} while( ret != 0 );*/
 
 	// TODO remove, fixed value while implementing option parser
 	auto_options_t auto_options = {.arch_name = "avr8", .mcu_name = "atmega2560", .board_name = "arduino_mega"};

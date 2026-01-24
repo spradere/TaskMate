@@ -22,7 +22,6 @@
 // clang-format off
 // why ? Auto-generated code
 
-// autoInclude hal system headers
 #include "hal/arch/avr8/hal_context.h"
 #include "hal/arch/avr8/hal_stack.h"
 #include "hal/mcu/atmega2560/hal_timerScheduler.h"

@@ -21,6 +21,7 @@
 #include "writeInclude.h"
 
 #include "fileUtility.h"
+#include "tokenizer.h"
 
 void writeInclude(const modules_database_t *data_base, include_type_t type, const char *file_name,
 				  const auto_options_t *auto_options)
@@ -93,24 +94,23 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
 			fileOpen(&file_hal, "r", __FILE__, __LINE__);
 
-			if( type == INCLUDE_HAL_USER_PART )
-			{
-				fprintf(file_tmp.stream, "// autoInclude hal user headers\n");
-			}
-			if( type == INCLUDE_HAL_SYSTEM_PART )
-			{
-				fprintf(file_tmp.stream, "// autoInclude hal system headers\n");
-			}
+			int file_line_number = 0;
+			tokenizer_t tok;
 
-			int ret;
-			do
+			while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_hal.stream) )
 			{
-				ret = fileGetToken(&file_hal);
-				if( strlen(file_hal.token) != 0 )
+				file_line_number++;
+				tokenizer(&tok);
+
+				if(tok.count > 1)
 				{
-					fprintf(file_tmp.stream, "#include \"%s\"\n", file_hal.token);
+					msgError("Wrong token count [%s:%i] is %i, should be 1",
+						file_hal.name, file_line_number, tok.count);
+					exit(1);
 				}
-			} while( ret != 0 );
+
+				if(tok.count == 1)fprintf(file_tmp.stream, "#include \"%s\"\n", tok.tokens[0]);
+			}
 		}
 
 		break;

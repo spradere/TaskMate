@@ -19,16 +19,16 @@
 
 # Source directory
 SRC_DIR = src
-SRC_DIR_LIST = ${SRC_DIR}/sysCore/
-SRC_DIR_LIST += ${SRC_DIR}/sysCall/
-SRC_DIR_LIST += ${SRC_DIR}/services/
-SRC_DIR_LIST += ${SRC_DIR}/tasks/
-SRC_DIR_LIST += ${SRC_DIR}/tm_libc/
+SRC_DIR_LIST = ${SRC_DIR}/sysCore
+SRC_DIR_LIST += ${SRC_DIR}/sysCall
+SRC_DIR_LIST += ${SRC_DIR}/services
+SRC_DIR_LIST += ${SRC_DIR}/tasks
+SRC_DIR_LIST += ${SRC_DIR}/tm_libc
 
-SRC_DIR_LIST += ${SRC_DIR}/hal/
-SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}/
-SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}/
-SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}/
+SRC_DIR_LIST += ${SRC_DIR}/hal
+SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}
+SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}
+SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}
 
 # Automatically gather all sources files
 SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
@@ -49,18 +49,20 @@ DEPS_FILE = ${BUILD_DIR}/.deps.d
 
 # autoCode
 AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
-AUTOCODE_SRCS != find ${SRC_DIR}/autoCode/ -maxdepth 1 -type f -name "*.c"
-AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode/ -maxdepth 1 -type f -name "*.h"
+AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
+AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
-AUTOCODE_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 
 AUTOCODE_LOG_BASE = ${LOG_DIR}/autoCode_log_
-AUTOCODE_LOG = ${AUTOCODE_LOG_BASE}${AUTOCODE_DATE_TIME}
+AUTOCODE_LOG_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
+AUTOCODE_LOG = ${AUTOCODE_LOG_BASE}${AUTOCODE_LOG_DATE_TIME}
 
 AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
 
 FILES_HAL_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
 FILES_HAL_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
+FILE_HAL_USER_PATH = ${BUILD_DIR}/files_hal_user
+FILE_HAL_SYSTEM_PATH = ${BUILD_DIR}/files_hal_system
 
 AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/src/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
