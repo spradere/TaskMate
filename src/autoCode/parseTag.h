@@ -24,6 +24,6 @@
 #include "globalError.h"
 #include "options.h"
 
-void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors, const auto_options_t *auto_options);
+void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors, const options_list_t *auto_options);
 
 #endif

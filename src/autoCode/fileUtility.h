@@ -33,7 +33,6 @@ typedef struct
 	char token[FILE_TOKEN_SIZE];
 } file_t;
 
-int fileGetToken(file_t *file);
 void filePrintModified(void);
 void fileCmpReplace(file_t *file_old, file_t *file_new);
 void fileClose(file_t *file, const char *caller, const int line);
