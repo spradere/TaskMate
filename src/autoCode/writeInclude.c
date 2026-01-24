@@ -24,7 +24,7 @@
 #include "tokenizer.h"
 
 void writeInclude(const modules_database_t *data_base, include_type_t type, const char *file_name,
-				  const auto_options_t *auto_options)
+				  const options_list_t *auto_options)
 {
 	// open file
 	msgInfo("generate include statements in <%s>", file_name);
