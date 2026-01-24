@@ -37,7 +37,7 @@ _dependency_check:
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or related srcs files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f ${AUTOCODE_LOG_BASE}*
+	@rm -f ${LOG_DIR}/${AUTOCODE_LOG_NAME}*
 
 	# set options
 	@printf "%s\n" "--arch ${ARCH}" > ${AUTOCODE_CONFIG}
@@ -102,5 +102,6 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	cat ${AUTOCODE_LOG}
+	#cat ${AUTOCODE_LOG}
+	find ./${LOG_DIR} -type f -name "${AUTOCODE_LOG_NAME}*" | xargs cat
 .PHONY: autoCode_alone

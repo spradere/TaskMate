@@ -25,14 +25,14 @@
 
 static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file);
 static void writeModulesCount(const modules_database_t *data_base, FILE *file);
-static void writeTarget(const auto_options_t *auto_options, FILE *file);
+static void writeTarget(const options_list_t *auto_options, FILE *file);
 static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
-			  const auto_options_t *auto_options)
+			  const options_list_t *auto_options)
 {
 	// open source and tmp file
 	msgInfo("open <%s> for parsing tag section", file_name);
@@ -173,7 +173,7 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 			 data_base->modules_type[MOD_TASKS_ID].modules_count));
 }
 
-static void writeTarget(const auto_options_t *auto_options, FILE *file)
+static void writeTarget(const options_list_t *auto_options, FILE *file)
 {
 	// write target name
 	fprintf(file, "const sc_target_info_t target_info =\n");

@@ -21,13 +21,23 @@
 #define OPTIONS_H
 
 #include "autoCode.h"
+#include "fileUtility.h"
 
 // autoCode option structure
 typedef struct
 {
-	const char * const arch_name;
-	const char * const mcu_name;
-	const char * const board_name;
-} auto_options_t;
+	char arch_name[BYTE_INDEX];
+	char mcu_name[BYTE_INDEX];
+	char board_name[BYTE_INDEX];
+} options_list_t;
+
+typedef struct
+{
+	const char *name;
+	void (*func)(const char *value, options_list_t *opt);
+
+} options_cmd_t;
+
+void options(const char *file_name, options_list_t *opt);
 
 #endif
