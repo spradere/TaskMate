@@ -64,7 +64,7 @@ int main(int argn, const char *argv[])
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError("build/errors_all.err", &errors_catalog, "src/sysCall/auto_error.h");
+	globalError(auto_options.errors_file, &errors_catalog, "src/sysCall/auto_error.h");
 
 	// setup data base
 	modules_database_t data_base;

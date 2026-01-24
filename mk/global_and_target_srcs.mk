@@ -58,6 +58,7 @@ AUTOCODE_LOG_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG = ${LOG_DIR}/${AUTOCODE_LOG_NAME}${AUTOCODE_LOG_DATE_TIME}
 
 AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
+AUTOCODE_ERROR_CATALOG = ${BUILD_DIR}/errors_all.err
 
 FILES_HAL_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
 FILES_HAL_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
