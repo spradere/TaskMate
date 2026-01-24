@@ -33,6 +33,6 @@ typedef enum
 	INCLUDE_TYPE_COUNT
 	} include_type_t;
 
-void writeInclude(const modules_database_t *data_base, include_type_t type ,const char *file_name, const auto_options_t *auto_options);
+void writeInclude(const modules_database_t *data_base, include_type_t type ,const char *file_name, const options_list_t *auto_options);
 
 #endif

@@ -1,3 +1,4 @@
+	add option parser to autoCode
 	spellcheck all project, including comments in C code
 	add prefix to all project tm_ sc_ gpio_ err_ mod_ rl_
 	change mod_t and mod_d -> mod, mod_t is confusing with typedef

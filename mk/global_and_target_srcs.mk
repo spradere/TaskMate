@@ -53,9 +53,9 @@ AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 
-AUTOCODE_LOG_BASE = ${LOG_DIR}/autoCode_log_
+AUTOCODE_LOG_NAME = autoCode_log_
 AUTOCODE_LOG_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
-AUTOCODE_LOG = ${AUTOCODE_LOG_BASE}${AUTOCODE_LOG_DATE_TIME}
+AUTOCODE_LOG = ${LOG_DIR}/${AUTOCODE_LOG_NAME}${AUTOCODE_LOG_DATE_TIME}
 
 AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
 
