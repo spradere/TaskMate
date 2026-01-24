@@ -35,7 +35,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 			  const options_list_t *auto_options)
 {
 	// open source and tmp file
-	msgInfo("open <%s> for parsing tag section", file_name);
+	msgInfo("open <%s>", file_name);
 
 	file_t file_src;
 	fileInit(&file_src);
