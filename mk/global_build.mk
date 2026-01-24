@@ -39,10 +39,13 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${LOG_DIR}/${AUTOCODE_LOG_NAME}*
 
-	# set options
+	# set autoCode options
 	@printf "%s\n" "--arch ${ARCH}" > ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--errors ${AUTOCODE_ERROR_CATALOG}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
 
 	# list hal sources files
 	@: > ${FILE_HAL_USER_PATH}
