@@ -36,10 +36,28 @@ static void funcBoard(const char *value, options_list_t *opt)
 	strncpy(opt->board_name, value, BYTE_INDEX);
 }
 
-const options_cmd_t options_cmds[] = 	{{"--arch", funcArch},
+static void funcError(const char *value, options_list_t *opt)
+{
+	strncpy(opt->errors_file, value, BYTE_INDEX);
+}
+
+static void funcHalUser(const char *value, options_list_t *opt)
+{
+	strncpy(opt->files_hal_user, value, BYTE_INDEX);
+}
+
+static void funcHalSystem(const char *value, options_list_t *opt)
+{
+	strncpy(opt->files_hal_system, value, BYTE_INDEX);
+}
+
+const options_cmd_t options_cmds[] ={	{"--arch", funcArch},
 										{"--mcu", funcMcu},
 										{"--board", funcBoard},
-										{NULL, NULL}};
+										{"--errors", funcError},
+										{"--files_hal_user", funcHalUser},
+										{"--files_hal_system", funcHalSystem},
+										{NULL, NULL}	};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
 {
@@ -71,18 +89,18 @@ void options(const char *file_name, options_list_t *opt)
 
 		if(tok.count != 2)
 		{
-			msgError("Wrong token count [%s:%i] is %i, should be 1",
+			msgError("wrong token count [%s:%i] is %i, should be 1",
 				file.name, file_line_number, tok.count);
 			exit(1);
 		}
 
-		msgInfo(" parsing option <%s> value <%s>", tok.tokens[0], tok.tokens[1]);
+		msgInfo(" parsing %s = %s", tok.tokens[0], tok.tokens[1]);
 
 		int err=optionCmdDispatch(tok.tokens[0], tok.tokens[1], opt);
 
 		if(err != 0)
 		{
-			msgError("Unknow option [%s:%i] %s\n", file.name, file_line_number,tok.tokens[0]);
+			msgError("unknown option [%s:%i] %s\n", file.name, file_line_number,tok.tokens[0]);
 			exit(1);
 		}
 	}

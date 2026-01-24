@@ -24,9 +24,9 @@ static int file_unchanged = 0;
 
 void filePrintModified(void)
 {
-	msgInfo("*****************************************************");
-	msgInfo("summary of modified files : %i updated, %i unchanged", file_updated, file_unchanged);
-	msgInfo("*****************************************************");
+	msgInfo("*******************************************************");
+	msgInfo("* summary of modified files : %i updated, %i unchanged *", file_updated, file_unchanged);
+	msgInfo("*******************************************************");
 }
 
 void fileCmpReplace(file_t *file_old, file_t *file_new)
@@ -56,13 +56,13 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 
 	if( same == true )
 	{
-		msgInfo("files are the same, keep the old one <%s>", file_old->name);
+		msgInfo("keep the old one <%s>", file_old->name);
 		remove(file_new->name);
 		file_unchanged++;
 	}
 	else
 	{
-		msgInfo("files are not the same, change for the new one .tmp -> <%s>", file_old->name);
+		msgInfo("change for the new one .tmp -> <%s>", file_old->name);
 		remove(file_old->name);
 		rename(file_new->name, file_old->name);
 		file_updated++;

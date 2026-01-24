@@ -27,7 +27,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 				  const options_list_t *auto_options)
 {
 	// open file
-	msgInfo("generate include statements in <%s>", file_name);
+	msgInfo("generate <%s>", file_name);
 	file_t file_include;
 	fileInit(&file_include);
 	file_include.name = (char *)file_name;
@@ -90,8 +90,8 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 		{
 			file_t file_hal;
 			fileInit(&file_hal);
-			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = "build/files_hal_user"; }
-			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
+			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = auto_options->files_hal_user; }
+			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = auto_options->files_hal_system; }
 			fileOpen(&file_hal, "r", __FILE__, __LINE__);
 
 			int file_line_number = 0;
