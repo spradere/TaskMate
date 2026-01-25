@@ -35,7 +35,7 @@ doc:
 #@ [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	doxygen doc/Doxyfile \
+	doxygen ${DOC_DIR}/Doxyfile \
 		-o HTML_OUTPUT=${DOXYGEN_DIR}
 .PHONY: doc
 

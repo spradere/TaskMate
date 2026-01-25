@@ -22,6 +22,7 @@ SRC_DIR = src
 BUILD_DIR = build
 LOG_DIR = log
 MAKE_DIR = mk
+DOC_DIR = doc
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 DOXYGEN_DIR = html
@@ -31,6 +32,11 @@ RSYNC_LOG = ${LOG_DIR}/rsync.log
 
 AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
 ERROR_CAT = ${BUILD_DIR}/errors_all.err
+
+GIT_IGNORE = .gitignore
+GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
+GIT_ALLOWED_EXT = .c .h .rc .err .mk .md
+GIT_ALLOWED_FILES != find ./ -maxdepth 1 -type f -name "*"
 
 # Target
 TARGET = ${BUILD_DIR}/TaskMate
