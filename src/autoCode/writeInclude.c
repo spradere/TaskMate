@@ -31,7 +31,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	file_t file_include;
 	fileInit(&file_include);
 	file_include.name = (char *)file_name;
-	fileOpen(&file_include, "r", __FILE__, __LINE__);
+	fileOpen(&file_include, "r", FILE_CREATE, __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
@@ -94,7 +94,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fileInit(&file_hal);
 			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = (char *)auto_options->files_hal_user; }
 			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = (char *)auto_options->files_hal_system; }
-			fileOpen(&file_hal, "r", __FILE__, __LINE__);
+			fileOpen(&file_hal, "r", FILE_READONLY, __FILE__, __LINE__);
 
 			int file_line_number = 0;
 			tokenizer_t tok;
