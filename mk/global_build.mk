@@ -19,21 +19,21 @@
 
 .MAIN: all
 
-# Targets begins with '_' or ${} are internal system only
-# They'll not be displayed in help: target
+# Info help system : targets begins with '_' or ${} are internal system only
+# they'll not be displayed in `make help`
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
 	@printf "\n%sAll done%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
-# dependency files used to compile *.c if related header or source was edited
+# dependency files used to compile sources if related header or source was edited
 _dependency_check:
 	@printf "\n%sCheck dependency files%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
-# Test if autoCode, initrc and error files was modified
+# Test for required files for autoCode
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or related srcs files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -69,7 +69,7 @@ ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang ${AUTOCODE_CFLAGS} ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 
-# check #include for system critical features
+# Check #include for system critical features
 _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -92,19 +92,18 @@ _system_critical_check:
 	done
 .endfor
 
-# global errors
+# Global errors
 ${ERROR_CAT}: ${ERROR_FILES}
 	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cat ${ERROR_FILES} > ${ERROR_CAT}
 
-# special rule for autoCode alone
+# Special rule for autoCode alone
 autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	#cat ${AUTOCODE_LOG}
 	find ./${LOG_DIR} -type f -name "${AUTOCODE_LOG_NAME}*" | xargs cat
 .PHONY: autoCode_alone

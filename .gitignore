@@ -1,6 +1,5 @@
 # Ignore compiled object files
 *.o
-utility/autoCode
 
 # Ignore dependency files
 *.d
@@ -17,7 +16,6 @@ utility/autoCode
 *.elf
 *.map
 *.hex
-.autoCode_stamp*
 
 # Ignore folder
 html/

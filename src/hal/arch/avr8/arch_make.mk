@@ -25,6 +25,10 @@ CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 
 CFLAGS += -I/root/code/TaskMate/TaskMate_current/src
 
+# output files
+HEX = ${TARGET}.hex
+ELF = ${TARGET}.elf
+
 # link
 ${TARGET}: ${OBJS}
 	@printf "\n%sLinking%s\n\n" \
@@ -40,9 +44,6 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
-# output files
-HEX = ${TARGET}.hex
-ELF = ${TARGET}.elf
 
 # flash Gordon
 upload: all

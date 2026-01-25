@@ -18,8 +18,6 @@
 ################################################################################
 
 # Get git tag for USB key directory backup
-USB_DIR = /media/usbkey
-USB_DEV = /dev/da0s1
 GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
@@ -44,7 +42,7 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
-	#Test if USB key is mount, do if not
+	# Test if USB key is mount, do if not
 	@if mount | grep -q "${USB_DIR}"; then \
 		printf "%sUSB key already mounted ${USB_DIR}%s\n" \
 			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
@@ -61,9 +59,10 @@ backup:
 	fi
 
 	# Run rsync
-	@printf "%sRun rsync, output logged in log/rsync.log%s\n" \
+	@printf "%sRun rsync, output logged in ${LOG_DIR}/rsync.log%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" --exclude="log" \
+	rsync -av * --progress --delete --exclude "*.o" --exclude="${DOXYGEN_DIR}" \
+		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
 		"${USB_DIR}${TASKMATE_DIR}/" > ${LOG_DIR}/rsync.log
 
 	# umount
