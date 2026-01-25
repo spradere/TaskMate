@@ -25,22 +25,22 @@
 
 static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file);
 static void writeModulesCount(const modules_database_t *data_base, FILE *file);
-static void writeTaget(const target_t *target, FILE *file);
+static void writeTarget(const options_list_t *auto_options, FILE *file);
 static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
-			  const target_t *target)
+			  const options_list_t *auto_options)
 {
 	// open source and tmp file
-	msgInfo("open <%s> for parsing tag section", file_name);
+	msgInfo("open <%s>", file_name);
 
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)file_name;
-	fileOpen(&file_src, "r", __FILE__, __LINE__);
+	fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
@@ -107,7 +107,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 			if( (strcmp(tok.tokens[2], "target") == 0) && (strcmp(tok.tokens[3], "name") == 0) )
 			{
-				writeTaget(target, file_tmp.stream);
+				writeTarget(auto_options, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "count") == 0) )
@@ -166,21 +166,20 @@ static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)
 
 static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 {
-	fprintf(file, "#define MOD_DRIVER_COUNT %i\n",
-			data_base->modules_type[MOD_DRIVERS_ID].modules_count);
+	fprintf(file, "#define MOD_DRIVER_COUNT %i\n", data_base->modules_type[MOD_DRIVERS_ID].modules_count);
 	fprintf(file, "#define MOD_THREAD_COUNT %i\n",
 			(data_base->modules_type[MOD_SERVICES_ID].modules_count +
 			 data_base->modules_type[MOD_TASKS_ID].modules_count));
 }
 
-static void writeTaget(const target_t *target, FILE *file)
+static void writeTarget(const options_list_t *auto_options, FILE *file)
 {
 	// write target name
 	fprintf(file, "const sc_target_info_t target_info =\n");
 	fprintf(file, "{\n");
-	fprintf(file, ".arch = \"%s\",\n", target->arch_name);
-	fprintf(file, ".mcu = \"%s\",\n", target->mcu_name);
-	fprintf(file, ".board = \"%s\"\n", target->board_name);
+	fprintf(file, ".arch = \"%s\",\n", auto_options->arch_name);
+	fprintf(file, ".mcu = \"%s\",\n", auto_options->mcu_name);
+	fprintf(file, ".board = \"%s\"\n", auto_options->board_name);
 	fprintf(file, "};\n");
 }
 

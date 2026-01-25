@@ -12,27 +12,29 @@
  */
 
 /**
- * @file writeInclude.h
- * @brief writeInclude header
+ * @file options.h
+ * @brief autoCode options parser header
  *
  */
 
-#ifndef WRITE_INCLUDE_H
-#define WRITE_INCLUDE_H
+#ifndef OPTIONS_H
+#define OPTIONS_H
 
 #include "autoCode.h"
-#include "options.h"
+#include "fileUtility.h"
 
-typedef enum
+// autoCode option structure
+typedef struct
 {
-	INCLUDE_THREAD_LIST,
-	INCLUDE_HAL_USER_PART,
-	INCLUDE_HAL_SYSTEM_PART,
-	INCLUDE_HAL_DEFINE,
-	INCLUDE_HAL_INIT,
-	INCLUDE_TYPE_COUNT
-	} include_type_t;
+	char arch_name[BYTE_INDEX];
+	char mcu_name[BYTE_INDEX];
+	char board_name[BYTE_INDEX];
+	char errors_file[BYTE_INDEX];
+	char files_hal_user[BYTE_INDEX];
+	char files_hal_system[BYTE_INDEX];
 
-void writeInclude(const modules_database_t *data_base, include_type_t type ,const char *file_name, const options_list_t *auto_options);
+} options_list_t;
+
+void options(const char *file_name, options_list_t *opt);
 
 #endif
