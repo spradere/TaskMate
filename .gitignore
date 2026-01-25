@@ -1,29 +1,28 @@
 # exclude evrything
 *
 
-# allowed directories
-!doc
-!doc/**
-!mk
-!mk/**
-!src
-!src/**
-
-# allowed extentions
-!*.c
-!*.h
-!*.rc
-!*.err
-!*.mk
-!*.md
+# allowed directories + extention
+!doc/
+!doc/**/*.c
+!doc/**/*.md
+!doc/**/*.txt
+!doc/**/*.png
+!doc/**/*.jpg
+!mk/
+!mk/**/*.mk
+!src/
+!src/**/*.c
+!src/**/*.h
+!src/**/*.rc
+!src/**/*.err
 
 # allowed files
 !./.clang-format
 !./.clang-tidy
+!./.gitignore
 !./audit_todo
 !./CHANGELOG
 !./LICENCE
 !./Makefile
 !./README.md
 !./version.h
-!./.gitignore.old
