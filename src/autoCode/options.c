@@ -12,8 +12,8 @@
  */
 
 /**
- * @file option.c
- * @brief autoCode option parser
+ * @file options.c
+ * @brief autoCode options parser
  *
  */
 
