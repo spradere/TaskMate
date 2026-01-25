@@ -17,8 +17,7 @@
 # Sources
 ################################################################################
 
-# Source directory
-SRC_DIR = src
+# Source directories
 SRC_DIR_LIST = ${SRC_DIR}/sysCore
 SRC_DIR_LIST += ${SRC_DIR}/sysCall
 SRC_DIR_LIST += ${SRC_DIR}/services
@@ -30,14 +29,9 @@ SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}
 SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}
 SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}
 
-# Automatically gather all sources files
+# Sources files and objects
 SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.h"
-
-# Build files and directory
-BUILD_DIR = build
-LOG_DIR = log
-TARGET = ${BUILD_DIR}/TaskMate
 
 OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
 
@@ -60,8 +54,8 @@ AUTOCODE_LOG = ${LOG_DIR}/${AUTOCODE_LOG_NAME}${AUTOCODE_LOG_DATE_TIME}
 AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
 AUTOCODE_ERROR_CATALOG = ${BUILD_DIR}/errors_all.err
 
-FILES_HAL_USER != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
-FILES_HAL_SYSTEM != find src/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
+FILES_HAL_USER != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
+FILES_HAL_SYSTEM != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
 FILE_HAL_USER_PATH = ${BUILD_DIR}/files_hal_user
 FILE_HAL_SYSTEM_PATH = ${BUILD_DIR}/files_hal_system
 
@@ -72,12 +66,12 @@ AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
-# global errors
+# Global errors
 ERROR_CAT = ${BUILD_DIR}/errors_all.err
 ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 
 # mk file -> target help
-MK_FILES_MK != find ./mk -maxdepth 1 -type f -name "*.mk"
-MK_FILES_HAL != find ./src/hal -maxdepth 3 -type f -name "*.mk"
+MK_FILES_MK != find ./${MK_DIR} -maxdepth 1 -type f -name "*.mk"
+MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}

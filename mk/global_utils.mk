@@ -22,8 +22,8 @@ clean:
 #@ [global] Remove all build files.
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
-	@printf "${COLOUR_RED}"
-	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate.*
+	@printf "${COLOUR_CLEAN_SOFT}"
+	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate*
 	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* ${BUILD_DIR}/autoCode_*
 	@printf "${COLOUR_RESET}"
 
@@ -32,19 +32,22 @@ clean:
 
 # Make Doxygen documentation
 doc:
-#@ [global] Generate Doxygen documentation.
+#@ [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	doxygen doc/Doxyfile
+	doxygen doc/Doxyfile \
+		-o HTML_OUTPUT=${DOXYGEN_DIR}
 .PHONY: doc
 
 # Count lines of code
 cloc:
 #@ [global] Count lines of codes.
-	@printf "\n%sCount lines of codes%s\n\n" \
+	@printf "\n%sCount lines of codes and documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=build,html,log,templates\
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
 		--exclude-lang=D --exclude-ext=rc,md
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
+		--exclude-lang=D,make --exclude-ext=rc,c,h
 .PHONY: cloc
 
 # Check annotations
