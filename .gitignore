@@ -17,12 +17,12 @@
 !src/**/*.err
 
 # allowed files
-!./.clang-format
-!./.clang-tidy
-!./.gitignore
-!./audit_todo
-!./CHANGELOG
-!./LICENCE
-!./Makefile
-!./README.md
-!./version.h
+!.clang-format
+!.clang-tidy
+!.gitignore
+!audit_todo
+!CHANGELOG
+!LICENCE
+!Makefile
+!README.md
+!version.h
