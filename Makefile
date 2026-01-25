@@ -13,20 +13,35 @@
 #
 ################################################################################
 
+################################################################################
+# Main makefile
+################################################################################
+
+# Directories
+SRC_DIR = src
+BUILD_DIR = build
+LOG_DIR = log
+MAKE_DIR = mk
+USB_DIR = /media/usbkey
+USB_DEV = /dev/da0s1
+DOXYGEN_DIR = html
+
+# Target
+TARGET = ${BUILD_DIR}/TaskMate
+
 # Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
-.include "mk/hardware_target.mk"
+.include "${MAKE_DIR}/hardware_target.mk"
 
 # Make global process
-.include "mk/make_colours.mk"
-.include "mk/global_and_target_srcs.mk"
-.include "mk/header_allow.mk"
-.include "mk/global_build.mk"
-.include "mk/global_utils.mk"
-.include "mk/global_backup.mk"
+.include "${MAKE_DIR}/make_colours.mk"
+.include "${MAKE_DIR}/global_and_target_srcs.mk"
+.include "${MAKE_DIR}/header_allow.mk"
+.include "${MAKE_DIR}/global_build.mk"
+.include "${MAKE_DIR}/global_utils.mk"
+.include "${MAKE_DIR}/global_backup.mk"
 
 # Hardware specific makefiles
-
-.include "src/hal/arch/${ARCH}/arch_make.mk"
-.include "src/hal/mcu/${MCU}/mcu_make.mk"
-.include "src/hal/board/${BOARD}/board_make.mk"
+.include "${SRC_DIR}/hal/arch/${ARCH}/arch_make.mk"
+.include "${SRC_DIR}/hal/mcu/${MCU}/mcu_make.mk"
+.include "${SRC_DIR}/hal/board/${BOARD}/board_make.mk"
 
