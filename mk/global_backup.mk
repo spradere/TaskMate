@@ -23,7 +23,7 @@ TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
 
 # Git push
-push:
+push: _gitignore
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -32,6 +32,31 @@ push:
 	@git push
 	@printf "\n"
 .PHONY: push
+
+# Write .gitignore file
+_gitignore:
+	@printf "# exclude evrything\n" > ${GIT_IGNORE}
+	@printf "*\n" >> ${GIT_IGNORE}
+	@printf "\n" >> ${GIT_IGNORE}
+
+	@printf "# allowed directories\n" >> ${GIT_IGNORE}
+.for dir in ${GIT_ALLOWED_DIR}
+	@printf "!${dir}\n" >> ${GIT_IGNORE}
+	@printf "!${dir}/**\n" >> ${GIT_IGNORE}
+.endfor
+	@printf "\n" >> ${GIT_IGNORE}
+
+	@printf "# allowed extentions\n" >> ${GIT_IGNORE}
+.for ext in ${GIT_ALLOWED_EXT}
+	@printf "!*${ext}\n" >> ${GIT_IGNORE}
+.endfor
+	@printf "\n" >> ${GIT_IGNORE}
+
+	@printf "# allowed files\n" >> ${GIT_IGNORE}
+.for file in ${GIT_ALLOWED_FILES}
+	@printf "!${file}\n" >> ${GIT_IGNORE}
+.endfor
+.PHONY: _gitignore
 
 # USB key backup
 backup:

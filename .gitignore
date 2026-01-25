@@ -1,23 +1,29 @@
-# Ignore compiled object files
-*.o
+# exclude evrything
+*
 
-# Ignore dependency files
-*.d
-.deps.d
+# allowed directories
+!doc
+!doc/**
+!mk
+!mk/**
+!src
+!src/**
 
-# Ignore backup files from editors
-*~
-*.swp
-*.log
-*.core
+# allowed extentions
+!*.c
+!*.h
+!*.rc
+!*.err
+!*.mk
+!*.md
 
-# Ignore temporary build files
-*.out
-*.elf
-*.map
-*.hex
-
-# Ignore folder
-html/
-build/
-log/
+# allowed files
+!./.clang-format
+!./.clang-tidy
+!./audit_todo
+!./CHANGELOG
+!./LICENCE
+!./Makefile
+!./README.md
+!./version.h
+!./.gitignore.old
