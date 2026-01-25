@@ -33,16 +33,19 @@ _dependency_check:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
-# Test for required files for autoCode
+# Test for autoCode required files
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_LOG}*
 
 	# set autoCode options
-	@printf "%s\n" "--arch ${ARCH}" > ${AUTOCODE_CONFIG}
+	@printf "# hardware target\n" > ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--arch ${ARCH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
+
+	@printf "\n# files path\n" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
@@ -105,5 +108,11 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	find ./${LOG_DIR} -type f -name "${AUTOCODE_LOG}*" | xargs cat
+	@ls ${AUTOCODE_LOG}* | xargs cat
+	@printf "${COLOUR_CYAN}"
+	@ls ${AUTOCODE_LOG}* | xargs cat | grep ': keep' | sed 's/^.*: *//'
+	@printf "${COLOUR_RESET }${COLOUR_YELLOW}"
+	@ls ${AUTOCODE_LOG}* | xargs cat | grep ': change' | sed 's/^.*: *//'
+	@printf "${COLOUR_RESET}"
+
 .PHONY: autoCode_alone

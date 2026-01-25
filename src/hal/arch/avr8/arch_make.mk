@@ -72,7 +72,7 @@ dump: all
 
 # clang-tidy
 tidy_TaskMate:
-#@ [avr8] tidy static code analysis for TaskMate, config /.clang-tidy.
+#@ [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
 	@printf "\n%sTidy TaskMate static code test%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\

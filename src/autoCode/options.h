@@ -35,13 +35,6 @@ typedef struct
 
 } options_list_t;
 
-typedef struct
-{
-	const char *name;
-	void (*func)(const char *value, options_list_t *opt);
-
-} options_cmd_t;
-
 void options(const char *file_name, options_list_t *opt);
 
 #endif
