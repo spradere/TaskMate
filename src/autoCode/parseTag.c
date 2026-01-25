@@ -166,8 +166,7 @@ static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)
 
 static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 {
-	fprintf(file, "#define MOD_DRIVER_COUNT %i\n",
-			data_base->modules_type[MOD_DRIVERS_ID].modules_count);
+	fprintf(file, "#define MOD_DRIVER_COUNT %i\n", data_base->modules_type[MOD_DRIVERS_ID].modules_count);
 	fprintf(file, "#define MOD_THREAD_COUNT %i\n",
 			(data_base->modules_type[MOD_SERVICES_ID].modules_count +
 			 data_base->modules_type[MOD_TASKS_ID].modules_count));
