@@ -6,3 +6,5 @@
 - #define -> typedef enum
 - libc/snprintf() module memory size 0x270 is too high - atomicity issues
 - Doxigen documentation : only in .h for API and general operations
+- change int type hal/ -> uint16 -> typedef to match arch size
+

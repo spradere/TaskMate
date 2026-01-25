@@ -10,3 +10,6 @@ open all files
 
 display a make variable
 	make -V VAR_NAME
+
+View preprocessor expand only -E
+clang -dM -E -I/root/code/TaskMate/TaskMate_current/src/ src/autoCode/options.c > xmacro

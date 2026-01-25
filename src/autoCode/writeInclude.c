@@ -21,16 +21,17 @@
 #include "writeInclude.h"
 
 #include "fileUtility.h"
+#include "tokenizer.h"
 
 void writeInclude(const modules_database_t *data_base, include_type_t type, const char *file_name,
-				  const target_t *target)
+				  const options_list_t *auto_options)
 {
 	// open file
-	msgInfo("generate include statements in <%s>", file_name);
+	msgInfo("generate <%s>", file_name);
 	file_t file_include;
 	fileInit(&file_include);
 	file_include.name = (char *)file_name;
-	fileOpen(&file_include, "r", __FILE__, __LINE__);
+	fileOpen(&file_include, "r", FILE_CREATE, __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
@@ -71,17 +72,19 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 		case INCLUDE_HAL_DEFINE:
 
 			fprintf(file_tmp.stream, "// target define\n");
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/arch_define.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n", target->board_name);
+			fprintf(file_tmp.stream, "#include \"hal/arch/%s/arch_define.h\"\n", auto_options->arch_name);
+			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", auto_options->mcu_name);
+			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n",
+					auto_options->board_name);
 			break;
 
 		case INCLUDE_HAL_INIT:
 
 			fprintf(file_tmp.stream, "// target init\n");
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", target->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", target->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", target->board_name);
+			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", auto_options->arch_name);
+			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", auto_options->mcu_name);
+			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n",
+					auto_options->board_name);
 			break;
 
 		case INCLUDE_HAL_USER_PART:
@@ -89,27 +92,27 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 		{
 			file_t file_hal;
 			fileInit(&file_hal);
-			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = "build/files_hal_user"; }
-			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = "build/files_hal_system"; }
-			fileOpen(&file_hal, "r", __FILE__, __LINE__);
-			int ret;
+			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = (char *)auto_options->files_hal_user; }
+			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = (char *)auto_options->files_hal_system; }
+			fileOpen(&file_hal, "r", FILE_READONLY, __FILE__, __LINE__);
 
-			if( type == INCLUDE_HAL_USER_PART )
-			{
-				fprintf(file_tmp.stream, "// autoInclude hal user headers\n");
-			}
-			if( type == INCLUDE_HAL_SYSTEM_PART )
-			{
-				fprintf(file_tmp.stream, "// autoInclude hal system headers\n");
-			}
+			int file_line_number = 0;
+			tokenizer_t tok;
 
-			do {
-				ret = fileGetToken(&file_hal);
-				if( strlen(file_hal.token) != 0 )
+			while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_hal.stream) )
+			{
+				file_line_number++;
+				tokenizer(&tok);
+
+				if( tok.count > 1 )
 				{
-					fprintf(file_tmp.stream, "#include \"%s\"\n", file_hal.token);
+					msgError("Wrong token count [%s:%i] is %i, should be 1", file_hal.name, file_line_number,
+							 tok.count);
+					exit(1);
 				}
-			} while( ret != 0 );
+
+				if( tok.count == 1 ) fprintf(file_tmp.stream, "#include \"%s\"\n", tok.tokens[0]);
+			}
 		}
 
 		break;

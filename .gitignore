@@ -1,25 +1,28 @@
-# Ignore compiled object files
-*.o
-utility/autoCode
+# exclude evrything
+*
 
-# Ignore dependency files
-*.d
-.deps.d
+# allowed directories + extension
+!doc/
+!doc/**/*.c
+!doc/**/*.md
+!doc/**/*.txt
+!doc/**/*.png
+!doc/**/*.jpg
+!mk/
+!mk/**/*.mk
+!src/
+!src/**/*.c
+!src/**/*.h
+!src/**/*.rc
+!src/**/*.err
 
-# Ignore backup files from editors
-*~
-*.swp
-*.log
-*.core
-
-# Ignore temporary build files
-*.out
-*.elf
-*.map
-*.hex
-.autoCode_stamp*
-
-# Ignore folder
-html/
-build/
-log/
+# allowed files
+!.clang-format
+!.clang-tidy
+!.gitignore
+!audit_todo
+!CHANGELOG
+!LICENCE
+!Makefile
+!README.md
+!version.h

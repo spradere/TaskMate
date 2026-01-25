@@ -1,7 +1,7 @@
 ################################################################################
 #
 # TaskMate Project
-# (c) 2025 PRADERE Sebastien
+# (c) 2026 PRADERE Sebastien
 #
 # This file is part of TaskMate and is distributed under the TaskMate License v1.0.
 # See the LICENSE file for full license terms.
@@ -9,7 +9,7 @@
 # Non-commercial use permitted under conditions. Commercial use requires a separate license.
 # Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
 #
-# Powered by TaskMate, (c) 2025 PRADERE Sebastien
+# Powered by TaskMate, (c) 2026 PRADERE Sebastien
 #
 ################################################################################
 
@@ -22,17 +22,20 @@ clean:
 #@ [global] Remove all build files.
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
-	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate.*
+	@printf "${COLOUR_CLEAN_SOFT}"
+	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate*
 	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* ${BUILD_DIR}/autoCode_*
+	@printf "${COLOUR_RESET}"
+
 
 .PHONY: clean
 
 # Make Doxygen documentation
 doc:
-#@ [global] Generate Doxygen documentation.
+#@ [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	doxygen doc/Doxyfile
+	doxygen ${DOC_DIR}/Doxyfile
 .PHONY: doc
 
 # Count lines of code
@@ -40,8 +43,12 @@ cloc:
 #@ [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=build,html,log,templates\
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
 		--exclude-lang=D --exclude-ext=rc,md
+	@printf "\n%sCount lines of documentation%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
+		--exclude-lang=D,make --exclude-ext=rc,c,h
 .PHONY: cloc
 
 # Check annotations
@@ -82,7 +89,7 @@ tidy_autoCode:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/src/
+	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
 .PHONY:tidy_autoCode
 
 # display targets
