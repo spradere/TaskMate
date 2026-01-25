@@ -59,11 +59,11 @@ backup:
 	fi
 
 	# Run rsync
-	@printf "%sRun rsync, output logged in ${LOG_DIR}/rsync.log%s\n" \
+	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	rsync -av * --progress --delete --exclude "*.o" --exclude="${DOXYGEN_DIR}" \
 		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
-		"${USB_DIR}${TASKMATE_DIR}/" > ${LOG_DIR}/rsync.log
+		"${USB_DIR}${TASKMATE_DIR}/" > ${RSYNC_LOG}
 
 	# umount
 	@printf "%sUmount ${USB_DIR}%s\n" \
