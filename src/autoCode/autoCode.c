@@ -50,13 +50,13 @@ static void threadCountLevel(modules_database_t *data_base);
 int main(int argn, const char *argv[])
 {
 	msgInfo("****************************");
-	msgInfo("* sarting autoCode process *");
+	msgInfo("* starting autoCode process *");
 	msgInfo("****************************");
 
 	// get options
 	if( argn != 2 )
 	{
-		msgError("autoCode bad argn (is %i, not 2)\n\tuse autoCode config_file", argn);
+		msgError("autoCode bad argn (is %i, not 2)\n\tuse autoCode configuration_file", argn);
 		exit(1);
 	}
 

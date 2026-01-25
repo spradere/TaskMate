@@ -40,7 +40,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)file_name;
-	fileOpen(&file_src, "r", __FILE__, __LINE__);
+	fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
