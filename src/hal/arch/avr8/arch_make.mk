@@ -23,7 +23,7 @@ CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
 	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
 
-CFLAGS += -I/root/code/TaskMate/TaskMate_current/src
+CFLAGS += -I/root/code/TaskMate/TaskMate_current/${SRC_DIR}
 
 # output files
 HEX = ${TARGET}.hex
@@ -77,7 +77,7 @@ tidy_TaskMate:
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/src/ \
+	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/ \
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.1.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \

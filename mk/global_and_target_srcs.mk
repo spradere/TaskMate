@@ -54,7 +54,7 @@ FILES_HAL_SYSTEM != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @
 FILE_HAL_USER_PATH = ${BUILD_DIR}/files_hal_user
 FILE_HAL_SYSTEM_PATH = ${BUILD_DIR}/files_hal_system
 
-AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/src/
+AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments

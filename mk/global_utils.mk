@@ -35,17 +35,18 @@ doc:
 #@ [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	doxygen ${DOC_DIR}/Doxyfile \
-		-o HTML_OUTPUT=${DOXYGEN_DIR}
+	doxygen ${DOC_DIR}/Doxyfile
 .PHONY: doc
 
 # Count lines of code
 cloc:
 #@ [global] Count lines of codes.
-	@printf "\n%sCount lines of codes and documentation%s\n\n" \
+	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
 		--exclude-lang=D --exclude-ext=rc,md
+	@printf "\n%sCount lines of documentation%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
 		--exclude-lang=D,make --exclude-ext=rc,c,h
 .PHONY: cloc
@@ -88,7 +89,7 @@ tidy_autoCode:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/src/
+	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
 .PHONY:tidy_autoCode
 
 # display targets

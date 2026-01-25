@@ -131,7 +131,7 @@ void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller
 
 void printLicenceHeader(FILE *file)
 {
-	const char header_path[] = "doc/licence_header";
+	const char header_path[] = "doc/licence_header.txt";
 	FILE *header_file = fopen(header_path, "r");
 
 	if( header_file == NULL )

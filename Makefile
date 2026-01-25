@@ -25,7 +25,6 @@ MAKE_DIR = mk
 DOC_DIR = doc
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
-DOXYGEN_DIR = html
 
 AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
 RSYNC_LOG = ${LOG_DIR}/rsync.log
@@ -40,7 +39,7 @@ GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
 GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err
 
-GIT_ALLOWED_FILES != find ./ -maxdepth 1 -type f -name "*"
+GIT_ALLOWED_FILES != find ./ -maxdepth 1 -type f -name "*" | sed 's|^\./||'
 
 # Target
 TARGET = ${BUILD_DIR}/TaskMate
