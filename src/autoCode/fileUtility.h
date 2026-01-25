@@ -24,12 +24,15 @@
 
 #define FILE_TOKEN_SIZE 256
 
+#define FILE_READONLY 1
+#define FILE_CREATE 2
+
 typedef struct
 {
 	FILE *stream;
-	bool stream_open; // allow fclose()
+	bool stream_opened; // allow fclose()
 	char *name;
-	bool name_alloc; // free() ?
+	bool name_allocated; // allow free()
 	char token[FILE_TOKEN_SIZE];
 } file_t;
 
@@ -37,7 +40,7 @@ void filePrintModified(void);
 void fileCmpReplace(file_t *file_old, file_t *file_new);
 void fileClose(file_t *file, const char *caller, const int line);
 void fileInit(file_t *file);
-void fileOpen( file_t *file, const char *mode, const char *caller, const int line);
+void fileOpen( file_t *file, const char *mode, const int special_mode, const char *caller, const int line);
 void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, const int line);
 void printLicenceHeader(FILE *file);
 void printWarningHeader(FILE *file);
