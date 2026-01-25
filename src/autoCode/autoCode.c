@@ -37,8 +37,8 @@
 
 #include "fileUtility.h"
 #include "globalError.h"
-#include "parseInitrc.h"
 #include "options.h"
+#include "parseInitrc.h"
 #include "parseTag.h"
 #include "printModules.h"
 #include "writeInclude.h"
@@ -49,6 +49,9 @@ static void threadCountLevel(modules_database_t *data_base);
 
 int main(int argn, const char *argv[])
 {
+	msgInfo("****************************");
+	msgInfo("* sarting autoCode process *");
+	msgInfo("****************************");
 
 	// get options
 	if( argn != 2 )
@@ -107,9 +110,8 @@ int main(int argn, const char *argv[])
 	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &auto_options);
 
 	// print all info about modules
-	filePrintModified();
 	printModules(&data_base);
-
+	filePrintModified();
 	return 0;
 }
 

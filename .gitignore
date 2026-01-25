@@ -1,7 +1,7 @@
 # exclude evrything
 *
 
-# allowed directories + extention
+# allowed directories + extension
 !doc/
 !doc/**/*.c
 !doc/**/*.md
@@ -26,3 +26,4 @@
 !Makefile
 !README.md
 !version.h
+!xmacro
