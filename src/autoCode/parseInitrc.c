@@ -26,7 +26,7 @@
 void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_initrc_name)
 {
 	// open list files
-	msgInfo("open <%s> for parsing", file_initrc_name);
+	msgInfo("open <%s>", file_initrc_name);
 
 	FILE *file_initrc = fopen(file_initrc_name, "r");
 	if( file_initrc == NULL )
@@ -49,7 +49,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 		file_line_number++;
 		tokenizer(&tok);
 
-		// proceed args
+		// proceed arguments
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
 			if( tok.count > mod->initrc_arg_count_max )
@@ -69,7 +69,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 				}
 			}
 
-			// no cmd parsing, add one module to run level
+			// no command parsing, add one module to run level
 			if( tok.count == 1 ) { data_base->run_level_module_count[TYPE][mod->status_default]++; }
 
 			// parse commands

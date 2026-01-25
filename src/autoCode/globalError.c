@@ -30,12 +30,12 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
-	fileOpen(&file_src, "r", __FILE__, __LINE__);
+	fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	file_t file_dest;
 	fileInit(&file_dest);
 	file_dest.name = (char *)dest_name;
-	fileOpen(&file_dest, "r", __FILE__, __LINE__);
+	fileOpen(&file_dest, "r", FILE_CREATE, __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);

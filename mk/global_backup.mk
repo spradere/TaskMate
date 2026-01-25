@@ -1,7 +1,7 @@
 ################################################################################
 #
 # TaskMate Project
-# (c) 2025 PRADERE Sebastien
+# (c) 2026 PRADERE Sebastien
 #
 # This file is part of TaskMate and is distributed under the TaskMate License v1.0.
 # See the LICENSE file for full license terms.
@@ -9,7 +9,7 @@
 # Non-commercial use permitted under conditions. Commercial use requires a separate license.
 # Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
 #
-# Powered by TaskMate, (c) 2025 PRADERE Sebastien
+# Powered by TaskMate, (c) 2026 PRADERE Sebastien
 #
 ################################################################################
 
@@ -18,14 +18,12 @@
 ################################################################################
 
 # Get git tag for USB key directory backup
-USB_DIR = /media/usbkey
-USB_DEV = /dev/da0s1
 GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
 
 # Git push
-push:
+push: _gitignore
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -34,6 +32,27 @@ push:
 	@git push
 	@printf "\n"
 .PHONY: push
+
+# Write .gitignore file
+_gitignore:
+	@printf "# exclude evrything\n" > ${GIT_IGNORE}
+	@printf "*\n" >> ${GIT_IGNORE}
+	@printf "\n" >> ${GIT_IGNORE}
+
+	@printf "# allowed directories + extension\n" >> ${GIT_IGNORE}
+.for dir in ${GIT_ALLOWED_DIR}
+	@printf "!${dir}/\n" >> ${GIT_IGNORE}
+.for ext in ${GIT_ALLOWED_EXT.${dir}}
+	@printf "!${dir}/**/*${ext}\n" >> ${GIT_IGNORE}
+.endfor
+.endfor
+	@printf "\n" >> ${GIT_IGNORE}
+
+	@printf "# allowed files\n" >> ${GIT_IGNORE}
+.for file in ${GIT_ALLOWED_FILES}
+	@printf "!${file}\n" >> ${GIT_IGNORE}
+.endfor
+.PHONY: _gitignore
 
 # USB key backup
 backup:
@@ -44,7 +63,7 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
-	#Test if USB key is mount, do if not
+	# Test if USB key is mount, do if not
 	@if mount | grep -q "${USB_DIR}"; then \
 		printf "%sUSB key already mounted ${USB_DIR}%s\n" \
 			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
@@ -61,10 +80,11 @@ backup:
 	fi
 
 	# Run rsync
-	@printf "%sRun rsync, output logged in log/rsync.log%s\n" \
+	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	rsync -av * --progress --delete --exclude "*.o" --exclude="html" --exclude="build" --exclude="log" \
-		"${USB_DIR}${TASKMATE_DIR}/" > ${LOG_DIR}/rsync.log
+	rsync -av * --progress --delete --exclude "*.o" --exclude="${DOXYGEN_DIR}" \
+		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
+		"${USB_DIR}${TASKMATE_DIR}/" > ${RSYNC_LOG}
 
 	# umount
 	@printf "%sUmount ${USB_DIR}%s\n" \

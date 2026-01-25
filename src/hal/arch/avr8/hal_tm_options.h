@@ -14,7 +14,7 @@
 
 /**
  * @file hal_tm_options.h
- * @brief arch avr8 definitions
+ * @brief TaskMate options
  *
  */
 
