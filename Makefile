@@ -17,7 +17,7 @@
 # Main makefile
 ################################################################################
 
-# Directories
+# Main directories and files
 SRC_DIR = src
 BUILD_DIR = build
 LOG_DIR = log
@@ -26,8 +26,15 @@ USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 DOXYGEN_DIR = html
 
+AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
+RSYNC_LOG = ${LOG_DIR}/rsync.log
+
+AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
+ERROR_CAT = ${BUILD_DIR}/errors_all.err
+
 # Target
 TARGET = ${BUILD_DIR}/TaskMate
+AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 
 # Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
 .include "${MAKE_DIR}/hardware_target.mk"

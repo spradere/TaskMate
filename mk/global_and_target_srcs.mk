@@ -42,17 +42,12 @@ DEPS_FILE = ${BUILD_DIR}/.deps.d
 .sinclude "${DEPS_FILE}"
 
 # autoCode
-AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
 AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 
-AUTOCODE_LOG_NAME = autoCode_log_
-AUTOCODE_LOG_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
-AUTOCODE_LOG = ${LOG_DIR}/${AUTOCODE_LOG_NAME}${AUTOCODE_LOG_DATE_TIME}
-
-AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
-AUTOCODE_ERROR_CATALOG = ${BUILD_DIR}/errors_all.err
+STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
+AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
 
 FILES_HAL_USER != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
 FILES_HAL_SYSTEM != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
@@ -67,7 +62,6 @@ AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # Global errors
-ERROR_CAT = ${BUILD_DIR}/errors_all.err
 ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 
 # mk file -> target help
