@@ -35,15 +35,15 @@ _dependency_check:
 
 # Test for required files for autoCode
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
-	@printf "\n%sautoCode, init_rc or related srcs files have changed -> run autoCode%s\n\n" \
+	@printf "\n%sautoCode, init_rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f ${LOG_DIR}/${AUTOCODE_LOG_NAME}*
+	@rm -f ${AUTOCODE_LOG}*
 
 	# set autoCode options
 	@printf "%s\n" "--arch ${ARCH}" > ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--errors ${AUTOCODE_ERROR_CATALOG}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--errors ${ERROR_CAT}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
 
@@ -60,7 +60,7 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 .endfor
 	@sed -i '' 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
 
-	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG}
+	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG_STAMP}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
@@ -105,5 +105,5 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	find ./${LOG_DIR} -type f -name "${AUTOCODE_LOG_NAME}*" | xargs cat
+	find ./${LOG_DIR} -type f -name "${AUTOCODE_LOG}*" | xargs cat
 .PHONY: autoCode_alone
