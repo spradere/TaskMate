@@ -13,7 +13,7 @@
 #
 ################################################################################
 
-# Compiler for arch avr8
+# compiler for arch avr8
 CC = avr-gcc
 
 CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
@@ -22,13 +22,30 @@ CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 	-Wswitch -Wenum-conversion -Wundef \
 	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
 	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
-CFLAGS += -I/root/code/TaskMate/TaskMate_current/src
 
-# Files
+CFLAGS += -I/root/code/TaskMate/TaskMate_current/${SRC_DIR}
+
+# output files
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
 
-# Flash Gordon
+# link
+${TARGET}: ${OBJS}
+	@printf "\n%sLinking%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	${CC} ${CFLAGS} -ffunction-sections -fdata-sections -Wl,--gc-sections -flto -o ${ELF} ${OBJS}
+
+# compile
+${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
+	@printf "\n%sCompilation ...%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
+	@mkdir -p ${.TARGET:H}
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
+		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
+
+
+# flash Gordon
 upload: all
 #@ [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash%s\n\n" \
@@ -43,7 +60,7 @@ upload: all
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload
 
-# Disassemble machine code
+# disassemble machine code
 dump: all
 #@ [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
@@ -55,12 +72,12 @@ dump: all
 
 # clang-tidy
 tidy_TaskMate:
-#@ [avr8] tidy static code analysis for TaskMate, config /.clang-tidy.
+#@ [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
 	@printf "\n%sTidy TaskMate static code test%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/src/ \
+	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/ \
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.1.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
