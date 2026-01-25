@@ -8,21 +8,21 @@ git push -u origin HEAD:refs/heads/feat/preempt-protected-i2c
 2. Work, commit :
 
 git add .
-git commit -m "Implement sysCallPreemptProtected() for I2C"
+git commit -m "Implement stuff"
 git push
 
-or make push M="Implement sysCallPreemptProtected() for I2C"
+or make push M="Implement stuff"
 
 3. Work done -> test ok -> merge :
 
 git switch main_new
-git merge --no-ff feat/preempt-protected-i2c
+git merge --no-ff test_branch
 git push origin main_new
 
 4. Delete branch :
 
-git branch -d feat/preempt-protected-i2c
-git push origin --delete feat/preempt-protected-i2c
+git branch -d test_branch
+git push origin --delete test_branch
 
 5. close a version
 
