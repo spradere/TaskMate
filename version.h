@@ -1,1 +1,1 @@
-#define TASKMATE_VERSION "0.24"
+#define TASKMATE_VERSION "0.25"
