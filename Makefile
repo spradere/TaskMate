@@ -17,7 +17,7 @@
 # Main makefile
 ################################################################################
 
-# Main directories and files
+# Main directories
 SRC_DIR = src
 BUILD_DIR = build
 LOG_DIR = log
@@ -25,6 +25,10 @@ MAKE_DIR = mk
 DOC_DIR = doc
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
+
+# Main path/file
+FILE_HAL_USER_PATH = ${BUILD_DIR}/files_hal_user
+FILE_HAL_SYSTEM_PATH = ${BUILD_DIR}/files_hal_system
 
 AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
 RSYNC_LOG = ${LOG_DIR}/rsync.log
@@ -34,14 +38,15 @@ ERROR_CAT = ${BUILD_DIR}/errors_all.err
 
 GIT_IGNORE = .gitignore
 GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
-
 GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
 GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err
-
 GIT_ALLOWED_FILES != find ./ -maxdepth 1 -type f -name "*" | sed 's|^\./||'
 
-# Target
+# Options
+OPT_CLEAN_AUTOCODE__LOGS = yes
+
+# Targets
 TARGET = ${BUILD_DIR}/TaskMate
 AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 

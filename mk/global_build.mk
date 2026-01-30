@@ -37,9 +37,11 @@ _dependency_check:
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+.if ${OPT_CLEAN_AUTOCODE__LOGS} == "yes"
 	@rm -f ${AUTOCODE_LOG}*
+.endif
 
-	# set autoCode options
+	# write autoCode options
 	@printf "# hardware target\n" > ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--arch ${ARCH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
@@ -50,14 +52,14 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
 
-	# list hal sources files
+	# write list hal sources files
 	@: > ${FILE_HAL_USER_PATH}
 .for file in ${FILES_HAL_USER}
 	@printf "%s\n" "${file}" >> ${FILE_HAL_USER_PATH}
 .endfor
 	@sed -i '' 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
 
-	@:> ${FILE_HAL_SYSTEM_PATH}
+	@: > ${FILE_HAL_SYSTEM_PATH}
 .for file in ${FILES_HAL_SYSTEM}
 	@printf "%s\n" "${file}" >> ${FILE_HAL_SYSTEM_PATH}
 .endfor
@@ -77,8 +79,8 @@ _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .for index in ${GREP_LIST}
-	@allowed="${GREP_ALLOWED${index}}"; \
-	pattern="${GREP_PATTERN${index}}"; \
+	@allowed="${ALLOWED_LIST${index}}"; \
+	pattern="${ALLOWED_PATTERN${index}}"; \
 	printf "\nChecking pattern %s...\n" "$$pattern"; \
 	files="`grep -R -l "$$pattern" ${SRC_DIR} 2>/dev/null || true`"; \
 	for f in $$files; do \
@@ -101,18 +103,19 @@ ${ERROR_CAT}: ${ERROR_FILES}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cat ${ERROR_FILES} > ${ERROR_CAT}
 
-# Special rule for autoCode alone
+AUTOCODE_LS_CMD = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
+
 autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	@ls ${AUTOCODE_LOG}* | xargs cat
+	#@ls -t ${AUTOCODE_LOG}* | head -1 | xargs cat
+	@${AUTOCODE_LS_CMD}
 	@printf "${COLOUR_CYAN}"
-	@ls ${AUTOCODE_LOG}* | xargs cat | grep ': keep' | sed 's/^.*: *//'
+	@${AUTOCODE_LS_CMD} | grep ': keep' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET }${COLOUR_YELLOW}"
-	@ls ${AUTOCODE_LOG}* | xargs cat | grep ': change' | sed 's/^.*: *//'
+	@${AUTOCODE_LS_CMD} | grep ': change' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET}"
-
 .PHONY: autoCode_alone
