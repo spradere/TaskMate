@@ -22,11 +22,11 @@
 // clang-format off
 // why ? Auto-generated code
 
-#include "hal/board/arduino_mega/hal_ZS_042.h"
-#include "hal/board/arduino_mega/hal_lcd.h"
 #include "hal/mcu/atmega2560/hal_gpio.h"
 #include "hal/mcu/atmega2560/hal_i2c.h"
 #include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/board/arduino_mega/hal_ZS_042.h"
+#include "hal/board/arduino_mega/hal_lcd.h"
 // clang-format on
 
 #endif
