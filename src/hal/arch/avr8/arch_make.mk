@@ -44,8 +44,6 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
-
-# flash Gordon
 upload: all
 #@ [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash%s\n\n" \
@@ -60,7 +58,6 @@ upload: all
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload
 
-# disassemble machine code
 dump: all
 #@ [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
@@ -70,7 +67,6 @@ dump: all
 	avr-objdump -D -m avr6 ${ELF} > ${BUILD_DIR}/elf.txt
 .PHONY: dump
 
-# clang-tidy
 tidy_TaskMate:
 #@ [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
 	@printf "\n%sTidy TaskMate static code test%s\n\n" \
@@ -84,10 +80,8 @@ tidy_TaskMate:
 	-DF_CPU=${F_CPU} \
 	-DHAL_SYSTEM_CRITICAL_API_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
-
 .PHONY: tidy_TaskMate
 
-# list modules size
 module_size: all
 #@ [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
