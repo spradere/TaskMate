@@ -21,8 +21,6 @@
 GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
-
-# Git push
 push: _gitignore
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
@@ -54,7 +52,6 @@ _gitignore:
 .endfor
 .PHONY: _gitignore
 
-# USB key backup
 backup:
 #@ [global] USB key backup with current git tag in directory.
 	@printf "\n%sBackup to <${USB_DIR}${TASKMATE_DIR}>%s\n\n" \
@@ -82,7 +79,7 @@ backup:
 	# Run rsync
 	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	rsync -av * --progress --delete --exclude "*.o" --exclude="${DOXYGEN_DIR}" \
+	rsync -av * --progress --delete --exclude "*.o" --exclude="html" \
 		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
 		"${USB_DIR}${TASKMATE_DIR}/" > ${RSYNC_LOG}
 

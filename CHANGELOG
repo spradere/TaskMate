@@ -1,3 +1,6 @@
+
+TaskMate 0.25
+
 	add option parser to autoCode
 	spellcheck all project, including comments in C code
 	add prefix to all project tm_ sc_ gpio_ err_ mod_ rl_

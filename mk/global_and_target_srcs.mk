@@ -49,10 +49,23 @@ AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
 
-FILES_HAL_USER != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @hal_user' {} +
-FILES_HAL_SYSTEM != find ${SRC_DIR}/hal/ -name '*.h' -type f -exec grep -l '// @hal_system' {} +
-FILE_HAL_USER_PATH = ${BUILD_DIR}/files_hal_user
-FILE_HAL_SYSTEM_PATH = ${BUILD_DIR}/files_hal_system
+FIND_OPT_BASE = -maxdepth 1 -name '*.h' -type f -exec grep -l
+FIND_OPT_USER_TAG = '// @hal_user'
+FIND_OPT_SYSTEM_TAG = '// @hal_system'
+CMD_OPT_OUT = {} + 2>/dev/null || true
+
+FIND_OPT_USER = ${FIND_OPT_BASE} ${FIND_OPT_USER_TAG} ${CMD_OPT_OUT}
+FIND_OPT_SYSTEM = ${FIND_OPT_BASE} ${FIND_OPT_SYSTEM_TAG} ${CMD_OPT_OUT}
+
+FILES_HAL_USER_ARCH != find ${SRC_DIR}/hal/arch/${ARCH} ${FIND_OPT_USER}
+FILES_HAL_USER_MCU != find ${SRC_DIR}/hal/mcu/${MCU} ${FIND_OPT_USER}
+FILES_HAL_USER_BOARD != find ${SRC_DIR}/hal/board/${BOARD} ${FIND_OPT_USER}
+FILES_HAL_USER = ${FILES_HAL_USER_ARCH} ${FILES_HAL_USER_MCU} ${FILES_HAL_USER_BOARD}
+
+FILES_HAL_SYSTEM_ARCH != find ${SRC_DIR}/hal/arch/${ARCH} ${FIND_OPT_SYSTEM}
+FILES_HAL_SYSTEM_MCU != find ${SRC_DIR}/hal/mcu/${MCU} ${FIND_OPT_SYSTEM}
+FILES_HAL_SYSTEM_BOARD != find ${SRC_DIR}/hal/board/${BOARD} ${FIND_OPT_SYSTEM}
+FILES_HAL_SYSTEM = ${FILES_HAL_SYSTEM_ARCH} ${FILES_HAL_SYSTEM_MCU} ${FILES_HAL_SYSTEM_BOARD}
 
 AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \

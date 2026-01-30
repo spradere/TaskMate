@@ -17,7 +17,14 @@
 # Utility
 ################################################################################
 
-# Heavy sweep
+tags:
+#@ [global] Generate tags for Vim
+	@ctags ${SRCS}
+	@ctags -a ${SRCS_H}
+	@ctags -a ${AUTOCODE_SRCS}
+	@ctags -a ${AUTOCODE_SRCS_H}
+.PHONY: tags
+
 clean:
 #@ [global] Remove all build files.
 	@printf "\n%sRemove files%s\n\n" \
@@ -26,11 +33,8 @@ clean:
 	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate*
 	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* ${BUILD_DIR}/autoCode_*
 	@printf "${COLOUR_RESET}"
-
-
 .PHONY: clean
 
-# Make Doxygen documentation
 doc:
 #@ [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
@@ -38,20 +42,18 @@ doc:
 	doxygen ${DOC_DIR}/Doxyfile
 .PHONY: doc
 
-# Count lines of code
 cloc:
 #@ [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
-		--exclude-lang=D --exclude-ext=rc,md
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},html \
+		--exclude-lang=D --exclude-ext=rc,md,txt
 	@printf "\n%sCount lines of documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},${DOXYGEN_DIR} \
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},html \
 		--exclude-lang=D,make --exclude-ext=rc,c,h
 .PHONY: cloc
 
-# Check annotations
 note:
 #@ [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
@@ -60,7 +62,6 @@ note:
 
 .PHONY: note
 
-# cppcheck
 cppcheck:
 #@ [global] cppcheck static code analysis for autoCode and TaskMate.
 	@printf "\n%sCount lines of codes%s\n\n" \
@@ -74,7 +75,6 @@ cppcheck:
 		${AUTOCODE_SRCS}
 .PHONY: check
 
-# clang-format
 clang_format:
 #@ [global] Formatting code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
@@ -82,7 +82,6 @@ clang_format:
 	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS}
 .PHONY: format
 
-# clang-tidy for autoCode
 tidy_autoCode:
 #@ [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
@@ -92,7 +91,6 @@ tidy_autoCode:
 	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
 .PHONY:tidy_autoCode
 
-# display targets
 help:
 #@ [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
