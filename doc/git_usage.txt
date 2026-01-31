@@ -1,23 +1,62 @@
-normal save :
+# normal save :
 	git add .
 	git commit -m "comment"
 	git push
 
+# show files will be add
+	git status
+
 delete local : git branch -d test_branch
 delete remote : git push origin --delete test_branch
 
-list last commits :
+# list last commits :
 	git log --oneline
 
-list local / remonte branch
+# list local / remonte branch
 	git branch -a --sort=-committerdate
 
-check tag
+# check tag
 	git ls-remote --tags origin
 
-check commits
+# check commits
 	git rev-list --count v0.5
 
-temp save/restore modified files
+# temporary save/restore modified files
 	git stash
 	git stash pop
+
+# search in commits, without merge, most add lines. --miror mode not tree 
+git log --no-merges --numstat --date=iso-strict --pretty="C %H %ad %s" \
+| awk '
+  /^[0-9]/ { add += $1; next }
+  /^C / {
+    if (NR > 1) print add, prev
+    prev = $0
+    add = 0
+  }
+  END { print add, prev }
+' \
+| sort -k1,1nr -k3,3r \
+| head -20
+
+# delete file in history
+# 1 - clone
+git clone --mirror git@codeberg.org:Doul09/TaskMate.git taskmate-commit-clean
+cd taskmate-commit-clean
+
+# 2 - clean
+git filter-repo --path path/file --invert-paths
+# 3 - check
+git log --stat -- '*file.*'
+
+# 4 - push
+git remote add origin git@codeberg.org:Doul09/TaskMate.git
+git remote -v
+git push --mirror origin
+
+# 5 - check on codeberg
+
+#6 - clone
+cd /root/code/TaskMate
+mv TaskMate_current TaskMate_old_after_rewrite
+git clone git@codeberg.org:Doul09/TaskMate.git TaskMate_current
