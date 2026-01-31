@@ -19,11 +19,10 @@
 # allowed files
 !.clang-format
 !.clang-tidy
-!.gitignore
+!.gitingnore
 !audit_todo
 !CHANGELOG
-!LICENCE
+!LICENSE
 !Makefile
 !README.md
 !version.h
-!tags

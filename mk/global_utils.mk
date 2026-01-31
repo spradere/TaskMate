@@ -19,10 +19,10 @@
 
 tags:
 #@ [global] Generate tags for Vim
-	@ctags ${SRCS}
-	@ctags -a ${SRCS_H}
-	@ctags -a ${AUTOCODE_SRCS}
-	@ctags -a ${AUTOCODE_SRCS_H}
+	@ctags -f ${BUILD_DIR}/tags ${SRCS}
+	@ctags -f ${BUILD_DIR}/tags -a ${SRCS_H}
+	@ctags -f ${BUILD_DIR}/tags -a ${AUTOCODE_SRCS}
+	@ctags -f ${BUILD_DIR}/tags -a ${AUTOCODE_SRCS_H}
 .PHONY: tags
 
 clean:

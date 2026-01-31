@@ -41,10 +41,11 @@ GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
 GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
 GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err
-GIT_ALLOWED_FILES != find ./ -maxdepth 1 -type f -name "*" | sed 's|^\./||'
+GIT_ALLOWED_FILES = .clang-format .clang-tidy .gitingnore \
+	audit_todo CHANGELOG LICENSE Makefile README.md version.h
 
 # Options
-OPT_CLEAN_AUTOCODE__LOGS = yes
+OPT_CLEAN_AUTOCODE_LOGS = yes
 
 # Targets
 TARGET = ${BUILD_DIR}/TaskMate
