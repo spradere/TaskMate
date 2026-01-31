@@ -17,10 +17,14 @@
 # Build rules
 ################################################################################
 
-.MAIN: all
-
 # Info help system : targets begins with '_' or ${} are internal system only
 # they'll not be displayed in `make help`
+
+.MAIN: all
+
+.BEGIN:
+	mkdir -p ${BUILD_DIR}
+	mkdir -p ${LOG_DIR}
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
@@ -37,7 +41,7 @@ _dependency_check:
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
 	@printf "\n%sautoCode, init_rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-.if ${OPT_CLEAN_AUTOCODE__LOGS} == "yes"
+.if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@rm -f ${AUTOCODE_LOG}*
 .endif
 
