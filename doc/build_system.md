@@ -4,9 +4,9 @@
 ## ✨ Makefile features
 
 - **Automatic Dependency Handling**: Only recompile modified source files.
-- **Header Dependency Tracking**: Detects changes in `.c .h` files and recompile affected `.c` files.
+Detects changes in `.c .h` files and recompile affected `.c` files.
 - **Automated Code Generation**:
-  - If any *_init.rc have been updated autoCode is launched before compilation.
+If any init.rc or error.err files have been updated autoCode is launched before compilation.
 - **Colourised Output**: Improved readability with `@printf` messages.
 - **POSIX-Compliant**: Works without requiring GNU Make.
 
@@ -22,151 +22,57 @@ Main workflow :
 | `make upload` | Uploads the compiled firmware to the device. |
 | `make push M="message"` | Commits and pushes changes to Git with a message. |
 | `make backup` | Backs up the project to a USB key. |
+| `make help` | print targets help. |
 
-Miscellaneous commands :
+TaskMate exposes a concise set of user `make` targets.
+The authoritative and up-to-date list of available commands
+is provided by `make help`, generated dynamically from the Makefile itself.
 
-| Command | Description |
-|---------|-------------|
-| `make clean` | Delete files, except code, obviously ! |
-| `make doc` | Generate Doxygen documentation |
-| `make dump` | Disassemble machine code |
-| `make cloc` | Count lines of code |
-| `make tidy` | C code static analysis with clang-tidy tool, configuration file /.clang-tidy |
-| `make note` | find TODO / FIX / HACK in sources files |
-| `make check` | C code static analysis with cppcheck tool |
-| `make format` | C code formatting with clang-format tool, configuration file /.clang-format|
-
----
-
-## 🚀 Streamlined Workflow
-
-Short, intuitive commands for development, deployment, and backup.
+🚀 **Streamlined workflow** : short, intuitive commands for development, deployment, and backup.
 
 ---
 
 ## 🛠️ Complete build system
-```
-              +-----------------------+
-              |        make           |
-              |  Build Orchestration  |
-              +----------+------------+
-                         |
-                         | selects architecture, MCU, board
-                         | and all relevant source files
-                         | manage dependencies .c <-> .h
-                         | provides utilities
-                         |
-                         v
-              +-----------------------+
-              |      autoCode         |
-              |Dynamic Code Generation|
-              +-----------------------+
-                         |
-                         | parses all *_init.rc files
-                         | generates headers autoInclude_*.h
-                         | generate code in .c files via tag system
-                         |
-                         | autoCode check configuration validity:
-                         |   - files name
-                         |   - options
-                         |   - modules count / name
-                         v
-              +-----------------------+
-              |       Compiler        |
-              +-----------------------+
-                         |
-                         | each translation unit
-                         | becomes an object file:
-                         |   foo.c → foo.o
-                         |
-                         | compiler verifies:
-                         |   - syntax & types
-                         |   - correct headers
-                         |   - matching prototypes
-                         |
-                         v
-              +-----------------------+
-              |        Linker         |
-              +-----------------------+
-                         |
-                         | merges all .o files
-                         | resolves symbols:
-                         |   - strong vs weak definitions
-                         |   - missing symbols
-                         |
-                         | detects errors such as:
-                         |   undefined reference
-                         |   multiple definition
-                         |
-                         v
-              +-----------------------+
-              |     Final Firmware    |
-              +-----------------------+
-```
+
+![Build system](doc/build_v2.png)
 
 ---
 
-## 🚧 Architecture Boundary Enforcement in the TaskMate Build System
+## 🚧 Architecture boundary enforcement
 
-TaskMate implements a lightweight but highly effective *compile-time architecture
-boundary system* designed to prevent accidental or unauthorised access to
-system-critical HAL and sysCore interfaces. This mechanism relies entirely on
-static checks and conventions, adding **zero overhead** to the final binary and no **runtime cost**.
+TaskMate enforces architectural boundaries **at build time** to prevent accidental
+or unauthorised access to system-critical interfaces.
+This mechanism relies entirely on **static checks and conventions**,
+introducing **zero runtime overhead** and no impact on the final firmware size.
 
-The enforcement logic operates at **two complementary levels:**
+Boundary enforcement is handled directly by the build system and operates at three complementary levels:
 
----
 
-### 1. Build-Time Include Validation
+### 1. Build-time validation
 
-All system-critical headers are declared in a single configuration file `allow.mk`
-as pattern / white list pairs. During the build, a dedicated Make rule scans the source
-tree with `grep` and ensures that each critical header is included **only** by source
-files explicitly listed in the white list.
 
-This mechanism automatically extracts the set of `<pattern → allowed>` pairs from
-the `.mk` file, avoiding duplication and ensuring that the configuration itself
-remains the single source of truth. Any unauthorised include immediately stops
-the build, guaranteeing a clean architectural boundary before compilation ever begins.
+The Makefile validates which source files are allowed to include system-critical
+headers, based on explicit white list rules. Any unauthorised inclusion immediately
+stops the build, ensuring architectural violations are detected **before compilation.**
 
----
 
-### 2. Compile-Time Protection in Critical Headers
+### 2. Compile-time guards (temporarily out of use due to headers refactor)
 
-Each system-critical header contains a defensive guard such as:
+System-critical headers contain defensive compile-time checks. Only explicitly
+authorised modules receive the required preprocessor definitions, preventing both
+ direct and indirect inclusion of privileged interfaces.
 
-```C
-#ifndef HAL_SYSTEM_CRITICAL_ALLOWED
-	#error "Forbidden inclusion of system-critical headers"
-#endif
-```
 
-Only the modules explicitly authorised receive the appropriate `-DX_Y_ALLOWED`
-flag from the build system. This ensures that **both direct and recursive includes**
-are kept under strict control, even if a developer manually bypasses the build-time white list.
+### 3. Structural conventions
 
----
+Clear directory separation and consistent naming conventions reinforce architectural
+ discipline, making incorrect usage unlikely and easy to detect.
 
-### 3. Structural and Naming Conventions
 
-TaskMate reinforces its internal boundaries through clear file naming
-`(hal_usr_api.h, hal_system_critical_api.h, autoInclude_*.h)` and a consistent
-directory hierarchy `(sysCore/, sysCall/, hal/, services/, tasks/)`. The architecture itself
-makes unauthorised use of privileged interfaces unlikely, and the automated checks
-eliminate the remaining risk.
+### Software-only boundary
 
----
-
-### 4. Software-Only Boundary — Not a Hardware MMU
-
-This mechanism enforces **logical** and **code-structure** separation between system-level
-and user-level components. However, it remains **purely software-based:**
-
-- It does **not** provide memory isolation or privilege rings.
-- It is **not equivalent** to a hardware MMU, MPU, or segmentation unit.
-- It does **not** prevent malicious code from misbehaving if intentionally modified.
-
-Its purpose is to enforce *architectural discipline*, not to provide hardware-backed
-process isolation. In the context of embedded systems—where the developer
-controls the tool-chain and firmware image—this approach provides an excellent
-balance between **robustness**, **clarity**, **maintainability**, and zero **runtime cost**.
+This mechanism enforces **logical and structural separation** only. It does **not** provide
+ memory isolation, privilege rings, or hardware-backed protection (MMU/MPU).
+ Its purpose is to maintain architectural clarity, robustness, and long-term
+ maintainability within the constraints of embedded systems, while remaining
+ lightweight and fully deterministic.
