@@ -1,13 +1,17 @@
-## 🧱 Portability and Conditional Compilation Policy
+## 🧱 Portability and hardware abstraction design
 
-Portability and configuration must be handled by:
+This document describes the architectural rules and design principles
+governing portability in TaskMate. It is intended as a technical guide
+rather than an introductory overview.
+
+**Portability and configuration are handled by:**
 
 - the directory structure (arch/, mcu/, board/)
 - the build system (Makefile variables: ARCH, MCU, BOARD)
 - autoCode generator for system initialisation.
 - C preprocessor conditional statements
 
-This rule prevents:
+This rules prevents:
 
 - configuration spaghetti
 - hard-to-read code paths
@@ -37,7 +41,7 @@ The design follows a strict layered model :
 | sysCall/gpio | Middleware / logical abstraction layer |
 | HAL Board	| Configuration layer |
 | HAL MCU | Hardware abstraction layer (strict) |
-| MCU | registers	Hardware |
+| MCU | Hardware register |
 
 ---
 
@@ -53,9 +57,11 @@ It knows the physical ports of the micro-controller
 
 Provide raw operations:
 
-- `halGpioWriteRaw(port_index, bit, value)`
-- `halGpioReadRaw(port_index, bit)`
-- `halGpioInitRaw(port_index, bit, mode, pull)`
+```C
+void hal_gpioInitPin(const gpio_pin_item_t *pin);
+void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
+bool hal_gpioReadPin(const gpio_pin_item_t *pin);
+```
 
 Maintain an internal table describing the MCU ports:
 
@@ -74,7 +80,7 @@ It works only with **physical** ports and bits.
 
 ---
 
-### 3. Board Mapping (hal/board/${BOARD}/hal_boardInit.c)
+### 3. Board mapping (hal/board/${BOARD}/hal_boardInit.c)
 
 **Role**
 
@@ -89,9 +95,15 @@ Defines how logical signals used by TaskMate are physically wired on a specific 
 Example:
 
 ```C
-sysGpioConfigureSignal(GPIO_SIGNAL_LED_RUN,
-                       GPIO_PORT_A, 1,
-                       true); // active high
+	// gpio pin definition
+	gpio_signal_item_t sig;
+
+	sig.pin.port_index = GPIO_PORT_B;
+	sig.pin.number = PB7;
+	sig.pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
+	sig.pin.pull = GPIO_PIN_PULL_NONE;
+	sig.active_high = true;
+	gpio_signalInit(GPIO_SIGNAL_INBOARD_LED, &sig);
 ```
 
 **Key point**
@@ -112,36 +124,36 @@ It enforces correctness and provides portability.
 - Hold the mapping logical signal → (port_index, bit, polarity).
 - Validate that each signal has been configured before use.
 - Apply active-high / active-low translation.
-- Call into halGpioWriteRaw() and halGpioReadRaw().
 
 Example:
 ```C
-void gpioSignalSet(gpio_signal_t sig, bool on)
+void gpio_signalSet(gpio_signal_t signal, bool on)
 {
-    const gpio_signal_cfg_t *c = sysGpioGetCfg(sig);
-    bool hw = c->active_high ? on : !on;
-    halGpioWriteRaw(c->port, c->bit, hw);
+	bool val = gpio_signals_table[signal].active_high ? on : !on;
+	hal_gpioWritePin(&(gpio_signals_table[signal].pin), val);
 }
 ```
 
 **Key point**
 
-Tasks never manipulate raw ports.
-They use only logical signals, which makes them fully portable.
+Tasks never manipulate raw ports. They use only logical signals,
+which makes them fully portable.
 
 ---
 
-## 🧩 Adding a New Hardware Target (ARCH / MCU / BOARD)
+## 🧩 Adding a new hardware target (ARCH / MCU / BOARD)
 
-Thanks to the existing build and directory structure, adding support for
-a new architecture, micro-controller or board **does not require** changes to
-the core system.
+all new drivers headers source files will be automatically ad to
+hal/auto_hal_user.h or hal/auto_hal_system.h by using tag :
 
+- // @hal_user
+- // @hal_system
+
+autoCode will read this tags and write meta headers hal files.
 
 1️⃣ **New architecture (ARCH)**
 
 Example: adding arm32v7m
-
 
 - Create a new architecture directory: `src/hal/arch/arm32v7m/`
 
@@ -151,7 +163,6 @@ Example: adding arm32v7m
 	- low-level interrupt handling.
 	- arch_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `hal/hal_api.h`
 - Extend the Makefile to accept: `ARCH=arm32v7m`
 
 ---
@@ -167,7 +178,6 @@ Example: adding stm32g474
 	- timers, USART, GPIO, I²C, ADC, …
 	- mcu_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `hal/hal_api.h`
 - Extend the Makefile to map: `MCU=stm32g474`
 
 ---
@@ -183,7 +193,6 @@ Example: adding nucleoG474RE
 	- board-specific initialization
 	- board_init.rc entries for new drivers
 
-- Use the common HAL API headers from: `hal/hal_api.h`
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 
 ---
@@ -192,4 +201,4 @@ Example: adding nucleoG474RE
 
 `make ARCH=<arch> MCU=<mcu> BOARD=<board>`
 
-<span style="color:green">**No changes to core system, no `#ifdef` and no hidden side effects.**</span>
+<span style="color:green">**No changes to core system, no hidden side effects.**</span>
