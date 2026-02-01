@@ -3,9 +3,6 @@
 	git commit -m "comment"
 	git push
 
-# show files will be add
-	git status
-
 delete local : git branch -d test_branch
 delete remote : git push origin --delete test_branch
 
@@ -25,7 +22,13 @@ delete remote : git push origin --delete test_branch
 	git stash
 	git stash pop
 
-# search in commits, without merge, most add lines. --miror mode not tree 
+##################################################
+# clean history
+##################################################
+# get repo size
+git count-objects -vH
+
+# search in commits, without merge, most add
 git log --no-merges --numstat --date=iso-strict --pretty="C %H %ad %s" \
 | awk '
   /^[0-9]/ { add += $1; next }
@@ -39,13 +42,25 @@ git log --no-merges --numstat --date=iso-strict --pretty="C %H %ad %s" \
 | sort -k1,1nr -k3,3r \
 | head -20
 
-# delete file in history
+# big blop
+git rev-list --objects --all \
+| git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
+| awk '$1=="blob"{print $3, $2, $4}' \
+| sort -n \
+| tail -20
+
+# find related commit 
+git log --all --find-object=deadbeef...
+
+# delete file in git history
 # 1 - clone
+cd ~/code/TaskMate
 git clone --mirror git@codeberg.org:Doul09/TaskMate.git taskmate-commit-clean
 cd taskmate-commit-clean
 
 # 2 - clean
 git filter-repo --path path/file --invert-paths
+
 # 3 - check
 git log --stat -- '*file.*'
 

@@ -62,7 +62,7 @@
 |---|---|---|
 | Core OS Architecture | ~80% | Core scheduler, task switching, system calls complete |
 | Robustness & Safety Features | ~20% | Error handling, watchdog, overflow checks needed |
-| Usability & Control (CLI, Config) | ~10% | Initial planning done, implementation pending |
+| Usability & Control (CLI, Configuration) | ~10% | Initial planning done, implementation pending |
 | Testing & Validation | 0% | Full system stress & failure handling not tested yet |
 
 **Total System Completion Estimate: ~35-40%**

@@ -13,9 +13,9 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
-> <span style="color:green"> **Project Stats (v0.24)**</span>
+> <span style="color:green"> **Project Stats (v0.25)**</span>
 >
->  <span style="color:green">280 commits • 92 source files • 2830 lines of code •
+>  <span style="color:green">298 commits • 95 source files • 3070 lines of code •
 > binary size : 6022 bytes (Flash) • ram usage : 2326 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
@@ -46,12 +46,10 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
-- Automatic recompilation based on file changes, including headers and initrc startup configuration.
+- Automatic recompilation based on files changes, including headers and initrc startup configuration.
 - CLI commands like `make upload`, `make push` and `make backup`.
-- architecture-specific and board-specific code is compiled with
-minimal using conditional macros (#ifdef).
 
-**Portability is achieved by build selection, not by preprocessor logic.**
+**Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
 See : [Makefile & build system](doc/build_system.md)
 
@@ -59,9 +57,9 @@ See : [Makefile & build system](doc/build_system.md)
 
 ### 🧱 Hardware Abstraction Layer and architecture support
 
-The HAL provide a **clean interface** between the system and the hardware.
+The HAL provides a **clean interface** between the system and the hardware.
 Ensures true portability across hardware families.
-This allow TaskMate to run on multiple architectures:
+This allows TaskMate to run on multiple architectures:
 
 - **avr8** - the historical beginning of TaskMate
 - **amd64** - for testing and faster development cycles
@@ -91,13 +89,12 @@ See : [Future improvements](doc/RTOS_improvements.md)
 
 ![System Layer Diagram](doc/TaskMate_layers_v5.png)
 
-The new TaskMate layer configuration provides a **stronger isolation between system components**.
+TaskMate layer configuration provides a **strong isolation between system components**.
 Each layer communicates through **well-defined interfaces**,
 preventing direct access to the hardware or core system logic.
 
 User tasks can still **benefit from all system features** —
-such as messaging, timing, I/O, and services —
-but always through indirect calls via the sysCall, services and HAL layers.
+such as messaging, timing, I/O, and services — but always through indirect calls.
 This design significantly improves **stability** and **portability**.
 
 ---
@@ -107,15 +104,15 @@ This design significantly improves **stability** and **portability**.
 Starting with version 0.10, TaskMate uses a **modular design model**:
 
 - Drivers, system services, and user tasks are placed in dedicated directories.
-- Each directory provides a `*_init.rc` file describing initialisation parameters.
+- Each directory provides a init.rc file describing initialisation parameters.
 - These files are parsed before **compile time** by a custom tool : `autoCode`.
 
 The result is **auto-generated code**, without runtime overhead 👍
 
 This approach keeps the flexibility of a dynamic system but ensures that
  **everything is resolved at compile time**, minimising Flash and RAM usage.
-This mechanism defines system initialisation and resource mapping
-**without manually hard coding** any configuration.
+This mechanism defines system initialisation **without manually hard coding**
+configuration.
 
 See : [More about autoCode](doc/autoCode.md)
 See : [Info about run level](doc/run_level.md)
@@ -155,7 +152,7 @@ See the `LICENSE` file for full details.
 
 ### 📟  Hardware setup : avr8 - atmega2560 - Arduino mega board
 
-![So called wired hardware](doc/hardware_mega.jpg)
+![Arduino mega board](doc/hardware_mega.jpg)
 
 ---
 
@@ -170,7 +167,7 @@ See the `LICENSE` file for full details.
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
 - The markdown guide, author Matt Cone, publisher Amazon. ISBN 9798656504492
 - Hands-On RTOS with Microcontrollers, author Brian Amos, publisher Packt. ISBN 978-1-83882-673-4
-- Making Embedded Sysems, author Elecia White, publisher O'Reilly. ISBN 978-1-098-15154-6
+- Making Embedded Systems, author Elecia White, publisher O'Reilly. ISBN 978-1-098-15154-6
 - Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 

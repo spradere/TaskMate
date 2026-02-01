@@ -82,7 +82,7 @@ FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 
 # mk file -> target help
-MK_FILES_MK != find ./${MK_DIR} -maxdepth 1 -type f -name "*.mk"
+MK_FILES_MK != find ./${MAKE_DIR} -maxdepth 1 -type f -name "*.mk"
 MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
