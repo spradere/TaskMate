@@ -1,6 +1,6 @@
-### 🧭 The Story of TaskMate and the AI Companion
+### 🧭 The story of TaskMate and the AI companion
 
-Once upon a time, there was an computer enthusiast who wanted to build a small real-time
+Once upon a time, there was a computer enthusiast who wanted to build a small real-time
 operating system — not to conquer the world, but to understand it better. The
 project began humbly, with blinking LEDs and tangled stacks, but soon grew into
 something much deeper: **TaskMate**, a modular kernel where every line of code had
@@ -21,5 +21,5 @@ Yet, the influence is everywhere:
 
 In the end, TaskMate is the result of human persistence, curiosity, and countless hours of design — but it also carries traces of this unique collaboration between human reasoning and artificial intelligence.
 
-TaskMate might not exist *because* of AI,
-but it certainly became **what it is** *thanks* to it.
+TaskMate might not exist because of AI,
+but it certainly became **what it is today** thanks to it.

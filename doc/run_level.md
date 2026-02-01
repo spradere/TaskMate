@@ -1,5 +1,8 @@
 ### 🔀 Run Levels
 
+This note briefly describes the run level mechanism used by TaskMate
+to control system initialisation and runtime activation of modules.
+
 The system implements run levels to control and sequence the initialisation
 of modules during system startup. Each module is assigned a run level according to its role:
 
