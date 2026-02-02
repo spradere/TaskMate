@@ -5,12 +5,12 @@
 ### ☀️ Core System (Foundation)
 - [x] Basic Preemptive OS
 - [x] Basic Real-Time Features
-- [x] Generic Driver Layout (init/start/stop format)
-- [x] Git Version Control Setup (Git & Codeberg)
-- [x] Initial Documentation (Doxygen setup)
+- [x] Generic Driver Layout
+- [x] Git Version Control Setup
+- [x] Initial Documentation
 - [x] Project Licensing
-- [x] Task Launch & Management (via scheduler)
-- [x] Core System Call Layer (basic)
+- [x] Task Launch & Management
+- [x] System Call Layer
 
 ### 📝 Process & Documentation Tools
 - [x] Git Workflow (with Codeberg)
