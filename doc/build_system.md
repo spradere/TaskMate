@@ -34,7 +34,7 @@ is provided by `make help`, generated dynamically from the Makefile itself.
 
 ## 🛠️ Complete build system
 
-![Build system](doc/build_v2.png)
+![Build system](build_v2.png)
 
 ---
 

@@ -158,10 +158,9 @@ See the `LICENSE` file for full details.
 
 ### 📑 Documentation & books 📚
 
-- **Compatibility** — versioning and guarantees: see [COMPATIBILITY.md](doc/COMPATIBILITY.md)
+- **Project development status** — see [Project Progress](doc/progress.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
-- **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/code_best_practices.md)
-- **Project progress** — see road map -> [Road map](doc/check_list.md)
+- **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/C_code_best_practices.md)
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
 - Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
@@ -170,4 +169,3 @@ See the `LICENSE` file for full details.
 - Making Embedded Systems, author Elecia White, publisher O'Reilly. ISBN 978-1-098-15154-6
 - Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
-
