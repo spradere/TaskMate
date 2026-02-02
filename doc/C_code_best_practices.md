@@ -17,6 +17,7 @@
 11. [Error messages: Informative, precise, human-readable](#11-error-messages-informative-precise-human-readable)
 12. [Refactoring mindset](#12-refactoring-mindset)
 13. [Git Commit Message Guidelines](#13-git-commit-message-guidelines)
+14. [Endnote](#14-Endnote)
 
 ---
 
@@ -56,16 +57,6 @@ Don't write clever code. Write code you'd understand a year from now with a hang
 
 * Be explicit, not implicit.
 Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
-
-**Example:**
-```c
-#define DRIVER_STATUS_DEFAULT (1 << DRIVER_INIT_AT_BOOT) | (1 << DRIVER_START_AT_BOOT)
-modules->drivers[i]->status = DRIVER_STATUS_DEFAULT;
-```
-```c
-typeof(table->task_list[i]->status) task_status; // unclear
-status_t task_status; // clear
-```
 
 ---
 
@@ -151,7 +142,7 @@ code over excessive comments. Write code so clear it needs fewer comments.
 Use comments to explain **why**, not **what**.
 
 * Don't: `timeout = 1000; // set timeout to 1000`
-* Do: `timeout = 1000; // 1 second max wait before watchdog reset`
+* Do: `timeout_ms = 1000; // 1 second max wait before watchdog reset`
 
 ### 8.2. Explain magic numbers and edge cases
 
@@ -198,7 +189,7 @@ resetWatchdog();
 Especially in embedded or timing-sensitive code—always say what the units are.
 
 * Don't: `delay = 200;`
-* Do: `delay = 200; // 200 ms delay between measurements`
+* Do: `delay_ms = 200; // 200 ms delay between measurements`
 
 ### 8.7. Explain why not something was done
 
@@ -262,7 +253,7 @@ Since auto-completion makes long names easy, there's no excuse for being cryptic
 
 **Example:**
 ```c
-MSGERR();          // unclear
+MERR();          // unclear
 messageError();    // clear
 ```
 
@@ -276,7 +267,7 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 * States clearly what went wrong → Not vague
 * Shows where the bad data came from → [file]
 * Prints the actual offending line/token → No guessing
-* Handles all common failure cases → Unknown command, missing flags, name duplication, wrong arg count, ...
+* Handles all common failure cases → Unknown command, missing flags, name duplication, wrong argument count, ...
 * Speaks like a human → Natural and helpful
 
 ### Very bad
@@ -299,10 +290,10 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 **Example:**
 ```
 [parseInitrc.c:101] error : missing -user or -system for task
-         [utility/tasks_list:15] task3
+         [utility/tasks_init.rc:15] task3
 
 [parseInitrc.c:69] error : wrong task token count
-         [utility/tasks_list:19] is 1, should be [2,3]
+         [utility/tasks_init.rc:19] is 1, should be [2,3]
 ```
 
 ---
@@ -348,8 +339,10 @@ Each message should begin with a **verb prefix** followed by a short description
 - `remove` — for deleted code, features, or clean-up
 - `fix` — for bug fixes or corrections
 - `change` — for modifications, refactors, or renames
-- `upgrade`
-- `replace`
+- `upgrade` / `update`
+- `replace` / `move`
+- `bump` / `merge` / `test`
+- ...
 
 ### Examples:
 - add command parser for task input
@@ -357,11 +350,17 @@ Each message should begin with a **verb prefix** followed by a short description
 - fix null pointer in tokenizer()
 - change task_list to tasks
 
-- Use **imperative mood** (like a commit is a command: "fix", not "fixed")
+Use **imperative mood** (like a commit is a command: "fix", not "fixed")
 - Keep it short (ideally under 60 characters)
 - Write one logical change per commit
 - Avoid vague messages like `update`, `misc`, `changes`
 
+---
 
+### 14. 🧭 Endnote
 
+These guidelines are not meant to restrict creativity, but to make correctness,
+clarity, and long-term maintainability the default.
 
+These practices are especially important in layered and safety-oriented systems
+such as RTOS.
