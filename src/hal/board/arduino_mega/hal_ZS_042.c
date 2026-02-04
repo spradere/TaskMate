@@ -37,12 +37,13 @@ void hal_ZS_042Stop(void) {}
 uint8_t hal_ZS_042Read(hal_rtc_time_t *t)
 {
 	uint8_t buf[8];
+	uint8_t data;
 
 	hal_i2cCommStart(ZS_042_I2C_ADDR);
 	hal_i2cWrite(0); // command ???
 
-	for( uint8_t i = 0; i < 6; i++ ) { buf[i] = hal_i2cRead(true); }
-	buf[7] = hal_i2cRead(false);
+	for( uint8_t i = 0; i < 6; i++ ) { buf[i] = hal_i2cRead(&data, true); }
+	buf[7] = hal_i2cRead(&data, false);
 	hal_i2cCommStop();
 
 	t->seconds = bcdToUint8(buf[0] & 0x7F); // bit 7 = CH (Clock Halt), ignored

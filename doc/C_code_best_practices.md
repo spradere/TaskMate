@@ -290,10 +290,10 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 **Example:**
 ```
 [parseInitrc.c:101] error : missing -user or -system for task
-         [utility/tasks_init.rc:15] task3
+         [tasks/tasks_init.rc:15] task3
 
 [parseInitrc.c:69] error : wrong task token count
-         [utility/tasks_init.rc:19] is 1, should be [2,3]
+         [tasks/tasks_init.rc:19] is 1, should be [2,3]
 ```
 
 ---
