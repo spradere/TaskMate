@@ -25,5 +25,6 @@
 #include <stdint.h>
 
 int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...);
+int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args);
 
 #endif

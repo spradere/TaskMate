@@ -48,18 +48,26 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 	buff_data[*buff_index] = 0;
 }
 
+int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	tm_vsnprintf(buff, buff_size, format, args);
+	va_end(args);
+}
+
 // !! use this macro only in TaskMate snprinf()
 #define put_char(ch)                                                                                         \
 	do {                                                                                                     \
 		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                     \
 	} while( 0 )
 
-int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
+int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args)
 {
 	uint8_t buff_index = 0;
 
-	va_list args;
-	va_start(args, format);
+	//va_list args;
+	//va_start(args, format);
 
 	while( *format )
 	{
@@ -124,7 +132,7 @@ int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 		format++;
 	}
 
-	va_end(args);
+	//va_end(args);
 
 	put_char(0); // close string
 	buff[buff_size - 1] = 0; // worst case close at the end of buffer
