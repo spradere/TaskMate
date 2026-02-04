@@ -30,38 +30,26 @@
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
 #include "tm_libc/tm_stdio.h"
+#include "tm_libc/tm_syslog.h"
 
 int main(void)
 {
 	// log start
-	char log[128];
-
-	hal_usartInit();
-	hal_usartStart();
-
-	tm_snprintf(log, sizeof(log), "\n\n[%s] Boot ...\n", __FILE__);
-	hal_usartWriteString(log);
-	hal_usartSendTXBuffer();
+	tm_syslog("\n\n[%s] Boot ...\n", __FILE__);
 
 	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
-	tm_snprintf(log, sizeof(log), "[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
-	hal_usartWriteString(log);
-	hal_usartSendTXBuffer();
+	tm_syslog("[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
 
 	// system static allocation init
-	tm_snprintf(log, sizeof(log), "[boot] system static allocation\n");
-	hal_usartWriteString(log);
-	hal_usartSendTXBuffer();
+	tm_syslog("[boot] system static allocation\n");
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
 	rl_Alloc();
 
 	// hal hardware init
-	tm_snprintf(log, sizeof(log), "[boot] hal hardware init\n");
-	hal_usartWriteString(log);
-	hal_usartSendTXBuffer();
+	tm_syslog("[boot] hal hardware init\n");
 
 	hal_archInit();
 	hal_mcuInit();
@@ -91,15 +79,10 @@ int main(void)
 	// hal_ZS_042Write(&t);
 	// hal_ZS_042Read(&t);
 
-	tm_snprintf(log, sizeof(log), "[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours,
-				t.minutes);
-	hal_usartWriteString(log);
-	hal_usartSendTXBuffer();
+	tm_syslog("[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
 
 	// jump to current thread for first call and start system by enabling INT
-	tm_snprintf(log, sizeof(log), "[boot] start round-robin scheduler\n");
-	hal_usartWriteString(log);
-	hal_usartSendTXBuffer();
+	tm_syslog("[boot] start round-robin scheduler\n");
 
 	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());

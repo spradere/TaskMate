@@ -3,7 +3,7 @@
 **System :**
 | Phase | Status | Notes |
 |---|---|---|
-| Core OS architecture | ~70% | scheduler, OS services, system calls |
+| Core OS architecture | ~70% | scheduler, OS services, OS statistics, system calls |
 | Hardware abstraction layer | ~80% | directory tree, GPIO, headers |
 | Build system  | ~90% | configuration, portability, backup  |
 | Deterministic RTOS | ~10% | Latency, jitter, bounded preemption not implemented |

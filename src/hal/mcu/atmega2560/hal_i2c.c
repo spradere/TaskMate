@@ -36,7 +36,7 @@ void hal_i2cInit(void)
 
 void hal_i2cStart(void)
 {
-	TWCR = (1 << TWEN); // Enable TWI
+	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 }
 
 void hal_i2cStop(void)
@@ -46,23 +46,15 @@ void hal_i2cStop(void)
 
 uint8_t hal_i2cCommStart(uint8_t address)
 {
-	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT); // | (1 << TWEA);
+	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
 	while( !(TWCR & (1 << TWINT)) );
 
-	if( (TWSR & 0xF8) != TW_START )
+	if( TW_STATUS != TW_START )
 	{
-		return 1; // Error
+		return TW_STATUS; // Error
 	}
 
-	TWDR = (address);
-	TWCR = (1 << TWEN) | (1 << TWINT);
-	while( !(TWCR & (1 << TWINT)) );
-
-	if( (TWSR & 0xF8) != TW_MT_SLA_ACK )
-	{
-		return 2; // Error
-	}
-	return 0; // Success
+	return hal_i2cWrite(address); // Success
 }
 
 void hal_i2cCommStop(void) { TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); }
@@ -73,14 +65,10 @@ uint8_t hal_i2cWrite(uint8_t data)
 	TWCR = (1 << TWEN) | (1 << TWINT);
 	while( !(TWCR & (1 << TWINT)) );
 
-	if( (TWSR & 0xF8) != TW_MT_DATA_ACK )
-	{
-		return 1; // Error
-	}
-	return 0; // Success
+	return TW_STATUS;
 }
 
-uint8_t hal_i2cRead(bool ack)
+uint8_t hal_i2cRead(uint8_t *data, bool ack)
 {
 	if( ack )
 		TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
@@ -89,12 +77,8 @@ uint8_t hal_i2cRead(bool ack)
 
 	while( !(TWCR & (1 << TWINT)) );
 
-	uint8_t status = TWSR & 0xF8;
-
-	if( ack && status != TW_MR_DATA_ACK ) return 0xFF;
-	if( !ack && status != TW_MR_DATA_NACK ) return 0xFF;
-
-	return TWDR;
+	*data = TWDR;
+	return TW_STATUS;
 }
 
 // NOLINTEND
