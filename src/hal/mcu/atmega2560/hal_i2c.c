@@ -21,22 +21,43 @@
 #include "hal/mcu/atmega2560/hal_i2c.h"
 
 #include <avr/io.h>
-#include <util/twi.h>
+
+#include "tm_libc/tm_syslog.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
-#define HAL_I2C_TWBR_VALUE ((F_CPU / HAL_I2C_FREQ - 16) / 2)
+#define I2C_TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
 
 void hal_i2cInit(void)
 {
-	TWBR = (uint8_t)HAL_I2C_TWBR_VALUE; // Set baud rate
+	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Pre scaler = 1
 }
 
 void hal_i2cStart(void)
 {
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
+
+	uint8_t status;
+
+	// address test
+	tm_syslog("[i2c] scan ...\n");
+	for(uint8_t adr = 0x00; adr != 0xFF; adr++)
+	{
+		// start comm
+		TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
+		while( !(TWCR & (1 << TWINT)) );
+
+		status = hal_i2cWrite(adr);
+
+		if(status == TW_MT_SLA_ACK)
+		{
+           tm_syslog("[i2c] found 0x%x\n",(adr >> 1));
+		}
+
+	hal_i2cCommStop();
+	}
 }
 
 void hal_i2cStop(void)
@@ -44,17 +65,17 @@ void hal_i2cStop(void)
 	TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
 }
 
-uint8_t hal_i2cCommStart(uint8_t address)
+uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 {
 	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
 	while( !(TWCR & (1 << TWINT)) );
 
-	if( TW_STATUS != TW_START )
+	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 	{
-		return TW_STATUS; // Error
+		return TW_STATUS;
 	}
 
-	return hal_i2cWrite(address); // Success
+	return hal_i2cWrite((address << 1) | rw);
 }
 
 void hal_i2cCommStop(void) { TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); }
