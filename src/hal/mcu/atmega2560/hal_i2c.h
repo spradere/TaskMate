@@ -25,13 +25,20 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <util/twi.h>
 
-#define HAL_I2C_FREQ 100000UL // Standard mode 100 kHz
+#define I2C_FREQ 100000UL // Standard mode 100 kHz
+#define I2C_READ 1
+#define I2C_WRITE 0
+#define I2C_ACK 1
+#define I2C_NACK 0
+
+
 
 void hal_i2cInit(void);
 void hal_i2cStart(void);
 void hal_i2cStop(void);
-uint8_t hal_i2cCommStart(uint8_t address);
+uint8_t hal_i2cCommStart(uint8_t address, bool rw);
 void hal_i2cCommStop(void);
 uint8_t hal_i2cWrite(uint8_t data);
 uint8_t hal_i2cRead(uint8_t *data, bool ack);
