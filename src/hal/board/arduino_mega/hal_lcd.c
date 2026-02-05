@@ -28,7 +28,7 @@
 
 static void lcdAMC2004SendCommand(uint8_t command);
 
-#define LCDAMC2004_I2C_ADDR 0x78 // AiP31068L I2C address (Write mode)
+#define LCDAMC2004_I2C_ADDR 0x3C // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
 #define LCDAMC2004_DATA 0x40 // Co=0 RS = 1, Write Data series
 #define LCDAMC2004_RAW 4
@@ -61,7 +61,7 @@ void hal_lcdStop(void)
 
 void lcdAMC2004SendCommand(uint8_t command)
 {
-	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
+	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, I2C_WRITE);
 	hal_i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
 	hal_i2cWrite(command);
 	hal_i2cCommStop();
@@ -82,7 +82,7 @@ void hal_lcdSetCursor(uint8_t row, uint8_t col)
 
 void hal_lcdWriteString(const char *str)
 {
-	hal_i2cCommStart(LCDAMC2004_I2C_ADDR);
+	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, I2C_WRITE);
 	hal_i2cWrite(LCDAMC2004_DATA);
 
 	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
