@@ -1,3 +1,5 @@
+	add system log + tm_vsnprintf()
+	hal I2C refactor, address maping
 	update doc due to major refactor
 
 TaskMate 0.25

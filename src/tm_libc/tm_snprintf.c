@@ -66,9 +66,6 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 {
 	uint8_t buff_index = 0;
 
-	//va_list args;
-	//va_start(args, format);
-
 	while( *format )
 	{
 		if( *format == '%' && *(format + 1) )
@@ -131,8 +128,6 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 		else { put_char(*format); }
 		format++;
 	}
-
-	//va_end(args);
 
 	put_char(0); // close string
 	buff[buff_size - 1] = 0; // worst case close at the end of buffer

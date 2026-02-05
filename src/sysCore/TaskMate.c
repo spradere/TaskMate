@@ -29,12 +29,16 @@
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
-#include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_syslog.h"
+
+#include "tm_libc/tm_stdio.h"
 
 int main(void)
 {
 	// log start
+	hal_usartInit();
+	hal_usartStart();
+
 	tm_syslog("\n\n[%s] Boot ...\n", __FILE__);
 
 	const sc_target_info_t *target;
@@ -68,16 +72,15 @@ int main(void)
 	// rtc time test
 
 	hal_rtc_time_t t;
-	t.day = 17;
-	t.hours = 20;
-	t.minutes = 47;
-	t.month = 12;
-	t.seconds = 15;
-	t.weekday = 3;
-	t.year = 25;
+	t.hours = 23;
+	t.minutes = 39;
+	t.seconds = 0;
+	t.day = 5;
+	t.month = 2;
+	t.year = 26;
 
-	// hal_ZS_042Write(&t);
-	// hal_ZS_042Read(&t);
+	hal_ZS_042Write(&t);
+	hal_ZS_042Read(&t);
 
 	tm_syslog("[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
 
