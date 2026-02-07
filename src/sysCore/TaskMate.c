@@ -1,6 +1,6 @@
 /*
  * TaskMate Project
- * (c) 2025 PRADERE Sebastien
+ * (c) 2026 PRADERE Sebastien
  *
  * This file is part of TaskMate and is distributed under the TaskMate License
  * v1.0. See the LICENSE file for full license terms.
@@ -9,7 +9,7 @@
  * separate license. Commercial licensing inquiries:
  * https://codeberg.org/Doul09/TaskMate/issues
  *
- * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
 /**
@@ -37,11 +37,11 @@ int main(void)
 	hal_usartInit();
 	hal_usartStart();
 
-	tm_syslog("\n\n[boot] TaskMate %s boot ...\n", TASKMATE_VERSION);
+	tm_syslog("\n\n[boot] TaskMate %s boot\n", TASKMATE_VERSION);
 
 	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
-	tm_syslog("[boot] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
+	tm_syslog("[info] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
 
 	// system static allocation init
 	tm_syslog("[boot] system static allocation\n");
@@ -71,14 +71,21 @@ int main(void)
 
 	hal_rtc_time_t t;
 	t.hours = 21;
-	t.minutes = 05;
+	t.minutes = 41;
 	t.seconds = 30;
 	t.day = 7;
 	t.month = 2;
 	t.year = 26;
 
-	 hal_rtcWrite(&t);
+	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
+
+	uint8_t test = 55;
+	tm_syslog("[debug] padding test %i %02i %04i \n", test, test, test);
+	test = 6;
+	tm_syslog("[debug] padding test %i %02i %04i \n", test, test, test);
+
+	tm_syslog("[info] date / time %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
 
 	char msg[64];
 	tm_snprintf(msg, sizeof(msg), "TaskMate %s", TASKMATE_VERSION);
@@ -86,7 +93,7 @@ int main(void)
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
 
-	tm_snprintf(msg, sizeof(msg), "%i/%i/20%i %i:%i", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_snprintf(msg, sizeof(msg), "%02i/%02i/20%02i %02i:%02i", t.day, t.month, t.year, t.hours, t.minutes);
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
