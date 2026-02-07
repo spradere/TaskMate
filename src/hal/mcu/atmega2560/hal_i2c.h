@@ -33,8 +33,6 @@
 #define I2C_ACK 1
 #define I2C_NACK 0
 
-
-
 void hal_i2cInit(void);
 void hal_i2cStart(void);
 void hal_i2cStop(void);

@@ -17,14 +17,6 @@
 # Utility
 ################################################################################
 
-tags:
-#@ [global] Generate tags for Vim
-	@ctags -f ${BUILD_DIR}/tags ${SRCS}
-	@ctags -f ${BUILD_DIR}/tags -a ${SRCS_H}
-	@ctags -f ${BUILD_DIR}/tags -a ${AUTOCODE_SRCS}
-	@ctags -f ${BUILD_DIR}/tags -a ${AUTOCODE_SRCS_H}
-.PHONY: tags
-
 clean:
 #@ [global] Remove all build files.
 	@printf "\n%sRemove files%s\n\n" \

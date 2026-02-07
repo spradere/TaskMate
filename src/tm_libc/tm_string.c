@@ -20,7 +20,7 @@
 
 #include "tm_libc/tm_string.h"
 
-char *tm_strncpy(char *dest, const char *src, uint8_t n)
+void tm_strncpy(char *dest, const char *src, uint8_t n)
 {
 	uint8_t i = 0;
 
