@@ -29,7 +29,4 @@ vim_all: tags
 	vim ${SRCS} ${SRCS_H} ${MK_FILES}
 .PHONY: vim_all
 
-geany_all: tags
-	geany ${SRCS} ${SRCS_H} ${MK_FILES}
-.PHONY: geany_all
 
