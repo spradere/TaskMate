@@ -107,7 +107,7 @@ void fileOpen(file_t *file, const char *mode, const int special_mode, const char
 		exit(1);
 	}
 
-	if( (file->stream == NULL) && (special_mode == FILE_CREATE) && (strcmp(mode,"r") == 0) )
+	if( (file->stream == NULL) && (special_mode == FILE_CREATE) && (strcmp(mode, "r") == 0) )
 	{
 		msgInfo("file don't exist -> creating <%s>", file->name);
 		file->stream = fopen(file->name, "w");

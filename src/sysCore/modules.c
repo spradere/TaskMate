@@ -170,14 +170,14 @@ void mod_driversAlloc(void)
 	};
 
 	mod = mod_driverGetPointer(5);
-	const char *driver5_name = "hal_ZS_042";
+	const char *driver5_name = "hal_rtc";
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = driver5_name,
 		.status = 2,
-		.init = hal_ZS_042Init,
-		.start = hal_ZS_042Start,
-		.stop = hal_ZS_042Stop
+		.init = hal_rtcInit,
+		.start = hal_rtcStart,
+		.stop = hal_rtcStop
 	};
 // clang-format on
 	// [/tag]
