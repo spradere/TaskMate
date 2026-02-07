@@ -1,6 +1,6 @@
 /*
  * TaskMate Project
- * (c) 2025 PRADERE Sebastien
+ * (c) 2026 PRADERE Sebastien
  *
  * This file is part of TaskMate and is distributed under the TaskMate License
  * v1.0. See the LICENSE file for full license terms.
@@ -9,7 +9,7 @@
  * separate license. Commercial licensing inquiries:
  * https://codeberg.org/Doul09/TaskMate/issues
  *
- * Powered by TaskMate, (c) 2025 PRADERE Sebastien
+ * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
 /**
@@ -19,10 +19,12 @@
  */
 
 #include "tm_libc/tm_snprintf.h"
+#include "tm_libc/tm_syslog.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
-static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size, uint16_t value, uint8_t base)
+static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
+	uint16_t value, uint8_t base, uint8_t padding)
 {
 	const char digits[] = "0123456789abcdef";
 
@@ -43,8 +45,16 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 		tmp[pos++] = digits[data];
 	}
 
+	while(pos < padding)
+	{
+		tmp[pos++] = '0';
+	}
+
 	// reverse order
-	while( (pos > 0) && (*buff_index < (buff_size - 1)) ) { buff_data[(*buff_index)++] = tmp[--pos]; }
+	while( (pos > 0) && (*buff_index < (buff_size - 1)) )
+	{
+		buff_data[(*buff_index)++] = tmp[--pos];
+	}
 	buff_data[*buff_index] = 0;
 }
 
@@ -56,8 +66,8 @@ int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 	va_end(args);
 }
 
-// !! use this macro only in TaskMate snprinf()
-#define put_char(ch)                                                                                         \
+// !! use this macro only in TaskMate tm_vsnprinf()
+#define tm_vsnprintf_put_char(ch)                                                                                         \
 	do {                                                                                                     \
 		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                     \
 	} while( 0 )
@@ -65,19 +75,35 @@ int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args)
 {
 	uint8_t buff_index = 0;
+	uint8_t padding = 0;
 
 	while( *format )
 	{
 		if( *format == '%' && *(format + 1) )
 		{
 			format++;
+
+			if( (*format) == '0')
+			{
+				format++;
+				padding = (uint8_t)(*format -48); // atoi
+				if( padding > 9 )
+				{
+					tm_syslog("[%s] error padding format <%c>\n", __FILE__,*format);
+					return 0;
+				}
+				//tm_syslog("[debug] padding  = %i \n", padding);
+				format++;
+
+			}
+
 			switch( *format )
 			{
 
 				case 'c':
 				{
 					int c = va_arg(args, int);
-					put_char(c);
+					tm_vsnprintf_put_char(c);
 					break;
 				}
 				case 's':
@@ -85,7 +111,7 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 					const char *s = va_arg(args, char *);
 					while( *s )
 					{
-						put_char(*s);
+						tm_vsnprintf_put_char(*s);
 						s++;
 					}
 					break;
@@ -113,23 +139,24 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 							base = 10;
 							break;
 					}
-					baseConvert(buff, &buff_index, buff_size, value, base);
+					baseConvert(buff, &buff_index, buff_size, value, base, padding);
+					padding = 0;
 					break;
 				}
 
 				case '%':
-					put_char('%');
+					tm_vsnprintf_put_char('%');
 					break;
 				default:
-					put_char('?');
+					tm_vsnprintf_put_char('?');
 					break;
 			}
 		}
-		else { put_char(*format); }
+		else { tm_vsnprintf_put_char(*format); }
 		format++;
 	}
 
-	put_char(0); // close string
+	tm_vsnprintf_put_char(0); // close string
 	buff[buff_size - 1] = 0; // worst case close at the end of buffer
 	return buff_index;
 }
