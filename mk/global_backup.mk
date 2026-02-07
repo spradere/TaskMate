@@ -40,6 +40,7 @@ _gitignore:
 	@printf "# allowed directories + extension\n" >> ${GIT_IGNORE}
 .for dir in ${GIT_ALLOWED_DIR}
 	@printf "!${dir}/\n" >> ${GIT_IGNORE}
+	@printf "!${dir}/**\n" >> ${GIT_IGNORE}
 .for ext in ${GIT_ALLOWED_EXT.${dir}}
 	@printf "!${dir}/**/*${ext}\n" >> ${GIT_IGNORE}
 .endfor
