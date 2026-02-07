@@ -16,12 +16,11 @@
  * @file TaskMate.c
  * @brief Implements system init
  *
- * @TODO finish run level
- *
  */
 
 #include <stdint.h>
 
+#include "../version.h"
 #include "hal/auto_hal_define.h"
 #include "hal/auto_hal_init.h"
 #include "hal/auto_hal_system.h"
@@ -29,17 +28,16 @@
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
-#include "tm_libc/tm_syslog.h"
-
 #include "tm_libc/tm_stdio.h"
+#include "tm_libc/tm_syslog.h"
 
 int main(void)
 {
-	// log start
+	// system startup
 	hal_usartInit();
 	hal_usartStart();
 
-	tm_syslog("\n\n[%s] Boot ...\n", __FILE__);
+	tm_syslog("\n\n[boot] TaskMate %s boot ...\n", TASKMATE_VERSION);
 
 	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
@@ -72,17 +70,25 @@ int main(void)
 	// rtc time test
 
 	hal_rtc_time_t t;
-	t.hours = 23;
-	t.minutes = 39;
-	t.seconds = 0;
-	t.day = 5;
+	t.hours = 21;
+	t.minutes = 05;
+	t.seconds = 30;
+	t.day = 7;
 	t.month = 2;
 	t.year = 26;
 
-	hal_ZS_042Write(&t);
-	hal_ZS_042Read(&t);
+	 hal_rtcWrite(&t);
+	hal_rtcRead(&t);
 
-	tm_syslog("[time test] %i/%i/20%i %i:%i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	char msg[64];
+	tm_snprintf(msg, sizeof(msg), "TaskMate %s", TASKMATE_VERSION);
+	hal_lcdClear();
+	hal_lcdSetCursor(0, 0);
+	hal_lcdWriteString(msg);
+
+	tm_snprintf(msg, sizeof(msg), "%i/%i/20%i %i:%i", t.day, t.month, t.year, t.hours, t.minutes);
+	hal_lcdSetCursor(1, 0);
+	hal_lcdWriteString(msg);
 
 	// jump to current thread for first call and start system by enabling INT
 	tm_syslog("[boot] start round-robin scheduler\n");

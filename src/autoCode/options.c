@@ -47,7 +47,8 @@ static int have_options_count[HAVE_COUNT];
 
 static const char *string_from_have(const int id)
 {
-#define X(e, s) if( id == e ) { return have_to_string[e]; }
+#define X(e, s)                                                                                              \
+	if( id == e ) { return have_to_string[e]; }
 	HAVE_OPTIONS(X)
 #undef X
 	return NULL;
