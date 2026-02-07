@@ -61,6 +61,7 @@ AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 .include "${MAKE_DIR}/global_build.mk"
 .include "${MAKE_DIR}/global_utils.mk"
 .include "${MAKE_DIR}/global_backup.mk"
+.include "${MAKE_DIR}/editors.mk"
 
 # Hardware specific makefiles
 .include "${SRC_DIR}/hal/arch/${ARCH}/arch_make.mk"

@@ -39,24 +39,20 @@ void hal_i2cStart(void)
 {
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
-	uint8_t status;
-
 	// address test
 	tm_syslog("[i2c] scan ...\n");
-	for(uint8_t adr = 0x00; adr != 0xFF; adr++)
+	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
 	{
 		// start comm
 		TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
 		while( !(TWCR & (1 << TWINT)) );
 
-		status = hal_i2cWrite(adr);
-
-		if(status == TW_MT_SLA_ACK)
+		if( (hal_i2cWrite((adr << 1) | 0)) == TW_MT_SLA_ACK )
 		{
-           tm_syslog("[i2c] found 0x%x\n",(adr >> 1));
+			tm_syslog("[i2c] found SLA+W 0x%x\n", (adr));
 		}
 
-	hal_i2cCommStop();
+		hal_i2cCommStop();
 	}
 }
 
@@ -72,6 +68,7 @@ uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 
 	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 	{
+		hal_i2cCommStop();
 		return TW_STATUS;
 	}
 

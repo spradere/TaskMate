@@ -23,8 +23,8 @@
 .MAIN: all
 
 .BEGIN:
-	mkdir -p ${BUILD_DIR}
-	mkdir -p ${LOG_DIR}
+	@mkdir -p ${BUILD_DIR}
+	@mkdir -p ${LOG_DIR}
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
