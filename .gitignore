@@ -3,14 +3,17 @@
 
 # allowed directories + extension
 !doc/
+!doc/**
 !doc/**/*.c
 !doc/**/*.md
 !doc/**/*.txt
 !doc/**/*.png
 !doc/**/*.jpg
 !mk/
+!mk/**
 !mk/**/*.mk
 !src/
+!src/**
 !src/**/*.c
 !src/**/*.h
 !src/**/*.rc
