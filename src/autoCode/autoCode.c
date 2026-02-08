@@ -94,7 +94,7 @@ int main(int argn, const char *argv[])
 	// count thread for each level
 	threadCountLevel(&data_base);
 
-	// parse tag and generate code for init
+	// parse tag and generate code
 	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &auto_options);

@@ -20,7 +20,6 @@
 
 #include <stdint.h>
 
-#include "../version.h"
 #include "hal/auto_hal_define.h"
 #include "hal/auto_hal_init.h"
 #include "hal/auto_hal_system.h"
@@ -30,6 +29,7 @@
 #include "sysCore/runLevel.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_syslog.h"
+#include "tm_version.h"
 
 int main(void)
 {
