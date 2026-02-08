@@ -1,6 +1,4 @@
-# 🧭 Code Prefixes — One-Page Guidelines
-
----
+# 🧭 Code and files prefixes — One-page guidelines
 
 ## 🏷️ In TaskMate, prefixes are used deliberately and sparingly.
 
@@ -90,7 +88,25 @@ Using a dedicated prefix avoids ambiguity:
 
 ---
 
-## Summary and this why matters
+### ● `auto_` — Generated files (autoCode)
+
+The `auto_` prefix is **reserved exclusively for generated file names.**
+
+- It does **not apply to symbols in code**
+- It is used only for files produced by the `autoCode` tool
+- It clearly marks files as **generated artefacts**, not hand-written source code
+
+This prefix exists to make the distinction explicit between:
+
+1. human-maintained code
+2. machine-generated code
+
+Unlike other prefixes, `auto_` is not a **conceptual namespace** inside the codebase.
+It is a **file-level convention**, used for traceability, tooling, and maintenance clarity.
+
+---
+
+## Summary and why this matters
 
 A prefix is not decoration.
 

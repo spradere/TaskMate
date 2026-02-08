@@ -1,6 +1,5 @@
 # 🧱 Portability and hardware abstraction design
 
----
 
 This document describes the architectural rules and design principles
 governing portability in TaskMate. It is intended as a technical guide
