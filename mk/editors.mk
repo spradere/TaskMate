@@ -17,15 +17,20 @@
 # editors
 ################################################################################
 
-tags:
-#@ [global] Generate tags for Vim and Geany
-	@ctags -f .tags ${SRCS}
-	@ctags -f .tags -a ${SRCS_H}
-	@ctags -f .tags -a ${AUTOCODE_SRCS}
-	@ctags -f .tags -a ${AUTOCODE_SRCS_H}
-.PHONY: tags
+# tags
+TAGS = .tags
+TAGS_STAMP = ${BUILD_DIR}/.tags_stamp
 
-vim_all: tags
+# Generate tags
+${TAGS_STAMP}: ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
+#@ [global] Generate tags for Vim and Geany
+	@ctags -f ${TAGS} ${SRCS}
+	@ctags -f ${TAGS} -a ${SRCS_H}
+	@ctags -f ${TAGS} -a ${AUTOCODE_SRCS}
+	@ctags -f ${TAGS} -a ${AUTOCODE_SRCS_H}
+	@touch ${TAGS_STAMP}
+
+vim_all: ${TAGS_STAMP}
 #@ [global] open Vim with all TaskMate sources files .c .h .mk (no autoCode)
 	vim ${SRCS} ${SRCS_H} Makefile ${MK_FILES}
 .PHONY: vim_all

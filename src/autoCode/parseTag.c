@@ -181,6 +181,7 @@ static void writeTarget(const options_list_t *auto_options, FILE *file)
 	fprintf(file, ".mcu = \"%s\",\n", auto_options->mcu_name);
 	fprintf(file, ".board = \"%s\"\n", auto_options->board_name);
 	fprintf(file, "};\n");
+
 }
 
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
