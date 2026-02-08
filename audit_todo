@@ -8,3 +8,4 @@
 - Doxigen documentation : only in .h for API and general operations
 - change int type hal/ -> uint16 -> typedef to match arch size
 - drivers : test init bofore start
+- hal_tm_options is badly named and misplaced

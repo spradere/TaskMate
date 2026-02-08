@@ -1,6 +1,5 @@
 # 🏗️ TaskMate build system
 
-
 ## ✨ Makefile features
 
 - **Automatic Dependency Handling**: Only recompile modified source files.
