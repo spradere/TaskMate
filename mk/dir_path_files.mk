@@ -38,7 +38,6 @@ ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 
 # git ignore
 GIT_IGNORE = .gitignore
-GIT_IGNORE_STAMP = .gitignore_stamp
 GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
 GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
@@ -54,3 +53,4 @@ MK_FILES_MK != find ./${MAKE_DIR} -maxdepth 1 -type f -name "*.mk"
 MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
+
