@@ -38,13 +38,13 @@ void hal_timerSTCInit(void)
 
 void hal_timerSTCStart(void)
 {
-	// start by enabling INT
+	// start by enabling interrupt
 	TIMSK3 |= (uint8_t)(1u << OCIE3A);
 }
 
 void hal_timerSTCStop(void)
 {
-	// stop by disabling INT
+	// stop by disabling interrupt
 	TIMSK3 &= (uint8_t)~(1u << OCIE3A);
 }
 

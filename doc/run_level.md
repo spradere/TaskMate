@@ -1,4 +1,6 @@
-### 🔀 Run Levels
+# 🔀 Run Levels
+
+---
 
 This note briefly describes the run level mechanism used by TaskMate
 to control system initialisation and runtime activation of modules.
