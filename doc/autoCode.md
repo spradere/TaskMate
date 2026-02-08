@@ -46,10 +46,10 @@ for the target architecture and how they should be initialised.
 | global errors	| `build/errors_all.err`				| Global error catalog		|
 | HAL headers	| `build/files_hal_user`				| List of hal user sources files |
 | 				| `build/files_hal_system`				| List of hal system sources files |
-| Drivers       | `hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers (I2C, USART…)  |
+| Drivers       | `hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers |
 | 				| `hal/mcu/<mcu_name>/drivers_init.rc` | |
 | 				| `hal/board/<borad_name>/drivers_init.rc` | |
-| Services      | `services/services_init.rc`        | System-level services (CLI, msg server)  |
+| Services      | `services/services_init.rc`        | System-level services  |
 | User Tasks    | `tasks/tasks_init.rc`              | User-level or application tasks          |
 
 The target architecture is usually passed from the Makefile,
