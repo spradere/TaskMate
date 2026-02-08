@@ -1,7 +1,5 @@
 # 🧭 The story of TaskMate and the AI companion
 
----
-
 Once upon a time, there was a computer enthusiast who wanted to build a small real-time
 operating system — not to conquer the world, but to understand it better. The
 project began humbly, with blinking LEDs and tangled stacks, but soon grew into

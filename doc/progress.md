@@ -1,7 +1,5 @@
 # 📋 Overall Progress Estimate
 
----
-
 **System :**
 | Phase | Status | Notes |
 |---|---|---|

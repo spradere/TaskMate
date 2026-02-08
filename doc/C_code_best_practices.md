@@ -1,7 +1,5 @@
 # 🥇 Code Style, Readability, Refactoring & Best Practices Summary
 
----
-
 ## 📋 Table of Contents
 
 1. [The Golden Rule of Code](#1-the-golden-rule-of-code)

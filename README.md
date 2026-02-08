@@ -1,9 +1,10 @@
 # TaskMate RTOS ![](doc/icon_64.png)
-## Micro-controller Unit - Real Time Operating System
+
+**Micro-controller Unit - Real Time Operating System**
 
 ---
 
-### ▶️ Introduction
+## ▶️ Introduction
 
 **TaskMate** is a lightweight, preemptive real-time operating system.
 Designed specifically for **micro-controllers**.
@@ -28,7 +29,7 @@ to separate build logic, system logic, and hardware dependencies.
 
 ---
 
-### 🧭 About ChatGPT and TaskMate
+## 🧭 About ChatGPT and TaskMate
 
 Although **no code from ChatGPT is ever copied directly** into the TaskMate source
 tree, the project would never have reached its current level of maturity without
@@ -42,7 +43,7 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 ---
 
-### ⚙️ Build System
+## ⚙️ Build System
 
 TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
@@ -55,7 +56,7 @@ See : [Makefile & build system](doc/build_system.md)
 
 ---
 
-### 🧱 Hardware Abstraction Layer and architecture support
+## 🧱 Hardware Abstraction Layer and architecture support
 
 The HAL provides a **clean interface** between the system and the hardware.
 Ensures true portability across hardware families.
@@ -69,7 +70,7 @@ See : [Portability](doc/portability.md)
 
 ---
 
-### ⏱️ Real-Time Behaviour
+## ⏱️ Real-Time Behaviour
 
 Although TaskMate includes preemptive scheduling and a software real-time clock,
 it **is not yet a true real-time operating system** in the strict sense.
@@ -81,11 +82,11 @@ System latency and jitter are acceptable for testing and lightweight application
 yet they remain **non-deterministic** under specific conditions such as nested interrupts,
 driver contention, or prolonged critical sections.
 
-See : [Future improvements](doc/RTOS_improvements.md)
+See : [Future improvements](doc/rtos_improvements.md)
 
 ---
 
-### ⬆️ Layers
+## ⬆️ Layers
 
 ![System Layer Diagram](doc/TaskMate_layers_v5.png)
 
@@ -99,7 +100,7 @@ This design significantly improves **stability** and **portability**.
 
 ---
 
-### 🧩 Modular Design & autoCode
+## 🧩 Modular Design & autoCode
 
 Starting with version 0.10, TaskMate uses a **modular design model**:
 
@@ -119,7 +120,7 @@ See : [Info about run level](doc/run_level.md)
 
 ---
 
-### 🚩 Global Error Management System
+## 🚩 Global Error Management System
 
 TaskMate introduces a unified **global error management** system designed to replace
 scattered, module-local error handling with a coherent, **system-wide architecture**.
@@ -136,7 +137,7 @@ embedded systems.
 
 ---
 
-### ️📜 License
+## ️📜 License
 
 This software is distributed under the **TaskMate License v1.0**.
 
@@ -150,13 +151,13 @@ See the `LICENSE` file for full details.
 
 ---
 
-### 📟  Hardware setup : avr8 - atmega2560 - Arduino mega board
+## 📟  Hardware setup : avr8 - atmega2560 - Arduino mega board
 
 ![Arduino mega board](doc/hardware_mega.jpg)
 
 ---
 
-### 📑 Documentation & books 📚
+## 📑 Documentation & books 📚
 
 - **Project development status** — see [Project Progress](doc/progress.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
