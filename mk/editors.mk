@@ -18,7 +18,7 @@
 ################################################################################
 
 tags:
-#@ [global] Generate tags for Vim
+#@ [global] Generate tags for Vim and Geany
 	@ctags -f .tags ${SRCS}
 	@ctags -f .tags -a ${SRCS_H}
 	@ctags -f .tags -a ${AUTOCODE_SRCS}
@@ -26,10 +26,17 @@ tags:
 .PHONY: tags
 
 vim_all: tags
-	vim ${SRCS} ${SRCS_H} ${MK_FILES}
+#@ [global] open Vim with all TaskMate sources files .c .h .mk (no autoCode)
+	vim ${SRCS} ${SRCS_H} Makefile ${MK_FILES}
 .PHONY: vim_all
 
 vim_doc:
+#@ [global] open Vim with all documentation files .md .txt
 	vim ${DOCS}
-.PHONY: vim_all
+.PHONY: vim_doc
+
+vim_autoCode: tags
+#@ [global] open Vim with all autoCode sources files .c .h
+	vim ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
+.PHONY: vim_autoCode
 
