@@ -1,4 +1,4 @@
-### 🚀 RTOS upgrade
+# 🚀 RTOS upgrade
 
 This note describes the technical conditions required for TaskMate to evolve
 into a deterministic RTOS.

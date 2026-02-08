@@ -13,7 +13,7 @@
 
 /**
  * @file hal_lcd_AMC2004.h
- * @brief header hal lcd implemetation
+ * @brief header hal lcd implementation
  *
  */
 
