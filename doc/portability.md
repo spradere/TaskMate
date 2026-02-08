@@ -22,8 +22,6 @@ This rules prevents:
 
 ## 🌐 GPIO Architecture overview
 
----
-
 ### 1. Purpose of the GPIO subsystem
 
 The GPIO subsystem provides a clean and portable abstraction for all inputs and outputs in TaskMate.

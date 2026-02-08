@@ -41,9 +41,6 @@ DEPS_FILE = ${BUILD_DIR}/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
-# documentation files
-DOCS != find ${DOC_DIR} -maxdepth 1 -type f -name "*.md"; find ${DOC_DIR} -maxdepth 1 -type f -name "*.txt"
-
 # autoCode
 AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
@@ -81,11 +78,6 @@ AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
-# Global error
-ERROR_FILES != find ${SRC_DIR_LIST} -name '*.err' -maxdepth 1 -type f | sort
 
-# mk file -> target help
-MK_FILES_MK != find ./${MAKE_DIR} -maxdepth 1 -type f -name "*.mk"
-MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
-MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
+

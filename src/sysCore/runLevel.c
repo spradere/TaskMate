@@ -29,7 +29,7 @@ void rl_Alloc(void)
 {
 
 	// [autoCode_tag] run_levels alloc
-	// clang-format off
+// clang-format off
 // why ? Auto-generated code
 
 /*
@@ -47,7 +47,7 @@ void rl_Alloc(void)
 	};
 	to_run.current=RUN_CORE;
 	to_run.next=RUN_CORE;
-	// clang-format on
+// clang-format on
 	// [/tag]
 }
 
