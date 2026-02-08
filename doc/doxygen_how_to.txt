@@ -10,7 +10,7 @@ TOP OF FILE **************************************************************
  * task switching and preemptive multitasking.
  */
 
-FUCTION **************************************************************
+FUNCTION **************************************************************
 /**
  * @brief Initializes the system timer.
  * 

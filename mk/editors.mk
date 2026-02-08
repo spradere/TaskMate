@@ -29,4 +29,7 @@ vim_all: tags
 	vim ${SRCS} ${SRCS_H} ${MK_FILES}
 .PHONY: vim_all
 
+vim_doc:
+	vim ${DOCS}
+.PHONY: vim_all
 

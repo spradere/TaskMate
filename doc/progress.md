@@ -1,4 +1,6 @@
-### 📋 Overall Progress Estimate
+# 📋 Overall Progress Estimate
+
+---
 
 **System :**
 | Phase | Status | Notes |

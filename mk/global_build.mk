@@ -115,7 +115,6 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	#@ls -t ${AUTOCODE_LOG}* | head -1 | xargs cat
 	@${AUTOCODE_LS_CMD}
 	@printf "${COLOUR_CYAN}"
 	@${AUTOCODE_LS_CMD} | grep ': keep' | sed 's/^.*: *//'

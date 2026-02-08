@@ -1,4 +1,6 @@
-## 🧱 Portability and hardware abstraction design
+# 🧱 Portability and hardware abstraction design
+
+---
 
 This document describes the architectural rules and design principles
 governing portability in TaskMate. It is intended as a technical guide
@@ -143,7 +145,7 @@ which makes them fully portable.
 
 ## 🧩 Adding a new hardware target (ARCH / MCU / BOARD)
 
-all new drivers headers source files will be automatically added to
+All new drivers headers source files will be automatically added to
 hal/auto_hal_user.h or hal/auto_hal_system.h by using tag :
 
 - // @hal_user

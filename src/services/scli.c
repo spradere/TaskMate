@@ -53,7 +53,7 @@ void scliEcho(void)
 		uint8_t i = 0;
 		char line[128];
 
-		// fail ! msgWritreText(scli_msg_channel, "[scli] recive :", MSG_TO_USART);
+		// fail ! msgWritreText(scli_msg_channel, "[scli] receive :", MSG_TO_USART);
 
 		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line) - 1)) )
 		{
