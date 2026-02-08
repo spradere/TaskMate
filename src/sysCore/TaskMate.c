@@ -67,7 +67,7 @@ int main(void)
 		(*(mod->start))();
 	}
 
-	// rtc time test
+	// RTC time test
 
 	hal_rtc_time_t t;
 	t.hours = 21;
@@ -79,11 +79,6 @@ int main(void)
 
 	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
-
-	uint8_t test = 55;
-	tm_syslog("[debug] padding test %i %02i %04i \n", test, test, test);
-	test = 6;
-	tm_syslog("[debug] padding test %i %02i %04i \n", test, test, test);
 
 	tm_syslog("[info] date / time %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
 
@@ -97,7 +92,7 @@ int main(void)
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
-	// jump to current thread for first call and start system by enabling INT
+	// jump to current thread for first call and start system by enabling interrupts
 	tm_syslog("[boot] start round-robin scheduler\n");
 
 	mod_threadSetCurrent(0);

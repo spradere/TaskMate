@@ -29,10 +29,10 @@
 #endif
 
 #if TM_LIBC_TASKMATE
-	#include <stdint.h>
 	#include <stdarg.h>
-	void tm_syslog(const char *format, ...);
-	void tm_vsyslog(const char *format, va_list args);
+	#include <stdint.h>
+void tm_syslog(const char *format, ...);
+void tm_vsyslog(const char *format, va_list args);
 #endif
 
 #endif

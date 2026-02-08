@@ -19,12 +19,13 @@
  */
 
 #include "tm_libc/tm_snprintf.h"
+
 #include "tm_libc/tm_syslog.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
-static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
-	uint16_t value, uint8_t base, uint8_t padding)
+static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size, uint16_t value, uint8_t base,
+						uint8_t padding)
 {
 	const char digits[] = "0123456789abcdef";
 
@@ -45,16 +46,10 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 		tmp[pos++] = digits[data];
 	}
 
-	while(pos < padding)
-	{
-		tmp[pos++] = '0';
-	}
+	while( pos < padding ) { tmp[pos++] = '0'; }
 
 	// reverse order
-	while( (pos > 0) && (*buff_index < (buff_size - 1)) )
-	{
-		buff_data[(*buff_index)++] = tmp[--pos];
-	}
+	while( (pos > 0) && (*buff_index < (buff_size - 1)) ) { buff_data[(*buff_index)++] = tmp[--pos]; }
 	buff_data[*buff_index] = 0;
 }
 
@@ -67,7 +62,7 @@ int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
 }
 
 // !! use this macro only in TaskMate tm_vsnprinf()
-#define tm_vsnprintf_put_char(ch)                                                                                         \
+#define tm_vsnprintf_put_char(ch)                                                                            \
 	do {                                                                                                     \
 		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                     \
 	} while( 0 )
@@ -83,18 +78,17 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 		{
 			format++;
 
-			if( (*format) == '0')
+			if( (*format) == '0' )
 			{
 				format++;
-				padding = (uint8_t)(*format -48); // atoi
+				padding = (uint8_t)(*format - 48); // atoi
 				if( padding > 9 )
 				{
-					tm_syslog("[%s] error padding format <%c>\n", __FILE__,*format);
+					tm_syslog("[%s] error padding format <%c>\n", __FILE__, *format);
 					return 0;
 				}
-				//tm_syslog("[debug] padding  = %i \n", padding);
+				// tm_syslog("[debug] padding  = %i \n", padding);
 				format++;
-
 			}
 
 			switch( *format )

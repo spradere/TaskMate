@@ -41,6 +41,9 @@ DEPS_FILE = ${BUILD_DIR}/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
+# documentation files
+DOCS != find ${DOC_DIR} -maxdepth 1 -type f -name "*.md"; find ${DOC_DIR} -maxdepth 1 -type f -name "*.txt"
+
 # autoCode
 AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"

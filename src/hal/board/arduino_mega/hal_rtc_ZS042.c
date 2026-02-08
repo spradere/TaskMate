@@ -39,7 +39,7 @@ void hal_rtcStop(void) {}
 uint8_t hal_rtcRead(hal_rtc_time_t *t)
 {
 	hal_i2cCommStart(ZS042_I2C_ADDR, I2C_WRITE);
-	hal_i2cWrite(0x00); // start regsiter
+	hal_i2cWrite(0x00); // start register
 
 	hal_i2cCommStart(ZS042_I2C_ADDR, I2C_READ);
 
@@ -48,7 +48,7 @@ uint8_t hal_rtcRead(hal_rtc_time_t *t)
 
 	hal_i2cCommStop();
 
-	t->seconds = bcdToBin(buf[0] & 0x7F); // bit 7 = CH (Clock Halt), ignored
+	t->seconds = bcdToBin(buf[0] & 0x7F); // bit 7 = Clock Halt, ignored
 	t->minutes = bcdToBin(buf[1]);
 	t->hours = bcdToBin(buf[2] & 0x3F); // 24 hour
 	t->weekday = bcdToBin(buf[3]);
@@ -61,7 +61,7 @@ uint8_t hal_rtcRead(hal_rtc_time_t *t)
 
 uint8_t hal_rtcWrite(const hal_rtc_time_t *t)
 {
-	buf[0] = binToBcd(t->seconds & 0x7F); // CH=0 (clock ON)
+	buf[0] = binToBcd(t->seconds & 0x7F); // bit 7 = 0, clock ON
 	buf[1] = binToBcd(t->minutes);
 	buf[2] = binToBcd(t->hours) & 0x3F; // mode 24h
 	buf[3] = binToBcd(t->weekday);
