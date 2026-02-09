@@ -24,7 +24,10 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...);
-int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args);
+int tm_printf(const char *format, ...);
+int tm_vprintf(const char *format, va_list args);
+
+int tm_snprintf(char *ptr, uint8_t size, const char *format, ...);
+int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args);
 
 #endif

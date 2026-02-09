@@ -80,7 +80,7 @@ int main(void)
 	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
 
-	tm_syslog("[info] date / time %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_syslog("[info] date & time : %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
 
 	char msg[64];
 	tm_snprintf(msg, sizeof(msg), "TaskMate %s", TASKMATE_VERSION);
