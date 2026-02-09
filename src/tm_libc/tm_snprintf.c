@@ -20,12 +20,27 @@
 
 #include "tm_libc/tm_snprintf.h"
 
+#include <stddef.h>
+
+#include "hal/auto_hal_user.h"
 #include "tm_libc/tm_syslog.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
-static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size, uint16_t value, uint8_t base,
-						uint8_t padding)
+static void baseConvert(uint16_t value, uint8_t base);
+static void tm_vsnprintf_put_char(char ch);
+
+// structure for buffer data
+struct buff_t
+{
+	char *ptr;
+	uint8_t size;
+	uint8_t index;
+	uint8_t padding;
+} buff;
+
+// reverse order base converter
+static void baseConvert(uint16_t value, uint8_t base)
 {
 	const char digits[] = "0123456789abcdef";
 
@@ -34,7 +49,7 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 
 	if( value == 0 )
 	{
-		buff_data[(*buff_index)++] = '0';
+		tm_vsnprintf_put_char('0');
 		return;
 	}
 
@@ -46,31 +61,61 @@ static void baseConvert(char *buff_data, uint8_t *buff_index, uint8_t buff_size,
 		tmp[pos++] = digits[data];
 	}
 
-	while( pos < padding ) { tmp[pos++] = '0'; }
+	while( pos < buff.padding ) { tmp[pos++] = '0'; }
 
 	// reverse order
-	while( (pos > 0) && (*buff_index < (buff_size - 1)) ) { buff_data[(*buff_index)++] = tmp[--pos]; }
-	buff_data[*buff_index] = 0;
+	while( pos > 0 )
+	{
+		tm_vsnprintf_put_char(tmp[--pos]);
+	}
 }
 
-int tm_snprintf(char *buff, uint8_t buff_size, const char *format, ...)
+int tm_snprintf(char *ptr, uint8_t size, const char *format, ...)
 {
 	va_list args;
 	va_start(args, format);
-	tm_vsnprintf(buff, buff_size, format, args);
+	tm_vsnprintf(ptr, size, format, args);
 	va_end(args);
 }
 
-// !! use this macro only in TaskMate tm_vsnprinf()
-#define tm_vsnprintf_put_char(ch)                                                                            \
-	do {                                                                                                     \
-		if( (uint8_t)(buff_index + 1) < buff_size ) { buff[buff_index++] = (char)(ch); }                     \
-	} while( 0 )
-
-int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args)
+int tm_printf(const char *format, ...)
 {
-	uint8_t buff_index = 0;
-	uint8_t padding = 0;
+	va_list args;
+	va_start(args, format);
+	tm_vprintf(format, args);
+	va_end(args);
+}
+
+int tm_vprintf(const char *format, va_list args)
+{
+	tm_vsnprintf(NULL, 0, format, args);
+}
+
+static void tm_vsnprintf_put_char(char ch)
+{
+	if( buff.ptr != NULL)
+	{
+		if( (buff.index + 1) < buff.size ) { buff.ptr[buff.index++] = ch; }
+	}
+
+	if(buff.ptr == NULL)
+	{
+		if(hal_usartWriteChar(ch) == ERR_HAL_USART_TX_BUFFER_FULL)
+		{
+			hal_usartSendTXBuffer();
+			hal_usartWriteChar(ch);
+		}
+
+		if( ch == '\n'){hal_usartSendTXBuffer();}
+	}
+}
+
+int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
+{
+	buff.ptr = ptr;
+	buff.size = size;
+	buff.index = 0;
+	buff.padding = 0;
 
 	while( *format )
 	{
@@ -81,13 +126,8 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 			if( (*format) == '0' )
 			{
 				format++;
-				padding = (uint8_t)(*format - 48); // atoi
-				if( padding > 9 )
-				{
-					tm_syslog("[%s] error padding format <%c>\n", __FILE__, *format);
-					return 0;
-				}
-				// tm_syslog("[debug] padding  = %i \n", padding);
+				buff.padding = (uint8_t)(*format - 48); // atoi
+				if( buff.padding > 9 ){ return 0; }
 				format++;
 			}
 
@@ -97,7 +137,7 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 				case 'c':
 				{
 					int c = va_arg(args, int);
-					tm_vsnprintf_put_char(c);
+					tm_vsnprintf_put_char((char)c);
 					break;
 				}
 				case 's':
@@ -133,8 +173,8 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 							base = 10;
 							break;
 					}
-					baseConvert(buff, &buff_index, buff_size, value, base, padding);
-					padding = 0;
+					baseConvert(value, base);
+					buff.padding = 0;
 					break;
 				}
 
@@ -151,6 +191,6 @@ int tm_vsnprintf(char *buff, uint8_t buff_size, const char *format, va_list args
 	}
 
 	tm_vsnprintf_put_char(0); // close string
-	buff[buff_size - 1] = 0; // worst case close at the end of buffer
-	return buff_index;
+	buff.ptr[buff.size - 1] = 0; // worst case close at the end of buffer
+	return buff.index;
 }
