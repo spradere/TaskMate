@@ -52,7 +52,7 @@ upload: all
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# RAM usage
 	@printf "\nStatic RAM usage : "
-	avr-size -A ${BUILD_DIR}/TaskMate.elf
+	avr-size -G -d ${BUILD_DIR}/TaskMate.elf
 	@printf "\n"
 	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
@@ -82,9 +82,11 @@ tidy_TaskMate:
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 .PHONY: tidy_TaskMate
 
-module_size: all
+mem_size: all
 #@ [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-	avr-nm --size-sort -r ${BUILD_DIR}/TaskMate.elf | head -20
+	avr-size -G -d ${BUILD_DIR}/TaskMate.elf
+	avr-nm --format=bsd --size-sort -r ${BUILD_DIR}/TaskMate.elf | head -20
+
 .PHONY: module_size
