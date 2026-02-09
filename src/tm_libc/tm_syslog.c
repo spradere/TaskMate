@@ -20,12 +20,7 @@
 
 #include "tm_libc/tm_syslog.h"
 
-#include "hal/auto_hal_user.h"
 #include "tm_libc/tm_snprintf.h"
-
-static char tm_log[128];
-
-// TODO add level INFO / WARN / ERROR
 
 void tm_syslog(const char *format, ...)
 {
@@ -37,8 +32,5 @@ void tm_syslog(const char *format, ...)
 
 void tm_vsyslog(const char *format, va_list args)
 {
-	tm_vsnprintf(tm_log, sizeof(tm_log), format, args);
-
-	hal_usartWriteString(tm_log);
-	hal_usartSendTXBuffer();
+	tm_vprintf(format, args);
 }
