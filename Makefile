@@ -18,7 +18,6 @@
 ################################################################################
 
 # Main directories
-TASKMATE_DIR != pwd
 SRC_DIR = src
 BUILD_DIR = build
 LOG_DIR = log
@@ -40,7 +39,6 @@ OPT_CLEAN_AUTOCODE_LOGS = yes
 .include "${MAKE_DIR}/hardware_target.mk"
 
 # Make global process
-.sinclude "${DEPS_FILE}"
 .include "${MAKE_DIR}/make_colours.mk"
 .include "${MAKE_DIR}/global_autoCode_hal_srcs.mk"
 .include "${MAKE_DIR}/header_allow.mk"

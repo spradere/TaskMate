@@ -27,6 +27,8 @@ OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
 DEPS = ${OBJS:.o=.d}
 DEPS_FILE = ${BUILD_DIR}/.deps.d
 
+.sinclude "${DEPS_FILE}"
+
 # autoCode
 AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
@@ -60,7 +62,7 @@ FILES_HAL_SYSTEM != { \
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # Global error
-ERROR_FILES != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.err" | sort 
+ERROR_FILES != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.err" | sort
 
 # documentation files
 DOCS != find  ${DOC_DIR} -maxdepth 1 -type f -name "*.md"; find ${DOC_DIR} -maxdepth 1 -type f -name "*.txt"

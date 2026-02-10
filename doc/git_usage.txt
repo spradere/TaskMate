@@ -1,3 +1,7 @@
+##################################################
+# save
+##################################################
+
 # normal save :
 	git add .
 	git commit -m "comment"
@@ -22,6 +26,26 @@ delete remote : git push origin --delete test_branch
 	git stash
 	git stash pop
 
+##################################################
+# update local repo
+##################################################
+
+# quick update
+git pull
+
+# what will done
+git fetch
+git status
+
+# push uncommited work
+git stash
+git pull
+git stash pop
+
+# full control
+git fetch
+git diff HEAD origin/main
+git merge origin/main
 ##################################################
 # clean history
 ##################################################
@@ -49,7 +73,7 @@ git rev-list --objects --all \
 | sort -n \
 | tail -20
 
-# find related commit 
+# find related commit
 git log --all --find-object=deadbeef...
 
 # delete file in git history
