@@ -18,6 +18,7 @@
 ################################################################################
 
 # Main directories
+TASKMATE_DIR != pwd
 SRC_DIR = src
 BUILD_DIR = build
 LOG_DIR = log
@@ -25,6 +26,9 @@ MAKE_DIR = mk
 DOC_DIR = doc
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
+
+# bmake option for -V
+.MAKE.EXPAND_VARIABLES = true
 
 # path and files
 .include "${MAKE_DIR}/dir_path_files.mk"
@@ -36,6 +40,7 @@ OPT_CLEAN_AUTOCODE_LOGS = yes
 .include "${MAKE_DIR}/hardware_target.mk"
 
 # Make global process
+.sinclude "${DEPS_FILE}"
 .include "${MAKE_DIR}/make_colours.mk"
 .include "${MAKE_DIR}/global_autoCode_hal_srcs.mk"
 .include "${MAKE_DIR}/header_allow.mk"
