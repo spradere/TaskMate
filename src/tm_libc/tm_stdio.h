@@ -26,6 +26,7 @@
 #if TM_LIBC_CSTD
 	#include <stdio.h>
 	#define tm_snprintf snprintf
+	#define tm_printf printf
 #endif
 
 #if TM_LIBC_TASKMATE

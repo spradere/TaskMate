@@ -37,21 +37,22 @@ int main(void)
 	hal_usartInit();
 	hal_usartStart();
 
-	tm_syslog("\n\n[boot] TaskMate %s boot\n", TASKMATE_VERSION);
+	tm_syslog(PSTR("\n\n[boot] TaskMate %s boot\n"), TASKMATE_VERSION);
 
 	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
-	tm_syslog("[info] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
+	tm_syslog(PSTR("[info] target : %s-%s-%s\n"), target->arch, target->mcu, target->board);
 
 	// system static allocation init
-	tm_syslog("[boot] system static allocation\n");
+	tm_syslog(PSTR("[boot] system static allocation\n"));
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
 	rl_Alloc();
 
 	// hal hardware init
-	tm_syslog("[boot] hal hardware init\n");
+	tm_syslog(PSTR("[boot] hal hardware init\n"));
+
 
 	hal_archInit();
 	hal_mcuInit();
@@ -62,13 +63,17 @@ int main(void)
 
 	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
 	{
+		tm_syslog(PSTR(" i= %i \n"),i);
+		if(i != 55)
+		{
 		mod_driver_item_t *mod = mod_driverGetPointer(i);
 		(*(mod->init))();
 		(*(mod->start))();
+		}
 	}
 
 	// RTC time test
-
+	tm_syslog(PSTR("[boot] hal hardware init\n"));
 	hal_rtc_time_t t;
 	t.hours = 21;
 	t.minutes = 41;
@@ -80,20 +85,20 @@ int main(void)
 	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
 
-	tm_syslog("[info] date & time : %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_syslog(PSTR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"), t.day, t.month, t.year, t.hours, t.minutes);
 
 	char msg[40];
-	tm_snprintf(msg, sizeof(msg), "TaskMate %s", TASKMATE_VERSION);
+	tm_snprintf(msg, sizeof(msg), PSTR("TaskMate %s"), TASKMATE_VERSION);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
 
-	tm_snprintf(msg, sizeof(msg), "%02i/%02i/20%02i %02i:%02i", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_snprintf(msg, sizeof(msg), PSTR("%02i/%02i/20%02i %02i:%02i"), t.day, t.month, t.year, t.hours, t.minutes);
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
 	// jump to current thread for first call and start system by enabling interrupts
-	tm_syslog("[boot] start round-robin scheduler\n");
+	tm_syslog(PSTR("[boot] start round-robin scheduler\n"));
 
 	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
