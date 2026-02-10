@@ -17,18 +17,6 @@
 # Sources
 ################################################################################
 
-# Source directories
-SRC_DIR_LIST = ${SRC_DIR}/sysCore
-SRC_DIR_LIST += ${SRC_DIR}/sysCall
-SRC_DIR_LIST += ${SRC_DIR}/services
-SRC_DIR_LIST += ${SRC_DIR}/tasks
-SRC_DIR_LIST += ${SRC_DIR}/tm_libc
-
-SRC_DIR_LIST += ${SRC_DIR}/hal
-SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}
-SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}
-SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}
-
 # Sources files and objects
 SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.h"
@@ -38,8 +26,6 @@ OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
 # Dependency files
 DEPS = ${OBJS:.o=.d}
 DEPS_FILE = ${BUILD_DIR}/.deps.d
-
-.sinclude "${DEPS_FILE}"
 
 # autoCode
 AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
@@ -71,13 +57,16 @@ FILES_HAL_SYSTEM != { \
         find "$$d" ${FIND_OPT_SYSTEM}; \
     done; }
 
-AUTOCODE_CFLAGS = -I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
-AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
-	-Wswitch -Wenum-conversion \
-	-Wno-gnu-zero-variadic-macro-arguments
-
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
+# Global error
+ERROR_FILES != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.err" | sort 
 
+# documentation files
+DOCS != find  ${DOC_DIR} -maxdepth 1 -type f -name "*.md"; find ${DOC_DIR} -maxdepth 1 -type f -name "*.txt"
 
+# mk files
+MK_FILES_MK != find  ./${MAKE_DIR} -maxdepth 1 -type f -name "*.mk"
+MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
+MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
