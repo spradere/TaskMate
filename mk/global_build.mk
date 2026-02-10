@@ -39,7 +39,7 @@ _dependency_check:
 
 # Test for autoCode required files
 ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
-	@printf "\n%sautoCode, init_rc or related sources files have changed -> run autoCode%s\n\n" \
+	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@rm -f ${AUTOCODE_LOG}*
@@ -61,18 +61,25 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 .for file in ${FILES_HAL_USER}
 	@printf "%s\n" "${file}" >> ${FILE_HAL_USER_PATH}
 .endfor
-	@sed -i '' 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
-
+	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
+	@rm -f ${FILE_HAL_USER_PATH}.bak
+	
 	@: > ${FILE_HAL_SYSTEM_PATH}
 .for file in ${FILES_HAL_SYSTEM}
 	@printf "%s\n" "${file}" >> ${FILE_HAL_SYSTEM_PATH}
 .endfor
-	@sed -i '' 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
-
+	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
+	@rm -f ${FILE_HAL_SYSTEM_PATH}.bak
+	
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG_STAMP}
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
+AUTOCODE_CFLAGS = -I${SRC_DIR}/
+AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
+	-Wswitch -Wenum-conversion \
+	-Wno-gnu-zero-variadic-macro-arguments
+	
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 	@printf "\n%sCompiling autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -107,6 +114,7 @@ ${ERROR_CAT}: ${ERROR_FILES}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cat ${ERROR_FILES} > ${ERROR_CAT}
 
+# Run autoCode alone
 AUTOCODE_LS_CMD = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 
 autoCode_alone: ${AUTOCODE_TARGET}

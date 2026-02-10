@@ -21,7 +21,7 @@
 GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
 
-push: _gitignore
+push: ${GIT_IGNORE_STAMP}
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -32,7 +32,7 @@ push: _gitignore
 .PHONY: push
 
 # Write .gitignore file
-_gitignore:
+${GIT_IGNORE_STAMP}: ${.PARSEDIR}/${.PARSEFILE}
 	@printf "# exclude evrything\n" > ${GIT_IGNORE}
 	@printf "*\n" >> ${GIT_IGNORE}
 	@printf "\n" >> ${GIT_IGNORE}
@@ -51,7 +51,7 @@ _gitignore:
 .for file in ${GIT_ALLOWED_FILES}
 	@printf "!${file}\n" >> ${GIT_IGNORE}
 .endfor
-.PHONY: _gitignore
+	@touch ${GIT_IGNORE_STAMP}
 
 backup:
 #@ [global] USB key backup with current git tag in directory.
@@ -71,15 +71,10 @@ backup:
 		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
 	fi
 
-	# Test if destination directory exist, create if not
-	@if [ -d "${USB_DIR}${TASKMATE_DIR}" ]; then \
-	else \
-		mkdir ${USB_DIR}${TASKMATE_DIR}; \
-	fi
-
 	# Run rsync
 	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
+	@mkdir -p ${USB_DIR}${TASKMATE_DIR}
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" \
 		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
 		"${USB_DIR}${TASKMATE_DIR}/" > ${RSYNC_LOG}
