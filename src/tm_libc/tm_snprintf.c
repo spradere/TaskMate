@@ -70,7 +70,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	}
 }
 
-int tm_snprintf(char *ptr, uint8_t size, const char *format, ...)
+int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -78,7 +78,7 @@ int tm_snprintf(char *ptr, uint8_t size, const char *format, ...)
 	va_end(args);
 }
 
-int tm_printf(const char *format, ...)
+int tm_printf(PGM_P format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -86,7 +86,7 @@ int tm_printf(const char *format, ...)
 	va_end(args);
 }
 
-int tm_vprintf(const char *format, va_list args)
+int tm_vprintf(PGM_P format, va_list args)
 {
 	tm_vsnprintf(NULL, 0, format, args);
 }
@@ -100,44 +100,47 @@ static void tm_vsnprintf_put_char(char ch)
 
 	if(buff.ptr == NULL)
 	{
-		if(hal_usartWriteChar(ch) == ERR_HAL_USART_TX_BUFFER_FULL)
+		if(hal_usartWriteChar((uint8_t)ch) == ERR_HAL_USART_TX_BUFFER_FULL)
 		{
 			hal_usartSendTXBuffer();
-			hal_usartWriteChar(ch);
+			hal_usartWriteChar((uint8_t)ch);
 		}
 
 		if( ch == '\n'){hal_usartSendTXBuffer();}
 	}
 }
 
-int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
+
+int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
 {
 	buff.ptr = ptr;
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
 
-	while( *format )
-	{
-		if( *format == '%' && *(format + 1) )
-		{
-			format++;
+	char c=pgm_read_byte(format++);
 
-			if( (*format) == '0' )
+	while( c )
+	{
+		if( c == '%' )
+		{
+			c=pgm_read_byte(format++);
+
+			if( (c) == '0' )
 			{
-				format++;
-				buff.padding = (uint8_t)(*format - 48); // atoi
+				c=pgm_read_byte(format++);
+				buff.padding = (uint8_t)(c - 48); // atoi
 				if( buff.padding > 9 ){ return 0; }
-				format++;
+				c=pgm_read_byte(format++);
 			}
 
-			switch( *format )
+			switch( c )
 			{
 
 				case 'c':
 				{
-					int c = va_arg(args, int);
-					tm_vsnprintf_put_char((char)c);
+					int cc = va_arg(args, int);
+					tm_vsnprintf_put_char((char)cc);
 					break;
 				}
 				case 's':
@@ -158,7 +161,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 					uint16_t value = va_arg(args, uint16_t);
 					uint8_t base;
 
-					switch( *format )
+					switch( c )
 					{
 						case 'i':
 							base = 10;
@@ -186,8 +189,8 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 					break;
 			}
 		}
-		else { tm_vsnprintf_put_char(*format); }
-		format++;
+		else { tm_vsnprintf_put_char(c); }
+		c=pgm_read_byte(format++);
 	}
 
 	tm_vsnprintf_put_char(0); // close string
