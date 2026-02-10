@@ -25,11 +25,27 @@ push: ${GIT_IGNORE_STAMP}
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@git status
+	@printf "%sPress ENTER to continue ... %s\n" \
+		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
+	@read dummy_var
 	@git add .
 	@git commit -m "${M}"
 	@git push
 	@printf "\n"
 .PHONY: push
+
+pull:
+#@ [global] Git pull routine
+	@git fetch
+	@git status
+	@printf "%sPress ENTER to continue ... %s\n" \
+		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
+	@read dummy_var
+	@git stash
+	@git merge
+	@git stash pop
+.PHONY: pull
 
 # Write .gitignore file
 ${GIT_IGNORE_STAMP}: ${.PARSEDIR}/${.PARSEFILE}

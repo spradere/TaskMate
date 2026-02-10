@@ -25,7 +25,7 @@
 
 // Circular buffers
 // always use a power of two for buffer size to avoid use of modulo
-#define HAL_USART_BUFFER_SIZE 128
+#define HAL_USART_BUFFER_SIZE 64
 
 _Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
 			   "HAL_USART_BUFFER_SIZE must be a power of two");

@@ -82,7 +82,7 @@ int main(void)
 
 	tm_syslog("[info] date & time : %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
 
-	char msg[64];
+	char msg[40];
 	tm_snprintf(msg, sizeof(msg), "TaskMate %s", TASKMATE_VERSION);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);

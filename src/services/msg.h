@@ -35,7 +35,7 @@
 #define MSG_FLAG_SEND 4
 
 // channel
-#define MSG_CHANNELS_MAX 5
+#define MSG_CHANNELS_MAX 4
 #define MSG_SIZE_MAX 64
 
 typedef struct
