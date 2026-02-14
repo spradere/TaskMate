@@ -76,7 +76,6 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 			fprintf(file_tmp.stream, "%s", tok.line);
 
 			fprintf(file_tmp.stream, "// clang-format off\n");
-			fprintf(file_tmp.stream, "// why ? Auto-generated code\n\n");
 
 			fprintf(file_tmp.stream, "/*\n");
 			fprintf(file_tmp.stream, " * do not edit code between tag\n");

@@ -22,8 +22,8 @@ CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 	-Wswitch -Wenum-conversion -Wundef \
 	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
 	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
-	
-CFLAGS += -I${SRC_DIR}
+
+CFLAGS += -I${SRC_DIR} -DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
 
 # output files
 HEX = ${TARGET}.hex

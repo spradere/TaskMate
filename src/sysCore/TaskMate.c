@@ -64,12 +64,9 @@ int main(void)
 	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
 	{
 		tm_syslog(PSTR(" i= %i \n"),i);
-		if(i != 55)
-		{
 		mod_driver_item_t *mod = mod_driverGetPointer(i);
 		(*(mod->init))();
 		(*(mod->start))();
-		}
 	}
 
 	// RTC time test
