@@ -26,7 +26,7 @@ push: ${GIT_IGNORE_STAMP}
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git status
-	@printf "%sPress ENTER to continue ... %s\n" \
+	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git add .
@@ -39,7 +39,7 @@ pull:
 #@ [global] Git pull routine
 	@git fetch
 	@git status
-	@printf "%sPress ENTER to continue ... %s\n" \
+	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git stash

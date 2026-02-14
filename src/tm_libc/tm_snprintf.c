@@ -110,7 +110,6 @@ static void tm_vsnprintf_put_char(char ch)
 	}
 }
 
-
 int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
 {
 	buff.ptr = ptr;

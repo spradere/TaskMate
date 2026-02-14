@@ -21,6 +21,8 @@
 #ifndef TM_STDIO_H
 #define TM_STDIO_H
 
+// clang-format off
+
 #include "hal/auto_hal_define.h" // get libc selection
 
 #if TM_LIBC_CSTD
@@ -33,4 +35,5 @@
 	#include "tm_libc/tm_snprintf.h"
 #endif
 
+// clang-format on
 #endif
