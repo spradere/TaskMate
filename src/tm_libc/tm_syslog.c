@@ -20,7 +20,7 @@
 
 #include "tm_libc/tm_syslog.h"
 
-#include "tm_libc/tm_snprintf.h"
+#include "tm_libc/tm_stdio.h"
 
 void tm_syslog(PGM_P format, ...)
 {

@@ -23,7 +23,6 @@ TAGS_STAMP = ${BUILD_DIR}/.tags_stamp
 
 # Generate tags
 ${TAGS_STAMP}: ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
-#@ [global] Generate tags for Vim and Geany
 	@ctags -f ${TAGS} ${SRCS}
 	@ctags -f ${TAGS} -a ${SRCS_H}
 	@ctags -f ${TAGS} -a ${AUTOCODE_SRCS}
