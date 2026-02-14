@@ -21,6 +21,8 @@
 #ifndef TM_SYSLOG_H
 #define TM_SYSLOG_H
 
+// clang-format off
+
 #include <avr/pgmspace.h>
 
 #include "hal/auto_hal_define.h" // get libc selection
@@ -36,5 +38,7 @@
 	void tm_syslog(PGM_P format, ...);
 	void tm_vsyslog(PGM_P format, va_list args);
 #endif
+
+// clang-format on
 
 #endif

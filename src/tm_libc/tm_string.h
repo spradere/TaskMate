@@ -21,6 +21,8 @@
 #ifndef TM_STRING_H
 #define TM_STRING_H
 
+// clang-format off
+
 #include "hal/auto_hal_define.h" // get libc selection
 
 #if TM_LIBC_CSTD
@@ -30,7 +32,9 @@
 
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
-void tm_strncpy(char *dest, const char *src, uint8_t n);
+	void tm_strncpy(char *dest, const char *src, uint8_t n);
 #endif
+
+// clang-format on
 
 #endif

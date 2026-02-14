@@ -25,6 +25,8 @@
 
 #include <avr/io.h>
 
+#include "hal/auto_hal_define.h" // get stack_word_t
+
 #define AVR8_PUSH_ALL_REGS                                                                                   \
 	"push r0 \n\t"                                                                                           \
 	"in r0, __SREG__ \n\t"                                                                                   \
@@ -109,8 +111,6 @@ static inline __attribute__((always_inline)) void hal_returnFromInterupt(void) {
 static inline __attribute__((always_inline)) void hal_setGlobalInterupt(void) { asm volatile("sei \n\t"); }
 
 static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void) { asm volatile("cli \n\t"); }
-
-#include "hal/auto_hal_define.h" // get stack_word_t
 
 void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer, hal_stack_word_t *stack_top);
 
