@@ -21,6 +21,10 @@
 TARGET = ${BUILD_DIR}/TaskMate
 AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 
+# USB
+USB_DIR = /media/usbkey
+USB_DEV = /dev/da0s1
+
 # Build_id
 BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
 
