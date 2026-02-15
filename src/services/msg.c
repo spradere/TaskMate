@@ -54,7 +54,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\3tm_vsnprintf() 02", MSG_TO_LCD); }
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\3update makefile 1", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);
