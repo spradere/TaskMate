@@ -25,10 +25,10 @@
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
-int tm_printf(PGM_P format, ...);
-int tm_vprintf(PGM_P format, va_list args);
+int tm_printf(const char *format, ...);
+int tm_vprintf(const char *format, va_list args);
 
-int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...);
-int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args);
+int tm_snprintf(char *ptr, uint8_t size, const char *format, ...);
+int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args);
 
 #endif
