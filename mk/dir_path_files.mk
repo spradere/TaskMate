@@ -21,6 +21,9 @@
 TARGET = ${BUILD_DIR}/TaskMate
 AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 
+# Build_id
+BUILD_ID = ${BUILD_DIR}/build_id.txt
+
 # Source directories
 SRC_DIR_LIST = ${SRC_DIR}/sysCore
 SRC_DIR_LIST += ${SRC_DIR}/sysCall
