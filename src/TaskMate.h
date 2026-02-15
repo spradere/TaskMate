@@ -13,10 +13,19 @@
  */
 
 /**
- * @file hal_tm_options.h
- * @brief TaskMate options
+ * @file TaskMate.h
+ * @brief header for TaskMate options
  *
  */
+
+#ifndef TASKMATE_H
+#define TASKMATE_H
+
+// TaskMate current version
+#define TASKMATE_VERSION "0.25"
+
+// debug options
+#define VERBOSE_LEVEL 1
 
 // libc selection
 #define TM_LIBC_TASKMATE 1
@@ -24,4 +33,6 @@
 
 #if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
 _Static_assert(0, "Select exactly one libc, external or internal");
+#endif
+
 #endif

@@ -25,7 +25,7 @@
 
 #include <avr/pgmspace.h>
 
-#include "hal/auto_hal_define.h" // get libc selection
+#include "TaskMate.h" // get libc selection
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
