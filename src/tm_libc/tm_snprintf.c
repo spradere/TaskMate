@@ -70,7 +70,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	}
 }
 
-int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...)
+int tm_snprintf(char *ptr, uint8_t size, const char *format, ...)
 {
 	int ret;
 	va_list args;
@@ -80,7 +80,7 @@ int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...)
 	return ret;
 }
 
-int tm_printf(PGM_P format, ...)
+int tm_printf(const char *format, ...)
 {
 	int ret;
 	va_list args;
@@ -90,7 +90,7 @@ int tm_printf(PGM_P format, ...)
 	return ret;
 }
 
-int tm_vprintf(PGM_P format, va_list args)
+int tm_vprintf(const char *format, va_list args)
 {
 	return tm_vsnprintf(NULL, 0, format, args);
 }
@@ -114,27 +114,27 @@ static void tm_vsnprintf_put_char(char ch)
 	}
 }
 
-int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
+int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 {
 	buff.ptr = ptr;
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
 
-	char c=pgm_read_byte(format++);
+	char c=*format++;
 
 	while( c )
 	{
 		if( c == '%' )
 		{
-			c=pgm_read_byte(format++);
+			c=*format++;
 
 			if( (c) == '0' )
 			{
-				c=pgm_read_byte(format++);
+				c=*format++;
 				buff.padding = (uint8_t)(c - 48); // atoi
 				if( buff.padding > 9 ){ return 0; }
-				c=pgm_read_byte(format++);
+				c=*format++;
 			}
 
 			switch( c )
@@ -193,7 +193,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
 			}
 		}
 		else { tm_vsnprintf_put_char(c); }
-		c=pgm_read_byte(format++);
+		c=*format++;
 	}
 
 	tm_vsnprintf_put_char(0); // close string

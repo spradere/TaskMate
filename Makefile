@@ -23,17 +23,13 @@ BUILD_BASE = build
 LOG_DIR = log
 MAKE_DIR = mk
 DOC_DIR = doc
-USB_DIR = /media/usbkey
-USB_DEV = /dev/da0s1
 
-# Options
-OPT_CLEAN_AUTOCODE_LOGS = yes
-# bmake option for -V
-.MAKE.EXPAND_VARIABLES = true
+# Build system options
+.include "${MAKE_DIR}/options.mk"
 
 # Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
 .include "${MAKE_DIR}/hardware_target.mk"
-BUILD_DIR += ${BUILD_BASE}/${ARCH}_${MCU}_${BOARD}
+BUILD_DIR = ${BUILD_BASE}/${ARCH}_${MCU}_${BOARD}
 
 # path and files
 .include "${MAKE_DIR}/dir_path_files.mk"
