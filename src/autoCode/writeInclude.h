@@ -30,8 +30,10 @@ typedef enum
 	INCLUDE_HAL_SYSTEM_PART,
 	INCLUDE_HAL_DEFINE,
 	INCLUDE_HAL_INIT,
+	INCLUDE_HAL_STDIO,
+
 	INCLUDE_TYPE_COUNT
-	} include_type_t;
+} include_type_t;
 
 void writeInclude(const modules_database_t *data_base, include_type_t type ,const char *file_name, const options_list_t *auto_options);
 

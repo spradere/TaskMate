@@ -52,7 +52,7 @@ _dependency_check:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test for autoCode required files
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
+${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM} ${FILE_HAL_STDIO}
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
@@ -69,6 +69,7 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--file_hal_stdio ${FILE_HAL_STDIO:S/src\///}" >> ${AUTOCODE_CONFIG}
 
 	# write list hal sources files
 	@: > ${FILE_HAL_USER_PATH}
