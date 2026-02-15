@@ -22,7 +22,7 @@
 
 #include "tm_libc/tm_stdio.h"
 
-void tm_syslog(PGM_P format, ...)
+void tm_syslog(const char *format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -30,7 +30,7 @@ void tm_syslog(PGM_P format, ...)
 	va_end(args);
 }
 
-void tm_vsyslog(PGM_P format, va_list args)
+void tm_vsyslog(const char *format, va_list args)
 {
 	tm_vprintf(format, args);
 }
