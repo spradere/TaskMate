@@ -22,7 +22,7 @@ TARGET = ${BUILD_DIR}/TaskMate
 AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 
 # Build_id
-BUILD_ID = ${BUILD_DIR}/build_id.txt
+BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
 
 # Source directories
 SRC_DIR_LIST = ${SRC_DIR}/sysCore
@@ -60,3 +60,6 @@ GIT_ALLOWED_FILES = .clang-format .clang-tidy .gitingnore \
 # Global error
 ERROR_CAT = ${BUILD_DIR}/errors_all.err
 
+# Tags
+TAGS = .tags
+TAGS_STAMP = ${BUILD_DIR}/.tags_stamp

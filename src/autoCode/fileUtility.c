@@ -177,10 +177,6 @@ void printWarningHeader(FILE *file)
 	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 }
 
-void printClangFormatOff(FILE *file)
-{
-	fprintf(file, "// clang-format off\n");
-	fprintf(file, "// why ? Auto-generated code\n\n");
-}
+void printClangFormatOff(FILE *file){ fprintf(file, "// clang-format off\n"); }
 
 void printClangFormatOn(FILE *file) { fprintf(file, "// clang-format on\n"); }
