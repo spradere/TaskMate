@@ -56,6 +56,7 @@ void sc_threadSetSTC(uint16_t count)
 uint16_t sc_threadGetSTC(void)
 {
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { return mod_threadGetSTC(); }
+	return 0; // dummy return to avoid -Wno-return-type
 }
 
 void sc_handYield(void) { hal_timerSchedulerLoad(); }

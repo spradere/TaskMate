@@ -19,6 +19,7 @@
 
 # Main directories
 SRC_DIR = src
+BUILD_BASE = build
 LOG_DIR = log
 MAKE_DIR = mk
 DOC_DIR = doc
@@ -32,7 +33,7 @@ OPT_CLEAN_AUTOCODE_LOGS = yes
 
 # Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
 .include "${MAKE_DIR}/hardware_target.mk"
-BUILD_DIR += build/${ARCH}_${MCU}_${BOARD}
+BUILD_DIR += ${BUILD_BASE}/${ARCH}_${MCU}_${BOARD}
 
 # path and files
 .include "${MAKE_DIR}/dir_path_files.mk"

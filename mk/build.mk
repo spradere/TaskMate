@@ -17,7 +17,7 @@
 # Build rules
 ################################################################################
 
-# Info about help system : targets begins with '_' or ${} are internal system only
+# Info about help system : targets begins with '_' or '$' are internal system only
 # they'll not be displayed in `make help`
 
 .MAIN: all
@@ -27,16 +27,18 @@
 	@mkdir -p ${LOG_DIR}
 
 .END:
-	@printf "######################\n" > ${BUILD_ID}
-	@printf "# Build informations #\n" >> ${BUILD_ID}
-	@printf "######################\n\n" >> ${BUILD_ID}
+	@printf "##########################\n" > ${BUILD_INFO}
+	@printf "# Last build informations \n" >> ${BUILD_INFO}
+	@printf "##########################\n\n" >> ${BUILD_INFO}
 
-	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_ID}
-	@printf "date : " >> ${BUILD_ID}
-	@date >> ${BUILD_ID}
-	@git -v >> ${BUILD_ID}
-	@printf "avr-gcc version : " >> ${BUILD_ID}
-	@avr-gcc -dumpversion >> ${BUILD_ID}
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_INFO}
+	@printf "date : " >> ${BUILD_INFO}
+	@date >> ${BUILD_INFO}
+	@git -v >> ${BUILD_INFO}
+	@printf "git tag : " >> ${BUILD_INFO}
+	@git describe --tags >> ${BUILD_INFO}
+	@printf "avr-gcc version : " >> ${BUILD_INFO}
+	@avr-gcc -dumpversion >> ${BUILD_INFO}
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
@@ -127,7 +129,7 @@ ${ERROR_CAT}: ${ERROR_FILES}
 	@cat ${ERROR_FILES} > ${ERROR_CAT}
 
 # Run autoCode alone
-AUTOCODE_LS_CMD = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
+AUTOCODE_PRINT_LAST_LOG = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 
 autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
@@ -135,10 +137,10 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	@${AUTOCODE_LS_CMD}
+	@${AUTOCODE_PRINT_LAST_LOG}
 	@printf "${COLOUR_CYAN}"
-	@${AUTOCODE_LS_CMD} | grep ': keep' | sed 's/^.*: *//'
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET }${COLOUR_YELLOW}"
-	@${AUTOCODE_LS_CMD} | grep ': change' | sed 's/^.*: *//'
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET}"
 .PHONY: autoCode_alone
