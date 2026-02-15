@@ -69,6 +69,12 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 	switch( type )
 	{
+		case INCLUDE_HAL_STDIO:
+
+			fprintf(file_tmp.stream, "// hal stdio implementation\n");
+			fprintf(file_tmp.stream, "#include \"%s\"\n", auto_options->file_hal_stdio);
+			break;
+
 		case INCLUDE_HAL_DEFINE:
 
 			fprintf(file_tmp.stream, "// target define\n");

@@ -22,13 +22,12 @@
 
 #include <stddef.h>
 
-#include "hal/auto_hal_user.h"
-#include "tm_libc/tm_syslog.h"
+#include "hal/auto_hal_stdio.h"
 
 #define SNPRINFT_BUFF_TEMP_SIZE 32
 
 static void baseConvert(uint16_t value, uint8_t base);
-static void tm_vsnprintf_put_char(char ch);
+static void tm_putChar(char ch);
 
 // structure for buffer data
 struct buff_t
@@ -49,7 +48,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 
 	if( value == 0 )
 	{
-		tm_vsnprintf_put_char('0');
+		tm_putChar('0');
 		return;
 	}
 
@@ -66,7 +65,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	// reverse order
 	while( pos > 0 )
 	{
-		tm_vsnprintf_put_char(tmp[--pos]);
+		tm_putChar(tmp[--pos]);
 	}
 }
 
@@ -95,7 +94,7 @@ int tm_vprintf(const char *format, va_list args)
 	return tm_vsnprintf(NULL, 0, format, args);
 }
 
-static void tm_vsnprintf_put_char(char ch)
+static void tm_putChar(char ch)
 {
 	if( buff.ptr != NULL)
 	{
@@ -104,13 +103,7 @@ static void tm_vsnprintf_put_char(char ch)
 
 	if(buff.ptr == NULL)
 	{
-		if(hal_usartWriteChar((uint8_t)ch) == ERR_HAL_USART_TX_BUFFER_FULL)
-		{
-			hal_usartSendTXBuffer();
-			hal_usartWriteChar((uint8_t)ch);
-		}
-
-		if( ch == '\n'){hal_usartSendTXBuffer();}
+		hal_stdio_putChar(ch);
 	}
 }
 
@@ -120,6 +113,8 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
+
+	//tm_vsnptintf_macro();
 
 	char c=*format++;
 
@@ -143,7 +138,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 				case 'c':
 				{
 					int cc = va_arg(args, int);
-					tm_vsnprintf_put_char((char)cc);
+					tm_putChar((char)cc);
 					break;
 				}
 				case 's':
@@ -151,7 +146,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 					const char *s = va_arg(args, char *);
 					while( *s )
 					{
-						tm_vsnprintf_put_char(*s);
+						tm_putChar(*s);
 						s++;
 					}
 					break;
@@ -185,18 +180,18 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 				}
 
 				case '%':
-					tm_vsnprintf_put_char('%');
+					tm_putChar('%');
 					break;
 				default:
-					tm_vsnprintf_put_char('?');
+					tm_putChar('?');
 					break;
 			}
 		}
-		else { tm_vsnprintf_put_char(c); }
+		else { tm_putChar(c); }
 		c=*format++;
 	}
 
-	tm_vsnprintf_put_char(0); // close string
+	tm_putChar(0); // close string
 	buff.ptr[buff.size - 1] = 0; // worst case close at the end of buffer
 	return buff.index;
 }

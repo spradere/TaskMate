@@ -54,7 +54,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\3string in ROM 01", MSG_TO_LCD); }
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWritreText(chan, "\3string in ROM 02", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);
