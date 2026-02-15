@@ -16,14 +16,18 @@
 # compiler for arch avr8
 CC = avr-gcc
 
-CFLAGS += -Os -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
+CFLAGS += -Os -MMD -MP
+
+CFLAGS += -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
 	-Wcast-align -Wundef -Wnull-dereference -Wpointer-arith -Wcast-qual \
 	-Wmissing-prototypes -Wmissing-declarations -Wredundant-decls \
 	-Wswitch -Wenum-conversion -Wundef \
 	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
-	-MMD -MP -Wno-builtin-declaration-mismatch -Wno-return-type
+	-Wno-builtin-declaration-mismatch -Wno-return-type
 
 CFLAGS += -I${SRC_DIR} -DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
+
+
 
 # output files
 HEX = ${TARGET}.hex

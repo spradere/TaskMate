@@ -18,6 +18,8 @@
  *
  */
 
+#include "TaskMate.h"
+
 #include <stdint.h>
 
 #include "hal/auto_hal_define.h"
@@ -29,7 +31,13 @@
 #include "sysCore/runLevel.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_syslog.h"
-#include "tm_version.h"
+
+// display harware target informations
+#if VERBOSE_LEVEL > 0
+    #pragma message "ARCH  = " ARCH
+    #pragma message "MCU   = " MCU
+    #pragma message "BOARD = " BOARD
+#endif
 
 int main(void)
 {

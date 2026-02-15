@@ -17,7 +17,7 @@
 # Build rules
 ################################################################################
 
-# Info help system : targets begins with '_' or ${} are internal system only
+# Info about help system : targets begins with '_' or ${} are internal system only
 # they'll not be displayed in `make help`
 
 .MAIN: all
@@ -25,6 +25,18 @@
 .BEGIN:
 	@mkdir -p ${BUILD_DIR}
 	@mkdir -p ${LOG_DIR}
+
+.END:
+	@printf "######################\n" > ${BUILD_ID}
+	@printf "# Build informations #\n" >> ${BUILD_ID}
+	@printf "######################\n\n" >> ${BUILD_ID}
+
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_ID}
+	@printf "date : " >> ${BUILD_ID}
+	@date >> ${BUILD_ID}
+	@git -v >> ${BUILD_ID}
+	@printf "avr-gcc version : " >> ${BUILD_ID}
+	@avr-gcc -dumpversion >> ${BUILD_ID}
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
@@ -63,14 +75,14 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
 	@rm -f ${FILE_HAL_USER_PATH}.bak
-	
+
 	@: > ${FILE_HAL_SYSTEM_PATH}
 .for file in ${FILES_HAL_SYSTEM}
 	@printf "%s\n" "${file}" >> ${FILE_HAL_SYSTEM_PATH}
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
 	@rm -f ${FILE_HAL_SYSTEM_PATH}.bak
-	
+
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG_STAMP}
 	@touch ${AUTOCODE_STAMP}
 
@@ -79,7 +91,7 @@ AUTOCODE_CFLAGS = -I${SRC_DIR}/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
-	
+
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 	@printf "\n%sCompiling autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
