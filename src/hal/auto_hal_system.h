@@ -20,8 +20,6 @@
 #define AUTO_HAL_SYSTEM_H
 
 // clang-format off
-// why ? Auto-generated code
-
 #include "hal/arch/avr8/hal_context.h"
 #include "hal/arch/avr8/hal_stack.h"
 #include "hal/mcu/atmega2560/hal_timerSTC.h"

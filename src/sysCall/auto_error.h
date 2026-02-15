@@ -20,8 +20,6 @@
 #define ERROR_H
 
 // clang-format off
-// why ? Auto-generated code
-
 typedef enum
 {
 	ERROR_LOW,

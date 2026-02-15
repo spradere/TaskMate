@@ -16,18 +16,29 @@
 # compiler for arch avr8
 CC = avr-gcc
 
+# General options
 CFLAGS += -Os -MMD -MP
 
-CFLAGS += -Wall -Wextra -Wshadow -Wstrict-prototypes -Wconversion \
-	-Wcast-align -Wundef -Wnull-dereference -Wpointer-arith -Wcast-qual \
-	-Wmissing-prototypes -Wmissing-declarations -Wredundant-decls \
-	-Wswitch -Wenum-conversion -Wundef \
-	-Wundef -Wswitch-enum -Wformat=2 -Wformat-security -Wpointer-arith \
-	-Wno-builtin-declaration-mismatch -Wno-return-type
+# General warnings
+CFLAGS += -Wall -Wextra -Wshadow -Werror=shadow -Wswitch -Wswitch-enum -Wformat=2 -Wformat-security
 
+# Prototypes
+CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls \
+	-Wbad-function-cast
+
+# Conversions
+CFLAGS += -Wconversion -Wsign-conversion -Wenum-conversion -Wpointer-arith -Wcast-align -Wcast-qual
+
+# Bug hunter
+CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-declaration \
+	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common
+
+# Commande line #include and #define
 CFLAGS += -I${SRC_DIR} -DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
 
-
+# Linker flags
+CFLAGS += -ffunction-sections -fdata-sections -flto -fstack-usage
+LFLGAS = -Wl,--gc-sections -Wl,-Map=${TARGET}.map
 
 # output files
 HEX = ${TARGET}.hex
@@ -37,7 +48,7 @@ ELF = ${TARGET}.elf
 ${TARGET}: ${OBJS}
 	@printf "\n%sLinking%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	${CC} ${CFLAGS} -ffunction-sections -fdata-sections -Wl,--gc-sections -flto -o ${ELF} ${OBJS}
+	${CC} ${CFLAGS} ${LFLAGS} -o ${ELF} ${OBJS}
 
 # compile
 ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
