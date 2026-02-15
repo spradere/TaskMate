@@ -64,7 +64,7 @@ FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 # Global error
 ERROR_FILES != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.err" | sort
 
-# documentation files
+# Documentation files
 DOCS != find  ${DOC_DIR} -maxdepth 1 -type f -name "*.md"; find ${DOC_DIR} -maxdepth 1 -type f -name "*.txt"
 
 # mk files

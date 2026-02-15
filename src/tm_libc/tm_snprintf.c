@@ -72,23 +72,27 @@ static void baseConvert(uint16_t value, uint8_t base)
 
 int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...)
 {
+	int ret;
 	va_list args;
 	va_start(args, format);
-	tm_vsnprintf(ptr, size, format, args);
+	ret = tm_vsnprintf(ptr, size, format, args);
 	va_end(args);
+	return ret;
 }
 
 int tm_printf(PGM_P format, ...)
 {
+	int ret;
 	va_list args;
 	va_start(args, format);
-	tm_vprintf(format, args);
+	ret = tm_vprintf(format, args);
 	va_end(args);
+	return ret;
 }
 
 int tm_vprintf(PGM_P format, va_list args)
 {
-	tm_vsnprintf(NULL, 0, format, args);
+	return tm_vsnprintf(NULL, 0, format, args);
 }
 
 static void tm_vsnprintf_put_char(char ch)

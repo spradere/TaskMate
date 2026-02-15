@@ -20,8 +20,6 @@
 #define AUTO_HAL_INIT_H
 
 // clang-format off
-// why ? Auto-generated code
-
 // target init
 #include "hal/arch/avr8/hal_archInit.h"
 #include "hal/mcu/atmega2560/hal_mcuInit.h"
