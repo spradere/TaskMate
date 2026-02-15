@@ -109,12 +109,20 @@ static void tm_putChar(char ch)
 
 int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 {
+
+	// store variables
 	buff.ptr = ptr;
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
 
-	//tm_vsnptintf_macro();
+	//tm_vsnptintf_macro(format);
+
+	//tm_vnsprintf_function(format, va_list args);
+
+//satic int tm_vnsprintf_function(tm_string format, va_list args)
+//{
+
 
 	char c=*format++;
 
@@ -192,6 +200,5 @@ int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 	}
 
 	tm_putChar(0); // close string
-	buff.ptr[buff.size - 1] = 0; // worst case close at the end of buffer
 	return buff.index;
 }
