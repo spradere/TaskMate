@@ -22,12 +22,12 @@
 
 #include <stddef.h>
 
-#include "hal/auto_hal_stdio.h"
-
-#define SNPRINFT_BUFF_TEMP_SIZE 32
+#include "hal/auto_hal_tmlibc.h"
 
 static void baseConvert(uint16_t value, uint8_t base);
 static void tm_putChar(char ch);
+
+#define SNPRINFT_BUFF_TEMP_SIZE 32
 
 // structure for buffer data
 struct buff_t
@@ -109,21 +109,16 @@ static void tm_putChar(char ch)
 
 int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
 {
+}
+
+static int tm_vnsprintf_function(tm_string format, va_list args)
+{
 
 	// store variables
 	buff.ptr = ptr;
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
-
-	//tm_vsnptintf_macro(format);
-
-	//tm_vnsprintf_function(format, va_list args);
-
-//satic int tm_vnsprintf_function(tm_string format, va_list args)
-//{
-
-
 	char c=*format++;
 
 	while( c )

@@ -23,7 +23,6 @@
 
 #include <stdarg.h>
 #include <stdint.h>
-#include <avr/pgmspace.h>
 
 int tm_printf(const char *format, ...);
 int tm_vprintf(const char *format, va_list args);

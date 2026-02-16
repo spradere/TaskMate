@@ -28,7 +28,7 @@
 	X(HAVE_ERRORS, "--errors")                                                                               \
 	X(HAVE_HAL_USER, "--files_hal_user")                                                                     \
 	X(HAVE_HAL_SYSTEM, "--files_hal_system") \
-	X(HAVE_HAL_STDIO, "--file_hal_stdio")
+	X(HAVE_HAL_TMLIBC, "--file_hal_tmlibc")
 
 enum
 {
@@ -91,10 +91,10 @@ static void funcHalSystem(const char *value, options_list_t *opt)
 	have_options_count[HAVE_HAL_SYSTEM]++;
 }
 
-static void funcHalStdio(const char *value, options_list_t *opt)
+static void funcHalTmlibc(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_hal_stdio, value, BYTE_INDEX);
-	have_options_count[HAVE_HAL_STDIO]++;
+	strncpy(opt->file_hal_tmlibc, value, BYTE_INDEX);
+	have_options_count[HAVE_HAL_TMLIBC]++;
 }
 
 static const struct
@@ -108,7 +108,7 @@ static const struct
 					{"--errors", funcErrors},
 					{"--files_hal_user", funcHalUser},
 					{"--files_hal_system", funcHalSystem},
-					{"--file_hal_stdio", funcHalStdio},
+					{"--file_hal_tmlibc", funcHalTmlibc},
 					{NULL, NULL}};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
