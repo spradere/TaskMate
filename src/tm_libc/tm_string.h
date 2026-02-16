@@ -27,19 +27,6 @@
 
 #include "TaskMate.h" // get libc selection
 
-typedef enum
-{
-	STRING_RAM,
-	STRING_ROM
-}tm_string_storage_t;
-
-typedef struct
-{
-	char *text;
-	uint8_t len;
-	tm_string_storage_t storage;
-}tm_string_t;
-
 #if TM_LIBC_CSTD
 	#include <string.h>
 	#define tm_strncpy strncpy

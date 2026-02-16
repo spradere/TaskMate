@@ -12,8 +12,9 @@
 #define tm_printf(format, vargs) \
 	tm_string_t UNIQUE_NAME(str) = { \
 		.text = PSRT(format), \
-		.len = 256}; \
-		UNIQUE_NAME(str).len = strlen(UNIQUE_NAME(str).text); \
+		.len = 256, \
+		.storage = STRING_RAM}; \
+		UNIQUE_NAME(str).len = tm_strlen(&UNIQUE_NAME(str)); \
 		tm_printf_P(UNIQUE_NAME(str), (vargs))
 
 
