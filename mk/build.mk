@@ -69,7 +69,7 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--file_hal_stdio ${FILE_HAL_STDIO:S/src\///}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--file_hal_tmlibc ${FILE_HAL_TMLIBC:S/src\///}" >> ${AUTOCODE_CONFIG}
 
 	# write list hal sources files
 	@: > ${FILE_HAL_USER_PATH}
