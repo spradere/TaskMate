@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_stdio.c
+ * @file hal_tmlibc.c
  * @brief board stdio
  *
  */
@@ -33,8 +33,9 @@ void hal_stdio_putChar(char ch)
 	if( ch == '\n'){hal_usartSendTXBuffer();}
 }
 
-
-char hal_sdtio_getChar(void)
+char hal_string_getChar(tm_string_t *str, uint8_t index)
 {
+	if(str->storage == STORAGE_RAM){ return str->text[index]; }
+	if(str->storage == STORAGE_ROM){ return pgm_read_byte(str->text[index]); }
 	return 0;
 }
