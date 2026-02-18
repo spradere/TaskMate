@@ -18,7 +18,7 @@
  *
  */
 
-#include "hal/board/arduino_mega/hal_stdio.h"
+#include "hal/board/arduino_mega/hal_tmlibc.h"
 
 #include "hal/auto_hal_user.h"
 
@@ -33,9 +33,9 @@ void hal_stdio_putChar(char ch)
 	if( ch == '\n'){hal_usartSendTXBuffer();}
 }
 
-char hal_string_getChar(tm_string_t *str, uint8_t index)
+char hal_string_getChar(const tm_string_t *str, uint8_t index)
 {
-	if(str->storage == STORAGE_RAM){ return str->text[index]; }
-	if(str->storage == STORAGE_ROM){ return pgm_read_byte(str->text[index]); }
+	if(str->storage == TM_MEM_RAM){ return str->text[index]; }
+	if(str->storage == TM_MEM_ROM){ return (char)pgm_read_byte(&(str->text[index])); }
 	return 0;
 }

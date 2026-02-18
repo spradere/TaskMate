@@ -26,6 +26,7 @@
 #include "hal/auto_hal_init.h"
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
+#include "hal/auto_hal_tmlibc.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
@@ -45,21 +46,21 @@ int main(void)
 	hal_usartInit();
 	hal_usartStart();
 
-	tm_syslog("\n\n[boot] TaskMate %s boot\n", TASKMATE_VERSION);
+	tm_syslog(TM_STR("\n\n[boot] TaskMate %s boot\n"), TASKMATE_VERSION);
 
 	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
-	tm_syslog("[info] target : %s-%s-%s\n", target->arch, target->mcu, target->board);
+	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), target->arch, target->mcu, target->board);
 
 	// system static allocation init
-	tm_syslog("[boot] system static allocation\n");
+	tm_syslog(TM_STR("[boot] system static allocation\n"));
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
 	rl_Alloc();
 
 	// hal hardware init
-	tm_syslog("[boot] hal hardware init\n");
+	tm_syslog(TM_STR("[boot] hal hardware init\n"));
 
 
 	hal_archInit();
@@ -77,7 +78,7 @@ int main(void)
 	}
 
 	// RTC time test
-	tm_syslog("[boot] hal hardware init\n");
+	tm_syslog(TM_STR("[boot] hal hardware init\n"));
 	hal_rtc_time_t t;
 	t.hours = 21;
 	t.minutes = 41;
@@ -89,20 +90,20 @@ int main(void)
 	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
 
-	tm_syslog("[info] date & time : %02i/%02i/20%02i %02i:%02i\n", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_syslog(TM_STR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"), t.day, t.month, t.year, t.hours, t.minutes);
 
 	char msg[40];
-	tm_snprintf(msg, sizeof(msg), "TaskMate %s", TASKMATE_VERSION);
+	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s"), TASKMATE_VERSION);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
 
-	tm_snprintf(msg, sizeof(msg), "%02i/%02i/20%02i %02i:%02i", t.day, t.month, t.year, t.hours, t.minutes);
+	tm_snprintf(msg, sizeof(msg), TM_STR("%02i/%02i/20%02i %02i:%02i"), t.day, t.month, t.year, t.hours, t.minutes);
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
 	// jump to current thread for first call and start system by enabling interrupts
-	tm_syslog("[boot] start round-robin scheduler\n");
+	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
 
 	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());

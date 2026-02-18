@@ -25,18 +25,19 @@
 
 #include <avr/pgmspace.h>
 
+#include "tm_libc/tm_string.h"
 #include "TaskMate.h" // get libc selection
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
-	#define tm_syslog syslog
+	// #define tm_syslog syslog !!! functions signatures do not match
 #endif
 
 #if TM_LIBC_TASKMATE
 	#include <stdarg.h>
 	#include <stdint.h>
-	void tm_syslog(const char *format, ...);
-	void tm_vsyslog(const char *format, va_list args);
+	void tm_syslog(const tm_string_t format, ...);
+	void tm_vsyslog(const tm_string_t format, va_list args);
 #endif
 
 // clang-format on

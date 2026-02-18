@@ -27,11 +27,11 @@ CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredu
 	-Wbad-function-cast
 
 # Conversions
-CFLAGS += -Wconversion -Wsign-conversion -Wenum-conversion -Wpointer-arith -Wcast-align -Wcast-qual
+CFLAGS += -Wconversion -Wsign-conversion -Wenum-conversion -Wcast-align -Wcast-qual
 
 # Bug hunter
 CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-declaration \
-	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common
+	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common -Wpointer-arith
 
 # Commande line #include and #define
 CFLAGS += -I${SRC_DIR} -DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
