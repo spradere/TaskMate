@@ -69,7 +69,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	}
 }
 
-int tm_snprintf(char *ptr, uint8_t size, const char *format, ...)
+int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...)
 {
 	int ret;
 	va_list args;
@@ -79,7 +79,7 @@ int tm_snprintf(char *ptr, uint8_t size, const char *format, ...)
 	return ret;
 }
 
-int tm_printf(const char *format, ...)
+int tm_printf(const tm_string_t format, ...)
 {
 	int ret;
 	va_list args;
@@ -89,7 +89,7 @@ int tm_printf(const char *format, ...)
 	return ret;
 }
 
-int tm_vprintf(const char *format, va_list args)
+int tm_vprintf(const tm_string_t format, va_list args)
 {
 	return tm_vsnprintf(NULL, 0, format, args);
 }
@@ -107,32 +107,29 @@ static void tm_putChar(char ch)
 	}
 }
 
-int tm_vsnprintf(char *ptr, uint8_t size, const char *format, va_list args)
+int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
-}
-
-static int tm_vnsprintf_function(tm_string format, va_list args)
-{
-
 	// store variables
 	buff.ptr = ptr;
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
-	char c=*format++;
+
+	uint8_t index = 0;
+	char c = hal_string_getChar(&format, index++);
 
 	while( c )
 	{
 		if( c == '%' )
 		{
-			c=*format++;
+			c = hal_string_getChar(&format, index++);
 
 			if( (c) == '0' )
 			{
-				c=*format++;
+				c = hal_string_getChar(&format, index++);
 				buff.padding = (uint8_t)(c - 48); // atoi
 				if( buff.padding > 9 ){ return 0; }
-				c=*format++;
+				c = hal_string_getChar(&format, index++);
 			}
 
 			switch( c )
@@ -191,7 +188,7 @@ static int tm_vnsprintf_function(tm_string format, va_list args)
 			}
 		}
 		else { tm_putChar(c); }
-		c=*format++;
+		c = hal_string_getChar(&format, index++);
 	}
 
 	tm_putChar(0); // close string
