@@ -18,6 +18,11 @@
 		tm_printf_P(UNIQUE_NAME(str), (vargs))
 
 
+#define TM_STR_NEW(name, size) \
+	char UNIQUE_NAME(name)[size];\
+	tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_RAM}
+
+
 typedef struct
 {
 	const char *text;
@@ -50,6 +55,8 @@ int main(void)
 	tm_printf("hello %i\n",i);
 
 	tm_printf("hello 2 %i\n",i+i);
+
+	TM_STR_NEW(test,10);
 
 	return 0;
 
