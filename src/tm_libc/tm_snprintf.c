@@ -115,24 +115,24 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	buff.index = 0;
 	buff.padding = 0;
 
-	uint8_t index = 0;
-	char c = hal_string_getChar(&format, index++);
+	uint8_t format_index= 0;
+	char format_c = hal_string_getChar(&format, format_index++);
 
-	while( c )
+	while( format_c )
 	{
-		if( c == '%' )
+		if( format_c == '%' )
 		{
-			c = hal_string_getChar(&format, index++);
+			format_c = hal_string_getChar(&format, format_index++);
 
-			if( (c) == '0' )
+			if( (format_c) == '0' )
 			{
-				c = hal_string_getChar(&format, index++);
-				buff.padding = (uint8_t)(c - 48); // atoi
+				format_c = hal_string_getChar(&format, format_index++);
+				buff.padding = (uint8_t)(format_c - 48); // atoi
 				if( buff.padding > 9 ){ return 0; }
-				c = hal_string_getChar(&format, index++);
+				format_c = hal_string_getChar(&format, format_index++);
 			}
 
-			switch( c )
+			switch( format_c )
 			{
 
 				case 'c':
@@ -141,7 +141,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					tm_putChar((char)cc);
 					break;
 				}
-				case 's':
+				/*case 's':
 				{
 					const char *s = va_arg(args, char *);
 					while( *s )
@@ -150,7 +150,20 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 						s++;
 					}
 					break;
+				}*/
+				case 's':
+				{
+					const tm_string_t str = va_arg(args, tm_string_t );
+					uint8_t str_index = 0;
+					char str_c = hal_string_getChar(&str, str_index++);
+					while( str_c != 0 )
+					{
+						tm_putChar(str_c);
+						str_c = hal_string_getChar(&str, str_index++);
+					}
+					break;
 				}
+
 
 				case 'i':
 				case 'x':
@@ -159,7 +172,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					uint16_t value = va_arg(args, uint16_t);
 					uint8_t base;
 
-					switch( c )
+					switch( format_c )
 					{
 						case 'i':
 							base = 10;
@@ -187,8 +200,8 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					break;
 			}
 		}
-		else { tm_putChar(c); }
-		c = hal_string_getChar(&format, index++);
+		else { tm_putChar(format_c); }
+		format_c = hal_string_getChar(&format, format_index++);
 	}
 
 	tm_putChar(0); // close string
