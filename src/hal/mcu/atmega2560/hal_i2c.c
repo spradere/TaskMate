@@ -50,7 +50,7 @@ void hal_i2cStart(void)
 
 		if( (hal_i2cWrite((adr << 1) | 0)) == TW_MT_SLA_ACK )
 		{
-			tm_syslog(TM_STR("[i2c] found SLA+W 0x%x\n"), (adr));
+			tm_syslog(TM_STR("[i2c] found SLA+W 0x%02x\n"), (adr));
 		}
 
 		hal_i2cCommStop();
