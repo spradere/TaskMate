@@ -176,10 +176,16 @@ static void writeTarget(const options_list_t *auto_options, FILE *file)
 	// write target name
 	fprintf(file, "const sc_target_info_t target_info =\n");
 	fprintf(file, "{\n");
-	fprintf(file, ".arch = \"%s\",\n", auto_options->arch_name);
-	fprintf(file, ".mcu = \"%s\",\n", auto_options->mcu_name);
-	fprintf(file, ".board = \"%s\"\n", auto_options->board_name);
+	fprintf(file, ".arch = TM_STR(\"%s\"),\n", auto_options->arch_name);
+	fprintf(file, ".mcu = TM_STR(\"%s\"),\n", auto_options->mcu_name);
+	fprintf(file, ".board = TM_STR(\"%s\")\n", auto_options->board_name);
 	fprintf(file, "};\n");
+	// write target name
+
+	/*fprintf(file, "target->arch = TM_STR(\"%s\");\n", auto_options->arch_name);
+	fprintf(file, "target->mcu = TM_STR(\"%s\");\n", auto_options->mcu_name);
+	fprintf(file, "target->board = TM_STR(\"%s\");\n", auto_options->board_name);*/
+
 
 }
 
