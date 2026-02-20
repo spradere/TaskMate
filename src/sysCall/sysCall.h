@@ -32,7 +32,7 @@ typedef struct
 	const tm_string_t board;
 } sc_target_info_t;
 
-void sc_targetGetInfo(sc_target_info_t **target);
+void sc_targetGetInfo(const sc_target_info_t **target);
 
 void sc_threadSetSTC(uint16_t count);
 uint16_t sc_threadGetSTC(void);

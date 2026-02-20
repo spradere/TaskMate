@@ -29,9 +29,6 @@
 	#include <stdio.h>
 	#define tm_snprintf snprintf
 	#define tm_printf printf
-	#define TM_STR_RAM(string) (string)
-	#define TM_STR_ROM(string) (string)
-	#define TM_STR(string) (string)
 #endif
 
 #if TM_LIBC_TASKMATE

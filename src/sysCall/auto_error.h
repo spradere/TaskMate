@@ -20,6 +20,8 @@
 #define ERROR_H
 
 // clang-format off
+#include "tm_libc/tm_string.h"
+
 typedef enum
 {
 	ERROR_LOW,
@@ -40,8 +42,8 @@ typedef enum
 
 typedef struct
 {
-	char *name;
-	err_critical_t critical;
+	const tm_string_t name;
+	const err_critical_t critical;
 } err_item_t;
 
 // clang-format on
