@@ -173,21 +173,9 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 
 static void writeTarget(const options_list_t *auto_options, FILE *file)
 {
-	/*// write target name
-	fprintf(file, "const sc_target_info_t target_info =\n");
-	fprintf(file, "{\n");
-	fprintf(file, ".arch = TM_STR(\"%s\"),\n", auto_options->arch_name);
-	fprintf(file, ".mcu = TM_STR(\"%s\"),\n", auto_options->mcu_name);
-	fprintf(file, ".board = TM_STR(\"%s\")\n", auto_options->board_name);
-	fprintf(file, "};\n");*/
-
-	// write target name
-
 	fprintf(file, "TM_STR_ROM_NEW(arch, \"%s\");\n", auto_options->arch_name);
 	fprintf(file, "TM_STR_ROM_NEW(mcu, \"%s\");\n", auto_options->mcu_name);
 	fprintf(file, "TM_STR_ROM_NEW(board, \"%s\");\n\n", auto_options->board_name);
-
-
 }
 
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
@@ -298,13 +286,19 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 {
-	fprintf(file, "const err_item_t error_catalog[] = \n{\n");
 
-	for( int i = 0; i < errors->error_count - 1; i++ )
+	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(file, "\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
+		fprintf(file, "TM_STR_ROM_NEW(err%i, %s);\n",i , errors->catalog[i].message);
 	}
-	fprintf(file, "\t{%s, %i}\n", errors->catalog[errors->error_count - 1].message,
-			errors->catalog[errors->error_count - 1].critical);
+
+	fprintf(file, "\nconst err_item_t error_catalog[] = \n{\n");
+
+	for( int i = 0; i < errors->error_count; i++ )
+	{
+		fprintf(file, "\t{err%i, %i},\n",i ,errors->catalog[i].critical);
+	}
+	/*fprintf(file, "\t{%s, %i}\n", errors->catalog[errors->error_count - 1].message,
+			errors->catalog[errors->error_count - 1].critical);*/
 	fprintf(file, "};\n");
 }

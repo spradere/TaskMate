@@ -50,6 +50,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 	printClangFormatOff(file_tmp.stream);
 
+	fprintf(file_tmp.stream, "#include \"tm_libc/tm_string.h\"\n\n");
+
 	fprintf(file_tmp.stream, "typedef enum\n");
 	fprintf(file_tmp.stream, "{\n");
 	fprintf(file_tmp.stream, "\tERROR_LOW,\n");
@@ -125,8 +127,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 	fprintf(file_tmp.stream, "typedef struct\n");
 	fprintf(file_tmp.stream, "{\n");
-	fprintf(file_tmp.stream, "\tchar *name;\n");
-	fprintf(file_tmp.stream, "\terr_critical_t critical;\n");
+	fprintf(file_tmp.stream, "\tconst tm_string_t name;\n");
+	fprintf(file_tmp.stream, "\tconst err_critical_t critical;\n");
 	fprintf(file_tmp.stream, "} err_item_t;\n\n");
 
 	// end

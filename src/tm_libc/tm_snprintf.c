@@ -46,11 +46,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
-	if( value == 0 )
-	{
-		tm_putChar('0');
-		return;
-	}
+	tmp[0] = '0';
 
 	// reverse order convert
 	while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )

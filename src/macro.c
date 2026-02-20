@@ -57,6 +57,8 @@ int main(void)
 	tm_printf("hello 2 %i\n",i+i);
 
 	TM_STR_NEW(test,10);
+	TM_STR_NEW(test2,10);
+
 
 	return 0;
 
