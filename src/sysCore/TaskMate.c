@@ -48,16 +48,8 @@ int main(void)
 
 	tm_syslog(TM_STR("\n\n[boot] TaskMate %s boot\n"), TM_STR(TASKMATE_VERSION));
 
-	sc_target_info_t *target;
-	tm_syslog(TM_STR("[debug] target pointer before call [%04x] -> %04x\n"), &target, target);
+	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
-	tm_syslog(TM_STR("[debug] target pointer after call [%04x] -> %04x\n"), &target, target);
-	tm_syslog(TM_STR("[debug] target pointer &arch %04x &arch->text %04x &arch->storage %04x\n"),
-		&target->arch, &target->arch.text, &target->arch.storage);
-
-	tm_syslog(TM_STR("[debug] target arch->text %s arch->storage %i\n"),
-		target->arch, target->arch.storage);
-
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), target->arch, target->mcu, target->board);
 
 	// system static allocation init

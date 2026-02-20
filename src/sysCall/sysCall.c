@@ -41,6 +41,7 @@ static uint8_t system_status = 0;
 TM_STR_ROM_NEW(arch, "avr8");
 TM_STR_ROM_NEW(mcu, "atmega2560");
 TM_STR_ROM_NEW(board, "arduino_mega");
+
 // clang-format on
 // [/tag]
 
@@ -52,7 +53,7 @@ static const sc_target_info_t target_info =
     .board = board
 };
 
-void sc_targetGetInfo(sc_target_info_t **target){ *target=&target_info; }
+void sc_targetGetInfo(const sc_target_info_t **target){ *target=&target_info; }
 
 void sc_threadSetSTC(uint16_t count)
 {

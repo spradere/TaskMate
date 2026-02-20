@@ -43,6 +43,10 @@ typedef struct
 #if TM_LIBC_CSTD
 	#include <string.h>
 	#define tm_strncpy strncpy
+
+	#define TM_STR_RAM(string) (string)
+	#define TM_STR_ROM(string) (string)
+	#define TM_STR(string) (string)
 	#define TM_STR_ROM_NEW(name, txt) \
 		const char name[] = (txt);
 #endif
@@ -50,6 +54,8 @@ typedef struct
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
 	void tm_strncpy(char *dest, const char *src, uint8_t n);
+
+	// macro TM_STR_* are defined in hal/board/${BOARD}/hal_tmlibc.h
 #endif
 
 // clang-format on
