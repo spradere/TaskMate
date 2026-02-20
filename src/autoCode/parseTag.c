@@ -173,18 +173,19 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 
 static void writeTarget(const options_list_t *auto_options, FILE *file)
 {
-	// write target name
+	/*// write target name
 	fprintf(file, "const sc_target_info_t target_info =\n");
 	fprintf(file, "{\n");
 	fprintf(file, ".arch = TM_STR(\"%s\"),\n", auto_options->arch_name);
 	fprintf(file, ".mcu = TM_STR(\"%s\"),\n", auto_options->mcu_name);
 	fprintf(file, ".board = TM_STR(\"%s\")\n", auto_options->board_name);
-	fprintf(file, "};\n");
+	fprintf(file, "};\n");*/
+
 	// write target name
 
-	/*fprintf(file, "target->arch = TM_STR(\"%s\");\n", auto_options->arch_name);
-	fprintf(file, "target->mcu = TM_STR(\"%s\");\n", auto_options->mcu_name);
-	fprintf(file, "target->board = TM_STR(\"%s\");\n", auto_options->board_name);*/
+	fprintf(file, "TM_STR_ROM_NEW(arch, \"%s\");\n", auto_options->arch_name);
+	fprintf(file, "TM_STR_ROM_NEW(mcu, \"%s\");\n", auto_options->mcu_name);
+	fprintf(file, "TM_STR_ROM_NEW(board, \"%s\");\n\n", auto_options->board_name);
 
 
 }

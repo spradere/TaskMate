@@ -26,16 +26,16 @@
 
 #include "tm_libc/tm_string.h"
 
-// macro for string in RAM
+// macro for in file scope string storage
 #define CONCAT2(a,b) a##b
 #define CONCAT(a,b) CONCAT2(a,b)
 #define UNIQUE_NAME(prefix) CONCAT(prefix, __LINE__)
 
-#define TN_STR_NEW(name, size) \
-	char UNIQUE_NAME(name)[size];\
-	tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_RAM}
+#define TM_STR_ROM_NEW(name, txt) \
+	const char UNIQUE_NAME(name)[] PROGMEM = (txt); \
+	const tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
-// macro for string storage
+// macro for in fonction string storage
 #define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
 #define TM_STR_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
 // default storage for avr8
