@@ -32,8 +32,8 @@
 #define UNIQUE_NAME(prefix) CONCAT(prefix, __LINE__)
 
 #define TM_STR_ROM_NEW(name, txt) \
-	const char UNIQUE_NAME(name)[] PROGMEM = (txt); \
-	const tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_ROM}
+	static const char UNIQUE_NAME(name)[] PROGMEM = (txt); \
+	static const tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
 // macro for in fonction string storage
 #define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
