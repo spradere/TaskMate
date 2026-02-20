@@ -43,6 +43,8 @@ typedef struct
 #if TM_LIBC_CSTD
 	#include <string.h>
 	#define tm_strncpy strncpy
+	#define TM_STR_ROM_NEW(name, txt) \
+		const char name[] = (txt);
 #endif
 
 #if TM_LIBC_TASKMATE
