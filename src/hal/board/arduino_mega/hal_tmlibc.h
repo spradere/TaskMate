@@ -21,6 +21,8 @@
 #ifndef HAL_TMLIBC_H
 #define HAL_TMLIBC_H
 
+// clang-format off
+
 #include <avr/pgmspace.h>
 #include <stdint.h>
 
@@ -45,4 +47,5 @@
 void hal_stdio_putChar(char ch);
 char hal_string_getChar(const tm_string_t *str, uint8_t index);
 
+// clang-format on
 #endif
