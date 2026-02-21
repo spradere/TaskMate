@@ -46,14 +46,16 @@ static void baseConvert(uint16_t value, uint8_t base)
 	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
-	tmp[0] = '0';
-
 	// reverse order convert
-	while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
+	if( value == 0 ) {tmp[pos++] = '0';}
+	else
 	{
-		uint16_t data = (value % base);
-		value /= base;
-		tmp[pos++] = digits[data];
+		while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
+		{
+			uint16_t data = (value % base);
+			value /= base;
+			tmp[pos++] = digits[data];
+		}
 	}
 
 	while( pos < buff.padding ) { tmp[pos++] = '0'; }

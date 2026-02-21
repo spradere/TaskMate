@@ -26,11 +26,12 @@
 #include "hal/auto_hal_init.h"
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
-#include "hal/auto_hal_tmlibc.h"
+#include "sysCall/error.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
 #include "tm_libc/tm_stdio.h"
+#include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
 // display harware target informations
@@ -78,7 +79,7 @@ int main(void)
 	}
 
 	// RTC time test
-	tm_syslog(TM_STR("[boot] hal hardware init\n"));
+	tm_syslog(TM_STR("[boot] hal RTC init\n"));
 	hal_rtc_time_t t;
 	t.hours = 21;
 	t.minutes = 41;
@@ -101,6 +102,22 @@ int main(void)
 	tm_snprintf(msg, sizeof(msg), TM_STR("%02i/%02i/20%02i %02i:%02i"), t.day, t.month, t.year, t.hours, t.minutes);
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
+
+#include <avr/pgmspace.h>
+
+	// test error catalog
+	for(uint8_t i=0; i < ERROR_COUNT; i++)
+	{
+		tm_string_t *err_msg = err_getMessage(i);
+		tm_printf(TM_STR_RAM("[debug] "));
+		for(uint8_t j=0; j<15; j++)
+		{
+			tm_printf(TM_STR_RAM("<%c.%c> "), pgm_read_byte(&err_msg->text[j]), hal_string_getChar(err_msg,j) );
+		}
+		tm_printf(TM_STR_RAM("\n"));
+
+		tm_syslog(TM_STR("[error] [%i] [0x%04x:0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
+	}
 
 	// jump to current thread for first call and start system by enabling interrupts
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));

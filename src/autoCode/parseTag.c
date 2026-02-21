@@ -298,7 +298,5 @@ static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 	{
 		fprintf(file, "\t{err%i, %i},\n",i ,errors->catalog[i].critical);
 	}
-	/*fprintf(file, "\t{%s, %i}\n", errors->catalog[errors->error_count - 1].message,
-			errors->catalog[errors->error_count - 1].critical);*/
 	fprintf(file, "};\n");
 }
