@@ -38,25 +38,8 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	fileMakeTmp(file_name, &file_tmp, __FILE__, __LINE__);
 
 	// generate multiple include guard name
-	char cmd[BYTE_INDEX];
 	char guard_name[BYTE_INDEX];
-
-	snprintf(cmd, sizeof(cmd), "printf \"%s\" | sed 's#.*/##' | tr a-z A-Z | sed 's/[^A-Z0-9_]/_/g'",
-			 file_name);
-
-	FILE *p_cmd = popen(cmd, "r");
-	if( !p_cmd )
-	{
-		msgError("failed open command pipe");
-		exit(1);
-	}
-
-	if( !fgets(guard_name, sizeof(guard_name), p_cmd) )
-	{
-		pclose(p_cmd);
-		msgError("failed get string form command pipe");
-		exit(1);
-	}
+	generateGuardName(file_name, guard_name);
 
 	// write code
 	printLicenceHeader(file_tmp.stream);
