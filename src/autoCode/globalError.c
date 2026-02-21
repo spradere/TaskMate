@@ -45,10 +45,15 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
 
-	fprintf(file_tmp.stream, "#ifndef ERROR_H\n");
-	fprintf(file_tmp.stream, "#define ERROR_H\n\n");
-
 	printClangFormatOff(file_tmp.stream);
+
+	// generate multiple include guard name
+	char guard_name[BYTE_INDEX];
+	generateGuardName(dest_name, guard_name);
+
+	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
+	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
+
 
 	fprintf(file_tmp.stream, "#include \"tm_libc/tm_string.h\"\n\n");
 

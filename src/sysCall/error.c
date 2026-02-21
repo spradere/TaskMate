@@ -16,12 +16,12 @@
  * @file error.c
  * @brief System wide error implementation
  *
- * @TODO Timeout routine, critical/fatal errors handling
  */
 
-#include "sysCall/auto_error.h"
+#include "sysCall/error.h"
 
-#include "hal/auto_hal_tmlibc.h"
+#include "tm_libc/tm_string.h"
+
 
 // [autoCode_tag] error catalog
 // clang-format off
@@ -37,14 +37,23 @@ TM_STR_ROM_NEW(err3, "hal USART TX buffer full");
 TM_STR_ROM_NEW(err4, "hal USART RX buffer full");
 TM_STR_ROM_NEW(err5, "msg no more free channels");
 
-const err_item_t error_catalog[] = 
+const err_item_t error_catalog[] =
 {
-	{err0, 1},
-	{err1, 1},
-	{err2, 1},
-	{err3, 1},
-	{err4, 1},
-	{err5, 1},
+	{&err0, 1},
+	{&err1, 1},
+	{&err2, 1},
+	{&err3, 1},
+	{&err4, 1},
+	{&err5, 1},
 };
 // clang-format on
 // [/tag]
+
+tm_string_t *err_getMessage(uint8_t num)
+{
+	if( num < ERROR_COUNT)
+	{
+		return error_catalog[num].name;
+	}
+	return 0;
+}
