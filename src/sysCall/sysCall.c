@@ -48,9 +48,9 @@ TM_STR_ROM_NEW(board, "arduino_mega");
 
 static const sc_target_info_t target_info =
 {
-    .arch  = arch,
-    .mcu   = mcu,
-    .board = board
+    .arch  = &arch,
+    .mcu   = &mcu,
+    .board = &board
 };
 
 void sc_targetGetInfo(const sc_target_info_t **target){ *target=&target_info; }

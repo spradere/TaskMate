@@ -27,9 +27,9 @@
 
 typedef struct
 {
-	const tm_string_t arch;
-	const tm_string_t mcu;
-	const tm_string_t board;
+	const tm_string_t *arch;
+	const tm_string_t *mcu;
+	const tm_string_t *board;
 } sc_target_info_t;
 
 void sc_targetGetInfo(const sc_target_info_t **target);
