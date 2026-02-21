@@ -103,20 +103,12 @@ int main(void)
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
-#include <avr/pgmspace.h>
-
 	// test error catalog
+	tm_syslog(TM_STR("[info] error catalog\n"));
 	for(uint8_t i=0; i < ERROR_COUNT; i++)
 	{
 		tm_string_t *err_msg = err_getMessage(i);
-		tm_printf(TM_STR_RAM("[debug] "));
-		for(uint8_t j=0; j<15; j++)
-		{
-			tm_printf(TM_STR_RAM("<%c.%c> "), pgm_read_byte(&err_msg->text[j]), hal_string_getChar(err_msg,j) );
-		}
-		tm_printf(TM_STR_RAM("\n"));
-
-		tm_syslog(TM_STR("[error] [%i] [0x%04x:0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
+		tm_syslog(TM_STR("\t[%i] [0x%04x:0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
 	}
 
 	// jump to current thread for first call and start system by enabling interrupts
