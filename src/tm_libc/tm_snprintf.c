@@ -151,13 +151,13 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 				}*/
 				case 's':
 				{
-					const tm_string_t str = va_arg(args, tm_string_t );
+					const tm_string_t *str = va_arg(args, tm_string_t* );
 					uint8_t str_index = 0;
-					char str_c = hal_string_getChar(&str, str_index++);
+					char str_c = hal_string_getChar(str, str_index++);
 					while( str_c != 0 )
 					{
 						tm_putChar(str_c);
-						str_c = hal_string_getChar(&str, str_index++);
+						str_c = hal_string_getChar(str, str_index++);
 					}
 					break;
 				}
