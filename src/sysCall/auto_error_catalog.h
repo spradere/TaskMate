@@ -16,10 +16,10 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef ERROR_H
-#define ERROR_H
-
 // clang-format off
+#ifndef AUTO_ERROR_CATALOG_H
+#define AUTO_ERROR_CATALOG_H
+
 #include "tm_libc/tm_string.h"
 
 typedef enum
@@ -42,7 +42,7 @@ typedef enum
 
 typedef struct
 {
-	const tm_string_t name;
+	const tm_string_t *name;
 	const err_critical_t critical;
 } err_item_t;
 
