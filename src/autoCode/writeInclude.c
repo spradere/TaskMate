@@ -61,18 +61,26 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 		case INCLUDE_HAL_DEFINE:
 
 			fprintf(file_tmp.stream, "// target define\n");
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/arch_define.h\"\n", auto_options->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", auto_options->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/board_define.h\"\n\n",
+			fprintf(file_tmp.stream,
+					"#include \"hal/arch/%s/arch_define.h\"\n",
+					auto_options->arch_name);
+			fprintf(
+				file_tmp.stream, "#include \"hal/mcu/%s/mcu_define.h\"\n", auto_options->mcu_name);
+			fprintf(file_tmp.stream,
+					"#include \"hal/board/%s/board_define.h\"\n\n",
 					auto_options->board_name);
 			break;
 
 		case INCLUDE_HAL_INIT:
 
 			fprintf(file_tmp.stream, "// target init\n");
-			fprintf(file_tmp.stream, "#include \"hal/arch/%s/hal_archInit.h\"\n", auto_options->arch_name);
-			fprintf(file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", auto_options->mcu_name);
-			fprintf(file_tmp.stream, "#include \"hal/board/%s/hal_boardInit.h\"\n\n",
+			fprintf(file_tmp.stream,
+					"#include \"hal/arch/%s/hal_archInit.h\"\n",
+					auto_options->arch_name);
+			fprintf(
+				file_tmp.stream, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", auto_options->mcu_name);
+			fprintf(file_tmp.stream,
+					"#include \"hal/board/%s/hal_boardInit.h\"\n\n",
 					auto_options->board_name);
 			break;
 
@@ -81,8 +89,14 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 		{
 			file_t file_hal;
 			fileInit(&file_hal);
-			if( type == INCLUDE_HAL_USER_PART ) { file_hal.name = (char *)auto_options->files_hal_user; }
-			if( type == INCLUDE_HAL_SYSTEM_PART ) { file_hal.name = (char *)auto_options->files_hal_system; }
+			if( type == INCLUDE_HAL_USER_PART )
+			{
+				file_hal.name = (char *)auto_options->files_hal_user;
+			}
+			if( type == INCLUDE_HAL_SYSTEM_PART )
+			{
+				file_hal.name = (char *)auto_options->files_hal_system;
+			}
 			fileOpen(&file_hal, "r", FILE_READONLY, __FILE__, __LINE__);
 
 			int file_line_number = 0;
@@ -95,7 +109,9 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 				if( tok.count > 1 )
 				{
-					msgError("Wrong token count [%s:%i] is %i, should be 1", file_hal.name, file_line_number,
+					msgError("Wrong token count [%s:%i] is %i, should be 1",
+							 file_hal.name,
+							 file_line_number,
 							 tok.count);
 					exit(1);
 				}

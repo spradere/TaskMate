@@ -84,7 +84,10 @@ int tm_printf(const tm_string_t format, ...)
 	return ret;
 }
 
-int tm_vprintf(const tm_string_t format, va_list args) { return tm_vsnprintf(NULL, 0, format, args); }
+int tm_vprintf(const tm_string_t format, va_list args)
+{
+	return tm_vsnprintf(NULL, 0, format, args);
+}
 
 static void tm_putChar(char ch)
 {

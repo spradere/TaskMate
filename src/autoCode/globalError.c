@@ -77,7 +77,9 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", file_src.name, file_src_line_number,
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>",
+						 file_src.name,
+						 file_src_line_number,
 						 tok.line);
 			}
 
@@ -93,9 +95,18 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
 
 			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
-			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_index].critical = ERROR_LOW; }
-			if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_index].critical = ERROR_MID; }
-			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_index].critical = ERROR_HIGH; }
+			if( strcmp(tok.tokens[2], "LOW") == 0 )
+			{
+				errors->catalog[error_index].critical = ERROR_LOW;
+			}
+			if( strcmp(tok.tokens[2], "MID") == 0 )
+			{
+				errors->catalog[error_index].critical = ERROR_MID;
+			}
+			if( strcmp(tok.tokens[2], "HIGH") == 0 )
+			{
+				errors->catalog[error_index].critical = ERROR_HIGH;
+			}
 			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
 			{
 				msgError("wrong critical argument <%s>", tok.tokens[2]);

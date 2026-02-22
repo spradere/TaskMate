@@ -21,14 +21,14 @@
 
 #include "tokenizer.h"
 
-#define HAVE_OPTIONS(X)                                                                                      \
-	X(HAVE_TM_VER, "--tm_ver")                                                                               \
-	X(HAVE_ARCH, "--arch")                                                                                   \
-	X(HAVE_MCU, "--mcu")                                                                                     \
-	X(HAVE_BOARD, "--board")                                                                                 \
-	X(HAVE_ERRORS, "--errors")                                                                               \
-	X(HAVE_HAL_USER, "--files_hal_user")                                                                     \
-	X(HAVE_HAL_SYSTEM, "--files_hal_system")                                                                 \
+#define HAVE_OPTIONS(X)                      \
+	X(HAVE_TM_VER, "--tm_ver")               \
+	X(HAVE_ARCH, "--arch")                   \
+	X(HAVE_MCU, "--mcu")                     \
+	X(HAVE_BOARD, "--board")                 \
+	X(HAVE_ERRORS, "--errors")               \
+	X(HAVE_HAL_USER, "--files_hal_user")     \
+	X(HAVE_HAL_SYSTEM, "--files_hal_system") \
 	X(HAVE_HAL_TMLIBC, "--file_hal_tmlibc")
 
 enum
@@ -49,7 +49,7 @@ static int have_options_count[HAVE_COUNT];
 
 static const char *string_from_have(const int id)
 {
-#define X(e, s)                                                                                              \
+#define X(e, s) \
 	if( id == e ) { return have_to_string[e]; }
 	HAVE_OPTIONS(X)
 #undef X
@@ -160,13 +160,16 @@ void options(const char *file_name, options_list_t *opt)
 
 				if( err != 0 )
 				{
-					msgError("unknown option [%s:%i] %s\n", file.name, file_line_number, tok.tokens[0]);
+					msgError(
+						"unknown option [%s:%i] %s\n", file.name, file_line_number, tok.tokens[0]);
 					exit(1);
 				}
 			}
 			else
 			{
-				msgError("wrong token count [%s:%i] is %i, should be 2", file.name, file_line_number,
+				msgError("wrong token count [%s:%i] is %i, should be 2",
+						 file.name,
+						 file_line_number,
 						 tok.count);
 				exit(1);
 			}
