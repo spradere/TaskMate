@@ -52,7 +52,8 @@ void generateGuardName(const char *file_name, char *guard_name)
 void filePrintModified(void)
 {
 	msgInfo("*******************************************************");
-	msgInfo("* summary of modified files : %i updated, %i unchanged *", file_updated, file_unchanged);
+	msgInfo(
+		"* summary of modified files : %i updated, %i unchanged *", file_updated, file_unchanged);
 	msgInfo("*******************************************************");
 }
 
@@ -119,7 +120,8 @@ void fileInit(file_t *file)
 	file->stream_opened = false;
 }
 
-void fileOpen(file_t *file, const char *mode, const int special_mode, const char *caller, const int line)
+void fileOpen(file_t *file, const char *mode, const int special_mode, const char *caller,
+			  const int line)
 {
 	if( file->name == NULL )
 	{

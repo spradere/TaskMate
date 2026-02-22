@@ -60,14 +60,19 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 		{
 			if( tok.count != 4 )
 			{
-				msgError("token count != 4 tok.line [%s:%i] %s", file_src.name, file_line_number, tok.line);
+				msgError("token count != 4 tok.line [%s:%i] %s",
+						 file_src.name,
+						 file_line_number,
+						 tok.line);
 				break;
 			}
 
 			if( tag_section == 1 )
 			{
-				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s", file_src.name,
-						 file_line_number, tok.line);
+				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s",
+						 file_src.name,
+						 file_line_number,
+						 tok.line);
 				break;
 			}
 
@@ -94,7 +99,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeDriversAlloc(data_base, file_tmp.stream);
 			}
 
-			if( (strcmp(tok.tokens[2], "run_levels") == 0) && (strcmp(tok.tokens[3], "alloc") == 0) )
+			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
+				(strcmp(tok.tokens[3], "alloc") == 0) )
 			{
 				writeRunLevelsAlloc(data_base, file_tmp.stream);
 			}
@@ -114,7 +120,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeModulesCount(data_base, file_tmp.stream);
 			}
 
-			if( (strcmp(tok.tokens[2], "run_levels") == 0) && (strcmp(tok.tokens[3], "define") == 0) )
+			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
+				(strcmp(tok.tokens[3], "define") == 0) )
 			{
 				writeRunlevelDefine(data_base, file_tmp.stream);
 			}
@@ -165,8 +172,11 @@ static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)
 
 static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 {
-	fprintf(file, "#define MOD_DRIVER_COUNT %i\n", data_base->modules_type[MOD_DRIVERS_ID].modules_count);
-	fprintf(file, "#define MOD_THREAD_COUNT %i\n",
+	fprintf(file,
+			"#define MOD_DRIVER_COUNT %i\n",
+			data_base->modules_type[MOD_DRIVERS_ID].modules_count);
+	fprintf(file,
+			"#define MOD_THREAD_COUNT %i\n",
 			(data_base->modules_type[MOD_SERVICES_ID].modules_count +
 			 data_base->modules_type[MOD_TASKS_ID].modules_count));
 }
@@ -211,13 +221,12 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 					mod->modules[i].name);
 
 			fprintf(file, "\tmod->software_time_counter = 0;\n");
-			// fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
-			fprintf(file, "\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n", threads_count, mod->modules[i].name);
-
+			fprintf(file,
+					"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
+					threads_count,
+					mod->modules[i].name);
 			fprintf(file, "\tmod->name = &thread%i_name;\n", threads_count);
-
 			fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status | type);
-
 			fprintf(file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 			threads_count++;
@@ -235,9 +244,7 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file)
 	{
 		fprintf(file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
 
-		// fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
 		fprintf(file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
-
 		fprintf(file, "\t*(mod) = (mod_driver_item_t)\n");
 		fprintf(file, "\t{\n");
 		fprintf(file, "\t\t.name = &driver%i_name,\n", i);
@@ -279,8 +286,9 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 		fprintf(file, "},\n");
 	}
 
-	fprintf(file, "\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, "
-				  "to_run.level3, to_run.level4}\n");
+	fprintf(file,
+			"\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, "
+			"to_run.level3, to_run.level4}\n");
 	fprintf(file, "\t};\n");
 
 	fprintf(file, "\tto_run.current=RUN_CORE;\n");
