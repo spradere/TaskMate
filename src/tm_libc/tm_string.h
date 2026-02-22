@@ -23,11 +23,9 @@
 
 // clang-format off
 
-#include <stdint.h>
-
 #include "TaskMate.h" // get libc selection
 
-// tm_sting implemetation
+// tm_sting implementation
 typedef enum
 {
 	TM_MEM_RAM,

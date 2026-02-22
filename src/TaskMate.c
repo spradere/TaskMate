@@ -36,7 +36,7 @@
 
 TM_STORE_FILE_NAME;
 
-// display harware target informations
+// display hardware target informations
 #if VERBOSE_LEVEL > 0
 	#pragma message "TM_VERSION  = " TM_VERSION
 	#pragma message "ARCH  = " ARCH
@@ -126,19 +126,19 @@ int main(void)
 
 	// display module names
 	tm_syslog(TM_STR("[modules] drivers\n"));
-	mod_driver_item_t *mod_d;
 
 	for( int num = 0; num < MOD_DRIVER_COUNT; num++ )
 	{
+		mod_driver_item_t *mod_d;
 		mod_d = mod_driverGetPointer(num);
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_d->name);
 	}
 
 	tm_syslog(TM_STR("[modules] threads\n"));
-	mod_thread_item_t *mod_t;
 
 	for( int num = 0; num < MOD_THREAD_COUNT; num++ )
 	{
+		mod_thread_item_t *mod_t;
 		mod_t = mod_threadGetPointer(num);
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
 	}
