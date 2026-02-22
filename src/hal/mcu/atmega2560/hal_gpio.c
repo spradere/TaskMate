@@ -24,22 +24,22 @@
 #include <stdbool.h>
 
 static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] = {
-	[GPIO_PORT_A] =
-		(gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA), (volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
-						  (volatile uint8_t *)_SFR_MEM_ADDR(PINA)},
-	[GPIO_PORT_B] =
-		(gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB), (volatile uint8_t *)_SFR_MEM_ADDR(PORTB),
-						  (volatile uint8_t *)_SFR_MEM_ADDR(PINB)} /*,
-[GPIO_PORT_C] = { DDRC, PORTC, PINC },
-[GPIO_PORT_D] = { DDRD, PORTD, PIND },
-[GPIO_PORT_E] = { DDRE, PORTE, PINE },
-[GPIO_PORT_F] = { DDRF, PORTF, PINF },
-[GPIO_PORT_G] = { DDRG, PORTG, PING },
-[GPIO_PORT_H] = { DDRH, PORTH, PINH },
-[GPIO_PORT_I] = { DDRI, PORTI, PINI },
-[GPIO_PORT_J] = { DDRJ, PORTJ, PINJ },
-[GPIO_PORT_K] = { DDRK, PORTK, PINK },
-[GPIO_PORT_L] = { DDRL, PORTL, PINL }*/
+	[GPIO_PORT_A] = (gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
+									  (volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
+									  (volatile uint8_t *)_SFR_MEM_ADDR(PINA)},
+	[GPIO_PORT_B] = (gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB),
+									  (volatile uint8_t *)_SFR_MEM_ADDR(PORTB),
+									  (volatile uint8_t *)_SFR_MEM_ADDR(PINB)} /*,
+			[GPIO_PORT_C] = { DDRC, PORTC, PINC },
+			[GPIO_PORT_D] = { DDRD, PORTD, PIND },
+			[GPIO_PORT_E] = { DDRE, PORTE, PINE },
+			[GPIO_PORT_F] = { DDRF, PORTF, PINF },
+			[GPIO_PORT_G] = { DDRG, PORTG, PING },
+			[GPIO_PORT_H] = { DDRH, PORTH, PINH },
+			[GPIO_PORT_I] = { DDRI, PORTI, PINI },
+			[GPIO_PORT_J] = { DDRJ, PORTJ, PINJ },
+			[GPIO_PORT_K] = { DDRK, PORTK, PINK },
+			[GPIO_PORT_L] = { DDRL, PORTL, PINL }*/
 
 };
 

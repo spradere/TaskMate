@@ -63,11 +63,14 @@ int main(int argn, const char *argv[])
 	options_list_t auto_options;
 	options(argv[1], &auto_options);
 
-	msgInfo("target %s -> %s -> %s", auto_options.arch_name, auto_options.mcu_name, auto_options.board_name);
+	msgInfo("target %s -> %s -> %s",
+			auto_options.arch_name,
+			auto_options.mcu_name,
+			auto_options.board_name);
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(auto_options.errors_file, &errors_catalog, "src/sysCall/auto_error.h");
+	globalError(auto_options.errors_file, &errors_catalog, "src/sysCall/auto_error_catalog.h");
 
 	// setup data base
 	modules_database_t data_base;
@@ -80,7 +83,8 @@ int main(int argn, const char *argv[])
 
 	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", auto_options.arch_name);
 	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", auto_options.mcu_name);
-	snprintf(board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", auto_options.board_name);
+	snprintf(
+		board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", auto_options.board_name);
 
 	parseInitrc(MOD_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
@@ -108,6 +112,7 @@ int main(int argn, const char *argv[])
 	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h", &auto_options);
 	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/auto_hal_define.h", &auto_options);
 	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_TMLIBC, "src/hal/auto_hal_tmlibc.h", &auto_options);
 
 	// print all info about modules
 	printModules(&data_base);
@@ -159,8 +164,10 @@ static void checkModulesCount(modules_database_t *data_base)
 	{
 		if( module_count[i][0] > module_count[i][1] )
 		{
-			msgError("Too many modules ! %s count = %i > TaskMate max %i", data_base->modules_type[i].name,
-					 module_count[i][0], module_count[i][1]);
+			msgError("Too many modules ! %s count = %i > TaskMate max %i",
+					 data_base->modules_type[i].name,
+					 module_count[i][0],
+					 module_count[i][1]);
 			exit(1);
 		}
 	}

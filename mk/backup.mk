@@ -26,7 +26,7 @@ push: ${GIT_IGNORE_STAMP}
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git status
-	@printf "%sPress ENTER to continue ... %s\n" \
+	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git add .
@@ -39,7 +39,7 @@ pull:
 #@ [global] Git pull routine
 	@git fetch
 	@git status
-	@printf "%sPress ENTER to continue ... %s\n" \
+	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git stash
@@ -48,7 +48,7 @@ pull:
 .PHONY: pull
 
 # Write .gitignore file
-${GIT_IGNORE_STAMP}: ${.PARSEDIR}/${.PARSEFILE}
+${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/dir_path_files.mk
 	@printf "# exclude evrything\n" > ${GIT_IGNORE}
 	@printf "*\n" >> ${GIT_IGNORE}
 	@printf "\n" >> ${GIT_IGNORE}
@@ -77,6 +77,7 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
+	# TODO ? remove and replace with automount
 	# Test if USB key is mount, do if not
 	@if mount | grep -q "${USB_DIR}"; then \
 		printf "%sUSB key already mounted ${USB_DIR}%s\n" \
