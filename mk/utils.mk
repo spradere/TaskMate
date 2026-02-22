@@ -38,11 +38,11 @@ cloc:
 #@ [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},html \
+	@cloc * --exclude-dir=${BUILD_BASE},${LOG_DIR} \
 		--exclude-lang=D --exclude-ext=rc,md,txt
 	@printf "\n%sCount lines of documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR},html \
+	@cloc * --exclude-dir=${BUILD_BASE},${LOG_DIR} \
 		--exclude-lang=D,make --exclude-ext=rc,c,h
 .PHONY: cloc
 
@@ -50,7 +50,7 @@ note:
 #@ [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@grep -r -n -i -E 'TODO|FIX|HACK' ${SRCS} ${SRCS_h } ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
+	@grep -r -n -i -E 'TODO|FIX|HACK' ${SRCS} ${SRCS_h} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 
 .PHONY: note
 

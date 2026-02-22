@@ -20,31 +20,36 @@
 
 #include "initrcCmdDispatch.h"
 
-static void funcRunNone(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunNone(module_status_t *status,
+						run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_NONE;
 	(*count)[RUN_NONE] = 0;
 }
-static void funcRunCore(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunCore(module_status_t *status,
+						run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_CORE;
 	(*count)[RUN_CORE]++;
 }
-static void funcRunDriver(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunDriver(module_status_t *status,
+						  run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_DRIVER;
 	(*count)[RUN_DRIVER]++;
 }
-static void funcRunService(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunService(module_status_t *status,
+						   run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_SERVICE;
 	(*count)[RUN_SERVICE]++;
 }
-static void funcRunUser(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunUser(module_status_t *status,
+						run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
 {
 	*status &= !RUN_LEVEL_MASK;
 	*status |= RUN_USER;

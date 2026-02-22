@@ -25,7 +25,7 @@
 
 static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file);
 static void writeModulesCount(const modules_database_t *data_base, FILE *file);
-static void writeTarget(const options_list_t *auto_options, FILE *file);
+static void writeInfo(const options_list_t *auto_options, FILE *file);
 static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
@@ -60,14 +60,19 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 		{
 			if( tok.count != 4 )
 			{
-				msgError("token count != 4 tok.line [%s:%i] %s", file_src.name, file_line_number, tok.line);
+				msgError("token count != 4 tok.line [%s:%i] %s",
+						 file_src.name,
+						 file_line_number,
+						 tok.line);
 				break;
 			}
 
 			if( tag_section == 1 )
 			{
-				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s", file_src.name,
-						 file_line_number, tok.line);
+				msgError("Start new tag section without previous end tag [/tag] [%s:%i] %s",
+						 file_src.name,
+						 file_line_number,
+						 tok.line);
 				break;
 			}
 
@@ -76,7 +81,6 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 			fprintf(file_tmp.stream, "%s", tok.line);
 
 			fprintf(file_tmp.stream, "// clang-format off\n");
-			fprintf(file_tmp.stream, "// why ? Auto-generated code\n\n");
 
 			fprintf(file_tmp.stream, "/*\n");
 			fprintf(file_tmp.stream, " * do not edit code between tag\n");
@@ -95,7 +99,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeDriversAlloc(data_base, file_tmp.stream);
 			}
 
-			if( (strcmp(tok.tokens[2], "run_levels") == 0) && (strcmp(tok.tokens[3], "alloc") == 0) )
+			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
+				(strcmp(tok.tokens[3], "alloc") == 0) )
 			{
 				writeRunLevelsAlloc(data_base, file_tmp.stream);
 			}
@@ -105,9 +110,9 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeErrorCatalog(errors, file_tmp.stream);
 			}
 
-			if( (strcmp(tok.tokens[2], "target") == 0) && (strcmp(tok.tokens[3], "name") == 0) )
+			if( (strcmp(tok.tokens[2], "system") == 0) && (strcmp(tok.tokens[3], "info") == 0) )
 			{
-				writeTarget(auto_options, file_tmp.stream);
+				writeInfo(auto_options, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "count") == 0) )
@@ -115,7 +120,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeModulesCount(data_base, file_tmp.stream);
 			}
 
-			if( (strcmp(tok.tokens[2], "run_levels") == 0) && (strcmp(tok.tokens[3], "define") == 0) )
+			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
+				(strcmp(tok.tokens[3], "define") == 0) )
 			{
 				writeRunlevelDefine(data_base, file_tmp.stream);
 			}
@@ -166,22 +172,21 @@ static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)
 
 static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 {
-	fprintf(file, "#define MOD_DRIVER_COUNT %i\n", data_base->modules_type[MOD_DRIVERS_ID].modules_count);
-	fprintf(file, "#define MOD_THREAD_COUNT %i\n",
+	fprintf(file,
+			"#define MOD_DRIVER_COUNT %i\n",
+			data_base->modules_type[MOD_DRIVERS_ID].modules_count);
+	fprintf(file,
+			"#define MOD_THREAD_COUNT %i\n",
 			(data_base->modules_type[MOD_SERVICES_ID].modules_count +
 			 data_base->modules_type[MOD_TASKS_ID].modules_count));
 }
 
-static void writeTarget(const options_list_t *auto_options, FILE *file)
+static void writeInfo(const options_list_t *auto_options, FILE *file)
 {
-	// write target name
-	fprintf(file, "const sc_target_info_t target_info =\n");
-	fprintf(file, "{\n");
-	fprintf(file, ".arch = \"%s\",\n", auto_options->arch_name);
-	fprintf(file, ".mcu = \"%s\",\n", auto_options->mcu_name);
-	fprintf(file, ".board = \"%s\"\n", auto_options->board_name);
-	fprintf(file, "};\n");
-
+	fprintf(file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", auto_options->tm_ver);
+	fprintf(file, "TM_STR_ROM_NEW(arch_name, \"%s\");\n", auto_options->arch_name);
+	fprintf(file, "TM_STR_ROM_NEW(mcu_name, \"%s\");\n", auto_options->mcu_name);
+	fprintf(file, "TM_STR_ROM_NEW(board_name, \"%s\");\n\n", auto_options->board_name);
 }
 
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
@@ -216,12 +221,12 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 					mod->modules[i].name);
 
 			fprintf(file, "\tmod->software_time_counter = 0;\n");
-			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
-
-			fprintf(file, "\tmod->name = thread%i_name;\n", threads_count);
-
+			fprintf(file,
+					"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
+					threads_count,
+					mod->modules[i].name);
+			fprintf(file, "\tmod->name = &thread%i_name;\n", threads_count);
 			fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status | type);
-
 			fprintf(file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 			threads_count++;
@@ -239,11 +244,10 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file)
 	{
 		fprintf(file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
 
-		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
-
+		fprintf(file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
 		fprintf(file, "\t*(mod) = (mod_driver_item_t)\n");
 		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.name = driver%i_name,\n", i);
+		fprintf(file, "\t\t.name = &driver%i_name,\n", i);
 		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
 		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
 		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
@@ -282,8 +286,9 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 		fprintf(file, "},\n");
 	}
 
-	fprintf(file, "\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, "
-				  "to_run.level3, to_run.level4}\n");
+	fprintf(file,
+			"\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, "
+			"to_run.level3, to_run.level4}\n");
 	fprintf(file, "\t};\n");
 
 	fprintf(file, "\tto_run.current=RUN_CORE;\n");
@@ -292,13 +297,17 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 {
-	fprintf(file, "const err_item_t error_catalog[] = \n{\n");
 
-	for( int i = 0; i < errors->error_count - 1; i++ )
+	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(file, "\t{%s, %i},\n", errors->catalog[i].message, errors->catalog[i].critical);
+		fprintf(file, "TM_STR_ROM_NEW(err%i, %s);\n", i, errors->catalog[i].message);
 	}
-	fprintf(file, "\t{%s, %i}\n", errors->catalog[errors->error_count - 1].message,
-			errors->catalog[errors->error_count - 1].critical);
+
+	fprintf(file, "\nconst err_item_t error_catalog[] = \n{\n");
+
+	for( int i = 0; i < errors->error_count; i++ )
+	{
+		fprintf(file, "\t{&err%i, %i},\n", i, errors->catalog[i].critical);
+	}
 	fprintf(file, "};\n");
 }

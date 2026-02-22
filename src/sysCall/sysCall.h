@@ -23,14 +23,17 @@
 
 #include <stdint.h>
 
+#include "tm_libc/tm_string.h"
+
 typedef struct
 {
-	const char *arch;
-	const char *mcu;
-	const char *board;
-} sc_target_info_t;
+	const tm_string_t *tm_ver;
+	const tm_string_t *arch;
+	const tm_string_t *mcu;
+	const tm_string_t *board;
+} sc_info_t;
 
-void sc_targetGetInfo(const sc_target_info_t **target);
+void sc_targetGetInfo(const sc_info_t **dest);
 
 void sc_threadSetSTC(uint16_t count);
 uint16_t sc_threadGetSTC(void);

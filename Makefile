@@ -17,35 +17,34 @@
 # Main makefile
 ################################################################################
 
+# TaskMate version
+TM_VERSION = 0.25
+
 # Main directories
 SRC_DIR = src
-BUILD_DIR = build
+BUILD_BASE = build
 LOG_DIR = log
 MAKE_DIR = mk
 DOC_DIR = doc
-USB_DIR = /media/usbkey
-USB_DEV = /dev/da0s1
 
-# bmake option for -V
-.MAKE.EXPAND_VARIABLES = true
+# Build system options
+.include "${MAKE_DIR}/options.mk"
+
+# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
+.include "${MAKE_DIR}/hardware_target.mk"
+BUILD_DIR = ${BUILD_BASE}/${ARCH}_${MCU}_${BOARD}
 
 # path and files
 .include "${MAKE_DIR}/dir_path_files.mk"
 
-# Options
-OPT_CLEAN_AUTOCODE_LOGS = yes
-
-# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
-.include "${MAKE_DIR}/hardware_target.mk"
-
 # Make global process
-.include "${MAKE_DIR}/make_colours.mk"
-.include "${MAKE_DIR}/global_autoCode_hal_srcs.mk"
+.include "${MAKE_DIR}/sources.mk"
 .include "${MAKE_DIR}/header_allow.mk"
-.include "${MAKE_DIR}/global_build.mk"
-.include "${MAKE_DIR}/global_utils.mk"
-.include "${MAKE_DIR}/global_backup.mk"
+.include "${MAKE_DIR}/build.mk"
+.include "${MAKE_DIR}/utils.mk"
+.include "${MAKE_DIR}/backup.mk"
 .include "${MAKE_DIR}/editors.mk"
+.include "${MAKE_DIR}/colours.mk"
 
 # Hardware specific makefiles
 .include "${SRC_DIR}/hal/arch/${ARCH}/arch_make.mk"

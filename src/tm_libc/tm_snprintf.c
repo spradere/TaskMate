@@ -22,13 +22,12 @@
 
 #include <stddef.h>
 
-#include "hal/auto_hal_user.h"
-#include "tm_libc/tm_syslog.h"
-
-#define SNPRINFT_BUFF_TEMP_SIZE 32
+#include "hal/auto_hal_tmlibc.h"
 
 static void baseConvert(uint16_t value, uint8_t base);
-static void tm_vsnprintf_put_char(char ch);
+static void tm_putChar(char ch);
+
+#define SNPRINFT_BUFF_TEMP_SIZE 32
 
 // structure for buffer data
 struct buff_t
@@ -47,109 +46,103 @@ static void baseConvert(uint16_t value, uint8_t base)
 	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
-	if( value == 0 )
-	{
-		tm_vsnprintf_put_char('0');
-		return;
-	}
-
 	// reverse order convert
-	while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
+	if( value == 0 ) { tmp[pos++] = '0'; }
+	else
 	{
-		uint16_t data = (value % base);
-		value /= base;
-		tmp[pos++] = digits[data];
+		while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
+		{
+			uint16_t data = (value % base);
+			value /= base;
+			tmp[pos++] = digits[data];
+		}
 	}
 
 	while( pos < buff.padding ) { tmp[pos++] = '0'; }
 
 	// reverse order
-	while( pos > 0 )
-	{
-		tm_vsnprintf_put_char(tmp[--pos]);
-	}
+	while( pos > 0 ) { tm_putChar(tmp[--pos]); }
 }
 
-int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...)
+int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...)
 {
+	int ret;
 	va_list args;
 	va_start(args, format);
-	tm_vsnprintf(ptr, size, format, args);
+	ret = tm_vsnprintf(ptr, size, format, args);
 	va_end(args);
+	return ret;
 }
 
-int tm_printf(PGM_P format, ...)
+int tm_printf(const tm_string_t format, ...)
 {
+	int ret;
 	va_list args;
 	va_start(args, format);
-	tm_vprintf(format, args);
+	ret = tm_vprintf(format, args);
 	va_end(args);
+	return ret;
 }
 
-int tm_vprintf(PGM_P format, va_list args)
+int tm_vprintf(const tm_string_t format, va_list args)
 {
-	tm_vsnprintf(NULL, 0, format, args);
+	return tm_vsnprintf(NULL, 0, format, args);
 }
 
-static void tm_vsnprintf_put_char(char ch)
+static void tm_putChar(char ch)
 {
-	if( buff.ptr != NULL)
+	if( buff.ptr != NULL )
 	{
 		if( (buff.index + 1) < buff.size ) { buff.ptr[buff.index++] = ch; }
 	}
 
-	if(buff.ptr == NULL)
-	{
-		if(hal_usartWriteChar((uint8_t)ch) == ERR_HAL_USART_TX_BUFFER_FULL)
-		{
-			hal_usartSendTXBuffer();
-			hal_usartWriteChar((uint8_t)ch);
-		}
-
-		if( ch == '\n'){hal_usartSendTXBuffer();}
-	}
+	if( buff.ptr == NULL ) { hal_stdio_putChar(ch); }
 }
 
-
-int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
+int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
+	// store variables
 	buff.ptr = ptr;
 	buff.size = size;
 	buff.index = 0;
 	buff.padding = 0;
 
-	char c=pgm_read_byte(format++);
+	uint8_t format_index = 0;
+	char format_c = hal_string_getChar(&format, format_index++);
 
-	while( c )
+	while( format_c )
 	{
-		if( c == '%' )
+		if( format_c == '%' )
 		{
-			c=pgm_read_byte(format++);
+			format_c = hal_string_getChar(&format, format_index++);
 
-			if( (c) == '0' )
+			if( (format_c) == '0' )
 			{
-				c=pgm_read_byte(format++);
-				buff.padding = (uint8_t)(c - 48); // atoi
-				if( buff.padding > 9 ){ return 0; }
-				c=pgm_read_byte(format++);
+				format_c = hal_string_getChar(&format, format_index++);
+				buff.padding = (uint8_t)(format_c - 48); // atoi
+				if( buff.padding > 9 ) { return 0; }
+				format_c = hal_string_getChar(&format, format_index++);
 			}
 
-			switch( c )
+			switch( format_c )
 			{
 
 				case 'c':
 				{
 					int cc = va_arg(args, int);
-					tm_vsnprintf_put_char((char)cc);
+					tm_putChar((char)cc);
 					break;
 				}
+
 				case 's':
 				{
-					const char *s = va_arg(args, char *);
-					while( *s )
+					const tm_string_t *str = va_arg(args, const tm_string_t *);
+					uint8_t str_index = 0;
+					char str_c = hal_string_getChar(str, str_index++);
+					while( str_c != 0 )
 					{
-						tm_vsnprintf_put_char(*s);
-						s++;
+						tm_putChar(str_c);
+						str_c = hal_string_getChar(str, str_index++);
 					}
 					break;
 				}
@@ -161,7 +154,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
 					uint16_t value = va_arg(args, uint16_t);
 					uint8_t base;
 
-					switch( c )
+					switch( format_c )
 					{
 						case 'i':
 							base = 10;
@@ -182,18 +175,17 @@ int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args)
 				}
 
 				case '%':
-					tm_vsnprintf_put_char('%');
+					tm_putChar('%');
 					break;
 				default:
-					tm_vsnprintf_put_char('?');
+					tm_putChar('?');
 					break;
 			}
 		}
-		else { tm_vsnprintf_put_char(c); }
-		c=pgm_read_byte(format++);
+		else { tm_putChar(format_c); }
+		format_c = hal_string_getChar(&format, format_index++);
 	}
 
-	tm_vsnprintf_put_char(0); // close string
-	buff.ptr[buff.size - 1] = 0; // worst case close at the end of buffer
+	tm_putChar(0); // close string
 	return buff.index;
 }

@@ -11,20 +11,18 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ! Auto generated code, do not edit !
-// ! any changes will be lost         !
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/**
+ * @file error.h
+ * @brief System wide error header
+ *
+ */
 
-#ifndef AUTO_HAL_INIT_H
-#define AUTO_HAL_INIT_H
+#ifndef ERROR_H
+#define ERROR_H
 
-// clang-format off
-// target init
-#include "hal/arch/avr8/hal_archInit.h"
-#include "hal/mcu/atmega2560/hal_mcuInit.h"
-#include "hal/board/arduino_mega/hal_boardInit.h"
+#include "sysCall/auto_error_catalog.h"
+#include "tm_libc/tm_string.h"
 
-// clang-format on
+const tm_string_t *err_getMessage(uint8_t num);
 
 #endif

@@ -17,7 +17,7 @@
 # Build rules
 ################################################################################
 
-# Info help system : targets begins with '_' or ${} are internal system only
+# Info about help system : targets begins with '_' or '$' are internal system only
 # they'll not be displayed in `make help`
 
 .MAIN: all
@@ -25,6 +25,20 @@
 .BEGIN:
 	@mkdir -p ${BUILD_DIR}
 	@mkdir -p ${LOG_DIR}
+
+.END:
+	@printf "##########################\n" > ${BUILD_INFO}
+	@printf "# Last build informations \n" >> ${BUILD_INFO}
+	@printf "##########################\n\n" >> ${BUILD_INFO}
+
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_INFO}
+	@printf "date : " >> ${BUILD_INFO}
+	@date >> ${BUILD_INFO}
+	@git -v >> ${BUILD_INFO}
+	@printf "git tag : " >> ${BUILD_INFO}
+	@git describe --tags >> ${BUILD_INFO}
+	@printf "avr-gcc version : " >> ${BUILD_INFO}
+	@avr-gcc -dumpversion >> ${BUILD_INFO}
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
@@ -38,7 +52,7 @@ _dependency_check:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test for autoCode required files
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM}
+${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM} ${FILE_HAL_STDIO}
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
@@ -46,7 +60,10 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 .endif
 
 	# write autoCode options
-	@printf "# hardware target\n" > ${AUTOCODE_CONFIG}
+	@printf "# TaskMate version\n" > ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--tm_ver ${TM_VERSION}" >> ${AUTOCODE_CONFIG}
+
+	@printf "\n# hardware target\n" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--arch ${ARCH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
@@ -55,6 +72,7 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--file_hal_tmlibc ${FILE_HAL_TMLIBC:S/src\///}" >> ${AUTOCODE_CONFIG}
 
 	# write list hal sources files
 	@: > ${FILE_HAL_USER_PATH}
@@ -63,14 +81,14 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
 	@rm -f ${FILE_HAL_USER_PATH}.bak
-	
+
 	@: > ${FILE_HAL_SYSTEM_PATH}
 .for file in ${FILES_HAL_SYSTEM}
 	@printf "%s\n" "${file}" >> ${FILE_HAL_SYSTEM_PATH}
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
 	@rm -f ${FILE_HAL_SYSTEM_PATH}.bak
-	
+
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG_STAMP}
 	@touch ${AUTOCODE_STAMP}
 
@@ -79,7 +97,7 @@ AUTOCODE_CFLAGS = -I${SRC_DIR}/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
-	
+
 ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 	@printf "\n%sCompiling autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -115,7 +133,7 @@ ${ERROR_CAT}: ${ERROR_FILES}
 	@cat ${ERROR_FILES} > ${ERROR_CAT}
 
 # Run autoCode alone
-AUTOCODE_LS_CMD = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
+AUTOCODE_PRINT_LAST_LOG = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 
 autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
@@ -123,10 +141,10 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f ${AUTOCODE_STAMP}
 	@${MAKE} ${AUTOCODE_STAMP}
-	@${AUTOCODE_LS_CMD}
+	@${AUTOCODE_PRINT_LAST_LOG}
 	@printf "${COLOUR_CYAN}"
-	@${AUTOCODE_LS_CMD} | grep ': keep' | sed 's/^.*: *//'
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET }${COLOUR_YELLOW}"
-	@${AUTOCODE_LS_CMD} | grep ': change' | sed 's/^.*: *//'
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET}"
 .PHONY: autoCode_alone

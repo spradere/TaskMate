@@ -21,8 +21,16 @@
 TARGET = ${BUILD_DIR}/TaskMate
 AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 
+# USB
+USB_DIR = /media/usbkey
+USB_DEV = /dev/da0s1
+
+# Build_id
+BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
+
 # Source directories
-SRC_DIR_LIST = ${SRC_DIR}/sysCore
+SRC_DIR_LIST = ${SRC_DIR}
+SRC_DIR_LIST += ${SRC_DIR}/sysCore
 SRC_DIR_LIST += ${SRC_DIR}/sysCall
 SRC_DIR_LIST += ${SRC_DIR}/services
 SRC_DIR_LIST += ${SRC_DIR}/tasks
@@ -57,3 +65,6 @@ GIT_ALLOWED_FILES = .clang-format .clang-tidy .gitingnore \
 # Global error
 ERROR_CAT = ${BUILD_DIR}/errors_all.err
 
+# Tags
+TAGS = .tags
+TAGS_STAMP = ${BUILD_DIR}/.tags_stamp
