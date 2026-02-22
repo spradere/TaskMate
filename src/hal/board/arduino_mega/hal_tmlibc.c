@@ -24,18 +24,18 @@
 
 void hal_stdio_putChar(char ch)
 {
-	if(hal_usartWriteChar((uint8_t)ch) == ERR_HAL_USART_TX_BUFFER_FULL)
+	if( hal_usartWriteChar((uint8_t)ch) == ERR_HAL_USART_TX_BUFFER_FULL )
 	{
 		hal_usartSendTXBuffer();
 		hal_usartWriteChar((uint8_t)ch);
 	}
 
-	if( ch == '\n'){hal_usartSendTXBuffer();}
+	if( ch == '\n' ) { hal_usartSendTXBuffer(); }
 }
 
 char hal_string_getChar(const tm_string_t *str, uint8_t index)
 {
-	if(str->storage == TM_MEM_RAM){ return str->text[index]; }
-	if(str->storage == TM_MEM_ROM){ return (char)pgm_read_byte(&(str->text[index])); }
+	if( str->storage == TM_MEM_RAM ) { return str->text[index]; }
+	if( str->storage == TM_MEM_ROM ) { return (char)pgm_read_byte(&(str->text[index])); }
 	return 0;
 }

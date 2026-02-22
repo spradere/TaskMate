@@ -28,21 +28,20 @@ void generateGuardName(const char *file_name, char *guard_name)
 {
 
 	int tmp_index = 0;
-	int file_index = (int)strlen(file_name)-1;
+	int file_index = (int)strlen(file_name) - 1;
 	int guard_index = 0;
 	char tmp[BYTE_INDEX];
 
-	do
-	{
+	do {
 		tmp[tmp_index++] = file_name[file_index--];
 	} while( (file_name[file_index] != '/') && (file_index >= 0) );
 	tmp[tmp_index] = 0;
 
-	tmp_index = (int)strlen(tmp)-1;
+	tmp_index = (int)strlen(tmp) - 1;
 	while( tmp_index >= 0 )
 	{
-		if( tmp[tmp_index] != '_' ){guard_name[guard_index] = (char)toupper(tmp[tmp_index]);}
-		if( (tmp[tmp_index] == '_') || (tmp[tmp_index] == '.') ){ guard_name[guard_index] = '_';}
+		if( tmp[tmp_index] != '_' ) { guard_name[guard_index] = (char)toupper(tmp[tmp_index]); }
+		if( (tmp[tmp_index] == '_') || (tmp[tmp_index] == '.') ) { guard_name[guard_index] = '_'; }
 		tmp_index--;
 		guard_index++;
 	}
@@ -205,6 +204,6 @@ void printWarningHeader(FILE *file)
 	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 }
 
-void printClangFormatOff(FILE *file){ fprintf(file, "// clang-format off\n"); }
+void printClangFormatOff(FILE *file) { fprintf(file, "// clang-format off\n"); }
 
 void printClangFormatOn(FILE *file) { fprintf(file, "// clang-format on\n"); }
