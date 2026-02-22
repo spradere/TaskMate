@@ -187,11 +187,11 @@ void printLicenceHeader(FILE *file)
 		exit(1);
 	}
 
-	int c;
+	int cc;
 	do {
-		c = fgetc(header_file);
-		if( c != EOF ) { fputc(c, file); }
-	} while( c != EOF );
+		cc = fgetc(header_file);
+		if( cc != EOF ) { fputc(cc, file); }
+	} while( cc != EOF );
 
 	fputc('\n', file);
 

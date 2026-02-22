@@ -36,8 +36,8 @@
 #if TM_LIBC_TASKMATE
 	#include <stdarg.h>
 	#include <stdint.h>
-	void tm_syslog(const tm_string_t format, ...);
-	void tm_vsyslog(const tm_string_t format, va_list args);
+	void tm_syslog(tm_string_t format, ...);
+	void tm_vsyslog(tm_string_t format, va_list args);
 #endif
 
 // clang-format on
