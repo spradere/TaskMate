@@ -69,11 +69,6 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	int error_index = 0;
 	tokenizer_t tok;
 
-	strncpy(errors->catalog[error_index].name, "ERR_NO_ERROR", BYTE_INDEX);
-	strncpy(errors->catalog[error_index].message, "\"No error\"", BYTE_INDEX);
-	errors->catalog[error_index].critical = ERROR_LOW;
-	error_index++;
-
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_src_line_number++;
@@ -132,7 +127,7 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 	fprintf(file_tmp.stream, "typedef struct\n");
 	fprintf(file_tmp.stream, "{\n");
-	fprintf(file_tmp.stream, "\tconst tm_string_t name;\n");
+	fprintf(file_tmp.stream, "\tconst tm_string_t *name;\n");
 	fprintf(file_tmp.stream, "\tconst err_critical_t critical;\n");
 	fprintf(file_tmp.stream, "} err_item_t;\n\n");
 

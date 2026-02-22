@@ -173,9 +173,9 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 
 static void writeTarget(const options_list_t *auto_options, FILE *file)
 {
-	fprintf(file, "TM_STR_ROM_NEW(arch, \"%s\");\n", auto_options->arch_name);
-	fprintf(file, "TM_STR_ROM_NEW(mcu, \"%s\");\n", auto_options->mcu_name);
-	fprintf(file, "TM_STR_ROM_NEW(board, \"%s\");\n\n", auto_options->board_name);
+	fprintf(file, "TM_STR_ROM_NEW(arch_name, \"%s\");\n", auto_options->arch_name);
+	fprintf(file, "TM_STR_ROM_NEW(mcu_name, \"%s\");\n", auto_options->mcu_name);
+	fprintf(file, "TM_STR_ROM_NEW(board_name, \"%s\");\n\n", auto_options->board_name);
 }
 
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
@@ -296,7 +296,7 @@ static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 
 	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(file, "\t{err%i, %i},\n",i ,errors->catalog[i].critical);
+		fprintf(file, "\t{&err%i, %i},\n",i ,errors->catalog[i].critical);
 	}
 	fprintf(file, "};\n");
 }
