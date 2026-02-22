@@ -14,7 +14,7 @@
 
 /**
  * @file TaskMate.c
- * @brief Implements system init
+ * @brief Implements system startup
  *
  */
 
@@ -47,7 +47,7 @@ int main(void)
 	hal_usartInit();
 	hal_usartStart();
 
-	tm_syslog(TM_STR("\n\n[boot] TaskMate %s boot\n"), TM_STR(TASKMATE_VERSION));
+	tm_syslog(TM_STR("\n\n[boot] %s %s boot\n"), &TM_STR(__FILE_NAME__),  &TM_STR(TASKMATE_VERSION));
 
 	const sc_target_info_t *target;
 	sc_targetGetInfo(&target);
@@ -78,7 +78,7 @@ int main(void)
 		(*(mod->start))();
 	}
 
-	// RTC time test
+	// RTC external module test
 	tm_syslog(TM_STR("[boot] hal RTC init\n"));
 	hal_rtc_time_t t;
 	t.hours = 21;
@@ -108,7 +108,7 @@ int main(void)
 	for(uint8_t i=0; i < ERROR_COUNT; i++)
 	{
 		tm_string_t *err_msg = err_getMessage(i);
-		tm_syslog(TM_STR("\t[%i] [0x%04x:0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
+		tm_syslog(TM_STR("\t[%i] [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
 	}
 
 	// jump to current thread for first call and start system by enabling interrupts
