@@ -30,7 +30,4 @@ void tm_syslog(const tm_string_t format, ...)
 	va_end(args);
 }
 
-void tm_vsyslog(const tm_string_t format, va_list args)
-{
-	tm_vprintf(format, args);
-}
+void tm_vsyslog(const tm_string_t format, va_list args) { tm_vprintf(format, args); }
