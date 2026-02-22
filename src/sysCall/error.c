@@ -31,11 +31,12 @@
  */
 
 TM_STR_ROM_NEW(err0, "No error");
-TM_STR_ROM_NEW(err1, "hal USART TX buffer empty");
-TM_STR_ROM_NEW(err2, "hal USART RX buffer empty");
-TM_STR_ROM_NEW(err3, "hal USART TX buffer full");
-TM_STR_ROM_NEW(err4, "hal USART RX buffer full");
-TM_STR_ROM_NEW(err5, "msg no more free channels");
+TM_STR_ROM_NEW(err1, "Pointer is NULL");
+TM_STR_ROM_NEW(err2, "hal USART TX buffer empty");
+TM_STR_ROM_NEW(err3, "hal USART RX buffer empty");
+TM_STR_ROM_NEW(err4, "hal USART TX buffer full");
+TM_STR_ROM_NEW(err5, "hal USART RX buffer full");
+TM_STR_ROM_NEW(err6, "msg no more free channels");
 
 const err_item_t error_catalog[] =
 {
@@ -45,11 +46,12 @@ const err_item_t error_catalog[] =
 	{&err3, 1},
 	{&err4, 1},
 	{&err5, 1},
+	{&err6, 1},
 };
 // clang-format on
 // [/tag]
 
-tm_string_t *err_getMessage(uint8_t num)
+const tm_string_t *err_getMessage(uint8_t num)
 {
 	if( num < ERROR_COUNT)
 	{
