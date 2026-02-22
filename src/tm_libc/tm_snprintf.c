@@ -47,7 +47,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	uint8_t pos = 0;
 
 	// reverse order convert
-	if( value == 0 ) {tmp[pos++] = '0';}
+	if( value == 0 ) { tmp[pos++] = '0'; }
 	else
 	{
 		while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
@@ -61,10 +61,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	while( pos < buff.padding ) { tmp[pos++] = '0'; }
 
 	// reverse order
-	while( pos > 0 )
-	{
-		tm_putChar(tmp[--pos]);
-	}
+	while( pos > 0 ) { tm_putChar(tmp[--pos]); }
 }
 
 int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...)
@@ -87,22 +84,16 @@ int tm_printf(const tm_string_t format, ...)
 	return ret;
 }
 
-int tm_vprintf(const tm_string_t format, va_list args)
-{
-	return tm_vsnprintf(NULL, 0, format, args);
-}
+int tm_vprintf(const tm_string_t format, va_list args) { return tm_vsnprintf(NULL, 0, format, args); }
 
 static void tm_putChar(char ch)
 {
-	if( buff.ptr != NULL)
+	if( buff.ptr != NULL )
 	{
 		if( (buff.index + 1) < buff.size ) { buff.ptr[buff.index++] = ch; }
 	}
 
-	if(buff.ptr == NULL)
-	{
-		hal_stdio_putChar(ch);
-	}
+	if( buff.ptr == NULL ) { hal_stdio_putChar(ch); }
 }
 
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
@@ -113,7 +104,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	buff.index = 0;
 	buff.padding = 0;
 
-	uint8_t format_index= 0;
+	uint8_t format_index = 0;
 	char format_c = hal_string_getChar(&format, format_index++);
 
 	while( format_c )
@@ -126,7 +117,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 			{
 				format_c = hal_string_getChar(&format, format_index++);
 				buff.padding = (uint8_t)(format_c - 48); // atoi
-				if( buff.padding > 9 ){ return 0; }
+				if( buff.padding > 9 ) { return 0; }
 				format_c = hal_string_getChar(&format, format_index++);
 			}
 
@@ -142,7 +133,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 
 				case 's':
 				{
-					const tm_string_t *str = va_arg(args, const tm_string_t* );
+					const tm_string_t *str = va_arg(args, const tm_string_t *);
 					uint8_t str_index = 0;
 					char str_c = hal_string_getChar(str, str_index++);
 					while( str_c != 0 )
@@ -152,7 +143,6 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					}
 					break;
 				}
-
 
 				case 'i':
 				case 'x':

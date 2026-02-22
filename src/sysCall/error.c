@@ -56,9 +56,6 @@ const err_item_t error_catalog[] =
 
 const tm_string_t *err_getMessage(uint8_t num)
 {
-	if( num < ERROR_COUNT)
-	{
-		return error_catalog[num].name;
-	}
+	if( num < ERROR_COUNT ) { return error_catalog[num].name; }
 	return 0;
 }

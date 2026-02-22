@@ -211,9 +211,10 @@ static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 					mod->modules[i].name);
 
 			fprintf(file, "\tmod->software_time_counter = 0;\n");
-			fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
+			// fprintf(file, "\tconst char *thread%i_name = \"%s\";\n", threads_count, mod->modules[i].name);
+			fprintf(file, "\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n", threads_count, mod->modules[i].name);
 
-			fprintf(file, "\tmod->name = thread%i_name;\n", threads_count);
+			fprintf(file, "\tmod->name = &thread%i_name;\n", threads_count);
 
 			fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status | type);
 
@@ -234,11 +235,12 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file)
 	{
 		fprintf(file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
 
-		fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
+		// fprintf(file, "\tconst char *driver%i_name = \"%s\";\n", i, mod->modules[i].name);
+		fprintf(file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
 
 		fprintf(file, "\t*(mod) = (mod_driver_item_t)\n");
 		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.name = driver%i_name,\n", i);
+		fprintf(file, "\t\t.name = &driver%i_name,\n", i);
 		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
 		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
 		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
@@ -290,14 +292,14 @@ static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 
 	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(file, "TM_STR_ROM_NEW(err%i, %s);\n",i , errors->catalog[i].message);
+		fprintf(file, "TM_STR_ROM_NEW(err%i, %s);\n", i, errors->catalog[i].message);
 	}
 
 	fprintf(file, "\nconst err_item_t error_catalog[] = \n{\n");
 
 	for( int i = 0; i < errors->error_count; i++ )
 	{
-		fprintf(file, "\t{&err%i, %i},\n",i ,errors->catalog[i].critical);
+		fprintf(file, "\t{&err%i, %i},\n", i, errors->catalog[i].critical);
 	}
 	fprintf(file, "};\n");
 }

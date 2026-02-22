@@ -20,8 +20,8 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include "tm_libc/tm_string.h"
 #include "sysCall/auto_error_catalog.h"
+#include "tm_libc/tm_string.h"
 
 const tm_string_t *err_getMessage(uint8_t num);
 
