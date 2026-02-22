@@ -40,7 +40,7 @@ enum
 } have_options_id;
 
 static const char *have_to_string[HAVE_COUNT] = {
-#define X(e, s) [e] = s,
+#define X(e, s) [e] = (s),
 	HAVE_OPTIONS(X)
 #undef X
 };
@@ -50,7 +50,7 @@ static int have_options_count[HAVE_COUNT];
 static const char *string_from_have(const int id)
 {
 #define X(e, s) \
-	if( id == e ) { return have_to_string[e]; }
+	if( id == (e) ) { return have_to_string[e]; }
 	HAVE_OPTIONS(X)
 #undef X
 	return NULL;

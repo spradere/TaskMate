@@ -94,7 +94,7 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 	// TODO wait here MSG_FLAG_SEND to don't overwrite message
 	// char debug[64];
 	// uint8_t flag = channels[channel].status & (1 << MSG_FLAG_SEND);
-	// tm_snprintf(debug,64,"[msg:write] debug satus=%i flag=<%i>\n",channels[channel].status, flag
+	// tm_snprintf(debug,64,"[msg:write] debug status=%i flag=<%i>\n",channels[channel].status, flag
 	// );
 
 	// hal_usartWriteString(debug);

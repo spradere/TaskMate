@@ -37,7 +37,7 @@
 	static const char UNIQUE_NAME(name)[] PROGMEM = (txt); \
 	static const tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
-// macro for in fonction string storage
+// macro for in function string storage
 #define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
 #define TM_STR_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
 // default storage for avr8

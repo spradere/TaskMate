@@ -26,10 +26,10 @@
 
 #include "tm_libc/tm_string.h"
 
-int tm_printf(const tm_string_t format, ...);
-int tm_vprintf(const tm_string_t format, va_list args);
+int tm_printf(tm_string_t format, ...);
+int tm_vprintf(tm_string_t format, va_list args);
 
-int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...);
-int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args);
+int tm_snprintf(char *ptr, uint8_t size, tm_string_t format, ...);
+int tm_vsnprintf(char *ptr, uint8_t size, tm_string_t format, va_list args);
 
 #endif
