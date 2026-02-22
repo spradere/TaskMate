@@ -20,8 +20,6 @@
 #define AUTO_THREADS_LIST_H
 
 // clang-format off
-// why ? Auto-generated code
-
 #include "services/scli.h"
 #include "services/msg.h"
 

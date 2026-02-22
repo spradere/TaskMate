@@ -37,6 +37,8 @@ AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
 STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
 
+FILE_HAL_TMLIBC != find ${SRC_DIR}/hal -maxdepth 3 -type f -name "hal_tmlibc.h"
+
 FIND_OPT_BASE = -maxdepth 1 -name '*.h' -type f -exec grep -l
 FIND_OPT_USER_TAG = '// @hal_user'
 FIND_OPT_SYSTEM_TAG = '// @hal_system'
@@ -64,7 +66,7 @@ FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 # Global error
 ERROR_FILES != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.err" | sort
 
-# documentation files
+# Documentation files
 DOCS != find  ${DOC_DIR} -maxdepth 1 -type f -name "*.md"; find ${DOC_DIR} -maxdepth 1 -type f -name "*.txt"
 
 # mk files

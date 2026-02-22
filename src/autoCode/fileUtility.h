@@ -46,5 +46,6 @@ void printLicenceHeader(FILE *file);
 void printWarningHeader(FILE *file);
 void printClangFormatOff(FILE *file);
 void printClangFormatOn(FILE *file);
+void generateGuardName(const char *file_name, char *guard_name);
 
 #endif

@@ -20,9 +20,9 @@
 
 #include "tm_libc/tm_syslog.h"
 
-#include "tm_libc/tm_snprintf.h"
+#include "tm_libc/tm_stdio.h"
 
-void tm_syslog(PGM_P format, ...)
+void tm_syslog(const tm_string_t format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -30,7 +30,4 @@ void tm_syslog(PGM_P format, ...)
 	va_end(args);
 }
 
-void tm_vsyslog(PGM_P format, va_list args)
-{
-	tm_vprintf(format, args);
-}
+void tm_vsyslog(const tm_string_t format, va_list args) { tm_vprintf(format, args); }

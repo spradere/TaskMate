@@ -13,10 +13,20 @@
  */
 
 /**
- * @file hal_tm_options.h
- * @brief TaskMate options
+ * @file TaskMate.h
+ * @brief header for TaskMate options
  *
  */
+
+#ifndef TASKMATE_H
+#define TASKMATE_H
+
+// file name in ROM
+#define TM_STORE_FILE_NAME \
+	TM_STR_ROM_NEW(file_name, __FILE_NAME__)
+
+// debug options
+#define VERBOSE_LEVEL 0
 
 // libc selection
 #define TM_LIBC_TASKMATE 1
@@ -24,4 +34,6 @@
 
 #if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
 _Static_assert(0, "Select exactly one libc, external or internal");
+#endif
+
 #endif

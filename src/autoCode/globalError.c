@@ -45,10 +45,16 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
 
-	fprintf(file_tmp.stream, "#ifndef ERROR_H\n");
-	fprintf(file_tmp.stream, "#define ERROR_H\n\n");
-
 	printClangFormatOff(file_tmp.stream);
+
+	// generate multiple include guard name
+	char guard_name[BYTE_INDEX];
+	generateGuardName(dest_name, guard_name);
+
+	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
+	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
+
+	fprintf(file_tmp.stream, "#include \"tm_libc/tm_string.h\"\n\n");
 
 	fprintf(file_tmp.stream, "typedef enum\n");
 	fprintf(file_tmp.stream, "{\n");
@@ -62,11 +68,6 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	int error_index = 0;
 	tokenizer_t tok;
 
-	strncpy(errors->catalog[error_index].name, "ERR_NO_ERROR", BYTE_INDEX);
-	strncpy(errors->catalog[error_index].message, "\"No error\"", BYTE_INDEX);
-	errors->catalog[error_index].critical = ERROR_LOW;
-	error_index++;
-
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_src_line_number++;
@@ -76,7 +77,9 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count != 3 tok.line [%s:%i] <%s>", file_src.name, file_src_line_number,
+				msgError("wrong token count != 3 tok.line [%s:%i] <%s>",
+						 file_src.name,
+						 file_src_line_number,
 						 tok.line);
 			}
 
@@ -92,9 +95,18 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
 
 			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
-			if( strcmp(tok.tokens[2], "LOW") == 0 ) { errors->catalog[error_index].critical = ERROR_LOW; }
-			if( strcmp(tok.tokens[2], "MID") == 0 ) { errors->catalog[error_index].critical = ERROR_MID; }
-			if( strcmp(tok.tokens[2], "HIGH") == 0 ) { errors->catalog[error_index].critical = ERROR_HIGH; }
+			if( strcmp(tok.tokens[2], "LOW") == 0 )
+			{
+				errors->catalog[error_index].critical = ERROR_LOW;
+			}
+			if( strcmp(tok.tokens[2], "MID") == 0 )
+			{
+				errors->catalog[error_index].critical = ERROR_MID;
+			}
+			if( strcmp(tok.tokens[2], "HIGH") == 0 )
+			{
+				errors->catalog[error_index].critical = ERROR_HIGH;
+			}
 			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
 			{
 				msgError("wrong critical argument <%s>", tok.tokens[2]);
@@ -125,8 +137,8 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 
 	fprintf(file_tmp.stream, "typedef struct\n");
 	fprintf(file_tmp.stream, "{\n");
-	fprintf(file_tmp.stream, "\tchar *name;\n");
-	fprintf(file_tmp.stream, "\terr_critical_t critical;\n");
+	fprintf(file_tmp.stream, "\tconst tm_string_t *name;\n");
+	fprintf(file_tmp.stream, "\tconst err_critical_t critical;\n");
 	fprintf(file_tmp.stream, "} err_item_t;\n\n");
 
 	// end

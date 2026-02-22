@@ -16,15 +16,12 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#ifndef AUTO_HAL_INIT_H
-#define AUTO_HAL_INIT_H
+#ifndef AUTO_HAL_TMLIBC_H
+#define AUTO_HAL_TMLIBC_H
 
 // clang-format off
-// target init
-#include "hal/arch/avr8/hal_archInit.h"
-#include "hal/mcu/atmega2560/hal_mcuInit.h"
-#include "hal/board/arduino_mega/hal_boardInit.h"
-
+// hal stdio implementation
+#include "hal/board/arduino_mega/hal_tmlibc.h"
 // clang-format on
 
 #endif
