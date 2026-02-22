@@ -22,7 +22,6 @@
 
 #include "tm_libc/tm_string.h"
 
-
 // [autoCode_tag] error catalog
 // clang-format off
 /*
@@ -32,13 +31,15 @@
 
 TM_STR_ROM_NEW(err0, "No error");
 TM_STR_ROM_NEW(err1, "Pointer is NULL");
-TM_STR_ROM_NEW(err2, "hal USART TX buffer empty");
-TM_STR_ROM_NEW(err3, "hal USART RX buffer empty");
-TM_STR_ROM_NEW(err4, "hal USART TX buffer full");
-TM_STR_ROM_NEW(err5, "hal USART RX buffer full");
-TM_STR_ROM_NEW(err6, "msg no more free channels");
+TM_STR_ROM_NEW(err2, "Most useless error in the world");
+TM_STR_ROM_NEW(err3, "Second most useless error");
+TM_STR_ROM_NEW(err4, "hal USART TX buffer empty");
+TM_STR_ROM_NEW(err5, "hal USART RX buffer empty");
+TM_STR_ROM_NEW(err6, "hal USART TX buffer full");
+TM_STR_ROM_NEW(err7, "hal USART RX buffer full");
+TM_STR_ROM_NEW(err8, "msg no more free channels");
 
-const err_item_t error_catalog[] =
+const err_item_t error_catalog[] = 
 {
 	{&err0, 1},
 	{&err1, 1},
@@ -47,6 +48,8 @@ const err_item_t error_catalog[] =
 	{&err4, 1},
 	{&err5, 1},
 	{&err6, 1},
+	{&err7, 1},
+	{&err8, 1},
 };
 // clang-format on
 // [/tag]

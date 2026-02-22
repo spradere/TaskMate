@@ -1,3 +1,4 @@
+	move const string to ROM 
 	fix i2c + external rtc
 	add system log + tm_vsnprintf()
 	hal I2C refactor, address maping

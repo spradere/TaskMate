@@ -25,7 +25,7 @@
 
 static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file);
 static void writeModulesCount(const modules_database_t *data_base, FILE *file);
-static void writeTarget(const options_list_t *auto_options, FILE *file);
+static void writeInfo(const options_list_t *auto_options, FILE *file);
 static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
@@ -104,9 +104,9 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeErrorCatalog(errors, file_tmp.stream);
 			}
 
-			if( (strcmp(tok.tokens[2], "target") == 0) && (strcmp(tok.tokens[3], "name") == 0) )
+			if( (strcmp(tok.tokens[2], "system") == 0) && (strcmp(tok.tokens[3], "info") == 0) )
 			{
-				writeTarget(auto_options, file_tmp.stream);
+				writeInfo(auto_options, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "count") == 0) )
@@ -171,8 +171,9 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 			 data_base->modules_type[MOD_TASKS_ID].modules_count));
 }
 
-static void writeTarget(const options_list_t *auto_options, FILE *file)
+static void writeInfo(const options_list_t *auto_options, FILE *file)
 {
+	fprintf(file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", auto_options->tm_ver);
 	fprintf(file, "TM_STR_ROM_NEW(arch_name, \"%s\");\n", auto_options->arch_name);
 	fprintf(file, "TM_STR_ROM_NEW(mcu_name, \"%s\");\n", auto_options->mcu_name);
 	fprintf(file, "TM_STR_ROM_NEW(board_name, \"%s\");\n\n", auto_options->board_name);
