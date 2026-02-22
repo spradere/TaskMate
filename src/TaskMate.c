@@ -34,6 +34,8 @@
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
+TM_STORE_FILE_NAME;
+
 // display harware target informations
 #if VERBOSE_LEVEL > 0
 	#pragma message "TM_VERSION  = " TM_VERSION
@@ -50,7 +52,7 @@ int main(void)
 
 	const sc_info_t *info;
 	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] TaskMate %s boot\n"), info->tm_ver);
+	tm_syslog(TM_STR("\n\n[boot] TaskMate %s %s boot\n"), &file_name, info->tm_ver);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 	// system static allocation init
@@ -90,7 +92,11 @@ int main(void)
 	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
 
-	tm_syslog(TM_STR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"), t.day, t.month, t.year, t.hours,
+	tm_syslog(TM_STR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"),
+			  t.day,
+			  t.month,
+			  t.year,
+			  t.hours,
 			  t.minutes);
 
 	char msg[40];
@@ -99,7 +105,13 @@ int main(void)
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
 
-	tm_snprintf(msg, sizeof(msg), TM_STR("%02i/%02i/20%02i %02i:%02i"), t.day, t.month, t.year, t.hours,
+	tm_snprintf(msg,
+				sizeof(msg),
+				TM_STR("%02i/%02i/20%02i %02i:%02i"),
+				t.day,
+				t.month,
+				t.year,
+				t.hours,
 				t.minutes);
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);

@@ -42,7 +42,8 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 	module_type_t *mod = &data_base->modules_type[TYPE];
 	int module_count = mod->modules_count;
 
-	while( (module_count < AUTOCODE_MODULE_COUNT_MAX) && fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
+	while( (module_count < AUTOCODE_MODULE_COUNT_MAX) &&
+		   fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
 		// start
 		mod->modules[module_count].status = mod->status_default;
@@ -54,8 +55,11 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 		{
 			if( tok.count > mod->initrc_arg_count_max )
 			{
-				msgError("wrong token count [%s:%i] is %i, should be max(%i)", file_initrc_name,
-						 file_line_number, tok.count, mod->initrc_arg_count_max);
+				msgError("wrong token count [%s:%i] is %i, should be max(%i)",
+						 file_initrc_name,
+						 file_line_number,
+						 tok.count,
+						 mod->initrc_arg_count_max);
 				err_flag = 1;
 			}
 
@@ -63,7 +67,9 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 			{
 				if( strcmp(mod->modules[j].name, tok.tokens[0]) == 0 )
 				{
-					msgError("duplicate name [%s:%i] %s\n\n", file_initrc_name, file_line_number,
+					msgError("duplicate name [%s:%i] %s\n\n",
+							 file_initrc_name,
+							 file_line_number,
 							 tok.tokens[0]);
 					err_flag = 1;
 				}
@@ -75,11 +81,15 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 			// parse commands
 			for( int i = 1; i < tok.count; i++ )
 			{
-				int err = initrcCmdDispatch(tok.tokens[i], &mod->modules[module_count].status,
+				int err = initrcCmdDispatch(tok.tokens[i],
+											&mod->modules[module_count].status,
 											&data_base->run_level_module_count[TYPE]);
 				if( err != 0 )
 				{
-					msgError("unknown command [%s:%i] %s", file_initrc_name, file_line_number, tok.tokens[i]);
+					msgError("unknown command [%s:%i] %s",
+							 file_initrc_name,
+							 file_line_number,
+							 tok.tokens[i]);
 					err_flag = 1;
 				}
 			}

@@ -63,7 +63,10 @@ int main(int argn, const char *argv[])
 	options_list_t auto_options;
 	options(argv[1], &auto_options);
 
-	msgInfo("target %s -> %s -> %s", auto_options.arch_name, auto_options.mcu_name, auto_options.board_name);
+	msgInfo("target %s -> %s -> %s",
+			auto_options.arch_name,
+			auto_options.mcu_name,
+			auto_options.board_name);
 
 	// global error system
 	error_catalog_t errors_catalog;
@@ -80,7 +83,8 @@ int main(int argn, const char *argv[])
 
 	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", auto_options.arch_name);
 	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", auto_options.mcu_name);
-	snprintf(board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", auto_options.board_name);
+	snprintf(
+		board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", auto_options.board_name);
 
 	parseInitrc(MOD_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
@@ -160,8 +164,10 @@ static void checkModulesCount(modules_database_t *data_base)
 	{
 		if( module_count[i][0] > module_count[i][1] )
 		{
-			msgError("Too many modules ! %s count = %i > TaskMate max %i", data_base->modules_type[i].name,
-					 module_count[i][0], module_count[i][1]);
+			msgError("Too many modules ! %s count = %i > TaskMate max %i",
+					 data_base->modules_type[i].name,
+					 module_count[i][0],
+					 module_count[i][1]);
 			exit(1);
 		}
 	}
