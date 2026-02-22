@@ -21,12 +21,13 @@
 
 #include "tokenizer.h"
 
-#define HAVE_OPTIONS(X)                                                                                      \
-	X(HAVE_ARCH, "--arch")                                                                                   \
-	X(HAVE_MCU, "--mcu")                                                                                     \
-	X(HAVE_BOARD, "--board")                                                                                 \
-	X(HAVE_ERRORS, "--errors")                                                                               \
-	X(HAVE_HAL_USER, "--files_hal_user")                                                                     \
+#define HAVE_OPTIONS(X) \
+	X(HAVE_TM_VER, "--tm_ver") \
+	X(HAVE_ARCH, "--arch") \
+	X(HAVE_MCU, "--mcu") \
+	X(HAVE_BOARD, "--board") \
+	X(HAVE_ERRORS, "--errors") \
+	X(HAVE_HAL_USER, "--files_hal_user") \
 	X(HAVE_HAL_SYSTEM, "--files_hal_system") \
 	X(HAVE_HAL_TMLIBC, "--file_hal_tmlibc")
 
@@ -53,6 +54,11 @@ static const char *string_from_have(const int id)
 	HAVE_OPTIONS(X)
 #undef X
 	return NULL;
+}
+static void funcTmVer(const char *value, options_list_t *opt)
+{
+	strncpy(opt->tm_ver, value, BYTE_INDEX);
+	have_options_count[HAVE_TM_VER]++;
 }
 
 static void funcArch(const char *value, options_list_t *opt)
@@ -102,7 +108,8 @@ static const struct
 	const char *name;
 	void (*func)(const char *value, options_list_t *opt);
 
-} options_cmds[] = {{"--arch", funcArch},
+} options_cmds[] = {{"--tm_ver", funcTmVer},
+					{"--arch", funcArch},
 					{"--mcu", funcMcu},
 					{"--board", funcBoard},
 					{"--errors", funcErrors},

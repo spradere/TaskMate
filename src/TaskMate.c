@@ -34,8 +34,10 @@
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
+
 // display harware target informations
 #if VERBOSE_LEVEL > 0
+    #pragma message "TM_VERSION  = " TM_VERSION
     #pragma message "ARCH  = " ARCH
     #pragma message "MCU   = " MCU
     #pragma message "BOARD = " BOARD
@@ -47,11 +49,10 @@ int main(void)
 	hal_usartInit();
 	hal_usartStart();
 
-	tm_syslog(TM_STR("\n\n[boot] %s %s boot\n"), &TM_STR(__FILE_NAME__),  &TM_STR(TASKMATE_VERSION));
-
-	const sc_target_info_t *target;
-	sc_targetGetInfo(&target);
-	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), target->arch, target->mcu, target->board);
+	const sc_info_t *info;
+	sc_targetGetInfo(&info);
+	tm_syslog(TM_STR("\n\n[boot] TaskMate %s boot\n"), info->tm_ver);
+	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 	// system static allocation init
 	tm_syslog(TM_STR("[boot] system static allocation\n"));
@@ -62,7 +63,6 @@ int main(void)
 
 	// hal hardware init
 	tm_syslog(TM_STR("[boot] hal hardware init\n"));
-
 
 	hal_archInit();
 	hal_mcuInit();
@@ -94,7 +94,7 @@ int main(void)
 	tm_syslog(TM_STR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"), t.day, t.month, t.year, t.hours, t.minutes);
 
 	char msg[40];
-	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s"), TM_STR(TASKMATE_VERSION));
+	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s"), info->tm_ver);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
@@ -107,7 +107,7 @@ int main(void)
 	tm_syslog(TM_STR("[info] error catalog\n"));
 	for(uint8_t i=0; i < ERROR_COUNT; i++)
 	{
-		tm_string_t *err_msg = err_getMessage(i);
+		const tm_string_t *err_msg = err_getMessage(i);
 		tm_syslog(TM_STR("\t[%i] [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
 	}
 

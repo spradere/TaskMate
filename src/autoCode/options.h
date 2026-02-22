@@ -26,6 +26,7 @@
 // autoCode option structure
 typedef struct
 {
+	char tm_ver[BYTE_INDEX];
 	char arch_name[BYTE_INDEX];
 	char mcu_name[BYTE_INDEX];
 	char board_name[BYTE_INDEX];
