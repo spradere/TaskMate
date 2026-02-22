@@ -21,11 +21,8 @@
 #ifndef TASKMATE_H
 #define TASKMATE_H
 
-// TaskMate current version
-#define TASKMATE_VERSION "0.25"
-
 // debug options
-#define VERBOSE_LEVEL 0
+#define VERBOSE_LEVEL 1
 
 // libc selection
 #define TM_LIBC_TASKMATE 1
