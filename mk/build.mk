@@ -60,7 +60,10 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 .endif
 
 	# write autoCode options
-	@printf "# hardware target\n" > ${AUTOCODE_CONFIG}
+	@printf "# TaskMate version\n" > ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--tm_ver ${TM_VERSION}" >> ${AUTOCODE_CONFIG}
+
+	@printf "\n# hardware target\n" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--arch ${ARCH}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
