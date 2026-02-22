@@ -54,7 +54,6 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
-
 	fprintf(file_tmp.stream, "#include \"tm_libc/tm_string.h\"\n\n");
 
 	fprintf(file_tmp.stream, "typedef enum\n");

@@ -34,13 +34,12 @@
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
-
 // display harware target informations
 #if VERBOSE_LEVEL > 0
-    #pragma message "TM_VERSION  = " TM_VERSION
-    #pragma message "ARCH  = " ARCH
-    #pragma message "MCU   = " MCU
-    #pragma message "BOARD = " BOARD
+	#pragma message "TM_VERSION  = " TM_VERSION
+	#pragma message "ARCH  = " ARCH
+	#pragma message "MCU   = " MCU
+	#pragma message "BOARD = " BOARD
 #endif
 
 int main(void)
@@ -91,7 +90,8 @@ int main(void)
 	// hal_rtcWrite(&t);
 	hal_rtcRead(&t);
 
-	tm_syslog(TM_STR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"), t.day, t.month, t.year, t.hours, t.minutes);
+	tm_syslog(TM_STR("[info] date & time : %02i/%02i/20%02i %02i:%02i\n"), t.day, t.month, t.year, t.hours,
+			  t.minutes);
 
 	char msg[40];
 	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s"), info->tm_ver);
@@ -99,16 +99,36 @@ int main(void)
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
 
-	tm_snprintf(msg, sizeof(msg), TM_STR("%02i/%02i/20%02i %02i:%02i"), t.day, t.month, t.year, t.hours, t.minutes);
+	tm_snprintf(msg, sizeof(msg), TM_STR("%02i/%02i/20%02i %02i:%02i"), t.day, t.month, t.year, t.hours,
+				t.minutes);
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
 	// test error catalog
 	tm_syslog(TM_STR("[info] error catalog\n"));
-	for(uint8_t i=0; i < ERROR_COUNT; i++)
+	for( uint8_t i = 0; i < ERROR_COUNT; i++ )
 	{
 		const tm_string_t *err_msg = err_getMessage(i);
-		tm_syslog(TM_STR("\t[%i] [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
+		tm_syslog(TM_STR("\t%i [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
+	}
+
+	// display module names
+	tm_syslog(TM_STR("[modules] drivers\n"));
+	mod_driver_item_t *mod_d;
+
+	for( int num = 0; num < MOD_DRIVER_COUNT; num++ )
+	{
+		mod_d = mod_driverGetPointer(num);
+		tm_syslog(TM_STR("\t%i %s\n"), num, mod_d->name);
+	}
+
+	tm_syslog(TM_STR("[modules] threads\n"));
+	mod_thread_item_t *mod_t;
+
+	for( int num = 0; num < MOD_THREAD_COUNT; num++ )
+	{
+		mod_t = mod_threadGetPointer(num);
+		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
 	}
 
 	// jump to current thread for first call and start system by enabling interrupts
