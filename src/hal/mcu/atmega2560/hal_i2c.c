@@ -22,6 +22,7 @@
 
 #include <avr/io.h>
 
+#include "hal/auto_hal_tmlibc.h"
 #include "tm_libc/tm_syslog.h"
 
 // NOLINTBEGIN
@@ -40,7 +41,7 @@ void hal_i2cStart(void)
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
 	// address test
-	tm_syslog(PSTR("[i2c] scan ...\n"));
+	tm_syslog(TM_STR("[i2c] scan ...\n"));
 	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
 	{
 		// start comm
@@ -49,7 +50,7 @@ void hal_i2cStart(void)
 
 		if( (hal_i2cWrite((adr << 1) | 0)) == TW_MT_SLA_ACK )
 		{
-			tm_syslog(PSTR("[i2c] found SLA+W 0x%x\n"), (adr));
+			tm_syslog(TM_STR("\tfound SLA+W 0x%02x\n"), (adr));
 		}
 
 		hal_i2cCommStop();

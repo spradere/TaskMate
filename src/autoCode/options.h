@@ -26,13 +26,14 @@
 // autoCode option structure
 typedef struct
 {
+	char tm_ver[BYTE_INDEX];
 	char arch_name[BYTE_INDEX];
 	char mcu_name[BYTE_INDEX];
 	char board_name[BYTE_INDEX];
 	char errors_file[BYTE_INDEX];
 	char files_hal_user[BYTE_INDEX];
 	char files_hal_system[BYTE_INDEX];
-
+	char file_hal_tmlibc[BYTE_INDEX];
 } options_list_t;
 
 void options(const char *file_name, options_list_t *opt);

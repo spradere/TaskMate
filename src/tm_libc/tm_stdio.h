@@ -21,7 +21,9 @@
 #ifndef TM_STDIO_H
 #define TM_STDIO_H
 
-#include "hal/auto_hal_define.h" // get libc selection
+// clang-format off
+
+#include "TaskMate.h" // get libc selection
 
 #if TM_LIBC_CSTD
 	#include <stdio.h>
@@ -33,4 +35,5 @@
 	#include "tm_libc/tm_snprintf.h"
 #endif
 
+// clang-format on
 #endif

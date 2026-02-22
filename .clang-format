@@ -11,9 +11,12 @@ AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
 AllowShortBlocksOnASingleLine: true
 AllowShortFunctionsOnASingleLine: true
+AlignEscapedNewlines: Left
+BinPackArguments: False
+
 
 # Formatting preferences
-ColumnLimit: 110
+ColumnLimit: 100
 PointerAlignment: Right
 SpaceAfterCStyleCast: false
 
@@ -34,7 +37,6 @@ AlignConsecutiveDeclarations: false
 AlignConsecutiveAssignments: false
 AlignTrailingComments: false
 IndentPPDirectives: BeforeHash
-
 
 # General C-style tuning
 IndentCaseLabels: true

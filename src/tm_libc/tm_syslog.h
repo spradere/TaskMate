@@ -21,20 +21,25 @@
 #ifndef TM_SYSLOG_H
 #define TM_SYSLOG_H
 
+// clang-format off
+
 #include <avr/pgmspace.h>
 
-#include "hal/auto_hal_define.h" // get libc selection
+#include "tm_libc/tm_string.h"
+#include "TaskMate.h" // get libc selection
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
-	#define tm_syslog syslog
+	// #define tm_syslog syslog !!! functions signatures do not match
 #endif
 
 #if TM_LIBC_TASKMATE
 	#include <stdarg.h>
 	#include <stdint.h>
-	void tm_syslog(PGM_P format, ...);
-	void tm_vsyslog(PGM_P format, va_list args);
+	void tm_syslog(const tm_string_t format, ...);
+	void tm_vsyslog(const tm_string_t format, va_list args);
 #endif
+
+// clang-format on
 
 #endif

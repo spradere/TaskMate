@@ -46,6 +46,7 @@ git stash pop
 git fetch
 git diff HEAD origin/main
 git merge origin/main
+
 ##################################################
 # clean history
 ##################################################

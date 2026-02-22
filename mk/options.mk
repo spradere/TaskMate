@@ -14,29 +14,17 @@
 ################################################################################
 
 ################################################################################
-# Editors
+# Build options
 ################################################################################
 
-# Generate tags
-${TAGS_STAMP}: ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
-	@ctags -f ${TAGS} ${SRCS}
-	@ctags -f ${TAGS} -a ${SRCS_H}
-	@ctags -f ${TAGS} -a ${AUTOCODE_SRCS}
-	@ctags -f ${TAGS} -a ${AUTOCODE_SRCS_H}
-	@touch ${TAGS_STAMP}
+# autoCode
+OPT_CLEAN_AUTOCODE_LOGS = yes
+VALID_OPTS = yes no
 
-vim_all: ${TAGS_STAMP}
-#@ [global] open Vim with all TaskMate sources files .c .h .mk (no autoCode)
-	vim ${SRCS} ${SRCS_H} Makefile ${MK_FILES}
-.PHONY: vim_all
+.if empty(VALID_OPTS:M${OPT_CLEAN_AUTOCODE_LOGS})
+.error Invalid option "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [${VALID_OPTS}]
+.endif
 
-vim_doc:
-#@ [global] open Vim with all documentation files .md .txt
-	vim ${DOCS}
-.PHONY: vim_doc
-
-vim_autoCode: tags
-#@ [global] open Vim with all autoCode sources files .c .h
-	vim ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
-.PHONY: vim_autoCode
+# bmake option for -V
+.MAKE.EXPAND_VARIABLES = true
 

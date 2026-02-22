@@ -21,16 +21,45 @@
 #ifndef TM_STRING_H
 #define TM_STRING_H
 
-#include "hal/auto_hal_define.h" // get libc selection
+// clang-format off
+
+#include <stdint.h>
+
+#include "TaskMate.h" // get libc selection
+
+// tm_sting implemetation
+typedef enum
+{
+	TM_MEM_RAM,
+	TM_MEM_ROM
+}tm_string_storage_t;
+
+typedef struct
+{
+	const char *text;
+	const tm_string_storage_t storage;
+}tm_string_t;
 
 #if TM_LIBC_CSTD
 	#include <string.h>
 	#define tm_strncpy strncpy
+
+	#define TM_STR_RAM(string) (string)
+	#define TM_STR_ROM(string) (string)
+	#define TM_STR(string) (string)
+	#define TM_STR_ROM_NEW(name, txt) \
+		const char name[] = (txt);
 #endif
 
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
-void tm_strncpy(char *dest, const char *src, uint8_t n);
+	#include "hal/auto_hal_tmlibc.h" // macro TM_STR_* hal definitions
+
+	void tm_strncpy(char *dest, const char *src, uint8_t n);
+
+
 #endif
+
+// clang-format on
 
 #endif

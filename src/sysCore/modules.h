@@ -24,6 +24,7 @@
 
 #include "hal/auto_hal_define.h" // get hal_stack_word_t from selected arch
 #include "sysCore/modules_define.h"
+#include "tm_libc/tm_string.h"
 
 /*
  * Modules structures
@@ -31,7 +32,7 @@
 
 typedef struct
 {
-	const char *name;
+	const tm_string_t *name;
 	uint8_t status;
 
 	void (*main)(void);
@@ -46,7 +47,7 @@ typedef struct
 // driver
 typedef struct
 {
-	const char *name;
+	const tm_string_t *name;
 	uint8_t status;
 
 	void (*init)(void);

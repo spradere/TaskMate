@@ -23,12 +23,13 @@
 
 #include <stdarg.h>
 #include <stdint.h>
-#include <avr/pgmspace.h>
 
-int tm_printf(PGM_P format, ...);
-int tm_vprintf(PGM_P format, va_list args);
+#include "tm_libc/tm_string.h"
 
-int tm_snprintf(char *ptr, uint8_t size, PGM_P format, ...);
-int tm_vsnprintf(char *ptr, uint8_t size, PGM_P format, va_list args);
+int tm_printf(const tm_string_t format, ...);
+int tm_vprintf(const tm_string_t format, va_list args);
+
+int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...);
+int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args);
 
 #endif

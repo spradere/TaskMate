@@ -8,4 +8,4 @@
 - Doxigen documentation : only in .h for API and general operations
 - change int type hal/ -> uint16 -> typedef to match arch size
 - drivers : test at init, check init bofore start
-
+- autocode (and TaskMate ?) : check if string pointer is not null before process data
