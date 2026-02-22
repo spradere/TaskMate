@@ -33,7 +33,7 @@ CFLAGS += -Wconversion -Wsign-conversion -Wenum-conversion -Wcast-align -Wcast-q
 CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-declaration \
 	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common -Wpointer-arith
 
-# Commande line #include and #define
+# Command line #include and #define
 CFLAGS += -I${SRC_DIR}
 CFLAGS += -DTM_VERSION=\"${TM_VERSION}\" -DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
 
