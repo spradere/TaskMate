@@ -1,0 +1,3 @@
+# TaskMate general errors
+ERR_NO_ERROR "No error" LOW
+ERR_NULL_POINTER "Pointer is NULL" LOW

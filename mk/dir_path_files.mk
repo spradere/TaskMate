@@ -29,7 +29,8 @@ USB_DEV = /dev/da0s1
 BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
 
 # Source directories
-SRC_DIR_LIST = ${SRC_DIR}/sysCore
+SRC_DIR_LIST = ${SRC_DIR}
+SRC_DIR_LIST += ${SRC_DIR}/sysCore
 SRC_DIR_LIST += ${SRC_DIR}/sysCall
 SRC_DIR_LIST += ${SRC_DIR}/services
 SRC_DIR_LIST += ${SRC_DIR}/tasks

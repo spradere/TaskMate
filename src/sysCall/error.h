@@ -23,6 +23,6 @@
 #include "tm_libc/tm_string.h"
 #include "sysCall/auto_error_catalog.h"
 
-tm_string_t *err_getMessage(uint8_t num);
+const tm_string_t *err_getMessage(uint8_t num);
 
 #endif
