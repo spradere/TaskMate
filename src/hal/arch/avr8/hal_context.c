@@ -25,7 +25,8 @@
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
-void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer, hal_stack_word_t *stack_top)
+void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
+						   hal_stack_word_t *stack_top)
 {
 	// stack init
 	hal_stack_word_t *sp = stack_top;
