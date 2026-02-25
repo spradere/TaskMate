@@ -100,7 +100,7 @@ int main(void)
 			  t.minutes);
 
 	char msg[40];
-	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s"), info->tm_ver);
+	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s %i"), info->tm_ver, TM_BUILD);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
@@ -127,7 +127,7 @@ int main(void)
 	// display module names
 	tm_syslog(TM_STR("[modules] drivers\n"));
 
-	for( int num = 0; num < MOD_DRIVER_COUNT; num++ )
+	for( uint8_t num = 0; num < MOD_DRIVER_COUNT; num++ )
 	{
 		mod_driver_item_t *mod_d;
 		mod_d = mod_driverGetPointer(num);

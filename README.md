@@ -14,7 +14,7 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
-> <span style="color:green"> **Project Stats (v0.25)**</span>
+> <span style="color:green"> **Project Stats (v0.25 [^1] )**</span>
 >
 >  <span style="color:green">329 commits • 104 source files • 3461 lines of code •
 > binary size : 6496 bytes (Flash) • ram usage : 2009 bytes</span>
@@ -170,3 +170,8 @@ See the `LICENSE` file for full details.
 - Making Embedded Systems, author Elecia White, publisher O'Reilly. ISBN 978-1-098-15154-6
 - Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
+
+---
+
+[^1]: ⚠️ Warning : Versions 1.37, 2.71, 3.14 and 4.2 are intentionally skipped. Universe backward compatibility constraints apply.
+
