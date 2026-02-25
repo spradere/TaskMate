@@ -74,3 +74,18 @@ MK_FILES_MK != find  ./${MAKE_DIR} -maxdepth 1 -type f -name "*.mk"
 MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
+
+# Build counter
+.if !exists(${BUILD_CNT_FILE})
+BUILD_CNT = 0
+.else
+BUILD_CNT != cat ${BUILD_CNT_FILE}
+.endif
+
+.if make(upload)
+BUILD_CNT2 != NEW_BUILD=$$((${BUILD_CNT} + 1)); \
+	echo $$NEW_BUILD > ${BUILD_CNT_FILE}; \
+	touch ${SRC_DIR}/TaskMate.c; \
+	echo $$NEW_BUILD;
+CFLAGS += -DTM_BUILD=${BUILD_CNT2}
+.endif

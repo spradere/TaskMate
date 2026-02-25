@@ -23,8 +23,6 @@
 
 // clang-format off
 
-#include <avr/pgmspace.h>
-
 #include "tm_libc/tm_string.h"
 #include "TaskMate.h" // get libc selection
 
@@ -35,7 +33,6 @@
 
 #if TM_LIBC_TASKMATE
 	#include <stdarg.h>
-	#include <stdint.h>
 	void tm_syslog(tm_string_t format, ...);
 	void tm_vsyslog(tm_string_t format, va_list args);
 #endif

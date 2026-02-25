@@ -62,8 +62,8 @@ ${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
 
 upload: all
 #@ [avr8] Upload firmware to mcu via Arduino board.
-	@printf "\n%sUpload binary to AVR flash%s\n\n" \
-		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
+		"${COLOR_TARGET_INFO}" ${BUILD_CNT2} "${COLOR_RESET}"
 	# ELF to hex format
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# RAM usage
