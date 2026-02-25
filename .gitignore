@@ -28,4 +28,4 @@
 !LICENSE
 !Makefile
 !README.md
-!version.h
+!.build_counter
