@@ -25,8 +25,10 @@ AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 
-# Build_id
+# Build info
 BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
+BUILD_CNT_FILE = ${BUILD_DIR}/.build_counter
+TM_VERSION_FILE = ${BUILD_DIR}/.tm_version
 
 # Source directories
 SRC_DIR_LIST = ${SRC_DIR}
@@ -69,5 +71,5 @@ ERROR_CAT = ${BUILD_DIR}/errors_all.err
 TAGS = .tags
 TAGS_STAMP = ${BUILD_DIR}/.tags_stamp
 
-# Build counter
-BUILD_CNT_FILE = .build_counter
+# USB key directory backup
+TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${TM_VERSION}

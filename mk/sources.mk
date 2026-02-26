@@ -75,17 +75,19 @@ MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
 
+# TaskMate version
+TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
+
 # Build counter
 .if !exists(${BUILD_CNT_FILE})
-BUILD_CNT = 0
+BUILD_CNT_BASE = 0
 .else
-BUILD_CNT != cat ${BUILD_CNT_FILE}
+BUILD_CNT_BASE != cat ${BUILD_CNT_FILE}
 .endif
+BUILD_CNT = ${BUILD_CNT_BASE}
 
 .if make(upload)
-BUILD_CNT2 != NEW_BUILD=$$((${BUILD_CNT} + 1)); \
+BUILD_CNT != NEW_BUILD=$$((${BUILD_CNT_BASE} + 1)); \
 	echo $$NEW_BUILD > ${BUILD_CNT_FILE}; \
-	touch ${SRC_DIR}/TaskMate.c; \
 	echo $$NEW_BUILD;
-CFLAGS += -DTM_BUILD=${BUILD_CNT2}
 .endif

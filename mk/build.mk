@@ -25,12 +25,18 @@
 .BEGIN:
 	@mkdir -p ${BUILD_DIR}
 	@mkdir -p ${LOG_DIR}
+.if make(upload) || make(all)
+	@printf '%s\n' "${TM_VERSION}" | \
+	cmp -s - "${TM_VERSION_FILE}" 2>/dev/null || \
+	printf '%s\n' "${TM_VERSION}" > "${TM_VERSION_FILE}"
+.endif
 
 .END:
 	@printf "##########################\n" > ${BUILD_INFO}
 	@printf "# Last build informations \n" >> ${BUILD_INFO}
 	@printf "##########################\n\n" >> ${BUILD_INFO}
 
+	@printf "build counter : %s\n" "${BUILD_CNT}" >> ${BUILD_INFO}
 	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_INFO}
 	@printf "date : " >> ${BUILD_INFO}
 	@date >> ${BUILD_INFO}
@@ -52,7 +58,10 @@ _dependency_check:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
 
 # Test for autoCode required files
-${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_USER} ${FILES_HAL_SYSTEM} ${FILE_HAL_STDIO}
+${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
+					${FILES_HAL_USER} ${FILES_HAL_SYSTEM} ${FILE_HAL_TMLIBC} \
+					${TM_VERSION_FILE} ${BUILD_CNT_FILE}
+
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
@@ -62,6 +71,7 @@ ${AUTOCODE_STAMP}: ${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} ${FILES_HAL_
 	# write autoCode options
 	@printf "# TaskMate version\n" > ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--tm_ver ${TM_VERSION}" >> ${AUTOCODE_CONFIG}
+	@printf "%s\n" "--tm_build ${BUILD_CNT}" >> ${AUTOCODE_CONFIG}
 
 	@printf "\n# hardware target\n" >> ${AUTOCODE_CONFIG}
 	@printf "%s\n" "--arch ${ARCH}" >> ${AUTOCODE_CONFIG}
