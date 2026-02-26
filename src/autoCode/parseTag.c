@@ -184,6 +184,7 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 static void writeInfo(const options_list_t *auto_options, FILE *file)
 {
 	fprintf(file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", auto_options->tm_ver);
+	fprintf(file, "const uint16_t tm_build = %i;\n", atoi(auto_options->tm_build));
 	fprintf(file, "TM_STR_ROM_NEW(arch_name, \"%s\");\n", auto_options->arch_name);
 	fprintf(file, "TM_STR_ROM_NEW(mcu_name, \"%s\");\n", auto_options->mcu_name);
 	fprintf(file, "TM_STR_ROM_NEW(board_name, \"%s\");\n\n", auto_options->board_name);

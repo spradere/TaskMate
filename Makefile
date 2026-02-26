@@ -17,9 +17,6 @@
 # Main makefile
 ################################################################################
 
-# TaskMate version
-TM_VERSION = 0.26
-
 # Main directories
 SRC_DIR = src
 BUILD_BASE = build

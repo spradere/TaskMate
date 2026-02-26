@@ -39,6 +39,7 @@ static uint8_t system_status = 0;
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.26");
+const uint16_t tm_build = 4501;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduino_mega");
@@ -47,7 +48,8 @@ TM_STR_ROM_NEW(board_name, "arduino_mega");
 // [/tag]
 
 static const sc_info_t info = {
-	.tm_ver = &tm_ver, .arch = &arch_name, .mcu = &mcu_name, .board = &board_name};
+	.tm_ver = &tm_ver, .tm_build = tm_build,
+	.arch = &arch_name, .mcu = &mcu_name, .board = &board_name};
 
 void sc_targetGetInfo(const sc_info_t **dest) { *dest = &info; }
 

@@ -100,7 +100,7 @@ int main(void)
 			  t.minutes);
 
 	char msg[40];
-	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s %i"), info->tm_ver, TM_BUILD);
+	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s %i"), info->tm_ver, info->tm_build);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(msg);
