@@ -28,6 +28,7 @@
 typedef struct
 {
 	const tm_string_t *tm_ver;
+	const uint16_t tm_build;
 	const tm_string_t *arch;
 	const tm_string_t *mcu;
 	const tm_string_t *board;
