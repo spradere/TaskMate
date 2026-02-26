@@ -23,6 +23,7 @@
 
 #define HAVE_OPTIONS(X)                      \
 	X(HAVE_TM_VER, "--tm_ver")               \
+	X(HAVE_TM_BUILD, "--tm_build")           \
 	X(HAVE_ARCH, "--arch")                   \
 	X(HAVE_MCU, "--mcu")                     \
 	X(HAVE_BOARD, "--board")                 \
@@ -61,6 +62,11 @@ static void funcTmVer(const char *value, options_list_t *opt)
 	have_options_count[HAVE_TM_VER]++;
 }
 
+static void funcTmBuild(const char *value, options_list_t *opt)
+{
+	strncpy(opt->tm_build, value, BYTE_INDEX);
+	have_options_count[HAVE_TM_BUILD]++;
+}
 static void funcArch(const char *value, options_list_t *opt)
 {
 	strncpy(opt->arch_name, value, BYTE_INDEX);
@@ -109,6 +115,7 @@ static const struct
 	void (*func)(const char *value, options_list_t *opt);
 
 } options_cmds[] = {{"--tm_ver", funcTmVer},
+					{"--tm_build", funcTmBuild},
 					{"--arch", funcArch},
 					{"--mcu", funcMcu},
 					{"--board", funcBoard},

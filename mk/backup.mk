@@ -17,10 +17,6 @@
 # Backup
 ################################################################################
 
-# Get git tag for USB key directory backup
-GIT_TAG != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
-TASKMATE_DIR != printf "/code/TaskMate/TaskMate_%s" ${GIT_TAG}
-
 push: ${GIT_IGNORE_STAMP}
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit%s\n\n" \
@@ -71,7 +67,7 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/dir_path_files.mk
 
 backup:
 #@ [global] USB key backup with current git tag in directory.
-	@printf "\n%sBackup to <${USB_DIR}${TASKMATE_DIR}>%s\n\n" \
+	@printf "\n%sBackup to <${USB_DIR}${TM_BACKUP_DIR}>%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
@@ -91,10 +87,10 @@ backup:
 	# Run rsync
 	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	@mkdir -p ${USB_DIR}${TASKMATE_DIR}
+	@mkdir -p ${USB_DIR}${TM_BACKUP_DIR}
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" \
 		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
-		"${USB_DIR}${TASKMATE_DIR}/" > ${RSYNC_LOG}
+		"${USB_DIR}${TM_BACKUP_DIR}/" > ${RSYNC_LOG}
 
 	# umount
 	@printf "%sUmount ${USB_DIR}%s\n" \
