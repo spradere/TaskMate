@@ -60,9 +60,10 @@ GIT_IGNORE_STAMP = ${BUILD_DIR}/.gitignore_stamp
 GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
 GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
-GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err
+GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err .mk
 GIT_ALLOWED_FILES = .clang-format .clang-tidy .gitingnore \
-	audit_todo CHANGELOG LICENSE Makefile README.md
+	audit_todo CHANGELOG LICENSE Makefile README.md \
+	doc/Doxyfile
 
 # Global error
 ERROR_CAT = ${BUILD_DIR}/errors_all.err
