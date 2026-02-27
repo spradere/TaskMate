@@ -44,12 +44,11 @@ pull:
 .PHONY: pull
 
 # Write .gitignore file
-${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/dir_path_files.mk
+${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 	@printf "# exclude evrything\n" > ${GIT_IGNORE}
 	@printf "*\n" >> ${GIT_IGNORE}
-	@printf "\n" >> ${GIT_IGNORE}
 
-	@printf "# allowed directories + extension\n" >> ${GIT_IGNORE}
+	@printf "\n# allowed directories + extension\n" >> ${GIT_IGNORE}
 .for dir in ${GIT_ALLOWED_DIR}
 	@printf "!${dir}/\n" >> ${GIT_IGNORE}
 	@printf "!${dir}/**\n" >> ${GIT_IGNORE}
@@ -57,12 +56,16 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/dir_path_files.mk
 	@printf "!${dir}/**/*${ext}\n" >> ${GIT_IGNORE}
 .endfor
 .endfor
-	@printf "\n" >> ${GIT_IGNORE}
 
-	@printf "# allowed files\n" >> ${GIT_IGNORE}
+	@printf "\n# allowed files\n" >> ${GIT_IGNORE}
 .for file in ${GIT_ALLOWED_FILES}
 	@printf "!${file}\n" >> ${GIT_IGNORE}
 .endfor
+	@printf "\n# special case for build counter\n" >> ${GIT_IGNORE}
+	@printf "${BUILD_BASE}/*\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_BASE}/**/\n" >> ${GIT_IGNORE}
+	@printf "${BUILD_BASE}/**\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_BASE}/**/.build_counter\n" >> ${GIT_IGNORE}
 	@touch ${GIT_IGNORE_STAMP}
 
 backup:

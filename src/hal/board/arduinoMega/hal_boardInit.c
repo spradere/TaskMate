@@ -17,7 +17,7 @@
  *
  */
 
-#include "hal/board/arduino_mega/hal_boardInit.h"
+#include "hal/board/arduinoMega/hal_boardInit.h"
 
 #include <avr/io.h>
 #include <stdbool.h>

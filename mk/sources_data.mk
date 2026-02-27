@@ -75,6 +75,10 @@ MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
 
+################################################################################
+# Data
+################################################################################
+
 # TaskMate version
 TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 

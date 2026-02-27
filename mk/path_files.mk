@@ -62,7 +62,7 @@ GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
 GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err
 GIT_ALLOWED_FILES = .clang-format .clang-tidy .gitingnore \
-	audit_todo CHANGELOG LICENSE Makefile README.md .build_counter
+	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
 ERROR_CAT = ${BUILD_DIR}/errors_all.err

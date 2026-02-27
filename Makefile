@@ -32,10 +32,10 @@ DOC_DIR = doc
 BUILD_DIR = ${BUILD_BASE}/${ARCH}_${MCU}_${BOARD}
 
 # path and files
-.include "${MAKE_DIR}/dir_path_files.mk"
+.include "${MAKE_DIR}/path_files.mk"
 
 # Make global process
-.include "${MAKE_DIR}/sources.mk"
+.include "${MAKE_DIR}/sources_data.mk"
 .include "${MAKE_DIR}/header_allow.mk"
 .include "${MAKE_DIR}/build.mk"
 .include "${MAKE_DIR}/utils.mk"

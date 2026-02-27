@@ -36,10 +36,11 @@
 	@printf "# Last build informations \n" >> ${BUILD_INFO}
 	@printf "##########################\n\n" >> ${BUILD_INFO}
 
-	@printf "build counter : %s\n" "${BUILD_CNT}" >> ${BUILD_INFO}
-	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_INFO}
+	@printf "TaskMate %s\n" "${TM_VERSION}" >> ${BUILD_INFO}
 	@printf "date : " >> ${BUILD_INFO}
 	@date >> ${BUILD_INFO}
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_INFO}
+	@printf "build counter for this target : %s\n" "${BUILD_CNT}" >> ${BUILD_INFO}
 	@git -v >> ${BUILD_INFO}
 	@printf "git tag : " >> ${BUILD_INFO}
 	@git describe --tags >> ${BUILD_INFO}
