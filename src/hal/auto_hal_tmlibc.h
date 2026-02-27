@@ -21,7 +21,7 @@
 
 // clang-format off
 // hal stdio implementation
-#include "hal/board/arduino_mega/hal_tmlibc.h"
+#include "hal/board/arduinoMega/hal_tmlibc.h"
 // clang-format on
 
 #endif

@@ -20,7 +20,7 @@
 # Default target
 ARCH ?= avr8
 MCU ?= atmega2560
-BOARD ?= arduino_mega
+BOARD ?= arduinoMega
 
 # Valid arch
 VALID_ARCHS = avr8 amd64 arm32v7-m4
@@ -39,7 +39,7 @@ VALID_MCUS.arm32v7-m4 = stm32g474
 .endif
 
 # Valid boards for .mcu
-VALID_BOARD.atmega2560 = arduino_mega arduino_mega_old
+VALID_BOARD.atmega2560 = arduinoMega arduinoMega_old
 VALID_BOARD.stm32g474 = nucleo-g474
 VALID_BOARD.amd64 = pc
 

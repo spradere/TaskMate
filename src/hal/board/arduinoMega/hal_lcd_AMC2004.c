@@ -17,7 +17,7 @@
  *
  */
 
-#include "hal/board/arduino_mega/hal_lcd_AMC2004.h"
+#include "hal/board/arduinoMega/hal_lcd_AMC2004.h"
 
 #include <util/delay.h>
 
