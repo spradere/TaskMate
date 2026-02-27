@@ -28,4 +28,9 @@
 !LICENSE
 !Makefile
 !README.md
-!.build_counter
+
+# special case for build counter
+build/*
+!build/**/
+build/**
+!build/**/.build_counter
