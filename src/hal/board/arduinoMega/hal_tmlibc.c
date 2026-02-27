@@ -18,7 +18,7 @@
  *
  */
 
-#include "hal/board/arduino_mega/hal_tmlibc.h"
+#include "hal/board/arduinoMega/hal_tmlibc.h"
 
 #include "hal/auto_hal_user.h"
 
