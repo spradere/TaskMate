@@ -62,10 +62,9 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 	@printf "!${file}\n" >> ${GIT_IGNORE}
 .endfor
 	@printf "\n# special case for build counter\n" >> ${GIT_IGNORE}
-	@printf "${BUILD_BASE}/*\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_BASE}/\n" >> ${GIT_IGNORE}
 	@printf "!${BUILD_BASE}/**/\n" >> ${GIT_IGNORE}
-	@printf "${BUILD_BASE}/**\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_BASE}/**/.build_counter\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_BASE}/**/build_counter\n" >> ${GIT_IGNORE}
 	@touch ${GIT_IGNORE_STAMP}
 
 backup:
