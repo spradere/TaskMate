@@ -18,17 +18,17 @@
 ################################################################################
 
 # Targets
-TARGET = ${BUILD_DIR}/TaskMate
-AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
+TARGET = ${BUILD_DIR_TARGET}/TaskMate
+AUTOCODE_TARGET = ${BUILD_DIR_TARGET}/autoCode
 
 # USB
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 
 # Build info
-BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
-BUILD_CNT_FILE = ${BUILD_DIR}/.build_counter
-TM_VERSION_FILE = ${BUILD_DIR}/.tm_version
+BUILD_INFO = ${BUILD_DIR_TARGET}/last_build_info.txt
+BUILD_CNT_FILE = ${BUILD_DIR_TARGET}/build_counter
+TM_VERSION_FILE = ${BUILD_DIR_TARGET}/tm_version
 
 # Source directories
 SRC_DIR_LIST = ${SRC_DIR}
@@ -44,33 +44,33 @@ SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}
 SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}
 
 # List for hal headers
-FILE_HAL_USER_PATH = ${BUILD_DIR}/files_hal_user
-FILE_HAL_SYSTEM_PATH = ${BUILD_DIR}/files_hal_system
+FILE_HAL_USER_PATH = ${BUILD_DIR_TARGET}/files_hal_user
+FILE_HAL_SYSTEM_PATH = ${BUILD_DIR_TARGET}/files_hal_system
 
 # log files
 AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
 RSYNC_LOG = ${LOG_DIR}/rsync.log
 
 # autoCode
-AUTOCODE_CONFIG = ${BUILD_DIR}/autoCode_config
+AUTOCODE_CONFIG = ${BUILD_DIR_TARGET}/autoCode_config
 
 # git ignore
 GIT_IGNORE = .gitignore
-GIT_IGNORE_STAMP = ${BUILD_DIR}/.gitignore_stamp
+GIT_IGNORE_STAMP = ${BUILD_DIR_TARGET}/.gitignore_stamp
 GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
 GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
 GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
 GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err .mk
-GIT_ALLOWED_FILES = .clang-format .clang-tidy .gitingnore \
+GIT_ALLOWED_FILES = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md \
 	doc/Doxyfile
 
 # Global error
-ERROR_CAT = ${BUILD_DIR}/errors_all.err
+ERROR_CAT = ${BUILD_DIR_TARGET}/errors_all.err
 
 # Tags
 TAGS = .tags
-TAGS_STAMP = ${BUILD_DIR}/.tags_stamp
+TAGS_STAMP = ${BUILD_DIR_TARGET}/.tags_stamp
 
 # USB key directory backup
 TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${TM_VERSION}

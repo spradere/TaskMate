@@ -22,8 +22,8 @@ clean:
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
-	rm -f ${OBJS} ${DEPS} ${BUILD_DIR}/TaskMate*
-	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR}/.autoCode_stamp* ${BUILD_DIR}/autoCode_*
+	rm -f ${OBJS} ${DEPS} ${BUILD_DIR_TARGET}/TaskMate*
+	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR_TARGET}/.autoCode_stamp* ${BUILD_DIR_TARGET}/autoCode_*
 	@printf "${COLOUR_RESET}"
 .PHONY: clean
 

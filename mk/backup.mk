@@ -91,7 +91,7 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@mkdir -p ${USB_DIR}${TM_BACKUP_DIR}
 	rsync -av * --progress --delete --exclude "*.o" --exclude="html" \
-		--exclude="${BUILD_DIR}" --exclude="${LOG_DIR}" \
+		--exclude="${BUILD_DIR_TARGET}" --exclude="${LOG_DIR}" \
 		"${USB_DIR}${TM_BACKUP_DIR}/" > ${RSYNC_LOG}
 
 	# umount
