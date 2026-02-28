@@ -90,10 +90,13 @@ backup:
 	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@mkdir -p ${USB_DIR}${TM_BACKUP_DIR}
-	rsync -av ./ --progress --delete 						\
-		--include="${BUILD_DIR_TARGET}/" 					\
-		--include="${BUILD_CNT_FILE}" 						\
-		--exclude="${BUILD_DIR}/*" --exclude="${LOG_DIR}" 	\
+	rsync -av ./ --progress --delete --delete-excluded \
+		--include="${BUILD_DIR}/" \
+		--include="${BUILD_DIR_TARGET}/" \
+		--include="${BUILD_DIR_TARGET}/build_counter" \
+		--exclude="${BUILD_DIR_TARGET}/*" \
+		--exclude="${BUILD_DIR}/*" --exclude="${LOG_DIR}" \
+		--exclude=".git" \
 		"${USB_DIR}${TM_BACKUP_DIR}/" > ${RSYNC_LOG}
 
 	# umount
