@@ -51,7 +51,7 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 	@printf "\n# allowed directories + extension\n" >> ${GIT_IGNORE}
 .for dir in ${GIT_ALLOWED_DIR}
 	@printf "!${dir}/\n" >> ${GIT_IGNORE}
-	@printf "!${dir}/**\n" >> ${GIT_IGNORE}
+	@printf "!${dir}/**/\n" >> ${GIT_IGNORE}
 .for ext in ${GIT_ALLOWED_EXT.${dir}}
 	@printf "!${dir}/**/*${ext}\n" >> ${GIT_IGNORE}
 .endfor
@@ -62,9 +62,9 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 	@printf "!${file}\n" >> ${GIT_IGNORE}
 .endfor
 	@printf "\n# special case for build counter\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_BASE}/\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_BASE}/**/\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_BASE}/**/build_counter\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_DIR}/\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_DIR}/**/\n" >> ${GIT_IGNORE}
+	@printf "!${BUILD_DIR}/**/build_counter\n" >> ${GIT_IGNORE}
 	@touch ${GIT_IGNORE_STAMP}
 
 backup:
@@ -90,8 +90,10 @@ backup:
 	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@mkdir -p ${USB_DIR}${TM_BACKUP_DIR}
-	rsync -av * --progress --delete --exclude "*.o" --exclude="html" \
-		--exclude="${BUILD_DIR_TARGET}" --exclude="${LOG_DIR}" \
+	rsync -av ./ --progress --delete 						\
+		--include="${BUILD_DIR_TARGET}/" 					\
+		--include="${BUILD_CNT_FILE}" 						\
+		--exclude="${BUILD_DIR}/*" --exclude="${LOG_DIR}" 	\
 		"${USB_DIR}${TM_BACKUP_DIR}/" > ${RSYNC_LOG}
 
 	# umount
