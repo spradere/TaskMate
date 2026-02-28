@@ -23,7 +23,7 @@
 .MAIN: all
 
 .BEGIN:
-	@mkdir -p ${BUILD_DIR}
+	@mkdir -p ${BUILD_DIR_TARGET}
 	@mkdir -p ${LOG_DIR}
 .if make(upload) || make(all)
 	@printf '%s\n' "${TM_VERSION}" | \
