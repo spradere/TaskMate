@@ -38,11 +38,11 @@ cloc:
 #@ [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_BASE},${LOG_DIR} \
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} \
 		--exclude-lang=D --exclude-ext=rc,md,txt
 	@printf "\n%sCount lines of documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_BASE},${LOG_DIR} \
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} \
 		--exclude-lang=D,make --exclude-ext=rc,c,h
 .PHONY: cloc
 
