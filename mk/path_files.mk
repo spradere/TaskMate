@@ -73,4 +73,5 @@ TAGS = .tags
 TAGS_STAMP = ${BUILD_DIR_TARGET}/.tags_stamp
 
 # USB key directory backup
+TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${TM_VERSION}
