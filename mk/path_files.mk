@@ -19,14 +19,14 @@
 
 # Targets
 TARGET = ${BUILD_DIR_TARGET}/TaskMate
-AUTOCODE_TARGET = ${BUILD_DIR_TARGET}/autoCode
+AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
 
 # USB
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 
 # Build info
-BUILD_INFO = ${BUILD_DIR_TARGET}/last_build_info.txt
+BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
 BUILD_CNT_FILE = ${BUILD_DIR_TARGET}/build_counter
 TM_VERSION_FILE = ${BUILD_DIR_TARGET}/tm_version
 
