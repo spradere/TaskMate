@@ -21,18 +21,18 @@
 SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
 SRCS_H != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.h"
 
-OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR}/%.o}
+OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR_TARGET}/%.o}
 
 # Dependency files
 DEPS = ${OBJS:.o=.d}
-DEPS_FILE = ${BUILD_DIR}/.deps.d
+DEPS_FILE = ${BUILD_DIR_TARGET}/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
 # autoCode
 AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
-AUTOCODE_STAMP = ${BUILD_DIR}/.autoCode_stamp_${ARCH}_${MCU}_${BOARD}
+AUTOCODE_STAMP = ${BUILD_DIR_TARGET}/.autoCode_stamp
 
 STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
