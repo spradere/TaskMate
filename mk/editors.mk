@@ -26,16 +26,21 @@ ${TAGS_STAMP}: ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 	@touch ${TAGS_STAMP}
 
 vim_all: ${TAGS_STAMP}
-#@ [global] open Vim with all TaskMate sources files .c .h .mk (no autoCode)
-	vim ${SRCS} ${SRCS_H} Makefile ${MK_FILES}
+#@ [global] open Vim with all TaskMate sources files .c .h (no autoCode)
+	vim ${SRCS} ${SRCS_H}
 .PHONY: vim_all
+
+vim_mk: ${TAGS_STAMP}
+#@ [global] open Vim with all Makefiles .mk
+	vim Makefile ${MK_FILES}
+.PHONY: vim_mk
 
 vim_doc:
 #@ [global] open Vim with all documentation files .md .txt
 	vim ${DOCS}
 .PHONY: vim_doc
 
-vim_autoCode: tags
+vim_autoCode: ${TAGS_STAMP}
 #@ [global] open Vim with all autoCode sources files .c .h
 	vim ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 .PHONY: vim_autoCode

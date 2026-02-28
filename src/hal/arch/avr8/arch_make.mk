@@ -52,13 +52,13 @@ ${TARGET}: ${OBJS}
 	${CC} ${CFLAGS} ${LFLAGS} -o ${ELF} ${OBJS}
 
 # compile
-${OBJS}: ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}
+${OBJS}: ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}
 	@printf "\n%sCompilation ...%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} ${.TARGET}
+	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c}} \
-		-c ${.TARGET:${BUILD_DIR}%.o=${SRC_DIR}%.c} -o ${.TARGET}
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}} \
+		-c ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
 upload: all
 #@ [avr8] Upload firmware to mcu via Arduino board.
@@ -68,7 +68,7 @@ upload: all
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# RAM usage
 	@printf "\nStatic RAM usage : "
-	avr-size -G -d ${BUILD_DIR}/TaskMate.elf
+	avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
 	@printf "\n"
 	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
@@ -79,8 +79,8 @@ dump: all
 	@printf "\n%sGenerate debugging informations%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	avr-objdump -D -m avr6 ${HEX} > ${BUILD_DIR}/hex.txt
-	avr-objdump -D -m avr6 ${ELF} > ${BUILD_DIR}/elf.txt
+	avr-objdump -D -m avr6 ${HEX} > ${BUILD_DIR_TARGET}/hex.txt
+	avr-objdump -D -m avr6 ${ELF} > ${BUILD_DIR_TARGET}/elf.txt
 .PHONY: dump
 
 tidy_TaskMate:
@@ -102,7 +102,7 @@ mem_size: all
 #@ [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
 		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
-	avr-size -G -d ${BUILD_DIR}/TaskMate.elf
-	avr-nm --format=bsd --size-sort -r ${BUILD_DIR}/TaskMate.elf | head -20
+	avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
+	avr-nm --format=bsd --size-sort -r ${BUILD_DIR_TARGET}/TaskMate.elf | head -20
 
 .PHONY: module_size
