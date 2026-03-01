@@ -19,27 +19,28 @@
 
 push: ${GIT_IGNORE_STAMP}
 #@ [global] Git push routine, use command line : # make push M="message"
-	@printf "\n%sGit routine for \"${M}\" commit -> ${REMOTE}/${BRANCH} %s\n\n" \
+	@printf "\n%sGit routine for \"${M}\" commit -> ${UPSTREAM} %s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	git branch
 	@git status
 	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git add .
 	@git commit -m "${M}"
-	@git push ${REMOTE} ${BRANCH}
+	@git push
 	@printf "\n"
 .PHONY: push
 
 pull:
 #@ [global] Git pull routine
-	@git fetch ${EMOTE}
+	@git fetch
 	@git status
 	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git stash
-	@git merge --ff-only ${REMOTE}/${BRANCH}
+	@git merge --ff-only
 	@git stash pop
 .PHONY: pull
 
