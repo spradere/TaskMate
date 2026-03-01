@@ -57,13 +57,13 @@ AUTOCODE_CONFIG = ${BUILD_DIR_TARGET}/autoCode_config
 # git ignore
 GIT_IGNORE = .gitignore
 GIT_IGNORE_STAMP = ${BUILD_DIR_TARGET}/.gitignore_stamp
-GIT_ALLOWED_DIR = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR}
-GIT_ALLOWED_EXT.${DOC_DIR} = .c .md .txt .png .jpg
-GIT_ALLOWED_EXT.${MAKE_DIR} = .mk
-GIT_ALLOWED_EXT.${SRC_DIR} = .c .h .rc .err .mk
+GIT_ALLOWED_DIRS = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR} ${BUILD_DIR}
+GIT_ALLOWED_FILES.${DOC_DIR} = *.c *.md *.txt *.png *.jpg Doxyfile
+GIT_ALLOWED_FILES.${MAKE_DIR} = *.mk
+GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk
+GIT_ALLOWED_FILES.${BUILD_DIR} = build_counter
 GIT_ALLOWED_FILES = .clang-format .clang-tidy \
-	audit_todo CHANGELOG LICENSE Makefile README.md \
-	doc/Doxyfile
+	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
 ERROR_CAT = ${BUILD_DIR_TARGET}/errors_all.err
@@ -73,5 +73,4 @@ TAGS = .tags
 TAGS_STAMP = ${BUILD_DIR_TARGET}/.tags_stamp
 
 # USB key directory backup
-TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${TM_VERSION}
