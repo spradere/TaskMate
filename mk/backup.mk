@@ -45,15 +45,15 @@ pull:
 
 # Write .gitignore file
 ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
-	@printf "# exclude evrything\n" > ${GIT_IGNORE}
+	@printf "# exclude everything\n" > ${GIT_IGNORE}
 	@printf "*\n" >> ${GIT_IGNORE}
 
-	@printf "\n# allowed directories + extension\n" >> ${GIT_IGNORE}
-.for dir in ${GIT_ALLOWED_DIR}
+	@printf "\n# allowed directories and files\n" >> ${GIT_IGNORE}
+.for dir in ${GIT_ALLOWED_DIRS}
 	@printf "!${dir}/\n" >> ${GIT_IGNORE}
 	@printf "!${dir}/**/\n" >> ${GIT_IGNORE}
-.for ext in ${GIT_ALLOWED_EXT.${dir}}
-	@printf "!${dir}/**/*${ext}\n" >> ${GIT_IGNORE}
+.for file in ${GIT_ALLOWED_FILES.${dir}}
+	@printf "!${dir}/**/${file}\n" >> ${GIT_IGNORE}
 .endfor
 .endfor
 
@@ -61,10 +61,6 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 .for file in ${GIT_ALLOWED_FILES}
 	@printf "!${file}\n" >> ${GIT_IGNORE}
 .endfor
-	@printf "\n# special case for build counter\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_DIR}/\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_DIR}/**/\n" >> ${GIT_IGNORE}
-	@printf "!${BUILD_DIR}/**/build_counter\n" >> ${GIT_IGNORE}
 	@touch ${GIT_IGNORE_STAMP}
 
 backup:
@@ -75,7 +71,6 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
-	# TODO ? remove and replace with automount
 	# Test if USB key is mount, do if not
 	@if mount | grep -q "${USB_DIR}"; then \
 		printf "%sUSB key already mounted ${USB_DIR}%s\n" \

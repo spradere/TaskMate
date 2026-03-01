@@ -31,19 +31,20 @@ DOC_DIR = doc
 .include "${MAKE_DIR}/hardware_target.mk"
 BUILD_DIR_TARGET = ${BUILD_DIR}/${ARCH}_${MCU}_${BOARD}
 
-# path and files
+# Definitions
+TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
 .include "${MAKE_DIR}/path_files.mk"
-
-# Make global process
 .include "${MAKE_DIR}/sources_data.mk"
 .include "${MAKE_DIR}/header_allow.mk"
+.include "${MAKE_DIR}/colours.mk"
+
+# Make global process
 .include "${MAKE_DIR}/build.mk"
 .include "${MAKE_DIR}/utils.mk"
 .include "${MAKE_DIR}/backup.mk"
 .include "${MAKE_DIR}/editors.mk"
-.include "${MAKE_DIR}/colours.mk"
 
-# Hardware specific makefiles
+# Make hardware specific
 .include "${SRC_DIR}/hal/arch/${ARCH}/arch_make.mk"
 .include "${SRC_DIR}/hal/mcu/${MCU}/mcu_make.mk"
 .include "${SRC_DIR}/hal/board/${BOARD}/board_make.mk"
