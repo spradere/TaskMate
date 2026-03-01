@@ -28,3 +28,12 @@ VALID_OPTS = yes no
 # bmake option for -V
 .MAKE.EXPAND_VARIABLES = true
 
+# Codeberg / Github
+VALID_REMOTES = codeberg github
+REMOTE ?= github
+BRANCH ?= main_new
+
+.if empty(VALID_REMOTES:M${REMOTE})
+.error Invalid REMOTE="${REMOTE}". Valid: ${VALID_REMOTES}
+.endif
+
