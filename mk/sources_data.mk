@@ -93,3 +93,6 @@ BUILD_CNT != NEW_BUILD=$$((${BUILD_CNT_BASE} + 1)); \
 	echo $$NEW_BUILD > ${BUILD_CNT_FILE}; \
 	echo $$NEW_BUILD;
 .endif
+
+# Get upstream
+UPSTREAM != git rev-parse --abbrev-ref --symbolic-full-name @{u}
