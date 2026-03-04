@@ -12,7 +12,7 @@ rather than an introductory overview.
 - autoCode generator for system initialisation.
 - C preprocessor conditional statements
 
-This rules prevents:
+These rules prevent:
 
 - configuration spaghetti
 - hard-to-read code paths
@@ -142,13 +142,13 @@ which makes them fully portable.
 
 ## 🧩 Adding a new hardware target (ARCH / MCU / BOARD)
 
-All new drivers headers source files will be automatically added to
-hal/auto_hal_user.h or hal/auto_hal_system.h by using tag :
+All new driver header and source files will be automatically added to
+hal/auto_hal_user.h or hal/auto_hal_system.h by using tags:
 
 - // @hal_user
 - // @hal_system
 
-autoCode will read this tags and write meta headers hal files.
+autoCode will read these tags and write the HAL meta-header files.
 
 1️⃣ **New architecture (ARCH)**
 
