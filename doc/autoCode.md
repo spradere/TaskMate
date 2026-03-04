@@ -13,7 +13,7 @@ into the generated system files that TaskMate uses at runtime.
 
 ---
 
-## ❓ How it work ?
+## ❓ How does it work?
 
 `autoCode` is responsible for generating dense, low-level initialisation
 code in files like `sysCore/modules.c`
