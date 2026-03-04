@@ -1,19 +1,19 @@
-// Summary for pointer to functions
+// Summary for pointers to functions
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * ! Warning: this file is only a small summary about passing pointers to !
  * ! functions, not a full working code: many memory leaks append.        !
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-/* Aliases of pointer :
+/* Aliases for pointers:
  * 	(*foo).member <-> foo->member
  * 	(array+i) <-> array[i]
  * 	&array[0] <-> array
- * 	fx() <-> (*fx)()    //useless
+ * 	fx() <-> (*fx)()    // equivalent
  * 	int *bar[x] -> int **bar
  */
 
-/* Incrementation tricky trap
+/* Increment tricky cases
  *	*p++   // same as *(p++): increment pointer, and dereference unincremented address
  * 	*++p   // same as *(++p): increment pointer, and dereference incremented address
  * 	++*p   // same as ++(*p): dereference pointer, and increment the value it points to
