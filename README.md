@@ -1,6 +1,6 @@
 # TaskMate RTOS ![](doc/icon_64.png)
 
-**Micro-controller Unit - Real Time Operating System**
+**Microcontroller Unit - Real-Time Operating System**
 
 ---
 
@@ -47,7 +47,7 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
 
-- Automatic recompilation based on files changes, including headers and initrc startup configuration.
+- Automatic recompilation based on file changes, including headers and init.rc startup configuration.
 - CLI commands like `make upload`, `make push` and `make backup`.
 
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
@@ -105,14 +105,14 @@ This design significantly improves **stability** and **portability**.
 Starting with version 0.10, TaskMate uses a **modular design model**:
 
 - Drivers, system services, and user tasks are placed in dedicated directories.
-- Each directory provides a init.rc file describing initialisation parameters.
-- These files are parsed before **compile time** by a custom tool : `autoCode`.
+- Each directory provides an init.rc file describing initialisation parameters.
+- These files are parsed at **compile time** by a custom tool: `autoCode`.
 
 The result is **auto-generated code**, without runtime overhead 👍
 
 This approach keeps the flexibility of a dynamic system but ensures that
  **everything is resolved at compile time**, minimising Flash and RAM usage.
-This mechanism defines system initialisation **without manually hard coding**
+This mechanism defines system initialisation **without manually hard-coding**
 configuration.
 
 See : [More about autoCode](doc/autoCode.md)
@@ -164,11 +164,11 @@ See the `LICENSE` file for full details.
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/C_code_best_practices.md)
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
-- Microcontleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
+- Microcontrôleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
 - The markdown guide, author Matt Cone, publisher Amazon. ISBN 9798656504492
 - Hands-On RTOS with Microcontrollers, author Brian Amos, publisher Packt. ISBN 978-1-83882-673-4
 - Making Embedded Systems, author Elecia White, publisher O'Reilly. ISBN 978-1-098-15154-6
-- Operating System Design, The Xinu Approch, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
+- Operating System Design, The Xinu Approach, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 
 [^1]: ⚠️ Warning : Versions 1.37, 2.71, 3.14 and 4.2 are intentionally skipped. Universe backward compatibility constraints apply.

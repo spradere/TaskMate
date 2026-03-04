@@ -13,7 +13,7 @@ delete remote : git push origin --delete test_branch
 # list last commits :
 	git log --oneline
 
-# list local / remonte branch
+# list local / remote branches
 	git branch -a --sort=-committerdate
 
 # check tag
@@ -33,11 +33,11 @@ delete remote : git push origin --delete test_branch
 # quick update
 git pull
 
-# what will done
+# what will be done
 git fetch
 git status
 
-# push uncommited work
+# push uncommitted work
 git stash
 git pull
 git stash pop
@@ -67,7 +67,7 @@ git log --no-merges --numstat --date=iso-strict --pretty="C %H %ad %s" \
 | sort -k1,1nr -k3,3r \
 | head -20
 
-# big blop
+# big blob
 git rev-list --objects --all \
 | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
 | awk '$1=="blob"{print $3, $2, $4}' \
