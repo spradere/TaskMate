@@ -64,7 +64,7 @@ ${OBJS}: ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}
 upload: all
 #@ [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
-		"${COLOR_TARGET_INFO}" ${BUILD_CNT} "${COLOR_RESET}"
+		"${COLOUR_TARGET_INFO}" ${BUILD_CNT} "${COLOUR_RESET}"
 	# ELF to hex format
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# RAM usage
@@ -78,16 +78,16 @@ upload: all
 dump: all
 #@ [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
-		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	avr-objdump -D -m avr6 ${HEX} > ${BUILD_DIR_TARGET}/hex.txt
-	avr-objdump -D -m avr6 ${ELF} > ${BUILD_DIR_TARGET}/elf.txt
+	avr-objdump -D -m avr6 ${HEX} > "${BUILD_DIR_TARGET}/hex.txt"
+	avr-objdump -D -m avr6 ${ELF} > "${BUILD_DIR_TARGET}/elf.txt"
 .PHONY: dump
 
 tidy_TaskMate:
 #@ [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
 	@printf "\n%sTidy TaskMate static code test%s\n\n" \
-		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/ \
@@ -102,8 +102,8 @@ tidy_TaskMate:
 mem_size: all
 #@ [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
-		"${COLOR_TARGET_INFO}" "${COLOR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
 	avr-nm --format=bsd --size-sort -r ${BUILD_DIR_TARGET}/TaskMate.elf | head -20
 
-.PHONY: module_size
+.PHONY: mem_size
