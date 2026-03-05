@@ -1,4 +1,8 @@
-	move const string to ROM 
+	build system refactor
+
+TaskMate 0.26
+
+	move const string to ROM
 	fix i2c + external rtc
 	add system log + tm_vsnprintf()
 	hal I2C refactor, address maping
