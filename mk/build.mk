@@ -18,7 +18,7 @@
 ################################################################################
 
 # Info about help system : targets begins with '_' or '$' are internal system only
-# they'll not be displayed in `make help`
+# they'll not be displayed in # make help
 
 .MAIN: all
 
@@ -32,20 +32,20 @@
 .endif
 
 .END:
-	@printf "##########################\n" > ${BUILD_INFO}
-	@printf "# Last build informations \n" >> ${BUILD_INFO}
-	@printf "##########################\n\n" >> ${BUILD_INFO}
+	@printf "##########################\n" > "${BUILD_INFO}"
+	@printf "# Last build informations \n" >> "${BUILD_INFO}"
+	@printf "##########################\n\n" >> "${BUILD_INFO}"
 
-	@printf "TaskMate %s\n" "${TM_VERSION}" >> ${BUILD_INFO}
-	@printf "date : " >> ${BUILD_INFO}
-	@date >> ${BUILD_INFO}
-	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> ${BUILD_INFO}
-	@printf "build counter for this target : %s\n" "${BUILD_CNT}" >> ${BUILD_INFO}
-	@git -v >> ${BUILD_INFO}
-	@printf "git tag : " >> ${BUILD_INFO}
-	@git describe --tags >> ${BUILD_INFO}
-	@printf "avr-gcc version : " >> ${BUILD_INFO}
-	@avr-gcc -dumpversion >> ${BUILD_INFO}
+	@printf "TaskMate %s\n" "${TM_VERSION}" >> "${BUILD_INFO}"
+	@printf "date : " >> "${BUILD_INFO}"
+	@date >> "${BUILD_INFO}"
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${BUILD_INFO}"
+	@printf "build counter for this target : %s\n" "${BUILD_CNT}" >> "${BUILD_INFO}"
+	@git -v >> "${BUILD_INFO}"
+	@printf "git tag : " >> "${BUILD_INFO}"
+	@git describe --tags >> "${BUILD_INFO}"
+	@printf "avr-gcc version : " >> "${BUILD_INFO}"
+	@avr-gcc -dumpversion >> "${BUILD_INFO}"
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
@@ -56,7 +56,7 @@ all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 _dependency_check:
 	@printf "\n%sCheck dependency files%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > ${DEPS_FILE}
+	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > "${DEPS_FILE}"
 
 # Test for autoCode required files
 ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
@@ -66,41 +66,41 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
-	@rm -f ${AUTOCODE_LOG}*
+	@rm -f "${AUTOCODE_LOG}*"
 .endif
 
 	# write autoCode options
-	@printf "# TaskMate version\n" > ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--tm_ver ${TM_VERSION}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--tm_build ${BUILD_CNT}" >> ${AUTOCODE_CONFIG}
+	@printf "# TaskMate version\n" > "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--tm_ver ${TM_VERSION}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--tm_build ${BUILD_CNT}" >> "${AUTOCODE_CONFIG}"
 
-	@printf "\n# hardware target\n" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--arch ${ARCH}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--mcu ${MCU}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--board ${BOARD}" >> ${AUTOCODE_CONFIG}
+	@printf "\n# hardware target\n" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--arch ${ARCH}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--mcu ${MCU}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--board ${BOARD}" >> "${AUTOCODE_CONFIG}"
 
-	@printf "\n# files path\n" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--errors ${ERROR_CAT}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> ${AUTOCODE_CONFIG}
-	@printf "%s\n" "--file_hal_tmlibc ${FILE_HAL_TMLIBC:S/src\///}" >> ${AUTOCODE_CONFIG}
+	@printf "\n# files path\n" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--errors ${ERROR_CAT}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--file_hal_tmlibc ${FILE_HAL_TMLIBC:S/src\///}" >> "${AUTOCODE_CONFIG}"
 
 	# write list hal sources files
-	@: > ${FILE_HAL_USER_PATH}
+	@: > "${FILE_HAL_USER_PATH}"
 .for file in ${FILES_HAL_USER}
-	@printf "%s\n" "${file}" >> ${FILE_HAL_USER_PATH}
+	@printf "%s\n" "${file}" >> "${FILE_HAL_USER_PATH}"
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
-	@rm -f ${FILE_HAL_USER_PATH}.bak
+	@rm -f "${FILE_HAL_USER_PATH}.bak"
 
-	@: > ${FILE_HAL_SYSTEM_PATH}
+	@: > "${FILE_HAL_SYSTEM_PATH}"
 .for file in ${FILES_HAL_SYSTEM}
-	@printf "%s\n" "${file}" >> ${FILE_HAL_SYSTEM_PATH}
+	@printf "%s\n" "${file}" >> "${FILE_HAL_SYSTEM_PATH}"
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
-	@rm -f ${FILE_HAL_SYSTEM_PATH}.bak
+	@rm -f "${FILE_HAL_SYSTEM_PATH}.bak"
 
-	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > ${AUTOCODE_LOG_STAMP}
+	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > "${AUTOCODE_LOG_STAMP}"
 	@touch ${AUTOCODE_STAMP}
 
 # Special rule for autoCode with clang, not mcu specialized compiler
@@ -122,7 +122,7 @@ _system_critical_check:
 	@allowed="${ALLOWED_LIST${index}}"; \
 	pattern="${ALLOWED_PATTERN${index}}"; \
 	printf "\nChecking pattern %s...\n" "$$pattern"; \
-	files="`grep -R -l "$$pattern" ${SRC_DIR} 2>/dev/null || true`"; \
+	files="$$(grep -R -l "$$pattern" "${SRC_DIR}" 2>/dev/null || true)"; \
 	for f in $$files; do \
 	    test=no; \
 	   for ok in $$allowed; do \
@@ -141,7 +141,7 @@ _system_critical_check:
 ${ERROR_CAT}: ${ERROR_FILES}
 	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cat ${ERROR_FILES} > ${ERROR_CAT}
+	@cat ${ERROR_FILES} > "${ERROR_CAT}"
 
 # Run autoCode alone
 AUTOCODE_PRINT_LAST_LOG = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
@@ -150,7 +150,7 @@ autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f ${AUTOCODE_STAMP}
+	@rm -f "${AUTOCODE_STAMP}"
 	@${MAKE} ${AUTOCODE_STAMP}
 	@${AUTOCODE_PRINT_LAST_LOG}
 	@printf "${COLOUR_CYAN}"
