@@ -32,7 +32,7 @@ DOC_DIR = doc
 BUILD_DIR_TARGET = ${BUILD_DIR}/${ARCH}_${MCU}_${BOARD}
 
 # Definitions
-TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || echo "0.00"
+TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00"
 .include "${MAKE_DIR}/path_files.mk"
 .include "${MAKE_DIR}/sources_data.mk"
 .include "${MAKE_DIR}/header_allow.mk"

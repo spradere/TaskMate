@@ -32,7 +32,7 @@ vim_all: ${TAGS_STAMP}
 
 vim_mk: ${TAGS_STAMP}
 #@ [global] open Vim with all Makefiles .mk
-	vim Makefile ${MK_FILES}
+	vim ${MK_FILES}
 .PHONY: vim_mk
 
 vim_doc:
@@ -45,3 +45,6 @@ vim_autoCode: ${TAGS_STAMP}
 	vim ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 .PHONY: vim_autoCode
 
+geany_mk:
+	geany ${MK_FILES}
+.PHONY: geany_mk
