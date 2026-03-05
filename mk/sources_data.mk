@@ -90,7 +90,7 @@ BUILD_CNT = ${BUILD_CNT_BASE}
 
 .if make(upload)
 BUILD_CNT != NEW_BUILD=$$((${BUILD_CNT_BASE} + 1)); \
-	echo $$NEW_BUILD > ${BUILD_CNT_FILE}; \
+	echo $$NEW_BUILD > "${BUILD_CNT_FILE}"; \
 	echo $$NEW_BUILD;
 .endif
 
