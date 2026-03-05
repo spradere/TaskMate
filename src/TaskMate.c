@@ -38,7 +38,10 @@ TM_STORE_FILE_NAME;
 
 // display hardware target informations
 #if VERBOSE_LEVEL > 0
+	#define STRING2(x) #x
+	#define STRING(x) STRING2(x)
 	#pragma message "TM_VERSION  = " TM_VERSION
+	#pragma message "BUILD  = " STRING(BUILD_CNT)
 	#pragma message "ARCH  = " ARCH
 	#pragma message "MCU   = " MCU
 	#pragma message "BOARD = " BOARD
@@ -52,7 +55,7 @@ int main(void)
 
 	const sc_info_t *info;
 	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] TaskMate %s %s boot\n"), &file_name, info->tm_ver);
+	tm_syslog(TM_STR("\n\n[boot] TaskMate %s v%s build : %i boot\n"), &file_name, info->tm_ver, info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 	// system static allocation init

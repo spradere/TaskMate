@@ -35,7 +35,8 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 
 # Command line #include and #define
 CFLAGS += -I${SRC_DIR}
-CFLAGS += -DTM_VERSION=\"${TM_VERSION}\" -DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
+CFLAGS += -DTM_VERSION=\"${TM_VERSION}\" -DBUILD_CNT=${BUILD_CNT} \
+	-DARCH=\"${ARCH}\" -DMCU=\"${MCU}\" -DBOARD=\"${BOARD}\"
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
