@@ -1,4 +1,22 @@
 ##################################################
+# 2 repo workflow github/test codeberg/main
+##################################################
+
+Work on test:
+
+git switch test
+git pull
+# work
+git push
+
+When code is clean, push to Codeberg :
+
+git switch main
+git pull
+git merge --ff-only test
+git push
+
+##################################################
 # save
 ##################################################
 

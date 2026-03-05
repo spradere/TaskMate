@@ -26,7 +26,7 @@
 	TM_STR_ROM_NEW(file_name, __FILE_NAME__)
 
 // debug options
-#define VERBOSE_LEVEL 0
+#define VERBOSE_LEVEL 1
 
 // libc selection
 #define TM_LIBC_TASKMATE 1
