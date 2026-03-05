@@ -1,13 +1,13 @@
-Name ended
+Name and release date
 
 QNX ->
 VxWorks ->
-FeeRTOS ->
+FreeRTOS ->
 RTEMS ->
 µC/OS 2016
 ThreadX ->
 Zephyr ->
-Chibios ->
+ChibiOS ->
 ARM Keil RTX5 ->
 Nut/OS 2015
 AvrX 2005
