@@ -50,7 +50,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 		file_line_number++;
 		tokenizer(&tok);
 
-		// proceed arguments
+		// process arguments
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
 			if( tok.count > mod->initrc_arg_count_max )
@@ -94,7 +94,7 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 				}
 			}
 
-			// proceed name
+			// process name
 			if( strlen(tok.tokens[0]) > MOD_NAME_SIZE_MAX )
 			{
 				msgError("Name too long <%s> is over %i", tok.tokens[0], MOD_NAME_SIZE_MAX);

@@ -25,7 +25,7 @@
 
 #include "TaskMate.h" // get libc selection
 
-// tm_sting implementation
+// tm_string implementation
 typedef enum
 {
 	TM_MEM_RAM,
