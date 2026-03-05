@@ -18,7 +18,7 @@
 ################################################################################
 
 # Info about help system : targets begins with '_' or '$' are internal system only
-# they'll not be displayed in `make help`
+# they'll not be displayed in # make help
 
 .MAIN: all
 
@@ -66,7 +66,7 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
-	@rm -f ${AUTOCODE_LOG}*
+	@rm -f "${AUTOCODE_LOG}*"
 .endif
 
 	# write autoCode options
@@ -91,14 +91,14 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@printf "%s\n" "${file}" >> "${FILE_HAL_USER_PATH}"
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
-	@rm -f ${FILE_HAL_USER_PATH}.bak
+	@rm -f "${FILE_HAL_USER_PATH}.bak"
 
 	@: > "${FILE_HAL_SYSTEM_PATH}"
 .for file in ${FILES_HAL_SYSTEM}
 	@printf "%s\n" "${file}" >> "${FILE_HAL_SYSTEM_PATH}"
 .endfor
 	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
-	@rm -f ${FILE_HAL_SYSTEM_PATH}.bak
+	@rm -f "${FILE_HAL_SYSTEM_PATH}.bak"
 
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > "${AUTOCODE_LOG_STAMP}"
 	@touch ${AUTOCODE_STAMP}
@@ -122,7 +122,7 @@ _system_critical_check:
 	@allowed="${ALLOWED_LIST${index}}"; \
 	pattern="${ALLOWED_PATTERN${index}}"; \
 	printf "\nChecking pattern %s...\n" "$$pattern"; \
-	files="$(grep -R -l "$$pattern" "${SRC_DIR}" 2>/dev/null || true)"; \
+	files="$$(grep -R -l "$$pattern" "${SRC_DIR}" 2>/dev/null || true)"; \
 	for f in $$files; do \
 	    test=no; \
 	   for ok in $$allowed; do \
@@ -150,7 +150,7 @@ autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f ${AUTOCODE_STAMP}
+	@rm -f "${AUTOCODE_STAMP}"
 	@${MAKE} ${AUTOCODE_STAMP}
 	@${AUTOCODE_PRINT_LAST_LOG}
 	@printf "${COLOUR_CYAN}"
