@@ -47,6 +47,6 @@ ALLOWED_LIST2 = \
 	${SRC_DIR}/TaskMate.c \
 	${SRC_DIR}/autoCode/autoCode.c
 
-GREP_LIST != cat ${.PARSEDIR}/${.PARSEFILE} \
+GREP_LIST != cat "${.PARSEDIR}/${.PARSEFILE}" \
 	| grep '^[[:space:]]*ALLOWED_PATTERN[0-9][0-9]*[[:space:]]*=' \
 	| sed 's/^[[:space:]]*ALLOWED_PATTERN\([0-9]*\)[[:space:]]*=.*/\1/'
