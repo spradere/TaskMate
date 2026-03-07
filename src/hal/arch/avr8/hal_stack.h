@@ -23,6 +23,7 @@
 #ifndef HAL_STACK_H
 #define HAL_STACK_H
 
+#include <stdint.h>
 #include <avr/io.h> // get SP
 
 static inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp) { SP = sp; }

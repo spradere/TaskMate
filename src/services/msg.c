@@ -26,10 +26,23 @@
 // Send message to :
 #include "hal/auto_hal_user.h"
 
-// variables
-channel_item_t channels[MSG_CHANNELS_MAX];
+// private message channel internals
+#define MSG_FLAG_IN_USE 3
+#define MSG_FLAG_SEND 4
 
-void msgProcess(void);
+#define MSG_CHANNELS_MAX 4
+#define MSG_SIZE_MAX 64
+
+typedef struct
+{
+	uint8_t status;
+	char text[MSG_SIZE_MAX];
+} channel_item_t;
+
+// variables
+static channel_item_t channels[MSG_CHANNELS_MAX];
+
+static void msgProcess(void);
 
 void msg(void)
 {
@@ -119,7 +132,7 @@ void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
 	channels[channel].status |= (uint8_t)(1u << MSG_FLAG_SEND);
 }
 
-void msgProcess(void)
+static void msgProcess(void)
 {
 	for( uint8_t channel = 0; channel < MSG_CHANNELS_MAX; channel++ )
 	{
