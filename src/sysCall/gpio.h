@@ -20,6 +20,7 @@
 #define GPIO_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "hal/auto_hal_define.h" // get : gpio_port_index_t gpio_signal_t
 
