@@ -12,7 +12,6 @@ git push
 When code is clean, push to Codeberg :
 
 git switch main
-git pull
 git merge --ff-only test
 git push
 
