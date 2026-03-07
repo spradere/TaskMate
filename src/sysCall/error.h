@@ -20,6 +20,8 @@
 #ifndef ERROR_H
 #define ERROR_H
 
+#include <stdint.h>
+
 #include "sysCall/auto_error_catalog.h"
 #include "tm_libc/tm_string.h"
 
