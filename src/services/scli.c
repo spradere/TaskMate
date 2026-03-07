@@ -26,7 +26,9 @@
 #include "services/msg.h"
 #include "sysCall/sysCall.h"
 
-uint8_t scli_msg_channel;
+static uint8_t scli_msg_channel;
+
+static void scliEcho(void);
 
 void scli(void)
 {
@@ -44,7 +46,7 @@ void scli(void)
 	}
 }
 
-void scliEcho(void)
+static void scliEcho(void)
 {
 	uint8_t data;
 
