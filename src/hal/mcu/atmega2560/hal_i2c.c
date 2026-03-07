@@ -21,6 +21,7 @@
 #include "hal/mcu/atmega2560/hal_i2c.h"
 
 #include <avr/io.h>
+#include <util/twi.h>
 
 #include "hal/auto_hal_tmlibc.h"
 #include "tm_libc/tm_syslog.h"
