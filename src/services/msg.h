@@ -31,19 +31,6 @@
 #define MSG_TO_LCD 1
 #define MSG_TO_USART 2
 
-#define MSG_FLAG_IN_USE 3
-#define MSG_FLAG_SEND 4
-
-// channel
-#define MSG_CHANNELS_MAX 4
-#define MSG_SIZE_MAX 64
-
-typedef struct
-{
-	uint8_t status;
-	char text[MSG_SIZE_MAX];
-} channel_item_t;
-
 void msg(void);
 
 err_codes_t msgRequestChannel(uint8_t *channel_id);
