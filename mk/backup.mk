@@ -44,6 +44,15 @@ pull:
 	@git stash pop
 .PHONY: pull
 
+merge:
+#@ [global] Git merge routine
+	@git switch main
+	@git merge --ff-only test
+	@git push
+	@git swtich test
+.PHONY: merge
+
+
 # Write .gitignore file
 ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 	@printf "# exclude everything\n" > "${GIT_IGNORE}"
