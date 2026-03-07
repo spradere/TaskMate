@@ -22,6 +22,5 @@
 #define SCLI_H
 
 void scli(void);
-void scliEcho(void);
 
 #endif
