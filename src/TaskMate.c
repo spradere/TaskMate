@@ -27,6 +27,7 @@
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
 #include "sysCall/error.h"
+#include "sysCall/gpio.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
@@ -55,7 +56,10 @@ int main(void)
 
 	const sc_info_t *info;
 	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] TaskMate %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
+	tm_syslog(TM_STR("\n\n[boot] TaskMate %s v%s build : %i\n"),
+			  &file_name,
+			  info->tm_ver,
+			  info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 	// system static allocation init
@@ -71,6 +75,7 @@ int main(void)
 	hal_archInit();
 	hal_mcuInit();
 	hal_boardInit();
+	gpio_signalsInit();
 
 	// start driver
 	// TODO remove this code when run level is implemented

@@ -76,6 +76,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
 	}
 
+	// call scheduler
 	tm_scheduler();
 
 	// restore next thread context

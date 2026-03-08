@@ -37,6 +37,7 @@ SRC_DIR_LIST += ${SRC_DIR}/sysCall
 SRC_DIR_LIST += ${SRC_DIR}/services
 SRC_DIR_LIST += ${SRC_DIR}/tasks
 SRC_DIR_LIST += ${SRC_DIR}/tm_libc
+SRC_DIR_LIST += ${SRC_DIR}/interfaces
 
 SRC_DIR_LIST += ${SRC_DIR}/hal
 SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}

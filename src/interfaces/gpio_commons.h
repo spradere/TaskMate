@@ -12,18 +12,26 @@
  */
 
 /**
- * @file hal_boardInit.h
- * @brief arduino mega board init arduino mega header
- *
+ * @file gpio_common.h
+ * @brief gpio common definitions
  */
 
-#ifndef HAL_BOARDINIT_H
-#define HAL_BOARDINIT_H
+#ifndef GPIO_COMMONS_H
+#define GPIO_COMMONS_H
 
-#include "hal/mcu/atmega2560/hal_gpio.h"
-#include "interfaces/gpio_signals.h"
+typedef enum
+{
+	GPIO_PIN_MODE_INPUT,
+	GPIO_PIN_MODE_OUTPUT_PP, // push-pull
+	GPIO_PIN_MODE_OUTPUT_OD, // open-drain
+	GPIO_PIN_MODE_OUTPUT_HZ, // high impedance
+} gpio_pin_mode_t;
 
-void hal_boardInit(void);
-void hal_boardWireSignal(hal_signal_t *table, gpio_signal_t signal);
+typedef enum
+{
+	GPIO_PIN_PULL_NONE,
+	GPIO_PIN_PULL_UP,
+	GPIO_PIN_PULL_DOWN
+} gpio_pin_pull_t;
 
 #endif

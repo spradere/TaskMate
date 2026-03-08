@@ -46,14 +46,6 @@ void tm_scheduler(void)
 	if( ++current == MOD_THREAD_COUNT ) { mod_threadSetCurrent(0); }
 	else { mod_threadSetCurrent(current); }
 
-	// I'm alive blink in board led
-	static uint8_t alive_cnt = 0;
-	if( ++alive_cnt > 250 )
-	{
-		gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
-		alive_cnt = 0;
-	}
-
 	// cooperative handling
 	sc_flagClear(FLAG_COOP);
 
