@@ -13,31 +13,20 @@
  */
 
 /**
- * @file mcu_define.h
- * @brief atmega2560 definitions
+ * @file gpio_signals.h
+ * @brief gpio logical signals definitions
  *
  */
 
-#ifndef MCU_DEFINE_H
-#define MCU_DEFINE_H
+#ifndef GPIO_SIGNALS_H
+#define GPIO_SIGNALS_H
 
-// atmega2560 ports
 typedef enum
 {
-	PORT_A,
-	PORT_B,
-	PORT_C,
-	PORT_D,
-	PORT_E,
-	PORT_F,
-	PORT_G,
-	PORT_H,
-	PORT_I,
-	PORT_J,
-	PORT_K,
-	PORT_L,
-
-	PORT_COUNT
-} hal_port_list_t;
+	GPIO_SIGNAL_INBOARD_LED,
+	GPIO_SIGNAL_TASK1_LED,
+	GPIO_SIGNAL_TASK2_LED,
+	GPIO_SIGNAL_COUNT
+} gpio_signal_t;
 
 #endif

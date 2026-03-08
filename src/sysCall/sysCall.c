@@ -39,7 +39,7 @@ static uint8_t system_status = 0;
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.26");
-const uint16_t tm_build = 4509;
+const uint16_t tm_build = 4558;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduinoMega");
@@ -47,9 +47,11 @@ TM_STR_ROM_NEW(board_name, "arduinoMega");
 // clang-format on
 // [/tag]
 
-static const sc_info_t info = {
-	.tm_ver = &tm_ver, .tm_build = tm_build,
-	.arch = &arch_name, .mcu = &mcu_name, .board = &board_name};
+static const sc_info_t info = {.tm_ver = &tm_ver,
+							   .tm_build = tm_build,
+							   .arch = &arch_name,
+							   .mcu = &mcu_name,
+							   .board = &board_name};
 
 void sc_targetGetInfo(const sc_info_t **dest) { *dest = &info; }
 
