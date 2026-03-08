@@ -25,10 +25,17 @@
 
 #include <stdbool.h>
 
-#include "sysCall/gpio.h"
+#include "hal/arch/avr8/arch_define.h"
+#include "interfaces/gpio_signals.h"
 
-void hal_gpioInitPin(const gpio_pin_item_t *pin);
-void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value);
-bool hal_gpioReadPin(const gpio_pin_item_t *pin);
+typedef struct
+{
+	hal_pin_t pin;
+	bool active_high;
+} hal_signal_t;
+
+void hal_gpioWireSignal(const gpio_signal_t sig);
+void hal_gpioWritePin(const gpio_signal_t sig, bool value);
+bool hal_gpioReadPin(const gpio_signal_t sig);
 
 #endif
