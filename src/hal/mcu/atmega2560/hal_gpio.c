@@ -54,10 +54,6 @@ static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
 void hal_gpioWireSignal(const gpio_signal_t sig)
 {
 	hal_boardWireSignal(signal_table, sig);
-
-	/*tm_syslog(TM_STR("[debug] hal_gpio pin 0x%04x %i %i \n"),
-		&signal_table[sig], signal_table[sig].pin.port, signal_table[sig].pin.number);*/
-
 	hal_gpioPinInit(&signal_table[sig].pin);
 }
 
@@ -90,5 +86,9 @@ bool hal_gpioReadPin(const gpio_signal_t sig)
 {
 	hal_pin_t pin = signal_table[sig].pin;
 
+	if(pin.mode == GPIO_PIN_MODE_INPUT)
+	{
+		return (*(mcu_ports[pin.port].pin) & (1 << pin.number)) >> pin.number;
+	}
 	return (*(mcu_ports[pin.port].port) & (1 << pin.number)) >> pin.number;
 }
