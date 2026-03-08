@@ -40,5 +40,4 @@ typedef enum
 	PORT_COUNT
 } hal_port_list_t;
 
-
 #endif

@@ -24,6 +24,6 @@
 #include "interfaces/gpio_signals.h"
 
 void hal_boardInit(void);
-void hal_boardWireSignal( hal_signal_t *table, gpio_signal_t signal);
+void hal_boardWireSignal(hal_signal_t *table, gpio_signal_t signal);
 
 #endif

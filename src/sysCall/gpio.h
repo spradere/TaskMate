@@ -22,37 +22,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "interfaces/gpio_signals.h" // get : gpio_signal_t
-
-
-
-/*typedef enum
-{
-	GPIO_PIN_MODE_INPUT,
-	GPIO_PIN_MODE_OUTPUT_PP, // push-pull
-	GPIO_PIN_MODE_OUTPUT_OD, // open-drain
-} gpio_pin_mode_t;
-
-typedef enum
-{
-	GPIO_PIN_PULL_NONE,
-	GPIO_PIN_PULL_UP,
-	GPIO_PIN_PULL_DOWN
-} gpio_pin_pull_t;*/
-
-/*typedef struct
-{
-	gpio_port_index_t port_index;
-	uint8_t number;
-	gpio_pin_mode_t mode;
-	gpio_pin_pull_t pull;
-} gpio_pin_item_t;*/
-
-/*typedef struct
-{
-	hal_pin_t pin;
-	bool active_high;
-} gpio_signal_item_t;*/
+#include "interfaces/gpio_signals.h"
 
 void gpio_signalsInit(void);
 void gpio_signalSet(gpio_signal_t signal, bool val);

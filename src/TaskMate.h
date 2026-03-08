@@ -22,8 +22,7 @@
 #define TASKMATE_H
 
 // file name in ROM
-#define TM_STORE_FILE_NAME \
-	TM_STR_ROM_NEW(file_name, __FILE_NAME__)
+#define TM_STORE_FILE_NAME TM_STR_ROM_NEW(file_name, __FILE_NAME__)
 
 // debug options
 #define VERBOSE_LEVEL 0
