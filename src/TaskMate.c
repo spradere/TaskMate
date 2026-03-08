@@ -125,31 +125,31 @@ int main(void)
 	hal_lcdWriteString(msg);
 
 	// test error catalog
-	/*	tm_syslog(TM_STR("[info] error catalog\n"));
-		for( uint8_t i = 0; i < ERROR_COUNT; i++ )
-		{
-			const tm_string_t *err_msg = err_getMessage(i);
-			tm_syslog(TM_STR("\t%i [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
-		}
+	tm_syslog(TM_STR("[info] error catalog\n"));
+	for( uint8_t i = 0; i < ERROR_COUNT; i++ )
+	{
+		const tm_string_t *err_msg = err_getMessage(i);
+		tm_syslog(TM_STR("\t%i [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
+	}
 
-		// display module names
-		tm_syslog(TM_STR("[modules] drivers\n"));
+	// display module names
+	tm_syslog(TM_STR("[modules] drivers\n"));
 
-		for( uint8_t num = 0; num < MOD_DRIVER_COUNT; num++ )
-		{
-			mod_driver_item_t *mod_d;
-			mod_d = mod_driverGetPointer(num);
-			tm_syslog(TM_STR("\t%i %s\n"), num, mod_d->name);
-		}
+	for( uint8_t num = 0; num < MOD_DRIVER_COUNT; num++ )
+	{
+		mod_driver_item_t *mod_d;
+		mod_d = mod_driverGetPointer(num);
+		tm_syslog(TM_STR("\t%i %s\n"), num, mod_d->name);
+	}
 
-		tm_syslog(TM_STR("[modules] threads\n"));
+	tm_syslog(TM_STR("[modules] threads\n"));
 
-		for( int num = 0; num < MOD_THREAD_COUNT; num++ )
-		{
-			mod_thread_item_t *mod_t;
-			mod_t = mod_threadGetPointer(num);
-			tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
-		}*/
+	for( int num = 0; num < MOD_THREAD_COUNT; num++ )
+	{
+		mod_thread_item_t *mod_t;
+		mod_t = mod_threadGetPointer(num);
+		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
+	}
 
 	// jump to current thread for first call and start system by enabling interrupts
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
