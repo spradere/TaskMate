@@ -47,9 +47,11 @@ TM_STR_ROM_NEW(board_name, "arduinoMega");
 // clang-format on
 // [/tag]
 
-static const sc_info_t info = {
-	.tm_ver = &tm_ver, .tm_build = tm_build,
-	.arch = &arch_name, .mcu = &mcu_name, .board = &board_name};
+static const sc_info_t info = {.tm_ver = &tm_ver,
+							   .tm_build = tm_build,
+							   .arch = &arch_name,
+							   .mcu = &mcu_name,
+							   .board = &board_name};
 
 void sc_targetGetInfo(const sc_info_t **dest) { *dest = &info; }
 
