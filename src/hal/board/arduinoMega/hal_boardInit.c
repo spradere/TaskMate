@@ -22,25 +22,42 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-#include "hal/auto_hal_user.h"
+#include "tm_libc/tm_syslog.h"
 
 void hal_boardInit(void)
 {
-	// gpio pin definition
-	gpio_signal_item_t sig;
+}
 
-	sig.pin.port_index = GPIO_PORT_B;
-	sig.pin.number = PB7;
-	sig.pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
-	sig.pin.pull = GPIO_PIN_PULL_NONE;
-	sig.active_high = true;
-	gpio_signalInit(GPIO_SIGNAL_INBOARD_LED, &sig);
+void hal_boardWireSignal( hal_signal_t *table, gpio_signal_t signal)
+{
+	// set default values for output
+	table[signal].pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
+	table[signal].pin.pull = GPIO_PIN_PULL_NONE;
+	table[signal].active_high = true;
 
-	sig.pin.port_index = GPIO_PORT_A;
-	sig.pin.number = PA0;
-	gpio_signalInit(GPIO_SIGNAL_TASK1_LED, &sig);
+	if( signal == GPIO_SIGNAL_INBOARD_LED)
+	{
+	table[signal].pin.port = PORT_B;
+	table[signal].pin.number = PB7;
+	return;
+	}
 
-	sig.pin.port_index = GPIO_PORT_A;
-	sig.pin.number = PA1;
-	gpio_signalInit(GPIO_SIGNAL_TASK2_LED, &sig);
+	if( signal == GPIO_SIGNAL_TASK1_LED)
+	{
+	table[signal].pin.port = PORT_A;
+	table[signal].pin.number = PA0;
+	return;
+	}
+
+	if( signal == GPIO_SIGNAL_TASK2_LED)
+	{
+	table[signal].pin.port = PORT_A;
+	table[signal].pin.number = PA1;
+	return;
+	}
+
+	// set default values for inputs
+	//table[signal]->pin.mode = GPIO_PIN_MODE_INPUT;
+	//table[signal]->pin.pull = GPIO_PIN_PULL_UP;
+	//table[signal]->active_high = false;
 }
