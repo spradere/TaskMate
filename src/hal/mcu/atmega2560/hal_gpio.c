@@ -24,9 +24,8 @@
 #include <stdbool.h>
 
 #include "hal/arch/avr8/arch_define.h"
-#include "hal/mcu/atmega2560/mcu_define.h"
 #include "hal/board/arduinoMega/hal_boardInit.h"
-#include "tm_libc/tm_syslog.h"
+#include "hal/mcu/atmega2560/mcu_define.h"
 
 static void hal_gpioPinInit(const hal_pin_t *pin);
 

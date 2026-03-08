@@ -19,7 +19,6 @@
 #ifndef GPIO_COMMONS_H
 #define GPIO_COMMONS_H
 
-
 typedef enum
 {
 	GPIO_PIN_MODE_INPUT,
