@@ -23,51 +23,73 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-static const gpio_mcu_port_t gpioMcuPorts[GPIO_PORT_COUNT] = {
-	[GPIO_PORT_A] = (gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
-									  (volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
-									  (volatile uint8_t *)_SFR_MEM_ADDR(PINA)},
-	[GPIO_PORT_B] = (gpio_mcu_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB),
-									  (volatile uint8_t *)_SFR_MEM_ADDR(PORTB),
-									  (volatile uint8_t *)_SFR_MEM_ADDR(PINB)} /*,
-			[GPIO_PORT_C] = { DDRC, PORTC, PINC },
-			[GPIO_PORT_D] = { DDRD, PORTD, PIND },
-			[GPIO_PORT_E] = { DDRE, PORTE, PINE },
-			[GPIO_PORT_F] = { DDRF, PORTF, PINF },
-			[GPIO_PORT_G] = { DDRG, PORTG, PING },
-			[GPIO_PORT_H] = { DDRH, PORTH, PINH },
-			[GPIO_PORT_I] = { DDRI, PORTI, PINI },
-			[GPIO_PORT_J] = { DDRJ, PORTJ, PINJ },
-			[GPIO_PORT_K] = { DDRK, PORTK, PINK },
-			[GPIO_PORT_L] = { DDRL, PORTL, PINL }*/
+#include "hal/arch/avr8/arch_define.h"
+#include "hal/mcu/atmega2560/mcu_define.h"
+#include "hal/board/arduinoMega/hal_boardInit.h"
+#include "tm_libc/tm_syslog.h"
+
+static void hal_gpioPinInit(const hal_pin_t *pin);
+
+static const hal_port_t mcu_ports[PORT_COUNT] = {
+	[PORT_A] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
+							(volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
+							(volatile uint8_t *)_SFR_MEM_ADDR(PINA)},
+	[PORT_B] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB),
+							(volatile uint8_t *)_SFR_MEM_ADDR(PORTB),
+							(volatile uint8_t *)_SFR_MEM_ADDR(PINB)} /*,
+			[PORT_C] = { DDRC, PORTC, PINC },
+			[PORT_D] = { DDRD, PORTD, PIND },
+			[PORT_E] = { DDRE, PORTE, PINE },
+			[PORT_F] = { DDRF, PORTF, PINF },
+			[PORT_G] = { DDRG, PORTG, PING },
+			[PORT_H] = { DDRH, PORTH, PINH },
+			[PORT_I] = { DDRI, PORTI, PINI },
+			[PORT_J] = { DDRJ, PORTJ, PINJ },
+			[PORT_K] = { DDRK, PORTK, PINK },
+			[PORT_L] = { DDRL, PORTL, PINL }*/
 
 };
 
-void hal_gpioInitPin(const gpio_pin_item_t *pin)
-{
+static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
 
+void hal_gpioWireSignal(const gpio_signal_t sig)
+{
+	hal_boardWireSignal(signal_table, sig);
+
+	/*tm_syslog(TM_STR("[debug] hal_gpio pin 0x%04x %i %i \n"),
+		&signal_table[sig], signal_table[sig].pin.port, signal_table[sig].pin.number);*/
+
+	hal_gpioPinInit(&signal_table[sig].pin);
+}
+
+static void hal_gpioPinInit(const hal_pin_t *pin)
+{
 	if( pin->mode == GPIO_PIN_MODE_INPUT )
 	{
-		*(gpioMcuPorts[pin->port_index].ddr) &= (uint8_t)~(1u << pin->number);
+		*(mcu_ports[pin->port].ddr) &= (uint8_t)~(1u << pin->number);
 	}
 	if( pin->mode == GPIO_PIN_MODE_OUTPUT_PP )
 	{
-		*(gpioMcuPorts[pin->port_index].ddr) |= (uint8_t)(1u << pin->number);
+		*(mcu_ports[pin->port].ddr) |= (uint8_t)(1u << pin->number);
 	}
 
 	if( pin->pull == GPIO_PIN_PULL_UP )
 	{
-		*(gpioMcuPorts[pin->port_index].port) |= (uint8_t)(1u << pin->number);
+		*(mcu_ports[pin->port].port) |= (uint8_t)(1u << pin->number);
 	}
 }
 
-void hal_gpioWritePin(const gpio_pin_item_t *pin, bool value)
+void hal_gpioWritePin(const gpio_signal_t sig, bool value)
 {
-	if( value ) { *(gpioMcuPorts[pin->port_index].port) |= (uint8_t)(1u << pin->number); }
-	else { *(gpioMcuPorts[pin->port_index].port) &= (uint8_t)~(1u << pin->number); }
+	hal_pin_t pin = signal_table[sig].pin;
+
+	if( value ) { *(mcu_ports[pin.port].port) |= (uint8_t)(1u << pin.number); }
+	else { *(mcu_ports[pin.port].port) &= (uint8_t)~(1u << pin.number); }
 }
 
-bool hal_gpioReadPin(const gpio_pin_item_t *pin)
+bool hal_gpioReadPin(const gpio_signal_t sig)
 {
-	return (*(gpioMcuPorts[pin->port_index].port) & (1 << pin->number)) >> pin->number;
+	hal_pin_t pin = signal_table[sig].pin;
+
+	return (*(mcu_ports[pin.port].port) & (1 << pin.number)) >> pin.number;
 }

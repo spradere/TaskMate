@@ -12,25 +12,20 @@
  */
 
 /**
- * @file gpio.h
- * @brief gpio header
+ * @file gpio_common.h
+ * @brief gpio common definitions
  */
 
-#ifndef GPIO_H
-#define GPIO_H
-
-#include <stdbool.h>
-#include <stdint.h>
-
-#include "interfaces/gpio_signals.h" // get : gpio_signal_t
+#ifndef GPIO_COMMONS_H
+#define GPIO_COMMONS_H
 
 
-
-/*typedef enum
+typedef enum
 {
 	GPIO_PIN_MODE_INPUT,
 	GPIO_PIN_MODE_OUTPUT_PP, // push-pull
 	GPIO_PIN_MODE_OUTPUT_OD, // open-drain
+	GPIO_PIN_MODE_OUTPUT_HZ, // high impedance
 } gpio_pin_mode_t;
 
 typedef enum
@@ -38,25 +33,6 @@ typedef enum
 	GPIO_PIN_PULL_NONE,
 	GPIO_PIN_PULL_UP,
 	GPIO_PIN_PULL_DOWN
-} gpio_pin_pull_t;*/
-
-/*typedef struct
-{
-	gpio_port_index_t port_index;
-	uint8_t number;
-	gpio_pin_mode_t mode;
-	gpio_pin_pull_t pull;
-} gpio_pin_item_t;*/
-
-/*typedef struct
-{
-	hal_pin_t pin;
-	bool active_high;
-} gpio_signal_item_t;*/
-
-void gpio_signalsInit(void);
-void gpio_signalSet(gpio_signal_t signal, bool val);
-bool gpio_signalGet(gpio_signal_t signal);
-void gpio_signalToggle(gpio_signal_t signal);
+} gpio_pin_pull_t;
 
 #endif

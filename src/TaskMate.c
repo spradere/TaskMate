@@ -27,6 +27,7 @@
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
 #include "sysCall/error.h"
+#include "sysCall/gpio.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
@@ -71,6 +72,7 @@ int main(void)
 	hal_archInit();
 	hal_mcuInit();
 	hal_boardInit();
+	gpio_signalsInit();
 
 	// start driver
 	// TODO remove this code when run level is implemented
@@ -81,6 +83,7 @@ int main(void)
 		(*(mod->init))();
 		(*(mod->start))();
 	}
+
 
 	// RTC external module test
 	tm_syslog(TM_STR("[boot] hal RTC init\n"));
@@ -120,7 +123,7 @@ int main(void)
 	hal_lcdWriteString(msg);
 
 	// test error catalog
-	tm_syslog(TM_STR("[info] error catalog\n"));
+/*	tm_syslog(TM_STR("[info] error catalog\n"));
 	for( uint8_t i = 0; i < ERROR_COUNT; i++ )
 	{
 		const tm_string_t *err_msg = err_getMessage(i);
@@ -144,7 +147,7 @@ int main(void)
 		mod_thread_item_t *mod_t;
 		mod_t = mod_threadGetPointer(num);
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
-	}
+	}*/
 
 	// jump to current thread for first call and start system by enabling interrupts
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));

@@ -21,13 +21,4 @@
 #ifndef BOARD_DEFINE_H
 #define BOARD_DEFINE_H
 
-// gpio arduino mega board + LCD4x20 + ZS-042 RTC signals
-typedef enum
-{
-	GPIO_SIGNAL_INBOARD_LED,
-	GPIO_SIGNAL_TASK1_LED,
-	GPIO_SIGNAL_TASK2_LED,
-	GPIO_SIGNAL_COUNT
-} gpio_signal_t;
-
 #endif
