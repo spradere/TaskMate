@@ -49,6 +49,4 @@ typedef struct
 	gpio_pin_pull_t pull;
 } hal_pin_t;
 
-
-
 #endif
