@@ -19,25 +19,31 @@
 #include "sysCall/gpio.h"
 
 #include "hal/auto_hal_user.h"
+#include "tm_libc/tm_syslog.h"
 
-static gpio_signal_item_t gpio_signals_table[GPIO_SIGNAL_COUNT];
+//static gpio_signal_item_t gpio_signals_table[GPIO_SIGNAL_COUNT];
 
-void gpio_signalInit(gpio_signal_t signal, gpio_signal_item_t *sig)
+void gpio_signalsInit(void)
 {
-	gpio_signals_table[signal] = *sig;
-	hal_gpioInitPin(&(sig->pin));
+	for(uint8_t i=0; i < GPIO_SIGNAL_COUNT; i++)
+	{
+		hal_gpioWireSignal(i);
+	}
 }
 
-void gpio_signalSet(gpio_signal_t signal, bool on)
+void gpio_signalSet(gpio_signal_t signal, bool val)
 {
-	bool val = gpio_signals_table[signal].active_high ? on : !on;
-	hal_gpioWritePin(&(gpio_signals_table[signal].pin), val);
+	hal_gpioWritePin(signal, val);
 }
 
 bool gpio_signalGet(gpio_signal_t signal)
 {
-	bool val = hal_gpioReadPin(&(gpio_signals_table[signal].pin));
-	return gpio_signals_table[signal].active_high ? val : !val;
+	return hal_gpioReadPin(signal);
 }
 
-void gpio_signalToggle(gpio_signal_t signal) { gpio_signalSet(signal, !gpio_signalGet(signal)); }
+void gpio_signalToggle(gpio_signal_t signal)
+{
+	//tm_syslog(TM_STR("[debug] gpio togle %i\n"), signal);
+
+	gpio_signalSet(signal, !gpio_signalGet(signal));
+}

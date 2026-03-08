@@ -20,6 +20,10 @@
 #ifndef HAL_BOARDINIT_H
 #define HAL_BOARDINIT_H
 
+#include "hal/mcu/atmega2560/hal_gpio.h"
+#include "interfaces/gpio_signals.h"
+
 void hal_boardInit(void);
+void hal_boardWireSignal( hal_signal_t *table, gpio_signal_t signal);
 
 #endif
