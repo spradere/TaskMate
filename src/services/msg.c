@@ -69,7 +69,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3GPIO refactor 01", MSG_TO_LCD);
+		msgWritreText(chan, "\3refactor callback 01", MSG_TO_LCD);
 	}
 
 	msgProcess();
