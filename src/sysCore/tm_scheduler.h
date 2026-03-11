@@ -18,9 +18,10 @@
  *
  */
 
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
+#ifndef TM_SCHEDULER_H
+#define TM_SCHEDULER_H
 
-void tm_scheduler(void);
+void tm_schedulerInit(void);
+void tm_schedulerStart(void);
 
 #endif
