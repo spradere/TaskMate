@@ -39,7 +39,7 @@ static uint8_t system_status = 0;
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.26");
-const uint16_t tm_build = 4560;
+const uint16_t tm_build = 4563;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduinoMega");
@@ -66,7 +66,12 @@ uint16_t sc_threadGetSTC(void)
 	return 0; // dummy return to avoid -Wno-return-type
 }
 
-void sc_handYield(void) { hal_timer1Load(); }
+void sc_handYield(void)
+{
+	sc_flagSet(FLAG_COOP);
+	hal_timer1Load();
+	while( sc_flagGet(FLAG_COOP) == 1 );
+}
 
 void sc_flagClear(uint8_t flag) { system_status &= ~flag; }
 void sc_flagSet(uint8_t flag) { system_status |= flag; }
