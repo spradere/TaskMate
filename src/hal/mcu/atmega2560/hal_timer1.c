@@ -13,25 +13,32 @@
  */
 
 /**
- * @file hal_timerScheduler.c
+ * @file hal_timer1.c
  * @brief hal part of scheduler
  *
  */
 
-#include "hal/mcu/atmega2560/hal_timerScheduler.h"
+#include "hal/mcu/atmega2560/hal_timer1.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/atomic.h>
+#include <stddef.h>
 
 #include "hal/auto_hal_system.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
-#include "sysCore/tm_scheduler.h"
+//#include "sysCore/tm_scheduler.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
+static hal_timer1Callback_t callback = NULL;
 
-void hal_timerSchedulerInit(void)
+void hal_timer1SetCallback(hal_timer1Callback_t func_ptr)
+{
+	callback = func_ptr;
+}
+
+void hal_timer1Init(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TCCR1B = (uint8_t)(1u << CS11); // pre scaler = 8
@@ -39,7 +46,7 @@ void hal_timerSchedulerInit(void)
 	TIMSK1 |= (uint8_t)(1u << OCIE1A);
 }
 
-void hal_timerSchedulerStart(void)
+void hal_timer1Start(void)
 {
 	TCNT1 = 0;
 	// start by enabling source
@@ -49,14 +56,14 @@ void hal_timerSchedulerStart(void)
 	TCCR1B &= (uint8_t)~(1u << WGM13);
 }
 
-void hal_timerSchedulerStop(void)
+void hal_timer1Stop(void)
 {
 	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> no source, timer stopped
 	TCCR1A &= (uint8_t)~((1u << WGM11) | (1u << WGM10));
 	TCCR1B &= (uint8_t)~((1u << WGM13) | (1u << WGM12));
 }
 
-void hal_timerSchedulerLoad(void)
+void hal_timer1Load(void)
 {
 	// used for cooperative yield hand to scheduler
 	sc_flagSet(FLAG_COOP);
@@ -76,8 +83,9 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
 	}
 
-	// call scheduler
-	tm_scheduler();
+	// callback
+	if(callback != NULL){callback();}
+	//callback replace direct call tm_scheduler();
 
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)

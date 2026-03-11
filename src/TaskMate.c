@@ -31,6 +31,7 @@
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
+#include "sysCore/tm_scheduler.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
@@ -153,6 +154,8 @@ int main(void)
 
 	// jump to current thread for first call and start system by enabling interrupts
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
+
+	tm_schedulerInit();
 
 	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
