@@ -25,9 +25,9 @@
 #include <util/atomic.h>
 #include <stddef.h>
 
-#include "hal/auto_hal_system.h"
+//#include "hal/auto_hal_system.h"
 //#include "sysCall/sysCall.h"
-#include "sysCore/modules.h"
+//#include "sysCore/modules.h"
 //#include "sysCore/tm_scheduler.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
@@ -71,7 +71,7 @@ void hal_timer1Load(void)
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	mod_thread_item_t *mod;
+	/*mod_thread_item_t *mod;
 
 	// save current thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
@@ -79,17 +79,17 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 		hal_contextSave();
 		mod = mod_threadGetPointer(mod_threadGetCurrent());
 		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
-	}
+	}*/
 
 	// callback
 	if(callback != NULL){callback();}
 
-	// restore next thread context
+	/*// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
 		mod = mod_threadGetPointer(mod_threadGetCurrent());
 		hal_setStackPointer((uintptr_t)mod->stack_pointer);
 		hal_contextRestore();
 		hal_returnFromInterupt();
-	}
+	}*/
 }

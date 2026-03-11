@@ -32,4 +32,5 @@
 
 5. system init
 
+	+#include "high/y.h"
 	+high_yInit()
