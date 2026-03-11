@@ -35,7 +35,7 @@ CFLAGS_${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c = \
 
 ALLOWED_PATTERN1 = hal/auto_hal_system.h
 ALLOWED_LIST1 = \
-	${SRC_DIR}/hal/mcu/${MCU}/hal_timerScheduler.c \
+	${SRC_DIR}/hal/mcu/${MCU}/hal_timer1.c \
 	${SRC_DIR}/TaskMate.c \
 	${SRC_DIR}/sysCore/tm_scheduler.c \
 	${SRC_DIR}/sysCore/modules.c \

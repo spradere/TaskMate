@@ -24,13 +24,22 @@
 
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
-#include "sysCall/gpio.h"
+//#include "sysCall/gpio.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // scheduler is called by hal_timerScheduler interrupt subroutine
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+static void tm_scheduler(void);
+
+void tm_schedulerInit(void)
+{
+	hal_timer1SetCallback(tm_scheduler);
+}
+
+void tm_schedulerStart(void){}
 
 void tm_scheduler(void)
 {
@@ -39,7 +48,7 @@ void tm_scheduler(void)
 
 	// stop hal_timerScheduler prevent preemption of the scheduler itself -> panic
 	// prevent scheduler eat thread time slice
-	hal_timerSchedulerStop();
+	hal_timer1Stop();
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
@@ -49,5 +58,5 @@ void tm_scheduler(void)
 	// cooperative handling
 	sc_flagClear(FLAG_COOP);
 
-	hal_timerSchedulerStart();
+	hal_timer1Start();
 }

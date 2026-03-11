@@ -23,7 +23,7 @@
 #include "hal/arch/avr8/hal_context.h"
 #include "hal/arch/avr8/hal_stack.h"
 #include "hal/mcu/atmega2560/hal_timerSTC.h"
-#include "hal/mcu/atmega2560/hal_timerScheduler.h"
+#include "hal/mcu/atmega2560/hal_timer1.h"
 // clang-format on
 
 #endif
