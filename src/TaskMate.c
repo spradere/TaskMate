@@ -156,14 +156,15 @@ int main(void)
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
 
 	tm_schedulerInit();
+	tm_schedulerStart();
 
-	mod_threadSetCurrent(0);
+	/*mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
 	hal_setStackPointer((uintptr_t)mod->stack_pointer);
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();
-	hal_returnFromInterupt();
+	hal_returnFromInterupt();*/
 
 	return 0; // You should never get here
 }

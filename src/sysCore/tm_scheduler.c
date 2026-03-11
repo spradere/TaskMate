@@ -24,7 +24,6 @@
 
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
-//#include "sysCall/gpio.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 
@@ -39,7 +38,16 @@ void tm_schedulerInit(void)
 	hal_timer1SetCallback(tm_scheduler);
 }
 
-void tm_schedulerStart(void){}
+void tm_schedulerStart(void)
+{
+	mod_threadSetCurrent(0);
+	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
+	hal_setStackPointer((uintptr_t)mod->stack_pointer);
+
+	hal_contextRestore();
+	hal_setGlobalInterupt();
+	hal_returnFromInterupt();
+}
 
 void tm_scheduler(void)
 {
