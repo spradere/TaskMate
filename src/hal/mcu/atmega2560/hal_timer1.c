@@ -26,7 +26,7 @@
 #include <stddef.h>
 
 #include "hal/auto_hal_system.h"
-#include "sysCall/sysCall.h"
+//#include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 //#include "sysCore/tm_scheduler.h"
 
@@ -66,9 +66,7 @@ void hal_timer1Stop(void)
 void hal_timer1Load(void)
 {
 	// used for cooperative yield hand to scheduler
-	sc_flagSet(FLAG_COOP);
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1 = TIMER1_OVERFLOW_COUNT - 1; }
-	while( sc_flagGet(FLAG_COOP) == 1 );
 }
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
@@ -85,7 +83,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 
 	// callback
 	if(callback != NULL){callback();}
-	//callback replace direct call tm_scheduler();
 
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
