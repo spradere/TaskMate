@@ -69,7 +69,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3refactor callback 01", MSG_TO_LCD);
+		msgWritreText(chan, "\3test hal_context 01", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -77,9 +77,11 @@ void msg(void)
 
 	while( 1 )
 	{
+		msgProcess();
+
 		sc_threadSetSTC(100);
 		while( sc_threadGetSTC() > 0 ) { sc_handYield(); };
-		msgProcess();
+
 	}
 }
 
