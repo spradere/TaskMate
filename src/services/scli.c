@@ -25,6 +25,7 @@
 #include "hal/auto_hal_user.h"
 #include "services/msg.h"
 #include "sysCall/sysCall.h"
+#include "tm_libc/tm_syslog.h"
 
 static uint8_t scli_msg_channel;
 
@@ -32,6 +33,7 @@ static void scliEcho(void);
 
 void scli(void)
 {
+
 	if( msgRequestChannel(&scli_msg_channel) == ERR_NO_ERROR )
 	{
 		msgWritreText(scli_msg_channel, "[scli] ready to work\n", MSG_TO_USART);

@@ -42,7 +42,7 @@ uint16_t sc_threadGetSTC(void);
 void sc_handYield(void);
 
 // system status flags
-#define FLAG_COOP 0x01
+#define FLAG_DUMMY 0x01
 
 void sc_flagClear(uint8_t flag);
 void sc_flagSet(uint8_t flag);

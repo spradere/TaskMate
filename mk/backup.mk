@@ -40,7 +40,7 @@ pull:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read dummy_var
 	@git stash
-	@git merge --ff-only
+	@git merge test
 	@git stash pop
 .PHONY: pull
 
