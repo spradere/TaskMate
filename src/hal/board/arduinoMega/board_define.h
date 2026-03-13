@@ -21,4 +21,8 @@
 #ifndef BOARD_DEFINE_H
 #define BOARD_DEFINE_H
 
+// frequencies
+#define USART_BAUD_RATE 9600
+#define I2C_FREQ 100000UL // Standard mode 100 kHz
+
 #endif

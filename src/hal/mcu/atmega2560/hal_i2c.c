@@ -25,6 +25,7 @@
 
 #include "hal/auto_hal_tmlibc.h"
 #include "tm_libc/tm_syslog.h"
+#include "hal/board/arduinoMega/board_define.h" // get i2c frequency
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
