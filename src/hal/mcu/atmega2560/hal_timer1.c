@@ -63,11 +63,11 @@ void hal_timer1Stop(void)
 	TCCR1B &= (uint8_t)~((1u << WGM13) | (1u << WGM12));
 }
 
-void hal_timer1Load(void)
+/*void hal_timer1Load(void)
 {
 	// used for cooperative yield hand to scheduler
 	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1 = TIMER1_OVERFLOW_COUNT - 1; }
-}
+}*/
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
