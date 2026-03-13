@@ -1,0 +1,36 @@
+1. low/x.h
+
+	+typedef void (*low_xCallback_t)(void);
+	+void low_xSetCallback(low_xCallback_t func_ptr);
+
+2. low/x.c
+
+	+static low_xCallback_t callback = NULL;
+
+	+void low_xSetCallback(hal_timer1Callback_t func_ptr)
+	+{
+		+callback = func_ptr;
+	+}
+
+	+ISR(x_COMPA_vect, ISR_NAKED)
+	+{
+		+if(callback != NULL){callback();}
+	+}
+
+3. high/y.h
+
+	+high/yInit();
+
+4. high/y.c
+
+	+#include "low/x.h"
+
+	+void high_yInit(void)
+	+{
+		+low_xSetCallback(yFunc);
+	+}
+
+5. system init
+
+	+#include "high/y.h"
+	+high_yInit()

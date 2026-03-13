@@ -46,5 +46,11 @@ vim_autoCode: ${TAGS_STAMP}
 .PHONY: vim_autoCode
 
 geany_mk:
+#@ [global] open Geany with all Makefiles .mk
 	geany ${MK_FILES}
 .PHONY: geany_mk
+
+geany_all:
+#@ [global] open Geany with all TaskMate sources files .c .h (no autoCode)
+	geany ${SRCS} ${SRCS_H}
+.PHONY: geany_all

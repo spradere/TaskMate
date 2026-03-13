@@ -1,4 +1,6 @@
-	build system refactor
+	refactor hal/hal_timerScheduler sysCore/tm_scheduler move code in right layer + implement callback
+	gpio refactor better separation logical signal / physical pin
+	build system refactor for minor issues
 
 TaskMate 0.26
 

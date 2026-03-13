@@ -31,11 +31,12 @@
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
+#include "sysCore/tm_scheduler.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
-TM_STORE_FILE_NAME;
+TM_STORE_FILE_NAME(file_name);
 
 // display hardware target informations
 #if VERBOSE_LEVEL > 0
@@ -56,7 +57,7 @@ int main(void)
 
 	const sc_info_t *info;
 	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] TaskMate %s v%s build : %i\n"),
+	tm_syslog(TM_STR("\n\n[boot] %s v%s build : %i\n"),
 			  &file_name,
 			  info->tm_ver,
 			  info->tm_build);
@@ -124,15 +125,15 @@ int main(void)
 	hal_lcdSetCursor(1, 0);
 	hal_lcdWriteString(msg);
 
-	// test error catalog
+	/*// test error catalog
 	tm_syslog(TM_STR("[info] error catalog\n"));
 	for( uint8_t i = 0; i < ERROR_COUNT; i++ )
 	{
 		const tm_string_t *err_msg = err_getMessage(i);
 		tm_syslog(TM_STR("\t%i [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
-	}
+	}*/
 
-	// display module names
+	/*// display module names
 	tm_syslog(TM_STR("[modules] drivers\n"));
 
 	for( uint8_t num = 0; num < MOD_DRIVER_COUNT; num++ )
@@ -149,18 +150,21 @@ int main(void)
 		mod_thread_item_t *mod_t;
 		mod_t = mod_threadGetPointer(num);
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
-	}
+	}*/
 
 	// jump to current thread for first call and start system by enabling interrupts
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
 
-	mod_threadSetCurrent(0);
+	tm_schedulerInit();
+	tm_schedulerStart();
+
+	/*mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
 	hal_setStackPointer((uintptr_t)mod->stack_pointer);
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();
-	hal_returnFromInterupt();
+	hal_returnFromInterupt();*/
 
 	return 0; // You should never get here
 }
