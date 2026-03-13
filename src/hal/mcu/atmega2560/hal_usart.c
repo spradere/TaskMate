@@ -22,6 +22,7 @@
 #include <avr/interrupt.h>
 
 #include "hal/auto_hal_user.h"
+#include "hal/board/arduinoMega/board_define.h" // get usart baud rate
 
 // Circular buffers
 // always use a power of two for buffer size to avoid use of modulo
@@ -44,7 +45,7 @@ static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 
 void hal_usartInit(void)
 {
-	uint16_t ubrr = (F_CPU / (16UL * HAL_USART_BAUD_RATE)) - 1;
+	uint16_t ubrr = (F_CPU / (16UL * USART_BAUD_RATE)) - 1;
 
 	UBRR1H = (uint8_t)(ubrr >> 8);
 	UBRR1L = (uint8_t)ubrr;
