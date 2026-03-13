@@ -61,7 +61,7 @@ void hal_lcdStop(void)
 
 void lcdAMC2004SendCommand(uint8_t command)
 {
-	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, I2C_WRITE);
+	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
 	hal_i2cWrite(command);
 	hal_i2cCommStop();
@@ -82,7 +82,7 @@ void hal_lcdSetCursor(uint8_t row, uint8_t col)
 
 void hal_lcdWriteString(const char *str)
 {
-	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, I2C_WRITE);
+	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(LCDAMC2004_DATA);
 
 	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
