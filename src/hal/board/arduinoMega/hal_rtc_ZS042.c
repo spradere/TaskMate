@@ -38,13 +38,13 @@ void hal_rtcStop(void) {}
 
 uint8_t hal_rtcRead(hal_rtc_time_t *t)
 {
-	hal_i2cCommStart(ZS042_I2C_ADDR, I2C_WRITE);
+	hal_i2cCommStart(ZS042_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(0x00); // start register
 
-	hal_i2cCommStart(ZS042_I2C_ADDR, I2C_READ);
+	hal_i2cCommStart(ZS042_I2C_ADDR, HAL_I2C_READ);
 
-	for( uint8_t i = 0; i < 6; i++ ) { hal_i2cRead(&buf[i], I2C_ACK); }
-	hal_i2cRead(&buf[6], I2C_NACK);
+	for( uint8_t i = 0; i < 6; i++ ) { hal_i2cRead(&buf[i], HAL_I2C_ACK); }
+	hal_i2cRead(&buf[6], HAL_I2C_NACK);
 
 	hal_i2cCommStop();
 
@@ -69,7 +69,7 @@ uint8_t hal_rtcWrite(const hal_rtc_time_t *t)
 	buf[5] = binToBcd(t->month & 0x1F);
 	buf[6] = binToBcd(t->year);
 
-	hal_i2cCommStart(ZS042_I2C_ADDR, I2C_WRITE);
+	hal_i2cCommStart(ZS042_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(0x00); // register start address
 	for( uint8_t i = 0; i < 7; i++ ) { hal_i2cWrite(buf[i]); }
 	hal_i2cCommStop();
