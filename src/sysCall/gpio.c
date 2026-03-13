@@ -20,15 +20,11 @@
 
 #include "hal/auto_hal_user.h"
 
-// static gpio_signal_item_t gpio_signals_table[GPIO_SIGNAL_COUNT];
-
 void gpio_signalsInit(void)
 {
 	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ ) { hal_gpioWireSignal(i); }
 }
 
 void gpio_signalSet(gpio_signal_t signal, bool val) { hal_gpioWritePin(signal, val); }
-
 bool gpio_signalGet(gpio_signal_t signal) { return hal_gpioReadPin(signal); }
-
 void gpio_signalToggle(gpio_signal_t signal) { gpio_signalSet(signal, !gpio_signalGet(signal)); }

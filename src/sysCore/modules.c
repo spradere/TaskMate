@@ -22,6 +22,7 @@
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
 #include "sysCore/auto_threads_list.h"
+#include "tm_libc/tm_syslog.h"
 
 static struct
 {
@@ -111,14 +112,14 @@ void mod_driversAlloc(void)
 	mod_driver_item_t *mod;
 
 	mod = mod_driverGetPointer(0);
-	TM_STR_ROM_NEW(driver0_name, "hal_timerScheduler");
+	TM_STR_ROM_NEW(driver0_name, "hal_timer1");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver0_name,
 		.status = 1,
-		.init = hal_timerSchedulerInit,
-		.start = hal_timerSchedulerStart,
-		.stop = hal_timerSchedulerStop
+		.init = hal_timer1Init,
+		.start = hal_timer1Start,
+		.stop = hal_timer1Stop
 	};
 
 	mod = mod_driverGetPointer(1);
