@@ -81,7 +81,6 @@ void msg(void)
 
 		sc_threadSetSTC(100);
 		while( sc_threadGetSTC() > 0 ) { sc_handYield(); };
-
 	}
 }
 
