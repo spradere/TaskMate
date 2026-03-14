@@ -52,7 +52,7 @@ TaskMate uses a custom **Build system** that fully manages dependencies and work
 
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
-![Build system](build_v2.png)
+![Build system](doc/build_v2.png)
 
 ---
 
