@@ -12,7 +12,7 @@
  */
 
 /**
- * @file gpio_common.h
+ * @file gpio_commons.h
  * @brief gpio common definitions
  */
 
