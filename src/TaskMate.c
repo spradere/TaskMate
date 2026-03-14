@@ -57,10 +57,7 @@ int main(void)
 
 	const sc_info_t *info;
 	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] %s v%s build : %i\n"),
-			  &file_name,
-			  info->tm_ver,
-			  info->tm_build);
+	tm_syslog(TM_STR("\n\n[boot] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 	// system static allocation init
