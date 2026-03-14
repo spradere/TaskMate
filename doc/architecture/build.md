@@ -35,7 +35,7 @@ This ordering enforces policy checks and code generation before compilation/link
 `mk/sources_data.mk` centralizes dynamic discovery using `find`:
 - project C/H sources from scoped source directories,
 - autoCode sources,
-- `*.rc` and `*.err` inventories,
+- `init.rc` and `*.err` inventories,
 - HAL headers annotated with `// @hal_user` or `// @hal_system`,
 - make/doc file sets used by editor/help targets.
 
@@ -86,6 +86,6 @@ The help system extracts documented targets via `#@` annotations in make fragmen
 ## Future improvements for industrial-grade embedded RTOS
 - Future improvements should focus on introducing a target-agnostic toolchain abstraction (per-arch tool info providers) so metadata and checks stay valid for non-AVR platforms.
 - Replacing host-specific absolute analysis include paths with generated compile databases (`compile_commands.json`) and standardized tool wrappers.
-- Making backup/git helper targets fully non-interactive and CI-safe (optional prompts, explicit branch parameters, typo fixes such as `git swtich`).
+- Making backup/git helper targets fully non-interactive and CI-safe (optional prompts, explicit branch parameters).
 - Strengthening policy checks from text grep to parser-assisted include validation and architecture rule tests.
 - Adding reproducibility controls: pinned tool versions, deterministic environment report, and optional “strict mode” that fails on unstaged generated artifacts.

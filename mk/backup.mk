@@ -49,7 +49,7 @@ merge:
 	@git switch main
 	@git merge --ff-only test
 	@git push
-	@git swtich test
+	@git switch test
 .PHONY: merge
 
 
