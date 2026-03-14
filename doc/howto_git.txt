@@ -14,6 +14,7 @@ When code is clean, push to Codeberg :
 git switch main
 git merge --ff-only test
 git push
+git switch test
 
 ##################################################
 # save

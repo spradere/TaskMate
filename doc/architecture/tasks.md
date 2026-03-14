@@ -24,4 +24,6 @@ They are generated into thread tables with run-level/user status metadata and de
 - Global task variables (message channels) are not namespaced per instance model.
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Add declarative task model: period, deadline, WCET budget, priority/criticality; Replace polling waits with scheduler-managed sleep/block primitives; Introduce task watchdog and overrun handling policies, and Provide static analysis hooks verifying task API usage constraints.
+- Future improvements should focus on Add declarative task model: period, deadline, WCET budget, priority/criticality
+- Replace polling waits with scheduler-managed sleep/block primitives
+- Introduce task watchdog and overrun handling policies, and Provide static analysis hooks verifying task API usage constraints.
