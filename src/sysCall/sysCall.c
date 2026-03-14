@@ -24,8 +24,6 @@
 
 #include <util/atomic.h>
 
-#include "hal/auto_hal_system.h"
-#include "hal/auto_hal_user.h"
 #include "sysCore/modules.h"
 #include "sysCore/tm_scheduler.h"
 #include "tm_libc/tm_string.h"
@@ -40,7 +38,7 @@ static uint8_t system_status = 0;
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.26");
-const uint16_t tm_build = 4589;
+const uint16_t tm_build = 4590;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduinoMega");

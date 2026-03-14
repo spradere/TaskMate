@@ -86,7 +86,7 @@ bool hal_gpioReadPin(const gpio_signal_t sig)
 {
 	hal_pin_t pin = signal_table[sig].pin;
 
-	if(pin.mode == GPIO_PIN_MODE_INPUT)
+	if( pin.mode == GPIO_PIN_MODE_INPUT )
 	{
 		return (*(mcu_ports[pin.port].pin) & (1 << pin.number)) >> pin.number;
 	}
