@@ -25,4 +25,7 @@ Compile-time generated headers (`auto_hal_*`) expose selected APIs to system/use
 - HAL still exposes details that can leak timing assumptions upward (scheduler and timer coupling).
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Define strict HAL capability interfaces (timer, gpio, uart traits) with compile-time conformance checks; Introduce per-driver latency budgets and ISR execution contracts; Move board signal mapping to declarative tables generated from configuration; Add hardware abstraction tests (mock HAL on host) to validate behavior without target silicon, and Separate “critical RT” HAL APIs from “best effort” APIs to protect determinism.
+- Future improvements should focus on Define strict HAL capability interfaces (timer, gpio, uart traits) with compile-time conformance checks
+- Introduce per-driver latency budgets and ISR execution contracts
+- Move board signal mapping to declarative tables generated from configuration
+- Add hardware abstraction tests (mock HAL on host) to validate behavior without target silicon, and Separate “critical RT” HAL APIs from “best effort” APIs to protect determinism.

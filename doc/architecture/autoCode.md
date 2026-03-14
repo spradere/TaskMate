@@ -20,4 +20,8 @@
 - Generated dense code intentionally favors machine structure over human readability, which raises debugging cost when generation errors slip through.
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Add a formal schema for `init.rc/.err` (versioned grammar + compatibility checks); Introduce generated manifest + checksum signed artifacts to support traceability and safety audits; Add CI differential tests: identical input ⇒ byte-identical generated outputs; Split generator backend into stable intermediate representation (IR) + pluggable emitters to reduce direct coupling to specific C files; Add static contract checks for dependency direction (interfaces ← HAL ← sysCall ← services/tasks), and Prepare multi-target profiles (debug/safety/min-size) and deterministic generation logs suited for certification workflows.
+- Future improvements should focus on Add a formal schema for `init.rc/.err` (versioned grammar + compatibility checks)
+- Introduce generated manifest + checksum signed artifacts to support traceability and safety audits
+- Add CI differential tests: identical input ⇒ byte-identical generated outputs
+- Split generator backend into stable intermediate representation (IR) + pluggable emitters to reduce direct coupling to specific C files
+- Add static contract checks for dependency direction (interfaces ← HAL ← sysCall ← services/tasks), and Prepare multi-target profiles (debug/safety/min-size) and deterministic generation logs suited for certification workflows.

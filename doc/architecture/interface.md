@@ -22,4 +22,6 @@ These headers are intentionally lightweight and mostly type/enum based. HAL cons
 - Some naming and file comments are slightly inconsistent (`common` vs `commons`), raising friction in larger teams.
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Expand interface contracts to timers, serial channels, clocks, and synchronization primitives; Add versioned interface IDs and compile-time compatibility guards; Create architecture compliance tests ensuring HAL implementations respect interface invariants, and Define explicit “no include upward” lint checks to prevent accidental dependency inversion.
+- Future improvements should focus on Expand interface contracts to timers, serial channels, clocks, and synchronization primitives
+- Add versioned interface IDs and compile-time compatibility guards
+- Create architecture compliance tests ensuring HAL implementations respect interface invariants, and Define explicit “no include upward” lint checks to prevent accidental dependency inversion.
