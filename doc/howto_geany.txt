@@ -7,9 +7,3 @@ Use ~/bin/go to select/paste an error from compiler output:
 Open all files:
 	geany $(find . -type f -name '*.h')
 	find . -type f \( -name "*.c" -o -name "*.h" \) -print0 | xargs -0 geany &
-
-Display a Make variable:
-	make -V VAR_NAME
-
-View preprocessor expansion only (-E):
-clang -dM -E -I/root/code/TaskMate/TaskMate_current/src/ src/autoCode/options.c > xmacro

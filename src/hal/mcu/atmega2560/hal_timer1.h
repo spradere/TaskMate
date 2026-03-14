@@ -28,7 +28,7 @@ typedef void (*hal_timer1Callback_t)(void);
 void hal_timer1Init(void);
 void hal_timer1Start(void);
 void hal_timer1Stop(void);
-//void hal_timer1Load(void);
+// void hal_timer1Load(void);
 void hal_timer1SetCallback(hal_timer1Callback_t func_ptr);
 
 #endif

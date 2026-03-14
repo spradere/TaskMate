@@ -16,7 +16,7 @@ to separate build logic, system logic, and hardware dependencies.
 
 > <span style="color:green"> **Project Stats (v0.26 [^1] )**</span>
 >
->  <span style="color:green">362 commits • 106 source files • 6818 lines of code •
+>  <span style="color:green">380 commits • 106 source files • 6818 lines of code •
 > binary size : 6496 bytes (Flash) • ram usage : 2009 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
@@ -45,14 +45,14 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 ## ⚙️ Build System
 
-TaskMate uses a custom **Makefile** that fully manages dependencies and workflow.
+TaskMate uses a custom **Build system** that fully manages dependencies and workflow.
 
-- Automatic recompilation based on file changes, including headers and init.rc startup configuration.
+- Automatic recompilation based on file changes, including headers and configuration files.
 - CLI commands like `make upload`, `make push` and `make backup`.
 
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
-See : [Makefile & build system](doc/build_system.md)
+![Build system](doc/build_v2.png)
 
 ---
 
@@ -66,7 +66,7 @@ This allows TaskMate to run on multiple architectures:
 - **amd64** - for testing and faster development cycles
 - **arm32v7-m4** - planned for future hardware performance upgrades
 
-See : [Portability](doc/portability.md)
+See : [Portability](doc/rules/portability.md)
 
 ---
 
@@ -82,13 +82,11 @@ System latency and jitter are acceptable for testing and lightweight application
 yet they remain **non-deterministic** under specific conditions such as nested interrupts,
 driver contention, or prolonged critical sections.
 
-See : [Future improvements](doc/rtos_improvements.md)
-
 ---
 
 ## ⬆️ Layers
 
-![System Layer Diagram](doc/TaskMate_layers_v5.png)
+![System Layer Diagram](doc/TaskMate_layers_v6.png)
 
 TaskMate layer configuration provides a **strong isolation between system components**.
 Each layer communicates through **well-defined interfaces**,
@@ -115,25 +113,7 @@ This approach keeps the flexibility of a dynamic system but ensures that
 This mechanism defines system initialisation **without manually hard-coding**
 configuration.
 
-See : [More about autoCode](doc/autoCode.md)
-See : [Info about run level](doc/run_level.md)
-
----
-
-## 🚩 Global Error Management System
-
-TaskMate introduces a unified **global error management** system designed to replace
-scattered, module-local error handling with a coherent, **system-wide architecture**.
-Each module declares its errors in a dedicated .err initialisation file using a strict
-naming convention, ensuring namespace safety and **long-term maintainability**.
-During the build process, autoCode tool **validates** error definitions,
-detects duplicates, assigns **unique identifiers**, and generates a centralised error
-database. At runtime, all errors are raised through a **single system interface**,
-allowing consistent handling of logging, severity levels, return values, and
-optional system actions. This approach minimises **code duplication**, reduces
-**memory usage**, and provides a solid foundation for diagnostics, robustness, and
-future extensibility, while remaining **lightweight** and suitable for constrained
-embedded systems.
+See : [More about autoCode](doc/rules/autoCode.md)
 
 ---
 
@@ -162,6 +142,10 @@ See the `LICENSE` file for full details.
 - **Project development status** — see [Project Progress](doc/progress.md)
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/C_code_best_practices.md)
+
+You will find more information about the architecture in the doc/architecture/files.
+These files contain information about the development history, the current implementation,
+the strengths and weaknesses of the source code, and future improvements.
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
 - Microcontrôleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6
