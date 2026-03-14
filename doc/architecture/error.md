@@ -20,4 +20,8 @@ The current design combines build-time generation and runtime lookup. During gen
 - Error handling policy remains distributed across services/tasks; there is no unified escalation path (retry, degrade mode, safe state).
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on defining a formal runtime error policy that maps `err_critical_t` to deterministic actions (log-only, task restart, subsystem quarantine, or controlled fail-safe); extending syscall APIs to expose structured error metadata beyond message strings; adding compile-time rules that enforce ownership and prefix conventions per module; introducing trace correlation (timestamp, task id, run level, source module) for post-mortem analysis; and implementing fault-injection tests that verify bounded and predictable behavior under repeated error conditions.
+- Future improvements should focus on defining a formal runtime error policy that maps `err_critical_t` to deterministic actions (log-only, task restart, subsystem quarantine, or controlled fail-safe)
+- extending syscall APIs to expose structured error metadata beyond message strings
+- adding compile-time rules that enforce ownership and prefix conventions per module
+- introducing trace correlation (timestamp, task id, run level, source module) for post-mortem analysis
+- and implementing fault-injection tests that verify bounded and predictable behavior under repeated error conditions.
