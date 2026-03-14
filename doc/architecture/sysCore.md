@@ -25,4 +25,7 @@ Scheduling is preemptive round-robin on timer callback, with context save/restor
 - No priority scheduling / criticality classes yet; determinism remains limited.
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Complete run-level state machine and remove transitional boot loops; Introduce priority-based scheduler with bounded preemption latency analysis; Add kernel tracing hooks (context switch time, ISR-to-task latency, jitter stats); Harden shared state with clear atomic sections and documented lock hierarchy, and Define strict kernel ABI to decouple sysCore internals from sysCall consumers.
+- Future improvements should focus on Complete run-level state machine and remove transitional boot loops
+- Introduce priority-based scheduler with bounded preemption latency analysis
+- Add kernel tracing hooks (context switch time, ISR-to-task latency, jitter stats)
+- Harden shared state with clear atomic sections and documented lock hierarchy, and Define strict kernel ABI to decouple sysCore internals from sysCall consumers.

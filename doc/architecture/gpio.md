@@ -25,4 +25,7 @@ Initialization wires all signals at boot (`gpio_signalsInit`) and then tasks man
 - No explicit debouncing, interrupt-driven GPIO events, or atomic multi-signal operations.
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Enforce polarity handling (`active_high`) consistently in syscall/HAL paths; Move mapping to generated static tables with compile-time validation; Add GPIO capability profiles (output-only, safety-critical, interrupt-capable); Provide deterministic event API (edge callbacks/queues) with bounded ISR work, and Add configuration and runtime diagnostics (stuck pin detection, illegal mode checks).
+- Future improvements should focus on Enforce polarity handling (`active_high`) consistently in syscall/HAL paths
+- Move mapping to generated static tables with compile-time validation
+- Add GPIO capability profiles (output-only, safety-critical, interrupt-capable)
+- Provide deterministic event API (edge callbacks/queues) with bounded ISR work, and Add configuration and runtime diagnostics (stuck pin detection, illegal mode checks).

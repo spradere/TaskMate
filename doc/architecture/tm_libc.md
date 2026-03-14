@@ -23,4 +23,6 @@ The logging path is currently thin: `tm_syslog` forwards variadic arguments to `
 - Limited formal tests for edge cases (formatting bounds, locale assumptions, reentrancy).
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Define strict reentrant subset + ISR-safe formatting variants; Add compile-time selectable log levels/sinks with bounded-time guarantees; Build unit/property tests for formatter correctness and truncation safety, and Document and enforce ABI stability for `tm_string_t` and formatting APIs.
+- Future improvements should focus on Define strict reentrant subset + ISR-safe formatting variants
+- Add compile-time selectable log levels/sinks with bounded-time guarantees
+- Build unit/property tests for formatter correctness and truncation safety, and Document and enforce ABI stability for `tm_string_t` and formatting APIs.

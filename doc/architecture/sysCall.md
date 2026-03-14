@@ -26,4 +26,6 @@ It acts as a thin wrapper layer over `sysCore` and HAL/user-facing generated hea
 - Mixed concerns (target info, thread control, GPIO, error catalog) in one layer can become monolithic.
 
 ## Future improvements for industrial-grade embedded RTOS
-Future improvements should focus on Split syscalls into domain modules (thread, io, diagnostics, platform info); Add privilege-like API contracts (which context can call what, ISR-safe variants); Define non-blocking/error-reporting conventions suitable for safety-critical flows, and Introduce syscall tracing and audit hooks for runtime observability.
+- Future improvements should focus on Split syscalls into domain modules (thread, io, diagnostics, platform info)
+- Add privilege-like API contracts (which context can call what, ISR-safe variants)
+- Define non-blocking/error-reporting conventions suitable for safety-critical flows, and Introduce syscall tracing and audit hooks for runtime observability.
