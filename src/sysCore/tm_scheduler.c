@@ -30,10 +30,7 @@
 
 static void tm_schedulerRR(void);
 
-void tm_schedulerInit(void)
-{
-	hal_timer1SetCallback(tm_schedulerRR);
-}
+void tm_schedulerInit(void) { hal_timer1SetCallback(tm_schedulerRR); }
 
 void tm_schedulerStart(void)
 {
@@ -46,10 +43,7 @@ void tm_schedulerStart(void)
 	hal_returnFromInterupt();
 }
 
-void tm_schedulerCoop(void)
-{
-	tm_schedulerRR();
-}
+void tm_schedulerCoop(void) { tm_schedulerRR(); }
 
 void tm_schedulerRR(void)
 {
@@ -71,11 +65,10 @@ void tm_schedulerRR(void)
 	hal_timer1Stop();
 
 	// switch thread
-	uint8_t current = mod_threadGetCurrent() ;
+	uint8_t current = mod_threadGetCurrent();
 
 	if( ++current == MOD_THREAD_COUNT ) { current = 0; }
 	mod_threadSetCurrent(current);
-
 
 	hal_timer1Start();
 

@@ -22,21 +22,18 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <util/atomic.h>
 #include <stddef.h>
+#include <util/atomic.h>
 
-//#include "hal/auto_hal_system.h"
-//#include "sysCall/sysCall.h"
-//#include "sysCore/modules.h"
-//#include "sysCore/tm_scheduler.h"
+// #include "hal/auto_hal_system.h"
+// #include "sysCall/sysCall.h"
+// #include "sysCore/modules.h"
+// #include "sysCore/tm_scheduler.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 static hal_timer1Callback_t callback = NULL;
 
-void hal_timer1SetCallback(hal_timer1Callback_t func_ptr)
-{
-	callback = func_ptr;
-}
+void hal_timer1SetCallback(hal_timer1Callback_t func_ptr) { callback = func_ptr; }
 
 void hal_timer1Init(void)
 {
@@ -82,7 +79,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	}*/
 
 	// callback
-	if(callback != NULL){callback();}
+	if( callback != NULL ) { callback(); }
 
 	/*// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
