@@ -51,7 +51,7 @@ typedef struct
 
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
-	#include "hal/auto_hal_tmlibc.h" // macro TM_STR_* hal definitions
+	#include "hal/public/hal_tmlibc.h" // macro TM_STR_* hal definitions
 
 	void tm_strncpy(char *dest, const char *src, uint8_t n);
 

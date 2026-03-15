@@ -37,9 +37,6 @@ TM_STORE_FILE_NAME(file_name);
 #if VERBOSE_LEVEL > 0
 	#pragma message "TM_VERSION  = " TM_VERSION
 	#pragma message "BUILD  = " INT_TO_STRING(BUILD_CNT)
-	#pragma message "ARCH  = " ARCH
-	#pragma message "MCU   = " MCU
-	#pragma message "BOARD = " BOARD
 #endif
 
 int main(void)
@@ -49,7 +46,7 @@ int main(void)
 
 	const hal_info_t *info;
 	hal_sysInfoGet(&info);
-	tm_syslog(TM_STR("[boot] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
+	tm_syslog(TM_STR("[info] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 /* *************************************************************************************************
