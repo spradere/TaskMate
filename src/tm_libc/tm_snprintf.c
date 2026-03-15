@@ -22,7 +22,7 @@
 
 #include <TaskMate.h>
 
-#include "hal/auto_hal_tmlibc.h"
+#include "hal/public/hal_tmlibc.h"
 
 static void baseConvert(uint16_t value, uint8_t base);
 static void tm_putChar(char ch);
