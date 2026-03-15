@@ -44,8 +44,8 @@
 	@git -v >> "${BUILD_INFO}"
 	@printf "git tag : " >> "${BUILD_INFO}"
 	@git describe --tags >> "${BUILD_INFO}"
-	@printf "avr-gcc version : " >> "${BUILD_INFO}"
-	@avr-gcc -dumpversion >> "${BUILD_INFO}"
+	@printf "${CC} : " >> "${BUILD_INFO}"
+	@printf "${CC_VER}\n" >> "${BUILD_INFO}"
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
