@@ -22,13 +22,8 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <stddef.h>
 #include <util/atomic.h>
-
-// #include "hal/auto_hal_system.h"
-// #include "sysCall/sysCall.h"
-// #include "sysCore/modules.h"
-// #include "sysCore/tm_scheduler.h"
+#include <TaskMate.h>
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 static hal_timer1Callback_t callback = NULL;
@@ -60,33 +55,10 @@ void hal_timer1Stop(void)
 	TCCR1B &= (uint8_t)~((1u << WGM13) | (1u << WGM12));
 }
 
-/*void hal_timer1Load(void)
-{
-	// used for cooperative yield hand to scheduler
-	ATOMIC_BLOCK(ATOMIC_FORCEON) { TCNT1 = TIMER1_OVERFLOW_COUNT - 1; }
-}*/
-
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	/*mod_thread_item_t *mod;
-
-	// save current thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_contextSave();
-		mod = mod_threadGetPointer(mod_threadGetCurrent());
-		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
-	}*/
 
 	// callback
 	if( callback != NULL ) { callback(); }
 
-	/*// restore next thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		mod = mod_threadGetPointer(mod_threadGetCurrent());
-		hal_setStackPointer((uintptr_t)mod->stack_pointer);
-		hal_contextRestore();
-		hal_returnFromInterupt();
-	}*/
 }
