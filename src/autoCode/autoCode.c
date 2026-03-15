@@ -102,7 +102,7 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCall/sysCall.c", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/hal/public/hal_sysInfo.c", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCore/modules_define.h", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &auto_options);
 
@@ -110,9 +110,8 @@ int main(int argn, const char *argv[])
 	writeInclude(&data_base, INCLUDE_THREAD_LIST, "src/sysCore/auto_threads_list.h", &auto_options);
 	writeInclude(&data_base, INCLUDE_HAL_SYSTEM_PART, "src/hal/auto_hal_system.h", &auto_options);
 	writeInclude(&data_base, INCLUDE_HAL_USER_PART, "src/hal/auto_hal_user.h", &auto_options);
-	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/auto_hal_define.h", &auto_options);
-	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/auto_hal_init.h", &auto_options);
-	writeInclude(&data_base, INCLUDE_HAL_TMLIBC, "src/hal/auto_hal_tmlibc.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/public/auto_hal_define.h", &auto_options);
+	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/hal/public/auto_hal_init.h", &auto_options);
 
 	// print all info about modules
 	printModules(&data_base);

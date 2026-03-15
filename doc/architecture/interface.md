@@ -19,7 +19,6 @@ These headers are intentionally lightweight and mostly type/enum based. HAL cons
 ### Weaknesses (layer leaks / dependency inversion risk)
 - Interface scope is currently narrow (mostly GPIO), so many subsystems still depend on HAL headers directly.
 - Lack of formal versioning for interface contracts may cause silent breaks when enums evolve.
-- Some naming and file comments are slightly inconsistent (`common` vs `commons`), raising friction in larger teams.
 
 ## Future improvements for industrial-grade embedded RTOS
 - Future improvements should focus on Expand interface contracts to timers, serial channels, clocks, and synchronization primitives

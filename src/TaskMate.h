@@ -21,7 +21,23 @@
 #ifndef TASKMATE_H
 #define TASKMATE_H
 
-// file name in ROM
+// general system macro / def
+#define	NULL ((void *)0)
+#define	MIN(a,b) (((a) < (b)) ? (a) : (b))
+#define	MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define	panic(msg) do {	hal_usartWriteString("\nSYSTEM PANIC : ");\
+	hal_usartSendTXBuffer();\
+	hal_usartWriteString(msg);\
+	hal_usartSendTXBuffer();\
+	hal_usartWriteString(", halt.");\
+	hal_usartSendTXBuffer();\
+	hal_clearGlobalInterupt();\
+	while (1); \
+	}while (0)
+
+// string macros
+#define STRING2(x) #x
+#define INT_TO_STRING(x) STRING2(x)
 #define TM_STORE_FILE_NAME(name) TM_STR_ROM_NEW(name, __FILE_NAME__)
 
 // debug options

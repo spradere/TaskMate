@@ -22,15 +22,10 @@
 
 #include <stdint.h>
 
-#include "hal/auto_hal_define.h"
-#include "hal/auto_hal_init.h"
-#include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
+#include "hal/public/hal_sysInfo.h"
 #include "sysCall/error.h"
-#include "sysCall/gpio.h"
-#include "sysCall/sysCall.h"
-#include "sysCore/modules.h"
-#include "sysCore/runLevel.h"
+#include "sysCore/boot.h"
 #include "sysCore/tm_scheduler.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
@@ -40,50 +35,23 @@ TM_STORE_FILE_NAME(file_name);
 
 // display hardware target informations
 #if VERBOSE_LEVEL > 0
-	#define STRING2(x) #x
-	#define STRING(x) STRING2(x)
 	#pragma message "TM_VERSION  = " TM_VERSION
-	#pragma message "BUILD  = " STRING(BUILD_CNT)
-	#pragma message "ARCH  = " ARCH
-	#pragma message "MCU   = " MCU
-	#pragma message "BOARD = " BOARD
+	#pragma message "BUILD  = " INT_TO_STRING(BUILD_CNT)
 #endif
 
 int main(void)
 {
-	// system startup
-	hal_usartInit();
-	hal_usartStart();
+	// system start up
+	boot();
 
-	const sc_info_t *info;
-	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
+	const hal_info_t *info;
+	hal_sysInfoGet(&info);
+	tm_syslog(TM_STR("[info] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
-	// system static allocation init
-	tm_syslog(TM_STR("[boot] system static allocation\n"));
-
-	mod_driversAlloc();
-	mod_threadsAlloc();
-	rl_Alloc();
-
-	// hal hardware init
-	tm_syslog(TM_STR("[boot] hal hardware init\n"));
-
-	hal_archInit();
-	hal_mcuInit();
-	hal_boardInit();
-	gpio_signalsInit();
-
-	// start driver
-	// TODO remove this code when run level is implemented
-
-	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
-	{
-		mod_driver_item_t *mod = mod_driverGetPointer(i);
-		(*(mod->init))();
-		(*(mod->start))();
-	}
+/* *************************************************************************************************
+ * test / experimental zone, before scheduler run
+ * ************************************************************************************************/
 
 	// RTC external module test
 	tm_syslog(TM_STR("[boot] hal RTC init\n"));
@@ -149,19 +117,17 @@ int main(void)
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
 	}*/
 
-	// jump to current thread for first call and start system by enabling interrupts
+/* *************************************************************************************************
+ * end of test / experimental zone
+ * ************************************************************************************************/
+
+	// start scheduler
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
+
+	//panic("\nboot stage 1");
 
 	tm_schedulerInit();
 	tm_schedulerStart();
-
-	/*mod_threadSetCurrent(0);
-	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
-	hal_setStackPointer((uintptr_t)mod->stack_pointer);
-
-	hal_contextRestore();
-	hal_setGlobalInterupt();
-	hal_returnFromInterupt();*/
 
 	return 0; // You should never get here
 }

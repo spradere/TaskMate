@@ -13,26 +13,15 @@
  */
 
 /**
- * @file sysCall.h
- * @brief sysCall header
+ * @file boot.h
+ * @brief header for boot
  *
  */
 
-#ifndef SYSCALL_H
-#define SYSCALL_H
 
-#include <stdint.h>
+#ifndef BOOT_H
+#define BOOT_H
 
-void sc_threadSetSTC(uint16_t count);
-uint16_t sc_threadGetSTC(void);
-
-void sc_handYield(void);
-
-// system status flags
-#define FLAG_DUMMY 0x01
-
-void sc_flagClear(uint8_t flag);
-void sc_flagSet(uint8_t flag);
-uint8_t sc_flagGet(uint8_t flag);
+void boot(void);
 
 #endif
