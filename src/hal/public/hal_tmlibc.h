@@ -11,16 +11,16 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-#ifndef PHAL_TMLIBC_H
-#define PHAL_TMLIBC_H
+#ifndef HAL_TMLIBC_H
+#define HAL_TMLIBC_H
 
-#define PHAL_TMLIBC 0
+#define HAL_TMLIBC 0
 
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
-	#include "hal/board/arduinoMega/hal_tmlibc.h"
-	#undef PHAL_TMLIBC
-	#define PHAL_TMLIBC 1
+	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
+	#undef HAL_TMLIBC
+	#define HAL_TMLIBC 1
 #endif
 
-_Static_assert(PHAL_TMLIBC, "No hal implementation for tm_libc selected.");
+_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc selected.");
 #endif

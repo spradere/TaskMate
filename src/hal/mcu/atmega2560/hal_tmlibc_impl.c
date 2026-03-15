@@ -18,9 +18,9 @@
  *
  */
 
-#include "hal/board/arduinoMega/hal_tmlibc.h"
+#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
 
-#include "hal/auto_hal_user.h"
+#include "hal/mcu/atmega2560/hal_usart.h"
 
 void hal_stdio_putChar(char ch)
 {
