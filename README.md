@@ -84,7 +84,7 @@ driver contention, or prolonged critical sections.
 
 ---
 
-## ⬆️ Layers
+## ⬆️ TaskMate Layers
 
 ![System Layer Diagram](doc/TaskMate_layers_v6.png)
 
@@ -143,9 +143,13 @@ See the `LICENSE` file for full details.
 - **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
 - **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/C_code_best_practices.md)
 
+**Architecture :**
+
 You will find more information about the architecture in the doc/architecture/files.
-These files contain information about the development history, the current implementation,
-the strengths and weaknesses of the source code, and future improvements.
+These files contain information about the development history, current implementation,
+strengths and weaknesses of source code, and future improvements.
+
+**Books :**
 
 - La référence du C norme ANSI-ISO, author Claude Delannoy, publisher Eyrolles. ISBN 2-212-09036-6
 - Microcontrôleurs AVR : des ATtiny aux ATmega, author Christian Tavernier, publisher Dunod. ISBN 978-2-10-074417-6

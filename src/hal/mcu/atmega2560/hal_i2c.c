@@ -23,7 +23,6 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "hal/auto_hal_tmlibc.h"
 #include "hal/board/arduinoMega/board_define.h" // get i2c frequency
 #include "tm_libc/tm_syslog.h"
 

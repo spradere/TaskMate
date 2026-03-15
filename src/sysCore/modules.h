@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 
-#include "hal/auto_hal_define.h" // get hal_stack_word_t from selected arch
+#include "hal/public/auto_hal_define.h" // get hal_stack_word_t from selected arch
 #include "sysCore/modules_define.h"
 #include "tm_libc/tm_string.h"
 

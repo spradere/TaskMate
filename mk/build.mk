@@ -44,8 +44,8 @@
 	@git -v >> "${BUILD_INFO}"
 	@printf "git tag : " >> "${BUILD_INFO}"
 	@git describe --tags >> "${BUILD_INFO}"
-	@printf "avr-gcc version : " >> "${BUILD_INFO}"
-	@avr-gcc -dumpversion >> "${BUILD_INFO}"
+	@printf "${CC} : " >> "${BUILD_INFO}"
+	@printf "${CC_VER}\n" >> "${BUILD_INFO}"
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
 #@ [global] System build.
@@ -83,7 +83,6 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> "${AUTOCODE_CONFIG}"
 	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> "${AUTOCODE_CONFIG}"
 	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> "${AUTOCODE_CONFIG}"
-	@printf "%s\n" "--file_hal_tmlibc ${FILE_HAL_TMLIBC:S/src\///}" >> "${AUTOCODE_CONFIG}"
 
 	# write list hal sources files
 	@: > "${FILE_HAL_USER_PATH}"

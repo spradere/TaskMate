@@ -33,7 +33,7 @@ This ordering enforces policy checks and code generation before compilation/link
 
 ### 4) Source discovery and generated data
 `mk/sources_data.mk` centralizes dynamic discovery using `find`:
-- project C/H sources from scoped source directories,
+- project .c/.h sources from scoped source directories,
 - autoCode sources,
 - `init.rc` and `*.err` inventories,
 - HAL headers annotated with `// @hal_user` or `// @hal_system`,
@@ -81,7 +81,6 @@ The help system extracts documented targets via `#@` annotations in make fragmen
 - Several rules embed environment-specific absolute include paths (clang-tidy/cppcheck), which can drift across developer machines.
 - Some backup/git targets are interactive (`read`) and branch-hardcoded (`merge test`), limiting CI/non-interactive reproducibility.
 - `_system_critical_check` uses recursive `grep`, which is practical but coarse (string-match policy vs semantic include graph).
-- Build metadata in `.END` is AVR-centric (`avr-gcc -dumpversion`) even when non-AVR targets are configured.
 
 ## Future improvements for industrial-grade embedded RTOS
 - Future improvements should focus on introducing a target-agnostic toolchain abstraction (per-arch tool info providers) so metadata and checks stay valid for non-AVR platforms.

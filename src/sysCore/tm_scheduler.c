@@ -24,7 +24,7 @@
 #include <util/atomic.h>
 
 #include "hal/auto_hal_system.h"
-#include "hal/auto_hal_user.h"
+//#include "hal/auto_hal_user.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 

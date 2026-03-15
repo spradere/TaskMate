@@ -13,11 +13,25 @@
  */
 
 /**
- * @file hal_api.c
- * @brief hal api for fallback
+ * @file hal_sysInfo.h
+ * @brief header for sysInfo
  *
  */
 
-#include "hal/auto_hal_user.h"
+#ifndef HAL_SYSINFO_H
+#define HAL_SYSINFO_H
 
-//__attribute__((weak)) void hal_inBoardLed(uint8_t action) {}
+#include "tm_libc/tm_string.h"
+
+typedef struct
+{
+	const tm_string_t *tm_ver;
+	const uint16_t tm_build;
+	const tm_string_t *arch;
+	const tm_string_t *mcu;
+	const tm_string_t *board;
+} hal_info_t;
+
+void hal_sysInfoGet(const hal_info_t **dest);
+
+#endif

@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef HAL_TMLIBC_H
-#define HAL_TMLIBC_H
+#ifndef HAL_TMLIBC_IMPL_H
+#define HAL_TMLIBC_IMPL_H
 
 // clang-format off
 
