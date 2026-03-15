@@ -22,11 +22,9 @@
 
 #include <stdint.h>
 
-#include "hal/auto_hal_define.h"
-#include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
+#include "hal/public/hal_sysInfo.h"
 #include "sysCall/error.h"
-#include "sysCall/sysCall.h"
 #include "sysCore/boot.h"
 #include "sysCore/tm_scheduler.h"
 #include "tm_libc/tm_stdio.h"
@@ -37,10 +35,8 @@ TM_STORE_FILE_NAME(file_name);
 
 // display hardware target informations
 #if VERBOSE_LEVEL > 0
-	#define STRING2(x) #x
-	#define STRING(x) STRING2(x)
 	#pragma message "TM_VERSION  = " TM_VERSION
-	#pragma message "BUILD  = " STRING(BUILD_CNT)
+	#pragma message "BUILD  = " INT_TO_STRING(BUILD_CNT)
 	#pragma message "ARCH  = " ARCH
 	#pragma message "MCU   = " MCU
 	#pragma message "BOARD = " BOARD
@@ -51,9 +47,9 @@ int main(void)
 	// system start up
 	boot();
 
-	const sc_info_t *info;
-	sc_targetGetInfo(&info);
-	tm_syslog(TM_STR("\n\n[boot] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
+	const hal_info_t *info;
+	hal_sysInfoGet(&info);
+	tm_syslog(TM_STR("[boot] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 /* *************************************************************************************************
