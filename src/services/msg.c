@@ -69,7 +69,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3move freq -> board", MSG_TO_LCD);
+		msgWritreText(chan, "\3TaskMate.h NULL", MSG_TO_LCD);
 	}
 
 	msgProcess();

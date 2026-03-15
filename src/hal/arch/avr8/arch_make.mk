@@ -47,12 +47,6 @@ LFLGAS = -Wl,--gc-sections -Wl,-Map=${TARGET}.map
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
 
-# Print compiler version in bild info file
-print_CC_version:
-	@printf "avr-gcc version : " >> "${BUILD_INFO}"
-	@avr-gcc -dumpversion >> "${BUILD_INFO}"
-.PHONY: print_CC_version
-
 # link
 ${TARGET}: ${OBJS}
 	@printf "\n%sLinking%s\n\n" \

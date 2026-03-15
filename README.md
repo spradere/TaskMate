@@ -84,7 +84,7 @@ driver contention, or prolonged critical sections.
 
 ---
 
-## ⬆️ Layers
+## ⬆️ TaskMate Layers
 
 ![System Layer Diagram](doc/TaskMate_layers_v6.png)
 
