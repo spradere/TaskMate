@@ -15,6 +15,7 @@
 
 # compiler for arch avr8
 CC = avr-gcc
+CC_VER != avr-gcc -dumpversion
 
 # General options
 CFLAGS += -Os -MMD -MP
@@ -45,6 +46,12 @@ LFLGAS = -Wl,--gc-sections -Wl,-Map=${TARGET}.map
 # output files
 HEX = ${TARGET}.hex
 ELF = ${TARGET}.elf
+
+# Print compiler version in bild info file
+print_CC_version:
+	@printf "avr-gcc version : " >> "${BUILD_INFO}"
+	@avr-gcc -dumpversion >> "${BUILD_INFO}"
+.PHONY: print_CC_version
 
 # link
 ${TARGET}: ${OBJS}
