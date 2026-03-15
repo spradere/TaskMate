@@ -33,6 +33,7 @@ void boot(void)
 	// system startup
 	hal_usartInit();
 	hal_usartStart();
+	tm_syslog(TM_STR("\n\n[boot] booting ...\n"));
 
 	// system static allocation init
 	tm_syslog(TM_STR("[boot] system static allocation\n"));
