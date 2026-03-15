@@ -13,26 +13,25 @@
  */
 
 /**
- * @file sysCall.h
- * @brief sysCall header
+ * @file hal_sysInfo.h
+ * @brief header for sysInfo
  *
  */
 
-#ifndef SYSCALL_H
-#define SYSCALL_H
+#ifndef HAL_SYSINFO_H
+#define HAL_SYSINFO_H
 
-#include <stdint.h>
+#include "tm_libc/tm_string.h"
 
-void sc_threadSetSTC(uint16_t count);
-uint16_t sc_threadGetSTC(void);
+typedef struct
+{
+	const tm_string_t *tm_ver;
+	const uint16_t tm_build;
+	const tm_string_t *arch;
+	const tm_string_t *mcu;
+	const tm_string_t *board;
+} hal_info_t;
 
-void sc_handYield(void);
-
-// system status flags
-#define FLAG_DUMMY 0x01
-
-void sc_flagClear(uint8_t flag);
-void sc_flagSet(uint8_t flag);
-uint8_t sc_flagGet(uint8_t flag);
+void hal_sysInfoGet(const hal_info_t **dest);
 
 #endif
