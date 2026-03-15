@@ -25,7 +25,7 @@
 
 #include <avr/io.h>
 
-#include "hal/auto_hal_define.h" // get stack_word_t
+#include "hal/public/auto_hal_define.h" // get stack_word_t
 
 #define AVR8_PUSH_ALL_REGS \
 	"push r0 \n\t"         \
