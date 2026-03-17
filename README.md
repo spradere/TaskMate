@@ -86,7 +86,7 @@ driver contention, or prolonged critical sections.
 
 ## ⬆️ TaskMate Layers
 
-![System Layer Diagram](doc/TaskMate_layers_v6.png)
+![System Layer Diagram](doc/TaskMate_layers_v7.png)
 
 TaskMate layer configuration provides a **strong isolation between system components**.
 Each layer communicates through **well-defined interfaces**,
