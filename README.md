@@ -88,9 +88,10 @@ driver contention, or prolonged critical sections.
 
 ![System Layer Diagram](doc/TaskMate_layers_v7.png)
 
-TaskMate layer configuration provides a **strong isolation between system components**.
-Each layer communicates through **well-defined interfaces**,
-preventing direct access to the hardware or core system logic.
+Here is the current layer diagram for TaskMate. The major task at the moment is to improve the
+architecture by eliminating **layer leaks** and **dependency inversions**. Only layers that share a common
+boundary are allowed to communicate, meaning higher‑level layers can call lower‑level ones
+(in theory, of course—practice is still **under construction**).
 
 User tasks can still **benefit from all system features** —
 such as messaging, timing, I/O, and services — but always through indirect calls.
