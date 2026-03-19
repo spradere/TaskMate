@@ -22,5 +22,5 @@
 	#define HAL_TMLIBC 1
 #endif
 
-_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc selected.");
+_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc on selected hardware target.");
 #endif
