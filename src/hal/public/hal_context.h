@@ -11,17 +11,16 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ! Auto generated code, do not edit !
-// ! any changes will be lost         !
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#ifndef HAL_CONTEXT_H
+#define HAL_CONTEXT_H
 
-#ifndef AUTO_HAL_SYSTEM_H
-#define AUTO_HAL_SYSTEM_H
+#define HAL_CONTEXT 0
 
-// clang-format off
-#include "hal/mcu/atmega2560/hal_timerSTC.h"
-#include "hal/mcu/atmega2560/hal_timer1.h"
-// clang-format on
+#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+	#include "hal/arch/avr8/hal_context_impl.h"
+	#undef HAL_CONTEXT
+	#define HAL_CONTEXT 1
+#endif
 
+_Static_assert(HAL_CONTEXT, "No hal implementation for context switch on selected hardware target.");
 #endif
