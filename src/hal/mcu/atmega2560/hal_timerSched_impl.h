@@ -18,10 +18,8 @@
  *
  */
 
-// @hal_system
-
-#ifndef HAL_TIMER1_H
-#define HAL_TIMER1_H
+#ifndef HAL_TIMER_SCHED_IMPL_H
+#define HAL_TIMER_SCHED_IMPL_H
 
 typedef void (*hal_timerSchedCallback_t)(void);
 

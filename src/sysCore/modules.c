@@ -19,9 +19,10 @@
 
 #include "sysCore/modules.h"
 
-#include "hal/auto_hal_system.h"
+//#include "hal/auto_hal_system.h"
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_timerSTC.h"
+#include "hal/public/hal_timerSched.h"
 #include "hal/auto_hal_user.h"
 #include "sysCore/auto_threads_list.h"
 

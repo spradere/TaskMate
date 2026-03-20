@@ -11,15 +11,16 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ! Auto generated code, do not edit !
-// ! any changes will be lost         !
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#ifndef HAL_TIMER_SCHED_H
+#define HAL_TIMER_SCHED_H
 
-#ifndef AUTO_HAL_SYSTEM_H
-#define AUTO_HAL_SYSTEM_H
+#define HAL_TIMER_SCHED 0
 
-// clang-format off
-// clang-format on
+#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+	#include "hal/mcu/atmega2560/hal_timerSched_impl.h"
+	#undef HAL_TIMER_SCHED
+	#define HAL_TIMER_SCHED 1
+#endif
 
+_Static_assert(HAL_TIMER_SCHED, "No hal implementation for scheduler timer on selected hardware target.");
 #endif
