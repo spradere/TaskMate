@@ -18,7 +18,7 @@
  *
  */
 
-#include "hal/arch/avr8/hal_context.h"
+#include "hal/arch/avr8/hal_context_impl.h"
 
 #include <avr/io.h>
 

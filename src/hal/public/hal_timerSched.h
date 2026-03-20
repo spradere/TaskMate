@@ -11,16 +11,16 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-#ifndef HAL_TMLIBC_H
-#define HAL_TMLIBC_H
+#ifndef HAL_TIMER_SCHED_H
+#define HAL_TIMER_SCHED_H
 
-#define HAL_TMLIBC 0
+#define HAL_TIMER_SCHED 0
 
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
-	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
-	#undef HAL_TMLIBC
-	#define HAL_TMLIBC 1
+	#include "hal/mcu/atmega2560/hal_timerSched_impl.h"
+	#undef HAL_TIMER_SCHED
+	#define HAL_TIMER_SCHED 1
 #endif
 
-_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc on selected hardware target.");
+_Static_assert(HAL_TIMER_SCHED, "No hal implementation for scheduler timer on selected hardware target.");
 #endif

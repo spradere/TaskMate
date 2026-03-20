@@ -18,10 +18,8 @@
  *
  */
 
-// @hal_system
-
-#ifndef HAL_CONTEXT_H
-#define HAL_CONTEXT_H
+#ifndef HAL_CONTEXT_IMPL_H
+#define HAL_CONTEXT_IMPL_H
 
 #include <avr/io.h>
 

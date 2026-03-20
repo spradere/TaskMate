@@ -13,12 +13,12 @@
  */
 
 /**
- * @file hal_timer1.c
+ * @file hal_timerSched.c
  * @brief hal part of scheduler
  *
  */
 
-#include "hal/mcu/atmega2560/hal_timer1.h"
+#include "hal/mcu/atmega2560/hal_timerSched_impl.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -26,11 +26,11 @@
 #include <TaskMate.h>
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
-static hal_timer1Callback_t callback = NULL;
 
-void hal_timer1SetCallback(hal_timer1Callback_t func_ptr) { callback = func_ptr; }
+static hal_timerSchedCallback_t callback = NULL;
+void hal_timerSchedSetCallback(hal_timerSchedCallback_t func_ptr) { callback = func_ptr; }
 
-void hal_timer1Init(void)
+void hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TCCR1B = (uint8_t)(1u << CS11); // pre scaler = 8
@@ -38,7 +38,7 @@ void hal_timer1Init(void)
 	TIMSK1 |= (uint8_t)(1u << OCIE1A);
 }
 
-void hal_timer1Start(void)
+void hal_timerSchedStart(void)
 {
 	TCNT1 = 0;
 	// start by enabling source
@@ -48,7 +48,7 @@ void hal_timer1Start(void)
 	TCCR1B &= (uint8_t)~(1u << WGM13);
 }
 
-void hal_timer1Stop(void)
+void hal_timerSchedStop(void)
 {
 	// WGM13 = 0 WGM12 = 1 WGM11 = 0 WGM10 = 0 -> no source, timer stopped
 	TCCR1A &= (uint8_t)~((1u << WGM11) | (1u << WGM10));
@@ -57,8 +57,6 @@ void hal_timer1Stop(void)
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-
 	// callback
 	if( callback != NULL ) { callback(); }
-
 }
