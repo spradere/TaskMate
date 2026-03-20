@@ -113,14 +113,14 @@ void mod_driversAlloc(void)
 	mod_driver_item_t *mod;
 
 	mod = mod_driverGetPointer(0);
-	TM_STR_ROM_NEW(driver0_name, "hal_timer1");
+	TM_STR_ROM_NEW(driver0_name, "hal_timerSched");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver0_name,
 		.status = 1,
-		.init = hal_timer1Init,
-		.start = hal_timer1Start,
-		.stop = hal_timer1Stop
+		.init = hal_timerSchedInit,
+		.start = hal_timerSchedStart,
+		.stop = hal_timerSchedStop
 	};
 
 	mod = mod_driverGetPointer(1);

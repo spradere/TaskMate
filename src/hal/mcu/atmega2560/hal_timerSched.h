@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timer1.h
+ * @file hal_timerSched.h
  * @brief header hal part of scheduler
  *
  */
@@ -23,12 +23,11 @@
 #ifndef HAL_TIMER1_H
 #define HAL_TIMER1_H
 
-typedef void (*hal_timer1Callback_t)(void);
+typedef void (*hal_timerSchedCallback_t)(void);
 
-void hal_timer1Init(void);
-void hal_timer1Start(void);
-void hal_timer1Stop(void);
-// void hal_timer1Load(void);
-void hal_timer1SetCallback(hal_timer1Callback_t func_ptr);
+void hal_timerSchedInit(void);
+void hal_timerSchedStart(void);
+void hal_timerSchedStop(void);
+void hal_timerSchedSetCallback(hal_timerSchedCallback_t func_ptr);
 
 #endif

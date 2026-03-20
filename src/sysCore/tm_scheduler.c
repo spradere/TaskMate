@@ -32,7 +32,7 @@
 
 static void tm_schedulerRR(void);
 
-void tm_schedulerInit(void) { hal_timer1SetCallback(tm_schedulerRR); }
+void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
 void tm_schedulerStart(void)
 {
@@ -62,9 +62,9 @@ void tm_schedulerRR(void)
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	hal_setGlobalInterupt();
 
-	// stop hal_timer1 prevent preemption of the scheduler itself -> panic
+	// stop hal_timerSched prevent preemption of the scheduler itself -> panic
 	// prevent scheduler eat thread time slice
-	hal_timer1Stop();
+	hal_timerSchedStop();
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
@@ -72,7 +72,7 @@ void tm_schedulerRR(void)
 	if( ++current == MOD_THREAD_COUNT ) { current = 0; }
 	mod_threadSetCurrent(current);
 
-	hal_timer1Start();
+	hal_timerSchedStart();
 
 	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
