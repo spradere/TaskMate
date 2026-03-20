@@ -18,10 +18,8 @@
  *
  */
 
-// @hal_system
-
-#ifndef HAL_STACK_H
-#define HAL_STACK_H
+#ifndef HAL_STACK_IMPL_H
+#define HAL_STACK_IMPL_H
 
 #include <avr/io.h> // get SP
 #include <stdint.h>
