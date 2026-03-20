@@ -18,9 +18,9 @@
  *
  */
 
-#ifndef SOFTWARE_TIME_COUNTER_H
-#define SOFTWARE_TIME_COUNTER_H
+#ifndef TM_SOFTWARE_TIME_COUNTER_H
+#define TM_SOFTWARE_TIME_COUNTER_H
 
-void tm_softwareTimeCounter(void);
+void tm_softwareTimeCounterInit(void);
 
 #endif

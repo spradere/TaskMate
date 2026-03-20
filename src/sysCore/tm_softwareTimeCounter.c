@@ -20,11 +20,13 @@
 
 #include "sysCore/tm_softwareTimeCounter.h"
 
+#include "hal/public/hal_timerSTC.h"
 #include "sysCore/modules.h"
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// softwareTimeCounter is called by hal_timerSTC interrupt subroutine
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+static void tm_softwareTimeCounter(void);
+
+void tm_softwareTimeCounterInit(void) { hal_timerSTCSetCallback(tm_softwareTimeCounter); }
 
 void tm_softwareTimeCounter(void)
 {

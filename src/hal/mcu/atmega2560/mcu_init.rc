@@ -1,7 +1,7 @@
 # drivers init.rc
 # default run level RUN_DRIVER
 
-hal_timer1 -RUN_CORE
+hal_timerSched -RUN_CORE
 hal_timerSTC -RUN_CORE
 hal_i2c -RUN_CORE
 hal_usart -RUN_CORE
