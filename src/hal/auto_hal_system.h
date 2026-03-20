@@ -21,7 +21,7 @@
 
 // clang-format off
 #include "hal/mcu/atmega2560/hal_timerSTC.h"
-#include "hal/mcu/atmega2560/hal_timer1.h"
+#include "hal/mcu/atmega2560/hal_timerSched.h"
 // clang-format on
 
 #endif
