@@ -26,7 +26,7 @@
 #include "hal/auto_hal_system.h"
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_stack.h"
-//#include "hal/auto_hal_user.h"
+#include "hal/public/hal_timerSched.h"
 #include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 
