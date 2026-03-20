@@ -21,9 +21,9 @@
 
 #include "hal/auto_hal_system.h"
 #include "hal/public/hal_context.h"
+#include "hal/public/hal_timerSTC.h"
 #include "hal/auto_hal_user.h"
 #include "sysCore/auto_threads_list.h"
-#include "tm_libc/tm_syslog.h"
 
 static struct
 {

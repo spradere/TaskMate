@@ -18,15 +18,20 @@
  *
  */
 
-#include "hal/mcu/atmega2560/hal_timerSTC.h"
+#include "hal/mcu/atmega2560/hal_timerSTC_impl.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/atomic.h>
 
-#include "sysCore/tm_softwareTimeCounter.h"
+#include "TaskMate.h"
+
+//#include "sysCore/tm_softwareTimeCounter.h"
 
 const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
+
+static hal_timerSTCCallback_t callback = NULL;
+void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr) { callback = func_ptr; }
 
 void hal_timerSTCInit(void)
 {
@@ -48,4 +53,8 @@ void hal_timerSTCStop(void)
 	TIMSK3 &= (uint8_t)~(1u << OCIE3A);
 }
 
-ISR(TIMER3_COMPA_vect) { tm_softwareTimeCounter(); }
+ISR(TIMER3_COMPA_vect)
+{
+	// callback
+	if( callback != NULL ) { callback(); }
+}

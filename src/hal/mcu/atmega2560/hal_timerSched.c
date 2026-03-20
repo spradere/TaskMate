@@ -26,8 +26,8 @@
 #include <TaskMate.h>
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
-static hal_timerSchedCallback_t callback = NULL;
 
+static hal_timerSchedCallback_t callback = NULL;
 void hal_timerSchedSetCallback(hal_timerSchedCallback_t func_ptr) { callback = func_ptr; }
 
 void hal_timerSchedInit(void)
@@ -57,8 +57,6 @@ void hal_timerSchedStop(void)
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-
 	// callback
 	if( callback != NULL ) { callback(); }
-
 }

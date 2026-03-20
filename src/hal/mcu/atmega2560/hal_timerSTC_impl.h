@@ -18,13 +18,14 @@
  *
  */
 
-// @hal_system
-
 #ifndef HAL_TIMER_STC_H
 #define HAL_TIMER_STC_H
+
+typedef void (*hal_timerSTCCallback_t)(void);
 
 void hal_timerSTCInit(void);
 void hal_timerSTCStart(void);
 void hal_timerSTCStop(void);
+void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr);
 
 #endif
