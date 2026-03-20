@@ -27,6 +27,7 @@
 #include "sysCall/error.h"
 #include "sysCore/boot.h"
 #include "sysCore/tm_scheduler.h"
+#include "sysCore/tm_softwareTimeCounter.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
@@ -125,6 +126,8 @@ int main(void)
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
 
 	//panic("\nboot stage 1");
+
+	tm_softwareTimeCounterInit();
 
 	tm_schedulerInit();
 	tm_schedulerStart();
