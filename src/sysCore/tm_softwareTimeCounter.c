@@ -22,10 +22,9 @@
 
 #include "hal/public/hal_timerSTC.h"
 #include "sysCore/modules.h"
-
+#include "tm_libc/tm_syslog.h"
 
 static void tm_softwareTimeCounter(void);
-
 void tm_softwareTimeCounterInit(void) { hal_timerSTCSetCallback(tm_softwareTimeCounter); }
 
 void tm_softwareTimeCounter(void)
@@ -36,5 +35,13 @@ void tm_softwareTimeCounter(void)
 	{
 		mod_thread_item_t *mod = mod_threadGetPointer(i);
 		if( mod->software_time_counter > 0 ) { mod->software_time_counter--; }
+		if(mod->software_time_counter !=0)
+		{
+			tm_syslog(TM_STR("[tm_STC] mod[0x%04x]->0x%04x counter[%i] = %i\n"),
+				mod,
+				&mod->software_time_counter,
+				i,
+				mod->software_time_counter);
+		}
 	}
 }

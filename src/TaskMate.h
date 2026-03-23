@@ -21,19 +21,12 @@
 #ifndef TASKMATE_H
 #define TASKMATE_H
 
+
 // general system macro / def
 #define	NULL ((void *)0)
 #define	MIN(a,b) (((a) < (b)) ? (a) : (b))
 #define	MAX(a,b) (((a) > (b)) ? (a) : (b))
-#define	panic(msg) do {	hal_usartWriteString("\nSYSTEM PANIC : ");\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString(msg);\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString(", halt.");\
-	hal_usartSendTXBuffer();\
-	hal_clearGlobalInterupt();\
-	while (1); \
-	}while (0)
+
 
 // string macros
 #define STRING2(x) #x
