@@ -3,6 +3,9 @@
 #include "services/msg.h"
 #include "sysCall/gpio.h"
 #include "sysCall/sysCall.h"
+#include "sysCall/panic.h"
+#include "tm_libc/tm_stdio.h"
+
 
 uint8_t task1_msg_channel;
 
@@ -13,6 +16,7 @@ void task1(void)
 	{
 		msgWritreText(task1_msg_channel, "[task1] hello !\n", MSG_TO_USART);
 	}
+
 
 	while( 1 )
 	{

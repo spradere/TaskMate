@@ -31,6 +31,7 @@
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
+#include "sysCall/panic.h"
 
 TM_STORE_FILE_NAME(file_name);
 
@@ -131,6 +132,8 @@ int main(void)
 
 	tm_schedulerInit();
 	tm_schedulerStart();
+
+	panic("\nsystem lauch fail");
 
 	return 0; // You should never get here
 }
