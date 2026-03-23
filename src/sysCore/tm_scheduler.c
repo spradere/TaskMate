@@ -28,9 +28,13 @@
 #include "hal/public/hal_stack.h"
 #include "hal/public/hal_timerSched.h"
 #include "sysCall/sysCall.h"
+#include "sysCall/panic.h"
 #include "sysCore/modules.h"
+#include "tm_libc/tm_stdio.h"
+
 
 static void tm_schedulerRR(void);
+static hal_stack_word_t *system_SP;
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
@@ -38,6 +42,9 @@ void tm_schedulerStart(void)
 {
 	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
+
+	system_SP = (hal_stack_word_t*)hal_getStackPointer();
+
 	hal_setStackPointer((uintptr_t)mod->stack_pointer);
 
 	hal_contextRestore();
@@ -49,22 +56,20 @@ void tm_schedulerCoop(void) { tm_schedulerRR(); }
 
 void tm_schedulerRR(void)
 {
-	mod_thread_item_t *mod;
-
+	mod_thread_item_t *thread;
 	// save current thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		hal_contextSave();
-		mod = mod_threadGetPointer(mod_threadGetCurrent());
-		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
+		thread = mod_threadGetPointer(mod_threadGetCurrent());
+		thread->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
 	}
 
-	// enable global INT to let run hal_timerRTC and hal_usart sCLI
-	hal_setGlobalInterupt();
+	// canary check
+	if(thread->canary_low != MOD_CANARY){panic("canary low 1");}
+	if(thread->canary_high != MOD_CANARY){panic("canary high 1");}
 
-	// stop hal_timerSched prevent preemption of the scheduler itself -> panic
-	// prevent scheduler eat thread time slice
-	hal_timerSchedStop();
+	// enable global INT to let run hal_timerRTC and hal_usart sCLI
+	//hal_setGlobalInterupt();
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
@@ -72,14 +77,13 @@ void tm_schedulerRR(void)
 	if( ++current == MOD_THREAD_COUNT ) { current = 0; }
 	mod_threadSetCurrent(current);
 
-	hal_timerSchedStart();
+	// canary check
+	if(thread->canary_low != MOD_CANARY){panic("canary low 2");}
+	if(thread->canary_high != MOD_CANARY){panic("canary high 2");}
 
-	// restore next thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
-		mod = mod_threadGetPointer(mod_threadGetCurrent());
-		hal_setStackPointer((uintptr_t)mod->stack_pointer);
-		hal_contextRestore();
-		hal_returnFromInterupt();
+		thread = mod_threadGetPointer(mod_threadGetCurrent());
+		hal_setStackPointer((uintptr_t)thread->stack_pointer);
 	}
 }

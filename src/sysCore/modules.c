@@ -19,11 +19,15 @@
 
 #include "sysCore/modules.h"
 
+#include <stddef.h>
+
 //#include "hal/auto_hal_system.h"
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_timerSTC.h"
 #include "hal/public/hal_timerSched.h"
 #include "hal/auto_hal_user.h"
+#include "tm_libc/tm_string.h"
+#include "tm_libc/tm_syslog.h"
 #include "sysCore/auto_threads_list.h"
 
 static struct
@@ -44,6 +48,7 @@ void mod_threadSetSTC(uint16_t count)
 uint16_t mod_threadGetSTC(void)
 {
 	return mod_data_base.threads[mod_data_base.thread_current].software_time_counter;
+	//return 1;
 }
 
 mod_driver_item_t *mod_driverGetPointer(uint8_t id) { return &mod_data_base.drivers[id]; }
@@ -54,6 +59,25 @@ mod_thread_item_t *mod_threadGetPointer(uint8_t id) { return &mod_data_base.thre
 
 void mod_threadsAlloc(void)
 {
+	tm_syslog(TM_STR("[modules.c] offsetof(name)                  = %i\n"), (unsigned)offsetof(mod_thread_item_t, name));
+	tm_syslog(TM_STR("[modules.c] offsetof(status)                = %i\n"), (unsigned)offsetof(mod_thread_item_t, status));
+	tm_syslog(TM_STR("[modules.c] offsetof(main)                  = %i\n"), (unsigned)offsetof(mod_thread_item_t, main));
+	tm_syslog(TM_STR("[modules.c] offsetof(software_time_counter) = %i\n"), (unsigned)offsetof(mod_thread_item_t, software_time_counter));
+	tm_syslog(TM_STR("[modules.c] offsetof(stack_pointer)         = %i\n"), (unsigned)offsetof(mod_thread_item_t, stack_pointer));
+	tm_syslog(TM_STR("[modules.c] offsetof(canary_low)            = %i\n"), (unsigned)offsetof(mod_thread_item_t, canary_low));
+	tm_syslog(TM_STR("[modules.c] offsetof(stack)                 = %i\n"), (unsigned)offsetof(mod_thread_item_t, stack));
+	tm_syslog(TM_STR("[modules.c] offsetof(canary_high)           = %i\n"), (unsigned)offsetof(mod_thread_item_t, canary_high));
+	tm_syslog(TM_STR("[modules.c] sizeof(mod_thread_item_t)       = %i\n"), (unsigned)sizeof(mod_thread_item_t));
+
+	mod_thread_item_t *thread;
+
+	for(uint8_t i=0; i<MOD_THREAD_COUNT; i++)
+	{
+		thread = mod_threadGetPointer(i);
+		thread->canary_low = MOD_CANARY;
+		thread->canary_high = MOD_CANARY;
+	}
+
 	// [autoCode_tag] threads alloc
 // clang-format off
 /*
@@ -65,21 +89,21 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(0);
 
-	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread0_name, "scli");
+	TM_STR_ROM_NEW(thread0_name, "msg");
 	mod->name = &thread0_name;
 	mod->status = 19;
-	mod->main = scli;
+	mod->main = msg;
 
 	mod = mod_threadGetPointer(1);
 
-	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread1_name, "msg");
+	TM_STR_ROM_NEW(thread1_name, "scli");
 	mod->name = &thread1_name;
 	mod->status = 19;
-	mod->main = msg;
+	mod->main = scli;
 
 	mod = mod_threadGetPointer(2);
 
