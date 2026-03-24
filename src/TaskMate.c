@@ -28,6 +28,7 @@
 #include "sysCore/boot.h"
 #include "sysCore/tm_scheduler.h"
 #include "sysCore/tm_softwareTimeCounter.h"
+#include "sysCore/modules.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
@@ -100,7 +101,7 @@ int main(void)
 		tm_syslog(TM_STR("\t%i [0x%04x->0x%04x] <%s>\n"), i, &err_msg, err_msg, err_msg);
 	}*/
 
-	/*// display module names
+	// display module names
 	tm_syslog(TM_STR("[modules] drivers\n"));
 
 	for( uint8_t num = 0; num < MOD_DRIVER_COUNT; num++ )
@@ -117,7 +118,7 @@ int main(void)
 		mod_thread_item_t *mod_t;
 		mod_t = mod_threadGetPointer(num);
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
-	}*/
+	}
 
 /* *************************************************************************************************
  * end of test / experimental zone
