@@ -28,7 +28,6 @@
 #include "hal/public/hal_stack.h"
 
 #include "tm_libc/tm_syslog.h"
-#include "sysCore/modules.h"
 
 
 //const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
@@ -54,7 +53,7 @@ void hal_timerSchedInit(void)
 void hal_timerSchedStart(void)
 {
 	TCNT1 = 0;
-	//TCCR1B |= (uint8_t)(1u << CS11); // pre scaler = 8
+	//TCCR1B = (uint8_t)(1u << CS11); // pre scaler = 8
 	TCCR1B = (uint8_t)((1u << CS12) | (1u << CS10)); // pre scaler = 1024
 
 }
@@ -66,23 +65,8 @@ void hal_timerSchedStop(void)
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	// save current thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_contextSave();
-	}
-	hal_timerSchedStop();
-
 	// scheduler callback
 	if( sched_callback != NULL ) { sched_callback(); }
 
-	// restore next thread context
-	hal_timerSchedStart();
-
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_contextRestore();
-		hal_returnFromInterupt();
-	}
-
+	hal_returnFromInterupt();
 }

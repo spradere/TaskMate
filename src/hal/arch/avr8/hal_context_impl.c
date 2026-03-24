@@ -20,7 +20,9 @@
 
 #include "hal/arch/avr8/hal_context_impl.h"
 
+#include <avr/interrupt.h>
 #include <avr/io.h>
+
 
 #include "sysCore/modules_define.h"
 #include "tm_libc/tm_syslog.h"
@@ -33,6 +35,9 @@ void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 {
 	// stack init
 	hal_stack_word_t *sp = stack_top;
+
+	void (*isr_ptr)(void) = TIMER1_COMPA_vect;
+	tm_syslog(TM_STR("[hal_context]  isr  = %04x\n"), isr_ptr);
 
 	tm_syslog(TM_STR("[hal_context]  func = %04x\n"), func);
 	tm_syslog(
