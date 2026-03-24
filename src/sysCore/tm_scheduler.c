@@ -31,19 +31,18 @@
 #include "sysCall/panic.h"
 #include "sysCore/modules.h"
 #include "tm_libc/tm_stdio.h"
+#include "sysCall/gpio.h"
 
 
 static void tm_schedulerRR(void);
-static hal_stack_word_t *system_SP;
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
 void tm_schedulerStart(void)
 {
-	mod_threadSetCurrent(0);
+	mod_threadSetCurrent(2);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
 
-	system_SP = (hal_stack_word_t*)hal_getStackPointer();
 
 	hal_setStackPointer((uintptr_t)mod->stack_pointer);
 
@@ -60,9 +59,12 @@ void tm_schedulerRR(void)
 	// save current thread context
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
+		hal_contextSave();
 		thread = mod_threadGetPointer(mod_threadGetCurrent());
 		thread->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
 	}
+
+	hal_timerSchedStop();
 
 	// canary check
 	if(thread->canary_low != MOD_CANARY){panic("canary low 1");}
@@ -71,19 +73,24 @@ void tm_schedulerRR(void)
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	//hal_setGlobalInterupt();
 
+	gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
+
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
 
 	if( ++current == MOD_THREAD_COUNT ) { current = 0; }
-	mod_threadSetCurrent(current);
+	//mod_threadSetCurrent(current);
 
 	// canary check
 	if(thread->canary_low != MOD_CANARY){panic("canary low 2");}
 	if(thread->canary_high != MOD_CANARY){panic("canary high 2");}
 
+	hal_timerSchedStart();
+
 	ATOMIC_BLOCK(ATOMIC_FORCEON)
 	{
 		thread = mod_threadGetPointer(mod_threadGetCurrent());
 		hal_setStackPointer((uintptr_t)thread->stack_pointer);
+		hal_contextRestore();
 	}
 }

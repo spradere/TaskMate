@@ -24,13 +24,14 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 
+
 #include "tm_libc/tm_syslog.h"
 
 //#include "TaskMate.h"
 
 //#include "sysCore/tm_softwareTimeCounter.h"
 
-const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
+const int hal_timerSTC_OVERFLOW_COUNT = 6250; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
 
 static hal_timerSTCCallback_t STC_callback = NULL;
 void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
