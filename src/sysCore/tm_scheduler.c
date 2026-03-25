@@ -34,7 +34,8 @@
 #include "sysCall/gpio.h"
 
 
-static void tm_schedulerRR(void);
+//static void tm_schedulerRR(void);
+static hal_stack_word_t* tm_schedulerRR(hal_stack_word_t * stack_pointer);
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
@@ -51,20 +52,17 @@ void tm_schedulerStart(void)
 	hal_returnFromInterupt();
 }
 
-void tm_schedulerCoop(void) { tm_schedulerRR(); }
+void tm_schedulerCoop(void) { }
 
-void tm_schedulerRR(void)
+hal_stack_word_t* tm_schedulerRR(hal_stack_word_t * stack_pointer)
+//hal_timerSchedCallback_t tm_schedulerRR
 {
 	mod_thread_item_t *thread;
-	// save current thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_contextSave();
-		thread = mod_threadGetPointer(mod_threadGetCurrent());
-		thread->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
-	}
 
-	hal_timerSchedStop();
+	// save current thread context
+
+	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	thread->stack_pointer = stack_pointer;
 
 	// canary check
 	if(thread->canary_low != MOD_CANARY){panic("canary low 1");}
@@ -73,24 +71,19 @@ void tm_schedulerRR(void)
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	//hal_setGlobalInterupt();
 
-	gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
+	//gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
 
 	if( ++current == MOD_THREAD_COUNT ) { current = 0; }
-	//mod_threadSetCurrent(current);
+	mod_threadSetCurrent(current);
 
 	// canary check
 	if(thread->canary_low != MOD_CANARY){panic("canary low 2");}
 	if(thread->canary_high != MOD_CANARY){panic("canary high 2");}
 
-	hal_timerSchedStart();
+	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	return thread->stack_pointer;
 
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		thread = mod_threadGetPointer(mod_threadGetCurrent());
-		hal_setStackPointer((uintptr_t)thread->stack_pointer);
-		hal_contextRestore();
-	}
 }
