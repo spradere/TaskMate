@@ -36,9 +36,6 @@ void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 	// stack init
 	hal_stack_word_t *sp = stack_top;
 
-	void (*isr_ptr)(void) = TIMER1_COMPA_vect;
-	tm_syslog(TM_STR("[hal_context]  isr  = %04x\n"), isr_ptr);
-
 	tm_syslog(TM_STR("[hal_context]  func = %04x\n"), func);
 	tm_syslog(
 		TM_STR("[hal_context] top *sp = %04x bottom = %04x\n"), sp, (sp)-MOD_THREAD_STACK_SIZE);
