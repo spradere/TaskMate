@@ -21,11 +21,16 @@
 #ifndef HAL_TIMER_SCHED_IMPL_H
 #define HAL_TIMER_SCHED_IMPL_H
 
-typedef void (*hal_timerSchedCallback_t)(void);
+#include "hal/public/auto_hal_define.h"
+
+//typedef void (*hal_timerSchedCallback_t)(void);
+//typedef hal_stack_word_t *(*hal_timerSchedCallback_t)(hal_stack_word_t *stack_pointer);
+typedef hal_stack_word_t *hal_timerSchedCallback_func_t(hal_stack_word_t *stack_pointer);
+typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
 
 void hal_timerSchedInit(void);
 void hal_timerSchedStart(void);
 void hal_timerSchedStop(void);
-void hal_timerSchedSetCallback(hal_timerSchedCallback_t func_ptr);
+void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr);
 
 #endif

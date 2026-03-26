@@ -20,7 +20,9 @@
 
 #include "hal/arch/avr8/hal_context_impl.h"
 
+#include <avr/interrupt.h>
 #include <avr/io.h>
+
 
 #include "sysCore/modules_define.h"
 #include "tm_libc/tm_syslog.h"
