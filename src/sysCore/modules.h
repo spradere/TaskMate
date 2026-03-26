@@ -24,11 +24,13 @@
 
 #include "hal/public/auto_hal_define.h" // get hal_stack_word_t from selected arch
 #include "sysCore/modules_define.h"
-#include "tm_libc/tm_string.h"
+#include "interfaces/tm_string_storage.h"
 
 /*
  * Modules structures
  */
+
+#define MOD_CANARY 0xa5a5
 
 typedef struct
 {
@@ -37,10 +39,13 @@ typedef struct
 
 	void (*main)(void);
 
-	volatile uint16_t software_time_counter;
+	uint16_t software_time_counter;
 
 	hal_stack_word_t *stack_pointer;
+
+	uint16_t canary_low;
 	hal_stack_word_t stack[MOD_THREAD_STACK_SIZE];
+	uint16_t canary_high;
 
 } mod_thread_item_t;
 
