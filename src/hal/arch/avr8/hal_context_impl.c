@@ -23,7 +23,6 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-
 #include "sysCore/modules_define.h"
 #include "tm_libc/tm_syslog.h"
 

@@ -22,5 +22,6 @@
 	#define HAL_CONTEXT 1
 #endif
 
-_Static_assert(HAL_CONTEXT, "No hal implementation for context switch on selected hardware target.");
+_Static_assert(HAL_CONTEXT,
+			   "No hal implementation for context switch on selected hardware target.");
 #endif
