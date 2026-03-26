@@ -33,9 +33,9 @@ const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^
 //const int TIMER1_OVERFLOW_COUNT = 15625; // Interrupt every 1s (1 x 16.10^6 )/1024 = 15625
 
 
-static hal_timerSchedCallback_t sched_callback = NULL;
+static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 
-void hal_timerSchedSetCallback(hal_timerSchedCallback_t func_ptr)
+void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
 	uintptr_t p = (uintptr_t)func_ptr;
 	tm_syslog(TM_STR("[timer sched] callback = 0x%04x\n"), (p<<1));
@@ -71,14 +71,17 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	hal_stack_word_t *sp_current;
 	hal_stack_word_t *sp_next;
 
-	sp_current = (hal_stack_word_t *)hal_getStackPointer();
+	//sp_current = (hal_stack_word_t *)hal_getStackPointer();
+	sp_current = hal_getStackPointer();
+
 	sp_next = sp_current;
 
 	// scheduler callback
 	if( sched_callback != NULL ) { sp_next = sched_callback(sp_current); }
 
 	hal_timerSchedStart();
-	hal_setStackPointer((uintptr_t)sp_next);
+	//hal_setStackPointer((uintptr_t)sp_next);
+	hal_setStackPointer(sp_next);
 	hal_contextRestore();
 	hal_setGlobalInterupt();
 	hal_returnFromInterupt();
