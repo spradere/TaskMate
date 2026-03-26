@@ -21,18 +21,17 @@
 #ifndef TM_STRING_STORAGE_H
 #define TM_STRING_STORAGE_H
 
-
 // tm_string implementation
 typedef enum
 {
 	TM_MEM_RAM,
 	TM_MEM_ROM
-}tm_string_storage_t;
+} tm_string_storage_t;
 
 typedef struct
 {
 	const char *text;
 	const tm_string_storage_t storage;
-}tm_string_t;
+} tm_string_t;
 
 #endif

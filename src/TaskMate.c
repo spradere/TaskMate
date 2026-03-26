@@ -25,14 +25,14 @@
 #include "hal/auto_hal_user.h"
 #include "hal/public/hal_sysInfo.h"
 #include "sysCall/error.h"
+#include "sysCall/panic.h"
 #include "sysCore/boot.h"
+#include "sysCore/modules.h"
 #include "sysCore/tm_scheduler.h"
 #include "sysCore/tm_softwareTimeCounter.h"
-#include "sysCore/modules.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
-#include "sysCall/panic.h"
 
 TM_STORE_FILE_NAME(file_name);
 
@@ -52,9 +52,9 @@ int main(void)
 	tm_syslog(TM_STR("[info] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
 	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
-/* *************************************************************************************************
- * test / experimental zone, before scheduler run
- * ************************************************************************************************/
+	/* *************************************************************************************************
+	 * test / experimental zone, before scheduler run
+	 * ************************************************************************************************/
 
 	// RTC external module test
 	tm_syslog(TM_STR("[boot] hal RTC init\n"));
@@ -120,14 +120,14 @@ int main(void)
 		tm_syslog(TM_STR("\t%i %s\n"), num, mod_t->name);
 	}*/
 
-/* *************************************************************************************************
- * end of test / experimental zone
- * ************************************************************************************************/
+	/* *************************************************************************************************
+	 * end of test / experimental zone
+	 * ************************************************************************************************/
 
 	// start scheduler
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
 
-	//panic("\nboot stage 1");
+	// panic("\nboot stage 1");
 
 	tm_softwareTimeCounterInit();
 

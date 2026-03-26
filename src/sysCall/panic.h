@@ -24,17 +24,17 @@
 #include "hal/auto_hal_user.h"
 #include "hal/public/hal_context.h"
 
-
-#define	panic(msg) do {	\
-	hal_clearGlobalInterupt();\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString("\nSYSTEM PANIC : ");\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString(msg);\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString(", halt.");\
-	hal_usartSendTXBuffer();\
-	while (1); \
-	}while (0)
+#define panic(msg)                                 \
+	do {                                           \
+		hal_clearGlobalInterupt();                 \
+		hal_usartSendTXBuffer();                   \
+		hal_usartWriteString("\nSYSTEM PANIC : "); \
+		hal_usartSendTXBuffer();                   \
+		hal_usartWriteString(msg);                 \
+		hal_usartSendTXBuffer();                   \
+		hal_usartWriteString(", halt.");           \
+		hal_usartSendTXBuffer();                   \
+		while( 1 );                                \
+	} while( 0 )
 
 #endif

@@ -22,5 +22,6 @@
 	#define HAL_TIMER_SCHED 1
 #endif
 
-_Static_assert(HAL_TIMER_SCHED, "No hal implementation for scheduler timer on selected hardware target.");
+_Static_assert(HAL_TIMER_SCHED,
+			   "No hal implementation for scheduler timer on selected hardware target.");
 #endif
