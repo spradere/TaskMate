@@ -20,7 +20,7 @@
 
 #include "hal/public/hal_sysInfo.h"
 
- // [autoCode_tag] system info
+// [autoCode_tag] system info
 // clang-format off
 /*
  * do not edit code between tag
@@ -28,7 +28,7 @@
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.26");
-const uint16_t tm_build = 4790;
+const uint16_t tm_build = 4791;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduinoMega");
@@ -37,9 +37,9 @@ TM_STR_ROM_NEW(board_name, "arduinoMega");
 // [/tag]
 
 static const hal_info_t info = {.tm_ver = &tm_ver,
-							   .tm_build = tm_build,
-							   .arch = &arch_name,
-							   .mcu = &mcu_name,
-							   .board = &board_name};
+								.tm_build = tm_build,
+								.arch = &arch_name,
+								.mcu = &mcu_name,
+								.board = &board_name};
 
 void hal_sysInfoGet(const hal_info_t **dest) { *dest = &info; }
