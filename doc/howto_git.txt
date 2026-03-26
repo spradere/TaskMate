@@ -17,6 +17,29 @@ git push
 git switch test
 
 ##################################################
+# 2 repo setup github/test codeberg/main
+##################################################
+
+# create repo
+git remote add codeberg  git@codeberg.org:USER/TaskMate.git
+git remote add github    git@github.com:USER/TaskMate.git
+
+# create branch & link repo
+git switch -c test
+git push -u github test
+
+git branch --set-upstream-to=codeberg/main main
+git branch --set-upstream-to=github/test test
+
+# delete a remonte / branch
+git remote remove github
+git push codeberg --delete main_new
+
+# check
+git remote -v
+git branch -vv
+
+##################################################
 # save
 ##################################################
 

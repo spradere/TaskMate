@@ -28,43 +28,45 @@
 #include "hal/public/hal_stack.h"
 #include "hal/public/hal_timerSched.h"
 #include "sysCall/sysCall.h"
+#include "sysCall/panic.h"
 #include "sysCore/modules.h"
+#include "tm_libc/tm_stdio.h"
+#include "sysCall/gpio.h"
 
-static void tm_schedulerRR(void);
+//static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
+static hal_timerSchedCallback_func_t tm_schedulerRR;
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
 void tm_schedulerStart(void)
 {
-	mod_threadSetCurrent(0);
+	mod_threadSetCurrent(2);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
-	hal_setStackPointer((uintptr_t)mod->stack_pointer);
+	hal_setStackPointer(mod->stack_pointer);
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();
 	hal_returnFromInterupt();
 }
 
-void tm_schedulerCoop(void) { tm_schedulerRR(); }
+void tm_schedulerCoop(void) { }
 
-void tm_schedulerRR(void)
+hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer)
 {
-	mod_thread_item_t *mod;
+	mod_thread_item_t *thread;
 
 	// save current thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		hal_contextSave();
-		mod = mod_threadGetPointer(mod_threadGetCurrent());
-		mod->stack_pointer = (hal_stack_word_t *)hal_getStackPointer();
-	}
+	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	thread->stack_pointer = stack_pointer;
+
+	// canary check
+	if(thread->canary_low != MOD_CANARY){panic("canary low 1");}
+	if(thread->canary_high != MOD_CANARY){panic("canary high 1");}
 
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
-	hal_setGlobalInterupt();
+	//hal_setGlobalInterupt();
 
-	// stop hal_timerSched prevent preemption of the scheduler itself -> panic
-	// prevent scheduler eat thread time slice
-	hal_timerSchedStop();
+	//gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
@@ -72,14 +74,11 @@ void tm_schedulerRR(void)
 	if( ++current == MOD_THREAD_COUNT ) { current = 0; }
 	mod_threadSetCurrent(current);
 
-	hal_timerSchedStart();
+	// canary check
+	if(thread->canary_low != MOD_CANARY){panic("canary low 2");}
+	if(thread->canary_high != MOD_CANARY){panic("canary high 2");}
 
-	// restore next thread context
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		mod = mod_threadGetPointer(mod_threadGetCurrent());
-		hal_setStackPointer((uintptr_t)mod->stack_pointer);
-		hal_contextRestore();
-		hal_returnFromInterupt();
-	}
+	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	return thread->stack_pointer;
+
 }
