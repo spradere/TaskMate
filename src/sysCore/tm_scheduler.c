@@ -33,9 +33,8 @@
 #include "tm_libc/tm_stdio.h"
 #include "sysCall/gpio.h"
 
-
-//static void tm_schedulerRR(void);
-static hal_stack_word_t* tm_schedulerRR(hal_stack_word_t * stack_pointer);
+//static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
+static hal_timerSchedCallback_func_t tm_schedulerRR;
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
@@ -43,9 +42,7 @@ void tm_schedulerStart(void)
 {
 	mod_threadSetCurrent(2);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
-
-
-	hal_setStackPointer((uintptr_t)mod->stack_pointer);
+	hal_setStackPointer(mod->stack_pointer);
 
 	hal_contextRestore();
 	hal_setGlobalInterupt();
@@ -54,13 +51,11 @@ void tm_schedulerStart(void)
 
 void tm_schedulerCoop(void) { }
 
-hal_stack_word_t* tm_schedulerRR(hal_stack_word_t * stack_pointer)
-//hal_timerSchedCallback_t tm_schedulerRR
+hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer)
 {
 	mod_thread_item_t *thread;
 
 	// save current thread context
-
 	thread = mod_threadGetPointer(mod_threadGetCurrent());
 	thread->stack_pointer = stack_pointer;
 
