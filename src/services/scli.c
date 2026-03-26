@@ -24,9 +24,9 @@
 
 #include "hal/auto_hal_user.h"
 #include "services/msg.h"
+#include "sysCall/panic.h"
 #include "sysCall/sysCall.h"
 #include "tm_libc/tm_syslog.h"
-#include "sysCall/panic.h"
 
 static uint8_t scli_msg_channel;
 
@@ -40,7 +40,7 @@ void scli(void)
 		msgWritreText(scli_msg_channel, "[scli] ready to work\n", MSG_TO_USART);
 	}
 
-	//panic("sCLI");
+	// panic("sCLI");
 	while( 1 )
 	{
 		scliEcho(); // Echo echo echo echo echo echo echo

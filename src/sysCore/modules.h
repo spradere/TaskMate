@@ -23,8 +23,8 @@
 #include <stdint.h>
 
 #include "hal/public/auto_hal_define.h" // get hal_stack_word_t from selected arch
-#include "sysCore/modules_define.h"
 #include "interfaces/tm_string_storage.h"
+#include "sysCore/modules_define.h"
 
 /*
  * Modules structures
@@ -39,6 +39,7 @@ typedef struct
 
 	void (*main)(void);
 
+	// TODO check if volatile is needed for software_time_counter
 	uint16_t software_time_counter;
 
 	hal_stack_word_t *stack_pointer;

@@ -21,12 +21,10 @@
 #ifndef TASKMATE_H
 #define TASKMATE_H
 
-
 // general system macro / def
-#define	NULL ((void *)0)
-#define	MIN(a,b) (((a) < (b)) ? (a) : (b))
-#define	MAX(a,b) (((a) > (b)) ? (a) : (b))
-
+#define NULL ((void *)0)
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 // string macros
 #define STRING2(x) #x

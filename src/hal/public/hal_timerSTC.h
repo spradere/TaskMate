@@ -22,5 +22,6 @@
 	#define HAL_TIMERSTC 1
 #endif
 
-_Static_assert(HAL_TIMERSTC, "No hal implementation for Software Time Counter on selected hardware target.");
+_Static_assert(HAL_TIMERSTC,
+			   "No hal implementation for Software Time Counter on selected hardware target.");
 #endif
