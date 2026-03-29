@@ -21,7 +21,7 @@
 #ifndef PANIC_H
 #define PANIC_H
 
-#include "hal/auto_hal_user.h"
+#include "hal/public/hal_usart.h"
 #include "hal/public/hal_context.h"
 
 #define panic(msg)                                 \

@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timerSched.h
+ * @file hal_timerSched_impl.h
  * @brief header hal part of scheduler
  *
  */
