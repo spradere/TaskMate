@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef HAL_LCD_2004_H
-#define HAL_LCD_2004_H
+#ifndef HAL_LCD_AMC2004_H
+#define HAL_LCD_AMC2004_H
 
 #define HAL_LCD_2004 0
 
