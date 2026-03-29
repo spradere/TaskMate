@@ -21,13 +21,13 @@
 
 #include <stddef.h>
 
-// #include "hal/auto_hal_system.h"
-#include "hal/auto_hal_user.h"
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_timerSTC.h"
 #include "hal/public/hal_timerSched.h"
 #include "hal/public/hal_i2c.h"
 #include "hal/public/hal_usart.h"
+#include "hal/public/hal_rtc_ZS042.h"
+#include "hal/public/hal_lcd_AMC2004.h"
 #include "sysCore/auto_threads_list.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
