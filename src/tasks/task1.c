@@ -1,8 +1,13 @@
+/**
+ * @file task1.c
+ * @brief task1 implementation
+ *
+ */
+
 #include "tasks/task1.h"
 
 #include "services/msg.h"
-#include "sysCall/gpio.h"
-#include "sysCall/panic.h"
+#include "sysCall/sc_gpio.h"
 #include "sysCall/sysCall.h"
 #include "tm_libc/tm_stdio.h"
 
@@ -19,7 +24,7 @@ void task1(void)
 	while( 1 )
 	{
 
-		gpio_signalToggle(GPIO_SIGNAL_TASK1_LED);
+		sc_gpio_signalToggle(GPIO_SIGNAL_TASK1_LED);
 
 		sc_threadSetSTC(50);
 		while( sc_threadGetSTC() > 0 );

@@ -20,7 +20,6 @@
 
 #include "sysCall/error.h"
 
-#include "interfaces/tm_string_storage.h"
 #include "tm_libc/tm_string.h"
 
 // [autoCode_tag] error catalog

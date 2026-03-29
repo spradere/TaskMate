@@ -24,7 +24,6 @@
 #include <avr/io.h>
 
 #include "interfaces/modules_define.h"
-#include "tm_libc/tm_syslog.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -34,10 +33,6 @@ void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 {
 	// stack init
 	hal_stack_word_t *sp = stack_top;
-
-	tm_syslog(TM_STR("[hal_context]  func = %04x\n"), func);
-	tm_syslog(
-		TM_STR("[hal_context] top *sp = %04x bottom = %04x\n"), sp, (sp)-MOD_THREAD_STACK_SIZE);
 
 	*(sp--) = (uint8_t)((uintptr_t)func & 0xFF); // PCL;
 	*(sp--) = (uint8_t)(((uintptr_t)func >> 8u) & 0xFF); // PCH
@@ -49,9 +44,5 @@ void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 	for( int i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
 
 	*stack_pointer = sp;
-	tm_syslog(TM_STR("[hal_context] after write *sp = %04x \n"), sp);
-
-	sp = stack_top;
-	tm_syslog(TM_STR("[hal_context]  PCH:PCL = %02x%02x \n\n"), *(sp - 1), *(sp));
 }
 // NOLINTEND
