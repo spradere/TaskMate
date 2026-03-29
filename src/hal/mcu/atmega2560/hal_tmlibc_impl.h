@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_tmlibc.h
+ * @file hal_tmlibc_impl.h
  * @brief board stdio header
  *
  */
