@@ -12,18 +12,22 @@
  */
 
 /**
- * @file hal_boardInit.h
- * @brief arduino mega board init arduino mega header
+ * @file hal_i2c.h
+ * @brief public header hal part of i2c
  *
  */
 
-#ifndef HAL_BOARDINIT_H
-#define HAL_BOARDINIT_H
+#ifndef HAL_I2C_H
+#define HAL_I2C_H
 
-#include "hal/mcu/atmega2560/hal_gpio_impl.h"
-#include "interfaces/gpio_signals.h"
+#define HAL_I2C 0
 
-void hal_boardInit(void);
-void hal_boardWireSignal(hal_signal_t *table, gpio_signal_t signal);
+#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+	#include "hal/mcu/atmega2560/hal_i2c_impl.h"
+	#undef HAL_I2C
+	#define HAL_I2C 1
+#endif
 
+_Static_assert(HAL_I2C,
+			   "No hal implementation for i2c on selected hardware target.");
 #endif
