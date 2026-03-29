@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
+/**
+ * @file hal_timerSched.h
+ * @brief public header hal part of scheduler
+ *
+ */
+
 #ifndef HAL_TIMER_SCHED_H
 #define HAL_TIMER_SCHED_H
 

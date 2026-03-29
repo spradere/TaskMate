@@ -20,7 +20,7 @@
 
 #include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
 
-#include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/mcu/atmega2560/hal_usart_impl.h"
 
 void hal_stdio_putChar(char ch)
 {

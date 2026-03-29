@@ -12,15 +12,13 @@
  */
 
 /**
- * @file hal_usart.h
+ * @file hal_usart_impl.h
  * @brief header hal usart implementation
  *
  */
 
-// @hal_user
-
-#ifndef HAL_USART_H
-#define HAL_USART_H
+#ifndef HAL_USART_IMPL_H
+#define HAL_USART_IMPL_H
 
 #include <stdbool.h>
 #include <stdint.h>

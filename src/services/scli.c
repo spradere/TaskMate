@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 
-#include "hal/auto_hal_user.h"
+#include "hal/public/hal_usart.h"
 #include "services/msg.h"
 #include "sysCall/sysCall.h"
 #include "tm_libc/tm_syslog.h"
