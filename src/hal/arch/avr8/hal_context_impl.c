@@ -13,8 +13,8 @@
  */
 
 /**
- * @file hal_threadContextinit.c
- * @brief hal thread context init
+ * @file hal_context_impl.c
+ * @brief hal context init
  *
  */
 
