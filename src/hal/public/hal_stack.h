@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
+/**
+ * @file hal_stack.h
+ * @brief hal stack
+ *
+ */
+
 #ifndef HAL_STACK_H
 #define HAL_STACK_H
 

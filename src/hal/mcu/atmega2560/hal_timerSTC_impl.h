@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timerSTC.h
+ * @file hal_timerSTC_impl.h
  * @brief header hal real time clock
  *
  */

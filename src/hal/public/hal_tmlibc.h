@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
+/**
+ * @file hal_tmlibc.h
+ * @brief hal tm_libc implementation
+ *
+ */
+
 #ifndef HAL_TMLIBC_H
 #define HAL_TMLIBC_H
 
