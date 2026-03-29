@@ -25,7 +25,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sysCall/error.h"
+#include "interfaces/auto_error_catalog.h"
 
 void hal_usartInit(void);
 void hal_usartStart(void);
