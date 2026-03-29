@@ -28,6 +28,5 @@
 	#define HAL_USART 1
 #endif
 
-_Static_assert(HAL_USART,
-			   "No hal implementation for usart on selected hardware target.");
+_Static_assert(HAL_USART, "No hal implementation for usart on selected hardware target.");
 #endif

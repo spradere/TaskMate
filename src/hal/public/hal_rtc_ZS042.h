@@ -28,6 +28,5 @@
 	#define HAL_RCT_ZS042 1
 #endif
 
-_Static_assert(HAL_RCT_ZS042,
-			   "No hal implementation for rtc ZS042 on selected hardware target.");
+_Static_assert(HAL_RCT_ZS042, "No hal implementation for rtc ZS042 on selected hardware target.");
 #endif

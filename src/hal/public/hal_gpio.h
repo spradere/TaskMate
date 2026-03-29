@@ -28,6 +28,5 @@
 	#define HAL_GPIO 1
 #endif
 
-_Static_assert(HAL_GPIO,
-			   "No hal implementation for gpio on selected hardware target.");
+_Static_assert(HAL_GPIO, "No hal implementation for gpio on selected hardware target.");
 #endif

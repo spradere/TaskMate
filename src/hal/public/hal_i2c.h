@@ -28,6 +28,5 @@
 	#define HAL_I2C 1
 #endif
 
-_Static_assert(HAL_I2C,
-			   "No hal implementation for i2c on selected hardware target.");
+_Static_assert(HAL_I2C, "No hal implementation for i2c on selected hardware target.");
 #endif

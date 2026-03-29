@@ -28,6 +28,5 @@
 	#define HAL_LCD_2004 1
 #endif
 
-_Static_assert(HAL_LCD_2004,
-			   "No hal implementation for lcd on selected hardware target.");
+_Static_assert(HAL_LCD_2004, "No hal implementation for lcd on selected hardware target.");
 #endif
