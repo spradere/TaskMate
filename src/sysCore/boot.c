@@ -23,7 +23,7 @@
 #include "hal/auto_hal_system.h"
 #include "hal/auto_hal_user.h"
 #include "hal/public/auto_hal_init.h"
-#include "sysCall/gpio.h"
+#include "sysCore/gpio.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
 #include "tm_libc/tm_syslog.h"
