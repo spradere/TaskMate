@@ -21,7 +21,6 @@
 
 #include <avr/interrupt.h>
 
-#include "hal/auto_hal_user.h"
 #include "hal/board/arduinoMega/board_define.h" // get usart baud rate
 
 // Circular buffers

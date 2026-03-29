@@ -24,8 +24,8 @@
 #include "tm_libc/tm_string.h"
 
 // Send message to :
-#include "hal/public/hal_usart.h"
 #include "hal/public/hal_lcd_AMC2004.h"
+#include "hal/public/hal_usart.h"
 
 // private message channel internals
 #define MSG_FLAG_IN_USE 3

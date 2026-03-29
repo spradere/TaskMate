@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef HAL_ZS_042_IMPL_H
 #define HAL_ZS_042_IMPL_H
 

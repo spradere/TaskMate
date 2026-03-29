@@ -20,7 +20,6 @@
 
 #include "sysCore/gpio.h"
 
-
 void sc_gpio_signalSet(gpio_signal_t signal, bool val) { gpio_signalSet(signal, val); }
 bool sc_gpio_signalGet(gpio_signal_t signal) { return gpio_signalGet(signal); }
 void sc_gpio_signalToggle(gpio_signal_t signal) { gpio_signalSet(signal, !gpio_signalGet(signal)); }
