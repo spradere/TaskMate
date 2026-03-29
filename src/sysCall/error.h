@@ -22,8 +22,14 @@
 
 #include <stdint.h>
 
-#include "sysCall/auto_error_catalog.h"
-#include "tm_libc/tm_string.h"
+#include "interfaces/auto_error_catalog.h"
+#include "interfaces/tm_string_storage.h"
+
+typedef struct
+{
+	const tm_string_t *name;
+	const err_critical_t critical;
+} err_item_t;
 
 const tm_string_t *err_getMessage(uint8_t num);
 

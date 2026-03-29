@@ -59,11 +59,11 @@ int main(void)
 	// RTC external module test
 	tm_syslog(TM_STR("[boot] hal RTC init\n"));
 	hal_rtc_time_t t;
-	t.hours = 21;
-	t.minutes = 41;
+	t.hours = 17;
+	t.minutes = 24;
 	t.seconds = 30;
-	t.day = 7;
-	t.month = 2;
+	t.day = 29;
+	t.month = 3;
 	t.year = 26;
 
 	// hal_rtcWrite(&t);

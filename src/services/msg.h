@@ -23,7 +23,7 @@
 
 #include <stdint.h>
 
-#include "sysCall/error.h"
+#include "interfaces/auto_error_catalog.h"
 
 // bits [2 1 0] is destination
 #define MSG_TO_MASK 0x07
