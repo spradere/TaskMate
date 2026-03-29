@@ -20,8 +20,6 @@
 #define AUTO_HAL_USER_H
 
 // clang-format off
-#include "hal/board/arduinoMega/hal_rtc_ZS042.h"
-#include "hal/board/arduinoMega/hal_lcd_AMC2004.h"
 // clang-format on
 
 #endif

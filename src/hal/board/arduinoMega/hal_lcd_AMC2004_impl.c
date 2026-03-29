@@ -12,12 +12,12 @@
  */
 
 /**
- * @file hal_lcd_AMC2004.c
+ * @file hal_lcd_AMC2004_impl.c
  * @brief hal lcd implementation
  *
  */
 
-#include "hal/board/arduinoMega/hal_lcd_AMC2004.h"
+#include "hal/board/arduinoMega/hal_lcd_AMC2004_impl.h"
 
 #include <util/delay.h>
 
