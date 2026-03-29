@@ -12,25 +12,27 @@
  */
 
 /**
- * @file error.h
- * @brief System wide error header
+ * @file hal_usart_impl.h
+ * @brief header hal usart implementation
  *
  */
 
-#ifndef ERROR_H
-#define ERROR_H
+#ifndef HAL_USART_IMPL_H
+#define HAL_USART_IMPL_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "interfaces/auto_error_catalog.h"
-#include "interfaces/tm_string_storage.h"
 
-typedef struct
-{
-	const tm_string_t *name;
-	const err_critical_t critical;
-} err_item_t;
-
-const tm_string_t *err_getMessage(uint8_t num);
+void hal_usartInit(void);
+void hal_usartStart(void);
+void hal_usartStop(void);
+err_codes_t hal_usartRead(uint8_t *data);
+err_codes_t hal_usartWriteChar(uint8_t data);
+void hal_usartSendTXBuffer(void);
+err_codes_t hal_usartTestBufferRx(void);
+err_codes_t hal_usartTestBufferTx(void);
+err_codes_t hal_usartWriteString(const char *str);
 
 #endif

@@ -13,18 +13,18 @@
  */
 
 /**
- * @file hal_timerSched.h
+ * @file hal_timerSched_impl.h
  * @brief header hal part of scheduler
  *
  */
 
-#ifndef HAL_TIMER_SCHED_IMPL_H
-#define HAL_TIMER_SCHED_IMPL_H
+#ifndef HAL_TIMERSCHED_IMPL_H
+#define HAL_TIMERSCHED_IMPL_H
 
 #include "hal/public/auto_hal_define.h"
 
-//typedef void (*hal_timerSchedCallback_t)(void);
-//typedef hal_stack_word_t *(*hal_timerSchedCallback_t)(hal_stack_word_t *stack_pointer);
+// typedef void (*hal_timerSchedCallback_t)(void);
+// typedef hal_stack_word_t *(*hal_timerSchedCallback_t)(hal_stack_word_t *stack_pointer);
 typedef hal_stack_word_t *hal_timerSchedCallback_func_t(hal_stack_word_t *stack_pointer);
 typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
 

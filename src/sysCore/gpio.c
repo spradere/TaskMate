@@ -16,9 +16,9 @@
  * @brief gpio implementation
  */
 
-#include "sysCall/gpio.h"
+#include "sysCore/gpio.h"
 
-#include "hal/auto_hal_user.h"
+#include "hal/public/hal_gpio.h"
 
 void gpio_signalsInit(void)
 {

@@ -21,7 +21,9 @@
 #ifndef HAL_SYSINFO_H
 #define HAL_SYSINFO_H
 
-#include "tm_libc/tm_string.h"
+#include <stdint.h>
+
+#include "interfaces/tm_string_storage.h"
 
 typedef struct
 {

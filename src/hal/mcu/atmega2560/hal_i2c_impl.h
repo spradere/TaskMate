@@ -13,15 +13,13 @@
  */
 
 /**
- * @file hal_i2c.h
+ * @file hal_i2c_impl.h
  * @brief header hal i2c serial comm
  *
  */
 
-// @hal_user
-
-#ifndef HAL_I2C_H
-#define HAL_I2C_H
+#ifndef HAL_I2C_IMPL_H
+#define HAL_I2C_IMPL_H
 
 #include <stdbool.h>
 #include <stdint.h>

@@ -12,15 +12,13 @@
  */
 
 /**
- * @file hal_rtc_ZS042.h
+ * @file hal_rtc_ZS042_impl.h
  * @brief header hal lcd implementation
  *
  */
 
-// @hal_user
-
-#ifndef HAL_ZS_042_H
-#define HAL_ZS_042_H
+#ifndef HAL_RTC_ZS042_IMPL_H
+#define HAL_RTC_ZS042_IMPL_H
 
 #include <stdint.h>
 

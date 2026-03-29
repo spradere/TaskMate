@@ -12,23 +12,21 @@
  */
 
 /**
- * @file hal_lcd_AMC2004.h
- * @brief header hal lcd implementation
+ * @file hal_i2c.h
+ * @brief public header hal part of i2c
  *
  */
 
-// @hal_user
+#ifndef HAL_I2C_H
+#define HAL_I2C_H
 
-#ifndef HAL_LCD_H
-#define HAL_LCD_H
+#define HAL_I2C 0
 
-#include <stdint.h>
+#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+	#include "hal/mcu/atmega2560/hal_i2c_impl.h"
+	#undef HAL_I2C
+	#define HAL_I2C 1
+#endif
 
-void hal_lcdInit(void);
-void hal_lcdStart(void);
-void hal_lcdStop(void);
-void hal_lcdClear(void);
-void hal_lcdSetCursor(uint8_t row, uint8_t col);
-void hal_lcdWriteString(const char *str);
-
+_Static_assert(HAL_I2C, "No hal implementation for i2c on selected hardware target.");
 #endif
