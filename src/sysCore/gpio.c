@@ -17,6 +17,7 @@
  */
 
 #include "sysCore/gpio.h"
+
 #include "hal/public/hal_gpio.h"
 
 void gpio_signalsInit(void)

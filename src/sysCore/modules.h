@@ -23,8 +23,8 @@
 #include <stdint.h>
 
 #include "hal/public/auto_hal_define.h" // get hal_stack_word_t from selected arch
-#include "interfaces/tm_string_storage.h"
 #include "interfaces/modules_define.h"
+#include "interfaces/tm_string_storage.h"
 
 /*
  * Modules structures

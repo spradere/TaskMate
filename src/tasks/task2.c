@@ -4,7 +4,6 @@
  *
  */
 
-
 #include "tasks/task2.h"
 
 #include "services/msg.h"
