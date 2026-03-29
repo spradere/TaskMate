@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef HAL_TIMER_SCHED_H
-#define HAL_TIMER_SCHED_H
+#ifndef HAL_TIMERSCHED_H
+#define HAL_TIMERSCHED_H
 
 #define HAL_TIMER_SCHED 0
 
