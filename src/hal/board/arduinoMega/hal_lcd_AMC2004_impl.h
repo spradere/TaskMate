@@ -12,21 +12,21 @@
  */
 
 /**
- * @file hal_tmlibc.h
- * @brief hal tm_libc implementation
+ * @file hal_lcd_AMC2004_impl.h
+ * @brief header hal lcd implementation
  *
  */
 
-#ifndef HAL_TMLIBC_H
-#define HAL_TMLIBC_H
+#ifndef HAL_LCD_AMC2004_IMPL_H
+#define HAL_LCD_AMC2004_IMPL_H
 
-#define HAL_TMLIBC 0
+#include <stdint.h>
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
-	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
-	#undef HAL_TMLIBC
-	#define HAL_TMLIBC 1
-#endif
+void hal_lcdInit(void);
+void hal_lcdStart(void);
+void hal_lcdStop(void);
+void hal_lcdClear(void);
+void hal_lcdSetCursor(uint8_t row, uint8_t col);
+void hal_lcdWriteString(const char *str);
 
-_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc on selected hardware target.");
 #endif

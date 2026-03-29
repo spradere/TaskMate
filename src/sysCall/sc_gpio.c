@@ -12,21 +12,14 @@
  */
 
 /**
- * @file hal_tmlibc.h
- * @brief hal tm_libc implementation
- *
+ * @file sc_gpio.c
+ * @brief sc_gpio implementation
  */
 
-#ifndef HAL_TMLIBC_H
-#define HAL_TMLIBC_H
+#include "sysCall/sc_gpio.h"
 
-#define HAL_TMLIBC 0
+#include "sysCore/gpio.h"
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
-	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
-	#undef HAL_TMLIBC
-	#define HAL_TMLIBC 1
-#endif
-
-_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc on selected hardware target.");
-#endif
+void sc_gpio_signalSet(gpio_signal_t signal, bool val) { gpio_signalSet(signal, val); }
+bool sc_gpio_signalGet(gpio_signal_t signal) { return gpio_signalGet(signal); }
+void sc_gpio_signalToggle(gpio_signal_t signal) { gpio_signalSet(signal, !gpio_signalGet(signal)); }

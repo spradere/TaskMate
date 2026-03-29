@@ -13,13 +13,13 @@
  */
 
 /**
- * @file hal_timerSTC.h
+ * @file hal_timerSTC_impl.h
  * @brief header hal real time clock
  *
  */
 
-#ifndef HAL_TIMER_STC_H
-#define HAL_TIMER_STC_H
+#ifndef HAL_TIMERSTC_IMPL_H
+#define HAL_TIMERSTC_IMPL_H
 
 typedef void (*hal_timerSTCCallback_t)(void);
 

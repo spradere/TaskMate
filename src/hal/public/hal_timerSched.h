@@ -11,8 +11,14 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-#ifndef HAL_TIMER_SCHED_H
-#define HAL_TIMER_SCHED_H
+/**
+ * @file hal_timerSched.h
+ * @brief public header hal part of scheduler
+ *
+ */
+
+#ifndef HAL_TIMERSCHED_H
+#define HAL_TIMERSCHED_H
 
 #define HAL_TIMER_SCHED 0
 
@@ -22,5 +28,6 @@
 	#define HAL_TIMER_SCHED 1
 #endif
 
-_Static_assert(HAL_TIMER_SCHED, "No hal implementation for scheduler timer on selected hardware target.");
+_Static_assert(HAL_TIMER_SCHED,
+			   "No hal implementation for scheduler timer on selected hardware target.");
 #endif

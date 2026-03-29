@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef GLOBAL_ERROR_H
-#define GLOBAL_ERROR_H
+#ifndef GLOBALERROR_H
+#define GLOBALERROR_H
 
 #include "autoCode.h"
 

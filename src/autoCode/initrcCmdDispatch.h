@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef INITRC_CMD_DISPATCH_H
-#define INITRC_CMD_DISPATCH_H
+#ifndef INITRCCMDDISPATCH_H
+#define INITRCCMDDISPATCH_H
 
 #include "autoCode.h"
 

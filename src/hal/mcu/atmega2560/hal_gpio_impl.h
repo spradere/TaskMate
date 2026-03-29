@@ -13,28 +13,27 @@
  */
 
 /**
- * @file panic.h
- * @brief header for panic
+ * @file hal_gpio_impl.h
+ * @brief header hal gpio
  *
  */
 
-#ifndef PANIC_H
-#define PANIC_H
+#ifndef HAL_GPIO_IMPL_H
+#define HAL_GPIO_IMPL_H
 
-#include "hal/auto_hal_user.h"
-#include "hal/public/hal_context.h"
+#include <stdbool.h>
 
+#include "hal/arch/avr8/arch_define.h"
+#include "interfaces/gpio_signals.h"
 
-#define	panic(msg) do {	\
-	hal_clearGlobalInterupt();\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString("\nSYSTEM PANIC : ");\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString(msg);\
-	hal_usartSendTXBuffer();\
-	hal_usartWriteString(", halt.");\
-	hal_usartSendTXBuffer();\
-	while (1); \
-	}while (0)
+typedef struct
+{
+	hal_pin_t pin;
+	bool active_high;
+} hal_signal_t;
+
+void hal_gpioWireSignal(const gpio_signal_t sig);
+void hal_gpioWritePin(const gpio_signal_t sig, bool value);
+bool hal_gpioReadPin(const gpio_signal_t sig);
 
 #endif

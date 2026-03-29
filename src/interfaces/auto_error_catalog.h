@@ -20,8 +20,6 @@
 #ifndef AUTO_ERROR_CATALOG_H
 #define AUTO_ERROR_CATALOG_H
 
-#include "tm_libc/tm_string.h"
-
 typedef enum
 {
 	ERROR_LOW,
@@ -42,12 +40,6 @@ typedef enum
 	ERR_MSG_OUT_OF_FREE_CHANNEL,
 	ERROR_COUNT
 } err_codes_t;
-
-typedef struct
-{
-	const tm_string_t *name;
-	const err_critical_t critical;
-} err_item_t;
 
 // clang-format on
 

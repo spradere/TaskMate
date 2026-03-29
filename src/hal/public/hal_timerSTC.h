@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
+/**
+ * @file hal_timerSTC.h
+ * @brief hal software time counter
+ *
+ */
+
 #ifndef HAL_TIMERSTC_H
 #define HAL_TIMERSTC_H
 
@@ -22,5 +28,6 @@
 	#define HAL_TIMERSTC 1
 #endif
 
-_Static_assert(HAL_TIMERSTC, "No hal implementation for Software Time Counter on selected hardware target.");
+_Static_assert(HAL_TIMERSTC,
+			   "No hal implementation for Software Time Counter on selected hardware target.");
 #endif

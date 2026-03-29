@@ -12,16 +12,15 @@
  */
 
 /**
- * @file hal_usart.c
+ * @file hal_usart_impl.c
  * @brief hal usart implementation
  *
  */
 
-#include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/mcu/atmega2560/hal_usart_impl.h"
 
 #include <avr/interrupt.h>
 
-#include "hal/auto_hal_user.h"
 #include "hal/board/arduinoMega/board_define.h" // get usart baud rate
 
 // Circular buffers
