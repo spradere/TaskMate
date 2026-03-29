@@ -12,33 +12,21 @@
  */
 
 /**
- * @file hal_rtc_ZS042.h
+ * @file hal_lcd_AMC2004_impl.h
  * @brief header hal lcd implementation
  *
  */
 
-// @hal_user
-
-#ifndef HAL_ZS_042_H
-#define HAL_ZS_042_H
+#ifndef HAL_LCD_IMPL_H
+#define HAL_LCD_IMPL_H
 
 #include <stdint.h>
 
-typedef struct
-{
-	uint8_t seconds; // 0-59
-	uint8_t minutes; // 0-59
-	uint8_t hours; // 0-23
-	uint8_t weekday; // 1-7
-	uint8_t day; // 1-31
-	uint8_t month; // 1-12
-	uint8_t year; // 0-99
-} hal_rtc_time_t;
-
-void hal_rtcInit(void);
-void hal_rtcStart(void);
-void hal_rtcStop(void);
-uint8_t hal_rtcRead(hal_rtc_time_t *t);
-uint8_t hal_rtcWrite(const hal_rtc_time_t *t);
+void hal_lcdInit(void);
+void hal_lcdStart(void);
+void hal_lcdStop(void);
+void hal_lcdClear(void);
+void hal_lcdSetCursor(uint8_t row, uint8_t col);
+void hal_lcdWriteString(const char *str);
 
 #endif
