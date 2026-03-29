@@ -26,6 +26,8 @@
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_timerSTC.h"
 #include "hal/public/hal_timerSched.h"
+#include "hal/public/hal_i2c.h"
+#include "hal/public/hal_usart.h"
 #include "sysCore/auto_threads_list.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"

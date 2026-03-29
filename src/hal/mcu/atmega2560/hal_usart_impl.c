@@ -12,12 +12,12 @@
  */
 
 /**
- * @file hal_usart.c
+ * @file hal_usart_impl.c
  * @brief hal usart implementation
  *
  */
 
-#include "hal/mcu/atmega2560/hal_usart.h"
+#include "hal/mcu/atmega2560/hal_usart_impl.h"
 
 #include <avr/interrupt.h>
 

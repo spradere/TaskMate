@@ -18,10 +18,8 @@
  *
  */
 
-// @hal_user
-
-#ifndef HAL_GPIO_H
-#define HAL_GPIO_H
+#ifndef HAL_GPIO_IMPL_H
+#define HAL_GPIO_IMPL_H
 
 #include <stdbool.h>
 

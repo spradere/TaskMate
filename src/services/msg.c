@@ -24,6 +24,7 @@
 #include "tm_libc/tm_string.h"
 
 // Send message to :
+#include "hal/public/hal_usart.h"
 #include "hal/auto_hal_user.h"
 
 // private message channel internals
@@ -69,7 +70,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3Arch cleanup gpio 10", MSG_TO_LCD);
+		msgWritreText(chan, "\3Arch cleanup usart 13", MSG_TO_LCD);
 	}
 
 	msgProcess();

@@ -11,8 +11,8 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
-#ifndef HAL_TIMERSTC_H
-#define HAL_TIMERSTC_H
+#ifndef HAL_TIMERSTC_IMPL_H
+#define HAL_TIMERSTC_IMPL_H
 
 #define HAL_TIMERSTC 0
 
