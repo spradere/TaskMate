@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef HAL_LCD_IMPL_H
-#define HAL_LCD_IMPL_H
+#ifndef HAL_LCD_AMC2004_IMPL_H
+#define HAL_LCD_AMC2004_IMPL_H
 
 #include <stdint.h>
 
