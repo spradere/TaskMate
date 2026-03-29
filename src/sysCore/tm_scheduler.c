@@ -27,11 +27,10 @@
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_stack.h"
 #include "hal/public/hal_timerSched.h"
-#include "sysCall/gpio.h"
-#include "sysCall/panic.h"
-#include "sysCall/sysCall.h"
+//#include "sysCall/gpio.h"
+#include "hal/public/panic.h"
+//#include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
-#include "tm_libc/tm_stdio.h"
 
 // static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
 static hal_timerSchedCallback_func_t tm_schedulerRR;
@@ -65,8 +64,6 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
 	// hal_setGlobalInterupt();
-
-	// gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();

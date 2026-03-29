@@ -25,7 +25,7 @@
 #include "hal/auto_hal_user.h"
 #include "hal/public/hal_sysInfo.h"
 #include "sysCall/error.h"
-#include "sysCall/panic.h"
+#include "hal/public/panic.h"
 #include "sysCore/boot.h"
 #include "sysCore/modules.h"
 #include "sysCore/tm_scheduler.h"
@@ -127,14 +127,12 @@ int main(void)
 	// start scheduler
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
 
-	// panic("\nboot stage 1");
-
 	tm_softwareTimeCounterInit();
 
 	tm_schedulerInit();
 	tm_schedulerStart();
 
-	panic("\nsystem lauch fail");
+	panic("\nsystem launch fail");
 
 	return 0; // You should never get here
 }
