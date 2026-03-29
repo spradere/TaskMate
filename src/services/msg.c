@@ -25,7 +25,7 @@
 
 // Send message to :
 #include "hal/public/hal_usart.h"
-#include "hal/auto_hal_user.h"
+#include "hal/public/hal_lcd_AMC2004.h"
 
 // private message channel internals
 #define MSG_FLAG_IN_USE 3
@@ -70,7 +70,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3Arch cleanup usart 13", MSG_TO_LCD);
+		msgWritreText(chan, "\3Arch cleanup lcd", MSG_TO_LCD);
 	}
 
 	msgProcess();

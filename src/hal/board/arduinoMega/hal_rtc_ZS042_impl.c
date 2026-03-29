@@ -12,12 +12,12 @@
  */
 
 /**
- * @file hal_rtc_ZS042.c
+ * @file hal_rtc_ZS042_impl.c
  * @brief hal lcd implementation
  *
  */
 
-#include "hal/board/arduinoMega/hal_rtc_ZS042.h"
+#include "hal/board/arduinoMega/hal_rtc_ZS042_impl.h"
 
 #include "hal/mcu/atmega2560/hal_i2c_impl.h"
 
