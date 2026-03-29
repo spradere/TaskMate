@@ -24,7 +24,8 @@
 #include "tm_libc/tm_string.h"
 
 // Send message to :
-#include "hal/auto_hal_user.h"
+#include "hal/public/hal_lcd_AMC2004.h"
+#include "hal/public/hal_usart.h"
 
 // private message channel internals
 #define MSG_FLAG_IN_USE 3
@@ -69,7 +70,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3typedef callback 1", MSG_TO_LCD);
+		msgWritreText(chan, "\3Arch cleanup lcd", MSG_TO_LCD);
 	}
 
 	msgProcess();

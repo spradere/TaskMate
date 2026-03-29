@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
+/**
+ * @file hal_context.h
+ * @brief hal context
+ *
+ */
+
 #ifndef HAL_CONTEXT_H
 #define HAL_CONTEXT_H
 
@@ -22,5 +28,6 @@
 	#define HAL_CONTEXT 1
 #endif
 
-_Static_assert(HAL_CONTEXT, "No hal implementation for context switch on selected hardware target.");
+_Static_assert(HAL_CONTEXT,
+			   "No hal implementation for context switch on selected hardware target.");
 #endif

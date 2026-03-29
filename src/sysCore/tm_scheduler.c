@@ -23,17 +23,13 @@
 #include <stdint.h>
 #include <util/atomic.h>
 
-#include "hal/auto_hal_system.h"
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_stack.h"
 #include "hal/public/hal_timerSched.h"
-#include "sysCall/sysCall.h"
-#include "sysCall/panic.h"
+#include "hal/public/panic.h"
 #include "sysCore/modules.h"
-#include "tm_libc/tm_stdio.h"
-#include "sysCall/gpio.h"
 
-//static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
+// static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
 static hal_timerSchedCallback_func_t tm_schedulerRR;
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
@@ -49,9 +45,9 @@ void tm_schedulerStart(void)
 	hal_returnFromInterupt();
 }
 
-void tm_schedulerCoop(void) { }
+void tm_schedulerCoop(void) {}
 
-hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer)
+hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 {
 	mod_thread_item_t *thread;
 
@@ -60,13 +56,11 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer)
 	thread->stack_pointer = stack_pointer;
 
 	// canary check
-	if(thread->canary_low != MOD_CANARY){panic("canary low 1");}
-	if(thread->canary_high != MOD_CANARY){panic("canary high 1");}
+	if( thread->canary_low != MOD_CANARY ) { panic("canary low 1"); }
+	if( thread->canary_high != MOD_CANARY ) { panic("canary high 1"); }
 
 	// enable global INT to let run hal_timerRTC and hal_usart sCLI
-	//hal_setGlobalInterupt();
-
-	//gpio_signalToggle(GPIO_SIGNAL_INBOARD_LED);
+	// hal_setGlobalInterupt();
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
@@ -75,10 +69,9 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer)
 	mod_threadSetCurrent(current);
 
 	// canary check
-	if(thread->canary_low != MOD_CANARY){panic("canary low 2");}
-	if(thread->canary_high != MOD_CANARY){panic("canary high 2");}
+	if( thread->canary_low != MOD_CANARY ) { panic("canary low 2"); }
+	if( thread->canary_high != MOD_CANARY ) { panic("canary high 2"); }
 
 	thread = mod_threadGetPointer(mod_threadGetCurrent());
 	return thread->stack_pointer;
-
 }

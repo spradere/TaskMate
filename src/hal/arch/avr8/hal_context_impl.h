@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_context.h
+ * @file hal_context_impl.h
  * @brief hal context save / restore
  *
  */

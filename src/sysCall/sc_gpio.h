@@ -12,29 +12,20 @@
  */
 
 /**
- * @file hal_usart.h
- * @brief header hal usart implementation
- *
+ * @file sc_gpio.h
+ * @brief sc_gpio header
  */
 
-// @hal_user
-
-#ifndef HAL_USART_H
-#define HAL_USART_H
+#ifndef SC_GPIO_H
+#define SC_GPIO_H
 
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sysCall/error.h"
+#include "interfaces/gpio_signals.h"
 
-void hal_usartInit(void);
-void hal_usartStart(void);
-void hal_usartStop(void);
-err_codes_t hal_usartRead(uint8_t *data);
-err_codes_t hal_usartWriteChar(uint8_t data);
-void hal_usartSendTXBuffer(void);
-err_codes_t hal_usartTestBufferRx(void);
-err_codes_t hal_usartTestBufferTx(void);
-err_codes_t hal_usartWriteString(const char *str);
+void sc_gpio_signalSet(gpio_signal_t signal, bool val);
+bool sc_gpio_signalGet(gpio_signal_t signal);
+void sc_gpio_signalToggle(gpio_signal_t signal);
 
 #endif

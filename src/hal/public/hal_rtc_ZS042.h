@@ -12,21 +12,21 @@
  */
 
 /**
- * @file hal_tmlibc.h
- * @brief hal tm_libc implementation
+ * @file hal_rtc_ZS042.h
+ * @brief public header hal part of RTC
  *
  */
 
-#ifndef HAL_TMLIBC_H
-#define HAL_TMLIBC_H
+#ifndef HAL_RTC_ZS042_H
+#define HAL_RTC_ZS042_H
 
-#define HAL_TMLIBC 0
+#define HAL_RCT_ZS042 0
 
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
-	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
-	#undef HAL_TMLIBC
-	#define HAL_TMLIBC 1
+	#include "hal/board/arduinoMega/hal_rtc_ZS042_impl.h"
+	#undef HAL_RCT_ZS042
+	#define HAL_RCT_ZS042 1
 #endif
 
-_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc on selected hardware target.");
+_Static_assert(HAL_RCT_ZS042, "No hal implementation for rtc ZS042 on selected hardware target.");
 #endif

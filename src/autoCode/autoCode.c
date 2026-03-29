@@ -70,7 +70,7 @@ int main(int argn, const char *argv[])
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(auto_options.errors_file, &errors_catalog, "src/sysCall/auto_error_catalog.h");
+	globalError(auto_options.errors_file, &errors_catalog, "src/interfaces/auto_error_catalog.h");
 
 	// setup data base
 	modules_database_t data_base;
@@ -103,7 +103,7 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/hal/public/hal_sysInfo.c", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCore/modules_define.h", &errors_catalog, &auto_options);
+	parseTag(&data_base, "src/interfaces/modules_define.h", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &auto_options);
 
 	// write headers

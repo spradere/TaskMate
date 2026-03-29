@@ -42,7 +42,7 @@ uint16_t sc_threadGetSTC(void)
 
 void sc_handYield(void)
 {
-	//tm_schedulerCoop();
+	// tm_schedulerCoop();
 }
 
 void sc_flagClear(uint8_t flag) { system_status &= ~flag; }

@@ -12,16 +12,16 @@
  */
 
 /**
- * @file hal_lcd_AMC2004.c
+ * @file hal_lcd_AMC2004_impl.c
  * @brief hal lcd implementation
  *
  */
 
-#include "hal/board/arduinoMega/hal_lcd_AMC2004.h"
+#include "hal/board/arduinoMega/hal_lcd_AMC2004_impl.h"
 
 #include <util/delay.h>
 
-#include "hal/mcu/atmega2560/hal_i2c.h"
+#include "hal/mcu/atmega2560/hal_i2c_impl.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
