@@ -22,12 +22,11 @@
 
 #include <stdint.h>
 
-
-#include "hal/public/hal_sysInfo.h"
-#include "sysCall/error.h"
-#include "hal/public/panic.h"
-#include "hal/public/hal_rtc_ZS042.h"
 #include "hal/public/hal_lcd_AMC2004.h"
+#include "hal/public/hal_rtc_ZS042.h"
+#include "hal/public/hal_sysInfo.h"
+#include "hal/public/panic.h"
+#include "sysCall/error.h"
 #include "sysCore/boot.h"
 #include "sysCore/modules.h"
 #include "sysCore/tm_scheduler.h"

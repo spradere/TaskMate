@@ -21,7 +21,6 @@
 
 #include "hal/mcu/atmega2560/hal_i2c_impl.h"
 
-
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 

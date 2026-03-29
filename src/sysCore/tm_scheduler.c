@@ -23,13 +23,10 @@
 #include <stdint.h>
 #include <util/atomic.h>
 
-#include "hal/auto_hal_system.h"
 #include "hal/public/hal_context.h"
 #include "hal/public/hal_stack.h"
 #include "hal/public/hal_timerSched.h"
-//#include "sysCall/gpio.h"
 #include "hal/public/panic.h"
-//#include "sysCall/sysCall.h"
 #include "sysCore/modules.h"
 
 // static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
