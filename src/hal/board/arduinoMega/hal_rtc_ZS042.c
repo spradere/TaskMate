@@ -20,7 +20,7 @@
 #include "hal/board/arduinoMega/hal_rtc_ZS042.h"
 
 #include "hal/mcu/atmega2560/hal_i2c.h"
-#include "tm_libc/tm_syslog.h"
+
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
