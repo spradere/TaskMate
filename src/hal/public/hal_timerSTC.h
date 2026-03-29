@@ -11,6 +11,12 @@
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 
+/**
+ * @file hal_timerSTC.h
+ * @brief hal software time counter
+ *
+ */
+
 #ifndef HAL_TIMERSTC_H
 #define HAL_TIMERSTC_H
 

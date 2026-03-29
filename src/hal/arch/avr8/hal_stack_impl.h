@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_stack.h
+ * @file hal_stack_impl.h
  * @brief hal stack handling
  *
  */
