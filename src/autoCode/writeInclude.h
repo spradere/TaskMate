@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef WRITE_INCLUDE_H
-#define WRITE_INCLUDE_H
+#ifndef WRITEINCLUDE_H
+#define WRITEINCLUDE_H
 
 #include "autoCode.h"
 #include "options.h"
