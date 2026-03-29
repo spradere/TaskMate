@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef HAL_TIMER_SCHED_IMPL_H
-#define HAL_TIMER_SCHED_IMPL_H
+#ifndef HAL_TIMERSCHED_IMPL_H
+#define HAL_TIMERSCHED_IMPL_H
 
 #include "hal/public/auto_hal_define.h"
 
