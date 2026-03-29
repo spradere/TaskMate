@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef HAL_ZS_042_IMPL_H
-#define HAL_ZS_042_IMPL_H
+#ifndef HAL_RTC_ZS042_IMPL_H
+#define HAL_RTC_ZS042_IMPL_H
 
 #include <stdint.h>
 

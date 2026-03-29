@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef HAL_RCT_ZS042_H
-#define HAL_RCT_ZS042_H
+#ifndef HAL_RTC_ZS042_H
+#define HAL_RTC_ZS042_H
 
 #define HAL_RCT_ZS042 0
 
