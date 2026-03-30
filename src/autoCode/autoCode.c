@@ -107,7 +107,8 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &auto_options);
 
 	// write headers
-	writeInclude(&data_base, INCLUDE_MODULES_LIST, "src/sysCore/auto_modules_list.h", &auto_options);
+	writeInclude(
+		&data_base, INCLUDE_MODULES_LIST, "src/sysCore/auto_modules_list.h", &auto_options);
 	writeInclude(&data_base, INCLUDE_HAL_DEFINE, "src/hal/public/auto_hal_define.h", &auto_options);
 	writeInclude(&data_base, INCLUDE_HAL_INIT, "src/sysCore/auto_hal_init.h", &auto_options);
 

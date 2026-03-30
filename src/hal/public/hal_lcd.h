@@ -12,7 +12,7 @@
  */
 
 /**
- * @file hal_lcd_AMC2004.h
+ * @file hal_lcd.h
  * @brief public hal_lcd_AMC2004 header declarations.
  *
  */

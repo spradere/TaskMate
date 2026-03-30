@@ -21,14 +21,13 @@
 
 #include "tokenizer.h"
 
-#define HAVE_OPTIONS(X)                  \
-	X(HAVE_TM_VER, "--tm_ver")           \
-	X(HAVE_TM_BUILD, "--tm_build")       \
-	X(HAVE_ARCH, "--arch")               \
-	X(HAVE_MCU, "--mcu")                 \
-	X(HAVE_BOARD, "--board")             \
+#define HAVE_OPTIONS(X)            \
+	X(HAVE_TM_VER, "--tm_ver")     \
+	X(HAVE_TM_BUILD, "--tm_build") \
+	X(HAVE_ARCH, "--arch")         \
+	X(HAVE_MCU, "--mcu")           \
+	X(HAVE_BOARD, "--board")       \
 	X(HAVE_ERRORS, "--errors")
-
 
 enum
 {
