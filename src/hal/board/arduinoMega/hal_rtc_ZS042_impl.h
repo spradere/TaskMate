@@ -13,7 +13,7 @@
 
 /**
  * @file hal_rtc_ZS042_impl.h
- * @brief header hal lcd implementation
+ * @brief arduinoMega hal_rtc_ZS042_impl header declarations.
  *
  */
 

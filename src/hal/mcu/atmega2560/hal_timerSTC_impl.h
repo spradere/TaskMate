@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerSTC_impl.h
- * @brief header hal real time clock
+ * @brief atmega2560 hal_timerSTC_impl header declarations.
  *
  */
 

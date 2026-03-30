@@ -14,7 +14,7 @@
 
 /**
  * @file autoCode.c
- * @brief Tool to generate code for threads, drivers and HAL in TaskMate codebase
+ * @brief autoCode implementation.
  *
  * - Simple and reliable, read plain text init.rc files
  * - Write code for #include / static allocation / initialisation via in code

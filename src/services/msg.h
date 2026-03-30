@@ -14,7 +14,7 @@
 
 /**
  * @file msg.h
- * @brief header of message display server
+ * @brief services msg header declarations.
  *
  */
 

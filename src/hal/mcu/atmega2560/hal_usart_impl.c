@@ -13,7 +13,7 @@
 
 /**
  * @file hal_usart_impl.c
- * @brief hal usart implementation
+ * @brief atmega2560 hal_usart_impl implementation.
  *
  */
 

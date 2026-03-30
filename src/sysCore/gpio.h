@@ -13,7 +13,7 @@
 
 /**
  * @file gpio.h
- * @brief gpio header
+ * @brief sysCore gpio header declarations.
  */
 
 #ifndef GPIO_H

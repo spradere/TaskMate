@@ -14,7 +14,7 @@
 
 /**
  * @file boot.c
- * @brief boot start up
+ * @brief sysCore boot implementation.
  *
  */
 

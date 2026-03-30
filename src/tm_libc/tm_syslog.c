@@ -14,7 +14,7 @@
 
 /**
  * @file tm_syslog.c
- * @brief implementation of system log
+ * @brief tm_libc tm_syslog implementation.
  *
  */
 

@@ -14,7 +14,7 @@
 
 /**
  * @file tm_softwareTimeCounter.c
- * @brief Implements STC.
+ * @brief sysCore tm_softwareTimeCounter implementation.
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file error.h
- * @brief System wide error header
+ * @brief sysCall error header declarations.
  *
  */
 

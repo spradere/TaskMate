@@ -13,7 +13,7 @@
 
 /**
  * @file sc_gpio.c
- * @brief sc_gpio implementation
+ * @brief sysCall sc_gpio implementation.
  */
 
 #include "sysCall/sc_gpio.h"

@@ -14,7 +14,7 @@
 
 /**
  * @file scli.c
- * @brief implementation of serial command line interface
+ * @brief services scli implementation.
  *
  */
 

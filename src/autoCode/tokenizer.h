@@ -13,7 +13,7 @@
 
 /**
  * @file tokenizer.h
- * @brief tokenizer header
+ * @brief autoCode tokenizer header declarations.
  *
  */
 
