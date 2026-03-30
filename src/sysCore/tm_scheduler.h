@@ -14,7 +14,7 @@
 
 /**
  * @file tm_scheduler.h
- * @brief scheduler header
+ * @brief sysCore tm_scheduler header declarations.
  *
  */
 

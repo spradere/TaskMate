@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerSched.c
- * @brief hal part of scheduler
+ * @brief atmega2560 hal_timerSched_impl implementation.
  *
  */
 
@@ -68,7 +68,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	hal_stack_word_t *sp_current;
 	hal_stack_word_t *sp_next;
 
-	// sp_current = (hal_stack_word_t *)hal_getStackPointer();
 	sp_current = hal_getStackPointer();
 
 	sp_next = sp_current;
@@ -77,7 +76,6 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	if( sched_callback != NULL ) { sp_next = sched_callback(sp_current); }
 
 	hal_timerSchedStart();
-	// hal_setStackPointer((uintptr_t)sp_next);
 	hal_setStackPointer(sp_next);
 	hal_contextRestore();
 	hal_setGlobalInterupt();

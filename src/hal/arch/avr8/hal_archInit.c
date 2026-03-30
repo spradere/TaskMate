@@ -10,6 +10,9 @@
  *
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
+/**
+ * @brief avr8 hal_archInit implementation.
+ */
 
 #include "hal/arch/avr8/hal_archInit.h"
 

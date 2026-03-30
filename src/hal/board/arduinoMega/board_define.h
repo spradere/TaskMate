@@ -14,7 +14,7 @@
 
 /**
  * @file board_define.h
- * @brief arduino mega board definitions
+ * @brief arduinoMega board_define header declarations.
  *
  */
 

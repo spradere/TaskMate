@@ -14,7 +14,7 @@
 
 /**
  * @file tm_stdio.h
- * @brief header of libc stdio
+ * @brief tm_libc tm_stdio header declarations.
  *
  */
 
