@@ -12,21 +12,21 @@
  */
 
 /**
- * @file hal_rtc_ZS042.h
- * @brief public header hal part of RTC
+ * @file hal_lcd_AMC2004.h
+ * @brief public header hal part of lcd
  *
  */
 
-#ifndef HAL_RTC_ZS042_H
-#define HAL_RTC_ZS042_H
+#ifndef HAL_LCD_H
+#define HAL_LCD_H
 
-#define HAL_RCT_ZS042 0
+#define HAL_LCD 0
 
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
-	#include "hal/board/arduinoMega/hal_rtc_ZS042_impl.h"
-	#undef HAL_RCT_ZS042
-	#define HAL_RCT_ZS042 1
+	#include "hal/board/arduinoMega/hal_lcd_AMC2004_impl.h"
+	#undef HAL_LCD
+	#define HAL_LCD 1
 #endif
 
-_Static_assert(HAL_RCT_ZS042, "No hal implementation for rtc ZS042 on selected hardware target.");
+_Static_assert(HAL_LCD, "No hal implementation for lcd on selected hardware target.");
 #endif
