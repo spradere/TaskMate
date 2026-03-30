@@ -81,23 +81,6 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 
 	@printf "\n# files path\n" >> "${AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> "${AUTOCODE_CONFIG}"
-	@printf "%s\n" "--files_hal_user ${FILE_HAL_USER_PATH}" >> "${AUTOCODE_CONFIG}"
-	@printf "%s\n" "--files_hal_system ${FILE_HAL_SYSTEM_PATH}" >> "${AUTOCODE_CONFIG}"
-
-	# write list hal sources files
-	@: > "${FILE_HAL_USER_PATH}"
-.for file in ${FILES_HAL_USER}
-	@printf "%s\n" "${file}" >> "${FILE_HAL_USER_PATH}"
-.endfor
-	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_USER_PATH}
-	@rm -f "${FILE_HAL_USER_PATH}.bak"
-
-	@: > "${FILE_HAL_SYSTEM_PATH}"
-.for file in ${FILES_HAL_SYSTEM}
-	@printf "%s\n" "${file}" >> "${FILE_HAL_SYSTEM_PATH}"
-.endfor
-	@sed -i.bak 's|${SRC_DIR}/||g' ${FILE_HAL_SYSTEM_PATH}
-	@rm -f "${FILE_HAL_SYSTEM_PATH}.bak"
 
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > "${AUTOCODE_LOG_STAMP}"
 	@touch ${AUTOCODE_STAMP}
