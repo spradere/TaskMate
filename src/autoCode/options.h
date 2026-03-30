@@ -13,7 +13,7 @@
 
 /**
  * @file options.h
- * @brief autoCode options parser header
+ * @brief autoCode options header declarations.
  *
  */
 

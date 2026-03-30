@@ -14,7 +14,7 @@
 
 /**
  * @file initrcCmdDispatch.c
- * @brief initrc dispatcher for initrc files
+ * @brief autoCode initrcCmdDispatch implementation.
  *
  */
 

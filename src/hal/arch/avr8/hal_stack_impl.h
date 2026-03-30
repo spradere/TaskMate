@@ -14,7 +14,7 @@
 
 /**
  * @file hal_stack_impl.h
- * @brief hal stack handling
+ * @brief avr8 hal_stack_impl header declarations.
  *
  */
 

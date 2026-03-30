@@ -13,7 +13,7 @@
 
 /**
  * @file hal_stack.h
- * @brief hal stack
+ * @brief public hal_stack header declarations.
  *
  */
 

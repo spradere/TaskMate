@@ -13,7 +13,7 @@
 
 /**
  * @file hal_mcuInit.h
- * @brief ATmega2560 init header
+ * @brief atmega2560 hal_mcuInit header declarations.
  *
  */
 

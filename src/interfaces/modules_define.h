@@ -14,7 +14,7 @@
 
 /**
  * @file modules_define.h
- * @brief module data base definitions
+ * @brief interfaces modules_define header declarations.
  */
 
 // [autoCode_tag] modules count

@@ -14,7 +14,7 @@
 
 /**
  * @file sysCall.c
- * @brief Implements system calls.
+ * @brief sysCall implementation.
  *
  * @warning This file contains ATOMIC material !
  *

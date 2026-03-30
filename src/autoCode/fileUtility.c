@@ -13,7 +13,7 @@
 
 /**
  * @file fileUtility.c
- * @brief file utility implementation
+ * @brief autoCode fileUtility implementation.
  *
  */
 
