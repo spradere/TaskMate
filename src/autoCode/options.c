@@ -27,9 +27,8 @@
 	X(HAVE_ARCH, "--arch")               \
 	X(HAVE_MCU, "--mcu")                 \
 	X(HAVE_BOARD, "--board")             \
-	X(HAVE_ERRORS, "--errors")           \
-	X(HAVE_HAL_USER, "--files_hal_user") \
-	X(HAVE_HAL_SYSTEM, "--files_hal_system")
+	X(HAVE_ERRORS, "--errors")
+
 
 enum
 {
@@ -90,18 +89,6 @@ static void funcErrors(const char *value, options_list_t *opt)
 	have_options_count[HAVE_ERRORS]++;
 }
 
-static void funcHalUser(const char *value, options_list_t *opt)
-{
-	strncpy(opt->files_hal_user, value, BYTE_INDEX);
-	have_options_count[HAVE_HAL_USER]++;
-}
-
-static void funcHalSystem(const char *value, options_list_t *opt)
-{
-	strncpy(opt->files_hal_system, value, BYTE_INDEX);
-	have_options_count[HAVE_HAL_SYSTEM]++;
-}
-
 static const struct
 {
 	const char *name;
@@ -113,8 +100,6 @@ static const struct
 					{"--mcu", funcMcu},
 					{"--board", funcBoard},
 					{"--errors", funcErrors},
-					{"--files_hal_user", funcHalUser},
-					{"--files_hal_system", funcHalSystem},
 					{NULL, NULL}};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
