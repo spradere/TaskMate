@@ -14,7 +14,7 @@
 
 /**
  * @file tm_snprintf.c
- * @brief implementation of libc formatted print in string
+ * @brief tm_libc tm_snprintf implementation.
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file fileUtility.h
- * @brief file utility header
+ * @brief autoCode fileUtility header declarations.
  *
  */
 

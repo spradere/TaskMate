@@ -14,7 +14,7 @@
 
 /**
  * @file runLevel.h
- * @brief run level header
+ * @brief sysCore runLevel header declarations.
  *
  */
 

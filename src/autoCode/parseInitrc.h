@@ -13,7 +13,7 @@
 
 /**
  * @file parseInitrc.h
- * @brief parseInitrc file header
+ * @brief autoCode parseInitrc header declarations.
  *
  */
 

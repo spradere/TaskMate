@@ -13,7 +13,7 @@
 
 /**
  * @file hal_rtc_ZS042.h
- * @brief public header hal part of RTC
+ * @brief public hal_rtc_ZS042 header declarations.
  *
  */
 

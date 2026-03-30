@@ -13,7 +13,7 @@
 
 /**
  * @file globalError.c
- * @brief write all error in one file
+ * @brief autoCode globalError implementation.
  *
  */
 

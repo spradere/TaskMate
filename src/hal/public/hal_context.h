@@ -13,7 +13,7 @@
 
 /**
  * @file hal_context.h
- * @brief hal context
+ * @brief public hal_context header declarations.
  *
  */
 

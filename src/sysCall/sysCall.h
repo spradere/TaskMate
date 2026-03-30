@@ -14,7 +14,7 @@
 
 /**
  * @file sysCall.h
- * @brief sysCall header
+ * @brief sysCall header declarations.
  *
  */
 
