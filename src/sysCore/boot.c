@@ -20,8 +20,8 @@
 
 #include "sysCore/boot.h"
 
-#include "sysCore/auto_hal_init.h"
 #include "hal/public/hal_usart.h"
+#include "sysCore/auto_hal_init.h"
 #include "sysCore/gpio.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
