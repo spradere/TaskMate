@@ -24,7 +24,7 @@
 #include "tm_libc/tm_string.h"
 
 // Send message to :
-#include "hal/public/hal_lcd_AMC2004.h"
+#include "hal/public/hal_lcd.h"
 #include "hal/public/hal_usart.h"
 
 // private message channel internals
@@ -70,7 +70,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3Arch cleanup lcd", MSG_TO_LCD);
+		msgWritreText(chan, "\3remove user/system 0", MSG_TO_LCD);
 	}
 
 	msgProcess();

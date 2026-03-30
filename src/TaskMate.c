@@ -22,8 +22,8 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_lcd_AMC2004.h"
-#include "hal/public/hal_rtc_ZS042.h"
+#include "hal/public/hal_lcd.h"
+#include "hal/public/hal_rtc.h"
 #include "hal/public/hal_sysInfo.h"
 #include "hal/public/panic.h"
 #include "sysCall/error.h"
