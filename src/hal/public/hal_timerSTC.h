@@ -13,7 +13,7 @@
 
 /**
  * @file hal_timerSTC.h
- * @brief hal software time counter
+ * @brief public hal_timerSTC header declarations.
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file globalError.h
- * @brief global error header
+ * @brief autoCode globalError header declarations.
  *
  */
 

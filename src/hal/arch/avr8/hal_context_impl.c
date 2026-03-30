@@ -14,7 +14,7 @@
 
 /**
  * @file hal_context_impl.c
- * @brief hal context init
+ * @brief avr8 hal_context_impl implementation.
  *
  */
 

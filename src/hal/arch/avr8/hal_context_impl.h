@@ -14,7 +14,7 @@
 
 /**
  * @file hal_context_impl.h
- * @brief hal context save / restore
+ * @brief avr8 hal_context_impl header declarations.
  *
  */
 

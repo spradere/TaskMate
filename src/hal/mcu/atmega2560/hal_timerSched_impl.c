@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerSched.c
- * @brief hal part of scheduler
+ * @brief atmega2560 hal_timerSched_impl implementation.
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file hal_gpio.h
- * @brief public header hal part of gpio
+ * @brief public hal_gpio header declarations.
  *
  */
 

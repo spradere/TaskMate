@@ -14,7 +14,7 @@
 
 /**
  * @file tm_softwareTimeCounter.h
- * @brief header for STC
+ * @brief sysCore tm_softwareTimeCounter header declarations.
  *
  */
 
