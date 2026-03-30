@@ -14,7 +14,7 @@
 
 /**
  * @file hal_tmlibc_impl.h
- * @brief board stdio header
+ * @brief atmega2560 hal_tmlibc_impl header declarations.
  *
  */
 

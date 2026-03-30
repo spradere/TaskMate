@@ -14,7 +14,7 @@
 
 /**
  * @file hal_sysInfo.h
- * @brief header for sysInfo
+ * @brief public hal_sysInfo header declarations.
  *
  */
 

@@ -14,7 +14,7 @@
 
 /**
  * @file tm_string.c
- * @brief implementation of libc string
+ * @brief tm_libc tm_string implementation.
  *
  */
 

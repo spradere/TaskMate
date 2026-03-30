@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerSTC.c
- * @brief hal real time clock
+ * @brief atmega2560 hal_timerSTC_impl implementation.
  *
  */
 

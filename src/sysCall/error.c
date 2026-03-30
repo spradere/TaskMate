@@ -14,7 +14,7 @@
 
 /**
  * @file error.c
- * @brief System wide error implementation
+ * @brief sysCall error implementation.
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file hal_lcd_AMC2004_impl.c
- * @brief hal lcd implementation
+ * @brief arduinoMega hal_lcd_AMC2004_impl implementation.
  *
  */
 

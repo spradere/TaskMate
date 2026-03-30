@@ -14,7 +14,7 @@
 
 /**
  * @file msg.c
- * @brief implementation of message display server
+ * @brief services msg implementation.
  */
 
 #include "services/msg.h"
