@@ -1,3 +1,5 @@
+	remove auto_hal_user.h and auto_hal_system.h, move headers to hal/public
+	change stack type uintptr_t -> hal_stack_world_t
 	fix context switch after adding callback
 	fix layer leaks, move code in layers sysCore sysCall hal
 	refactor hal/hal_timerScheduler sysCore/tm_scheduler move code in right layer + implement callback

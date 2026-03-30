@@ -45,10 +45,6 @@ SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}
 SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}
 SRC_DIR_LIST += ${SRC_DIR}/hal/public
 
-# List for hal headers
-FILE_HAL_USER_PATH = ${BUILD_DIR_TARGET}/files_hal_user
-FILE_HAL_SYSTEM_PATH = ${BUILD_DIR_TARGET}/files_hal_system
-
 # log files
 AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
 RSYNC_LOG = ${LOG_DIR}/rsync.log
