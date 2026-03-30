@@ -14,7 +14,7 @@
 
 /**
  * @file modules.h
- * @brief module data base header
+ * @brief sysCore modules header declarations.
  */
 
 #ifndef MODULES_H

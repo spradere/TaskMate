@@ -13,7 +13,7 @@
 
 /**
  * @file sc_gpio.h
- * @brief sc_gpio header
+ * @brief sysCall sc_gpio header declarations.
  */
 
 #ifndef SC_GPIO_H

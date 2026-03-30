@@ -14,7 +14,7 @@
 
 /**
  * @file tm_scheduler.c
- * @brief scheduler implementation
+ * @brief sysCore tm_scheduler implementation.
  *
  */
 

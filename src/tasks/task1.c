@@ -1,6 +1,6 @@
 /**
  * @file task1.c
- * @brief task1 implementation
+ * @brief tasks task1 implementation.
  *
  */
 

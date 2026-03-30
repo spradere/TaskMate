@@ -14,7 +14,7 @@
 
 /**
  * @file writeInclude.c
- * @brief write include files
+ * @brief autoCode writeInclude implementation.
  *
  */
 
@@ -78,45 +78,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 					auto_options->board_name);
 			break;
 
-		case INCLUDE_HAL_USER_PART:
-		case INCLUDE_HAL_SYSTEM_PART:
-		{
-			file_t file_hal;
-			fileInit(&file_hal);
-			if( type == INCLUDE_HAL_USER_PART )
-			{
-				file_hal.name = (char *)auto_options->files_hal_user;
-			}
-			if( type == INCLUDE_HAL_SYSTEM_PART )
-			{
-				file_hal.name = (char *)auto_options->files_hal_system;
-			}
-			fileOpen(&file_hal, "r", FILE_READONLY, __FILE__, __LINE__);
-
-			int file_line_number = 0;
-			tokenizer_t tok;
-
-			while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_hal.stream) )
-			{
-				file_line_number++;
-				tokenizer(&tok);
-
-				if( tok.count > 1 )
-				{
-					msgError("Wrong token count [%s:%i] is %i, should be 1",
-							 file_hal.name,
-							 file_line_number,
-							 tok.count);
-					exit(1);
-				}
-
-				if( tok.count == 1 ) fprintf(file_tmp.stream, "#include \"%s\"\n", tok.tokens[0]);
-			}
-		}
-
-		break;
-
-		case INCLUDE_THREAD_LIST:
+		case INCLUDE_MODULES_LIST:
 		{
 			const module_type_t *mod = &data_base->modules_type[MOD_SERVICES_ID];
 
@@ -131,6 +93,14 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			for( int i = 0; i < mod->modules_count; i++ )
 			{
 				fprintf(file_tmp.stream, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+			}
+			fprintf(file_tmp.stream, "\n");
+
+			mod = &data_base->modules_type[MOD_DRIVERS_ID];
+
+			for( int i = 0; i < mod->modules_count; i++ )
+			{
+				fprintf(file_tmp.stream, "#include \"hal/public/%s.h\"\n", mod->modules[i].name);
 			}
 		}
 		break;

@@ -14,7 +14,7 @@
 
 /**
  * @file hal_timerSTC.c
- * @brief hal real time clock
+ * @brief atmega2560 hal_timerSTC_impl implementation.
  *
  */
 
@@ -25,10 +25,6 @@
 #include <util/atomic.h>
 
 #include "tm_libc/tm_syslog.h"
-
-// #include "TaskMate.h"
-
-// #include "sysCore/tm_softwareTimeCounter.h"
 
 const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
 

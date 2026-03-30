@@ -10,6 +10,9 @@
  *
  * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
+/**
+ * @brief atmega2560 hal_mcuInit implementation.
+ */
 
 #include "hal/mcu/atmega2560/hal_mcuInit.h"
 

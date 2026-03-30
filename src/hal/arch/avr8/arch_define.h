@@ -14,7 +14,7 @@
 
 /**
  * @file arch_define.h
- * @brief avr8 definitions
+ * @brief avr8 arch_define header declarations.
  *
  */
 

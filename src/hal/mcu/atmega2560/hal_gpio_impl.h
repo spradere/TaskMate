@@ -14,7 +14,7 @@
 
 /**
  * @file hal_gpio_impl.h
- * @brief header hal gpio
+ * @brief atmega2560 hal_gpio_impl header declarations.
  *
  */
 
