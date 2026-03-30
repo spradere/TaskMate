@@ -37,30 +37,6 @@ AUTOCODE_STAMP = ${BUILD_DIR_TARGET}/.autoCode_stamp
 STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
 
-#FILE_HAL_TMLIBC != find ${SRC_DIR}/hal -maxdepth 3 -type f -name "hal_tmlibc.h"
-
-FIND_OPT_BASE = -maxdepth 1 -name '*.h' -type f -exec grep -l
-FIND_OPT_USER_TAG = '// @hal_user'
-FIND_OPT_SYSTEM_TAG = '// @hal_system'
-CMD_OPT_OUT = {} + 2>/dev/null || true
-
-FIND_OPT_USER = ${FIND_OPT_BASE} ${FIND_OPT_USER_TAG} ${CMD_OPT_OUT}
-FIND_OPT_SYSTEM = ${FIND_OPT_BASE} ${FIND_OPT_SYSTEM_TAG} ${CMD_OPT_OUT}
-
-FILES_HAL_PATH = 	${SRC_DIR}/hal/arch/${ARCH} \
-					${SRC_DIR}/hal/mcu/${MCU} \
-					${SRC_DIR}/hal/board/${BOARD}
-
-FILES_HAL_USER != { \
-    for d in ${FILES_HAL_PATH}; do \
-        find "$$d" ${FIND_OPT_USER}; \
-    done; }
-
-FILES_HAL_SYSTEM != { \
-    for d in ${FILES_HAL_PATH}; do \
-        find "$$d" ${FIND_OPT_SYSTEM}; \
-    done; }
-
 FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # Global error

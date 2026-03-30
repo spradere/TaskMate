@@ -26,9 +26,6 @@
 
 #include "hal/public/auto_hal_define.h"
 
-// static inline __attribute__((always_inline)) void hal_setStackPointer(uintptr_t sp) { SP = sp; }
-// static inline __attribute__((always_inline)) uintptr_t hal_getStackPointer(void) { return SP; }
-
 static inline __attribute__((always_inline)) void hal_setStackPointer(hal_stack_word_t *sp)
 {
 	SP = (uintptr_t)sp;
