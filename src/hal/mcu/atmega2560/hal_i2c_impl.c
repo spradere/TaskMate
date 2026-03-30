@@ -14,7 +14,7 @@
 
 /**
  * @file hal_i2c.c
- * @brief hal i2c serial comm
+ * @brief atmega2560 hal_i2c_impl implementation.
  *
  */
 

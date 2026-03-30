@@ -13,7 +13,7 @@
 
 /**
  * @file parseTag.h
- * @brief parseTag header
+ * @brief autoCode parseTag header declarations.
  *
  */
 

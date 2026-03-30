@@ -14,7 +14,7 @@
 
 /**
  * @file hal_sysInfo.c
- * @brief System informations
+ * @brief public hal_sysInfo implementation.
  *
  */
 

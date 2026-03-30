@@ -14,7 +14,7 @@
 
 /**
  * @file panic.h
- * @brief header for panic
+ * @brief public panic header declarations.
  *
  */
 

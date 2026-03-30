@@ -14,7 +14,7 @@
 
 /**
  * @file parseInitrc.c
- * @brief read init.rc file and write data to modules database
+ * @brief autoCode parseInitrc implementation.
  *
  */
 

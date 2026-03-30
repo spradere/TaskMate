@@ -13,7 +13,7 @@
 
 /**
  * @file hal_i2c.h
- * @brief public header hal part of i2c
+ * @brief public hal_i2c header declarations.
  *
  */
 

@@ -14,7 +14,7 @@
 
 /**
  * @file boot.h
- * @brief header for boot
+ * @brief sysCore boot header declarations.
  *
  */
 

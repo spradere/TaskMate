@@ -14,7 +14,7 @@
 
 /**
  * @file TaskMate.c
- * @brief Implements system startup
+ * @brief TaskMate implementation.
  *
  */
 

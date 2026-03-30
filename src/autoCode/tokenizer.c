@@ -14,7 +14,7 @@
 
 /**
  * @file tokenizer.c
- * @brief tokenizer implementation, cut one line into tokens
+ * @brief autoCode tokenizer implementation.
  *
  */
 
