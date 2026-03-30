@@ -13,7 +13,7 @@
 
 /**
  * @file hal_archInit.h
- * @brief arch AVR8 init header
+ * @brief avr8 hal_archInit header declarations.
  *
  */
 

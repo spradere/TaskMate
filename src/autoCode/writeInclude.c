@@ -14,7 +14,7 @@
 
 /**
  * @file writeInclude.c
- * @brief write include files
+ * @brief autoCode writeInclude implementation.
  *
  */
 

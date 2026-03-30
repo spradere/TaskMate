@@ -13,7 +13,7 @@
 
 /**
  * @file hal_tmlibc.h
- * @brief hal tm_libc implementation
+ * @brief public hal_tmlibc header declarations.
  *
  */
 

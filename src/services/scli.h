@@ -14,7 +14,7 @@
 
 /**
  * @file scli.h
- * @brief header of serial command line interface
+ * @brief services scli header declarations.
  *
  */
 

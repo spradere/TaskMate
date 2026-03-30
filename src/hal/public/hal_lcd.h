@@ -13,7 +13,7 @@
 
 /**
  * @file hal_lcd_AMC2004.h
- * @brief public header hal part of lcd
+ * @brief public hal_lcd_AMC2004 header declarations.
  *
  */
 

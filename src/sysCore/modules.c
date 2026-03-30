@@ -14,7 +14,7 @@
 
 /**
  * @file modules.c
- * @brief module data base
+ * @brief sysCore modules implementation.
  */
 
 #include "sysCore/modules.h"

@@ -14,7 +14,7 @@
 
 /**
  * @file TaskMate.h
- * @brief header for TaskMate options
+ * @brief TaskMate header declarations.
  *
  */
 

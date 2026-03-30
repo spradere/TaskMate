@@ -14,7 +14,7 @@
 
 /**
  * @file runLevel.c
- * @brief run level code
+ * @brief sysCore runLevel implementation.
  *
  */
 

@@ -13,7 +13,7 @@
 
 /**
  * @file gpio.c
- * @brief gpio implementation
+ * @brief sysCore gpio implementation.
  */
 
 #include "sysCore/gpio.h"

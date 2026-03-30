@@ -13,7 +13,7 @@
 
 /**
  * @file printModules.h
- * @brief printModules header
+ * @brief autoCode printModules header declarations.
  *
  */
 
