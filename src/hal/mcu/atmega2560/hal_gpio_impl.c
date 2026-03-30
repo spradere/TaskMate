@@ -14,7 +14,7 @@
 
 /**
  * @file hal_gpio.c
- * @brief hal gpio implementation
+ * @brief atmega2560 hal_gpio_impl implementation.
  *
  */
 

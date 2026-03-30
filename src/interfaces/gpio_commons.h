@@ -13,7 +13,7 @@
 
 /**
  * @file gpio_commons.h
- * @brief gpio common definitions
+ * @brief interfaces gpio_commons header declarations.
  */
 
 #ifndef GPIO_COMMONS_H

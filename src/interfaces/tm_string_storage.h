@@ -14,7 +14,7 @@
 
 /**
  * @file tm_string_storage.h
- * @brief header  for TaskMate string
+ * @brief interfaces tm_string_storage header declarations.
  *
  */
 

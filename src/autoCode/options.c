@@ -13,7 +13,7 @@
 
 /**
  * @file options.c
- * @brief autoCode options parser
+ * @brief autoCode options implementation.
  *
  */
 

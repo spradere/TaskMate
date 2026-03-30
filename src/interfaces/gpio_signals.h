@@ -14,7 +14,7 @@
 
 /**
  * @file gpio_signals.h
- * @brief gpio logical signals definitions
+ * @brief interfaces gpio_signals header declarations.
  *
  */
 

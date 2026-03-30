@@ -13,7 +13,7 @@
 
 /**
  * @file initrcCmdDispatch.h
- * @brief initrc dispatcher header
+ * @brief autoCode initrcCmdDispatch header declarations.
  *
  */
 
