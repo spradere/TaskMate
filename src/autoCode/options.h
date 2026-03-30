@@ -32,8 +32,6 @@ typedef struct
 	char mcu_name[BYTE_INDEX];
 	char board_name[BYTE_INDEX];
 	char errors_file[BYTE_INDEX];
-	char files_hal_user[BYTE_INDEX];
-	char files_hal_system[BYTE_INDEX];
 } options_list_t;
 
 void options(const char *file_name, options_list_t *opt);
