@@ -1,6 +1,6 @@
 /**
  * @file task1.h
- * @brief task1 header
+ * @brief tasks task1 header declarations.
  *
  */
 

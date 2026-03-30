@@ -14,7 +14,7 @@
 
 /**
  * @file tm_syslog.h
- * @brief header of system log
+ * @brief tm_libc tm_syslog header declarations.
  *
  */
 

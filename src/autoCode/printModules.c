@@ -14,7 +14,7 @@
 
 /**
  * @file printModules.c
- * @brief print modules database content
+ * @brief autoCode printModules implementation.
  *
  */
 

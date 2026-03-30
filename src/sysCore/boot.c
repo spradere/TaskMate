@@ -14,14 +14,14 @@
 
 /**
  * @file boot.c
- * @brief boot start up
+ * @brief sysCore boot implementation.
  *
  */
 
 #include "sysCore/boot.h"
 
-#include "hal/public/auto_hal_init.h"
 #include "hal/public/hal_usart.h"
+#include "sysCore/auto_hal_init.h"
 #include "sysCore/gpio.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"

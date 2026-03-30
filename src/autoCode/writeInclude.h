@@ -13,7 +13,7 @@
 
 /**
  * @file writeInclude.h
- * @brief writeInclude header
+ * @brief autoCode writeInclude header declarations.
  *
  */
 
@@ -25,9 +25,7 @@
 
 typedef enum
 {
-	INCLUDE_THREAD_LIST,
-	INCLUDE_HAL_USER_PART,
-	INCLUDE_HAL_SYSTEM_PART,
+	INCLUDE_MODULES_LIST,
 	INCLUDE_HAL_DEFINE,
 	INCLUDE_HAL_INIT,
 
