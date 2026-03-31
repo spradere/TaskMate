@@ -14,14 +14,14 @@
 
 /**
  * @file macros.h
- * @brief TaskMate general macros defintion.
+ * @brief TaskMate general macro definitions.
  *
  */
 
 #ifndef TM_MACROS_H
 #define TM_MACROS_H
 
-// general system macro / def
+// general system macros / definitions
 #define NULL ((void *)0)
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
