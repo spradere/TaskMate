@@ -23,7 +23,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/atomic.h>
-#include "TaskMate.h"
+#include "interfaces/macros.h"
 // #include "tm_libc/tm_syslog.h"
 
 const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625

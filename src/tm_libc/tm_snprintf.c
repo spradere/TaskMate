@@ -20,7 +20,7 @@
 
 #include "tm_libc/tm_snprintf.h"
 
-#include <TaskMate.h>
+#include "interfaces/macros.h"
 
 #include "hal/public/hal_tmlibc.h"
 
