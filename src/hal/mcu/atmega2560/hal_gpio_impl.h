@@ -32,8 +32,8 @@ typedef struct
 	bool active_high;
 } hal_signal_t;
 
-void hal_gpioWireSignal(const gpio_signal_t sig);
-void hal_gpioWritePin(const gpio_signal_t sig, bool value);
-bool hal_gpioReadPin(const gpio_signal_t sig);
+void hal_gpioPinInit(const hal_pin_t *pin);
+void hal_gpioWritePin(const hal_pin_t pin, bool value);
+bool hal_gpioReadPin(const hal_pin_t pin);
 
 #endif

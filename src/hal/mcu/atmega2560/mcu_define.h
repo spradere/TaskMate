@@ -24,6 +24,10 @@
 #include <stdint.h>
 #include "interfaces/gpio_commons.h"
 
+// frequencies
+#define USART_BAUD_RATE 9600
+#define I2C_FREQ 100000UL // Standard mode 100 kHz
+
 // atmega2560 ports
 typedef enum
 {
