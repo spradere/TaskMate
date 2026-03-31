@@ -24,7 +24,6 @@
 #include <stdbool.h>
 
 #include "hal/mcu/atmega2560/mcu_define.h"
-#include "interfaces/gpio_signals.h"
 
 typedef struct
 {
@@ -33,7 +32,7 @@ typedef struct
 } hal_signal_t;
 
 void hal_gpioPinInit(const hal_pin_t *pin);
-void hal_gpioWritePin(const hal_pin_t pin, bool value);
-bool hal_gpioReadPin(const hal_pin_t pin);
+void hal_gpioPinWrite(const hal_pin_t pin, bool value);
+bool hal_gpioPinRead(const hal_pin_t pin);
 
 #endif

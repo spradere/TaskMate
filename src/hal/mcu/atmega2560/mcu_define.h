@@ -22,6 +22,7 @@
 #define MCU_DEFINE_H
 
 #include <stdint.h>
+
 #include "interfaces/gpio_commons.h"
 
 // frequencies
@@ -55,6 +56,5 @@ typedef struct
 	gpio_pin_mode_t mode;
 	gpio_pin_pull_t pull;
 } hal_pin_t;
-
 
 #endif
