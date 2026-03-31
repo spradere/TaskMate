@@ -23,6 +23,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/atomic.h>
+
 #include "interfaces/macros.h"
 // #include "tm_libc/tm_syslog.h"
 
@@ -32,7 +33,7 @@ static hal_timerSTCCallback_t STC_callback = NULL;
 void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
 {
 	uintptr_t p = (uintptr_t)func_ptr;
-	//tm_syslog(TM_STR("[timer STC] callback = 0x%04x\n"), (p << 1));
+	// tm_syslog(TM_STR("[timer STC] callback = 0x%04x\n"), (p << 1));
 	STC_callback = func_ptr;
 }
 

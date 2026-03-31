@@ -63,13 +63,13 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 	}
 }
 
-void hal_gpioWritePin(const hal_pin_t pin, bool value)
+void hal_gpioPinWrite(const hal_pin_t pin, bool value)
 {
 	if( value ) { *(mcu_ports[pin.port].port) |= (uint8_t)(1u << pin.number); }
 	else { *(mcu_ports[pin.port].port) &= (uint8_t)~(1u << pin.number); }
 }
 
-bool hal_gpioReadPin(const hal_pin_t pin)
+bool hal_gpioPinRead(const hal_pin_t pin)
 {
 	if( pin.mode == GPIO_PIN_MODE_INPUT )
 	{
