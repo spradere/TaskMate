@@ -13,12 +13,22 @@
  */
 
 /**
- * @file board_define.h
- * @brief arduinoMega board_define header declarations.
+ * @file macros.h
+ * @brief TaskMate general macros defintion.
  *
  */
 
-#ifndef BOARD_DEFINE_H
-#define BOARD_DEFINE_H
+#ifndef TM_MACROS_H
+#define TM_MACROS_H
+
+// general system macro / def
+#define NULL ((void *)0)
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
+// string macros
+#define STRING2(x) #x
+#define INT_TO_STRING(x) STRING2(x)
+#define TM_STORE_FILE_NAME(name) TM_STR_ROM_NEW(name, __FILE_NAME__)
 
 #endif

@@ -24,7 +24,7 @@
 // clang-format off
 
 #include "tm_libc/tm_string.h"
-#include "TaskMate.h" // get libc selection
+#include "interfaces/options.h" // get libc selection
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
