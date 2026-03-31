@@ -23,12 +23,6 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-#include "hal/arch/avr8/arch_define.h"
-#include "hal/board/arduinoMega/hal_boardInit.h"
-#include "hal/mcu/atmega2560/mcu_define.h"
-
-static void hal_gpioPinInit(const hal_pin_t *pin);
-
 static const hal_port_t mcu_ports[PORT_COUNT] = {
 	[PORT_A] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
@@ -49,15 +43,7 @@ static const hal_port_t mcu_ports[PORT_COUNT] = {
 
 };
 
-static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
-
-void hal_gpioWireSignal(const gpio_signal_t sig)
-{
-	hal_boardWireSignal(signal_table, sig);
-	hal_gpioPinInit(&signal_table[sig].pin);
-}
-
-static void hal_gpioPinInit(const hal_pin_t *pin)
+void hal_gpioPinInit(const hal_pin_t *pin)
 {
 	if( pin->mode == GPIO_PIN_MODE_INPUT )
 	{
@@ -74,18 +60,14 @@ static void hal_gpioPinInit(const hal_pin_t *pin)
 	}
 }
 
-void hal_gpioWritePin(const gpio_signal_t sig, bool value)
+void hal_gpioPinWrite(const hal_pin_t pin, bool value)
 {
-	hal_pin_t pin = signal_table[sig].pin;
-
 	if( value ) { *(mcu_ports[pin.port].port) |= (uint8_t)(1u << pin.number); }
 	else { *(mcu_ports[pin.port].port) &= (uint8_t)~(1u << pin.number); }
 }
 
-bool hal_gpioReadPin(const gpio_signal_t sig)
+bool hal_gpioPinRead(const hal_pin_t pin)
 {
-	hal_pin_t pin = signal_table[sig].pin;
-
 	if( pin.mode == GPIO_PIN_MODE_INPUT )
 	{
 		return (*(mcu_ports[pin.port].pin) & (1 << pin.number)) >> pin.number;

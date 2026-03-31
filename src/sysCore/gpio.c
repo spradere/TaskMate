@@ -19,12 +19,22 @@
 #include "sysCore/gpio.h"
 
 #include "hal/public/hal_gpio.h"
+#include "sysCore/auto_hal_init.h"
+
+static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
 
 void gpio_signalsInit(void)
 {
-	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ ) { hal_gpioWireSignal(i); }
+	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
+	{
+		hal_boardWireSignal(signal_table, i);
+		hal_gpioPinInit(&signal_table[i].pin);
+	}
 }
 
-void gpio_signalSet(gpio_signal_t signal, bool val) { hal_gpioWritePin(signal, val); }
-bool gpio_signalGet(gpio_signal_t signal) { return hal_gpioReadPin(signal); }
+void gpio_signalSet(gpio_signal_t signal, bool val)
+{
+	hal_gpioPinWrite(signal_table[signal].pin, val);
+}
+bool gpio_signalGet(gpio_signal_t signal) { return hal_gpioPinRead(signal_table[signal].pin); }
 void gpio_signalToggle(gpio_signal_t signal) { gpio_signalSet(signal, !gpio_signalGet(signal)); }
