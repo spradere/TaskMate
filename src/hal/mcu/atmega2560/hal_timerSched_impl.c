@@ -24,9 +24,10 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 
-#include "hal/public/hal_context.h"
-#include "hal/public/hal_stack.h"
-#include "tm_libc/tm_syslog.h"
+#include "hal/arch/avr8/hal_context_impl.h"
+#include "hal/arch/avr8/hal_stack_impl.h"
+#include "interfaces/macros.h"
+// #include "tm_libc/tm_syslog.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 // const int TIMER1_OVERFLOW_COUNT = 15625; // Interrupt every 1s (1 x 16.10^6 )/1024 = 15625
@@ -36,7 +37,7 @@ static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
 	uintptr_t p = (uintptr_t)func_ptr;
-	tm_syslog(TM_STR("[timer sched] callback = 0x%04x\n"), (p << 1));
+	// tm_syslog(TM_STR("[timer sched] callback = 0x%04x\n"), (p << 1));
 	sched_callback = func_ptr;
 }
 

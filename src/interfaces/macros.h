@@ -13,26 +13,22 @@
  */
 
 /**
- * @file hal_gpio_impl.h
- * @brief atmega2560 hal_gpio_impl header declarations.
+ * @file macros.h
+ * @brief TaskMate general macro definitions.
  *
  */
 
-#ifndef HAL_GPIO_IMPL_H
-#define HAL_GPIO_IMPL_H
+#ifndef TM_MACROS_H
+#define TM_MACROS_H
 
-#include <stdbool.h>
+// general system macros / definitions
+#define NULL ((void *)0)
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-#include "hal/mcu/atmega2560/mcu_define.h"
-
-typedef struct
-{
-	hal_pin_t pin;
-	bool active_high;
-} hal_signal_t;
-
-void hal_gpioPinInit(const hal_pin_t *pin);
-void hal_gpioPinWrite(const hal_pin_t pin, bool value);
-bool hal_gpioPinRead(const hal_pin_t pin);
+// string macros
+#define STRING2(x) #x
+#define INT_TO_STRING(x) STRING2(x)
+#define TM_STORE_FILE_NAME(name) TM_STR_ROM_NEW(name, __FILE_NAME__)
 
 #endif

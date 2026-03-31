@@ -20,7 +20,7 @@
 
 #include "hal/public/hal_sysInfo.h"
 
-#include "tm_libc/tm_string.h"
+#include "hal/public/hal_tmlibc.h"
 
 // [autoCode_tag] system info
 // clang-format off
@@ -30,7 +30,7 @@
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.26");
-const uint16_t tm_build = 4804;
+const uint16_t tm_build = 4808;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduinoMega");

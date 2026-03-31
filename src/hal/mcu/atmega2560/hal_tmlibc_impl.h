@@ -26,7 +26,7 @@
 #include <avr/pgmspace.h>
 #include <stdint.h>
 
-#include "tm_libc/tm_string.h"
+#include "interfaces/tm_string_storage.h"
 
 // macro for in file scope string storage
 #define CONCAT2(a,b) a##b
