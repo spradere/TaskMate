@@ -70,7 +70,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3hal cleanup 12", MSG_TO_LCD);
+		msgWritreText(chan, "\3TaskMate.h 12", MSG_TO_LCD);
 	}
 
 	msgProcess();

@@ -18,15 +18,14 @@
  *
  */
 
-#include "TaskMate.h"
-
 #include <stdint.h>
 
 #include "hal/public/hal_lcd.h"
 #include "hal/public/hal_rtc.h"
 #include "hal/public/hal_sysInfo.h"
 #include "hal/public/panic.h"
-#include "sysCall/error.h"
+#include "interfaces/macros.h"
+#include "interfaces/options.h"
 #include "sysCore/boot.h"
 #include "sysCore/modules.h"
 #include "sysCore/tm_scheduler.h"

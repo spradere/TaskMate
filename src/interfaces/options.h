@@ -13,23 +13,13 @@
  */
 
 /**
- * @file TaskMate.h
- * @brief TaskMate header declarations.
+ * @file options.h
+ * @brief TaskMate options declarations.
  *
  */
 
-#ifndef TASKMATE_H
-#define TASKMATE_H
-
-// general system macro / def
-#define NULL ((void *)0)
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-
-// string macros
-#define STRING2(x) #x
-#define INT_TO_STRING(x) STRING2(x)
-#define TM_STORE_FILE_NAME(name) TM_STR_ROM_NEW(name, __FILE_NAME__)
+#ifndef TM_OPTIONS_H
+#define TM_OPTIONS_H
 
 // debug options
 #define VERBOSE_LEVEL 0

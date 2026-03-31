@@ -23,8 +23,7 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "hal/board/arduinoMega/board_define.h" // get i2c frequency
-//#include "tm_libc/tm_syslog.h"
+#include "hal/mcu/atmega2560/mcu_define.h" // get i2c frequency
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
