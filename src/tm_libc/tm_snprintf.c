@@ -26,7 +26,7 @@
 static void baseConvert(uint16_t value, uint8_t base);
 static void tm_putChar(char ch);
 
-#define SNPRINFT_BUFF_TEMP_SIZE 32
+#define SNPRINTF_BUFF_TEMP_SIZE 32
 
 // structure for buffer data
 struct buff_t
@@ -42,14 +42,14 @@ static void baseConvert(uint16_t value, uint8_t base)
 {
 	const char digits[] = "0123456789abcdef";
 
-	char tmp[SNPRINFT_BUFF_TEMP_SIZE];
+	char tmp[SNPRINTF_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
 	// reverse order convert
 	if( value == 0 ) { tmp[pos++] = '0'; }
 	else
 	{
-		while( (value != 0) && (pos < SNPRINFT_BUFF_TEMP_SIZE) )
+		while( (value != 0) && (pos < SNPRINTF_BUFF_TEMP_SIZE) )
 		{
 			uint16_t data = (value % base);
 			value /= base;
