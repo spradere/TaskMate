@@ -21,6 +21,9 @@
 #ifndef MCU_DEFINE_H
 #define MCU_DEFINE_H
 
+#include <stdint.h>
+#include "interfaces/gpio_commons.h"
+
 // atmega2560 ports
 typedef enum
 {
@@ -39,5 +42,15 @@ typedef enum
 
 	PORT_COUNT
 } hal_port_list_t;
+
+// atmega2560 pin structure
+typedef struct
+{
+	hal_port_list_t port;
+	uint8_t number;
+	gpio_pin_mode_t mode;
+	gpio_pin_pull_t pull;
+} hal_pin_t;
+
 
 #endif
