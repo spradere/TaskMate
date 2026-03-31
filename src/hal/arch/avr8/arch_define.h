@@ -23,8 +23,6 @@
 
 #include <stdint.h>
 
-
-
 // AVR arch definition
 #define AVR8_REGISTER_COUNT 32 // from R0 to R31
 
