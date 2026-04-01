@@ -1,3 +1,5 @@
+TaskMate 0.27
+
 	remove auto_hal_user.h and auto_hal_system.h, move headers to hal/public
 	change stack type uintptr_t -> hal_stack_world_t
 	fix context switch after adding callback
@@ -22,7 +24,7 @@ TaskMate 0.25
 	change mod_t and mod_d -> mod, mod_t is confusing with typedef
 	gather code about modules in modules.h
 	move autoCode sources from utility/autoCode_src -> src/autoCode
-	rename RCT -> STC SoftwareTimeCounter
+	rename RTC -> STC SoftwareTimeCounter
 	refactor hal headers .h automatic find sources files, sort all headers with clang-format
 	refactor hal_usart with macro for circular buffer handling
 	upgrade message server
