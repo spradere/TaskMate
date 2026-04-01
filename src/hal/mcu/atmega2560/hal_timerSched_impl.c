@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timerSched.c
+ * @file hal_timerSched_impl.c
  * @brief atmega2560 hal_timerSched_impl implementation.
  *
  */
