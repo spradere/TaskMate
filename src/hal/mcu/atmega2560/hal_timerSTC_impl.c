@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timerSTC.c
+ * @file hal_timerSTC_impl.c
  * @brief atmega2560 hal_timerSTC_impl implementation.
  *
  */

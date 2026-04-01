@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_i2c.c
+ * @file hal_i2c_impl.c
  * @brief atmega2560 hal_i2c_impl implementation.
  *
  */
