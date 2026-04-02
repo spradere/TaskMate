@@ -13,21 +13,15 @@
  */
 
 /**
- * @file macros.h
- * @brief TaskMate general macro.
+ * @file define.h
+ * @brief TaskMate general definitions.
  *
  */
 
-#ifndef TM_MACROS_H
-#define TM_MACROS_H
+#ifndef TM_DEFINE_H
+#define TM_DEFINE_H
 
-// general system macros
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-
-// string macros
-#define STRING2(x) #x
-#define INT_TO_STRING(x) STRING2(x)
-#define TM_STORE_FILE_NAME(name) TM_STR_ROM_NEW(name, __FILE_NAME__)
+// general system definitions
+#define NULL ((void *)0)
 
 #endif
