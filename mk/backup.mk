@@ -17,6 +17,9 @@
 # Backup
 ################################################################################
 
+gitignore: ${GIT_IGNORE_STAMP}
+.PHONY: gitignore
+
 push: ${GIT_IGNORE_STAMP}
 #@ [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit -> ${UPSTREAM} %s\n\n" \
