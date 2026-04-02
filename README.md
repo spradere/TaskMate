@@ -86,7 +86,7 @@ driver contention, or prolonged critical sections.
 
 ## ⬆️ TaskMate Layers
 
-![System Layer Diagram](doc/TaskMate_layers_v7.png)
+![System Layer Diagram](doc/TaskMate_layers_v8.png)
 
 Here is the current layer diagram for TaskMate. The major task at the moment is to improve the
 architecture by eliminating **layer leaks** and **dependency inversions**. Only layers that share a common
