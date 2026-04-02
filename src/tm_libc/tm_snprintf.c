@@ -21,7 +21,7 @@
 #include "tm_libc/tm_snprintf.h"
 
 #include "hal/public/hal_tmlibc.h"
-#include "interfaces/macros.h"
+#include "interfaces/define.h"
 
 static void baseConvert(uint16_t value, uint8_t base);
 static void tm_putChar(char ch);
