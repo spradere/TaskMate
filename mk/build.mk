@@ -60,7 +60,6 @@ _dependency_check:
 
 # Test for autoCode required files
 ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
-					${FILES_HAL_USER} ${FILES_HAL_SYSTEM} \
 					${TM_VERSION_FILE} ${BUILD_CNT_FILE}
 
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
