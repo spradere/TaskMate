@@ -61,7 +61,7 @@ GIT_ALLOWED_FILES.${MAKE_DIR} = *.mk
 GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk tm_version
 GIT_ALLOWED_FILES.${BUILD_DIR} = build_counter
 GIT_ALLOWED_FILES = .clang-format .clang-tidy \
-	audit_todo CHANGELOG LICENSE Makefile README.md \
+	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
 ERROR_CAT = ${BUILD_DIR_TARGET}/errors_all.err
