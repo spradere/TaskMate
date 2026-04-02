@@ -28,7 +28,7 @@ USB_DEV = /dev/da0s1
 # Build info
 BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
 BUILD_CNT_FILE = ${BUILD_DIR_TARGET}/build_counter
-TM_VERSION_FILE = ${BUILD_DIR_TARGET}/tm_version
+TM_VERSION_FILE = ${SRC_DIR}/interfaces/tm_version
 
 # Source directories
 SRC_DIR_LIST = ${SRC_DIR}
@@ -58,10 +58,10 @@ GIT_IGNORE_STAMP = ${BUILD_DIR_TARGET}/.gitignore_stamp
 GIT_ALLOWED_DIRS = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR} ${BUILD_DIR}
 GIT_ALLOWED_FILES.${DOC_DIR} = *.c *.md *.txt *.png *.jpg Doxyfile
 GIT_ALLOWED_FILES.${MAKE_DIR} = *.mk
-GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk
+GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk tm_version
 GIT_ALLOWED_FILES.${BUILD_DIR} = build_counter
 GIT_ALLOWED_FILES = .clang-format .clang-tidy \
-	audit_todo CHANGELOG LICENSE Makefile README.md
+	audit_todo CHANGELOG LICENSE Makefile README.md \
 
 # Global error
 ERROR_CAT = ${BUILD_DIR_TARGET}/errors_all.err
