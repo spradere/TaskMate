@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timerSTC.c
+ * @file hal_timerSTC_impl.c
  * @brief atmega2560 hal_timerSTC_impl implementation.
  *
  */
@@ -24,7 +24,7 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 
-#include "interfaces/macros.h"
+#include "interfaces/define.h"
 // #include "tm_libc/tm_syslog.h"
 
 const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625

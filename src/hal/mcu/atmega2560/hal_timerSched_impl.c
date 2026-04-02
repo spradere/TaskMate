@@ -13,7 +13,7 @@
  */
 
 /**
- * @file hal_timerSched.c
+ * @file hal_timerSched_impl.c
  * @brief atmega2560 hal_timerSched_impl implementation.
  *
  */
@@ -26,7 +26,7 @@
 
 #include "hal/arch/avr8/hal_context_impl.h"
 #include "hal/arch/avr8/hal_stack_impl.h"
-#include "interfaces/macros.h"
+#include "interfaces/define.h"
 // #include "tm_libc/tm_syslog.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
