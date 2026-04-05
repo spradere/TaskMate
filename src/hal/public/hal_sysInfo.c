@@ -2,14 +2,8 @@
  * TaskMate Project
  * (c) 2026 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License
- * v1.0. See the LICENSE file for full license terms.
- *
- * Non-commercial use permitted under conditions. Commercial use requires a
- * separate license. Commercial licensing inquiries:
- * https://codeberg.org/Doul09/TaskMate/issues
- *
- * Powered by TaskMate, (c) 2026 PRADERE Sebastien
+ * This file is part of TaskMate and is distributed under the BSD 2-Clause License.
+ * See the LICENSE file for full license terms.
  */
 
 /**
@@ -30,7 +24,7 @@
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.27");
-const uint16_t tm_build = 4808;
+const uint16_t tm_build = 4809;
 TM_STR_ROM_NEW(arch_name, "avr8");
 TM_STR_ROM_NEW(mcu_name, "atmega2560");
 TM_STR_ROM_NEW(board_name, "arduinoMega");
