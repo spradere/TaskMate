@@ -90,7 +90,7 @@ driver contention, or prolonged critical sections.
 
 Here is the current layer diagram for TaskMate. The major task at the moment is to improve the
 architecture by eliminating **layer leaks** and **dependency inversions**. Only layers that share a common
-boundary and color are allowed to communicate, from top to bottom.
+boundary are allowed to communicate, from top to bottom.
 
 User tasks can still **benefit from all system features** —
 such as messaging, timing, I/O, and services — but always through indirect calls.
