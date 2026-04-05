@@ -120,15 +120,11 @@ See : [More about autoCode](doc/rules/autoCode.md)
 
 ## ️📜 License
 
-This software is distributed under the **TaskMate License v1.0**.
+This software is distributed under the **BSD 2-Clause License**.
 
-- Free for **non-commercial use** under conditions described in the `LICENSE` file.
-- Commercial use requires a **separate paid license**.
-
-To inquire about commercial licensing, please open an issue in this repository:
-[Open Licensing Issue](https://codeberg.org/Doul09/TaskMate/issues).
-By using this software, you agree to the terms of the TaskMate License v1.0.
-See the `LICENSE` file for full details.
+You may use, modify, and redistribute it in source or binary form,
+provided that you keep the copyright notice, license conditions,
+and disclaimer as described in the `LICENSE` file.
 
 ---
 
