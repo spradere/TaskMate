@@ -2,13 +2,8 @@
  * TaskMate Project
  * (c) 2026 PRADERE Sebastien
  *
- * This file is part of TaskMate and is distributed under the TaskMate License v1.0.
+ * This file is part of TaskMate and is distributed under the BSD 2-Clause License.
  * See the LICENSE file for full license terms.
- *
- * Non-commercial use permitted under conditions. Commercial use requires a separate license.
- * Commercial licensing inquiries: https://codeberg.org/Doul09/TaskMate/issues
- *
- * Powered by TaskMate, (c) 2026 PRADERE Sebastien
  */
 /**
  * @brief atmega2560 hal_mcuInit implementation.
