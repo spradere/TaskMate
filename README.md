@@ -6,17 +6,20 @@
 
 ## ▶️ Introduction
 
-**TaskMate** is a lightweight, preemptive real-time operating system.
-Designed specifically for **micro-controllers**.
-It emphasises **reliability** and **modularity**.
-Without relying on any external RTOS — everything is built entirely from scratch.
+**TaskMate is a personal project focused on learning C programming and real-time operating system
+design through hands-on practice, experimentation, and iterative development.**
 
-**TaskMate** is structured around a clean and portable architecture designed
-to separate build logic, system logic, and hardware dependencies.
+At a much smaller scale and within my own limits, this project is also a way to retrace—step by
+step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
+the fundamental primitives of an operating system should be and how they can be implemented from scratch.
+
+TaskMate operating system is designed for microcontrollers, reliability and modularity are constraints
+that guides every design choice. Architecture is structured to maintain a clear separation between build logic,
+system behavior, and hardware dependencies, ensuring both portability and maintainability.
 
 > <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
 >
->  <span style="color:green">426 commits • 121 source files • 7273 lines of code •
+>  <span style="color:green">432 commits • 121 source files • 6667 lines of code •
 > binary size : 6496 bytes (Flash) • ram usage : 2009 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
@@ -29,17 +32,22 @@ to separate build logic, system logic, and hardware dependencies.
 
 ---
 
-## 🧭 About ChatGPT and TaskMate
+## ⬆️ TaskMate Layers
 
-Although **no code from ChatGPT is ever copied directly** into the TaskMate source
-tree, the project would never have reached its current level of maturity without
-the assistance of AI. ChatGPT has been a great tool for structuring ideas,
-learning new concepts, and refining both code and architectural design. It
-provides echnical guidance. Moreover, it enables efficient
-research on related topics by summarising and contextualising complex technical
-information, helping me focus on building rather than endlessly searching.
+![System Layer Diagram](doc/TaskMate_layers_v8.png)
 
-See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
+
+
+The diagram shows the current layered architecture of TaskMate.
+Each layer communicates primarily with its direct neighbors, following a strict top-down model to
+maintain clear boundaries and avoid hidden dependencies.
+
+Some components, such as interfaces and the lightweight libc, play a transversal role across multiple
+layers. Rather than breaking the architecture, they provide controlled and well-defined access points
+that help decouple the system while preserving its structure.
+
+System features such as messaging, timing, I/O, and services remain fully accessible to user
+tasks—but always through controlled and indirect interactions.
 
 ---
 
@@ -53,20 +61,6 @@ TaskMate uses a custom **Build system** that fully manages dependencies and work
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
 ![Build system](doc/build_v2.png)
-
----
-
-## 🧱 Hardware Abstraction Layer and architecture support
-
-The HAL provides a **clean interface** between the system and the hardware.
-Ensures true portability across hardware families.
-This allows TaskMate to run on multiple architectures:
-
-- **avr8** - the historical beginning of TaskMate
-- **amd64** - for testing and faster development cycles
-- **arm32v7-m4** - planned for future hardware performance upgrades
-
-See : [Portability](doc/rules/portability.md)
 
 ---
 
@@ -84,36 +78,53 @@ driver contention, or prolonged critical sections.
 
 ---
 
-## ⬆️ TaskMate Layers
+## 🧩 Key Concepts
 
-![System Layer Diagram](doc/TaskMate_layers_v8.png)
+> A few core ideas shape the design of TaskMate and guide its evolution:
 
-Here is the current layer diagram for TaskMate. The major task at the moment is to improve the
-architecture by eliminating **layer leaks** and **dependency inversions**. Only layers that share a common
-boundary are allowed to communicate, from top to bottom.
 
-User tasks can still **benefit from all system features** —
-such as messaging, timing, I/O, and services — but always through indirect calls.
-This design significantly improves **stability** and **portability**.
+**HAL (Hardware Abstraction Layer)**
+
+The HAL isolates all hardware-specific details behind a consistent interface.
+It allows the system to remain portable and predictable, regardless of the underlying architecture, MCU, or board.
+
+**SysCall (System Call Layer)**
+
+The system call layer acts as a controlled boundary between user space and the system core.
+It ensures that all interactions with the kernel are explicit, validated, and well-defined.
+
+
+
+**Interfaces**
+
+Interfaces provide neutral contracts between layers.
+They help reduce coupling by defining shared types and behaviors without exposing implementation details,
+making the system easier to evolve and refactor.
+
+
+**AutoCode**
+
+AutoCode is used to generate parts of the system from simple configuration files.
+It helps maintain consistency, reduce boilerplate, and keep the overall structure aligned with the intended architecture.
+All generation happens at compile time, with static allocation, ensuring zero runtime overhead and fully deterministic behavior.
+
+
+See : [Portability](doc/rules/portability.md)
+See : [More about autoCode](doc/rules/autoCode.md)
 
 ---
 
-## 🧩 Modular Design & autoCode
+## 🧭 About ChatGPT and TaskMate
 
-Starting with version 0.10, TaskMate uses a **modular design model**:
+Although **no code from ChatGPT is ever copied directly** into the TaskMate source
+tree, the project would never have reached its current level of maturity without
+the assistance of AI. ChatGPT has been a great tool for structuring ideas,
+learning new concepts, and refining both code and architectural design. It
+provides echnical guidance. Moreover, it enables efficient
+research on related topics by summarising and contextualising complex technical
+information, helping me focus on building rather than endlessly searching.
 
-- Drivers, system services, and user tasks are placed in dedicated directories.
-- Each directory provides an init.rc file describing initialisation parameters.
-- These files are parsed at compile time by a custom tool: `autoCode`.
-
-The result is **auto-generated code**, without runtime overhead 👍
-
-This approach keeps the flexibility of a dynamic system but ensures that
- everything is resolved at compile time, minimising Flash and RAM usage.
-This mechanism defines system initialisation **without manually hard-coding**
-configuration.
-
-See : [More about autoCode](doc/rules/autoCode.md)
+See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 ---
 
