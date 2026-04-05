@@ -1,55 +1,25 @@
-TaskMate License v1.0
-Copyright (c) 2026 PRADERE Sebastien
+BSD 2-Clause License
+
+Copyright (c) 2026, PRADERE Sebastien
 All rights reserved.
 
-1. License Grant for Non-Commercial Use
-You are hereby granted a limited, non-exclusive, royalty-free license to use,
-modify, and distribute this software for non-commercial purposes under the
-following conditions:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-- All copies, modifications, and redistribution must retain this license in full.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-- Credit to the original author ("PRADERE Sebastien") must be clearly displayed
-	in any documentation, software credits, or user interface where this software
-	(or derivatives) is used.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-- Any modifications made to the software must be made publicly available if
-	distributed, either as source code or through an accessible repository.
-
-- Non-commercial use includes personal projects, educational use, research,
-	and hobbyist projects. Use in any project directly generating revenue, used
-	in a product, or for internal business purposes is considered commercial use.
-
-2. Commercial Use and Licensing
-Commercial use — including integration into products, services, embedded systems,
-or internal company tools — is prohibited without obtaining a separate commercial
-license from the author.
-
-To inquire about commercial licensing terms, please open an issue at:
-https://codeberg.org/Doul09/TaskMate/issues
-
-3. Attribution Requirement
-All public and distributed versions of this software, whether modified or unmodified,
-must display the following credit notice:
-
-    "Powered by TaskMate, (c) 2026 PRADERE Sebastien"
-
-The credit must appear in user-facing documentation, software about screens, or
-equivalent places where technical acknowledgements are typically displayed.
-
-4. Warranty Disclaimer
-This software is provided "as is", without warranty of any kind, express or implied,
-including but not limited to the warranties of merchantability, fitness for a
-particular purpose, and non infringement. In no event shall the author be liable
-for any claim, damages, or other liability, whether in an action of contract,
-tort, or otherwise, arising from, out of, or in connection with the software or
-the use or other dealings in the software.
-
-5. Termination
-Any violation of these terms will automatically terminate your rights under this license.
-
-6. Governing Law
-This license shall be governed by and construed in accordance with the laws of
-France, without regard to conflict of law principles.
-
-End of License
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
