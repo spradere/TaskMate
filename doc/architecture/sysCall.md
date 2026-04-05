@@ -4,27 +4,26 @@
 As TaskMate layered architecture matured, `sysCall` became the mediation layer between kernel/services/tasks and hardware-oriented implementation. It consolidated thread delay/yield APIs, error catalog access, and GPIO logical operations.
 
 ## Current implementation
-`sysCall` currently provides:
-- thread timing helpers (`sc_threadSetSTC`, `sc_threadGetSTC`, `sc_handYield`),
+`sysCall` currently groups:
+- thread timing/yield helpers,
 - global status flags,
-- error catalog API (`err_getMessage`),
-- GPIO logical signal API (`gpio_signal*`).
+- error catalog access,
+- logical GPIO operations (via `sc_gpio`).
 
-It acts as a thin wrapper layer over `sysCore` and HAL/user-facing generated headers.
+It remains intentionally thin and delegates stateful policy to sysCore.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Centralized system-facing API for upper layers.
-- Lightweight wrappers keep code size low.
-- Error centralization improves diagnostics consistency.
+- Single API surface for upper layers reduces direct kernel/HAL coupling.
+- Keeps call paths lightweight for constrained targets.
+- Pairs naturally with interface-defined data contracts.
 
-### Weaknesses (layer leaks / dependency inversion risk)
-- Several syscalls are near-pass-through helpers; policy remains spread in callers.
-- `sc_flagGet` implementation mutates status during read (`&=`), likely unintended and risky.
-- GPIO syscall directly mirrors HAL calls, exposing low-level semantics without permission/ownership model.
-- Mixed concerns (thread control, GPIO, error catalog) in one layer can become monolithic.
+### Remaining weaknesses
+- Domain mixing in one layer (thread + GPIO + diagnostics) can still grow monolithic.
+- Some wrappers are pass-through and do not enforce usage policy strongly.
+- Context-safety contracts (task vs ISR-safe APIs) are not fully formalized.
 
 ## Future improvements for industrial-grade embedded RTOS
-- Future improvements should focus on Split syscalls into domain modules (thread, io, diagnostics)
-- Add privilege-like API contracts (which context can call what, ISR-safe variants)
-- Define non-blocking/error-reporting conventions suitable for safety-critical flows, and Introduce syscall tracing and audit hooks for runtime observability.
+- Split syscalls by domain (`sc_thread`, `sc_io`, `sc_diag`) with explicit context guarantees.
+- Add structured return/error policies (beyond message lookup).
+- Add syscall tracing/audit hooks for runtime observability and misuse detection.

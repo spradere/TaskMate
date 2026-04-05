@@ -120,7 +120,7 @@ Although **no code from ChatGPT is ever copied directly** into the TaskMate sour
 tree, the project would never have reached its current level of maturity without
 the assistance of AI. ChatGPT has been a great tool for structuring ideas,
 learning new concepts, and refining both code and architectural design. It
-provides echnical guidance. Moreover, it enables efficient
+provides technical guidance. Moreover, it enables efficient
 research on related topics by summarising and contextualising complex technical
 information, helping me focus on building rather than endlessly searching.
 
