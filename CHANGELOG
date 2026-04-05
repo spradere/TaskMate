@@ -1,3 +1,6 @@
+	cleanup user/commiter name and email
+	change project license for BSD-2-Clause
+	
 TaskMate 0.27
 
 	remove auto_hal_user.h and auto_hal_system.h, move headers to hal/public

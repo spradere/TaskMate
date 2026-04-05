@@ -141,3 +141,15 @@ git push --mirror origin
 cd /root/code/TaskMate
 mv TaskMate_current TaskMate_old_after_rewrite
 git clone git@codeberg.org:Doul09/TaskMate.git TaskMate_current
+
+##################################################
+# change user/commiter name
+##################################################
+git filter-repo --force --commit-callback '
+if commit.author_name == b"Charlie Root":
+    commit.author_name = b"spradere"
+    commit.author_email = b"spradere@pm.me"
+if commit.committer_name == b"Charlie Root":
+    commit.committer_name = b"spradere"
+    commit.committer_email = b"spradere@pm.me"
+'

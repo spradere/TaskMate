@@ -99,7 +99,6 @@ backup:
 		--include="${BUILD_DIR_TARGET}/build_counter" \
 		--exclude="${BUILD_DIR_TARGET}/*" \
 		--exclude="${BUILD_DIR}/*" --exclude="${LOG_DIR}" \
-		--exclude=".git" \
 		"${USB_DIR}${TM_BACKUP_DIR}/" > "${RSYNC_LOG}"
 
 	# umount
