@@ -14,9 +14,9 @@ Without relying on any external RTOS — everything is built entirely from scrat
 **TaskMate** is structured around a clean and portable architecture designed
 to separate build logic, system logic, and hardware dependencies.
 
-> <span style="color:green"> **Project Stats (v0.26 [^1] )**</span>
+> <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
 >
->  <span style="color:green">422 commits • 120 source files • 7243 lines of code •
+>  <span style="color:green">426 commits • 121 source files • 7273 lines of code •
 > binary size : 6496 bytes (Flash) • ram usage : 2009 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
@@ -33,10 +33,10 @@ to separate build logic, system logic, and hardware dependencies.
 
 Although **no code from ChatGPT is ever copied directly** into the TaskMate source
 tree, the project would never have reached its current level of maturity without
-the assistance of AI. ChatGPT has been an invaluable tool for **structuring ideas,
-learning new concepts, and refining both code and architectural design.** It
-provides **technical guidance**. Moreover, it enables **efficient
-research** on related topics by summarising and contextualising complex technical
+the assistance of AI. ChatGPT has been a great tool for structuring ideas,
+learning new concepts, and refining both code and architectural design. It
+provides echnical guidance. Moreover, it enables efficient
+research on related topics by summarising and contextualising complex technical
 information, helping me focus on building rather than endlessly searching.
 
 See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
@@ -90,8 +90,7 @@ driver contention, or prolonged critical sections.
 
 Here is the current layer diagram for TaskMate. The major task at the moment is to improve the
 architecture by eliminating **layer leaks** and **dependency inversions**. Only layers that share a common
-boundary are allowed to communicate, meaning higher‑level layers can call lower‑level ones
-(in theory, of course—practice is still **under construction**).
+boundary and color are allowed to communicate, from top to bottom.
 
 User tasks can still **benefit from all system features** —
 such as messaging, timing, I/O, and services — but always through indirect calls.
@@ -105,12 +104,12 @@ Starting with version 0.10, TaskMate uses a **modular design model**:
 
 - Drivers, system services, and user tasks are placed in dedicated directories.
 - Each directory provides an init.rc file describing initialisation parameters.
-- These files are parsed at **compile time** by a custom tool: `autoCode`.
+- These files are parsed at compile time by a custom tool: `autoCode`.
 
 The result is **auto-generated code**, without runtime overhead 👍
 
 This approach keeps the flexibility of a dynamic system but ensures that
- **everything is resolved at compile time**, minimising Flash and RAM usage.
+ everything is resolved at compile time, minimising Flash and RAM usage.
 This mechanism defines system initialisation **without manually hard-coding**
 configuration.
 
