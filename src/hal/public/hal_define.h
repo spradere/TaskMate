@@ -10,6 +10,7 @@
  * @file hal_define.h
  * @brief hal define
  */
+
 #ifndef HAL_DEFINE_H
 #define HAL_DEFINE_H
 

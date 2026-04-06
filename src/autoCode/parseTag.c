@@ -28,6 +28,7 @@ static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
 static void writeErrorEnum(const error_catalog_t *errors, FILE *file);
 static void writeModulesList(modules_database_t *data_base, FILE *file);
 static void writeHalDefine(const options_list_t *auto_options, FILE *file);
+static void writeHalInit(const options_list_t *auto_options, FILE *file);
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const options_list_t *auto_options)
@@ -123,6 +124,11 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeHalDefine(auto_options, file_tmp.stream);
 			}
 
+			if( (strcmp(tok.tokens[2], "hal") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
+			{
+				writeHalInit(auto_options, file_tmp.stream);
+			}
+
 			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "count") == 0) )
 			{
 				writeModulesCount(data_base, file_tmp.stream);
@@ -160,16 +166,19 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	fileClose(&file_src, __FILE__, __LINE__);
 	fileClose(&file_tmp, __FILE__, __LINE__);
 }
+
+static void writeHalInit(const options_list_t *auto_options, FILE *file)
+{
+	fprintf(file,"#include \"hal/arch/%s/hal_archInit.h\"\n",auto_options->arch_name);
+	fprintf(file, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", auto_options->mcu_name);
+	fprintf(file,"#include \"hal/board/%s/hal_boardInit.h\"\n\n",auto_options->board_name);
+}
+
 static void writeHalDefine(const options_list_t *auto_options, FILE *file)
 {
-	fprintf(file,
-			"#include \"hal/arch/%s/arch_define.h\"\n",
-			auto_options->arch_name);
-	fprintf(
-		file, "#include \"hal/mcu/%s/mcu_define.h\"\n", auto_options->mcu_name);
-	fprintf(file,
-			"#include \"hal/board/%s/board_define.h\"\n\n",
-			auto_options->board_name);
+	fprintf(file,"#include \"hal/arch/%s/arch_define.h\"\n",auto_options->arch_name);
+	fprintf(file, "#include \"hal/mcu/%s/mcu_define.h\"\n", auto_options->mcu_name);
+	fprintf(file,"#include \"hal/board/%s/board_define.h\"\n\n",auto_options->board_name);
 }
 
 static void writeModulesList(modules_database_t *data_base, FILE *file)

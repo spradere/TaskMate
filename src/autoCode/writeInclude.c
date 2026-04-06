@@ -64,7 +64,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 					auto_options->board_name);
 			break;*/
 
-		case WI_HAL_INIT:
+		/*case WI_HAL_INIT:
 
 			fprintf(file_tmp.stream, "// target init\n");
 			fprintf(file_tmp.stream,
@@ -75,7 +75,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fprintf(file_tmp.stream,
 					"#include \"hal/board/%s/hal_boardInit.h\"\n\n",
 					auto_options->board_name);
-			break;
+			break;*/
 
 		/*case WI_MOD_LIST:
 		{
