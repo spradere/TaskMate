@@ -7,7 +7,7 @@
 > Any change to autoCode must be considered system-critical and tested accordingly.</span>
 
 `autoCode` is a **code generation tool** used by TaskMate to automatically build
-the initialisation code for drivers, services, and user tasks.
+the initialisation code at compile time for drivers, services, and user tasks.
 It consolidates all module definitions from `init.rc` configuration files
 into the generated system files that TaskMate uses at runtime.
 
@@ -16,17 +16,11 @@ into the generated system files that TaskMate uses at runtime.
 ## ❓ How does it work?
 
 `autoCode` is responsible for generating dense, low-level initialisation
-code in files like `sysCore/modules.c`
-
-This generated code is **not meant to be human-friendly**: it uses indexes,
-tables, and “magic numbers” to keep the runtime overhead small and the layout explicit for the compiler.
-
-Instead of relying on the readability of the generated code, TaskMate trusts the **generator** itself:
+code in files like `sysCore/modules_list.h`
 
 - autoCode parses architecture-specific and generic init.rc files (drivers, services, tasks).
 - It validates tags, run levels and module definitions.
 - It prints a detailed, human-readable summary of all discovered modules and their run-level mapping.
-
 
 In other words, autoCode acts both as a **configuration validator** and as
 a **single source of truth** for system initialisation. As long as autoCode
@@ -44,8 +38,6 @@ for the target architecture and how they should be initialised.
 |-------------- |----------------------------------------|------------------------------------------|
 | configuration | `build/autoCode_config`				| hardware target, options, files path |
 | global errors	| `build/errors_all.err`				| Global error catalog		|
-| HAL headers	| `build/files_hal_user`				| List of hal user sources files |
-| 				| `build/files_hal_system`				| List of hal system sources files |
 | Drivers       | `hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers |
 | 				| `hal/mcu/<mcu_name>/drivers_init.rc` | |
 | 				| `hal/board/<borad_name>/drivers_init.rc` | |
@@ -63,20 +55,19 @@ and determines which folder under `hal/` is parsed.
 
 | File                        | Role                                                                 |
 |------------------------------|----------------------------------------------------------------------|
-| `src/sysCall/auto_error.h`      					| Global error catalog header    |
+| `interfaces/error_catalog.h`    					| Global error catalog header    |
+| `sysCall/error.c`      					| Global error catalog data    |
 |								 |															|
-| `src/sysCore/runLevel.h`      					| run level header    |
-| `src/sysCore/runLevel.c`      					| run level data    |
-| `src/sysCall/error.c`      					| Global error catalog data    |
-| `src/sysCall/systemCall.c`      					| Hardware target name arch/mcu/board    |
-| `src/sysCore/modules_define.h`      					| Modules count header    |
-| `src/sysCore/modules.c`      					| Modules data for drivers and threads    |
+| `sysCore/runLevel.h`      					| run level header    |
+| `sysCore/runLevel.c`      					| run level data    |
+| `sysCore/modules_list.h"`				| all modules list |
+| `sysCore/modules_define.h`      					| Modules count header    |
+| `sysCore/modules.c`      					| Modules data for drivers and threads    |
+| `sysCore/hal_init.h`						| List of hardware target `_init.h`       |
 |												|										|
-| `sysCore/auto_threads_list.h"`				| Thread list |
-| `hal/auto_hal_system.h`						| List of hal headers, system type |
-| `hal/auto_hal_user.h`						| List of hal headers, user type |
-| `hal/auto_hal_define.h`						| List of hardware target `_define.h` |
-| `hal/auto_hal_init.h`						| List of hardware target `_init.h`       |
+| `hal/public/hal_sysInfo.c`      					| Hardware target name arch/mcu/board    |
+| `hal/public/hal_define.h`						| List of hardware target `_define.h` |
+
 
 ---
 

@@ -35,7 +35,6 @@
 #include "parseInitrc.h"
 #include "parseTag.h"
 #include "printModules.h"
-#include "writeInclude.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -103,11 +102,6 @@ int main(int argn, const char *argv[])
 	parseTag(&data_base, "src/sysCore/modules_list.h", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/hal/public/hal_define.h", &errors_catalog, &auto_options);
 	parseTag(&data_base, "src/sysCore/hal_init.h", &errors_catalog, &auto_options);
-
-	// write headers
-	//writeInclude(&data_base, WI_MOD_LIST, "src/sysCore/auto_modules_list.h", &auto_options);
-	//writeInclude(&data_base, WI_HAL_DEFINE, "src/hal/public/auto_hal_define.h", &auto_options);
-	//writeInclude(&data_base, WI_HAL_INIT, "src/sysCore/auto_hal_init.h", &auto_options);
 
 	// print all info about modules
 	printModules(&data_base);
