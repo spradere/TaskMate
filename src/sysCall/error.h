@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 
-#include "interfaces/auto_error_catalog.h"
+#include "interfaces/error_catalog.h"
 #include "interfaces/tm_string_storage.h"
 
 typedef struct

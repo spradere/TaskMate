@@ -7,7 +7,7 @@
  */
 
 /**
- * @file parseTagDriversInit.c
+ * @file parseTag.c
  * @brief autoCode parseTag implementation.
  *
  */
@@ -24,6 +24,7 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
+static void writeErrorEnum(const error_catalog_t *errors, FILE *file);
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const options_list_t *auto_options)
@@ -102,6 +103,11 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "catalog") == 0) )
 			{
 				writeErrorCatalog(errors, file_tmp.stream);
+			}
+
+			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "enum") == 0) )
+			{
+				writeErrorEnum(errors, file_tmp.stream);
 			}
 
 			if( (strcmp(tok.tokens[2], "system") == 0) && (strcmp(tok.tokens[3], "info") == 0) )
@@ -305,4 +311,18 @@ static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
 		fprintf(file, "\t{&err%i, %i},\n", i, errors->catalog[i].critical);
 	}
 	fprintf(file, "};\n");
+}
+
+static void writeErrorEnum(const error_catalog_t *errors, FILE *file)
+{
+	// write errors enum
+	fprintf(file, "typedef enum\n");
+	fprintf(file, "{\n");
+
+	for( int i = 0; i < errors->error_count; i++ )
+	{
+		fprintf(file, "\t%s,\n", errors->catalog[i].name);
+	}
+	fprintf(file, "\tERROR_COUNT\n");
+	fprintf(file, "} err_codes_t;\n\n");
 }

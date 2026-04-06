@@ -17,7 +17,7 @@
 #include "fileUtility.h"
 #include "tokenizer.h"
 
-void globalError(const char *src_name, error_catalog_t *errors, const char *dest_name)
+void globalError(const char *src_name, error_catalog_t *errors)
 {
 	msgInfo("open file.err <%s>", src_name);
 
@@ -27,39 +27,39 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	file_src.name = (char *)src_name;
 	fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__);
 
-	file_t file_dest;
+	/*file_t file_dest;
 	fileInit(&file_dest);
 	file_dest.name = (char *)dest_name;
 	fileOpen(&file_dest, "r", FILE_CREATE, __FILE__, __LINE__);
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
-	fileMakeTmp(dest_name, &file_tmp, __FILE__, __LINE__);
+	fileMakeTmp(dest_name, &file_tmp, __FILE__, __LINE__);*/
 
 	// write statements
-	printLicenceHeader(file_tmp.stream);
-	printWarningHeader(file_tmp.stream);
+	//printLicenceHeader(file_tmp.stream);
+	//printWarningHeader(file_tmp.stream);
 
-	fprintf(file_tmp.stream, "/**\n");
-	fprintf(file_tmp.stream, " * @file %s\n", dest_name);
-	fprintf(file_tmp.stream, " * @brief autoCode generated file\n");
-	fprintf(file_tmp.stream, " */\n");
+	//fprintf(file_tmp.stream, "/**\n");
+	//fprintf(file_tmp.stream, " * @file %s\n", dest_name);
+	//fprintf(file_tmp.stream, " * @brief autoCode generated file\n");
+	//fprintf(file_tmp.stream, " */\n");
 
-	printClangFormatOff(file_tmp.stream);
+	//printClangFormatOff(file_tmp.stream);
 
 	// generate multiple include guard name
-	char guard_name[BYTE_INDEX];
-	generateGuardName(dest_name, guard_name);
+	//char guard_name[BYTE_INDEX];
+	//generateGuardName(dest_name, guard_name);
 
-	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
-	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
+	//fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
+	//fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 
-	fprintf(file_tmp.stream, "typedef enum\n");
+	/*fprintf(file_tmp.stream, "typedef enum\n");
 	fprintf(file_tmp.stream, "{\n");
 	fprintf(file_tmp.stream, "\tERROR_LOW,\n");
 	fprintf(file_tmp.stream, "\tERROR_MID,\n");
 	fprintf(file_tmp.stream, "\tERROR_HIGH\n");
-	fprintf(file_tmp.stream, "} err_critical_t;\n\n");
+	fprintf(file_tmp.stream, "} err_critical_t;\n\n");*/
 
 	// read form source
 	int file_src_line_number = 0;
@@ -123,7 +123,7 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	}
 
 	// write errors enum
-	fprintf(file_tmp.stream, "typedef enum\n");
+	/*fprintf(file_tmp.stream, "typedef enum\n");
 	fprintf(file_tmp.stream, "{\n");
 
 	for( int i = 0; i < errors->error_count; i++ )
@@ -131,16 +131,16 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 		fprintf(file_tmp.stream, "\t%s,\n", errors->catalog[i].name);
 	}
 	fprintf(file_tmp.stream, "\tERROR_COUNT\n");
-	fprintf(file_tmp.stream, "} err_codes_t;\n\n");
+	fprintf(file_tmp.stream, "} err_codes_t;\n\n");*/
 
 	// end
 
-	printClangFormatOn(file_tmp.stream);
-	fprintf(file_tmp.stream, "\n#endif\n");
+	//printClangFormatOn(file_tmp.stream);
+	//fprintf(file_tmp.stream, "\n#endif\n");
 
-	fileCmpReplace(&file_dest, &file_tmp);
+	//fileCmpReplace(&file_dest, &file_tmp);
 
 	fileClose(&file_src, __FILE__, __LINE__);
-	fileClose(&file_dest, __FILE__, __LINE__);
-	fileClose(&file_tmp, __FILE__, __LINE__);
+	//fileClose(&file_dest, __FILE__, __LINE__);
+	//fileClose(&file_tmp, __FILE__, __LINE__);
 }

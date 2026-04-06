@@ -51,7 +51,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 	switch( type )
 	{
-		case INCLUDE_HAL_DEFINE:
+		case WI_HAL_DEFINE:
 
 			fprintf(file_tmp.stream, "// target define\n");
 			fprintf(file_tmp.stream,
@@ -64,7 +64,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 					auto_options->board_name);
 			break;
 
-		case INCLUDE_HAL_INIT:
+		case WI_HAL_INIT:
 
 			fprintf(file_tmp.stream, "// target init\n");
 			fprintf(file_tmp.stream,
@@ -77,7 +77,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 					auto_options->board_name);
 			break;
 
-		case INCLUDE_MODULES_LIST:
+		case WI_MOD_LIST:
 		{
 			const module_type_t *mod = &data_base->modules_type[MOD_SERVICES_ID];
 
