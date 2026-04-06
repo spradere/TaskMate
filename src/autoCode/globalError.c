@@ -40,6 +40,11 @@ void globalError(const char *src_name, error_catalog_t *errors, const char *dest
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
 
+	fprintf(file_tmp.stream, "/**\n");
+	fprintf(file_tmp.stream, " * @file %s\n", dest_name);
+	fprintf(file_tmp.stream, " * @brief autoCode generated file\n");
+	fprintf(file_tmp.stream, " */\n");
+
 	printClangFormatOff(file_tmp.stream);
 
 	// generate multiple include guard name

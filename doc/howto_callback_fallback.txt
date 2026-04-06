@@ -1,13 +1,15 @@
 1. low/x.h
 
-	+typedef void (*low_xCallback_t)(void);
-	+void low_xSetCallback(low_xCallback_t func_ptr);
+	typedef type low_xCallback_func_t(type var);
+	typedef low_xCallback_func_t *low_xCallback_ptr_t;
+
+	+void low_xSetCallback(low_xCallback_ptr_t func_ptr);
 
 2. low/x.c
 
-	+static low_xCallback_t callback = NULL;
+	+static low_xCallback_ptr_t callback = NULL;
 
-	+void low_xSetCallback(hal_timer1Callback_t func_ptr)
+	+void low_xSetCallback(hal_timer1Callback_ptr_t func_ptr)
 	+{
 		+callback = func_ptr;
 	+}
@@ -25,10 +27,14 @@
 
 	+#include "low/x.h"
 
+	static low_xCallBack_func_t yFunc;
+
 	+void high_yInit(void)
 	+{
 		+low_xSetCallback(yFunc);
 	+}
+
+	yFunc(){}
 
 5. system init
 

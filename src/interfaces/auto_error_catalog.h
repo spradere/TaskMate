@@ -11,6 +11,10 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+/**
+ * @file src/interfaces/auto_error_catalog.h
+ * @brief autoCode generated file
+ */
 // clang-format off
 #ifndef AUTO_ERROR_CATALOG_H
 #define AUTO_ERROR_CATALOG_H
