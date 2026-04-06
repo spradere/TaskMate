@@ -130,7 +130,7 @@ See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
 
 ## ️📜 License
 
-This software is distributed under the **BSD 2-Clause License**.
+This software is distributed under the **BSD-2-Clause License**.
 
 You may use, modify, and redistribute it in source or binary form,
 provided that you keep the copyright notice, license conditions,
