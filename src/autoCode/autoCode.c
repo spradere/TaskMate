@@ -11,11 +11,11 @@
  * @brief autoCode implementation.
  *
  * - Simple and reliable, read plain text init.rc files
- * - Write code for #include / static allocation / initialisation via in code
+ * - Write code for #include / static allocation / initialisation directly in code
  * tag system
  *
  * @note
- * tag format are one line C comment // [tag] <object> <action>
+ * tag format is a one-line C comment: // [tag] <object> <action>
  *
  */
 

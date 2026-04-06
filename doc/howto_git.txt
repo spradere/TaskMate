@@ -143,7 +143,7 @@ mv TaskMate_current TaskMate_old_after_rewrite
 git clone git@codeberg.org:Doul09/TaskMate.git TaskMate_current
 
 ##################################################
-# change user/commiter name
+# change user/committer name
 ##################################################
 git filter-repo --force --commit-callback '
 if commit.author_name == b"Charlie Root":

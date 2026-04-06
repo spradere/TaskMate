@@ -13,8 +13,8 @@ At a much smaller scale and within my own limits, this project is also a way to 
 step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
-TaskMate operating system is designed for microcontrollers, reliability and modularity are constraints
-that guides every design choice. Architecture is structured to maintain a clear separation between build logic,
+TaskMate operating system is designed for microcontrollers; reliability and modularity are constraints
+that guide every design choice. Its architecture is structured to maintain a clear separation between build logic,
 system behavior, and hardware dependencies, ensuring both portability and maintainability.
 
 > <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
@@ -121,7 +121,7 @@ tree, the project would never have reached its current level of maturity without
 the assistance of AI. ChatGPT has been a great tool for structuring ideas,
 learning new concepts, and refining both code and architectural design. It
 provides technical guidance. Moreover, it enables efficient
-research on related topics by summarising and contextualising complex technical
+research on related topics by summarizing and contextualizing complex technical
 information, helping me focus on building rather than endlessly searching.
 
 See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
@@ -167,4 +167,3 @@ strengths and weaknesses of source code, and future improvements.
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 
 [^1]: ⚠️ Warning : Versions 1.37, 2.71, 3.14 and 4.2 are intentionally skipped. Universe backward compatibility constraints apply.
-
