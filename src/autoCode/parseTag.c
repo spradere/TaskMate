@@ -24,7 +24,9 @@ static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
 static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
 static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
+
 static void writeErrorEnum(const error_catalog_t *errors, FILE *file);
+static void writeModulesList(modules_database_t *data_base, FILE *file);
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const options_list_t *auto_options)
@@ -120,6 +122,10 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 				writeModulesCount(data_base, file_tmp.stream);
 			}
 
+			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "list") == 0) )
+			{
+				writeModulesList(data_base, file_tmp.stream);
+			}
 			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
 				(strcmp(tok.tokens[3], "define") == 0) )
 			{
@@ -147,6 +153,32 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 	fileClose(&file_src, __FILE__, __LINE__);
 	fileClose(&file_tmp, __FILE__, __LINE__);
+}
+
+static void writeModulesList(modules_database_t *data_base, FILE *file)
+{
+	module_type_t *mod = &data_base->modules_type[MOD_SERVICES_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		fprintf(file, "#include \"services/%s.h\"\n", mod->modules[i].name);
+	}
+	fprintf(file, "\n");
+
+	mod = &data_base->modules_type[MOD_TASKS_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		fprintf(file, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+	}
+	fprintf(file, "\n");
+
+	mod = &data_base->modules_type[MOD_DRIVERS_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		fprintf(file, "#include \"hal/public/%s.h\"\n", mod->modules[i].name);
+	}
 }
 
 static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)

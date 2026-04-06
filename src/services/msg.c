@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3autoCode err", MSG_TO_LCD);
+		msgWritreText(chan, "\3autoCode mod list", MSG_TO_LCD);
 	}
 
 	msgProcess();
