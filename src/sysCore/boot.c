@@ -15,8 +15,8 @@
 #include "sysCore/boot.h"
 
 #include "hal/public/hal_usart.h"
-#include "sysCore/hal_init.h"
 #include "sysCore/gpio.h"
+#include "sysCore/hal_init.h"
 #include "sysCore/modules.h"
 #include "sysCore/runLevel.h"
 #include "tm_libc/tm_syslog.h"
