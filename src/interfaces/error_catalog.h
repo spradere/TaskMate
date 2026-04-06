@@ -11,7 +11,6 @@
  * @brief error catalog
  */
 
-
 #ifndef ERROR_CATALOG_H
 #define ERROR_CATALOG_H
 
