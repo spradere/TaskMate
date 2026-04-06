@@ -11,6 +11,10 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+/**
+ * @file src/sysCore/auto_hal_init.h
+ * @brief autoCode generated file
+ */
 #ifndef AUTO_HAL_INIT_H
 #define AUTO_HAL_INIT_H
 
