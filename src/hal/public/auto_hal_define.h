@@ -11,6 +11,10 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+/**
+ * @file src/hal/public/auto_hal_define.h
+ * @brief autoCode generated file
+ */
 #ifndef AUTO_HAL_DEFINE_H
 #define AUTO_HAL_DEFINE_H
 

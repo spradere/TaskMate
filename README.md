@@ -14,8 +14,8 @@ step—the kind of questions and discoveries that shaped early systems like Unix
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
 TaskMate operating system is designed for microcontrollers; reliability and modularity are constraints
-that guide every design choice. Its architecture is structured to maintain a clear separation between build logic,
-system behavior, and hardware dependencies, ensuring both portability and maintainability.
+that guide design choice. Its architecture is structured to maintain a clear separation between build
+logic, system behavior, and hardware dependencies, ensuring both portability and maintainability.
 
 > <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
 >

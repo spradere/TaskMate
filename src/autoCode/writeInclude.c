@@ -39,6 +39,11 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 	printLicenceHeader(file_tmp.stream);
 	printWarningHeader(file_tmp.stream);
 
+	fprintf(file_tmp.stream, "/**\n");
+	fprintf(file_tmp.stream, " * @file %s\n", file_name);
+	fprintf(file_tmp.stream, " * @brief autoCode generated file\n");
+	fprintf(file_tmp.stream, " */\n");
+
 	fprintf(file_tmp.stream, "#ifndef %s\n", guard_name);
 	fprintf(file_tmp.stream, "#define %s\n\n", guard_name);
 

@@ -11,6 +11,10 @@
 // ! any changes will be lost         !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+/**
+ * @file src/sysCore/auto_modules_list.h
+ * @brief autoCode generated file
+ */
 #ifndef AUTO_MODULES_LIST_H
 #define AUTO_MODULES_LIST_H
 
