@@ -11,8 +11,8 @@
  * @brief modules list
  */
 
-#ifndef AUTO_MODULES_LIST_H
-#define AUTO_MODULES_LIST_H
+#ifndef MODULES_LIST_H
+#define MODULES_LIST_H
 
 // [autoCode_tag] modules list
 // clang-format off
