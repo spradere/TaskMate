@@ -1,4 +1,4 @@
-	cleanup user/commiter name and email
+	clean up user/committer name and email
 	change project license for BSD-2-Clause
 	
 TaskMate 0.27
@@ -16,7 +16,7 @@ TaskMate 0.26
 	move const string to ROM
 	fix i2c + external rtc
 	add system log + tm_vsnprintf()
-	hal I2C refactor, address maping
+	hal I2C refactor, address mapping
 	update doc due to major refactor
 
 TaskMate 0.25
@@ -123,7 +123,7 @@ TaskMate 0.6
 
 TaskMate 0.5
 
-	test USART comm, must use another usart to don't mess with USB bootloader / in system programmer
+	test USART communication; must use another USART to avoid interfering with the USB bootloader / system programmer
 
 TaskMate 0.4
 
