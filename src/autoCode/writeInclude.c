@@ -51,7 +51,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 
 	switch( type )
 	{
-		case WI_HAL_DEFINE:
+		/*case WI_HAL_DEFINE:
 
 			fprintf(file_tmp.stream, "// target define\n");
 			fprintf(file_tmp.stream,
@@ -62,7 +62,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 			fprintf(file_tmp.stream,
 					"#include \"hal/board/%s/board_define.h\"\n\n",
 					auto_options->board_name);
-			break;
+			break;*/
 
 		case WI_HAL_INIT:
 
