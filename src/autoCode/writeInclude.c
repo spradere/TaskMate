@@ -77,7 +77,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 					auto_options->board_name);
 			break;
 
-		case WI_MOD_LIST:
+		/*case WI_MOD_LIST:
 		{
 			const module_type_t *mod = &data_base->modules_type[MOD_SERVICES_ID];
 
@@ -102,7 +102,7 @@ void writeInclude(const modules_database_t *data_base, include_type_t type, cons
 				fprintf(file_tmp.stream, "#include \"hal/public/%s.h\"\n", mod->modules[i].name);
 			}
 		}
-		break;
+		break;*/
 
 		default:
 			msgError("unrecognised type %i", type);
