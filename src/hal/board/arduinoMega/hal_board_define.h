@@ -7,7 +7,7 @@
  */
 
 /**
- * @file board_define.h
+ * @file hal_board_define.h
  * @brief arduinoMega board_define header declarations.
  *
  */

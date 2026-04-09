@@ -17,7 +17,7 @@
 
 #include <stdbool.h>
 
-#include "hal/mcu/atmega2560/mcu_define.h"
+#include "hal/mcu/atmega2560/hal_mcu_define.h"
 
 typedef struct
 {
