@@ -18,7 +18,7 @@
 #include <avr/io.h> // get SP
 #include <stdint.h>
 
-#include "hal/arch/avr8/arch_define.h"
+#include "hal/arch/avr8/hal_arch_define.h"
 
 static inline __attribute__((always_inline)) void hal_setStackPointer(hal_stack_word_t *sp)
 {
