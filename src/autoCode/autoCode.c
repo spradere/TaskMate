@@ -74,10 +74,10 @@ int main(int argn, const char *argv[])
 	char mcu_initrc_path[BYTE_INDEX];
 	char board_initrc_path[BYTE_INDEX];
 
-	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/arch_init.rc", auto_options.arch_name);
-	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/mcu_init.rc", auto_options.mcu_name);
+	snprintf(arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/hal_arch_init.rc", auto_options.arch_name);
+	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/hal_mcu_init.rc", auto_options.mcu_name);
 	snprintf(
-		board_initrc_path, BYTE_INDEX, "src/hal/board/%s/board_init.rc", auto_options.board_name);
+		board_initrc_path, BYTE_INDEX, "src/hal/board/%s/hal_board_init.rc", auto_options.board_name);
 
 	parseInitrc(MOD_DRIVERS_ID, &data_base, arch_initrc_path);
 	parseInitrc(MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
