@@ -17,7 +17,7 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "hal/mcu/atmega2560/mcu_define.h" // get i2c frequency
+#include "hal/mcu/atmega2560/hal_mcu_define.h" // get i2c frequency
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)

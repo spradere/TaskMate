@@ -15,7 +15,7 @@
 #ifndef HAL_TIMERSCHED_IMPL_H
 #define HAL_TIMERSCHED_IMPL_H
 
-#include "hal/arch/avr8/arch_define.h"
+#include "hal/arch/avr8/hal_arch_define.h"
 
 typedef hal_stack_word_t *hal_timerSchedCallback_func_t(hal_stack_word_t *stack_pointer);
 typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
