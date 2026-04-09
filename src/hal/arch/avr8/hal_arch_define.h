@@ -7,7 +7,7 @@
  */
 
 /**
- * @file arch_define.h
+ * @file hal_arch_define.h
  * @brief avr8 arch_define header declarations.
  *
  */

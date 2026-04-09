@@ -40,7 +40,7 @@ TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00
 .include "${MAKE_DIR}/editors.mk"
 
 # Make hardware specific
-.include "${SRC_DIR}/hal/arch/${ARCH}/arch_make.mk"
-.include "${SRC_DIR}/hal/mcu/${MCU}/mcu_make.mk"
-.include "${SRC_DIR}/hal/board/${BOARD}/board_make.mk"
+.include "${SRC_DIR}/hal/arch/${ARCH}/hal_arch_make.mk"
+.include "${SRC_DIR}/hal/mcu/${MCU}/hal_mcu_make.mk"
+.include "${SRC_DIR}/hal/board/${BOARD}/hal_board_make.mk"
 
