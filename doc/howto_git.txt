@@ -145,6 +145,15 @@ git clone git@codeberg.org:Doul09/TaskMate.git TaskMate_current
 ##################################################
 # change user/committer name
 ##################################################
+
+# 1 test
+git config --global --list | grep user
+git config --list | grep user
+git remote -v
+git branch -vv
+git log --format="%h %an <%ae> | %cn <%ce>" --all | less
+
+# 2 update
 git filter-repo --force --commit-callback '
 if commit.author_name == b"Charlie Root":
     commit.author_name = b"spradere"
