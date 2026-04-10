@@ -16,6 +16,7 @@
 #define PANIC_H
 
 #include "hal/public/hal_context.h"
+#include "hal/public/hal_int.h"
 #include "hal/public/hal_usart.h"
 
 #define panic(msg)                                 \
