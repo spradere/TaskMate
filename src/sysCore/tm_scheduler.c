@@ -15,9 +15,9 @@
 #include "sysCore/tm_scheduler.h"
 
 #include <stdint.h>
-#include <util/atomic.h>
 
 #include "hal/public/hal_context.h"
+#include "hal/public/hal_int.h"
 #include "hal/public/hal_stack.h"
 #include "hal/public/hal_timerSched.h"
 #include "hal/public/panic.h"
