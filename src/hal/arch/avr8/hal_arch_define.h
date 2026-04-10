@@ -22,6 +22,7 @@
 
 // stack related size
 typedef uint8_t hal_stack_word_t;
+typedef uint8_t hal_irq_sate_t;
 
 // avr8 port structure
 typedef struct
