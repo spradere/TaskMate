@@ -1,0 +1,28 @@
+/*
+ * TaskMate Project
+ * (c) 2026 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
+ * See the LICENSE file for full license terms.
+ */
+
+/**
+ * @file hal_atomic.h
+ * @brief public hal_atomic header declarations.
+ *
+ */
+
+#ifndef HAL_ATOMIC_H
+#define HAL_ATOMIC_H
+
+#define HAL_ATOMIC 0
+
+#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+	#include "hal/arch/avr8/hal_atomic_impl.h"
+	#undef HAL_ATOMIC
+	#define HAL_ATOMIC 1
+#endif
+
+_Static_assert(HAL_ATOMIC,
+			   "No hal implementation for atomic block on selected hardware target.");
+#endif
