@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3hal_ prefix ", MSG_TO_LCD);
+		msgWritreText(chan, "\3hal/arch int 10 ", MSG_TO_LCD);
 	}
 
 	msgProcess();

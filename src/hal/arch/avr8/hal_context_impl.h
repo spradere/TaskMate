@@ -101,21 +101,6 @@ static inline __attribute__((always_inline)) void hal_contextRestore(void)
 	asm volatile(AVR8_POP_ALL_REGS);
 }
 
-static inline __attribute__((always_inline)) void hal_returnFromInterupt(void)
-{
-	asm volatile("reti \n\t");
-}
-
-static inline __attribute__((always_inline)) void hal_setGlobalInterupt(void)
-{
-	asm volatile("sei \n\t");
-}
-
-static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void)
-{
-	asm volatile("cli \n\t");
-}
-
 void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 						   hal_stack_word_t *stack_top);
 

@@ -16,6 +16,7 @@
 
 #include "sysCall/sysCall.h"
 
+// TODO implement hal_atomic and remove util/atomic
 #include <util/atomic.h>
 
 #include "sysCore/modules.h"
