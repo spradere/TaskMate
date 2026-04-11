@@ -56,7 +56,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "[msg] canal test to USART\n", MSG_TO_USART);
+		msgWriteText(chan, "[msg] canal test to USART\n", MSG_TO_USART);
 	}
 
 	msgProcess();
@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWritreText(chan, "\3hal atomic 10 ", MSG_TO_LCD);
+		msgWriteText(chan, "\3names inco 10 ", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -98,7 +98,7 @@ void msgFreeChannel(uint8_t channel)
 	channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_IN_USE);
 }
 
-void msgWritreText(uint8_t channel, const char *msg, uint8_t dest)
+void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
 {
 	// TODO wait for MSG_FLAG_SEND here to avoid overwriting the message
 	// char debug[64];

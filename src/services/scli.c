@@ -30,7 +30,7 @@ void scli(void)
 
 	if( msgRequestChannel(&scli_msg_channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(scli_msg_channel, "[scli] ready to work\n", MSG_TO_USART);
+		msgWriteText(scli_msg_channel, "[scli] ready to work\n", MSG_TO_USART);
 	}
 
 	while( 1 )
@@ -51,7 +51,7 @@ static void scliEcho(void)
 		uint8_t i = 0;
 		char line[128];
 
-		// fail ! msgWritreText(scli_msg_channel, "[scli] receive :", MSG_TO_USART);
+		// fail ! msgWriteText(scli_msg_channel, "[scli] receive :", MSG_TO_USART);
 
 		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line) - 1)) )
 		{
@@ -59,6 +59,6 @@ static void scliEcho(void)
 		}
 		line[i] = 0;
 
-		msgWritreText(scli_msg_channel, line, MSG_TO_USART);
+		msgWriteText(scli_msg_channel, line, MSG_TO_USART);
 	}
 }

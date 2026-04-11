@@ -28,7 +28,7 @@
 void msg(void);
 
 err_codes_t msgRequestChannel(uint8_t *channel_id);
-void msgWritreText(uint8_t channel_id, const char *msg, uint8_t dest);
+void msgWriteText(uint8_t channel_id, const char *msg, uint8_t dest);
 void msgFreeChannel(uint8_t channel);
 
 #endif

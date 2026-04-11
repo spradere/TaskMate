@@ -7,7 +7,7 @@ The dedicated `interfaces/` layer appeared as TaskMate matured toward portabilit
 `interfaces/` now acts as the canonical portability contract layer:
 - platform-neutral GPIO contracts (`gpio_signals.h`, `gpio_commons.h`),
 - shared system-wide constants and compile options (`macros.h`, `options.h`),
-- generated global catalogs consumed across layers (`auto_error_catalog.h`).
+- generated global catalogs consumed across layers (`error_catalog.h`).
 
 Rules are now clearer in practice: interfaces define data contracts, HAL implements them, and upper layers consume them through sysCore/sysCall APIs without pulling hardware details into the contract layer.
 
