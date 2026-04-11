@@ -15,19 +15,19 @@
 #ifndef HAL_ATOMIC_IMPL_H
 #define HAL_ATOMIC_IMPL_H
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/io.h>
 
-#include "hal/arch/avr8/hal_arch_define.h" // get hal_irq_state_t
+#include "hal/arch/avr8/hal_arch_define.h" // get hal_atomic_state_t
 
-static inline __attribute__((always_inline)) hal_irq_sate_t hal_atomicStart(void)
+static inline __attribute__((always_inline)) hal_atomic_sate_t hal_atomicStart(void)
 {
-	hal_irq_sate_t state = SREG;
+	hal_atomic_sate_t state = SREG;
 	cli();
 	return state;
 }
 
-static inline __attribute__((always_inline)) void hal_atomicEnd(hal_irq_sate_t state)
+static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_sate_t state)
 {
 	SREG = state;
 }

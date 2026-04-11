@@ -10,17 +10,11 @@
  * @file sysCall.c
  * @brief sysCall implementation.
  *
- * @warning This file contains ATOMIC material !
- *
  */
 
 #include "sysCall/sysCall.h"
 
-// TODO implement hal_atomic and remove util/atomic
-//#include <util/atomic.h>
-
 #include "hal/public/hal_atomic.h"
-
 #include "sysCore/modules.h"
 #include "sysCore/tm_scheduler.h"
 
@@ -29,20 +23,19 @@ static uint8_t system_status = 0;
 void sc_threadSetSTC(uint16_t count)
 {
 	// ATOMIC_BLOCK(ATOMIC_FORCEON) { mod_threadSetSTC(count); }
-	hal_irq_sate_t state = hal_atomicStart();
+	hal_atomic_sate_t state = hal_atomicStart();
 	mod_threadSetSTC(count);
 	hal_atomicEnd(state);
-
 }
 
 uint16_t sc_threadGetSTC(void)
 {
-	//ATOMIC_BLOCK(ATOMIC_FORCEON) { return mod_threadGetSTC(); }
-	hal_irq_sate_t state = hal_atomicStart();
+	// ATOMIC_BLOCK(ATOMIC_FORCEON) { return mod_threadGetSTC(); }
+	hal_atomic_sate_t state = hal_atomicStart();
 	uint16_t timer = mod_threadGetSTC();
 	hal_atomicEnd(state);
 
-	return timer; // dummy return to avoid -Wno-return-type
+	return timer;
 }
 
 void sc_handYield(void)

@@ -12,7 +12,7 @@
  *
  */
 
-#ifndef BOARD_DEFINE_H
-#define BOARD_DEFINE_H
+#ifndef HAL_BOARD_DEFINE_H
+#define HAL_BOARD_DEFINE_H
 
 #endif
