@@ -142,13 +142,9 @@ which makes them fully portable.
 
 ## 🧩 Adding a new hardware target (ARCH / MCU / BOARD)
 
-All new driver header and source files will be automatically added to
-hal/auto_hal_user.h or hal/auto_hal_system.h by using tags:
 
-- // @hal_user
-- // @hal_system
+> TODO add hal/public
 
-autoCode will read these tags and write the HAL meta-header files.
 
 1️⃣ **New architecture (ARCH)**
 

@@ -30,10 +30,10 @@ vim_mk: ${TAGS_STAMP}
 	vim ${MK_FILES}
 .PHONY: vim_mk
 
-vim_doc:
+geany_doc:
 #@ [global] open Vim with all documentation files .md .txt
-	vim ${DOCS}
-.PHONY: vim_doc
+	geany ${DOCS}
+.PHONY: geany_doc
 
 vim_autoCode: ${TAGS_STAMP}
 #@ [global] open Vim with all autoCode sources files .c .h
