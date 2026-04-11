@@ -23,6 +23,5 @@
 	#define HAL_ATOMIC 1
 #endif
 
-_Static_assert(HAL_ATOMIC,
-			   "No hal implementation for atomic block on selected hardware target.");
+_Static_assert(HAL_ATOMIC, "No hal implementation for atomic block on selected hardware target.");
 #endif

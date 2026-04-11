@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef ARCH_DEFINE_H
-#define ARCH_DEFINE_H
+#ifndef HAL_ARCH_DEFINE_H
+#define HAL_ARCH_DEFINE_H
 
 #include <stdint.h>
 
@@ -22,7 +22,7 @@
 
 // stack related size
 typedef uint8_t hal_stack_word_t;
-typedef uint8_t hal_irq_sate_t;
+typedef uint8_t hal_atomic_sate_t;
 
 // avr8 port structure
 typedef struct
