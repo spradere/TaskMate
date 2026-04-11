@@ -22,7 +22,7 @@ DOC_DIR = doc
 # Build system options
 .include "${MAKE_DIR}/options.mk"
 
-# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduino_mega
+# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduinoMega
 .include "${MAKE_DIR}/hardware_target.mk"
 BUILD_DIR_TARGET = ${BUILD_DIR}/${ARCH}_${MCU}_${BOARD}
 

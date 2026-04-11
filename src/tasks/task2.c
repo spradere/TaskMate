@@ -26,7 +26,7 @@ void task2(void)
 
 	if( msgRequestChannel(&task2_msg_channel) == ERR_NO_ERROR )
 	{
-		msgWritreText(task2_msg_channel, "[task2] task2 here !\n", MSG_TO_USART);
+		msgWriteText(task2_msg_channel, "[task2] task2 here !\n", MSG_TO_USART);
 	}
 
 	while( 1 )
