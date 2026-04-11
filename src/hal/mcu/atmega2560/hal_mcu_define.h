@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef MCU_DEFINE_H
-#define MCU_DEFINE_H
+#ifndef HAL_MCU_DEFINE_H
+#define HAL_MCU_DEFINE_H
 
 #include <stdint.h>
 

@@ -23,6 +23,5 @@
 	#define HAL_INT 1
 #endif
 
-_Static_assert(HAL_INT,
-			   "No hal implementation for int on selected hardware target.");
+_Static_assert(HAL_INT, "No hal implementation for int on selected hardware target.");
 #endif
