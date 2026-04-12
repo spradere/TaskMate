@@ -132,7 +132,7 @@ void options(const char *file_name, options_list_t *opt)
 		{
 			if( tok.count == 2 )
 			{
-				msgInfo(" parsing %s = %s", tok.tokens[0], tok.tokens[1]);
+				msgInfo("parsing %s = %s", tok.tokens[0], tok.tokens[1]);
 
 				int err = optionCmdDispatch(tok.tokens[0], tok.tokens[1], opt);
 
