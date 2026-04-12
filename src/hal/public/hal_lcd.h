@@ -15,13 +15,12 @@
 #ifndef HAL_LCD_H
 #define HAL_LCD_H
 
-#define HAL_LCD 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/board/arduinoMega/hal_lcd_AMC2004_impl.h"
-	#undef HAL_LCD
-	#define HAL_LCD 1
+	#define HAL_LCD
 #endif
 
-_Static_assert(HAL_LCD, "No hal implementation for lcd on selected hardware target.");
+#if !defined(HAL_LCD)
+    #error "No hal implementation for lcd on selected hardware target."
+#endif
 #endif
