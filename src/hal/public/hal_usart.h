@@ -15,13 +15,12 @@
 #ifndef HAL_USART_H
 #define HAL_USART_H
 
-#define HAL_USART 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/mcu/atmega2560/hal_usart_impl.h"
-	#undef HAL_USART
-	#define HAL_USART 1
+	#define HAL_USART
 #endif
 
-_Static_assert(HAL_USART, "No hal implementation for usart on selected hardware target.");
+#if !defined(HAL_USART)
+    #error "No hal implementation for usart on selected hardware target."
+#endif
 #endif

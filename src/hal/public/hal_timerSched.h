@@ -15,14 +15,12 @@
 #ifndef HAL_TIMERSCHED_H
 #define HAL_TIMERSCHED_H
 
-#define HAL_TIMER_SCHED 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/mcu/atmega2560/hal_timerSched_impl.h"
-	#undef HAL_TIMER_SCHED
-	#define HAL_TIMER_SCHED 1
+	#define HAL_TIMER_SCHED
 #endif
 
-_Static_assert(HAL_TIMER_SCHED,
-			   "No hal implementation for scheduler timer on selected hardware target.");
+#if !defined(HAL_TIMER_SCHED)
+    #error "No hal implementation for scheduler timer on selected hardware target."
+#endif
 #endif
