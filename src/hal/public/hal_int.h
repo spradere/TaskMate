@@ -19,13 +19,12 @@
     #error "NOT ALLOWED INCLUDE : hal_int.h"
 #endif
 
-#define HAL_INT 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/arch/avr8/hal_int_impl.h"
-	#undef HAL_INT
-	#define HAL_INT 1
+	#define HAL_INT
 #endif
 
-_Static_assert(HAL_INT, "No hal implementation for int on selected hardware target.");
+#if !defined(HAL_INT)
+    #error "No hal implementation for int on selected hardware target."
+#endif
 #endif

@@ -15,13 +15,12 @@
 #ifndef HAL_RTC_H
 #define HAL_RTC_H
 
-#define HAL_RTC 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/board/arduinoMega/hal_rtc_ZS042_impl.h"
-	#undef HAL_RTC
-	#define HAL_RTC 1
+	#define HAL_RTC
 #endif
 
-_Static_assert(HAL_RTC, "No hal implementation for rtc on selected hardware target.");
+#if !defined(HAL_RTC)
+    #error "No hal implementation for rtc on selected hardware target."
+#endif
 #endif

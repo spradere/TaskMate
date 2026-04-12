@@ -15,13 +15,12 @@
 #ifndef HAL_TMLIBC_H
 #define HAL_TMLIBC_H
 
-#define HAL_TMLIBC 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
-	#undef HAL_TMLIBC
-	#define HAL_TMLIBC 1
+	#define HAL_TMLIBC
 #endif
 
-_Static_assert(HAL_TMLIBC, "No hal implementation for tm_libc on selected hardware target.");
+#if !defined(HAL_TMLIBC)
+    #error "No hal implementation for tm_libc on selected hardware target."
+#endif
 #endif

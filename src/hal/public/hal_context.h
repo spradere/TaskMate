@@ -19,14 +19,12 @@
     #error "NOT ALLOWED INCLUDE : hal_context.h"
 #endif
 
-#define HAL_CONTEXT 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/arch/avr8/hal_context_impl.h"
-	#undef HAL_CONTEXT
-	#define HAL_CONTEXT 1
+	#define HAL_CONTEXT
 #endif
 
-_Static_assert(HAL_CONTEXT,
-			   "No hal implementation for context switch on selected hardware target.");
+#if !defined(HAL_CONTEXT)
+    #error "No hal implementation for context switch on selected hardware target."
+#endif
 #endif
