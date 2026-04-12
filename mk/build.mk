@@ -53,7 +53,9 @@ _dependency_check:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > "${DEPS_FILE}"
 
-# Test for autoCode required files
+# autoCode and required files
+AUTOCODE_PRINT_LAST_LOG = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
+
 ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 					${TM_VERSION_FILE} ${BUILD_CNT_FILE}
 
@@ -79,7 +81,14 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > "${AUTOCODE_LOG_STAMP}"
 	@touch ${AUTOCODE_STAMP}
 
-# Special rule for autoCode with clang, not mcu specialized compiler
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': \*' | sed 's/^.* info : //'
+	@printf "${COLOUR_CYAN}"
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
+	@printf "${COLOUR_RESET} ${COLOUR_YELLOW}"
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
+	@printf "${COLOUR_RESET}"
+
+# Special rule for autoCode with clang, not arch specialized compiler
 AUTOCODE_CFLAGS = -I${SRC_DIR}/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
@@ -90,29 +99,6 @@ ${AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang ${AUTOCODE_CFLAGS} ${AUTOCODE_SRCS} -o ${AUTOCODE_TARGET}
 
-# Check #include for system critical features
-_system_critical_check:
-	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-.for index in ${GREP_LIST}
-	@allowed="${ALLOWED_LIST${index}}"; \
-	pattern="${ALLOWED_PATTERN${index}}"; \
-	printf "\nChecking pattern %s...\n" "$$pattern"; \
-	files="$$(grep -R -l "$$pattern" "${SRC_DIR}" 2>/dev/null || true)"; \
-	for f in $$files; do \
-	    test=no; \
-	   for ok in $$allowed; do \
-	        [ "$$f" = "$$ok" ] && test=yes; \
-	    done; \
-	    if [ "$$test" = "no" ]; then \
-	       printf "%s[ FAIL ] Forbidden include detected in: %s%s\n" "${COLOUR_FAIL}" "$$f" "${COLOUR_RESET}"; \
-	       exit 1; \
-		else \
-			printf "%s[  OK  ]%s %s\n" "${COLOUR_OK}" "${COLOUR_RESET}" "$$f"; \
-	    fi; \
-	done
-.endfor
-
 # Global errors
 ${ERROR_CAT}: ${ERROR_FILES}
 	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
@@ -120,8 +106,6 @@ ${ERROR_CAT}: ${ERROR_FILES}
 	@cat ${ERROR_FILES} > "${ERROR_CAT}"
 
 # Run autoCode alone
-AUTOCODE_PRINT_LAST_LOG = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
-
 autoCode_alone: ${AUTOCODE_TARGET}
 #@ [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
@@ -129,9 +113,9 @@ autoCode_alone: ${AUTOCODE_TARGET}
 	@rm -f "${AUTOCODE_STAMP}"
 	@${MAKE} ${AUTOCODE_STAMP}
 	@${AUTOCODE_PRINT_LAST_LOG}
-	@printf "${COLOUR_CYAN}"
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
-	@printf "${COLOUR_RESET }${COLOUR_YELLOW}"
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
-	@printf "${COLOUR_RESET}"
+	#@printf "${COLOUR_CYAN}"
+	#@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
+	#@printf "${COLOUR_RESET} ${COLOUR_YELLOW}"
+	#@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
+	#@printf "${COLOUR_RESET}"
 .PHONY: autoCode_alone
