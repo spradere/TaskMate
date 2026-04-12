@@ -23,17 +23,17 @@ CFLAGS_${SRC_DIR}/sysCore/TaskMate.c = \
 
 ALLOWED_PATTERN1 = hal/public/hal_context.h
 ALLOWED_LIST1 = \
-	src/sysCore/modules.c \
-	src/sysCore/tm_scheduler.c
+	${SRC_DIR}/sysCore/modules.c \
+	${SRC_DIR}/sysCore/tm_scheduler.c
 
 ALLOWED_PATTERN2 = hal/public/hal_stack.h
 ALLOWED_LIST2 = \
-	src/sysCore/tm_scheduler.c
+	${SRC_DIR}/sysCore/tm_scheduler.c
 
 ALLOWED_PATTERN3 = hal/public/hal_int.h
 ALLOWED_LIST3 = \
-	src/hal/public/panic.h \
-	src/sysCore/tm_scheduler.c
+	${SRC_DIR}/hal/public/panic.h \
+	${SRC_DIR}/sysCore/tm_scheduler.c
 
 GREP_LIST != cat "${.PARSEDIR}/${.PARSEFILE}" \
 	| grep '^[[:space:]]*ALLOWED_PATTERN[0-9][0-9]*[[:space:]]*=' \

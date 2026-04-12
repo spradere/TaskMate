@@ -16,7 +16,7 @@ headers, based on explicit white list rules. Any unauthorised inclusion immediat
 stops the build, ensuring architectural violations are detected **before compilation.**
 
 
-## 2. Compile-time guards (temporarily out of use due to headers refactor)
+## 2. Compile-time guards
 
 System-critical headers contain defensive compile-time checks. Only explicitly
 authorised modules receive the required preprocessor definitions, preventing both
