@@ -85,7 +85,7 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 	}
 	else
 	{
-		msgInfo("change for the new one tmp -> <%s>", file_old->name);
+		msgInfo("change for the new one, tmp -> <%s>", file_old->name);
 		remove(file_old->name);
 		rename(file_new->name, file_old->name);
 		file_updated++;

@@ -42,15 +42,13 @@
 	@printf "${CC} : " >> "${BUILD_INFO}"
 	@printf "${CC_VER}\n" >> "${BUILD_INFO}"
 
-all: _system_critical_check ${AUTOCODE_STAMP} _dependency_check ${TARGET}
+all: _system_critical_check ${AUTOCODE_STAMP} _dependency ${TARGET}
 #@ [global] System build.
-	@printf "\n%sAll done%s\n\n" \
+	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
 # dependency files used to compile sources if related header or source was edited
-_dependency_check:
-	@printf "\n%sCheck dependency files%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+_dependency:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > "${DEPS_FILE}"
 
 # autoCode and required files
@@ -82,11 +80,12 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@touch ${AUTOCODE_STAMP}
 
 	@${AUTOCODE_PRINT_LAST_LOG} | grep ': \*' | sed 's/^.* info : //'
-	@printf "${COLOUR_CYAN}"
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
-	@printf "${COLOUR_RESET} ${COLOUR_YELLOW}"
+	@printf "${COLOUR_YELLOW}"
 	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
 	@printf "${COLOUR_RESET}"
+
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//' >> "${AUTOCODE_LOG_STAMP}"
+	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//' >> "${AUTOCODE_LOG_STAMP}"
 
 # Special rule for autoCode with clang, not arch specialized compiler
 AUTOCODE_CFLAGS = -I${SRC_DIR}/
