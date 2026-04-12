@@ -58,19 +58,35 @@ ${OBJS}: ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}
 	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
-upload: all
+upload: all _mcu_memory
 #@ [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${BUILD_CNT} "${COLOUR_RESET}"
 	# ELF to hex format
-	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	# RAM usage
-	@printf "\nStatic RAM usage : "
-	avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
-	@printf "\n"
+	@avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# Upload to Atmega
 	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
 .PHONY: upload
+
+# memory usage
+_mcu_memory:
+	@printf "\nStatic RAM usage : \n"
+	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
+	@printf "\n"
+	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf | awk -v flash_total="${FLASH_SIZE}" -v ram_total="${RAM_SIZE}" '\
+	NR==2 { \
+		text  = $$1; \
+		data  = $$2; \
+		bss   = $$3; \
+		flash = text + data; \
+		ram   = data + bss; \
+		flash_pct = (flash / flash_total) * 100; \
+		ram_pct   = (ram / ram_total) * 100; \
+		printf("${COLOUR_WHITE_BOLD}Memory usage\n"); \
+		printf("\tFlash : %d / %d bytes (%.1f%%)\n", flash, flash_total, flash_pct); \
+		printf("\tRAM   : %d / %d bytes (%.1f%%)\n", ram, ram_total, ram_pct); \
+		printf("${COLOUR_RESET}"); \
+	}'
 
 dump: all
 #@ [avr8] Disassemble machine code in .hex and .elf

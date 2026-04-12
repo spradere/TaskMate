@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3names inco 10 ", MSG_TO_LCD);
+		msgWriteText(chan, "\3meme usage 10 ", MSG_TO_LCD);
 	}
 
 	msgProcess();

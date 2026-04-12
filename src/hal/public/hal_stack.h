@@ -24,7 +24,7 @@
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/arch/avr8/hal_stack_impl.h"
 	#undef HAL_STACK
-	#define HAL_STACK 0
+	#define HAL_STACK 1
 #endif
 
 _Static_assert(HAL_STACK, "No hal implementation for stack pointer on selected hardware target.");
