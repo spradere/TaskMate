@@ -14,6 +14,10 @@
 #ifndef HAL_INIT_H
 #define HAL_INIT_H
 
+#if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
+	#error "NOT ALLOWED INCLUDE : hal_init.h"
+#endif
+
 // [autoCode_tag] hal init
 // clang-format off
 /*

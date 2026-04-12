@@ -14,5 +14,5 @@ MCU = atmega2560
 CFLAGS += -mmcu=${MCU}
 
 # atmega2560 flash is 128 kB, PCHH is not implemented in context switch so flash is limited to 64 kB
-FLASH_SIZE=65536
-RAM_SIZE=8192
+FLASH_SIZE_K=64
+RAM_SIZE_K=8

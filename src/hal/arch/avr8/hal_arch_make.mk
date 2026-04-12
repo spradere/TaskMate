@@ -73,15 +73,17 @@ _mcu_memory:
 	@printf "\nStatic RAM usage : \n"
 	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
 	@printf "\n"
-	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf | awk -v flash_total="${FLASH_SIZE}" -v ram_total="${RAM_SIZE}" '\
+	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf | awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
 	NR==2 { \
 		text  = $$1; \
 		data  = $$2; \
 		bss   = $$3; \
 		flash = text + data; \
 		ram   = data + bss; \
-		flash_pct = (flash / flash_total) * 100; \
-		ram_pct   = (ram / ram_total) * 100; \
+		flash_total = flash_total_k * 1024; \
+		ram_total = ram_total_k * 1024; \
+		flash_pct = (flash / (flash_total)) * 100; \
+		ram_pct   = (ram / (ram_total)) * 100; \
 		printf("${COLOUR_WHITE_BOLD}Memory usage\n"); \
 		printf("\tFlash : %d / %d bytes (%.1f%%)\n", flash, flash_total, flash_pct); \
 		printf("\tRAM   : %d / %d bytes (%.1f%%)\n", ram, ram_total, ram_pct); \

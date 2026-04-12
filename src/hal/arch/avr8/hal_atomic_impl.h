@@ -20,14 +20,14 @@
 
 #include "hal/arch/avr8/hal_arch_define.h" // get hal_atomic_state_t
 
-static inline __attribute__((always_inline)) hal_atomic_sate_t hal_atomicStart(void)
+static inline __attribute__((always_inline)) hal_atomic_state_t hal_atomicStart(void)
 {
-	hal_atomic_sate_t state = SREG;
+	hal_atomic_state_t state = SREG;
 	cli();
 	return state;
 }
 
-static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_sate_t state)
+static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_state_t state)
 {
 	SREG = state;
 }
