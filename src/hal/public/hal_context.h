@@ -15,6 +15,10 @@
 #ifndef HAL_CONTEXT_H
 #define HAL_CONTEXT_H
 
+#if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
+    #error "NOT ALLOWED INCLUDE : hal_context.h"
+#endif
+
 #define HAL_CONTEXT 0
 
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)

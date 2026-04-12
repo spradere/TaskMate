@@ -46,7 +46,8 @@ ELF = ${TARGET}.elf
 ${TARGET}: ${OBJS}
 	@printf "\n%sLinking%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	${CC} ${CFLAGS} ${LFLAGS} -o ${ELF} ${OBJS}
+	@${CC} ${CFLAGS} ${LFLAGS} -o ${ELF} ${OBJS}
+	@printf "\t *.o -> ${ELF}\n"
 
 # compile
 ${OBJS}: ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}

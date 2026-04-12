@@ -15,7 +15,8 @@
  * tag system
  *
  * @note
- * tag format is a one-line C comment: // [tag] <object> <action>
+ * tag format is a one-line C comment: // [autoCode_tag] <object> <action>
+ * end tag zone // [/tag]
  *
  */
 
@@ -42,10 +43,6 @@ static void threadCountLevel(modules_database_t *data_base);
 
 int main(int argn, const char *argv[])
 {
-	msgInfo("****************************");
-	msgInfo("* starting autoCode process *");
-	msgInfo("****************************");
-
 	// get options
 	if( argn != 2 )
 	{

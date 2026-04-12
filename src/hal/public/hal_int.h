@@ -15,6 +15,10 @@
 #ifndef HAL_INT_H
 #define HAL_INT_H
 
+#if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
+    #error "NOT ALLOWED INCLUDE : hal_int.h"
+#endif
+
 #define HAL_INT 0
 
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
