@@ -19,7 +19,7 @@
     #error "NOT ALLOWED INCLUDE : hal_stack.h"
 #endif
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(ARCH_avr8)
 	#include "hal/arch/avr8/hal_stack_impl.h"
 	#define HAL_STACK
 #endif

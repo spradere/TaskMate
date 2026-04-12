@@ -15,7 +15,7 @@
 #ifndef HAL_ATOMIC_H
 #define HAL_ATOMIC_H
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(ARCH_avr8)
 	#include "hal/arch/avr8/hal_atomic_impl.h"
 	#define HAL_ATOMIC
 #endif
