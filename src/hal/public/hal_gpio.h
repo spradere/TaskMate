@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_GPIO)
-    #error "No hal implementation for gpio on selected hardware target."
+	#error "No hal implementation for gpio on selected hardware target."
 #endif
 #endif

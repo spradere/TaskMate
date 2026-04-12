@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_TIMERSTC)
-    #error "No hal implementation for Software Time Counter on selected hardware target."
+	#error "No hal implementation for Software Time Counter on selected hardware target."
 #endif
 #endif

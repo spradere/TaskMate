@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_TMLIBC)
-    #error "No hal implementation for tm_libc on selected hardware target."
+	#error "No hal implementation for tm_libc on selected hardware target."
 #endif
 #endif

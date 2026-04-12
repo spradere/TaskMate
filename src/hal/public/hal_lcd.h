@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_LCD)
-    #error "No hal implementation for lcd on selected hardware target."
+	#error "No hal implementation for lcd on selected hardware target."
 #endif
 #endif

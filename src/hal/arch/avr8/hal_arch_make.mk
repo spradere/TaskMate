@@ -71,10 +71,12 @@ upload: all _mcu_memory
 # memory usage
 _mcu_memory:
 	@printf "\nStatic RAM usage : \n"
-	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
-	@printf "\n"
-	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf | awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
-	NR==2 { \
+	@out=$$(avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf); \
+	printf "%s\n" "$$out"; \
+	printf "\n"; \
+	printf "%s\n" "$$out" \
+		| awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
+		NR==2 { \
 		text  = $$1; \
 		data  = $$2; \
 		bss   = $$3; \

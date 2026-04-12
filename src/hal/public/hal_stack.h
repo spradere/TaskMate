@@ -16,7 +16,7 @@
 #define HAL_STACK_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-    #error "NOT ALLOWED INCLUDE : hal_stack.h"
+	#error "NOT ALLOWED INCLUDE : hal_stack.h"
 #endif
 
 #if defined(ARCH_avr8)
@@ -25,6 +25,6 @@
 #endif
 
 #if !defined(HAL_STACK)
-    #error "No hal implementation for stack pointer on selected hardware target."
+	#error "No hal implementation for stack pointer on selected hardware target."
 #endif
 #endif
