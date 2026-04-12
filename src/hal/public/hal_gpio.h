@@ -15,13 +15,12 @@
 #ifndef HAL_GPIO_H
 #define HAL_GPIO_H
 
-#define HAL_GPIO 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/mcu/atmega2560/hal_gpio_impl.h"
-	#undef HAL_GPIO
-	#define HAL_GPIO 1
+	#define HAL_GPIO
 #endif
 
-_Static_assert(HAL_GPIO, "No hal implementation for gpio on selected hardware target.");
+#if !defined(HAL_GPIO)
+    #error "No hal implementation for gpio on selected hardware target."
+#endif
 #endif
