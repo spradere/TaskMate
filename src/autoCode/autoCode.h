@@ -23,6 +23,7 @@
 #include <stdbool.h>
 
 // get TaskMate define
+#define TM_SYSTEM_CRITICAL_ALLOWED
 #include "interfaces/modules_define.h"
 #include "sysCore/runLevel.h"
 

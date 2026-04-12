@@ -11,6 +11,13 @@
  * @brief interfaces modules_define header declarations.
  */
 
+#ifndef MODULES_DEFINE_H
+#define MODULES_DEFINE_H
+
+#if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
+	#error "NOT ALLOWED INCLUDE : modules_define.h"
+#endif
+
 // [autoCode_tag] modules count
 // clang-format off
 /*
@@ -47,3 +54,5 @@
 #define MOD_DRIVER_LOCK 3
 #define MOD_DRIVER_DEAD 4
 #define MOD_DRIVER_INIT 5
+
+#endif

@@ -14,6 +14,10 @@
 #ifndef MODULES_LIST_H
 #define MODULES_LIST_H
 
+#if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
+	#error "NOT ALLOWED INCLUDE : modules_list.h"
+#endif
+
 // [autoCode_tag] modules list
 // clang-format off
 /*
