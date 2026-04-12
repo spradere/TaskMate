@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_I2C)
-    #error "No hal implementation for i2c on selected hardware target."
+	#error "No hal implementation for i2c on selected hardware target."
 #endif
 #endif

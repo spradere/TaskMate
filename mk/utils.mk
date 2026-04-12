@@ -33,12 +33,37 @@ cloc:
 #@ [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} \
-		--exclude-lang=D --exclude-ext=rc,md,txt
+	@out=$$(cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D --exclude-ext=rc,md,txt); \
+	printf "%s\n" "$$out"; \
+	printf "\n"; \
+	printf "%s\n" "$$out" \
+		| awk '/^SUM:/ { \
+		blank   = $$3; \
+		comment = $$4; \
+		code    = $$5; \
+		total   = blank + comment + code; \
+		code_pct    = (code / total) * 100; \
+		comment_pct = (comment / total) * 100; \
+		printf("${COLOUR_WHITE_BOLD}Total lines : %d\n", total); \
+		printf("\tCode    : %d (%.1f%%)\n", code, code_pct); \
+		printf("\tComment : %d (%.1f%%)\n", comment, comment_pct); \
+		printf("${COLOUR_RESET}"); \
+		}'
+
 	@printf "\n%sCount lines of documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} \
-		--exclude-lang=D,make --exclude-ext=rc,c,h
+	@out=$$(cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h); \
+	printf "%s\n" "$$out"; \
+	printf "\n"; \
+	printf "%s\n" "$$out" \
+		| awk '/^SUM:/ { \
+		blank   = $$3; \
+		code    = $$5; \
+		total   = blank + code; \
+		printf("${COLOUR_WHITE_BOLD}Total lines : %d\n", total); \
+		printf("${COLOUR_RESET}"); \
+		}'
+
 .PHONY: cloc
 
 note:

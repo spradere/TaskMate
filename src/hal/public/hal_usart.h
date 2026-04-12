@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_USART)
-    #error "No hal implementation for usart on selected hardware target."
+	#error "No hal implementation for usart on selected hardware target."
 #endif
 #endif

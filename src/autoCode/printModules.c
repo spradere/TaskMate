@@ -18,7 +18,6 @@ void printModules(const modules_database_t *data_base)
 {
 	msgInfo("+++ modules informations +++\n");
 
-
 	msgInfo("found drivers :");
 	const module_type_t *driver = &data_base->modules_type[MOD_DRIVERS_ID];
 	for( int i = 0; i < driver->modules_count; i++ )

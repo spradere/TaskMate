@@ -16,7 +16,7 @@
 #define HAL_INT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-    #error "NOT ALLOWED INCLUDE : hal_int.h"
+	#error "NOT ALLOWED INCLUDE : hal_int.h"
 #endif
 
 #if defined(ARCH_avr8)
@@ -25,6 +25,6 @@
 #endif
 
 #if !defined(HAL_INT)
-    #error "No hal implementation for int on selected hardware target."
+	#error "No hal implementation for int on selected hardware target."
 #endif
 #endif
