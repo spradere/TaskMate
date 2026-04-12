@@ -15,7 +15,7 @@
 #ifndef HAL_GPIO_H
 #define HAL_GPIO_H
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/hal_gpio_impl.h"
 	#define HAL_GPIO
 #endif

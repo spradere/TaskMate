@@ -19,7 +19,7 @@
     #error "NOT ALLOWED INCLUDE : hal_context.h"
 #endif
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(ARCH_avr8)
 	#include "hal/arch/avr8/hal_context_impl.h"
 	#define HAL_CONTEXT
 #endif

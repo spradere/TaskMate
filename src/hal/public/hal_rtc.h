@@ -15,7 +15,7 @@
 #ifndef HAL_RTC_H
 #define HAL_RTC_H
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(BOARD_arduinoMega)
 	#include "hal/board/arduinoMega/hal_rtc_ZS042_impl.h"
 	#define HAL_RTC
 #endif
