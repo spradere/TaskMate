@@ -23,7 +23,7 @@ static uint8_t system_status = 0;
 void sc_threadSetSTC(uint16_t count)
 {
 	// ATOMIC_BLOCK(ATOMIC_FORCEON) { mod_threadSetSTC(count); }
-	hal_atomic_sate_t state = hal_atomicStart();
+	hal_atomic_state_t state = hal_atomicStart();
 	mod_threadSetSTC(count);
 	hal_atomicEnd(state);
 }
@@ -31,7 +31,7 @@ void sc_threadSetSTC(uint16_t count)
 uint16_t sc_threadGetSTC(void)
 {
 	// ATOMIC_BLOCK(ATOMIC_FORCEON) { return mod_threadGetSTC(); }
-	hal_atomic_sate_t state = hal_atomicStart();
+	hal_atomic_state_t state = hal_atomicStart();
 	uint16_t timer = mod_threadGetSTC();
 	hal_atomicEnd(state);
 

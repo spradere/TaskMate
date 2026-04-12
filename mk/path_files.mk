@@ -43,6 +43,7 @@ SRC_DIR_LIST += ${SRC_DIR}/hal/public
 # log files
 AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
 RSYNC_LOG = ${LOG_DIR}/rsync.log
+H_CHECK_LOG = ${LOG_DIR}/headers_check.log
 
 # autoCode
 AUTOCODE_CONFIG = ${BUILD_DIR_TARGET}/autoCode_config
