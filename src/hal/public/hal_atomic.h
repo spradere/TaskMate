@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_ATOMIC)
-    #error "No hal implementation for atomic block on selected hardware target."
+	#error "No hal implementation for atomic block on selected hardware target."
 #endif
 #endif

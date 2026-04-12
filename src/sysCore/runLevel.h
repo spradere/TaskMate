@@ -18,7 +18,7 @@
 #include <stdint.h>
 
 #if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
-    #error "NOT ALLOWED INCLUDE : runLevel.h"
+	#error "NOT ALLOWED INCLUDE : runLevel.h"
 #endif
 
 // run levels definitions

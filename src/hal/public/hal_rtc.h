@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_RTC)
-    #error "No hal implementation for rtc on selected hardware target."
+	#error "No hal implementation for rtc on selected hardware target."
 #endif
 #endif

@@ -21,6 +21,6 @@
 #endif
 
 #if !defined(HAL_TIMER_SCHED)
-    #error "No hal implementation for scheduler timer on selected hardware target."
+	#error "No hal implementation for scheduler timer on selected hardware target."
 #endif
 #endif
