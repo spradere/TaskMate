@@ -15,7 +15,7 @@
 #ifndef HAL_TMLIBC_H
 #define HAL_TMLIBC_H
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/hal_tmlibc_impl.h"
 	#define HAL_TMLIBC
 #endif

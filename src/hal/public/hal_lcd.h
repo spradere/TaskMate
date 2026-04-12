@@ -15,7 +15,7 @@
 #ifndef HAL_LCD_H
 #define HAL_LCD_H
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(BOARD_arduinoMega)
 	#include "hal/board/arduinoMega/hal_lcd_AMC2004_impl.h"
 	#define HAL_LCD
 #endif

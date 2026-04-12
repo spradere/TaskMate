@@ -15,7 +15,7 @@
 #ifndef HAL_I2C_H
 #define HAL_I2C_H
 
-#if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
+#if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/hal_i2c_impl.h"
 	#define HAL_I2C
 #endif
