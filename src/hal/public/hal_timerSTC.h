@@ -15,14 +15,12 @@
 #ifndef HAL_TIMERSTC_H
 #define HAL_TIMERSTC_H
 
-#define HAL_TIMERSTC 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/mcu/atmega2560/hal_timerSTC_impl.h"
-	#undef HAL_TIMERSTC
-	#define HAL_TIMERSTC 1
+	#define HAL_TIMERSTC
 #endif
 
-_Static_assert(HAL_TIMERSTC,
-			   "No hal implementation for Software Time Counter on selected hardware target.");
+#if !defined(HAL_TIMERSTC)
+    #error "No hal implementation for Software Time Counter on selected hardware target."
+#endif
 #endif

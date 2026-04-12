@@ -15,13 +15,12 @@
 #ifndef HAL_I2C_H
 #define HAL_I2C_H
 
-#define HAL_I2C 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/mcu/atmega2560/hal_i2c_impl.h"
-	#undef HAL_I2C
-	#define HAL_I2C 1
+	#define HAL_I2C
 #endif
 
-_Static_assert(HAL_I2C, "No hal implementation for i2c on selected hardware target.");
+#if !defined(HAL_I2C)
+    #error "No hal implementation for i2c on selected hardware target."
+#endif
 #endif
