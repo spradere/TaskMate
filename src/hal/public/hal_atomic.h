@@ -15,13 +15,12 @@
 #ifndef HAL_ATOMIC_H
 #define HAL_ATOMIC_H
 
-#define HAL_ATOMIC 0
-
 #if defined(ARCH_avr8) && defined(MCU_atmega2560) && defined(BOARD_arduinoMega)
 	#include "hal/arch/avr8/hal_atomic_impl.h"
-	#undef HAL_ATOMIC
-	#define HAL_ATOMIC 1
+	#define HAL_ATOMIC
 #endif
 
-_Static_assert(HAL_ATOMIC, "No hal implementation for atomic block on selected hardware target.");
+#if !defined(HAL_ATOMIC)
+    #error "No hal implementation for atomic block on selected hardware target."
+#endif
 #endif
