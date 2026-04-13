@@ -25,6 +25,14 @@ BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
 BUILD_CNT_FILE = ${BUILD_DIR_TARGET}/build_counter
 TM_VERSION_FILE = ${SRC_DIR}/interfaces/tm_version
 
+CLOC_RAW = ${BUILD_DIR_TARGET}/cloc_raw
+CLOC_DATA = ${BUILD_DIR_TARGET}/cloc_data
+MEM_RAW = ${BUILD_DIR_TARGET}/mem_raw
+MEM_DATA = ${BUILD_DIR_TARGET}/mem_data
+MEM_FLASH_PCT = ${BUILD_DIR_TARGET}/mem_flash_pct
+MEM_RAM_PCT = ${BUILD_DIR_TARGET}/mem_ram_pct
+
+
 # Source directories
 SRC_DIR_LIST = ${SRC_DIR}
 SRC_DIR_LIST += ${SRC_DIR}/sysCore

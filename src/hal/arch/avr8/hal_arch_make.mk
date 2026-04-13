@@ -58,7 +58,7 @@ ${OBJS}: ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}
 	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}} \
 		-c ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c} -o ${.TARGET}
 
-upload: all _mcu_memory
+upload: all _mcu_memory_show
 #@ [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${BUILD_CNT} "${COLOUR_RESET}"
@@ -69,13 +69,12 @@ upload: all _mcu_memory
 .PHONY: upload
 
 # memory usage
-_mcu_memory:
-	@printf "\nStatic RAM usage : \n"
-	@out=$$(avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf); \
-	printf "%s\n" "$$out"; \
-	printf "\n"; \
-	printf "%s\n" "$$out" \
-		| awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
+_mcu_memory_raw:
+	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf > ${MEM_RAW}
+.PHONY: _mcu_memory_raw
+
+_mcu_memory_data: _mcu_memory_raw
+	@awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
 		NR==2 { \
 		text  = $$1; \
 		data  = $$2; \
@@ -86,11 +85,39 @@ _mcu_memory:
 		ram_total = ram_total_k * 1024; \
 		flash_pct = (flash / (flash_total)) * 100; \
 		ram_pct   = (ram / (ram_total)) * 100; \
-		printf("${COLOUR_WHITE_BOLD}Memory usage\n"); \
-		printf("\tFlash : %d / %d bytes (%.1f%%)\n", flash, flash_total, flash_pct); \
-		printf("\tRAM   : %d / %d bytes (%.1f%%)\n", ram, ram_total, ram_pct); \
-		printf("${COLOUR_RESET}"); \
-	}'
+		printf("%d %d %f\n", flash, flash_total, flash_pct) > "${MEM_DATA}"; \
+		printf("%d %d %f\n", ram, ram_total, ram_pct) >> "${MEM_DATA}"; \
+		close("${MEM_DATA}"); \
+		printf("%0.1f%%\n", flash_pct) > "${MEM_FLASH_PCT}"; \
+		close("${MEM_FLASH_PCT}"); \
+		printf("%0.1f%%\n", ram_pct) > "${MEM_RAM_PCT}"; \
+		close("${MEM_RAM_PCT}"); \
+		}' ${MEM_RAW}
+.PHONY: _mcu_memory_data
+
+_mcu_memory_show: _mcu_memory_data
+	@printf "\nStatic memory usage : \n"
+	@cat ${MEM_RAW}
+
+	@printf "${COLOUR_WHITE_BOLD}Memory usage :\n"
+
+	@awk '\
+	NR==1 { \
+		flash  = $$1; \
+		flash_total = $$2; \
+		flash_pct = $$3; \
+		printf("\tFlash : %d / %d bytes (%0.1f%%)\n", flash, flash_total, flash_pct); \
+		} \
+	NR==2 { \
+		ram  = $$1; \
+		ram_total = $$2; \
+		ram_pct = $$3; \
+		printf("\tRAM   : %d / %d bytes (%0.1f%%)\n", ram, ram_total, ram_pct); \
+		}' ${MEM_DATA}
+
+	@printf "${COLOUR_RESET}"
+.PHONY: _mcu_memory_show
+
 
 dump: all
 #@ [avr8] Disassemble machine code in .hex and .elf
