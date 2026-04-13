@@ -41,7 +41,3 @@ VALID_BOARD.amd64 = pc
 .if empty(VALID_BOARD.${MCU}:M${BOARD})
 .error Invalid BOARD="${BOARD}" for MCU="${MCU}". Valid boards: ${VALID_BOARD.${MCU}}
 .endif
-
-# Final target
-.info Building for architecture: ${ARCH} -> ${MCU} -> ${BOARD}
-

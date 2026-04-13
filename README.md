@@ -13,14 +13,14 @@ At a much smaller scale and within my own limits, this project is also a way to 
 step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
-TaskMate operating system is designed for microcontrollers; reliability and modularity are constraints
-that guide design choice. Its architecture is structured to maintain a clear separation between build
+TaskMate operating system is designed for microcontrollers. Its architecture is structured to
+maintain a clear separation between build
 logic, system behavior, and hardware dependencies, ensuring both portability and maintainability.
 
 > <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
 >
->  <span style="color:green">442 commits • 119 source files • 6762 lines of code •
-> binary size : 6496 bytes (Flash) • ram usage : 2009 bytes</span>
+>  <span style="color:green">461 commits • 123 source files • 6801 lines of code •
+> binary size : 6552 bytes (Flash) • ram usage : 2027 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -35,7 +35,6 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 ## ⬆️ TaskMate Layers
 
 ![System Layer Diagram](doc/TaskMate_layers_v8.png)
-
 
 
 The diagram shows the current layered architecture of TaskMate.
@@ -92,7 +91,6 @@ It allows the system to remain portable and predictable, regardless of the under
 
 The system call layer acts as a controlled boundary between user space and the system core.
 It ensures that all interactions with the kernel are explicit, validated, and well-defined.
-
 
 
 **Interfaces**

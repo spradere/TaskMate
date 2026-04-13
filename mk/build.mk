@@ -42,7 +42,24 @@
 	@printf "${CC} : " >> "${BUILD_INFO}"
 	@printf "${CC_VER}\n" >> "${BUILD_INFO}"
 
-all: _system_critical_check ${AUTOCODE_STAMP} _dependency ${TARGET}
+.if make(upload) || make(all)
+	@printf "%s\n" "${COLOUR_CYAN_BOLD}"
+	@printf "##########################\n"
+	@printf "# Build summary\n"
+	@printf "##########################\n\n"
+	@printf "\tTaskMate version : %s\n" "${TM_VERSION}"
+	@printf "\tHardware target  : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}"
+	@printf "\tbuild            : %s\n" "${BUILD_CNT}"
+	@printf "\tFlash            : "
+	@cat ${MEM_FLASH_PCT}
+	@printf "\tRAM              : "
+	@cat ${MEM_RAM_PCT}
+	@printf "\n"
+	@printf "${COLOUR_RESET}"
+.endif
+
+
+all: _system_critical_check ${AUTOCODE_STAMP} _dependency _mcu_memory_data ${TARGET}
 #@ [global] System build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
