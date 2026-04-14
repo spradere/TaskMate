@@ -85,13 +85,10 @@ _mcu_memory_data: _mcu_memory_raw
 		ram_total = ram_total_k * 1024; \
 		flash_pct = (flash / (flash_total)) * 100; \
 		ram_pct   = (ram / (ram_total)) * 100; \
-		printf("%d %d %f\n", flash, flash_total, flash_pct) > "${MEM_DATA}"; \
-		printf("%d %d %f\n", ram, ram_total, ram_pct) >> "${MEM_DATA}"; \
+		printf("Memory used total %%\n") > "${MEM_DATA}"; \
+		printf("Flash %d %d %f\n", flash, flash_total, flash_pct) >> "${MEM_DATA}"; \
+		printf("RAM %d %d %f\n", ram, ram_total, ram_pct) >> "${MEM_DATA}"; \
 		close("${MEM_DATA}"); \
-		printf("%0.1f%%\n", flash_pct) > "${MEM_FLASH_PCT}"; \
-		close("${MEM_FLASH_PCT}"); \
-		printf("%0.1f%%\n", ram_pct) > "${MEM_RAM_PCT}"; \
-		close("${MEM_RAM_PCT}"); \
 		}' ${MEM_RAW}
 .PHONY: _mcu_memory_data
 
@@ -100,21 +97,14 @@ _mcu_memory_show: _mcu_memory_data
 	@cat ${MEM_RAW}
 
 	@printf "${COLOUR_WHITE_BOLD}Memory usage :\n"
-
 	@awk '\
-	NR==1 { \
-		flash  = $$1; \
-		flash_total = $$2; \
-		flash_pct = $$3; \
-		printf("\tFlash : %d / %d bytes (%0.1f%%)\n", flash, flash_total, flash_pct); \
-		} \
-	NR==2 { \
-		ram  = $$1; \
-		ram_total = $$2; \
-		ram_pct = $$3; \
-		printf("\tRAM   : %d / %d bytes (%0.1f%%)\n", ram, ram_total, ram_pct); \
+	NR > 1 { \
+		name  = $$1; \
+		use = $$2; \
+		total = $$3; \
+		pct = $$4; \
+		printf("\t%-10s : %d / %d bytes (%0.1f%%)\n", name, use, total, pct); \
 		}' ${MEM_DATA}
-
 	@printf "${COLOUR_RESET}"
 .PHONY: _mcu_memory_show
 
