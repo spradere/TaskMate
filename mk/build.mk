@@ -47,17 +47,24 @@
 	@printf "##########################\n"
 	@printf "# Build summary\n"
 	@printf "##########################\n\n"
-	@printf "\tTaskMate version : %s\n" "${TM_VERSION}"
-	@printf "\tHardware target  : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}"
-	@printf "\tbuild            : %s\n" "${BUILD_CNT}"
-	@printf "\tFlash            : "
-	@cat ${MEM_FLASH_PCT}
-	@printf "\tRAM              : "
-	@cat ${MEM_RAM_PCT}
-	@printf "\n"
+	@printf "\t%-16s : %s\n" "TaskMate version" "${TM_VERSION}"
+	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
+	@printf "\t%-16s : %s\n" "build" "${BUILD_CNT}"
+	@awk '\
+		NR > 1 { \
+		name = $$1; \
+		pct  = $$4; \
+		printf("\t%-16s : %0.1f%%\n", name, pct); \
+		if ($$4 > 20) \
+			{\
+			printf("${COLOUR_RED_BOLD}\t>>> ERROR: usage high > 20%% <<< ${COLOUR_RESET}\n"); \
+			exit(1); \
+			} \
+		if ($$4 > 5) \
+			printf("${COLOUR_YELLOW_BOLD}\t>>> WARNING: usage high > 5%% <<< ${COLOUR_CYAN_BOLD}\n"); \
+		}' ${MEM_DATA}
 	@printf "${COLOUR_RESET}"
 .endif
-
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency _mcu_memory_data ${TARGET}
 #@ [global] System build.
