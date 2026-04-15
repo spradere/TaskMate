@@ -64,7 +64,7 @@ GIT_ALLOWED_FILES.${DOC_DIR} = *.c *.md *.txt *.png *.jpg Doxyfile
 GIT_ALLOWED_FILES.${MAKE_DIR} = *.mk
 GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk tm_version
 GIT_ALLOWED_FILES.${BUILD_DIR} = build_counter
-GIT_ALLOWED_FILES.${SCRIPT_DIR} = *.awk
+GIT_ALLOWED_FILES.${SCRIPTS_DIR} = *.awk
 GIT_ALLOWED_FILES = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
