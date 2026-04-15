@@ -12,18 +12,13 @@ $1 == "C/C++" && $2 == "Header" {
 	c_code += $6
 	}
 
-/^make/ {
+($1 == "make") || ($1 == "awk") {
 	make_blank += $3
 	make_comment += $4
 	make_code += $5
 	}
 
-/^Markdown/ {
-	doc_blank += $3
-	doc_code += $5
-	}
-
-/^Text/ {
+($1 == "Markdown") || ($1 == "Text") {
 	doc_blank += $3
 	doc_code += $5
 	}
@@ -40,14 +35,14 @@ END {
 	doc_pct = (doc_total / loc_total) * 100
 	make_pct = (make_total / loc_total) * 100
 
-	printf("Count lines of code \n") > "${CLOC_DATA}"
-	printf("loc_total %d\n", loc_total) >> "${CLOC_DATA}"
-	printf("make_total %d\n", make_total) >> "${CLOC_DATA}"
-	printf("loc+doc %d\n", loc_total + doc_total) >> "${CLOC_DATA}"
-	printf("code_pct %0.1f\n", code_pct) >> "${CLOC_DATA}"
-	printf("comment_pct %0.1f\n", comment_pct) >> "${CLOC_DATA}"
-	printf("doc_pct %0.1f\n", doc_pct) >> "${CLOC_DATA}"
-	printf("make_pct %0.1f\n", make_pct) >> "${CLOC_DATA}"
+	printf("Count lines of code \n") > file
+	printf("loc_total %d\n", loc_total) >> file
+	printf("make_total %d\n", make_total) >> file
+	printf("loc+doc %d\n", loc_total + doc_total) >> file
+	printf("code_pct %0.1f\n", code_pct) >> file
+	printf("comment_pct %0.1f\n", comment_pct) >> file
+	printf("doc_pct %0.1f\n", doc_pct) >> file
+	printf("make_pct %0.1f\n", make_pct) >> file
 
-	close("${CLOC_DATA}")
+	close(file)
 	}
