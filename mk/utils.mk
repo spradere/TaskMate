@@ -32,8 +32,8 @@ doc:
 _cloc_data:
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D --exclude-ext=rc,md,txt > ${CLOC_RAW}
 	@printf "\n" >> ${CLOC_RAW}
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h >> ${CLOC_RAW}
-	@awk -f scripts/cloc_data.awk ${CLOC_RAW}
+	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${CLOC_RAW}
+	@awk -v file="${CLOC_DATA}" -f scripts/cloc_data.awk ${CLOC_RAW}
 .PHONY: _cloc_data
 
 cloc: _cloc_data
