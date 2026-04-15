@@ -50,17 +50,21 @@ AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
 RSYNC_LOG = ${LOG_DIR}/rsync.log
 H_CHECK_LOG = ${LOG_DIR}/headers_check.log
 
+# scripts
+SCRIPTS_DIR = scripts
+
 # autoCode
 AUTOCODE_CONFIG = ${BUILD_DIR_TARGET}/autoCode_config
 
 # git ignore
 GIT_IGNORE = .gitignore
 GIT_IGNORE_STAMP = ${BUILD_DIR_TARGET}/.gitignore_stamp
-GIT_ALLOWED_DIRS = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR} ${BUILD_DIR}
+GIT_ALLOWED_DIRS = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR} ${BUILD_DIR} ${SCRIPTS_DIR}
 GIT_ALLOWED_FILES.${DOC_DIR} = *.c *.md *.txt *.png *.jpg Doxyfile
 GIT_ALLOWED_FILES.${MAKE_DIR} = *.mk
 GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk tm_version
 GIT_ALLOWED_FILES.${BUILD_DIR} = build_counter
+GIT_ALLOWED_FILES.${SCRIPT_DIR} = *.awk
 GIT_ALLOWED_FILES = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
