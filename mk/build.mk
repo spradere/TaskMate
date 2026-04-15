@@ -43,7 +43,7 @@
 	@printf "${CC_VER}\n" >> "${BUILD_INFO}"
 
 .if make(upload) || make(all)
-	@printf "%s\n" "${COLOUR_CYAN_BOLD}"
+	@printf "%s\n" "${COLOUR_WHITE_BOLD}"
 	@printf "##########################\n"
 	@printf "# Build summary\n"
 	@printf "##########################\n\n"
