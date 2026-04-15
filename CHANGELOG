@@ -1,3 +1,4 @@
+	use awk scripts for cloc and memory useage
 	refactor autoCode use only parseTag() and delete writeHeader()
 	clean up user/committer name and email
 	change project license for BSD-2-Clause
