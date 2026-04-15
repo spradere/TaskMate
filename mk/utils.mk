@@ -29,24 +29,21 @@ doc:
 	doxygen ${DOC_DIR}/Doxyfile
 .PHONY: doc
 
-_cloc_raw:
+_cloc_data:
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D --exclude-ext=rc,md,txt > ${CLOC_RAW}
+	@printf "\n" >> ${CLOC_RAW}
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h >> ${CLOC_RAW}
-.PHONY: _cloc_raw
 
-_cloc_data: _cloc_raw
 	@awk '\
 		$$1 == "C" { \
 		c_blank += $$3; \
 		c_comment += $$4; \
 		c_code += $$5; \
-		printf("Count lines of C code \n"); \
 		} \
 		$$1 == "C/C++" && $$2 == "Header" { \
 		c_blank += $$4; \
 		c_comment += $$5; \
 		c_code += $$6; \
-		printf("Count lines of .h code \n"); \
 		} \
 		/^make/ { \
 		make_blank += $$3; \
@@ -73,50 +70,48 @@ _cloc_data: _cloc_raw
 		make_pct = (make_total / loc_total) * 100; \
 		printf("Count lines of code \n") > "${CLOC_DATA}"; \
 		printf("loc_total %d\n", loc_total) >> "${CLOC_DATA}"; \
+		printf("make_total %d\n", make_total) >> "${CLOC_DATA}"; \
 		printf("loc+doc %d\n", loc_total + doc_total) >> "${CLOC_DATA}"; \
-		printf("code_pct %f\n", code_pct) >> "${CLOC_DATA}"; \
-		printf("comment_pct %f\n", comment_pct) >> "${CLOC_DATA}"; \
-		printf("doc_pct %f\n", doc_pct) >> "${CLOC_DATA}"; \
-		printf("make_pct %f\n", make_pct) >> "${CLOC_DATA}"; \
+		printf("code_pct %0.1f\n", code_pct) >> "${CLOC_DATA}"; \
+		printf("comment_pct %0.1f\n", comment_pct) >> "${CLOC_DATA}"; \
+		printf("doc_pct %0.1f\n", doc_pct) >> "${CLOC_DATA}"; \
+		printf("make_pct %0.1f\n", make_pct) >> "${CLOC_DATA}"; \
 		close("${CLOC_DATA}"); \
 		}' ${CLOC_RAW}
 .PHONY: _cloc_data
 
-cloc:
+cloc: _cloc_data
 #@ [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@out=$$(cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D --exclude-ext=rc,md,txt); \
-	printf "%s\n" "$$out"; \
-	printf "\n"; \
-	printf "%s\n" "$$out" \
-		| awk '/^SUM:/ { \
-		blank   = $$3; \
-		comment = $$4; \
-		code    = $$5; \
-		total   = blank + comment + code; \
-		code_pct    = (code / total) * 100; \
-		comment_pct = (comment / total) * 100; \
-		printf("${COLOUR_WHITE_BOLD}Total lines : %d\n", total); \
-		printf("\tCode    : %d (%.1f%%)\n", code, code_pct); \
-		printf("\tComment : %d (%.1f%%)\n", comment, comment_pct); \
-		printf("${COLOUR_RESET}"); \
-		}'
 
-	@printf "\n%sCount lines of documentation%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@out=$$(cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h); \
-	printf "%s\n" "$$out"; \
-	printf "\n"; \
-	printf "%s\n" "$$out" \
-		| awk '/^SUM:/ { \
-		blank   = $$3; \
-		code    = $$5; \
-		total   = blank + code; \
-		printf("${COLOUR_WHITE_BOLD}Total lines : %d\n", total); \
-		printf("${COLOUR_RESET}"); \
-		}'
+	@cat ${CLOC_RAW}
+	@printf "${COLOUR_WHITE_BOLD}\nTotal loc + %% :\n"
 
+	@awk '\
+		NR > 1 { \
+		vars[$$1] = $$2; \
+		} \
+		END { \
+		split("\
+		loc_total \
+		loc+doc \
+		code_pct \
+		comment_pct \
+		make_total \
+		make_pct \
+		doc_pct" \
+		, order, " "); \
+		for (i = 1; i <= length(order); i++) \
+			{ \
+			k = order[i]; \
+			if (k in vars) \
+				{ \
+				printf("\t%-12s : %s\n", k, vars[k]); \
+				} \
+			} \
+		}' ${CLOC_DATA}
+	@printf "${COLOUR_RESET}"
 .PHONY: cloc
 
 note:
