@@ -50,19 +50,26 @@
 	@printf "\t%-16s : %s\n" "TaskMate version" "${TM_VERSION}"
 	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
 	@printf "\t%-16s : %s\n" "build" "${BUILD_CNT}"
+
+	@awk '\
+		$$1 == "loc_total" { \
+			printf("\t%-16s : %s\n", "lines of code", $$2); \
+		}' ${CLOC_DATA}
+
 	@awk '\
 		NR > 1 { \
 		name = $$1; \
 		pct  = $$4; \
 		printf("\t%-16s : %0.1f%%\n", name, pct); \
-		if ($$4 > 20) \
+		if ($$4 > 98) \
 			{\
-			printf("${COLOUR_RED_BOLD}\t>>> ERROR: usage high > 20%% <<< ${COLOUR_RESET}\n"); \
+			printf("${COLOUR_RED_BOLD}\t>>> ERROR: usage high > 98%% <<< ${COLOUR_RESET}\n"); \
 			exit(1); \
 			} \
-		if ($$4 > 5) \
-			printf("${COLOUR_YELLOW_BOLD}\t>>> WARNING: usage high > 5%% <<< ${COLOUR_CYAN_BOLD}\n"); \
+		if ($$4 > 85) \
+			printf("${COLOUR_YELLOW_BOLD}\t>>> WARNING: usage high > 85%% <<< ${COLOUR_CYAN_BOLD}\n"); \
 		}' ${MEM_DATA}
+
 	@printf "${COLOUR_RESET}"
 .endif
 

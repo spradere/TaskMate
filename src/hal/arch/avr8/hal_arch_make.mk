@@ -69,12 +69,10 @@ upload: all _mcu_memory_show
 .PHONY: upload
 
 # memory usage
-_mcu_memory_raw:
-	@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf > ${MEM_RAW}
-.PHONY: _mcu_memory_raw
+_mcu_memory_data:
+		@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf > ${MEM_RAW}
 
-_mcu_memory_data: _mcu_memory_raw
-	@awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
+		@awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
 		NR==2 { \
 		text  = $$1; \
 		data  = $$2; \
@@ -133,11 +131,10 @@ tidy_TaskMate:
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 .PHONY: tidy_TaskMate
 
-mem_size: all
+modules_size: all
 #@ [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
 	avr-nm --format=bsd --size-sort -r ${BUILD_DIR_TARGET}/TaskMate.elf | head -20
-
 .PHONY: mem_size
