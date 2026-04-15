@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3count loc 00 ", MSG_TO_LCD);
+		msgWriteText(chan, "\3awk build 00 ", MSG_TO_LCD);
 	}
 
 	msgProcess();
