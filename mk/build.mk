@@ -52,7 +52,7 @@
 	@printf "\t%-16s : %s\n" "build" "${BUILD_CNT}"
 
 	@awk '\
-		$$1 == "loc_total" { \
+		$$1 == "code_total" { \
 			printf("\t%-16s : %s\n", "lines of code", $$2); \
 		}' ${CLOC_DATA}
 

@@ -32,13 +32,13 @@ END {
 
 	code_pct = (code_total / loc_total) * 100
 	comment_pct = (comment_total / loc_total) * 100
-	doc_pct = (doc_total / loc_total) * 100
+	doc_pct = (doc_total / (loc_total+doc_total)) * 100
 	make_pct = (make_total / loc_total) * 100
 
 	printf("Count lines of code \n") > file
-	printf("loc_total %d\n", loc_total) >> file
+	printf("code_total %d\n", loc_total) >> file
 	printf("make_total %d\n", make_total) >> file
-	printf("loc+doc %d\n", loc_total + doc_total) >> file
+	printf("code+doc_total %d\n", loc_total + doc_total) >> file
 	printf("code_pct %0.1f\n", code_pct) >> file
 	printf("comment_pct %0.1f\n", comment_pct) >> file
 	printf("doc_pct %0.1f\n", doc_pct) >> file
