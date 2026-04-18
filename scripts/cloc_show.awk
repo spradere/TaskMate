@@ -1,4 +1,16 @@
-# cloc show values
+################################################################################
+#
+# TaskMate Project
+# (c) 2026 PRADERE Sebastien
+#
+# This file is part of TaskMate and is distributed under the BSD-2-Clause License.
+# See the LICENSE file for full license terms.
+#
+################################################################################
+
+################################################################################
+# show lines of code values
+################################################################################
 
 NR > 1 {
 	vars[$1] = $2;
@@ -32,7 +44,6 @@ END {
 			sub(/_total$/, "", display)
 			suffix = "loc"
 		}
-
 
 		if (k in vars)
 		{

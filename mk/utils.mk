@@ -43,7 +43,7 @@ cloc: _cloc_data
 
 	@cat ${CLOC_RAW}
 	@printf "${COLOUR_WHITE_BOLD}\nTotal loc and ratio :\n"
-	@awk -f scripts/cloc_show.awk ${CLOC_DATA}
+	@awk -f scripts/cloc_show.awk "${CLOC_DATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: cloc
 
