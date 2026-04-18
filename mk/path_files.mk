@@ -52,6 +52,7 @@ H_CHECK_LOG = ${LOG_DIR}/headers_check.log
 
 # scripts
 SCRIPTS_DIR = scripts
+H_ALLOW_FILE = mk/header_allow.conf
 
 # autoCode
 AUTOCODE_CONFIG = ${BUILD_DIR_TARGET}/autoCode_config
