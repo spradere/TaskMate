@@ -83,8 +83,6 @@ _dependency:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > "${DEPS_FILE}"
 
 # autoCode and required files
-AUTOCODE_PRINT_LAST_LOG = ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
-
 ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 					${TM_VERSION_FILE} ${BUILD_CNT_FILE}
 
@@ -112,15 +110,26 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@touch ${AUTOCODE_STAMP}
 
 	# proceed log
-
-
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': \*' | sed 's/^.* info : //'
-	@printf "${COLOUR_YELLOW}"
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
-	@printf "${COLOUR_RESET}"
-
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//' >> "${AUTOCODE_LOG_STAMP}"
-	@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//' >> "${AUTOCODE_LOG_STAMP}"
+	@awk ${AWK_COLOURS} '\
+		$$1 == "[fileUtility.c]" { \
+			if($$4 ~ /^\*/) {\
+				temp = $$0; \
+				sub(/^[^*]*/,"",temp); \
+				print temp; \
+				} \
+			} \
+		$$4 == "keep" { \
+			temp = $$0; \
+			sub(/^[^:]*: /,"",temp); \
+			printf("%s%s%s\n", COLOUR_CYAN, temp, COLOUR_RESET); \
+			print temp >> "${AUTOCODE_LOG_STAMP}"; \
+		}\
+		$$4 == "change" { \
+			temp = $$0; \
+			sub(/^[^:]*: /,"",temp); \
+			printf("%s%s%s\n", COLOUR_YELLOW, temp, COLOUR_RESET); \
+			print temp >> "${AUTOCODE_LOG_STAMP}"; \
+		}' ${AUTOCODE_LOG_STAMP}
 
 # Special rule for autoCode with clang, not arch specialized compiler
 AUTOCODE_CFLAGS = -I${SRC_DIR}/
@@ -146,5 +155,5 @@ autoCode_alone: ${AUTOCODE_TARGET}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f "${AUTOCODE_STAMP}"
 	@${MAKE} ${AUTOCODE_STAMP}
-	@${AUTOCODE_PRINT_LAST_LOG}
+	@ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 .PHONY: autoCode_alone
