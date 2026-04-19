@@ -162,7 +162,7 @@ function check_pattern(block, cmd, file, found_any)
 		}
 		else
 		{
-			printf("[\033[1;31m FAIL \033[0m] Forbidden include detected in: %s\n", file)
+			printf("[%s FAIL %s] Forbidden include detected in: %s\n", COLOUR_FAIL, COLOUR_RESET, file)
 			printf("[ >>>FAIL<<< ] Forbidden include detected in: %s\n", file) > h_check_log
 			scan_failed = 1
 		}
