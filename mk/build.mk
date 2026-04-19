@@ -74,7 +74,7 @@
 .endif
 
 all: _system_critical_check ${AUTOCODE_STAMP} _dependency _mcu_memory_data ${TARGET}
-#@ [global] System build.
+#help [global] System build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -121,13 +121,13 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 		$$4 == "keep" { \
 			temp = $$0; \
 			sub(/^[^:]*: /,"",temp); \
-			printf("%s%s%s\n", COLOUR_CYAN, temp, COLOUR_RESET); \
+			print COLOUR_CYAN, temp, COLOUR_RESET; \
 			print temp >> "${AUTOCODE_LOG_STAMP}"; \
 		}\
 		$$4 == "change" { \
 			temp = $$0; \
 			sub(/^[^:]*: /,"",temp); \
-			printf("%s%s%s\n", COLOUR_YELLOW, temp, COLOUR_RESET); \
+			print COLOUR_YELLOW, temp, COLOUR_RESET; \
 			print temp >> "${AUTOCODE_LOG_STAMP}"; \
 		}' ${AUTOCODE_LOG_STAMP}
 
@@ -150,7 +150,7 @@ ${ERROR_CAT}: ${ERROR_FILES}
 
 # Run autoCode alone
 autoCode_alone: ${AUTOCODE_TARGET}
-#@ [global] Run autoCode alone.
+#help [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f "${AUTOCODE_STAMP}"
