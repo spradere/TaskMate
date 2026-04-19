@@ -99,10 +99,4 @@ help:
 			print temp; \
 		}\
 	' ${MK_FILES}
-
-	#@sed -n \
-	#	-e 's/^\([A-Za-z0-9][A-Za-z0-9_-]*\)[[:space:]]*:.*$$/${COLOUR_HELP_TARGET}\1${COLOUR_RESET}/p' \
-	#	-e 's/^#help \(\[[^]]*\]\)/    -> ${COLOUR_HELP_TAG}\1${COLOUR_RESET}/p' \
-	#	-e 's/^#help /    -> /p' \
-	#	${MK_FILES}
 .PHONY: help

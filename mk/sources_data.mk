@@ -52,17 +52,10 @@ MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
 ################################################################################
 
 # Build counter
-.if !exists(${BUILD_CNT_FILE})
-BUILD_CNT_BASE = 0
-.else
-BUILD_CNT_BASE != cat "${BUILD_CNT_FILE}"
-.endif
-BUILD_CNT = ${BUILD_CNT_BASE}
-
 .if make(upload)
-BUILD_CNT != NEW_BUILD=$$((${BUILD_CNT_BASE} + 1)); \
-	printf "%i" $$NEW_BUILD > "${BUILD_CNT_FILE}"; \
-	printf "%i" $$NEW_BUILD;
+BUILD_CNT != awk '{print $$1 + 1}' "${BUILD_CNT_FILE}"
+.else
+BUILD_CNT != awk '{print $$1;}' "${BUILD_CNT_FILE}"
 .endif
 
 # Get upstream

@@ -21,8 +21,8 @@ git switch test
 ##################################################
 
 # create repo
-git remote add codeberg  git@codeberg.org:USER/TaskMate.git
-git remote add github    git@github.com:USER/TaskMate.git
+git remote add codeberg  git@codeberg.org:spradere/TaskMate.git
+git remote add github    git@github.com:spradere/TaskMate.git
 
 # create branch & link repo
 git switch -c test
