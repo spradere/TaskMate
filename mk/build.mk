@@ -13,7 +13,7 @@
 ################################################################################
 
 # Info about help system : targets begins with '_' or '$' are internal system only
-# they'll not be displayed in # make help
+# they'll not be displayed with 'make help'
 
 .MAIN: all
 
@@ -107,8 +107,12 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 	@printf "\n# files path\n" >> "${AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${ERROR_CAT}" >> "${AUTOCODE_CONFIG}"
 
+	# launch autoCode
 	./${AUTOCODE_TARGET} ${AUTOCODE_CONFIG} > "${AUTOCODE_LOG_STAMP}"
 	@touch ${AUTOCODE_STAMP}
+
+	# proceed log
+
 
 	@${AUTOCODE_PRINT_LAST_LOG} | grep ': \*' | sed 's/^.* info : //'
 	@printf "${COLOUR_YELLOW}"
@@ -143,9 +147,4 @@ autoCode_alone: ${AUTOCODE_TARGET}
 	@rm -f "${AUTOCODE_STAMP}"
 	@${MAKE} ${AUTOCODE_STAMP}
 	@${AUTOCODE_PRINT_LAST_LOG}
-	#@printf "${COLOUR_CYAN}"
-	#@${AUTOCODE_PRINT_LAST_LOG} | grep ': keep' | sed 's/^.*: *//'
-	#@printf "${COLOUR_RESET} ${COLOUR_YELLOW}"
-	#@${AUTOCODE_PRINT_LAST_LOG} | grep ': change' | sed 's/^.*: *//'
-	#@printf "${COLOUR_RESET}"
 .PHONY: autoCode_alone
