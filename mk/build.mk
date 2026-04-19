@@ -20,6 +20,11 @@
 .BEGIN:
 	@mkdir -p ${BUILD_DIR_TARGET}
 	@mkdir -p ${LOG_DIR}
+	
+.if make(upload)
+	printf "%i" ${BUILD_CNT} > "${BUILD_CNT_FILE}"
+.endif	
+
 .if make(upload) || make(all)
 	@printf '%s\n' "${TM_VERSION}" | \
 	cmp -s - "${TM_VERSION_FILE}" 2>/dev/null || \
@@ -73,11 +78,11 @@
 	@printf "${COLOUR_RESET}"
 .endif
 
-all: _system_critical_check ${AUTOCODE_STAMP} _dependency _mcu_memory_data ${TARGET}
+all: _system_critical_check ${AUTOCODE_STAMP} _dependency ${TARGET} _mcu_memory_data
 #help [global] System build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-
+		
 # dependency files used to compile sources if related header or source was edited
 _dependency:
 	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > "${DEPS_FILE}"
