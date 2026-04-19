@@ -16,7 +16,7 @@ gitignore: ${GIT_IGNORE_STAMP}
 .PHONY: gitignore
 
 push: ${GIT_IGNORE_STAMP}
-#@ [global] Git push routine, use command line : # make push M="message"
+#help [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit -> ${UPSTREAM} %s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git add .
@@ -26,7 +26,7 @@ push: ${GIT_IGNORE_STAMP}
 .PHONY: push
 
 pull:
-#@ [global] Git pull routine
+#help [global] Git pull routine
 	@git fetch
 	@git status
 	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
@@ -38,7 +38,7 @@ pull:
 .PHONY: pull
 
 merge:
-#@ [global] Git merge test -> main routine
+#help [global] Git merge test -> main routine
 	@git switch main
 	@git merge --no-ff test
 	@git push
@@ -67,7 +67,7 @@ ${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
 	@touch ${GIT_IGNORE_STAMP}
 
 backup:
-#@ [global] USB key backup with current git tag in directory.
+#help [global] USB key backup with current git tag in directory.
 	@printf "\n%sBackup to <${USB_DIR}${TM_BACKUP_DIR}>%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \
