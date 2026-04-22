@@ -52,6 +52,9 @@ MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
 ################################################################################
 
 # Build counter
+#BUILD_REV != git rev-list --count HEAD
+#BUILD_HASH != git rev-parse --short HEAD
+
 .if make(upload)
 BUILD_CNT != awk '{print $$1 + 1}' "${BUILD_CNT_FILE}"
 .else

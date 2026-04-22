@@ -13,6 +13,7 @@
 ################################################################################
 
 gitignore: ${GIT_IGNORE_STAMP}
+#help [global] generate gitignore file
 .PHONY: gitignore
 
 push: ${GIT_IGNORE_STAMP}

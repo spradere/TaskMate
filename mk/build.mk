@@ -78,7 +78,7 @@
 	@printf "${COLOUR_RESET}"
 .endif
 
-all: _system_critical_check ${AUTOCODE_STAMP} _dependency ${TARGET} _mcu_memory_data
+all: _system_critical_check ${AUTOCODE_STAMP} _dependency ${TARGET} _mcu_memory_data _cloc_data
 #help [global] System build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
