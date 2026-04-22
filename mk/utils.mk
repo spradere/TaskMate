@@ -33,7 +33,7 @@ _cloc_data:
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D --exclude-ext=rc,md,txt > ${CLOC_RAW}
 	@printf "\n" >> ${CLOC_RAW}
 	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${CLOC_RAW}
-	@awk -v file="${CLOC_DATA}" -f scripts/cloc_data.awk ${CLOC_RAW}
+	@awk -v file="${CLOC_DATA}" -f ${DIR_SCRIPTS}/cloc_data.awk ${CLOC_RAW}
 .PHONY: _cloc_data
 
 cloc: _cloc_data
@@ -43,7 +43,7 @@ cloc: _cloc_data
 
 	@cat ${CLOC_RAW}
 	@printf "${COLOUR_WHITE_BOLD}\nTotal loc and ratio :\n"
-	@awk -f scripts/cloc_show.awk "${CLOC_DATA}"
+	@awk -f ${DIR_SCRIPTS}/cloc_show.awk "${CLOC_DATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: cloc
 

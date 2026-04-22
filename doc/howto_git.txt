@@ -20,6 +20,10 @@ git switch test
 # 2 repo setup github/test codeberg/main
 ##################################################
 
+# set name email
+git config --global user.name "spradere"
+git config --global user.email "spradere@pm.me"
+
 # create repo
 git remote add codeberg  git@codeberg.org:spradere/TaskMate.git
 git remote add github    git@github.com:spradere/TaskMate.git

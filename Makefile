@@ -18,6 +18,7 @@ BUILD_DIR = build
 LOG_DIR = log
 MAKE_DIR = mk
 DOC_DIR = doc
+DIR_SCRIPTS = scripts
 
 # Build system options
 .include "${MAKE_DIR}/options.mk"
