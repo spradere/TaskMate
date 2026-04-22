@@ -1,3 +1,4 @@
+	refactor makefiles variables name, add prefix_
 	use awk scripts for cloc and memory useage
 	refactor autoCode use only parseTag() and delete writeHeader()
 	clean up user/committer name and email
