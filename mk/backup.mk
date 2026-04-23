@@ -48,7 +48,7 @@ merge:
 
 
 # Write .gitignore file
-${GIT_IGNORE_STAMP}: ${MAKE_DIR}/backup.mk ${MAKE_DIR}/path_files.mk
+${GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "# exclude everything\n" > "${GIT_IGNORE}"
 	@printf "*\n" >> "${GIT_IGNORE}"
 
@@ -90,11 +90,11 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@mkdir -p ${USB_DIR}${TM_BACKUP_DIR}
 	rsync -av ./ --progress --delete --delete-excluded \
-		--include="${BUILD_DIR}/" \
-		--include="${BUILD_DIR_TARGET}/" \
-		--include="${BUILD_DIR_TARGET}/build_counter" \
-		--exclude="${BUILD_DIR_TARGET}/*" \
-		--exclude="${BUILD_DIR}/*" --exclude="${LOG_DIR}" \
+		--include="${PATH_BUILD}/" \
+		--include="${PATH_BUILD_TARGET}/" \
+		--include="${PATH_BUILD_TARGET}/build_counter" \
+		--exclude="${PATH_BUILD_TARGET}/*" \
+		--exclude="${PATH_BUILD}/*" --exclude="${PATH_LOGS}" \
 		"${USB_DIR}${TM_BACKUP_DIR}/" > "${RSYNC_LOG}"
 
 	# umount

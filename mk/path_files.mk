@@ -13,68 +13,68 @@
 ################################################################################
 
 # Targets
-TARGET = ${BUILD_DIR_TARGET}/TaskMate
-AUTOCODE_TARGET = ${BUILD_DIR}/autoCode
+TARGET = ${PATH_BUILD_TARGET}/TaskMate
+AUTOCODE_TARGET = ${PATH_BUILD}/autoCode
 
 # USB
 USB_DIR = /media/usbkey
 USB_DEV = /dev/da0s1
 
 # Build info
-BUILD_INFO = ${BUILD_DIR}/last_build_info.txt
-BUILD_CNT_FILE = ${BUILD_DIR_TARGET}/build_counter
-TM_VERSION_FILE = ${SRC_DIR}/interfaces/tm_version
+BUILD_INFO = ${PATH_BUILD}/last_build_info.txt
+BUILD_CNT_FILE = ${PATH_BUILD_TARGET}/build_counter
+VAL_TM_VERSION_FILE = ${PATH_SOURCES}/interfaces/tm_version
 
-CLOC_RAW = ${BUILD_DIR_TARGET}/cloc_raw
-CLOC_DATA = ${BUILD_DIR_TARGET}/cloc_data
-MEM_RAW = ${BUILD_DIR_TARGET}/mem_raw
-MEM_DATA = ${BUILD_DIR_TARGET}/mem_data
+CLOC_RAW = ${PATH_BUILD_TARGET}/cloc_raw
+CLOC_DATA = ${PATH_BUILD_TARGET}/cloc_data
+MEM_RAW = ${PATH_BUILD_TARGET}/mem_raw
+MEM_DATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
-SRC_DIR_LIST = ${SRC_DIR}
-SRC_DIR_LIST += ${SRC_DIR}/sysCore
-SRC_DIR_LIST += ${SRC_DIR}/sysCall
-SRC_DIR_LIST += ${SRC_DIR}/services
-SRC_DIR_LIST += ${SRC_DIR}/tasks
-SRC_DIR_LIST += ${SRC_DIR}/tm_libc
-SRC_DIR_LIST += ${SRC_DIR}/interfaces
+PATH_SOURCES_LIST = ${PATH_SOURCES}
+PATH_SOURCES_LIST += ${PATH_SOURCES}/sysCore
+PATH_SOURCES_LIST += ${PATH_SOURCES}/sysCall
+PATH_SOURCES_LIST += ${PATH_SOURCES}/services
+PATH_SOURCES_LIST += ${PATH_SOURCES}/tasks
+PATH_SOURCES_LIST += ${PATH_SOURCES}/tm_libc
+PATH_SOURCES_LIST += ${PATH_SOURCES}/interfaces
 
-SRC_DIR_LIST += ${SRC_DIR}/hal
-SRC_DIR_LIST += ${SRC_DIR}/hal/arch/${ARCH}
-SRC_DIR_LIST += ${SRC_DIR}/hal/mcu/${MCU}
-SRC_DIR_LIST += ${SRC_DIR}/hal/board/${BOARD}
-SRC_DIR_LIST += ${SRC_DIR}/hal/public
+PATH_SOURCES_LIST += ${PATH_SOURCES}/hal
+PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/arch/${ARCH}
+PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/mcu/${MCU}
+PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/board/${BOARD}
+PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/public
 
 # log files
-AUTOCODE_LOG = ${LOG_DIR}/autoCode_log
-RSYNC_LOG = ${LOG_DIR}/rsync.log
-H_CHECK_LOG = ${LOG_DIR}/headers_check.log
+AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
+RSYNC_LOG = ${PATH_LOGS}/rsync.log
+H_CHECK_LOG = ${PATH_LOGS}/headers_check.log
 
 # scripts
 SCRIPTS_DIR = scripts
 H_ALLOW_FILE = mk/header_allow.conf
 
 # autoCode
-AUTOCODE_CONFIG = ${BUILD_DIR_TARGET}/autoCode_config
+AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 
 # git ignore
 GIT_IGNORE = .gitignore
-GIT_IGNORE_STAMP = ${BUILD_DIR_TARGET}/.gitignore_stamp
-GIT_ALLOWED_DIRS = ${DOC_DIR} ${MAKE_DIR} ${SRC_DIR} ${BUILD_DIR} ${SCRIPTS_DIR}
-GIT_ALLOWED_FILES.${DOC_DIR} = *.c *.md *.txt *.png *.jpg Doxyfile
-GIT_ALLOWED_FILES.${MAKE_DIR} = *.mk *.conf
-GIT_ALLOWED_FILES.${SRC_DIR} = *.c *.h *.rc *.err *.mk tm_version
-GIT_ALLOWED_FILES.${BUILD_DIR} = build_counter
+GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
+GIT_ALLOWED_DIRS = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_BUILD} ${SCRIPTS_DIR}
+GIT_ALLOWED_FILES.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
+GIT_ALLOWED_FILES.${PATH_MAKEFILES} = *.mk *.conf
+GIT_ALLOWED_FILES.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk tm_version
+GIT_ALLOWED_FILES.${PATH_BUILD} = build_counter
 GIT_ALLOWED_FILES.${SCRIPTS_DIR} = *.awk
 GIT_ALLOWED_FILES = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
-ERROR_CAT = ${BUILD_DIR_TARGET}/errors_all.err
+ERROR_CAT = ${PATH_BUILD_TARGET}/errors_all.err
 
 # Tags
 TAGS = .tags
-TAGS_STAMP = ${BUILD_DIR_TARGET}/.tags_stamp
+TAGS_STAMP = ${PATH_BUILD_TARGET}/.tags_stamp
 
 # USB key directory backup
-TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${TM_VERSION}
+TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${VAL_TM_VERSION}

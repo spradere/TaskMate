@@ -13,37 +13,37 @@
 ################################################################################
 
 # Sources files and objects
-SRCS != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.c"
-SRCS_H != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.h"
+SRCS != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.c"
+SRCS_H != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.h"
 
-OBJS = ${SRCS:${SRC_DIR}/%.c=${BUILD_DIR_TARGET}/%.o}
+OBJS = ${SRCS:${PATH_SOURCES}/%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Dependency files
 DEPS = ${OBJS:.o=.d}
-DEPS_FILE = ${BUILD_DIR_TARGET}/.deps.d
+DEPS_FILE = ${PATH_BUILD_TARGET}/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
 # autoCode
-AUTOCODE_SRCS != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.c"
-AUTOCODE_SRCS_H != find ${SRC_DIR}/autoCode -maxdepth 1 -type f -name "*.h"
-AUTOCODE_STAMP = ${BUILD_DIR_TARGET}/.autoCode_stamp
+AUTOCODE_SRCS != find ${PATH_SOURCES}/autoCode -maxdepth 1 -type f -name "*.c"
+AUTOCODE_SRCS_H != find ${PATH_SOURCES}/autoCode -maxdepth 1 -type f -name "*.h"
+AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 
 STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
 
-FILES_INIT_RC != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.rc"
+FILES_INIT_RC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # Global error
-ERROR_FILES != find ${SRC_DIR_LIST} -maxdepth 1 -type f -name "*.err" | sort
+ERROR_FILES != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.err" | sort
 
 # Documentation files
-DOCS != find ${DOC_DIR} -maxdepth 3 -type f -name "*.md"; \
-		find ${DOC_DIR} -maxdepth 3 -type f -name "*.txt"
+DOCS != find ${PATH_DOCS} -maxdepth 3 -type f -name "*.md"; \
+		find ${PATH_DOCS} -maxdepth 3 -type f -name "*.txt"
 
 # mk files
-MK_FILES_MK != find  ./${MAKE_DIR} -maxdepth 1 -type f -name "*.mk"
-MK_FILES_HAL != find ./${SRC_DIR}/hal -maxdepth 3 -type f -name "*.mk"
+MK_FILES_MK != find  ./${PATH_MAKEFILES} -maxdepth 1 -type f -name "*.mk"
+MK_FILES_HAL != find ./${PATH_SOURCES}/hal -maxdepth 3 -type f -name "*.mk"
 
 MK_FILES = ./Makefile ${MK_FILES_MK} ${MK_FILES_HAL}
 
