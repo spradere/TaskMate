@@ -18,8 +18,8 @@ gitignore: ${FILE_GIT_IGNORE_STAMP}
 
 push: ${FILE_GIT_IGNORE_STAMP}
 #help [global] Git push routine, use command line : # make push M="message"
-	@printf "\n%sGit routine for \"${M}\" commit -> ${UPSTREAM} %s\n\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "\n%sGit routine for \"${M}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git add .
 	@git commit -m "${M}"
 	@git push
@@ -70,7 +70,7 @@ ${FILE_GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_fil
 backup:
 #help [global] USB key backup with current git tag in directory.
 	@printf "\n%sBackup to <${PATH_USBKEY}${VAL_TM_BACKUP_DIR}>%s\n\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
@@ -86,14 +86,14 @@ backup:
 	fi
 
 	# Run rsync
-	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
+	@printf "%sRun rsync, output logged in ${FILE_RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@mkdir -p ${PATH_USBKEY}${VAL_TM_BACKUP_DIR}
 	rsync -av ./ --progress --delete --delete-excluded \
 		--exclude=".git" \
 		--exclude="${PATH_BUILDS}/" \
 		--exclude="${PATH_LOGS}" \
-		"${PATH_USBKEY}${VAL_TM_BACKUP_DIR}/" > "${RSYNC_LOG}"
+		"${PATH_USBKEY}${VAL_TM_BACKUP_DIR}/" > "${FILE_RSYNC_LOG}"
 
 	# umount
 	@printf "%sUmount ${PATH_USBKEY}%s\n" \

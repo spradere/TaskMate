@@ -13,39 +13,39 @@
 ################################################################################
 
 # Generate tags
-${FILE_TAGS_STAMP}: ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
-	@ctags -f ${FILE_TAGS} ${SRCS}
-	@ctags -f ${FILE_TAGS} -a ${SRCS_H}
-	@ctags -f ${FILE_TAGS} -a ${AUTOCODE_SRCS}
-	@ctags -f ${FILE_TAGS} -a ${AUTOCODE_SRCS_H}
+${FILE_TAGS_STAMP}: ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
+	@ctags -f ${FILE_TAGS} ${FILES_SRC}
+	@ctags -f ${FILE_TAGS} -a ${FILES_SRC_H}
+	@ctags -f ${FILE_TAGS} -a ${FILES_AUTOCOE_SRC}
+	@ctags -f ${FILE_TAGS} -a ${FILES_AUTOCOE_SRC_H}
 	@touch ${FILE_TAGS_STAMP}
 
 vim_all: ${FILE_TAGS_STAMP}
 #help [global] open Vim with all TaskMate sources files .c .h (no autoCode)
-	vim ${SRCS} ${SRCS_H}
+	vim ${FILES_SRC} ${FILES_SRC_H}
 .PHONY: vim_all
 
 vim_mk: ${FILE_TAGS_STAMP}
 #help [global] open Vim with all Makefiles .mk
-	vim ${MK_FILES}
+	vim ${FILES_MK}
 .PHONY: vim_mk
 
 geany_doc:
 #help [global] open Vim with all documentation files .md .txt
-	geany ${DOCS}
+	geany ${FILES_DOC}
 .PHONY: geany_doc
 
 vim_autoCode: ${FILE_TAGS_STAMP}
 #help [global] open Vim with all autoCode sources files .c .h
-	vim ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
+	vim ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
 .PHONY: vim_autoCode
 
 geany_mk:
 #help [global] open Geany with all Makefiles .mk
-	geany ${MK_FILES}
+	geany ${FILES_MK}
 .PHONY: geany_mk
 
 geany_all:
 #help [global] open Geany with all TaskMate sources files .c .h (no autoCode)
-	geany ${SRCS} ${SRCS_H}
+	geany ${FILES_SRC} ${FILES_SRC_H}
 .PHONY: geany_all
