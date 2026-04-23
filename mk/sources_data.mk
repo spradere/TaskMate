@@ -16,18 +16,18 @@
 SRCS != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.c"
 SRCS_H != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.h"
 
-OBJS = ${SRCS:${PATH_SOURCES}/%.c=${PATH_BUILD_TARGET}/%.o}
+OBJS = ${SRCS:${PATH_SOURCES}/%.c=${PATH_BUILDS_TARGET}/%.o}
 
 # Dependency files
 DEPS = ${OBJS:.o=.d}
-DEPS_FILE = ${PATH_BUILD_TARGET}/.deps.d
+DEPS_FILE = ${PATH_BUILDS_TARGET}/.deps.d
 
 .sinclude "${DEPS_FILE}"
 
 # autoCode
 AUTOCODE_SRCS != find ${PATH_SOURCES}/autoCode -maxdepth 1 -type f -name "*.c"
 AUTOCODE_SRCS_H != find ${PATH_SOURCES}/autoCode -maxdepth 1 -type f -name "*.h"
-AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
+AUTOCODE_STAMP = ${PATH_BUILDS_TARGET}/.autoCode_stamp
 
 STAMP_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 AUTOCODE_LOG_STAMP = ${AUTOCODE_LOG}_${STAMP_DATE_TIME}
