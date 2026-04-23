@@ -17,40 +17,40 @@ clean:
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
-	rm -f ${OBJS} ${DEPS} ${PATH_BUILD_TARGET}/TaskMate*
-	rm -f ${AUTOCODE_TARGET} ${PATH_BUILD_TARGET}/.autoCode_stamp* ${PATH_BUILD_TARGET}/autoCode_*
+	rm -f ${OBJS} ${DEPS} ${PATH_BUILDS_TARGET}/TaskMate*
+	rm -f ${FILE_AUTOCODE_TARGET} ${PATH_BUILDS_TARGET}/.autoCode_stamp* ${PATH_BUILDS_TARGET}/autoCode_*
 	@printf "${COLOUR_RESET}"
 .PHONY: clean
 
 doc:
 #help [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	doxygen ${PATH_DOCS}/Doxyfile
 .PHONY: doc
 
 _cloc_data:
-	@cloc * --exclude-dir=${PATH_BUILD},${PATH_LOGS} --exclude-lang=D --exclude-ext=rc,md,txt > ${CLOC_RAW}
-	@printf "\n" >> ${CLOC_RAW}
-	@cloc * --exclude-dir=${PATH_BUILD},${PATH_LOGS} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${CLOC_RAW}
-	@awk -v file="${CLOC_DATA}" -f ${PATH_SCRIPTS}/cloc_data.awk ${CLOC_RAW}
+	@cloc * --exclude-dir=${PATH_BUILDS},${PATH_LOGS} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
+	@printf "\n" >> ${FILE_CLOCRAW}
+	@cloc * --exclude-dir=${PATH_BUILDS},${PATH_LOGS} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${FILE_CLOCRAW}
+	@awk -v file="${FILE_CLOCDATA}" -f ${PATH_SCRIPTS}/cloc_data.awk ${FILE_CLOCRAW}
 .PHONY: _cloc_data
 
 cloc: _cloc_data
 #help [global] Count lines of codes.
 	@printf "\n%sCount lines of codes%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 
-	@cat ${CLOC_RAW}
+	@cat ${FILE_CLOCRAW}
 	@printf "${COLOUR_WHITE_BOLD}\nTotal loc and ratio :\n"
-	@awk -f ${PATH_SCRIPTS}/cloc_show.awk "${CLOC_DATA}"
+	@awk -f ${PATH_SCRIPTS}/cloc_show.awk "${FILE_CLOCDATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: cloc
 
 note:
 #help [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@grep -r -n -i -E 'TODO|FIX|HACK' ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
 
 .PHONY: note
@@ -58,7 +58,7 @@ note:
 cppcheck:
 #help [global] cppcheck static code analysis for autoCode and TaskMate.
 	@printf "\n%sCount lines of codes%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@cppcheck -I/root/code/TaskMate/TaskMate_current/ \
 		--enable=all --inconclusive --force \
 		--suppress=missingIncludeSystem \
@@ -71,14 +71,14 @@ cppcheck:
 clang_format:
 #help [global] Formatting code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format -i ${SRCS} ${SRCS_H} ${AUTOCODE_SRCS}
 .PHONY: clang_format
 
 tidy_autoCode:
 #help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/${PATH_SOURCES}/
@@ -87,10 +87,10 @@ tidy_autoCode:
 help:
 #help [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@awk ${AWK_COLOURS} '\
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+	@awk ${COULOURS_AWK} '\
 		/^([A-Za-z0-9][A-Za-z0-9_-]*):/ { \
-			print COLOUR_HELP_TARGET $$1 COLOUR_RESET; \
+			print COLOUR_HELP_FILE_TARGET $$1 COLOUR_RESET; \
 			} \
 		$$1 == "#help" {\
 			printf("  %s%s%s", COLOUR_HELP_TAG, $$2, COLOUR_RESET); \

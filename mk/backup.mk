@@ -12,14 +12,14 @@
 # Backup
 ################################################################################
 
-gitignore: ${GIT_IGNORE_STAMP}
+gitignore: ${FILE_GIT_IGNORE_STAMP}
 #help [global] generate gitignore file
 .PHONY: gitignore
 
-push: ${GIT_IGNORE_STAMP}
+push: ${FILE_GIT_IGNORE_STAMP}
 #help [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit -> ${UPSTREAM} %s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@git add .
 	@git commit -m "${M}"
 	@git push
@@ -48,58 +48,56 @@ merge:
 
 
 # Write .gitignore file
-${GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
-	@printf "# exclude everything\n" > "${GIT_IGNORE}"
-	@printf "*\n" >> "${GIT_IGNORE}"
+${FILE_GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
+	@printf "# exclude everything\n" > "${FILE_GIT_IGNORE}"
+	@printf "*\n" >> "${FILE_GIT_IGNORE}"
 
-	@printf "\n# allowed directories and files\n" >> "${GIT_IGNORE}"
-.for dir in ${GIT_ALLOWED_DIRS}
-	@printf "!${dir}/\n" >> "${GIT_IGNORE}"
-	@printf "!${dir}/**/\n" >> "${GIT_IGNORE}"
-.for file in ${GIT_ALLOWED_FILES.${dir}}
-	@printf "!${dir}/**/${file}\n" >> "${GIT_IGNORE}"
+	@printf "\n# allowed directories and files\n" >> "${FILE_GIT_IGNORE}"
+.for dir in ${PATHS_GIT_ALLOWED_PATH}
+	@printf "!${dir}/\n" >> "${FILE_GIT_IGNORE}"
+	@printf "!${dir}/**/\n" >> "${FILE_GIT_IGNORE}"
+.for file in ${VAL_GIT_ALLOWED.${dir}}
+	@printf "!${dir}/**/${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 .endfor
 
-	@printf "\n# allowed files\n" >> "${GIT_IGNORE}"
-.for file in ${GIT_ALLOWED_FILES}
-	@printf "!${file}\n" >> "${GIT_IGNORE}"
+	@printf "\n# allowed files\n" >> "${FILE_GIT_IGNORE}"
+.for file in ${VAL_GIT_ALLOWED}
+	@printf "!${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
-	@touch ${GIT_IGNORE_STAMP}
+	@touch ${FILE_GIT_IGNORE_STAMP}
 
 backup:
 #help [global] USB key backup with current git tag in directory.
-	@printf "\n%sBackup to <${USB_DIR}${TM_BACKUP_DIR}>%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "\n%sBackup to <${PATH_USBKEY}${VAL_TM_BACKUP_DIR}>%s\n\n" \
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
 	# Test if USB key is mount, do if not
-	@if mount | grep -q "${USB_DIR}"; then \
-		printf "%sUSB key already mounted ${USB_DIR}%s\n" \
+	@if mount | grep -q "${PATH_USBKEY}"; then \
+		printf "%sUSB key already mounted ${PATH_USBKEY}%s\n" \
 			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
 	else \
-		printf "%sMount USB key ${USB_DIR}%s\n" \
+		printf "%sMount USB key ${PATH_USBKEY}%s\n" \
 			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
-		mount -v -t msdosfs ${USB_DEV} ${USB_DIR}; \
+		mount -v -t msdosfs ${FILE_USBDEV} ${PATH_USBKEY}; \
 	fi
 
 	# Run rsync
 	@printf "%sRun rsync, output logged in ${RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	@mkdir -p ${USB_DIR}${TM_BACKUP_DIR}
+	@mkdir -p ${PATH_USBKEY}${VAL_TM_BACKUP_DIR}
 	rsync -av ./ --progress --delete --delete-excluded \
-		--include="${PATH_BUILD}/" \
-		--include="${PATH_BUILD_TARGET}/" \
-		--include="${PATH_BUILD_TARGET}/build_counter" \
-		--exclude="${PATH_BUILD_TARGET}/*" \
-		--exclude="${PATH_BUILD}/*" --exclude="${PATH_LOGS}" \
-		"${USB_DIR}${TM_BACKUP_DIR}/" > "${RSYNC_LOG}"
+		--exclude=".git" \
+		--exclude="${PATH_BUILDS}/" \
+		--exclude="${PATH_LOGS}" \
+		"${PATH_USBKEY}${VAL_TM_BACKUP_DIR}/" > "${RSYNC_LOG}"
 
 	# umount
-	@printf "%sUmount ${USB_DIR}%s\n" \
+	@printf "%sUmount ${PATH_USBKEY}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	@umount ${USB_DIR}
+	@umount ${PATH_USBKEY}
 	@printf "\n"
 .PHONY: backup

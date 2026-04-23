@@ -13,22 +13,22 @@
 ################################################################################
 
 # Targets
-TARGET = ${PATH_BUILD_TARGET}/TaskMate
-AUTOCODE_TARGET = ${PATH_BUILD}/autoCode
+FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
+FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 
 # USB
-USB_DIR = /media/usbkey
-USB_DEV = /dev/da0s1
+PATH_USBKEY = /media/usbkey
+FILE_USBDEV = /dev/da0s1
 
 # Build info
-BUILD_INFO = ${PATH_BUILD}/last_build_info.txt
-BUILD_CNT_FILE = ${PATH_BUILD_TARGET}/build_counter
+BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
+BUILD_CNT_FILE = ${PATH_BUILDS_TARGET}/build_counter
 VAL_TM_VERSION_FILE = ${PATH_SOURCES}/interfaces/tm_version
 
-CLOC_RAW = ${PATH_BUILD_TARGET}/cloc_raw
-CLOC_DATA = ${PATH_BUILD_TARGET}/cloc_data
-MEM_RAW = ${PATH_BUILD_TARGET}/mem_raw
-MEM_DATA = ${PATH_BUILD_TARGET}/mem_data
+FILE_CLOCRAW = ${PATH_BUILDS}/cloc_raw
+FILE_CLOCDATA = ${PATH_BUILDS}/cloc_data
+FILE_MEMRAW = ${PATH_BUILDS_TARGET}/mem_raw
+FILE_MEMDATA = ${PATH_BUILDS_TARGET}/mem_data
 
 # Source directories
 PATH_SOURCES_LIST = ${PATH_SOURCES}
@@ -55,26 +55,26 @@ SCRIPTS_DIR = scripts
 H_ALLOW_FILE = mk/header_allow.conf
 
 # autoCode
-AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
+FILE_AUTOCODE_CONFIG = ${PATH_BUILDS_TARGET}/autoCode_config
 
 # git ignore
-GIT_IGNORE = .gitignore
-GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
-GIT_ALLOWED_DIRS = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_BUILD} ${SCRIPTS_DIR}
-GIT_ALLOWED_FILES.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
-GIT_ALLOWED_FILES.${PATH_MAKEFILES} = *.mk *.conf
-GIT_ALLOWED_FILES.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk tm_version
-GIT_ALLOWED_FILES.${PATH_BUILD} = build_counter
-GIT_ALLOWED_FILES.${SCRIPTS_DIR} = *.awk
-GIT_ALLOWED_FILES = .clang-format .clang-tidy \
+FILE_GIT_IGNORE = .gitignore
+FILE_GIT_IGNORE_STAMP = ${PATH_BUILDS_TARGET}/.gitignore_stamp
+PATHS_GIT_ALLOWED_PATH = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_BUILDS} ${SCRIPTS_DIR}
+VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
+VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
+VAL_GIT_ALLOWED.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk tm_version
+VAL_GIT_ALLOWED.${PATH_BUILDS} = build_counter
+VAL_GIT_ALLOWED.${SCRIPTS_DIR} = *.awk
+VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
-ERROR_CAT = ${PATH_BUILD_TARGET}/errors_all.err
+FILE_ERROR_CAT = ${PATH_BUILDS_TARGET}/errors_all.err
 
 # Tags
-TAGS = .tags
-TAGS_STAMP = ${PATH_BUILD_TARGET}/.tags_stamp
+FILE_TAGS = .tags
+FILE_TAGS_STAMP = ${PATH_BUILDS_TARGET}/.tags_stamp
 
 # USB key directory backup
-TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${VAL_TM_VERSION}
+VAL_TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${VAL_TM_VERSION}
