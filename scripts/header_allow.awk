@@ -91,7 +91,7 @@ state == "in_allow" {
 
 	if (file == "") error("empty entry in allow block")
 
-	allow[block_id, src_dir "/" file] = 1
+	allow[block_id, PATH_SOURCES "/" file] = 1
 	allow_count[block_id]++
 	next
 }
@@ -149,7 +149,7 @@ function check_pattern(block, cmd, file, found_any)
 	printf("Checking pattern %s ...\n", pattern[block])
 	printf("\nChecking pattern %s ...\n", pattern[block]) > h_check_log
 
-	cmd = "grep -R -l \"" pattern[block] "\" \"" src_dir "\" 2>/dev/null"
+	cmd = "grep -R -l \"" pattern[block] "\" \"" PATH_SOURCES "\" 2>/dev/null"
 
 	while ((cmd | getline file) > 0)
 	{

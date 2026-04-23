@@ -30,8 +30,8 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common -Wpointer-arith
 
 # Command line #include and #define
-CFLAGS += -I${SRC_DIR}
-CFLAGS += -DTM_VERSION=\"${TM_VERSION}\" -DBUILD_CNT=${BUILD_CNT} \
+CFLAGS += -I${PATH_SOURCES}
+CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DBUILD_CNT=${BUILD_CNT} \
 	-DARCH_${ARCH} -DMCU_${MCU} -DBOARD_${BOARD}
 
 # Linker flags
@@ -50,13 +50,13 @@ ${TARGET}: ${OBJS}
 	@printf "\t *.o -> ${ELF}\n"
 
 # compile
-${OBJS}: ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}
+${OBJS}: ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}
 	@printf "\n%sCompilation ...%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c} ${.TARGET}
+	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c}} \
-		-c ${.TARGET:${BUILD_DIR_TARGET}%.o=${SRC_DIR}%.c} -o ${.TARGET}
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}} \
+		-c ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c} -o ${.TARGET}
 
 upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.
@@ -70,7 +70,7 @@ upload: all _mcu_memory_show
 
 # memory usage
 _mcu_memory_data:
-		@avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf > ${MEM_RAW}
+		@avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf > ${MEM_RAW}
 
 		@awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
 		NR==2 { \
@@ -112,8 +112,8 @@ dump: all
 	@printf "\n%sGenerate debugging informations%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	avr-objdump -D -m avr6 ${HEX} > "${BUILD_DIR_TARGET}/hex.txt"
-	avr-objdump -D -m avr6 ${ELF} > "${BUILD_DIR_TARGET}/elf.txt"
+	avr-objdump -D -m avr6 ${HEX} > "${PATH_BUILD_TARGET}/hex.txt"
+	avr-objdump -D -m avr6 ${ELF} > "${PATH_BUILD_TARGET}/elf.txt"
 .PHONY: dump
 
 tidy_TaskMate:
@@ -122,7 +122,7 @@ tidy_TaskMate:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/ \
+	-I/root/code/TaskMate/TaskMate_current/${PATH_SOURCES}/ \
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.1.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
@@ -135,6 +135,6 @@ modules_size: all
 #help [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	avr-size -G -d ${BUILD_DIR_TARGET}/TaskMate.elf
-	avr-nm --format=bsd --size-sort -r ${BUILD_DIR_TARGET}/TaskMate.elf | head -20
+	avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf
+	avr-nm --format=bsd --size-sort -r ${PATH_BUILD_TARGET}/TaskMate.elf | head -20
 .PHONY: mem_size

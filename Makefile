@@ -13,35 +13,35 @@
 ################################################################################
 
 # Main directories
-SRC_DIR = src
-BUILD_DIR = build
-LOG_DIR = log
-MAKE_DIR = mk
-DOC_DIR = doc
-DIR_SCRIPTS = scripts
+PATH_SOURCES = src
+PATH_BUILD = build
+PATH_LOGS = log
+PATH_MAKEFILES = mk
+PATH_DOCS = doc
+PATH_SCRIPTS = scripts
 
 # Build system options
-.include "${MAKE_DIR}/options.mk"
+.include "${PATH_MAKEFILES}/options.mk"
 
 # Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduinoMega
-.include "${MAKE_DIR}/hardware_target.mk"
-BUILD_DIR_TARGET = ${BUILD_DIR}/${ARCH}_${MCU}_${BOARD}
+.include "${PATH_MAKEFILES}/hardware_target.mk"
+PATH_BUILD_TARGET = ${PATH_BUILD}/${ARCH}_${MCU}_${BOARD}
 
 # Definitions
-TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00"
-.include "${MAKE_DIR}/path_files.mk"
-.include "${MAKE_DIR}/sources_data.mk"
-.include "${MAKE_DIR}/header_allow.mk"
-.include "${MAKE_DIR}/colours.mk"
+VAL_TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00"
+.include "${PATH_MAKEFILES}/path_files.mk"
+.include "${PATH_MAKEFILES}/sources_data.mk"
+.include "${PATH_MAKEFILES}/header_allow.mk"
+.include "${PATH_MAKEFILES}/colours.mk"
 
 # Make global process
-.include "${MAKE_DIR}/build.mk"
-.include "${MAKE_DIR}/utils.mk"
-.include "${MAKE_DIR}/backup.mk"
-.include "${MAKE_DIR}/editors.mk"
+.include "${PATH_MAKEFILES}/build.mk"
+.include "${PATH_MAKEFILES}/utils.mk"
+.include "${PATH_MAKEFILES}/backup.mk"
+.include "${PATH_MAKEFILES}/editors.mk"
 
 # Make hardware specific
-.include "${SRC_DIR}/hal/arch/${ARCH}/hal_arch_make.mk"
-.include "${SRC_DIR}/hal/mcu/${MCU}/hal_mcu_make.mk"
-.include "${SRC_DIR}/hal/board/${BOARD}/hal_board_make.mk"
+.include "${PATH_SOURCES}/hal/arch/${ARCH}/hal_arch_make.mk"
+.include "${PATH_SOURCES}/hal/mcu/${MCU}/hal_mcu_make.mk"
+.include "${PATH_SOURCES}/hal/board/${BOARD}/hal_board_make.mk"
 

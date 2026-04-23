@@ -17,8 +17,8 @@ clean:
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
-	rm -f ${OBJS} ${DEPS} ${BUILD_DIR_TARGET}/TaskMate*
-	rm -f ${AUTOCODE_TARGET} ${BUILD_DIR_TARGET}/.autoCode_stamp* ${BUILD_DIR_TARGET}/autoCode_*
+	rm -f ${OBJS} ${DEPS} ${PATH_BUILD_TARGET}/TaskMate*
+	rm -f ${AUTOCODE_TARGET} ${PATH_BUILD_TARGET}/.autoCode_stamp* ${PATH_BUILD_TARGET}/autoCode_*
 	@printf "${COLOUR_RESET}"
 .PHONY: clean
 
@@ -26,14 +26,14 @@ doc:
 #help [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	doxygen ${DOC_DIR}/Doxyfile
+	doxygen ${PATH_DOCS}/Doxyfile
 .PHONY: doc
 
 _cloc_data:
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D --exclude-ext=rc,md,txt > ${CLOC_RAW}
+	@cloc * --exclude-dir=${PATH_BUILD},${PATH_LOGS} --exclude-lang=D --exclude-ext=rc,md,txt > ${CLOC_RAW}
 	@printf "\n" >> ${CLOC_RAW}
-	@cloc * --exclude-dir=${BUILD_DIR},${LOG_DIR} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${CLOC_RAW}
-	@awk -v file="${CLOC_DATA}" -f ${DIR_SCRIPTS}/cloc_data.awk ${CLOC_RAW}
+	@cloc * --exclude-dir=${PATH_BUILD},${PATH_LOGS} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${CLOC_RAW}
+	@awk -v file="${CLOC_DATA}" -f ${PATH_SCRIPTS}/cloc_data.awk ${CLOC_RAW}
 .PHONY: _cloc_data
 
 cloc: _cloc_data
@@ -43,7 +43,7 @@ cloc: _cloc_data
 
 	@cat ${CLOC_RAW}
 	@printf "${COLOUR_WHITE_BOLD}\nTotal loc and ratio :\n"
-	@awk -f ${DIR_SCRIPTS}/cloc_show.awk "${CLOC_DATA}"
+	@awk -f ${PATH_SCRIPTS}/cloc_show.awk "${CLOC_DATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: cloc
 
@@ -81,7 +81,7 @@ tidy_autoCode:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(AUTOCODE_SRCS) ${AUTOCODE_SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/${SRC_DIR}/
+	-I/root/code/TaskMate/TaskMate_current/${PATH_SOURCES}/
 .PHONY:tidy_autoCode
 
 help:
