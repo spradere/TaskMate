@@ -18,17 +18,17 @@
 .MAIN: all
 
 .BEGIN:
-	@mkdir -p ${BUILD_DIR_TARGET}
-	@mkdir -p ${LOG_DIR}
+	@mkdir -p ${PATH_BUILD_TARGET}
+	@mkdir -p ${PATH_LOGS}
 	
 .if make(upload)
 	printf "%i" ${BUILD_CNT} > "${BUILD_CNT_FILE}"
 .endif	
 
 .if make(upload) || make(all)
-	@printf '%s\n' "${TM_VERSION}" | \
-	cmp -s - "${TM_VERSION_FILE}" 2>/dev/null || \
-	printf '%s\n' "${TM_VERSION}" > "${TM_VERSION_FILE}"
+	@printf '%s\n' "${VAL_TM_VERSION}" | \
+	cmp -s - "${VAL_TM_VERSION_FILE}" 2>/dev/null || \
+	printf '%s\n' "${VAL_TM_VERSION}" > "${VAL_TM_VERSION_FILE}"
 .endif
 
 .END:
@@ -36,7 +36,7 @@
 	@printf "# Last build informations \n" >> "${BUILD_INFO}"
 	@printf "##########################\n\n" >> "${BUILD_INFO}"
 
-	@printf "TaskMate %s\n" "${TM_VERSION}" >> "${BUILD_INFO}"
+	@printf "TaskMate %s\n" "${VAL_TM_VERSION}" >> "${BUILD_INFO}"
 	@printf "date : " >> "${BUILD_INFO}"
 	@date >> "${BUILD_INFO}"
 	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${BUILD_INFO}"
@@ -52,7 +52,7 @@
 	@printf "##########################\n"
 	@printf "# Build summary\n"
 	@printf "##########################\n\n"
-	@printf "\t%-16s : %s\n" "TaskMate version" "${TM_VERSION}"
+	@printf "\t%-16s : %s\n" "TaskMate version" "${VAL_TM_VERSION}"
 	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
 	@printf "\t%-16s : %s\n" "build" "${BUILD_CNT}"
 
@@ -89,7 +89,7 @@ _dependency:
 
 # autoCode and required files
 ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
-					${TM_VERSION_FILE} ${BUILD_CNT_FILE}
+					${VAL_TM_VERSION_FILE} ${BUILD_CNT_FILE}
 
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -99,7 +99,7 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 
 	# write autoCode options
 	@printf "# TaskMate version\n" > "${AUTOCODE_CONFIG}"
-	@printf "%s\n" "--tm_ver ${TM_VERSION}" >> "${AUTOCODE_CONFIG}"
+	@printf "%s\n" "--tm_ver ${VAL_TM_VERSION}" >> "${AUTOCODE_CONFIG}"
 	@printf "%s\n" "--tm_build ${BUILD_CNT}" >> "${AUTOCODE_CONFIG}"
 
 	@printf "\n# hardware target\n" >> "${AUTOCODE_CONFIG}"
@@ -137,7 +137,7 @@ ${AUTOCODE_STAMP}: 	${AUTOCODE_TARGET} ${FILES_INIT_RC} ${ERROR_CAT} \
 		}' ${AUTOCODE_LOG_STAMP}
 
 # Special rule for autoCode with clang, not arch specialized compiler
-AUTOCODE_CFLAGS = -I${SRC_DIR}/
+AUTOCODE_CFLAGS = -I${PATH_SOURCES}/
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
