@@ -36,32 +36,32 @@ CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DBUILD_CNT=${BUILD_CNT} \
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
-LFLGAS = -Wl,--gc-sections -Wl,-Map=${TARGET}.map
+LFLGAS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 
 # output files
-HEX = ${TARGET}.hex
-ELF = ${TARGET}.elf
+HEX = ${FILE_TARGET}.hex
+ELF = ${FILE_TARGET}.elf
 
 # link
-${TARGET}: ${OBJS}
+${FILE_TARGET}: ${OBJS}
 	@printf "\n%sLinking%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@${CC} ${CFLAGS} ${LFLAGS} -o ${ELF} ${OBJS}
 	@printf "\t *.o -> ${ELF}\n"
 
 # compile
-${OBJS}: ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}
+${OBJS}: ${.TARGET:${PATH_BUILDS_TARGET}%.o=${PATH_SOURCES}%.c}
 	@printf "\n%sCompilation ...%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c} ${.TARGET}
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILDS_TARGET}%.o=${PATH_SOURCES}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}} \
-		-c ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c} -o ${.TARGET}
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILDS_TARGET}%.o=${PATH_SOURCES}%.c}} \
+		-c ${.TARGET:${PATH_BUILDS_TARGET}%.o=${PATH_SOURCES}%.c} -o ${.TARGET}
 
 upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
-		"${COLOUR_TARGET_INFO}" ${BUILD_CNT} "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" ${BUILD_CNT} "${COLOUR_RESET}"
 	# ELF to hex format
 	@avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
 	# Upload to Atmega
@@ -70,7 +70,7 @@ upload: all _mcu_memory_show
 
 # memory usage
 _mcu_memory_data:
-		@avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf > ${MEM_RAW}
+		@avr-size -G -d ${PATH_BUILDS_TARGET}/TaskMate.elf > ${FILE_MEMRAW}
 
 		@awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
 		NR==2 { \
@@ -83,16 +83,16 @@ _mcu_memory_data:
 		ram_total = ram_total_k * 1024; \
 		flash_pct = (flash / (flash_total)) * 100; \
 		ram_pct   = (ram / (ram_total)) * 100; \
-		printf("Memory used total %%\n") > "${MEM_DATA}"; \
-		printf("Flash %d %d %f\n", flash, flash_total, flash_pct) >> "${MEM_DATA}"; \
-		printf("RAM %d %d %f\n", ram, ram_total, ram_pct) >> "${MEM_DATA}"; \
-		close("${MEM_DATA}"); \
-		}' ${MEM_RAW}
+		printf("Memory used total %%\n") > "${FILE_MEMDATA}"; \
+		printf("Flash %d %d %f\n", flash, flash_total, flash_pct) >> "${FILE_MEMDATA}"; \
+		printf("RAM %d %d %f\n", ram, ram_total, ram_pct) >> "${FILE_MEMDATA}"; \
+		close("${FILE_MEMDATA}"); \
+		}' ${FILE_MEMRAW}
 .PHONY: _mcu_memory_data
 
 _mcu_memory_show: _mcu_memory_data
 	@printf "\nStatic memory usage : \n"
-	@cat ${MEM_RAW}
+	@cat ${FILE_MEMRAW}
 
 	@printf "${COLOUR_WHITE_BOLD}Memory usage :\n"
 	@awk '\
@@ -102,7 +102,7 @@ _mcu_memory_show: _mcu_memory_data
 		total = $$3; \
 		pct = $$4; \
 		printf("\t%-10s : %d / %d bytes (%0.1f%%)\n", name, use, total, pct); \
-		}' ${MEM_DATA}
+		}' ${FILE_MEMDATA}
 	@printf "${COLOUR_RESET}"
 .PHONY: _mcu_memory_show
 
@@ -110,16 +110,16 @@ _mcu_memory_show: _mcu_memory_data
 dump: all
 #help [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	avr-objdump -D -m avr6 ${HEX} > "${PATH_BUILD_TARGET}/hex.txt"
-	avr-objdump -D -m avr6 ${ELF} > "${PATH_BUILD_TARGET}/elf.txt"
+	avr-objdump -D -m avr6 ${HEX} > "${PATH_BUILDS_TARGET}/hex.txt"
+	avr-objdump -D -m avr6 ${ELF} > "${PATH_BUILDS_TARGET}/elf.txt"
 .PHONY: dump
 
 tidy_TaskMate:
 #help [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
 	@printf "\n%sTidy TaskMate static code test%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(SRCS) ${SRCS_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/${PATH_SOURCES}/ \
@@ -134,7 +134,7 @@ tidy_TaskMate:
 modules_size: all
 #help [avr8] List module size sorted from highest.
 	@printf "\n%sList module size%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf
-	avr-nm --format=bsd --size-sort -r ${PATH_BUILD_TARGET}/TaskMate.elf | head -20
+		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+	avr-size -G -d ${PATH_BUILDS_TARGET}/TaskMate.elf
+	avr-nm --format=bsd --size-sort -r ${PATH_BUILDS_TARGET}/TaskMate.elf | head -20
 .PHONY: mem_size
