@@ -46,8 +46,8 @@ CFLAGS_${PATH_SOURCES}/sysCore/gpio.c = \
 # Check #include for system critical features
 _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
-	@awk ${COULOURS_AWK} -v PATH_SOURCES=${PATH_SOURCES} -v h_check_log=${H_CHECK_LOG} -f ${PATH_SCRIPTS}/header_allow.awk "${H_ALLOW_FILE}"
+	@awk ${COULOURS_AWK} -v PATH_SOURCES=${PATH_SOURCES} -v h_check_log=${FILE_H_CHECK_LOG} -f ${PATH_SCRIPTS}/header_allow.awk "${FILE_H_ALLOW_CONF}"
 
 

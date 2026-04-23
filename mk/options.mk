@@ -14,10 +14,10 @@
 
 # autoCode
 OPT_CLEAN_AUTOCODE_LOGS = yes
-VALID_OPTS = yes no
+VAL_VALID_OPTS = yes no
 
-.if empty(VALID_OPTS:M${OPT_CLEAN_AUTOCODE_LOGS})
-.error Invalid option "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [${VALID_OPTS}]
+.if empty(VAL_VALID_OPTS:M${OPT_CLEAN_AUTOCODE_LOGS})
+.error Invalid option "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [${VAL_VALID_OPTS}]
 .endif
 
 # bmake option for -V
