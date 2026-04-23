@@ -18,11 +18,11 @@
 .MAIN: all
 
 .BEGIN:
-	#@mkdir -p "${PATH_BUILDS_TARGET}"
-	#@mkdir -p "${PATH_LOGS}"
+	@mkdir -p "${PATH_BUILD_TARGET}"
+	@mkdir -p "${PATH_LOGS}"
 	
 .if make(upload)
-	printf "%i" ${BUILD_CNT} > "${BUILD_CNT_FILE}"
+	printf "%i" ${VAL_BUILD_CNT} > "${VAL_BUILD_CNT_FILE}"
 .endif	
 
 .if make(upload) || make(all)
@@ -40,7 +40,7 @@
 	@printf "date : " >> "${BUILD_INFO}"
 	@date >> "${BUILD_INFO}"
 	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${BUILD_INFO}"
-	@printf "build counter for this target : %s\n" "${BUILD_CNT}" >> "${BUILD_INFO}"
+	@printf "build counter for this target : %s\n" "${VAL_BUILD_CNT}" >> "${BUILD_INFO}"
 	@git -v >> "${BUILD_INFO}"
 	@printf "git tag : " >> "${BUILD_INFO}"
 	@git describe --tags >> "${BUILD_INFO}"
@@ -54,7 +54,7 @@
 	@printf "##########################\n\n"
 	@printf "\t%-16s : %s\n" "TaskMate version" "${VAL_TM_VERSION}"
 	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
-	@printf "\t%-16s : %s\n" "build" "${BUILD_CNT}"
+	@printf "\t%-16s : %s\n" "build" "${VAL_BUILD_CNT}"
 
 	@awk '\
 		$$1 == "code_total" { \
@@ -78,29 +78,29 @@
 	@printf "${COLOUR_RESET}"
 .endif
 
-all: _system_critical_check ${AUTOCODE_STAMP} _dependency ${FILE_TARGET} _mcu_memory_data _cloc_data
+all: _system_critical_check ${FILE_AUTOCODE_STAMP} _dependency ${FILE_TARGET} _mcu_memory_data _cloc_data
 #help [global] System build.
 	@printf "\n%sBuild complete%s\n\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 		
 # dependency files used to compile sources if related header or source was edited
 _dependency:
-	@if ls ${DEPS} >/dev/null 2>&1; then cat ${DEPS}; fi > "${DEPS_FILE}"
+	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
 
 # autoCode and required files
-${AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
-					${VAL_TM_VERSION_FILE} ${BUILD_CNT_FILE}
+${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
+					${VAL_TM_VERSION_FILE} ${VAL_BUILD_CNT_FILE}
 
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
-	@rm -f ${AUTOCODE_LOG}*
+	@rm -f ${FILE_AUTOCODE_LOG}*
 .endif
 
 	# write autoCode options
 	@printf "# TaskMate version\n" > "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--tm_ver ${VAL_TM_VERSION}" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--tm_build ${BUILD_CNT}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--tm_build ${VAL_BUILD_CNT}" >> "${FILE_AUTOCODE_CONFIG}"
 
 	@printf "\n# hardware target\n" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--arch ${ARCH}" >> "${FILE_AUTOCODE_CONFIG}"
@@ -111,8 +111,8 @@ ${AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
 	@printf "%s\n" "--errors ${FILE_ERROR_CAT}" >> "${FILE_AUTOCODE_CONFIG}"
 
 	# launch autoCode
-	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${AUTOCODE_LOG_STAMP}"
-	@touch ${AUTOCODE_STAMP}
+	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_STAMP}"
+	@touch ${FILE_AUTOCODE_STAMP}
 
 	# proceed log
 	@awk ${COULOURS_AWK} '\
@@ -127,14 +127,14 @@ ${AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
 			temp = $$0; \
 			sub(/^[^:]*: /,"",temp); \
 			print COLOUR_CYAN, temp, COLOUR_RESET; \
-			print temp >> "${AUTOCODE_LOG_STAMP}"; \
+			print temp >> "${FILE_AUTOCODE_LOG_STAMP}"; \
 		}\
 		$$4 == "change" { \
 			temp = $$0; \
 			sub(/^[^:]*: /,"",temp); \
 			print COLOUR_YELLOW, temp, COLOUR_RESET; \
-			print temp >> "${AUTOCODE_LOG_STAMP}"; \
-		}' ${AUTOCODE_LOG_STAMP}
+			print temp >> "${FILE_AUTOCODE_LOG_STAMP}"; \
+		}' ${FILE_AUTOCODE_LOG_STAMP}
 
 # Special rule for autoCode with clang, not arch specialized compiler
 AUTOCODE_CFLAGS = -I${PATH_SOURCES}/
@@ -142,23 +142,23 @@ AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
 
-${FILE_AUTOCODE_TARGET}: ${AUTOCODE_SRCS} ${AUTOCODE_SRCS_H}
+${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
 	@printf "\n%sCompiling autoCode%s\n\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
-	clang ${AUTOCODE_CFLAGS} ${AUTOCODE_SRCS} -o ${FILE_AUTOCODE_TARGET}
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	clang ${AUTOCODE_CFLAGS} ${FILES_AUTOCOE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
 # Global errors
-${FILE_ERROR_CAT}: ${ERROR_FILES}
+${FILE_ERROR_CAT}: ${FILES_ERROR}
 	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
-	@cat ${ERROR_FILES} > "${FILE_ERROR_CAT}"
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@cat ${FILES_ERROR} > "${FILE_ERROR_CAT}"
 
 # Run autoCode alone
 autoCode_alone: ${FILE_AUTOCODE_TARGET}
 #help [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
-		"${COLOUR_FILE_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f "${AUTOCODE_STAMP}"
-	@${MAKE} ${AUTOCODE_STAMP}
-	@ls -t ${AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@rm -f "${FILE_AUTOCODE_STAMP}"
+	@${MAKE} ${FILE_AUTOCODE_STAMP}
+	@ls -t ${FILE_AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 .PHONY: autoCode_alone

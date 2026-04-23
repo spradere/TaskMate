@@ -17,7 +17,7 @@ PATH_SOURCES = src
 PATH_BUILDS = build
 PATH_LOGS = log
 PATH_MAKEFILES = mk
-PATH_DOCS = doc
+PATH_FILES_DOC = doc
 PATH_SCRIPTS = scripts
 
 # Build system options
@@ -25,7 +25,7 @@ PATH_SCRIPTS = scripts
 
 # Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduinoMega
 .include "${PATH_MAKEFILES}/hardware_target.mk"
-PATH_BUILDS_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
+PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
 
 # Definitions
 VAL_TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00"
