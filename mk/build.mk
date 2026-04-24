@@ -21,31 +21,35 @@
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
 	
-.if make(upload)
-	printf "%i" ${VAL_BUILD_CNT} > "${VAL_BUILD_CNT_FILE}"
+.if exists(${FILE_TM_INFO})
+	@awk ${COLOURS_AWK} -v tm_version_make=${VAL_TM_VERSION} -v build_cnt_make=${VAL_BUILD_CNT} \
+		-f ${PATH_SCRIPTS}/tm_info.awk "${FILE_TM_INFO}"
 .endif	
 
-.if make(upload) || make(all)
-	@printf '%s\n' "${VAL_TM_VERSION}" | \
-	cmp -s - "${VAL_TM_VERSION_FILE}" 2>/dev/null || \
-	printf '%s\n' "${VAL_TM_VERSION}" > "${VAL_TM_VERSION_FILE}"
+.if !exists(${FILE_TM_INFO})
+	@printf "#####################################\n" > "${FILE_TM_INFO}"
+	@printf "# TaskMate informations informations \n" >> "${FILE_TM_INFO}"
+	@printf "#####################################\n\n" >> "${FILE_TM_INFO}"
+	
+	@printf "tm_version %s\n" "${VAL_TM_VERSION}" >> "${FILE_TM_INFO}"
+	@printf "build_cnt %s\n" "${VAL_BUILD_CNT}" >> "${FILE_TM_INFO}"
 .endif
 
 .END:
-	@printf "##########################\n" > "${BUILD_INFO}"
-	@printf "# Last build informations \n" >> "${BUILD_INFO}"
-	@printf "##########################\n\n" >> "${BUILD_INFO}"
-
-	@printf "TaskMate %s\n" "${VAL_TM_VERSION}" >> "${BUILD_INFO}"
-	@printf "date : " >> "${BUILD_INFO}"
-	@date >> "${BUILD_INFO}"
-	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${BUILD_INFO}"
-	@printf "build counter for this target : %s\n" "${VAL_BUILD_CNT}" >> "${BUILD_INFO}"
-	@git -v >> "${BUILD_INFO}"
-	@printf "git tag : " >> "${BUILD_INFO}"
-	@git describe --tags >> "${BUILD_INFO}"
-	@printf "${CC} : " >> "${BUILD_INFO}"
-	@printf "${CC_VER}\n" >> "${BUILD_INFO}"
+	@printf "##########################\n" > "${FILE_BUILD_INFO}"
+	@printf "# Last build informations \n" >> "${FILE_BUILD_INFO}"
+	@printf "##########################\n\n" >> "${FILE_BUILD_INFO}"
+	
+	@printf "TaskMate %s\n" "${VAL_TM_VERSION}" >> "${FILE_BUILD_INFO}"
+	@printf "date : " >> "${FILE_BUILD_INFO}"
+	@date >> "${FILE_BUILD_INFO}"
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${FILE_BUILD_INFO}"
+	@printf "build counter for this target : %s\n" "${VAL_BUILD_CNT}" >> "${FILE_BUILD_INFO}"
+	@git -v >> "${FILE_BUILD_INFO}"
+	@printf "git tag : " >> "${FILE_BUILD_INFO}"
+	@git describe --tags >> "${FILE_BUILD_INFO}"
+	@printf "${CC} : " >> "${FILE_BUILD_INFO}"
+	@printf "${CC_VER}\n" >> "${FILE_BUILD_INFO}"
 
 .if make(upload) || make(all)
 	@printf "%s\n" "${COLOUR_WHITE_BOLD}"
@@ -89,7 +93,7 @@ _dependency:
 
 # autoCode and required files
 ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
-					${VAL_TM_VERSION_FILE} ${VAL_BUILD_CNT_FILE}
+							${FILE_TM_INFO} 
 
 	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -115,7 +119,7 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_C
 	@touch ${FILE_AUTOCODE_STAMP}
 
 	# proceed log
-	@awk ${COULOURS_AWK} '\
+	@awk ${COLOURS_AWK} '\
 		$$1 == "[fileUtility.c]" { \
 			if($$4 ~ /^\*/) {\
 				temp = $$0; \

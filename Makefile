@@ -17,7 +17,7 @@ PATH_SOURCES = src
 PATH_BUILDS = build
 PATH_LOGS = log
 PATH_MAKEFILES = mk
-PATH_FILES_DOC = doc
+PATH_DOCS = doc
 PATH_SCRIPTS = scripts
 
 # Build system options

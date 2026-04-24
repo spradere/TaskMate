@@ -17,9 +17,7 @@ BEGIN {
 	block_id = 0
 }
 
-/^[ \t]*$/ { next }
-
-/^[ \t]*#/ { next }
+(NF == 0) || (/^[[:space:]]*#/) { next }
 
 { line = $0 }
 
