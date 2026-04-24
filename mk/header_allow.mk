@@ -48,6 +48,7 @@ _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
-	@awk ${COULOURS_AWK} -v PATH_SOURCES=${PATH_SOURCES} -v h_check_log=${FILE_H_CHECK_LOG} -f ${PATH_SCRIPTS}/header_allow.awk "${FILE_H_ALLOW_CONF}"
+	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SOURCES} -v h_check_log=${FILE_H_CHECK_LOG} \
+		-f ${PATH_SCRIPTS}/header_allow.awk "${FILE_H_ALLOW_CONF}"
 
 

@@ -21,9 +21,8 @@ PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
 
 # Build info
-BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
-VAL_BUILD_CNT_FILE = ${PATH_BUILD_TARGET}/build_counter
-VAL_TM_VERSION_FILE = ${PATH_SOURCES}/interfaces/tm_version
+FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
+FILE_TM_INFO = ${PATH_BUILDS}/tm_info.txt
 
 FILE_CLOCRAW = ${PATH_BUILDS}/cloc_raw
 FILE_CLOCDATA = ${PATH_BUILDS}/cloc_data
@@ -60,8 +59,8 @@ FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 # git ignore
 FILE_GIT_IGNORE = .gitignore
 FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
-PATHS_GIT_ALLOWED_PATH = ${PATH_FILES_DOC} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_BUILDS} ${PATH_SCRIPTS}
-VAL_GIT_ALLOWED.${PATH_FILES_DOC} = *.c *.md *.txt *.png *.jpg Doxyfile
+PATHS_GIT_ALLOWED_PATH = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_BUILDS} ${PATH_SCRIPTS}
+VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
 VAL_GIT_ALLOWED.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk tm_version
 VAL_GIT_ALLOWED.${PATH_BUILDS} = build_counter
