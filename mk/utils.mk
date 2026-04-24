@@ -26,7 +26,7 @@ doc:
 #help [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	doxygen ${PATH_FILES_DOC}/Doxyfile
+	doxygen ${PATH_DOCS}/Doxyfile
 .PHONY: doc
 
 _cloc_data:
@@ -88,7 +88,7 @@ help:
 #help [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@awk ${COULOURS_AWK} '\
+	@awk ${COLOURS_AWK} '\
 		/^([A-Za-z0-9][A-Za-z0-9_-]*):/ { \
 			print COLOUR_HELP_FILE_TARGET $$1 COLOUR_RESET; \
 			} \

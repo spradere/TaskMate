@@ -38,8 +38,8 @@ FILES_INIT_RC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.rc"
 FILES_ERROR != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.err" | sort
 
 # Documentation files
-FILES_DOC != find ${PATH_FILES_DOC} -maxdepth 3 -type f -name "*.md"; \
-		find ${PATH_FILES_DOC} -maxdepth 3 -type f -name "*.txt"
+FILES_DOC != find ${PATH_DOCS} -maxdepth 3 -type f -name "*.md"; \
+		find ${PATH_DOCS} -maxdepth 3 -type f -name "*.txt"
 
 # mk files
 FILES_MK_MK != find  ./${PATH_MAKEFILES} -maxdepth 1 -type f -name "*.mk"
@@ -52,14 +52,13 @@ FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL}
 ################################################################################
 
 # Build counter
-#BUILD_REV != git rev-list --count HEAD
-#BUILD_HASH != git rev-parse --short HEAD
+VAL_BUILD_CNT != git rev-list --count HEAD
 
-.if make(upload)
-VAL_BUILD_CNT != awk '{print $$1 + 1}' "${VAL_BUILD_CNT_FILE}"
-.else
-VAL_BUILD_CNT != awk '{print $$1;}' "${VAL_BUILD_CNT_FILE}"
-.endif
+#.if make(upload)
+#VAL_BUILD_CNT != awk '{print $$1 + 1}' "${VAL_BUILD_CNT_FILE}"
+#.else
+#VAL_BUILD_CNT != awk '{print $$1;}' "${VAL_BUILD_CNT_FILE}"
+#.endif
 
 # Get upstream
 VAL_UPSTREAM != git rev-parse --abbrev-ref --symbolic-full-name @{u}
