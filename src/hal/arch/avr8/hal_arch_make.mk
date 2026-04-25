@@ -32,7 +32,7 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 # Command line #include and #define
 CFLAGS += -I${PATH_SOURCES}
 CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT} \
-	-DARCH_${ARCH} -DMCU_${VAL_MCU_SERIAL} -DBOARD_${BOARD}
+	-DARCH_${ARCH} -DMCU_${MCU} -DBOARD_${BOARD}
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
