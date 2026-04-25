@@ -35,7 +35,7 @@ FILE_AUTOCODE_LOG_STAMP = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 FILES_INIT_RC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # Global error
-FILES_ERROR != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.err" | sort
+FILES_ERROR != find ${PATH_SOURCES_LIST} -maxdepth 1  -type f -name "*.err" | sort
 
 # Documentation files
 FILES_DOC != find ${PATH_DOCS} -maxdepth 3 -type f -name "*.md"; \
