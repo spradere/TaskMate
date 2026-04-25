@@ -8,7 +8,7 @@
 #
 ################################################################################
 
-# VAL_MCU_SERIAL settings
+# MCU settings
 
 VAL_MCU_SERIAL = atmega2560
 CFLAGS += -mmcu=${VAL_MCU_SERIAL}

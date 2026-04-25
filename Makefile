@@ -23,9 +23,9 @@ PATH_SCRIPTS = scripts
 # Build system options
 .include "${PATH_MAKEFILES}/options.mk"
 
-# Hardware target choice :  make ARCH=avr8 VAL_MCU_SERIAL=atmega2560 BOARD=arduinoMega
+# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduinoMega
 .include "${PATH_MAKEFILES}/hardware_target.mk"
-PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${VAL_MCU_SERIAL}_${BOARD}
+PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
 
 # Definitions
 VAL_TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00"
@@ -42,6 +42,6 @@ VAL_TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "
 
 # Make hardware specific
 .include "${PATH_SOURCES}/hal/arch/${ARCH}/hal_arch_make.mk"
-.include "${PATH_SOURCES}/hal/mcu/${VAL_MCU_SERIAL}/hal_mcu_make.mk"
+.include "${PATH_SOURCES}/hal/mcu/${MCU}/hal_mcu_make.mk"
 .include "${PATH_SOURCES}/hal/board/${BOARD}/hal_board_make.mk"
 
