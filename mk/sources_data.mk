@@ -54,11 +54,5 @@ FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL}
 # Build counter
 VAL_BUILD_CNT != git rev-list --count HEAD
 
-#.if make(upload)
-#VAL_BUILD_CNT != awk '{print $$1 + 1}' "${VAL_BUILD_CNT_FILE}"
-#.else
-#VAL_BUILD_CNT != awk '{print $$1;}' "${VAL_BUILD_CNT_FILE}"
-#.endif
-
 # Get upstream
 VAL_UPSTREAM != git rev-parse --abbrev-ref --symbolic-full-name @{u}

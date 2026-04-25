@@ -32,22 +32,22 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 # Command line #include and #define
 CFLAGS += -I${PATH_SOURCES}
 CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT} \
-	-DARCH_${ARCH} -DMCU_${MCU} -DBOARD_${BOARD}
+	-DARCH_${ARCH} -DMCU_${VAL_MCU_SERIAL} -DBOARD_${BOARD}
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
 LFLGAS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 
 # output files
-HEX = ${FILE_TARGET}.hex
-ELF = ${FILE_TARGET}.elf
+FILE_HEX = ${FILE_TARGET}.hex
+FILE_ELF = ${FILE_TARGET}.elf
 
 # link
 ${FILE_TARGET}: ${FILES_OBJ}
 	@printf "\n%sLinking%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${CC} ${CFLAGS} ${LFLAGS} -o ${ELF} ${FILES_OBJ}
-	@printf "\t *.o -> ${ELF}\n"
+	@${CC} ${CFLAGS} ${LFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
+	@printf "\t *.o -> ${FILE_ELF}\n"
 
 # compile
 ${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}
@@ -62,17 +62,17 @@ upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${VAL_BUILD_CNT} "${COLOUR_RESET}"
-	# ELF to hex format
-	@avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
+	# FILE_ELF to hex format
+	@avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
 	# Upload to Atmega
-	avrdude -c ${PROGRAMMER} -p ${MCU} -U flash:w:${HEX}:i -P ${PORT} -D
+	avrdude -c ${VAL_PROGRAMMER} -p ${VAL_MCU_SERIAL} -U flash:w:${FILE_HEX}:i -P ${VAL_PROGRAMMER_PORT} -D
 .PHONY: upload
 
 # memory usage
 _mcu_memory_data:
 		@avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf > ${FILE_MEMRAW}
 
-		@awk -v flash_total_k="${FLASH_SIZE_K}" -v ram_total_k="${RAM_SIZE_K}" '\
+		@awk -v flash_total_k="${VAL_FLASH_SIZE_K}" -v ram_total_k="${VAL_RAM_SIZE_K}" '\
 		NR==2 { \
 		text  = $$1; \
 		data  = $$2; \
@@ -111,9 +111,9 @@ dump: all
 #help [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	avr-objcopy -O ihex -R .eeprom ${ELF} ${HEX}
-	avr-objdump -D -m avr6 ${HEX} > "${PATH_BUILD_TARGET}/hex.txt"
-	avr-objdump -D -m avr6 ${ELF} > "${PATH_BUILD_TARGET}/elf.txt"
+	avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
+	avr-objdump -D -m avr6 ${FILE_HEX} > "${PATH_BUILD_TARGET}/hex.txt"
+	avr-objdump -D -m avr6 ${FILE_ELF} > "${PATH_BUILD_TARGET}/elf.txt"
 .PHONY: dump
 
 tidy_TaskMate:
@@ -126,7 +126,7 @@ tidy_TaskMate:
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.1.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-	-DF_CPU=${F_CPU} \
+	-DF_CPU=${VAL_CPU_FREQ} \
 	-DHAL_SYSTEM_CRITICAL_API_ALLOWED \
 	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
 .PHONY: tidy_TaskMate
