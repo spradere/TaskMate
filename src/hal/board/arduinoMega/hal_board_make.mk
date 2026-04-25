@@ -9,9 +9,9 @@
 ################################################################################
 
 # board settings
-F_CPU = 16000000UL
+VAL_CPU_FREQ = 16000000UL
 
-CFLAGS += -DF_CPU=${F_CPU}
+CFLAGS += -DF_CPU=${VAL_CPU_FREQ}
 
-PROGRAMMER = avrispmkII
-PORT = /dev/ttyU0
+VAL_PROGRAMMER = avrispmkII
+VAL_PROGRAMMER_PORT = /dev/ttyU0

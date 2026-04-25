@@ -43,7 +43,7 @@
 	@printf "TaskMate %s\n" "${VAL_TM_VERSION}" >> "${FILE_BUILD_INFO}"
 	@printf "date : " >> "${FILE_BUILD_INFO}"
 	@date >> "${FILE_BUILD_INFO}"
-	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${FILE_BUILD_INFO}"
+	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${VAL_MCU_SERIAL}" "${BOARD}" >> "${FILE_BUILD_INFO}"
 	@printf "build counter for this target : %s\n" "${VAL_BUILD_CNT}" >> "${FILE_BUILD_INFO}"
 	@git -v >> "${FILE_BUILD_INFO}"
 	@printf "git tag : " >> "${FILE_BUILD_INFO}"
@@ -57,7 +57,7 @@
 	@printf "# Build summary\n"
 	@printf "##########################\n\n"
 	@printf "\t%-16s : %s\n" "TaskMate version" "${VAL_TM_VERSION}"
-	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
+	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${VAL_MCU_SERIAL}" "${BOARD}"
 	@printf "\t%-16s : %s\n" "build" "${VAL_BUILD_CNT}"
 
 	@awk '\
@@ -108,7 +108,7 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_C
 
 	@printf "\n# hardware target\n" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--arch ${ARCH}" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--mcu ${MCU}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--mcu ${VAL_MCU_SERIAL}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--board ${BOARD}" >> "${FILE_AUTOCODE_CONFIG}"
 
 	@printf "\n# files path\n" >> "${FILE_AUTOCODE_CONFIG}"
