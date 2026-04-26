@@ -16,13 +16,15 @@
 
 #include "tokenizer.h"
 
-#define HAVE_OPTIONS(X)            \
-	X(HAVE_TM_VER, "--tm_ver")     \
-	X(HAVE_TM_BUILD, "--tm_build") \
-	X(HAVE_ARCH, "--arch")         \
-	X(HAVE_MCU, "--mcu")           \
-	X(HAVE_BOARD, "--board")       \
-	X(HAVE_ERRORS, "--errors")
+#define HAVE_OPTIONS(X)            	\
+	X(HAVE_TM_VER, "--tm_ver")     	\
+	X(HAVE_TM_BUILD, "--tm_build") 	\
+	X(HAVE_ARCH, "--arch")         	\
+	X(HAVE_MCU, "--mcu")           	\
+	X(HAVE_BOARD, "--board")       	\
+	X(HAVE_ERRORS, "--errors")		\
+	X(HAVE_INITRC, "--initrc")		\
+	X(HAVE_PARSETAG, "--parsetag")
 
 enum
 {
@@ -79,8 +81,20 @@ static void funcBoard(const char *value, options_list_t *opt)
 
 static void funcErrors(const char *value, options_list_t *opt)
 {
-	strncpy(opt->errors_file, value, BYTE_INDEX);
+	strncpy(opt->file_errors_list, value, BYTE_INDEX);
 	have_options_count[HAVE_ERRORS]++;
+}
+
+static void funcInitrc(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_initrc_list, value, BYTE_INDEX);
+	have_options_count[HAVE_INITRC]++;
+}
+
+static void funcParsetag(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_parsetag_list, value, BYTE_INDEX);
+	have_options_count[HAVE_PARSETAG]++;
 }
 
 static const struct
@@ -94,6 +108,8 @@ static const struct
 					{"--mcu", funcMcu},
 					{"--board", funcBoard},
 					{"--errors", funcErrors},
+					{"--initrc", funcInitrc},
+					{"--parsetag", funcParsetag},
 					{NULL, NULL}};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)

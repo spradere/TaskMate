@@ -20,11 +20,11 @@
 typedef struct
 {
 	const char *name;
-	void (*func)(module_status_t *status, run_level_modules_count_t (*count)[RUN_LEVEL_COUNT]);
+	void (*func)(module_item_t *mod);
 
 } initrc_cmd_t;
 
-int initrcCmdDispatch(const char *cmd, module_status_t *status, run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT]);
+int initrcCmdDispatch(const char *cmd, module_item_t *mod);
 
 
 #endif

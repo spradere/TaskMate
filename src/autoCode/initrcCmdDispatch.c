@@ -14,59 +14,68 @@
 
 #include "initrcCmdDispatch.h"
 
-static void funcRunNone(module_status_t *status,
-						run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunNone(module_item_t *mod)
 {
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_NONE;
-	(*count)[RUN_NONE] = 0;
+	mod->status &= !RUN_LEVEL_MASK;
+	mod->status |= RUN_NONE;
+
 }
-static void funcRunCore(module_status_t *status,
-						run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunCore(module_item_t *mod)
 {
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_CORE;
-	(*count)[RUN_CORE]++;
+	mod->status &= !RUN_LEVEL_MASK;
+	mod->status |= RUN_CORE;
+
 }
-static void funcRunDriver(module_status_t *status,
-						  run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunDriver(module_item_t *mod)
 {
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_DRIVER;
-	(*count)[RUN_DRIVER]++;
+	mod->status &= !RUN_LEVEL_MASK;
+	mod->status |= RUN_DRIVER;
+
 }
-static void funcRunService(module_status_t *status,
-						   run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunService(module_item_t *mod )
 {
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_SERVICE;
-	(*count)[RUN_SERVICE]++;
+	mod->status &= !RUN_LEVEL_MASK;
+	mod->status |= RUN_SERVICE;
+
 }
-static void funcRunUser(module_status_t *status,
-						run_level_modules_count_t (*count)[RUN_LEVEL_COUNT])
+static void funcRunUser(module_item_t *mod)
 {
-	*status &= !RUN_LEVEL_MASK;
-	*status |= RUN_USER;
-	(*count)[RUN_USER]++;
+	mod->status &= !RUN_LEVEL_MASK;
+	mod->status |= RUN_USER;
+
+}
+static void funcTypeDriver(module_item_t *mod)
+{
+	mod->type = TM_MOD_DRIVERS_ID;
+}
+static void funcTypeService(module_item_t *mod)
+{
+	mod->type = TM_MOD_SERVICES_ID;
+}
+static void funcTypeUser(module_item_t *mod)
+{
+	mod->type = TM_MOD_TASKS_ID;
 }
 
-const initrc_cmd_t initrc_cmds[] = {{"-RUN_NONE", funcRunNone},
-									{"-RUN_CORE", funcRunCore},
-									{"-RUN_DRIVER", funcRunDriver},
-									{"-RUN_SERVICE", funcRunService},
-									{"-RUN_USER", funcRunUser},
+const initrc_cmd_t initrc_cmds[] = {{"-run_none", funcRunNone},
+									{"-run_core", funcRunCore},
+									{"-run_driver", funcRunDriver},
+									{"-run_service", funcRunService},
+									{"-run_user", funcRunUser},
+									{"-type_driver", funcTypeDriver},
+									{"-type_service", funcTypeService},
+									{"-type_user", funcTypeUser},
 									{NULL, NULL}
 
 };
 
-int initrcCmdDispatch(const char *cmd, module_status_t *status,
-					  run_level_modules_count_t (*level_count)[RUN_LEVEL_COUNT])
+int initrcCmdDispatch(const char *cmd, module_item_t *mod)
 {
 	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
 	{
 		if( strcmp(cmd, initrc_cmds[i].name) == 0 )
 		{
-			(*initrc_cmds[i].func)(status, level_count);
+			(*initrc_cmds[i].func)(mod);
 			return 0;
 		}
 	}

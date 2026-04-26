@@ -18,7 +18,7 @@
 .MAIN: all
 
 .BEGIN:
-	mkdir -p "${PATH_BUILD_TARGET}"
+	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
 
 .if exists(${FILE_TM_INFO})
@@ -92,8 +92,8 @@ _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
 
 # autoCode and required files
-${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
-							${FILE_TM_INFO}
+${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
+							${FILE_TM_INFO} ${FILE_PARSE_TAG_LIST}
 
 	@printf "\n%sautoCode, init.rc or related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -111,8 +111,10 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_C
 	@printf "%s\n" "--mcu ${MCU}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--board ${BOARD}" >> "${FILE_AUTOCODE_CONFIG}"
 
-	@printf "\n# files path\n" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--errors ${FILE_ERROR_CAT}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "\n# files list\n" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 
 	# launch autoCode
 	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_STAMP}"
@@ -151,11 +153,23 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang ${AUTOCODE_CFLAGS} ${FILES_AUTOCOE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
-# Global errors
-${FILE_ERROR_CAT}: ${FILES_ERROR}
+# Files list for autoCode
+${FILE_ERROR_LIST}: ${FILES_ERROR}
 	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cat ${FILES_ERROR} > "${FILE_ERROR_CAT}"
+	@cat ${FILES_ERROR} > "${FILE_ERROR_LIST}"
+
+${FILE_INITRC_LIST}: ${FILES_INITRC}
+	@printf "" > ${FILE_INITRC_LIST}
+.for file in ${FILES_INITRC}
+	@printf "%s\n" ${file} >> ${FILE_INITRC_LIST}
+.endfor
+
+${FILE_PARSE_TAG_LIST}: ${FILES_PARSE_TAG}
+	@printf "" > ${FILE_PARSE_TAG_LIST}
+.for file in ${FILES_PARSE_TAG}
+	@printf "%s\n" ${file} >> ${FILE_PARSE_TAG_LIST}
+.endfor
 
 # Run autoCode alone
 autoCode_alone: ${FILE_AUTOCODE_TARGET}

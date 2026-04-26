@@ -17,7 +17,7 @@
 #include "initrcCmdDispatch.h"
 #include "tokenizer.h"
 
-void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file_initrc_name)
+void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
 {
 	// open list files
 	msgInfo("open <%s>", file_initrc_name);
@@ -31,32 +31,54 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 
 	// variables
 	int file_line_number = 0;
-	int err_flag = 0;
 	tokenizer_t tok;
-	module_type_t *mod = &data_base->modules_type[TYPE];
-	int module_count = mod->modules_count;
+	module_item_t mod_tmp;
 
-	while( (module_count < AUTOCODE_MODULE_COUNT_MAX) &&
-		   fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
 	{
 		// start
-		mod->modules[module_count].status = mod->status_default;
 		file_line_number++;
 		tokenizer(&tok);
 
 		// process arguments
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
-			if( tok.count > mod->initrc_arg_count_max )
+			if( tok.count != 3 )
 			{
-				msgError("wrong token count [%s:%i] is %i, should be max(%i)",
+				msgError("wrong token count [%s:%i] is %i, should be 3",
 						 file_initrc_name,
 						 file_line_number,
-						 tok.count,
-						 mod->initrc_arg_count_max);
-				err_flag = 1;
+						 tok.count);
+				exit(1);
 			}
 
+			// parse commands
+			for( int i = 1; i < tok.count; i++ )
+			{
+				int err = initrcCmdDispatch(tok.tokens[i], &mod_tmp);
+				if( err == -1 )
+				{
+					msgError("unknown command [%s:%i] %s",
+							 file_initrc_name,
+							 file_line_number,
+							 tok.tokens[i]);
+					exit(1);
+				}
+			}
+
+			// process name
+			if( strlen(tok.tokens[0]) > TM_MOD_NAME_SIZE_MAX )
+			{
+				msgError("Name too long <%s> is over %i", tok.tokens[0], TM_MOD_NAME_SIZE_MAX);
+				exit(1);
+			}
+
+			msgInfo("found module : %s\n", tok.tokens[0]);
+
+			module_type_t *mod = &data_base->modules_type[mod_tmp.type];
+			int module_count = mod->modules_count;
+
+			// check duplicate name
 			for( int j = 0; j < module_count; j++ )
 			{
 				if( strcmp(mod->modules[j].name, tok.tokens[0]) == 0 )
@@ -65,46 +87,18 @@ void parseInitrc(const int TYPE, modules_database_t *data_base, const char *file
 							 file_initrc_name,
 							 file_line_number,
 							 tok.tokens[0]);
-					err_flag = 1;
+					exit(1);
 				}
 			}
 
-			// no command parsing, add one module to run level
-			if( tok.count == 1 ) { data_base->run_level_module_count[TYPE][mod->status_default]++; }
+			// copy tmp mod in dest mod
+			int index = mod->modules_count;
+			if(index > AUTOCODE_MODULE_COUNT_MAX){msgError("too much modules > %i\n", index); exit(1);}
 
-			// parse commands
-			for( int i = 1; i < tok.count; i++ )
-			{
-				int err = initrcCmdDispatch(tok.tokens[i],
-											&mod->modules[module_count].status,
-											&data_base->run_level_module_count[TYPE]);
-				if( err != 0 )
-				{
-					msgError("unknown command [%s:%i] %s",
-							 file_initrc_name,
-							 file_line_number,
-							 tok.tokens[i]);
-					err_flag = 1;
-				}
-			}
-
-			// process name
-			if( strlen(tok.tokens[0]) > TM_MOD_NAME_SIZE_MAX )
-			{
-				msgError("Name too long <%s> is over %i", tok.tokens[0], TM_MOD_NAME_SIZE_MAX);
-				err_flag = 1;
-			}
-
-			strcpy(mod->modules[module_count].name, tok.tokens[0]);
-			module_count++;
+			strcpy(mod->modules[index].name, tok.tokens[0]);
+			mod->modules[index].status = mod_tmp.status;
+			mod->modules_count = index + 1;
 		}
 	}
-
-	msgInfo("found %i module", module_count);
-
-	mod->modules_count = module_count;
-
 	fclose(file_initrc);
-
-	if( err_flag == 1 ) { exit(1); }
 }
