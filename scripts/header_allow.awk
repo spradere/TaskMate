@@ -124,12 +124,12 @@ END {
 
 function error(msg) {
 	failed = 1
-	printf("[%s:%d] parse error : %s\n", FILENAME, NR, msg)
+	printf("header_allow.awk [%s:%d] parse error : %s\n", FILENAME, NR, msg)
 	exit 1
 }
 
 function error_end(msg) {
-	printf("[%s] parse error: %s\n",FILENAME, msg)
+	printf("header_allow.awk [%s] parse error: %s\n",FILENAME, msg)
 	exit 2
 }
 
