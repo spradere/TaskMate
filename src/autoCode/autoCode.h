@@ -40,7 +40,7 @@ typedef int run_level_modules_count_t;
 // modules structures
 typedef struct
 {
-	char name[MOD_NAME_SIZE_MAX];
+	char name[TM_MOD_NAME_SIZE_MAX];
 	module_status_t status;
 
 } module_item_t;
@@ -59,8 +59,8 @@ typedef struct
 
 typedef struct
 {
-	module_type_t modules_type[MOD_TYPE_COUNT];
-	run_level_modules_count_t run_level_module_count[MOD_TYPE_COUNT][RUN_LEVEL_COUNT];
+	module_type_t modules_type[TM_MOD_TYPE_COUNT];
+	run_level_modules_count_t run_level_module_count[TM_MOD_TYPE_COUNT][RUN_LEVEL_COUNT];
 	int threads_count[RUN_LEVEL_COUNT];
 
 } modules_database_t;
