@@ -5,4 +5,4 @@
 3. Add data to autoCode_config in mk/build.mk.
 4. Add an entry in autoCode/options.h.
 5. Add an entry in autoCode/options.c.
-6. Generate the file from autoCode/autocode.c via tag (parseTag.c partial file) or header (writeInclude.c complete file).
+6. Generate the file from autoCode/autocode.c via tag (parseTag.c partial file)

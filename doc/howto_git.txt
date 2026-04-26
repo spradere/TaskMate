@@ -1,4 +1,12 @@
+###################################################
+# Tag a version
 ##################################################
+
+git commit -am "Tag version to 0.7"
+git tag -a v0.7 -m "TaskMate 0.7 - New feature"
+git push --tags
+
+#################################################
 # 2 repo workflow github/test codeberg/main
 ##################################################
 
@@ -7,14 +15,11 @@ Work on test:
 git switch test
 git pull
 # work
-git push
+make push M="Hello there"
 
 When code is clean, push to Codeberg :
 
-git switch main
-git merge --ff-only test
-git push
-git switch test
+make merge
 
 ##################################################
 # 2 repo setup github/test codeberg/main
@@ -35,9 +40,12 @@ git push -u github test
 git branch --set-upstream-to=codeberg/main main
 git branch --set-upstream-to=github/test test
 
-# delete a remonte / branch
+# delete a remonte
 git remote remove github
-git push codeberg --delete main_new
+
+# delete branch
+local: git branch -d test_branch
+remote: git push codeberg --delete main_new
 
 # check
 git remote -v
@@ -52,9 +60,6 @@ git branch -vv
 	git commit -m "comment"
 	git push
 
-delete local : git branch -d test_branch
-delete remote : git push origin --delete test_branch
-
 # list last commits :
 	git log --oneline
 
@@ -62,14 +67,7 @@ delete remote : git push origin --delete test_branch
 	git branch -a --sort=-committerdate
 
 # check tag
-	git ls-remote --tags origin
-
-# check commits
-	git rev-list --count v0.5
-
-# temporary save/restore modified files
-	git stash
-	git stash pop
+	git ls-remote --tags
 
 ##################################################
 # update local repo
@@ -82,7 +80,7 @@ git pull
 git fetch
 git status
 
-# push uncommitted work
+# pull with uncommitted work
 git stash
 git pull
 git stash pop
