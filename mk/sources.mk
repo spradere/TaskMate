@@ -46,13 +46,3 @@ FILES_MK_MK != find  ./${PATH_MAKEFILES} -maxdepth 1 -type f -name "*.mk"
 FILES_MK_HAL != find ./${PATH_SOURCES}/hal -maxdepth 3 -type f -name "*.mk"
 
 FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL}
-
-################################################################################
-# Data
-################################################################################
-
-# Build counter
-VAL_BUILD_CNT != git rev-list --count HEAD
-
-# Get upstream
-VAL_UPSTREAM != git rev-parse --abbrev-ref --symbolic-full-name @{u}

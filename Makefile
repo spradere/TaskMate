@@ -28,9 +28,9 @@ PATH_SCRIPTS = scripts
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
 
 # Definitions
-VAL_TM_VERSION != git describe --tags | cut -d'-' -f1 | sed 's/^v//' || printf "0.00"
+.include "${PATH_MAKEFILES}/data.mk"
 .include "${PATH_MAKEFILES}/path_files.mk"
-.include "${PATH_MAKEFILES}/sources_data.mk"
+.include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
 .include "${PATH_MAKEFILES}/colours.mk"
 

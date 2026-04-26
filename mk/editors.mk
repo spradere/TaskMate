@@ -35,10 +35,10 @@ geany_doc:
 	geany ${FILES_DOC}
 .PHONY: geany_doc
 
-vim_autoCode: ${FILE_TAGS_STAMP}
+geany_autoCode:
 #help [global] open Vim with all autoCode sources files .c .h
-	vim ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
-.PHONY: vim_autoCode
+	geany ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
+.PHONY: geany_autoCode
 
 geany_mk:
 #help [global] open Geany with all Makefiles .mk
