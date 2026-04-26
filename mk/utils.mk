@@ -17,9 +17,11 @@ clean:
 	@printf "\n%sRemove files%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
-	rm -f ${FILES_OBJ} ${FILES_DEP} ${PATH_BUILD_TARGET}/TaskMate*
-	rm -f ${FILE_AUTOCODE_TARGET} ${PATH_BUILD_TARGET}/.autoCode_stamp* ${PATH_BUILD_TARGET}/autoCode_*
-	@printf "${COLOUR_RESET}"
+	@printf "{FILES_OBJ} {FILES_DEP} {PATH_BUILD_TARGET}/TaskMate*\n"
+	@printf "{FILE_AUTOCODE_TARGET} {PATH_BUILD_TARGET}/.autoCode_stamp* {PATH_BUILD_TARGET}/autoCode_*\n"
+	@printf "${COLOUR_RESET}"	
+	@rm -f ${FILES_OBJ} ${FILES_DEP} ${PATH_BUILD_TARGET}/TaskMate*
+	@rm -f ${FILE_AUTOCODE_TARGET} ${PATH_BUILD_TARGET}/.autoCode_stamp* ${PATH_BUILD_TARGET}/autoCode_*
 .PHONY: clean
 
 doc:
@@ -90,7 +92,7 @@ help:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@awk ${COLOURS_AWK} '\
 		/^([A-Za-z0-9][A-Za-z0-9_-]*):/ { \
-			print COLOUR_HELP_FILE_TARGET $$1 COLOUR_RESET; \
+			print COLOUR_HELP_TARGET $$1 COLOUR_RESET; \
 			} \
 		$$1 == "#help" {\
 			printf("  %s%s%s", COLOUR_HELP_TAG, $$2, COLOUR_RESET); \
