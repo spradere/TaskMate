@@ -12,10 +12,6 @@
 # Directories, path and files
 ################################################################################
 
-# Targets
-FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
-FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
-
 # USB
 PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
@@ -30,18 +26,12 @@ FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
-PATH_SOURCES_LIST = ${PATH_SOURCES}
 PATH_SOURCES_LIST += ${PATH_SOURCES}/sysCore
 PATH_SOURCES_LIST += ${PATH_SOURCES}/sysCall
 PATH_SOURCES_LIST += ${PATH_SOURCES}/services
 PATH_SOURCES_LIST += ${PATH_SOURCES}/tasks
 PATH_SOURCES_LIST += ${PATH_SOURCES}/tm_libc
 PATH_SOURCES_LIST += ${PATH_SOURCES}/interfaces
-
-PATH_SOURCES_LIST += ${PATH_SOURCES}/hal
-PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/arch/${ARCH}
-PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/mcu/${MCU}
-PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/board/${BOARD}
 PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/public
 
 # log files

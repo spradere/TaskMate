@@ -18,19 +18,19 @@
 .MAIN: all
 
 .BEGIN:
-	@mkdir -p "${PATH_BUILD_TARGET}"
+	mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
-	
+
 .if exists(${FILE_TM_INFO})
 	@awk ${COLOURS_AWK} -v tm_version_make=${VAL_TM_VERSION} -v build_cnt_make=${VAL_BUILD_CNT} \
 		-f ${PATH_SCRIPTS}/tm_info.awk "${FILE_TM_INFO}"
-.endif	
+.endif
 
 .if !exists(${FILE_TM_INFO})
 	@printf "#####################################\n" > "${FILE_TM_INFO}"
 	@printf "# TaskMate informations informations \n" >> "${FILE_TM_INFO}"
 	@printf "#####################################\n\n" >> "${FILE_TM_INFO}"
-	
+
 	@printf "tm_version %s\n" "${VAL_TM_VERSION}" >> "${FILE_TM_INFO}"
 	@printf "build_cnt %s\n" "${VAL_BUILD_CNT}" >> "${FILE_TM_INFO}"
 .endif
@@ -39,7 +39,7 @@
 	@printf "##########################\n" > "${FILE_BUILD_INFO}"
 	@printf "# Last build informations \n" >> "${FILE_BUILD_INFO}"
 	@printf "##########################\n\n" >> "${FILE_BUILD_INFO}"
-	
+
 	@printf "TaskMate %s\n" "${VAL_TM_VERSION}" >> "${FILE_BUILD_INFO}"
 	@printf "date : " >> "${FILE_BUILD_INFO}"
 	@date >> "${FILE_BUILD_INFO}"
@@ -86,14 +86,14 @@ all: _system_critical_check ${FILE_AUTOCODE_STAMP} _dependency ${FILE_TARGET} _m
 #help [global] System build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-		
+
 # dependency files used to compile sources if related header or source was edited
 _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
 
 # autoCode and required files
 ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
-							${FILE_TM_INFO} 
+							${FILE_TM_INFO}
 
 	@printf "\n%sautoCode, init.rc or related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

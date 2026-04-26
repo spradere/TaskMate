@@ -20,7 +20,7 @@ VAL_VALID_OPTS = yes no
 .error Invalid option "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [${VAL_VALID_OPTS}]
 .endif
 
-# bmake option for -V
+# bmake option for -V (Win10/Cygwin)
 .MAKE.EXPAND_VARIABLES = true
 
 
