@@ -19,7 +19,7 @@ void printModules(const modules_database_t *data_base)
 	msgInfo("+++ modules informations +++\n");
 
 	msgInfo("found drivers :");
-	const module_type_t *driver = &data_base->modules_type[MOD_DRIVERS_ID];
+	const module_type_t *driver = &data_base->modules_type[TM_MOD_DRIVERS_ID];
 	for( int i = 0; i < driver->modules_count; i++ )
 	{
 		printf("\tdrivers[%i] \"%s\" status=%i\n",
@@ -30,7 +30,7 @@ void printModules(const modules_database_t *data_base)
 	printf("\n");
 
 	msgInfo("found services :");
-	const module_type_t *services = &data_base->modules_type[MOD_SERVICES_ID];
+	const module_type_t *services = &data_base->modules_type[TM_MOD_SERVICES_ID];
 	for( int i = 0; i < services->modules_count; i++ )
 	{
 		printf("\tservices[%i] \"%s\" status=%i\n",
@@ -41,7 +41,7 @@ void printModules(const modules_database_t *data_base)
 	printf("\n");
 
 	msgInfo("found tasks :");
-	const module_type_t *tasks = &data_base->modules_type[MOD_TASKS_ID];
+	const module_type_t *tasks = &data_base->modules_type[TM_MOD_TASKS_ID];
 	for( int i = 0; i < tasks->modules_count; i++ )
 	{
 		printf(

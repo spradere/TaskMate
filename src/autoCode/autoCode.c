@@ -79,11 +79,11 @@ int main(int argn, const char *argv[])
 			 "src/hal/board/%s/hal_board_init.rc",
 			 auto_options.board_name);
 
-	parseInitrc(MOD_DRIVERS_ID, &data_base, arch_initrc_path);
-	parseInitrc(MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
-	parseInitrc(MOD_DRIVERS_ID, &data_base, board_initrc_path);
-	parseInitrc(MOD_SERVICES_ID, &data_base, "src/services/services_init.rc");
-	parseInitrc(MOD_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
+	parseInitrc(TM_MOD_DRIVERS_ID, &data_base, arch_initrc_path);
+	parseInitrc(TM_MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
+	parseInitrc(TM_MOD_DRIVERS_ID, &data_base, board_initrc_path);
+	parseInitrc(TM_MOD_SERVICES_ID, &data_base, "src/services/services_init.rc");
+	parseInitrc(TM_MOD_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
 
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
@@ -111,45 +111,45 @@ int main(int argn, const char *argv[])
 
 static void setupDB(modules_database_t *data_base)
 {
-	for( int i = 0; i < MOD_TYPE_COUNT; i++ )
+	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
 	{
 		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
 	}
 
-	data_base->modules_type[MOD_DRIVERS_ID].initrc_arg_count_max = 2;
-	data_base->modules_type[MOD_DRIVERS_ID].modules_count = 0;
-	data_base->modules_type[MOD_DRIVERS_ID].name = "Drivers";
-	data_base->modules_type[MOD_DRIVERS_ID].status_default = RUN_DRIVER;
+	data_base->modules_type[TM_MOD_DRIVERS_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count = 0;
+	data_base->modules_type[TM_MOD_DRIVERS_ID].name = "Drivers";
+	data_base->modules_type[TM_MOD_DRIVERS_ID].status_default = RUN_DRIVER;
 
-	data_base->modules_type[MOD_SERVICES_ID].initrc_arg_count_max = 2;
-	data_base->modules_type[MOD_SERVICES_ID].modules_count = 0;
-	data_base->modules_type[MOD_SERVICES_ID].name = "Services";
-	data_base->modules_type[MOD_SERVICES_ID].status_default = RUN_SERVICE;
+	data_base->modules_type[TM_MOD_SERVICES_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[TM_MOD_SERVICES_ID].modules_count = 0;
+	data_base->modules_type[TM_MOD_SERVICES_ID].name = "Services";
+	data_base->modules_type[TM_MOD_SERVICES_ID].status_default = RUN_SERVICE;
 
-	data_base->modules_type[MOD_TASKS_ID].initrc_arg_count_max = 2;
-	data_base->modules_type[MOD_TASKS_ID].modules_count = 0;
-	data_base->modules_type[MOD_TASKS_ID].name = "Task";
-	data_base->modules_type[MOD_TASKS_ID].status_default = RUN_USER;
+	data_base->modules_type[TM_MOD_TASKS_ID].initrc_arg_count_max = 2;
+	data_base->modules_type[TM_MOD_TASKS_ID].modules_count = 0;
+	data_base->modules_type[TM_MOD_TASKS_ID].name = "Task";
+	data_base->modules_type[TM_MOD_TASKS_ID].status_default = RUN_USER;
 }
 
 static void checkModulesCount(modules_database_t *data_base)
 {
-	int module_count[MOD_TYPE_COUNT][2];
+	int module_count[TM_MOD_TYPE_COUNT][2];
 	int id;
 
-	id = MOD_DRIVERS_ID;
+	id = TM_MOD_DRIVERS_ID;
 	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = MOD_DRIVERS_COUNT_MAX;
+	module_count[id][1] = TM_MOD_DRIVERS_COUNT_MAX;
 
-	id = MOD_SERVICES_ID;
+	id = TM_MOD_SERVICES_ID;
 	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = MOD_SERVICES_COUNT_MAX;
+	module_count[id][1] = TM_MOD_SERVICES_COUNT_MAX;
 
-	id = MOD_TASKS_ID;
+	id = TM_MOD_TASKS_ID;
 	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = MOD_TASKS_COUNT_MAX;
+	module_count[id][1] = TM_MOD_TASKS_COUNT_MAX;
 
-	for( int i = 0; i < MOD_TYPE_COUNT; i++ )
+	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
 	{
 		if( module_count[i][0] > module_count[i][1] )
 		{
@@ -172,11 +172,11 @@ static void threadCountLevel(modules_database_t *data_base)
 
 		for( int i = 1; i <= level; i++ )
 		{
-			thread_count += data_base->run_level_module_count[MOD_SERVICES_ID][i];
+			thread_count += data_base->run_level_module_count[TM_MOD_SERVICES_ID][i];
 		}
 		for( int i = 1; i <= level; i++ )
 		{
-			thread_count += data_base->run_level_module_count[MOD_TASKS_ID][i];
+			thread_count += data_base->run_level_module_count[TM_MOD_TASKS_ID][i];
 		}
 
 		data_base->threads_count[level] = thread_count;
