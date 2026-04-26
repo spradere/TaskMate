@@ -95,7 +95,7 @@ _dependency:
 ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILES_INIT_RC} ${FILE_ERROR_CAT} \
 							${FILE_TM_INFO} 
 
-	@printf "\n%sautoCode, init.rc or related sources files have changed -> run autoCode%s\n\n" \
+	@printf "\n%sautoCode, init.rc or related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@rm -f ${FILE_AUTOCODE_LOG}*

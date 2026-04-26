@@ -62,7 +62,7 @@ FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
 PATHS_GIT_ALLOWED_PATH = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_SCRIPTS}
 VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
-VAL_GIT_ALLOWED.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk tm_version
+VAL_GIT_ALLOWED.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk
 VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md

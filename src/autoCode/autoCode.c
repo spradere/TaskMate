@@ -12,11 +12,10 @@
  *
  * - Simple and reliable, read plain text init.rc files
  * - Write code for #include / static allocation / initialisation directly in code
- * tag system
  *
  * @note
  * tag format is a one-line C comment: // [autoCode_tag] <object> <action>
- * end tag zone // [/tag]
+ * end tag zone: // [/tag]
  *
  */
 
