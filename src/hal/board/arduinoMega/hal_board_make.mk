@@ -8,6 +8,12 @@
 #
 ################################################################################
 
+# Registration in the global system
+VAL_HW_STACK += arduinoMega
+PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/board/arduinoMega
+
+.include "${PATH_SOURCES}/hal/mcu/atmega2560/hal_mcu_make.mk"
+
 # board settings
 VAL_CPU_FREQ = 16000000UL
 

@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3add TM_MOD prefix", MSG_TO_LCD);
+		msgWriteText(chan, "\3remove arch/mcu/board", MSG_TO_LCD);
 	}
 
 	msgProcess();

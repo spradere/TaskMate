@@ -20,19 +20,24 @@ PATH_MAKEFILES = mk
 PATH_DOCS = doc
 PATH_SCRIPTS = scripts
 
-# Build system options
+# Build data
 .include "${PATH_MAKEFILES}/options.mk"
+.include "${PATH_MAKEFILES}/data.mk"
+.include "${PATH_MAKEFILES}/colours.mk"
 
-# Hardware target choice :  make ARCH=avr8 MCU=atmega2560 BOARD=arduinoMega
+# Hardware target choice
 .include "${PATH_MAKEFILES}/hardware_target.mk"
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
+#PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 
-# Definitions
-.include "${PATH_MAKEFILES}/data.mk"
+# Targets
+FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
+FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
+
+# Proceed files
 .include "${PATH_MAKEFILES}/path_files.mk"
 .include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
-.include "${PATH_MAKEFILES}/colours.mk"
 
 # Make global process
 .include "${PATH_MAKEFILES}/build.mk"
@@ -40,8 +45,5 @@ PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
 .include "${PATH_MAKEFILES}/backup.mk"
 .include "${PATH_MAKEFILES}/editors.mk"
 
-# Make hardware specific
-.include "${PATH_SOURCES}/hal/arch/${ARCH}/hal_arch_make.mk"
-.include "${PATH_SOURCES}/hal/mcu/${MCU}/hal_mcu_make.mk"
-.include "${PATH_SOURCES}/hal/board/${BOARD}/hal_board_make.mk"
-
+# Make arch specific
+.include "${FILE_ARCH_CC}"
