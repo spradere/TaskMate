@@ -59,7 +59,7 @@ int main(int argn, const char *argv[])
 
 	// global error system
 	error_catalog_t errors_catalog;
-	globalError(auto_options.errors_file, &errors_catalog);
+	globalError(auto_options.file_errors_list, &errors_catalog);
 
 	// setup data base
 	modules_database_t data_base;
@@ -78,11 +78,11 @@ int main(int argn, const char *argv[])
 			 "src/hal/board/%s/hal_board_init.rc",
 			 auto_options.board_name);
 
-	parseInitrc(TM_MOD_DRIVERS_ID, &data_base, arch_initrc_path);
-	parseInitrc(TM_MOD_DRIVERS_ID, &data_base, mcu_initrc_path);
-	parseInitrc(TM_MOD_DRIVERS_ID, &data_base, board_initrc_path);
-	parseInitrc(TM_MOD_SERVICES_ID, &data_base, "src/services/services_init.rc");
-	parseInitrc(TM_MOD_TASKS_ID, &data_base, "src/tasks/tasks_init.rc");
+	parseInitrc( &data_base, arch_initrc_path);
+	parseInitrc( &data_base, mcu_initrc_path);
+	parseInitrc( &data_base, board_initrc_path);
+	parseInitrc( &data_base, "src/services/services_init.rc");
+	parseInitrc( &data_base, "src/tasks/tasks_init.rc");
 
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);

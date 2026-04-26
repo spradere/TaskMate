@@ -12,6 +12,14 @@
 # Directories, path and files
 ################################################################################
 
+# Final full HW path
+PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
+#PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
+
+# Targets
+FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
+FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
+
 # USB
 PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
@@ -45,6 +53,20 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 
 # autoCode
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
+FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc_list
+
+FILES_PARSE_TAG = src/sysCore/runLevel.h \
+	src/sysCore/runLevel.c \
+	src/sysCall/error.c \
+	src/interfaces/error_catalog.h \
+	src/hal/public/hal_sysInfo.c \
+	src/interfaces/modules_define.h \
+	src/sysCore/modules.c \
+	src/sysCore/modules_list.h \
+	src/hal/public/hal_define.h \
+	src/sysCore/hal_init.h
+
+FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse_list
 
 # git ignore
 FILE_GIT_IGNORE = .gitignore
@@ -58,7 +80,7 @@ VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
-FILE_ERROR_CAT = ${PATH_BUILD_TARGET}/errors_all.err
+FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/errors_all.err
 
 # Tags
 FILE_TAGS = .tags

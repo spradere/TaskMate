@@ -1,6 +1,5 @@
 # services init.rc
-# default run level RUN_SERVICE
+# default run level run_service
 
-
-msg
-scli
+msg -type_service -run_service
+scli -type_service -run_service

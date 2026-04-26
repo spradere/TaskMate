@@ -42,6 +42,7 @@ typedef struct
 {
 	char name[TM_MOD_NAME_SIZE_MAX];
 	module_status_t status;
+	unsigned char type;
 
 } module_item_t;
 

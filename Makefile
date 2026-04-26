@@ -27,12 +27,6 @@ PATH_SCRIPTS = scripts
 
 # Hardware target choice
 .include "${PATH_MAKEFILES}/hardware_target.mk"
-PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
-#PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
-
-# Targets
-FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
-FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 
 # Proceed files
 .include "${PATH_MAKEFILES}/path_files.mk"
