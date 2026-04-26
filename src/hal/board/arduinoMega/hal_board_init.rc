@@ -1,5 +1,5 @@
 # drivers init.rc
-# default run level RUN_DRIVER
+# default run level run_driver
 
-hal_lcd
-hal_rtc
+hal_lcd -type_driver -run_driver
+hal_rtc -type_driver -run_driver

@@ -32,7 +32,7 @@ FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 FILE_AUTOCODE_LOG_STAMP = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
-FILES_INIT_RC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.rc"
+FILES_INITRC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.rc"
 
 # Global error
 FILES_ERROR != find ${PATH_SOURCES_LIST} -maxdepth 1  -type f -name "*.err" | sort
