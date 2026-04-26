@@ -22,8 +22,8 @@
 
 static struct
 {
-	mod_driver_item_t drivers[MOD_DRIVER_COUNT];
-	mod_thread_item_t threads[MOD_THREAD_COUNT];
+	mod_driver_item_t drivers[TM_MOD_DRIVER_COUNT];
+	mod_thread_item_t threads[TM_MOD_THREAD_COUNT];
 	uint8_t thread_current;
 } mod_data_base;
 
@@ -69,11 +69,11 @@ void mod_threadsAlloc(void)
 
 	mod_thread_item_t *thread;
 
-	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
+	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{
 		thread = mod_threadGetPointer(i);
-		thread->canary_low = MOD_CANARY;
-		thread->canary_high = MOD_CANARY;
+		thread->canary_low = TM_MOD_CANARY;
+		thread->canary_high = TM_MOD_CANARY;
 	}
 
 	// [autoCode_tag] threads alloc
@@ -87,7 +87,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(0);
 
-	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	TM_STR_ROM_NEW(thread0_name, "msg");
 	mod->name = &thread0_name;
@@ -96,7 +96,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(1);
 
-	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	TM_STR_ROM_NEW(thread1_name, "scli");
 	mod->name = &thread1_name;
@@ -105,7 +105,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(2);
 
-	hal_threadContextInit(task1, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(task1, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	TM_STR_ROM_NEW(thread2_name, "task1");
 	mod->name = &thread2_name;
@@ -114,7 +114,7 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(3);
 
-	hal_threadContextInit(task2, &(mod->stack_pointer), &(mod->stack[MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(task2, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
 	TM_STR_ROM_NEW(thread3_name, "task2");
 	mod->name = &thread3_name;
