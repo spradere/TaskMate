@@ -57,7 +57,7 @@
 	@printf "# Build summary\n"
 	@printf "##########################\n\n"
 	@printf "\t%-16s : %s\n" "TaskMate version" "${VAL_TM_VERSION}"
-	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
+	@printf "\t%-16s : %s\n" "Hardware target" "${VAL_HW_STACK}"
 	@printf "\t%-16s : %s\n" "build" "${VAL_BUILD_CNT}"
 
 	@awk '\

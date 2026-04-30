@@ -23,6 +23,6 @@ FILE_HWT_MK = ${PATH_SOURCES}/hal/target/${HWT}/hwt.mk
 .include "${FILE_HWT_MK}"
 
 # Default target / old system
-ARCH ?= avr8
-MCU ?= atmega2560
-BOARD ?= arduinoMega
+#ARCH ?= avr8
+#MCU ?= atmega2560
+#BOARD ?= arduinoMega

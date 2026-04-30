@@ -11,6 +11,7 @@
 # Registration in the global system
 VAL_HW_STACK += atmega2560
 PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/mcu/atmega2560
+CFLAGS += -DHW_MCU_atmega2560
 
 .include "${PATH_SOURCES}/hal/arch/avr8/hal_arch_make.mk"
 

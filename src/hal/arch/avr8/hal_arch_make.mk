@@ -11,6 +11,7 @@
 # Registration in the global system
 VAL_HW_STACK += avr8
 PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/arch/avr8
+CFLAGS += -DHW_ARCH_avr8
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SOURCES}/hal/arch/avr8/hal_archCC.mk
 
@@ -37,8 +38,7 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 
 # Command line #include and #define
 CFLAGS += -I${PATH_SOURCES}
-CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT} \
-	-DARCH_${ARCH} -DMCU_${MCU} -DBOARD_${BOARD}
+CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT}
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto

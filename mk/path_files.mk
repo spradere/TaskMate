@@ -13,8 +13,8 @@
 ################################################################################
 
 # Final full HW path
-PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
-#PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
+#PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
+PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 
 # Targets
 FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
