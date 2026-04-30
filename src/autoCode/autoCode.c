@@ -52,11 +52,6 @@ int main(int argn, const char *argv[])
 	options_list_t auto_options;
 	options(argv[1], &auto_options);
 
-	msgInfo("target %s -> %s -> %s",
-			auto_options.arch_name,
-			auto_options.mcu_name,
-			auto_options.board_name);
-
 	// global error system
 	error_catalog_t errors_catalog;
 	globalError(auto_options.file_errors_list, &errors_catalog);
@@ -66,24 +61,16 @@ int main(int argn, const char *argv[])
 	setupDB(&data_base);
 
 	// read init.rc file and store data in data base
-	char arch_initrc_path[BYTE_INDEX];
-	char mcu_initrc_path[BYTE_INDEX];
-	char board_initrc_path[BYTE_INDEX];
-
-	snprintf(
-		arch_initrc_path, BYTE_INDEX, "src/hal/arch/%s/hal_arch_init.rc", auto_options.arch_name);
-	snprintf(mcu_initrc_path, BYTE_INDEX, "src/hal/mcu/%s/hal_mcu_init.rc", auto_options.mcu_name);
-	snprintf(board_initrc_path,
-			 BYTE_INDEX,
-			 "src/hal/board/%s/hal_board_init.rc",
-			 auto_options.board_name);
-
-	parseInitrc( &data_base, arch_initrc_path);
-	parseInitrc( &data_base, mcu_initrc_path);
-	parseInitrc( &data_base, board_initrc_path);
-	parseInitrc( &data_base, "src/services/services_init.rc");
-	parseInitrc( &data_base, "src/tasks/tasks_init.rc");
-
+	FILE finitrc = fopen(auto_options.file_initrc_list, "r");
+	if(finitrc == NULL) {msgError("File not found : <%s>\n",auto_options.file_initrc_list); exit(1);}
+	
+	char fname[BYTE_INDEX];
+	
+	while(fgets(fname, BYTE_INDEX, finitrc)
+	{
+		parseInitrc(&data_base, fname);
+	}
+	
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 

@@ -19,9 +19,6 @@
 #define HAVE_OPTIONS(X)            	\
 	X(HAVE_TM_VER, "--tm_ver")     	\
 	X(HAVE_TM_BUILD, "--tm_build") 	\
-	X(HAVE_ARCH, "--arch")         	\
-	X(HAVE_MCU, "--mcu")           	\
-	X(HAVE_BOARD, "--board")       	\
 	X(HAVE_ERRORS, "--errors")		\
 	X(HAVE_INITRC, "--initrc")		\
 	X(HAVE_PARSETAG, "--parsetag")
@@ -61,23 +58,6 @@ static void funcTmBuild(const char *value, options_list_t *opt)
 	strncpy(opt->tm_build, value, BYTE_INDEX);
 	have_options_count[HAVE_TM_BUILD]++;
 }
-static void funcArch(const char *value, options_list_t *opt)
-{
-	strncpy(opt->arch_name, value, BYTE_INDEX);
-	have_options_count[HAVE_ARCH]++;
-}
-
-static void funcMcu(const char *value, options_list_t *opt)
-{
-	strncpy(opt->mcu_name, value, BYTE_INDEX);
-	have_options_count[HAVE_MCU]++;
-}
-
-static void funcBoard(const char *value, options_list_t *opt)
-{
-	strncpy(opt->board_name, value, BYTE_INDEX);
-	have_options_count[HAVE_BOARD]++;
-}
 
 static void funcErrors(const char *value, options_list_t *opt)
 {
@@ -104,9 +84,6 @@ static const struct
 
 } options_cmds[] = {{"--tm_ver", funcTmVer},
 					{"--tm_build", funcTmBuild},
-					{"--arch", funcArch},
-					{"--mcu", funcMcu},
-					{"--board", funcBoard},
 					{"--errors", funcErrors},
 					{"--initrc", funcInitrc},
 					{"--parsetag", funcParsetag},
