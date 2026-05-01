@@ -53,7 +53,7 @@ ${FILE_GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_fil
 	@printf "*\n" >> "${FILE_GIT_IGNORE}"
 
 	@printf "\n# allowed directories and files\n" >> "${FILE_GIT_IGNORE}"
-.for dir in ${PATHS_GIT_ALLOWED_PATH}
+.for dir in ${PATHS_GIT_ALLOWED}
 	@printf "!${dir}/\n" >> "${FILE_GIT_IGNORE}"
 	@printf "!${dir}/**/\n" >> "${FILE_GIT_IGNORE}"
 .for file in ${VAL_GIT_ALLOWED.${dir}}

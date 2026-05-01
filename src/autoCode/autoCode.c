@@ -61,15 +61,19 @@ int main(int argn, const char *argv[])
 	setupDB(&data_base);
 
 	// read init.rc file and store data in data base
-	FILE finitrc = fopen(auto_options.file_initrc_list, "r");
+	FILE *finitrc = fopen(auto_options.file_initrc_list, "r");
 	if(finitrc == NULL) {msgError("File not found : <%s>\n",auto_options.file_initrc_list); exit(1);}
 	
 	char fname[BYTE_INDEX];
 	
-	while(fgets(fname, BYTE_INDEX, finitrc)
+	while(fgets(fname, BYTE_INDEX, finitrc))
 	{
+		msgInfo("file : %s\n",fname);
 		parseInitrc(&data_base, fname);
 	}
+	fclose(finitrc);
+	
+	exit(1);
 	
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
