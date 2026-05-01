@@ -169,16 +169,32 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 static void writeHalInit(const options_list_t *auto_options, FILE *file)
 {
-	fprintf(file, "#include \"hal/arch/%s/hal_archInit.h\"\n", auto_options->arch_name);
-	fprintf(file, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", auto_options->mcu_name);
-	fprintf(file, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", auto_options->board_name);
+	/*file_t file_list;
+	fileInit(&file_list);
+	strncpy(file_list.name, auto_options->file_halinit_list, BYTE_INDEX);
+	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
+	
+	char one_file[BYTE_INDEX];
+	while(fgets( one_file, BYTE_INDEX, file_list.stream))
+	{
+		fprintf(file, "#include \"%s\"\n", one_file);
+	}
+	fileClose(&file_list, __FILE__, __LINE__);*/
 }
 
 static void writeHalDefine(const options_list_t *auto_options, FILE *file)
 {
-	fprintf(file, "#include \"hal/arch/%s/hal_arch_define.h\"\n", auto_options->arch_name);
-	fprintf(file, "#include \"hal/mcu/%s/hal_mcu_define.h\"\n", auto_options->mcu_name);
-	fprintf(file, "#include \"hal/board/%s/hal_board_define.h\"\n\n", auto_options->board_name);
+	/*file_t file_list;
+	fileInit(&file_list);
+	strncpy(file_list.name, auto_options->file_haldefine_list, BYTE_INDEX);
+	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
+	
+	char one_file[BYTE_INDEX];
+	while(fgets( one_file, BYTE_INDEX, file_list.stream))
+	{
+		fprintf(file, "#include \"%s\"\n", one_file);
+	}
+	fileClose(&file_list, __FILE__, __LINE__);*/
 }
 
 static void writeModulesList(modules_database_t *data_base, FILE *file)
@@ -243,9 +259,6 @@ static void writeInfo(const options_list_t *auto_options, FILE *file)
 {
 	fprintf(file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", auto_options->tm_ver);
 	fprintf(file, "const uint16_t tm_build = %i;\n", atoi(auto_options->tm_build));
-	fprintf(file, "TM_STR_ROM_NEW(arch_name, \"%s\");\n", auto_options->arch_name);
-	fprintf(file, "TM_STR_ROM_NEW(mcu_name, \"%s\");\n", auto_options->mcu_name);
-	fprintf(file, "TM_STR_ROM_NEW(board_name, \"%s\");\n\n", auto_options->board_name);
 }
 
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)

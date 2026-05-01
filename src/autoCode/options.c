@@ -21,8 +21,10 @@
 	X(HAVE_TM_BUILD, "--tm_build") 	\
 	X(HAVE_ERRORS, "--errors")		\
 	X(HAVE_INITRC, "--initrc")		\
-	X(HAVE_PARSETAG, "--parsetag")
-
+	X(HAVE_PARSETAG, "--parsetag")	\
+	X(HAVE_HALINIT, "--halinit")	\
+	X(HAVE_HALDEFINE, "--haldefine")
+	
 enum
 {
 #define X(e, s) e,
@@ -77,6 +79,18 @@ static void funcParsetag(const char *value, options_list_t *opt)
 	have_options_count[HAVE_PARSETAG]++;
 }
 
+static void funcHalInit(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_halinit_list, value, BYTE_INDEX);
+	have_options_count[HAVE_HALINIT]++;
+}
+
+static void funcHalDefine(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_haldefine_list, value, BYTE_INDEX);
+	have_options_count[HAVE_HALDEFINE]++;
+}
+
 static const struct
 {
 	const char *name;
@@ -87,6 +101,8 @@ static const struct
 					{"--errors", funcErrors},
 					{"--initrc", funcInitrc},
 					{"--parsetag", funcParsetag},
+					{"--halinit", funcHalInit},					
+					{"--haldefine", funcHalDefine},
 					{NULL, NULL}};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
@@ -103,10 +119,9 @@ static int optionCmdDispatch(const char *cmd, const char *value, options_list_t 
 }
 
 void options(const char *file_name, options_list_t *opt)
-{
+{	
 	// initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
-
 	// proceed options from files
 	file_t file;
 	fileInit(&file);
@@ -115,12 +130,12 @@ void options(const char *file_name, options_list_t *opt)
 
 	int file_line_number = 0;
 	tokenizer_t tok;
-
+	msgInfo("read file %s", file_name);
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file.stream) )
 	{
 		file_line_number++;
 		tokenizer(&tok);
-
+		
 		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
 		{
 			if( tok.count == 2 )
@@ -152,13 +167,13 @@ void options(const char *file_name, options_list_t *opt)
 	{
 		if( have_options_count[i] == 0 )
 		{
-			msgError("required option %s is not set", string_from_have(i));
+			msgError("required autoCode option %s is not set", string_from_have(i));
 			exit(1);
 		}
 
 		if( have_options_count[i] > 1 )
 		{
-			msgError("required option %s is multiple set", string_from_have(i));
+			msgError("required autoCode option %s is multiple set", string_from_have(i));
 			exit(1);
 		}
 	}
