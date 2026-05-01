@@ -33,8 +33,8 @@ void rl_Alloc(void)
 		.level0 = {0},
 		.level1 = {0},
 		.level2 = {0},
-		.level3 = {0,0,1},
-		.level4 = {0,0,1,2,3},
+		.level3 = {0},
+		.level4 = {0},
 		.levels = {to_run.level0, to_run.level1, to_run.level2, to_run.level3, to_run.level4}
 	};
 	to_run.current=RUN_CORE;
