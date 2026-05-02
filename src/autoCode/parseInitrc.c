@@ -16,25 +16,24 @@
 
 #include "initrcCmdDispatch.h"
 #include "tokenizer.h"
+#include "fileUtility.h"
 
-void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
+void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 {
 	// open list files
-	msgInfo("open <%s>", file_initrc_name);
+	msgInfo("open <%s>", initrc_name);
 
-	FILE *file_initrc = fopen(file_initrc_name, "r");
-	if( file_initrc == NULL )
-	{
-		msgError("file not found <%s>", file_initrc_name);
-		exit(1);
-	}
-
+	file_t initrc_list;
+	fileInit(&initrc_list);
+	initrc_list.name = (char *)initrc_name;
+	fileOpen(&initrc_list, "r", FILE_READONLY, __FILE__, __LINE__);
+	
 	// variables
 	int file_line_number = 0;
 	tokenizer_t tok;
 	module_item_t mod_tmp;
 
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_initrc) )
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, initrc_list.stream) )
 	{
 		// start
 		file_line_number++;
@@ -46,7 +45,7 @@ void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
 			if( tok.count != 3 )
 			{
 				msgError("wrong token count [%s:%i] is %i, should be 3",
-						 file_initrc_name,
+						 initrc_name,
 						 file_line_number,
 						 tok.count);
 				exit(1);
@@ -59,7 +58,7 @@ void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
 				if( err == -1 )
 				{
 					msgError("unknown command [%s:%i] %s",
-							 file_initrc_name,
+							 initrc_name,
 							 file_line_number,
 							 tok.tokens[i]);
 					exit(1);
@@ -73,7 +72,7 @@ void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
 				exit(1);
 			}
 
-			msgInfo("found module : %s\n", tok.tokens[0]);
+			msgInfo("found module : %s", tok.tokens[0]);
 
 			module_type_t *mod = &data_base->modules_type[mod_tmp.type];
 			int module_count = mod->modules_count;
@@ -84,7 +83,7 @@ void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
 				if( strcmp(mod->modules[j].name, tok.tokens[0]) == 0 )
 				{
 					msgError("duplicate name [%s:%i] %s\n\n",
-							 file_initrc_name,
+							 initrc_name,
 							 file_line_number,
 							 tok.tokens[0]);
 					exit(1);
@@ -100,5 +99,5 @@ void parseInitrc(modules_database_t *data_base, const char *file_initrc_name)
 			mod->modules_count = index + 1;
 		}
 	}
-	fclose(file_initrc);
+	fileClose(&initrc_list, __FILE__, __LINE__);
 }

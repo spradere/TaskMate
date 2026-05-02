@@ -44,7 +44,6 @@ int main(void)
 	const hal_info_t *info;
 	hal_sysInfoGet(&info);
 	tm_syslog(TM_STR("[info] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
-	tm_syslog(TM_STR("[info] target : %s-%s-%s\n"), info->arch, info->mcu, info->board);
 
 	/* *************************************************************************************************
 	 * test / experimental zone, before scheduler run

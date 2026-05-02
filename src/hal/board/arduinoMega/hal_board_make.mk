@@ -14,7 +14,7 @@ PATH_ARDUINOMEGA = ${PATH_SOURCES}/hal/board/arduinoMega
 PATHS_SOURCES += ${PATH_ARDUINOMEGA}
 FILES_HALINIT += ${PATH_ARDUINOMEGA}/hal_boardInit.h
 FILES_HALDEFINE += ${PATH_ARDUINOMEGA}/hal_board_define.h
-CFLAGS += -DHW_BOARD_arduinoMega
+CFLAGS += -DBOARD_arduinoMega
 
 .include "${PATH_SOURCES}/hal/mcu/atmega2560/hal_mcu_make.mk"
 
