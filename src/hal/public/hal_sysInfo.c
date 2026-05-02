@@ -24,14 +24,11 @@
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.27");
-const uint16_t tm_build = 486;
+const uint16_t tm_build = 487;
 // clang-format on
 // [/tag]
 
 static const hal_info_t info = {.tm_ver = &tm_ver,
-								.tm_build = tm_build,
-								.arch = &arch_name,
-								.mcu = &mcu_name,
-								.board = &board_name};
+								.tm_build = tm_build};
 
 void hal_sysInfoGet(const hal_info_t **dest) { *dest = &info; }
