@@ -21,15 +21,7 @@
 	#error "NOT ALLOWED INCLUDE : runLevel.h"
 #endif
 
-// run levels definitions
-#define RUN_NONE 0
-#define RUN_CORE 1
-#define RUN_DRIVER 2
-#define RUN_SERVICE 3
-#define RUN_USER 4
-
-#define RUN_LEVEL_MASK 0x07
-#define RUN_LEVEL_COUNT 5
+#include "interfaces/runLevel_define.h"
 
 // [autoCode_tag] run_levels define
 // clang-format off
