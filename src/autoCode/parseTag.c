@@ -169,32 +169,34 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 static void writeHalInit(const options_list_t *auto_options, FILE *file)
 {
-	/*file_t file_list;
+	file_t file_list;
 	fileInit(&file_list);
-	strncpy(file_list.name, auto_options->file_halinit_list, BYTE_INDEX);
+	file_list.name = (char*)auto_options->file_halinit_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
 	
-	char one_file[BYTE_INDEX];
-	while(fgets( one_file, BYTE_INDEX, file_list.stream))
+	tokenizer_t tok;
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream ))	
 	{
-		fprintf(file, "#include \"%s\"\n", one_file);
+		tokenizer(&tok);
+		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
 	}
-	fileClose(&file_list, __FILE__, __LINE__);*/
+	fileClose(&file_list, __FILE__, __LINE__);
 }
 
 static void writeHalDefine(const options_list_t *auto_options, FILE *file)
 {
-	/*file_t file_list;
+	file_t file_list;
 	fileInit(&file_list);
-	strncpy(file_list.name, auto_options->file_haldefine_list, BYTE_INDEX);
+	file_list.name = (char*)auto_options->file_haldefine_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
 	
-	char one_file[BYTE_INDEX];
-	while(fgets( one_file, BYTE_INDEX, file_list.stream))
+	tokenizer_t tok;
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream ))
 	{
-		fprintf(file, "#include \"%s\"\n", one_file);
+		tokenizer(&tok);
+		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
 	}
-	fileClose(&file_list, __FILE__, __LINE__);*/
+	fileClose(&file_list, __FILE__, __LINE__);
 }
 
 static void writeModulesList(modules_database_t *data_base, FILE *file)

@@ -15,6 +15,7 @@
 #include "sysCore/boot.h"
 
 #include "hal/public/hal_usart.h"
+#include "hal/public/hal_i2c.h"
 #include "sysCore/gpio.h"
 #include "sysCore/hal_init.h"
 #include "sysCore/modules.h"
@@ -36,20 +37,26 @@ void boot(void)
 	rl_Alloc();
 
 	// hal hardware init
-	tm_syslog(TM_STR("[boot] hal hardware init\n"));
+	tm_syslog(TM_STR("[boot] hal hardware init test\n"));
 
 	hal_archInit();
 	hal_mcuInit();
 	hal_boardInit();
 	gpio_signalsInit();
 
+
 	// start driver
 	// TODO remove this code when run level is implemented
 
+	hal_i2cInit();
+	hal_i2cStart();
+	
 	for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *mod = mod_driverGetPointer(i);
+
 		(*(mod->init))();
 		(*(mod->start))();
-	}
+	}	
+	tm_syslog(TM_STR("[boot] 5\n"));
 }

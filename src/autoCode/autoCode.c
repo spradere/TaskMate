@@ -35,6 +35,7 @@
 #include "parseInitrc.h"
 #include "parseTag.h"
 #include "printModules.h"
+#include "tokenizer.h"
 
 static void setupDB(modules_database_t *data_base);
 static void checkModulesCount(modules_database_t *data_base);
@@ -61,19 +62,19 @@ int main(int argn, const char *argv[])
 	setupDB(&data_base);
 
 	// read init.rc file and store data in data base
-	FILE *finitrc = fopen(auto_options.file_initrc_list, "r");
-	if(finitrc == NULL) {msgError("File not found : <%s>\n",auto_options.file_initrc_list); exit(1);}
+	file_t finitrc;
+	fileInit(&finitrc);
+	finitrc.name = auto_options.file_initrc_list;
+	fileOpen(&finitrc, "r", FILE_READONLY, __FILE__, __LINE__);
+
+	tokenizer_t tok;
 	
-	char fname[BYTE_INDEX];
-	
-	while(fgets(fname, BYTE_INDEX, finitrc))
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, finitrc.stream ))
 	{
-		msgInfo("file : %s\n",fname);
-		parseInitrc(&data_base, fname);
+		tokenizer(&tok);
+		parseInitrc(&data_base, tok.tokens[0]);
 	}
-	fclose(finitrc);
-	
-	exit(1);
+	fileClose(&finitrc, __FILE__, __LINE__);
 	
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);

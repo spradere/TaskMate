@@ -14,7 +14,7 @@ PATH_ATMEGA2560 = ${PATH_SOURCES}/hal/mcu/atmega2560
 PATHS_SOURCES += ${PATH_ATMEGA2560}
 FILES_HALINIT += ${PATH_ATMEGA2560}/hal_mcuInit.h
 FILES_HALDEFINE += ${PATH_ATMEGA2560}/hal_mcu_define.h
-CFLAGS += -DHW_MCU_atmega2560
+CFLAGS += -DMCU_atmega2560
 
 .include "${PATH_SOURCES}/hal/arch/avr8/hal_arch_make.mk"
 

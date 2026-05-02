@@ -14,7 +14,7 @@ PATH_AVR8 = ${PATH_SOURCES}/hal/arch/avr8
 PATHS_SOURCES += ${PATH_AVR8}
 FILES_HALINIT += ${PATH_AVR8}/hal_archInit.h
 FILES_HALDEFINE += ${PATH_AVR8}/hal_arch_define.h
-CFLAGS += -DHW_ARCH_avr8
+CFLAGS += -DARCH_avr8
 
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SOURCES}/hal/arch/avr8/hal_archCC.mk
@@ -41,7 +41,7 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common -Wpointer-arith
 
 # Command line #include and #define
-CFLAGS += -I${PATH_SOURCES}
+CFLAGS += -I${PATH_SOURCES} -I./
 CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT}
 
 # Linker flags
