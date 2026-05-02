@@ -171,11 +171,11 @@ static void writeHalInit(const options_list_t *auto_options, FILE *file)
 {
 	file_t file_list;
 	fileInit(&file_list);
-	file_list.name = (char*)auto_options->file_halinit_list;
+	file_list.name = (char *)auto_options->file_halinit_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
-	
+
 	tokenizer_t tok;
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream ))	
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
 	{
 		tokenizer(&tok);
 		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
@@ -187,11 +187,11 @@ static void writeHalDefine(const options_list_t *auto_options, FILE *file)
 {
 	file_t file_list;
 	fileInit(&file_list);
-	file_list.name = (char*)auto_options->file_haldefine_list;
+	file_list.name = (char *)auto_options->file_haldefine_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
-	
+
 	tokenizer_t tok;
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream ))
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
 	{
 		tokenizer(&tok);
 		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);

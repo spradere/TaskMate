@@ -14,9 +14,9 @@
 
 #include "parseInitrc.h"
 
+#include "fileUtility.h"
 #include "initrcCmdDispatch.h"
 #include "tokenizer.h"
-#include "fileUtility.h"
 
 void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 {
@@ -27,7 +27,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 	fileInit(&initrc_list);
 	initrc_list.name = (char *)initrc_name;
 	fileOpen(&initrc_list, "r", FILE_READONLY, __FILE__, __LINE__);
-	
+
 	// variables
 	int file_line_number = 0;
 	tokenizer_t tok;
@@ -57,10 +57,8 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 				int err = initrcCmdDispatch(tok.tokens[i], &mod_tmp);
 				if( err == -1 )
 				{
-					msgError("unknown command [%s:%i] %s",
-							 initrc_name,
-							 file_line_number,
-							 tok.tokens[i]);
+					msgError(
+						"unknown command [%s:%i] %s", initrc_name, file_line_number, tok.tokens[i]);
 					exit(1);
 				}
 			}
@@ -92,7 +90,11 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 
 			// copy tmp mod in dest mod
 			int index = mod->modules_count;
-			if(index > AUTOCODE_MODULE_COUNT_MAX){msgError("too much modules > %i\n", index); exit(1);}
+			if( index > AUTOCODE_MODULE_COUNT_MAX )
+			{
+				msgError("too much modules > %i\n", index);
+				exit(1);
+			}
 
 			strcpy(mod->modules[index].name, tok.tokens[0]);
 			mod->modules[index].status = mod_tmp.status;

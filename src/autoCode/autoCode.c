@@ -68,14 +68,14 @@ int main(int argn, const char *argv[])
 	fileOpen(&finitrc, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	tokenizer_t tok;
-	
-	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, finitrc.stream ))
+
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, finitrc.stream) )
 	{
 		tokenizer(&tok);
 		parseInitrc(&data_base, tok.tokens[0]);
 	}
 	fileClose(&finitrc, __FILE__, __LINE__);
-	
+
 	// check module count autoCode <-> TaskMate
 	checkModulesCount(&data_base);
 
@@ -83,16 +83,17 @@ int main(int argn, const char *argv[])
 	threadCountLevel(&data_base);
 
 	// parse tag and generate code
-	parseTag(&data_base, "src/sysCore/runLevel.h", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCore/runLevel.c", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCall/error.c", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/interfaces/error_catalog.h", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/hal/public/hal_sysInfo.c", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/interfaces/modules_define.h", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCore/modules.c", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCore/modules_list.h", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/hal/public/hal_define.h", &errors_catalog, &auto_options);
-	parseTag(&data_base, "src/sysCore/hal_init.h", &errors_catalog, &auto_options);
+	file_t ftag;
+	fileInit(&ftag);
+	ftag.name = auto_options.file_parsetag_list;
+	fileOpen(&ftag, "r", FILE_READONLY, __FILE__, __LINE__);
+
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, ftag.stream) )
+	{
+		tokenizer(&tok);
+		parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);		
+	}
+	fileClose(&ftag, __FILE__, __LINE__);
 
 	// print all info about modules
 	printModules(&data_base);
@@ -107,20 +108,20 @@ static void setupDB(modules_database_t *data_base)
 		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
 	}
 
-	data_base->modules_type[TM_MOD_DRIVERS_ID].initrc_arg_count_max = 2;
+	//data_base->modules_type[TM_MOD_DRIVERS_ID].initrc_arg_count_max = 2;
 	data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count = 0;
 	data_base->modules_type[TM_MOD_DRIVERS_ID].name = "Drivers";
-	data_base->modules_type[TM_MOD_DRIVERS_ID].status_default = RUN_DRIVER;
+	//data_base->modules_type[TM_MOD_DRIVERS_ID].status_default = RUN_DRIVER;
 
-	data_base->modules_type[TM_MOD_SERVICES_ID].initrc_arg_count_max = 2;
+	//data_base->modules_type[TM_MOD_SERVICES_ID].initrc_arg_count_max = 2;
 	data_base->modules_type[TM_MOD_SERVICES_ID].modules_count = 0;
 	data_base->modules_type[TM_MOD_SERVICES_ID].name = "Services";
-	data_base->modules_type[TM_MOD_SERVICES_ID].status_default = RUN_SERVICE;
+	//data_base->modules_type[TM_MOD_SERVICES_ID].status_default = RUN_SERVICE;
 
-	data_base->modules_type[TM_MOD_TASKS_ID].initrc_arg_count_max = 2;
+	//data_base->modules_type[TM_MOD_TASKS_ID].initrc_arg_count_max = 2;
 	data_base->modules_type[TM_MOD_TASKS_ID].modules_count = 0;
 	data_base->modules_type[TM_MOD_TASKS_ID].name = "Task";
-	data_base->modules_type[TM_MOD_TASKS_ID].status_default = RUN_USER;
+	//data_base->modules_type[TM_MOD_TASKS_ID].status_default = RUN_USER;
 }
 
 static void checkModulesCount(modules_database_t *data_base)
