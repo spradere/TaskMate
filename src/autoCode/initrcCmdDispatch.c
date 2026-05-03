@@ -17,43 +17,43 @@
 static void funcRunNone(module_item_t *mod)
 {
 	mod->status |= RUN_NONE;
-	mod->set_runlevel++; 
+	mod->set_runlevel++;
 }
 static void funcRunCore(module_item_t *mod)
 {
 	mod->status |= RUN_CORE;
-	mod->set_runlevel++; 
+	mod->set_runlevel++;
 }
 static void funcRunDriver(module_item_t *mod)
 {
 	mod->status |= RUN_DRIVER;
-	mod->set_runlevel++; 
+	mod->set_runlevel++;
 }
 static void funcRunService(module_item_t *mod)
 {
 	mod->status |= RUN_SERVICE;
-	mod->set_runlevel++; 
+	mod->set_runlevel++;
 }
 static void funcRunUser(module_item_t *mod)
 {
 	mod->status |= RUN_USER;
-	mod->set_runlevel++; 
+	mod->set_runlevel++;
 }
-static void funcTypeDriver(module_item_t *mod) 
-{ 
+static void funcTypeDriver(module_item_t *mod)
+{
 	mod->type = TM_MOD_DRIVERS_ID;
 	mod->set_type++;
 }
-static void funcTypeService(module_item_t *mod) 
-{ 
-	mod->type = TM_MOD_THREAD_ID; 
+static void funcTypeService(module_item_t *mod)
+{
+	mod->type = TM_MOD_THREAD_ID;
 	mod->subtype = TM_MOD_THREAD_TYPE_SYS;
 	mod->status |= (1 << TM_MOD_THREAD_TYPE_SYS);
 	mod->set_type++;
 }
-static void funcTypeUser(module_item_t *mod) 
-{ 
-	mod->type = TM_MOD_THREAD_ID; 
+static void funcTypeUser(module_item_t *mod)
+{
+	mod->type = TM_MOD_THREAD_ID;
 	mod->subtype = TM_MOD_THREAD_TYPE_USER;
 	mod->status |= (1 << TM_MOD_THREAD_TYPE_USER);
 	mod->set_type++;

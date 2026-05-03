@@ -15,7 +15,10 @@ PATHS_SOURCES += ${PATH_AVR8}
 FILES_HALINIT += ${PATH_AVR8}/hal_archInit.h
 FILES_HALDEFINE += ${PATH_AVR8}/hal_arch_define.h
 CFLAGS += -DARCH_avr8
-
+# allow interfaces/module_define.h usage
+CFLAGS_${PATH_SOURCES}/hal/arch/avr8/hal_context_impl.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+	
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SOURCES}/hal/arch/avr8/hal_archCC.mk
 

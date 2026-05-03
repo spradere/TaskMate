@@ -87,7 +87,7 @@ int main(int argn, const char *argv[])
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, ftag.stream) )
 	{
 		tokenizer(&tok);
-		parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);		
+		parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);
 	}
 	fileClose(&ftag, __FILE__, __LINE__);
 
@@ -104,10 +104,10 @@ static void setupDB(modules_database_t *data_base)
 		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
 	}
 
-	for(int i=0; i<TM_MOD_TYPE_COUNT; i++)
+	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
 	{
 		data_base->modules_type[i].modules_count = 0;
-		for(int j=0; j< TM_MOD_COUNT_MAX; j++)
+		for( int j = 0; j < TM_MOD_COUNT_MAX; j++ )
 		{
 			data_base->modules_type[i].modules[j].set_runlevel = 0;
 			data_base->modules_type[i].modules[j].set_type = 0;

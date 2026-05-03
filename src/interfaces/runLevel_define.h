@@ -15,7 +15,7 @@
 #define RUNLEVEL_DEFINE_H
 
 #if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : modules_define.h"
+	#error "NOT ALLOWED INCLUDE : runLevel_define.h"
 #endif
 
 // run levels definitions
