@@ -32,7 +32,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 	int file_line_number = 0;
 	tokenizer_t tok;
 	module_item_t mod_tmp;
-
+	
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, initrc_list.stream) )
 	{
 		// start
@@ -50,7 +50,12 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 						 tok.count);
 				exit(1);
 			}
-
+			
+			// reset tmp module 
+			mod_tmp.status = 0;
+			mod_tmp.set_runlevel = 0;
+			mod_tmp.set_type = 0;
+			
 			// parse commands
 			for( int i = 1; i < tok.count; i++ )
 			{
@@ -72,6 +77,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 
 			msgInfo("found module : %s", tok.tokens[0]);
 
+			// ok go on with selected type in initrc
 			module_type_t *mod = &data_base->modules_type[mod_tmp.type];
 			int module_count = mod->modules_count;
 
@@ -88,17 +94,40 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 				}
 			}
 
+			// check options
+			if(mod_tmp.set_runlevel < 1 )
+			{
+				msgError("Module %s : -run_* option is not set", tok.tokens[0]);
+				exit(1);
+			}
+			if(mod_tmp.set_runlevel > 1 )
+			{
+				msgError("Module %s : -run_* option is multiple set", tok.tokens[0]);
+				exit(1);
+			}			
+			if(mod_tmp.set_type < 1 )
+			{
+				msgError("Module %s : -type_* option is not set", tok.tokens[0]);
+				exit(1);
+			}
+			if(mod_tmp.set_type > 1 )
+			{
+				msgError("Module %s : -type_* option is multiple set", tok.tokens[0]);
+				exit(1);
+			}			
+			
 			// copy tmp mod in dest mod
 			int index = mod->modules_count;
-			if( index > AUTOCODE_MODULE_COUNT_MAX )
+			if( index > TM_MOD_COUNT_MAX )
 			{
-				msgError("too much modules > %i\n", index);
+				msgError("too much modules > %i type=%i\n", index,mod_tmp.type);
 				exit(1);
 			}
 
 			strcpy(mod->modules[index].name, tok.tokens[0]);
 			mod->modules[index].status = mod_tmp.status;
 			mod->modules_count = index + 1;
+			mod->modules[index].subtype = mod_tmp.subtype;
 		}
 	}
 	fileClose(&initrc_list, __FILE__, __LINE__);
