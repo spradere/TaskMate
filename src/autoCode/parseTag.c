@@ -205,14 +205,14 @@ static void writeModulesList(modules_database_t *data_base, FILE *file)
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		if(mod->modules[i].subtype == TM_MOD_THREAD_TYPE_SYS)
+		if( mod->modules[i].subtype == TM_MOD_THREAD_TYPE_SYS )
 		{
 			fprintf(file, "#include \"services/%s.h\"\n", mod->modules[i].name);
 		}
-		if(mod->modules[i].subtype == TM_MOD_THREAD_TYPE_USER)
-		{	
+		if( mod->modules[i].subtype == TM_MOD_THREAD_TYPE_USER )
+		{
 			fprintf(file, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
-		}	
+		}
 	}
 	fprintf(file, "\n");
 
@@ -329,8 +329,8 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 		int threads_count = 0;
 		const module_type_t *mod;
 
-		mod = &data_base->modules_type[TM_MOD_THREAD_ID]; 
-		
+		mod = &data_base->modules_type[TM_MOD_THREAD_ID];
+
 		for( int i = 0; i < mod->modules_count; i++ )
 		{
 			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
