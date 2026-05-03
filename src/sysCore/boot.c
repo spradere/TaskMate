@@ -14,7 +14,9 @@
 
 #include "sysCore/boot.h"
 
+#include "hal/public/hal_i2c.h"
 #include "hal/public/hal_usart.h"
+#include "interfaces/runLevel_define.h"
 #include "sysCore/gpio.h"
 #include "sysCore/hal_init.h"
 #include "sysCore/modules.h"
@@ -43,13 +45,17 @@ void boot(void)
 	hal_boardInit();
 	gpio_signalsInit();
 
-	// start driver
-	// TODO remove this code when run level is implemented
-
-	for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
+	// start drivers
+	for( uint8_t runlevel = 1; runlevel < RUN_LEVEL_COUNT; runlevel++ )
 	{
-		mod_driver_item_t *mod = mod_driverGetPointer(i);
-		(*(mod->init))();
-		(*(mod->start))();
+		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
+		{
+			mod_driver_item_t *mod = mod_driverGetPointer(i);
+			if( (mod->status & RUN_LEVEL_MASK) == runlevel )
+			{
+				(*(mod->init))();
+				(*(mod->start))();
+			}
+		}
 	}
 }

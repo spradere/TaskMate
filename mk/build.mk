@@ -43,7 +43,7 @@
 	@printf "TaskMate %s\n" "${VAL_TM_VERSION}" >> "${FILE_BUILD_INFO}"
 	@printf "date : " >> "${FILE_BUILD_INFO}"
 	@date >> "${FILE_BUILD_INFO}"
-	@printf "Hardware target : %s -> %s -> %s\n" "${ARCH}" "${MCU}" "${BOARD}" >> "${FILE_BUILD_INFO}"
+	@printf "Hardware target : %s\n" "${VAL_HW_STACK}" >> "${FILE_BUILD_INFO}"
 	@printf "build counter for this target : %s\n" "${VAL_BUILD_CNT}" >> "${FILE_BUILD_INFO}"
 	@git -v >> "${FILE_BUILD_INFO}"
 	@printf "git tag : " >> "${FILE_BUILD_INFO}"
@@ -57,7 +57,7 @@
 	@printf "# Build summary\n"
 	@printf "##########################\n\n"
 	@printf "\t%-16s : %s\n" "TaskMate version" "${VAL_TM_VERSION}"
-	@printf "\t%-16s : %s -> %s -> %s\n" "Hardware target" "${ARCH}" "${MCU}" "${BOARD}"
+	@printf "\t%-16s : %s\n" "Hardware target" "${VAL_HW_STACK}"
 	@printf "\t%-16s : %s\n" "build" "${VAL_BUILD_CNT}"
 
 	@awk '\
@@ -93,7 +93,8 @@ _dependency:
 
 # autoCode and required files
 ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
-							${FILE_TM_INFO} ${FILE_PARSE_TAG_LIST}
+							${FILE_TM_INFO} ${FILE_PARSE_TAG_LIST} \
+							${FILE_HALINIT_LIST} ${FILE_HALDEFINE_LIST}
 
 	@printf "\n%sautoCode, init.rc or related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -106,18 +107,16 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERRO
 	@printf "%s\n" "--tm_ver ${VAL_TM_VERSION}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--tm_build ${VAL_BUILD_CNT}" >> "${FILE_AUTOCODE_CONFIG}"
 
-	@printf "\n# hardware target\n" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--arch ${ARCH}" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--mcu ${MCU}" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--board ${BOARD}" >> "${FILE_AUTOCODE_CONFIG}"
-
 	@printf "\n# files list\n" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
-
+	@printf "%s\n" "--halinit ${FILE_HALINIT_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--haldefine ${FILE_HALDEFINE_LIST}" >> "${FILE_AUTOCODE_CONFIG}"	
+	
 	# launch autoCode
 	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_STAMP}"
+	#./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG}
 	@touch ${FILE_AUTOCODE_STAMP}
 
 	# proceed log
@@ -169,6 +168,18 @@ ${FILE_PARSE_TAG_LIST}: ${FILES_PARSE_TAG}
 	@printf "" > ${FILE_PARSE_TAG_LIST}
 .for file in ${FILES_PARSE_TAG}
 	@printf "%s\n" ${file} >> ${FILE_PARSE_TAG_LIST}
+.endfor
+
+${FILE_HALINIT_LIST}: ${FILES_HALINIT}
+	@printf "" > ${FILE_HALINIT_LIST}
+.for file in ${FILES_HALINIT}
+	@printf "%s\n" ${file} >> ${FILE_HALINIT_LIST}
+.endfor
+
+${FILE_HALDEFINE_LIST}: ${FILES_HALDEFINE}
+	@printf "" > ${FILE_HALDEFINE_LIST}
+.for file in ${FILES_HALDEFINE}
+	@printf "%s\n" ${file} >> ${FILE_HALDEFINE_LIST}
 .endfor
 
 # Run autoCode alone

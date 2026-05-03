@@ -41,7 +41,8 @@ CFLAGS_${PATH_SOURCES}/hal/arch/avr8/hal_context_impl.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SOURCES}/sysCore/gpio.c = \
-	-D=HAL_SYSTEM_CRITICAL_ALLOWED
+	-DHAL_SYSTEM_CRITICAL_ALLOWED
+
 
 # Check #include for system critical features
 _system_critical_check:

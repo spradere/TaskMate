@@ -169,33 +169,50 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 static void writeHalInit(const options_list_t *auto_options, FILE *file)
 {
-	fprintf(file, "#include \"hal/arch/%s/hal_archInit.h\"\n", auto_options->arch_name);
-	fprintf(file, "#include \"hal/mcu/%s/hal_mcuInit.h\"\n", auto_options->mcu_name);
-	fprintf(file, "#include \"hal/board/%s/hal_boardInit.h\"\n\n", auto_options->board_name);
+	file_t file_list;
+	fileInit(&file_list);
+	file_list.name = (char *)auto_options->file_halinit_list;
+	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
+
+	tokenizer_t tok;
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
+	{
+		tokenizer(&tok);
+		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
+	}
+	fileClose(&file_list, __FILE__, __LINE__);
 }
 
 static void writeHalDefine(const options_list_t *auto_options, FILE *file)
 {
-	fprintf(file, "#include \"hal/arch/%s/hal_arch_define.h\"\n", auto_options->arch_name);
-	fprintf(file, "#include \"hal/mcu/%s/hal_mcu_define.h\"\n", auto_options->mcu_name);
-	fprintf(file, "#include \"hal/board/%s/hal_board_define.h\"\n\n", auto_options->board_name);
+	file_t file_list;
+	fileInit(&file_list);
+	file_list.name = (char *)auto_options->file_haldefine_list;
+	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
+
+	tokenizer_t tok;
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
+	{
+		tokenizer(&tok);
+		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
+	}
+	fileClose(&file_list, __FILE__, __LINE__);
 }
 
 static void writeModulesList(modules_database_t *data_base, FILE *file)
 {
-	module_type_t *mod = &data_base->modules_type[TM_MOD_SERVICES_ID];
+	module_type_t *mod = &data_base->modules_type[TM_MOD_THREAD_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "#include \"services/%s.h\"\n", mod->modules[i].name);
-	}
-	fprintf(file, "\n");
-
-	mod = &data_base->modules_type[TM_MOD_TASKS_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(file, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+		if(mod->modules[i].subtype == TM_MOD_THREAD_TYPE_SYS)
+		{
+			fprintf(file, "#include \"services/%s.h\"\n", mod->modules[i].name);
+		}
+		if(mod->modules[i].subtype == TM_MOD_THREAD_TYPE_USER)
+		{	
+			fprintf(file, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+		}	
 	}
 	fprintf(file, "\n");
 
@@ -235,61 +252,44 @@ static void writeModulesCount(const modules_database_t *data_base, FILE *file)
 			data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count);
 	fprintf(file,
 			"#define TM_MOD_THREAD_COUNT %i\n",
-			(data_base->modules_type[TM_MOD_SERVICES_ID].modules_count +
-			 data_base->modules_type[TM_MOD_TASKS_ID].modules_count));
+			data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
 }
 
 static void writeInfo(const options_list_t *auto_options, FILE *file)
 {
 	fprintf(file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", auto_options->tm_ver);
 	fprintf(file, "const uint16_t tm_build = %i;\n", atoi(auto_options->tm_build));
-	fprintf(file, "TM_STR_ROM_NEW(arch_name, \"%s\");\n", auto_options->arch_name);
-	fprintf(file, "TM_STR_ROM_NEW(mcu_name, \"%s\");\n", auto_options->mcu_name);
-	fprintf(file, "TM_STR_ROM_NEW(board_name, \"%s\");\n\n", auto_options->board_name);
 }
 
 static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
 {
 	int threads_count = 0;
 	const module_type_t *mod;
-	int type;
 
 	fprintf(file, "\tmod_thread_item_t *mod;\n");
 
-	for( int j = 0; j < 2; j++ )
+	mod = &data_base->modules_type[TM_MOD_THREAD_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		if( j == 0 )
-		{
-			mod = &data_base->modules_type[TM_MOD_SERVICES_ID];
-			type = (1 << TM_MOD_THREAD_TYPE_SYSTEM);
-		}
-		if( j == 1 )
-		{
-			mod = &data_base->modules_type[TM_MOD_TASKS_ID];
-			type = (1 << TM_MOD_THREAD_TYPE_USER);
-		}
 
-		for( int i = 0; i < mod->modules_count; i++ )
-		{
+		fprintf(file, "\n\tmod = mod_threadGetPointer(%i);\n", threads_count);
 
-			fprintf(file, "\n\tmod = mod_threadGetPointer(%i);\n", threads_count);
+		fprintf(file,
+				"\n\thal_threadContextInit(%s, &(mod->stack_pointer), "
+				"&(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));\n",
+				mod->modules[i].name);
 
-			fprintf(file,
-					"\n\thal_threadContextInit(%s, &(mod->stack_pointer), "
-					"&(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));\n",
-					mod->modules[i].name);
+		fprintf(file, "\tmod->software_time_counter = 0;\n");
+		fprintf(file,
+				"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
+				threads_count,
+				mod->modules[i].name);
+		fprintf(file, "\tmod->name = &thread%i_name;\n", threads_count);
+		fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status);
+		fprintf(file, "\tmod->main = %s;\n", mod->modules[i].name);
 
-			fprintf(file, "\tmod->software_time_counter = 0;\n");
-			fprintf(file,
-					"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
-					threads_count,
-					mod->modules[i].name);
-			fprintf(file, "\tmod->name = &thread%i_name;\n", threads_count);
-			fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status | type);
-			fprintf(file, "\tmod->main = %s;\n", mod->modules[i].name);
-
-			threads_count++;
-		}
+		threads_count++;
 	}
 }
 
@@ -329,17 +329,13 @@ static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
 		int threads_count = 0;
 		const module_type_t *mod;
 
-		for( int j = 0; j < 2; j++ )
+		mod = &data_base->modules_type[TM_MOD_THREAD_ID]; 
+		
+		for( int i = 0; i < mod->modules_count; i++ )
 		{
-			if( j == 0 ) { mod = &data_base->modules_type[TM_MOD_SERVICES_ID]; }
-			if( j == 1 ) { mod = &data_base->modules_type[TM_MOD_TASKS_ID]; }
-
-			for( int i = 0; i < mod->modules_count; i++ )
+			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
 			{
-				if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
-				{
-					fprintf(file, ",%i", threads_count++);
-				}
+				fprintf(file, ",%i", threads_count++);
 			}
 		}
 		fprintf(file, "},\n");
