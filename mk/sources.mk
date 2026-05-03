@@ -13,8 +13,8 @@
 ################################################################################
 
 # Sources files and objects
-FILES_SRC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.c"
-FILES_SRC_H != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.h"
+FILES_SRC != find ${PATHS_SOURCES} -maxdepth 1 -type f -name "*.c"
+FILES_SRC_H != find ${PATHS_SOURCES} -maxdepth 1 -type f -name "*.h"
 
 FILES_OBJ = ${FILES_SRC:${PATH_SOURCES}/%.c=${PATH_BUILD_TARGET}/%.o}
 
@@ -32,10 +32,10 @@ FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 FILE_AUTOCODE_LOG_STAMP = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
-FILES_INITRC != find ${PATH_SOURCES_LIST} -maxdepth 1 -type f -name "*.rc"
+FILES_INITRC != find ${PATHS_SOURCES} -maxdepth 1 -type f -name "*.rc"
 
 # Global error
-FILES_ERROR != find ${PATH_SOURCES_LIST} -maxdepth 1  -type f -name "*.err" | sort
+FILES_ERROR != find ${PATHS_SOURCES} -maxdepth 1  -type f -name "*.err" | sort
 
 # Documentation files
 FILES_DOC != find ${PATH_DOCS} -maxdepth 3 -type f -name "*.md"; \

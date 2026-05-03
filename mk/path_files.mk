@@ -13,8 +13,8 @@
 ################################################################################
 
 # Final full HW path
-PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
-#PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
+#PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
+PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 
 # Targets
 FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
@@ -34,13 +34,13 @@ FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
-PATH_SOURCES_LIST += ${PATH_SOURCES}/sysCore
-PATH_SOURCES_LIST += ${PATH_SOURCES}/sysCall
-PATH_SOURCES_LIST += ${PATH_SOURCES}/services
-PATH_SOURCES_LIST += ${PATH_SOURCES}/tasks
-PATH_SOURCES_LIST += ${PATH_SOURCES}/tm_libc
-PATH_SOURCES_LIST += ${PATH_SOURCES}/interfaces
-PATH_SOURCES_LIST += ${PATH_SOURCES}/hal/public
+PATHS_SOURCES += ${PATH_SOURCES}/sysCore
+PATHS_SOURCES += ${PATH_SOURCES}/sysCall
+PATHS_SOURCES += ${PATH_SOURCES}/services
+PATHS_SOURCES += ${PATH_SOURCES}/tasks
+PATHS_SOURCES += ${PATH_SOURCES}/tm_libc
+PATHS_SOURCES += ${PATH_SOURCES}/interfaces
+PATHS_SOURCES += ${PATH_SOURCES}/hal/public
 
 # log files
 FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
@@ -53,7 +53,7 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 
 # autoCode
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
-FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc_list
+FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 
 FILES_PARSE_TAG = src/sysCore/runLevel.h \
 	src/sysCore/runLevel.c \
@@ -66,12 +66,14 @@ FILES_PARSE_TAG = src/sysCore/runLevel.h \
 	src/hal/public/hal_define.h \
 	src/sysCore/hal_init.h
 
-FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse_list
+FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
+FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
+FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 
 # git ignore
 FILE_GIT_IGNORE = .gitignore
 FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
-PATHS_GIT_ALLOWED_PATH = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_SCRIPTS}
+PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_SCRIPTS}
 VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
 VAL_GIT_ALLOWED.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk

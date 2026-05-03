@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3new parse intrc 01", MSG_TO_LCD);
+		msgWriteText(chan, "\3del service/task", MSG_TO_LCD);
 	}
 
 	msgProcess();

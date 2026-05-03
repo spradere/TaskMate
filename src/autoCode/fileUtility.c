@@ -19,31 +19,6 @@
 static int file_updated = 0;
 static int file_unchanged = 0;
 
-void generateGuardName(const char *file_name, char *guard_name)
-{
-
-	int tmp_index = 0;
-	int file_index = (int)strlen(file_name) - 1;
-	int guard_index = 0;
-	char tmp[BYTE_INDEX];
-
-	do {
-		tmp[tmp_index++] = file_name[file_index--];
-	} while( (file_name[file_index] != '/') && (file_index >= 0) );
-	tmp[tmp_index] = 0;
-
-	tmp_index = (int)strlen(tmp) - 1;
-	while( tmp_index >= 0 )
-	{
-		if( tmp[tmp_index] != '_' ) { guard_name[guard_index] = (char)toupper(tmp[tmp_index]); }
-		if( (tmp[tmp_index] == '_') || (tmp[tmp_index] == '.') ) { guard_name[guard_index] = '_'; }
-		tmp_index--;
-		guard_index++;
-	}
-
-	guard_name[guard_index] = 0;
-}
-
 void filePrintModified(void)
 {
 	msgInfo("*******************************************************");
@@ -170,37 +145,3 @@ void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller
 	}
 	file_tmp->stream_opened = true;
 }
-
-void printLicenceHeader(FILE *file)
-{
-	const char header_path[] = "doc/licence_header.txt";
-	FILE *header_file = fopen(header_path, "r");
-
-	if( header_file == NULL )
-	{
-		msgError("open error file <%s>", header_path);
-		exit(1);
-	}
-
-	int cc;
-	do {
-		cc = fgetc(header_file);
-		if( cc != EOF ) { fputc(cc, file); }
-	} while( cc != EOF );
-
-	fputc('\n', file);
-
-	fclose(header_file);
-}
-
-void printWarningHeader(FILE *file)
-{
-	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	fprintf(file, "// ! Auto generated code, do not edit !\n");
-	fprintf(file, "// ! any changes will be lost         !\n");
-	fprintf(file, "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-}
-
-void printClangFormatOff(FILE *file) { fprintf(file, "// clang-format off\n"); }
-
-void printClangFormatOn(FILE *file) { fprintf(file, "// clang-format on\n"); }

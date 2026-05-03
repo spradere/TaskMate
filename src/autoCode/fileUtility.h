@@ -37,10 +37,5 @@ void fileClose(file_t *file, const char *caller, int line);
 void fileInit(file_t *file);
 void fileOpen( file_t *file, const char *mode, int special_mode, const char *caller, int line);
 void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, int line);
-void printLicenceHeader(FILE *file);
-void printWarningHeader(FILE *file);
-void printClangFormatOff(FILE *file);
-void printClangFormatOn(FILE *file);
-void generateGuardName(const char *file_name, char *guard_name);
 
 #endif

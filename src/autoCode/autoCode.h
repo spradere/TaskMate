@@ -34,34 +34,29 @@
 #define msgInfo(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
-typedef unsigned char module_status_t;
-typedef int run_level_modules_count_t;
-
 // modules structures
 typedef struct
 {
 	char name[TM_MOD_NAME_SIZE_MAX];
-	module_status_t status;
+	unsigned char status;
 	unsigned char type;
-
+	unsigned char subtype;
+	int set_runlevel;
+	int set_type;
+	
 } module_item_t;
-
-#define AUTOCODE_MODULE_COUNT_MAX 256
 
 typedef struct
 {
-	module_item_t modules[AUTOCODE_MODULE_COUNT_MAX];
+	module_item_t modules[TM_MOD_COUNT_MAX];
 	int modules_count;
-	int initrc_arg_count_max;
-	module_status_t status_default;
-	char *name;
-
+	
 } module_type_t;
 
 typedef struct
 {
 	module_type_t modules_type[TM_MOD_TYPE_COUNT];
-	run_level_modules_count_t run_level_module_count[TM_MOD_TYPE_COUNT][RUN_LEVEL_COUNT];
+	int run_level_module_count[TM_MOD_TYPE_COUNT][RUN_LEVEL_COUNT];
 	int threads_count[RUN_LEVEL_COUNT];
 
 } modules_database_t;

@@ -30,23 +30,28 @@
 // clang-format on
 // [/tag]
 
-#define TM_MOD_TASKS_COUNT_MAX 128
-#define TM_MOD_SERVICES_COUNT_MAX 128
-#define TM_MOD_DRIVERS_COUNT_MAX 256
+// definitions for autoCode
+
+#define TM_MOD_COUNT_MAX 256
+//#define TM_MOD_TASKS_COUNT_MAX 128
+//#define TM_MOD_SERVICES_COUNT_MAX 128
+//#define TM_MOD_DRIVERS_COUNT_MAX 256
 
 #define TM_MOD_DRIVERS_ID 0
-#define TM_MOD_SERVICES_ID 1
-#define TM_MOD_TASKS_ID 2
+#define TM_MOD_THREAD_ID 1
+#define TM_MOD_THREAD_SYS_ID 2
+#define TM_MOD_THREAD_USER_ID 3
 
-#define TM_MOD_TYPE_COUNT 3
+#define TM_MOD_TYPE_COUNT 2
 #define TM_MOD_NAME_SIZE_MAX 32
 
+// system 
 #define TM_MOD_THREAD_STACK_SIZE 256
 
 // thread status bits
 // bit [2 1 0 ] is run level
 #define TM_MOD_THREAD_TYPE_USER 3
-#define TM_MOD_THREAD_TYPE_SYSTEM 4
+#define TM_MOD_THREAD_TYPE_SYS 4
 #define TM_MOD_THREAD_DEAD 5
 
 // driver status bits

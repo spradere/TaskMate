@@ -16,15 +16,14 @@
 
 #include "tokenizer.h"
 
-#define HAVE_OPTIONS(X)            	\
-	X(HAVE_TM_VER, "--tm_ver")     	\
-	X(HAVE_TM_BUILD, "--tm_build") 	\
-	X(HAVE_ARCH, "--arch")         	\
-	X(HAVE_MCU, "--mcu")           	\
-	X(HAVE_BOARD, "--board")       	\
-	X(HAVE_ERRORS, "--errors")		\
-	X(HAVE_INITRC, "--initrc")		\
-	X(HAVE_PARSETAG, "--parsetag")
+#define HAVE_OPTIONS(X)            \
+	X(HAVE_TM_VER, "--tm_ver")     \
+	X(HAVE_TM_BUILD, "--tm_build") \
+	X(HAVE_ERRORS, "--errors")     \
+	X(HAVE_INITRC, "--initrc")     \
+	X(HAVE_PARSETAG, "--parsetag") \
+	X(HAVE_HALINIT, "--halinit")   \
+	X(HAVE_HALDEFINE, "--haldefine")
 
 enum
 {
@@ -61,23 +60,6 @@ static void funcTmBuild(const char *value, options_list_t *opt)
 	strncpy(opt->tm_build, value, BYTE_INDEX);
 	have_options_count[HAVE_TM_BUILD]++;
 }
-static void funcArch(const char *value, options_list_t *opt)
-{
-	strncpy(opt->arch_name, value, BYTE_INDEX);
-	have_options_count[HAVE_ARCH]++;
-}
-
-static void funcMcu(const char *value, options_list_t *opt)
-{
-	strncpy(opt->mcu_name, value, BYTE_INDEX);
-	have_options_count[HAVE_MCU]++;
-}
-
-static void funcBoard(const char *value, options_list_t *opt)
-{
-	strncpy(opt->board_name, value, BYTE_INDEX);
-	have_options_count[HAVE_BOARD]++;
-}
 
 static void funcErrors(const char *value, options_list_t *opt)
 {
@@ -97,6 +79,18 @@ static void funcParsetag(const char *value, options_list_t *opt)
 	have_options_count[HAVE_PARSETAG]++;
 }
 
+static void funcHalInit(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_halinit_list, value, BYTE_INDEX);
+	have_options_count[HAVE_HALINIT]++;
+}
+
+static void funcHalDefine(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_haldefine_list, value, BYTE_INDEX);
+	have_options_count[HAVE_HALDEFINE]++;
+}
+
 static const struct
 {
 	const char *name;
@@ -104,12 +98,11 @@ static const struct
 
 } options_cmds[] = {{"--tm_ver", funcTmVer},
 					{"--tm_build", funcTmBuild},
-					{"--arch", funcArch},
-					{"--mcu", funcMcu},
-					{"--board", funcBoard},
 					{"--errors", funcErrors},
 					{"--initrc", funcInitrc},
 					{"--parsetag", funcParsetag},
+					{"--halinit", funcHalInit},
+					{"--haldefine", funcHalDefine},
 					{NULL, NULL}};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
@@ -129,7 +122,6 @@ void options(const char *file_name, options_list_t *opt)
 {
 	// initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
-
 	// proceed options from files
 	file_t file;
 	fileInit(&file);
@@ -138,7 +130,7 @@ void options(const char *file_name, options_list_t *opt)
 
 	int file_line_number = 0;
 	tokenizer_t tok;
-
+	msgInfo("read file %s", file_name);
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file.stream) )
 	{
 		file_line_number++;
@@ -175,13 +167,13 @@ void options(const char *file_name, options_list_t *opt)
 	{
 		if( have_options_count[i] == 0 )
 		{
-			msgError("required option %s is not set", string_from_have(i));
+			msgError("required autoCode option %s is not set", string_from_have(i));
 			exit(1);
 		}
 
 		if( have_options_count[i] > 1 )
 		{
-			msgError("required option %s is multiple set", string_from_have(i));
+			msgError("required autoCode option %s is multiple set", string_from_have(i));
 			exit(1);
 		}
 	}
