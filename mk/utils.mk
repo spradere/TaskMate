@@ -74,7 +74,7 @@ clang_format:
 #help [global] Formatting code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang-format -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCOE_SRC}
+	clang-format19 -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCOE_SRC}
 .PHONY: clang_format
 
 tidy_autoCode:

@@ -27,16 +27,15 @@
 
 #include "services/msg.h"
 #include "services/scli.h"
-
 #include "tasks/task1.h"
 #include "tasks/task2.h"
 
+#include "hal/public/hal_lcd.h"
+#include "hal/public/hal_rtc.h"
 #include "hal/public/hal_timerSched.h"
 #include "hal/public/hal_timerSTC.h"
 #include "hal/public/hal_i2c.h"
 #include "hal/public/hal_usart.h"
-#include "hal/public/hal_lcd.h"
-#include "hal/public/hal_rtc.h"
 // clang-format on
 // [/tag]
 

@@ -22,34 +22,26 @@ void printModules(const modules_database_t *data_base)
 	const module_type_t *driver = &data_base->modules_type[TM_MOD_DRIVERS_ID];
 	for( int i = 0; i < driver->modules_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" status=%i\n",
+		printf("\tdrivers[%i] \"%s\" runlevel=%i\n",
 			   i,
 			   driver->modules[i].name,
 			   driver->modules[i].status);
 	}
 	printf("\n");
 
-	msgInfo("found services :");
-	const module_type_t *services = &data_base->modules_type[TM_MOD_SERVICES_ID];
-	for( int i = 0; i < services->modules_count; i++ )
+	msgInfo("found threads :");
+	const module_type_t *threads = &data_base->modules_type[TM_MOD_THREAD_ID];
+	for( int i = 0; i < threads->modules_count; i++ )
 	{
-		printf("\tservices[%i] \"%s\" status=%i\n",
+		printf("\tthread[%i] \"%s\" runlevel=%i type=%i\n",
 			   i,
-			   services->modules[i].name,
-			   services->modules[i].status);
+			   threads->modules[i].name,
+			   threads->modules[i].status & RUN_LEVEL_MASK,
+			   threads->modules[i].status & (~RUN_LEVEL_MASK));
 	}
 	printf("\n");
 
-	msgInfo("found tasks :");
-	const module_type_t *tasks = &data_base->modules_type[TM_MOD_TASKS_ID];
-	for( int i = 0; i < tasks->modules_count; i++ )
-	{
-		printf(
-			"\ttasks[%i] \"%s\" status=%i\n", i, tasks->modules[i].name, tasks->modules[i].status);
-	}
-	printf("\n");
-
-	msgInfo("threads (services + tasks) by run level :");
+	msgInfo("threads by run level :");
 	char name[BYTE_INDEX];
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
