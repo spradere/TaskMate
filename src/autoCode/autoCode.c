@@ -38,7 +38,6 @@
 #include "tokenizer.h"
 
 static void setupDB(modules_database_t *data_base);
-static void checkModulesCount(modules_database_t *data_base);
 static void threadCountLevel(modules_database_t *data_base);
 
 int main(int argn, const char *argv[])
@@ -76,9 +75,6 @@ int main(int argn, const char *argv[])
 	}
 	fileClose(&finitrc, __FILE__, __LINE__);
 
-	// check module count autoCode <-> TaskMate
-	checkModulesCount(&data_base);
-
 	// count thread for each level
 	threadCountLevel(&data_base);
 
@@ -108,48 +104,13 @@ static void setupDB(modules_database_t *data_base)
 		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
 	}
 
-	//data_base->modules_type[TM_MOD_DRIVERS_ID].initrc_arg_count_max = 2;
-	data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count = 0;
-	data_base->modules_type[TM_MOD_DRIVERS_ID].name = "Drivers";
-	//data_base->modules_type[TM_MOD_DRIVERS_ID].status_default = RUN_DRIVER;
-
-	//data_base->modules_type[TM_MOD_SERVICES_ID].initrc_arg_count_max = 2;
-	data_base->modules_type[TM_MOD_SERVICES_ID].modules_count = 0;
-	data_base->modules_type[TM_MOD_SERVICES_ID].name = "Services";
-	//data_base->modules_type[TM_MOD_SERVICES_ID].status_default = RUN_SERVICE;
-
-	//data_base->modules_type[TM_MOD_TASKS_ID].initrc_arg_count_max = 2;
-	data_base->modules_type[TM_MOD_TASKS_ID].modules_count = 0;
-	data_base->modules_type[TM_MOD_TASKS_ID].name = "Task";
-	//data_base->modules_type[TM_MOD_TASKS_ID].status_default = RUN_USER;
-}
-
-static void checkModulesCount(modules_database_t *data_base)
-{
-	int module_count[TM_MOD_TYPE_COUNT][2];
-	int id;
-
-	id = TM_MOD_DRIVERS_ID;
-	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = TM_MOD_DRIVERS_COUNT_MAX;
-
-	id = TM_MOD_SERVICES_ID;
-	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = TM_MOD_SERVICES_COUNT_MAX;
-
-	id = TM_MOD_TASKS_ID;
-	module_count[id][0] = data_base->modules_type[id].modules_count;
-	module_count[id][1] = TM_MOD_TASKS_COUNT_MAX;
-
-	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
+	for(int i=0; i<TM_MOD_TYPE_COUNT; i++)
 	{
-		if( module_count[i][0] > module_count[i][1] )
+		data_base->modules_type[i].modules_count = 0;
+		for(int j=0; j< TM_MOD_COUNT_MAX; j++)
 		{
-			msgError("Too many modules ! %s count = %i > TaskMate max %i",
-					 data_base->modules_type[i].name,
-					 module_count[i][0],
-					 module_count[i][1]);
-			exit(1);
+			data_base->modules_type[i].modules[j].set_runlevel = 0;
+			data_base->modules_type[i].modules[j].set_type = 0;
 		}
 	}
 }
@@ -159,16 +120,12 @@ static void threadCountLevel(modules_database_t *data_base)
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
 
-		// count thread (services + task) for run level
+		// count thread for each run level
 		int thread_count = 0;
 
 		for( int i = 1; i <= level; i++ )
 		{
-			thread_count += data_base->run_level_module_count[TM_MOD_SERVICES_ID][i];
-		}
-		for( int i = 1; i <= level; i++ )
-		{
-			thread_count += data_base->run_level_module_count[TM_MOD_TASKS_ID][i];
+			thread_count += data_base->run_level_module_count[TM_MOD_THREAD_ID][i];
 		}
 
 		data_base->threads_count[level] = thread_count;
