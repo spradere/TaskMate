@@ -17,18 +17,26 @@
 #include "fileUtility.h"
 #include "tokenizer.h"
 
-static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file);
-static void writeModulesCount(const modules_database_t *data_base, FILE *file);
-static void writeInfo(const options_list_t *auto_options, FILE *file);
-static void writeDriversAlloc(modules_database_t *data_base, FILE *file);
-static void writeThreadsAlloc(modules_database_t *data_base, FILE *file);
-static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file);
-static void writeErrorCatalog(const error_catalog_t *errors, FILE *file);
+typedef struct
+{
+	const modules_database_t *data_base;
+	FILE *file;
+	const error_catalog_t *errors;
+	const options_list_t *auto_options;
+} parseTag_t;
 
-static void writeErrorEnum(const error_catalog_t *errors, FILE *file);
-static void writeModulesList(modules_database_t *data_base, FILE *file);
-static void writeHalDefine(const options_list_t *auto_options, FILE *file);
-static void writeHalInit(const options_list_t *auto_options, FILE *file);
+static void writeRunlevelDefine(const parseTag_t *parse);
+static void writeModulesCount(const parseTag_t *parse);
+static void writeInfo(const parseTag_t *parse);
+static void writeDriversAlloc(const parseTag_t *parse);
+static void writeThreadsAlloc(const parseTag_t *parse);
+static void writeRunLevelsAlloc(const parseTag_t *parse);
+static void writeErrorCatalog(const parseTag_t *parse);
+
+static void writeErrorEnum(const parseTag_t *parse);
+static void writeModulesList(const parseTag_t *parse);
+static void writeHalDefine(const parseTag_t *parse);
+static void writeHalInit(const parseTag_t *parse);
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const options_list_t *auto_options)
@@ -44,6 +52,13 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	file_t file_tmp;
 	fileInit(&file_tmp);
 	fileMakeTmp(file_src.name, &file_tmp, __FILE__, __LINE__);
+
+	parseTag_t parse = {
+		.data_base = data_base,
+		.file = file_tmp.stream,
+		.errors = errors,
+		.auto_options = auto_options,
+	};
 
 	// read form source
 	int tag_section = 0;
@@ -90,58 +105,58 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 			if( (strcmp(tok.tokens[2], "threads") == 0) && (strcmp(tok.tokens[3], "alloc") == 0) )
 			{
-				writeThreadsAlloc(data_base, file_tmp.stream);
+				writeThreadsAlloc(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "drivers") == 0) && (strcmp(tok.tokens[3], "alloc") == 0) )
 			{
-				writeDriversAlloc(data_base, file_tmp.stream);
+				writeDriversAlloc(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
 				(strcmp(tok.tokens[3], "alloc") == 0) )
 			{
-				writeRunLevelsAlloc(data_base, file_tmp.stream);
+				writeRunLevelsAlloc(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "catalog") == 0) )
 			{
-				writeErrorCatalog(errors, file_tmp.stream);
+				writeErrorCatalog(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "error") == 0) && (strcmp(tok.tokens[3], "enum") == 0) )
 			{
-				writeErrorEnum(errors, file_tmp.stream);
+				writeErrorEnum(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "system") == 0) && (strcmp(tok.tokens[3], "info") == 0) )
 			{
-				writeInfo(auto_options, file_tmp.stream);
+				writeInfo(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "hal") == 0) && (strcmp(tok.tokens[3], "define") == 0) )
 			{
-				writeHalDefine(auto_options, file_tmp.stream);
+				writeHalDefine(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "hal") == 0) && (strcmp(tok.tokens[3], "init") == 0) )
 			{
-				writeHalInit(auto_options, file_tmp.stream);
+				writeHalInit(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "count") == 0) )
 			{
-				writeModulesCount(data_base, file_tmp.stream);
+				writeModulesCount(&parse);
 			}
 
 			if( (strcmp(tok.tokens[2], "modules") == 0) && (strcmp(tok.tokens[3], "list") == 0) )
 			{
-				writeModulesList(data_base, file_tmp.stream);
+				writeModulesList(&parse);
 			}
 			if( (strcmp(tok.tokens[2], "run_levels") == 0) &&
 				(strcmp(tok.tokens[3], "define") == 0) )
 			{
-				writeRunlevelDefine(data_base, file_tmp.stream);
+				writeRunlevelDefine(&parse);
 			}
 		}
 
@@ -167,216 +182,216 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	fileClose(&file_tmp, __FILE__, __LINE__);
 }
 
-static void writeHalInit(const options_list_t *auto_options, FILE *file)
+static void writeHalInit(const parseTag_t *parse)
 {
 	file_t file_list;
 	fileInit(&file_list);
-	file_list.name = (char *)auto_options->file_halinit_list;
+	file_list.name = (char *)parse->auto_options->file_halinit_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	tokenizer_t tok;
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
 	{
 		tokenizer(&tok);
-		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
+		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
 }
 
-static void writeHalDefine(const options_list_t *auto_options, FILE *file)
+static void writeHalDefine(const parseTag_t *parse)
 {
 	file_t file_list;
 	fileInit(&file_list);
-	file_list.name = (char *)auto_options->file_haldefine_list;
+	file_list.name = (char *)parse->auto_options->file_haldefine_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	tokenizer_t tok;
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
 	{
 		tokenizer(&tok);
-		fprintf(file, "#include \"%s\"\n", tok.tokens[0]);
+		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
 }
 
-static void writeModulesList(modules_database_t *data_base, FILE *file)
+static void writeModulesList(const parseTag_t *parse)
 {
-	module_type_t *mod = &data_base->modules_type[TM_MOD_THREAD_ID];
+	const module_type_t *mod = &parse->data_base->modules_type[TM_MOD_THREAD_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
 		if( mod->modules[i].subtype == TM_MOD_THREAD_TYPE_SYS )
 		{
-			fprintf(file, "#include \"services/%s.h\"\n", mod->modules[i].name);
+			fprintf(parse->file, "#include \"services/%s.h\"\n", mod->modules[i].name);
 		}
 		if( mod->modules[i].subtype == TM_MOD_THREAD_TYPE_USER )
 		{
-			fprintf(file, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
+			fprintf(parse->file, "#include \"tasks/%s.h\"\n", mod->modules[i].name);
 		}
 	}
-	fprintf(file, "\n");
+	fprintf(parse->file, "\n");
 
-	mod = &data_base->modules_type[TM_MOD_DRIVERS_ID];
+	mod = &parse->data_base->modules_type[TM_MOD_DRIVERS_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "#include \"hal/public/%s.h\"\n", mod->modules[i].name);
+		fprintf(parse->file, "#include \"hal/public/%s.h\"\n", mod->modules[i].name);
 	}
 }
 
-static void writeRunlevelDefine(const modules_database_t *data_base, FILE *file)
+static void writeRunlevelDefine(const parseTag_t *parse)
 {
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(file, "#define RUN_LEVEL%i_THREADS_COUNT %i\n", i, data_base->threads_count[i]);
+		fprintf(parse->file, "#define RUN_LEVEL%i_THREADS_COUNT %i\n", i, parse->data_base->threads_count[i]);
 	}
 	// structure
-	fprintf(file, "\ntypedef struct\n");
-	fprintf(file, "{\n");
+	fprintf(parse->file, "\ntypedef struct\n");
+	fprintf(parse->file, "{\n");
 
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(file, "\tuint8_t level%i[RUN_LEVEL%i_THREADS_COUNT + 1];\n", i, i);
+		fprintf(parse->file, "\tuint8_t level%i[RUN_LEVEL%i_THREADS_COUNT + 1];\n", i, i);
 	}
 
-	fprintf(file, "\tuint8_t *levels[%i];\n", RUN_LEVEL_COUNT);
-	fprintf(file, "\tuint8_t current;\n");
-	fprintf(file, "\tuint8_t next;\n");
-	fprintf(file, "} rl_data_base_t;\n\n");
+	fprintf(parse->file, "\tuint8_t *levels[%i];\n", RUN_LEVEL_COUNT);
+	fprintf(parse->file, "\tuint8_t current;\n");
+	fprintf(parse->file, "\tuint8_t next;\n");
+	fprintf(parse->file, "} rl_data_base_t;\n\n");
 }
 
-static void writeModulesCount(const modules_database_t *data_base, FILE *file)
+static void writeModulesCount(const parseTag_t *parse)
 {
-	fprintf(file,
+	fprintf(parse->file,
 			"#define TM_MOD_DRIVER_COUNT %i\n",
-			data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count);
-	fprintf(file,
+			parse->data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count);
+	fprintf(parse->file,
 			"#define TM_MOD_THREAD_COUNT %i\n",
-			data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
+			parse->data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
 }
 
-static void writeInfo(const options_list_t *auto_options, FILE *file)
+static void writeInfo(const parseTag_t *parse)
 {
-	fprintf(file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", auto_options->tm_ver);
-	fprintf(file, "const uint16_t tm_build = %i;\n", atoi(auto_options->tm_build));
+	fprintf(parse->file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", parse->auto_options->tm_ver);
+	fprintf(parse->file, "const uint16_t tm_build = %i;\n", atoi(parse->auto_options->tm_build));
 }
 
-static void writeThreadsAlloc(modules_database_t *data_base, FILE *file)
+static void writeThreadsAlloc(const parseTag_t *parse)
 {
 	int threads_count = 0;
 	const module_type_t *mod;
 
-	fprintf(file, "\tmod_thread_item_t *mod;\n");
+	fprintf(parse->file, "\tmod_thread_item_t *mod;\n");
 
-	mod = &data_base->modules_type[TM_MOD_THREAD_ID];
+	mod = &parse->data_base->modules_type[TM_MOD_THREAD_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
 
-		fprintf(file, "\n\tmod = mod_threadGetPointer(%i);\n", threads_count);
+		fprintf(parse->file, "\n\tmod = mod_threadGetPointer(%i);\n", threads_count);
 
-		fprintf(file,
+		fprintf(parse->file,
 				"\n\thal_threadContextInit(%s, &(mod->stack_pointer), "
 				"&(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));\n",
 				mod->modules[i].name);
 
-		fprintf(file, "\tmod->software_time_counter = 0;\n");
-		fprintf(file,
+		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
+		fprintf(parse->file,
 				"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
 				threads_count,
 				mod->modules[i].name);
-		fprintf(file, "\tmod->name = &thread%i_name;\n", threads_count);
-		fprintf(file, "\tmod->status = %i;\n", mod->modules[i].status);
-		fprintf(file, "\tmod->main = %s;\n", mod->modules[i].name);
+		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", threads_count);
+		fprintf(parse->file, "\tmod->status = %i;\n", mod->modules[i].status);
+		fprintf(parse->file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 		threads_count++;
 	}
 }
 
-static void writeDriversAlloc(modules_database_t *data_base, FILE *file)
+static void writeDriversAlloc(const parseTag_t *parse)
 {
-	const module_type_t *mod = &data_base->modules_type[TM_MOD_DRIVERS_ID];
+	const module_type_t *mod = &parse->data_base->modules_type[TM_MOD_DRIVERS_ID];
 
-	fprintf(file, "\tmod_driver_item_t *mod;\n");
+	fprintf(parse->file, "\tmod_driver_item_t *mod;\n");
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		fprintf(file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
+		fprintf(parse->file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
 
-		fprintf(file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
-		fprintf(file, "\t*(mod) = (mod_driver_item_t)\n");
-		fprintf(file, "\t{\n");
-		fprintf(file, "\t\t.name = &driver%i_name,\n", i);
-		fprintf(file, "\t\t.status = %i,\n", mod->modules[i].status);
-		fprintf(file, "\t\t.init = %sInit,\n", mod->modules[i].name);
-		fprintf(file, "\t\t.start = %sStart,\n", mod->modules[i].name);
-		fprintf(file, "\t\t.stop = %sStop\n", mod->modules[i].name);
-		fprintf(file, "\t};\n");
+		fprintf(parse->file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
+		fprintf(parse->file, "\t*(mod) = (mod_driver_item_t)\n");
+		fprintf(parse->file, "\t{\n");
+		fprintf(parse->file, "\t\t.name = &driver%i_name,\n", i);
+		fprintf(parse->file, "\t\t.status = %i,\n", mod->modules[i].status);
+		fprintf(parse->file, "\t\t.init = %sInit,\n", mod->modules[i].name);
+		fprintf(parse->file, "\t\t.start = %sStart,\n", mod->modules[i].name);
+		fprintf(parse->file, "\t\t.stop = %sStop\n", mod->modules[i].name);
+		fprintf(parse->file, "\t};\n");
 	}
 }
 
-static void writeRunLevelsAlloc(modules_database_t *data_base, FILE *file)
+static void writeRunLevelsAlloc(const parseTag_t *parse)
 {
 	// data
-	fprintf(file, "\tto_run = (rl_data_base_t){\n");
+	fprintf(parse->file, "\tto_run = (rl_data_base_t){\n");
 
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{
 
-		fprintf(file, "\t\t.level%i = {%i", level, data_base->threads_count[level]);
+		fprintf(parse->file, "\t\t.level%i = {%i", level, parse->data_base->threads_count[level]);
 
 		// write threads list for run level
 		int threads_count = 0;
 		const module_type_t *mod;
 
-		mod = &data_base->modules_type[TM_MOD_THREAD_ID];
+		mod = &parse->data_base->modules_type[TM_MOD_THREAD_ID];
 
 		for( int i = 0; i < mod->modules_count; i++ )
 		{
 			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
 			{
-				fprintf(file, ",%i", threads_count++);
+				fprintf(parse->file, ",%i", threads_count++);
 			}
 		}
-		fprintf(file, "},\n");
+		fprintf(parse->file, "},\n");
 	}
 
-	fprintf(file,
+	fprintf(parse->file,
 			"\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, "
 			"to_run.level3, to_run.level4}\n");
-	fprintf(file, "\t};\n");
+	fprintf(parse->file, "\t};\n");
 
-	fprintf(file, "\tto_run.current=RUN_CORE;\n");
-	fprintf(file, "\tto_run.next=RUN_CORE;\n");
+	fprintf(parse->file, "\tto_run.current=RUN_CORE;\n");
+	fprintf(parse->file, "\tto_run.next=RUN_CORE;\n");
 }
 
-static void writeErrorCatalog(const error_catalog_t *errors, FILE *file)
+static void writeErrorCatalog(const parseTag_t *parse)
 {
 
-	for( int i = 0; i < errors->error_count; i++ )
+	for( int i = 0; i < parse->errors->error_count; i++ )
 	{
-		fprintf(file, "TM_STR_ROM_NEW(err%i, %s);\n", i, errors->catalog[i].message);
+		fprintf(parse->file, "TM_STR_ROM_NEW(err%i, %s);\n", i, parse->errors->catalog[i].message);
 	}
 
-	fprintf(file, "\nconst err_item_t error_catalog[] = \n{\n");
+	fprintf(parse->file, "\nconst err_item_t error_catalog[] = \n{\n");
 
-	for( int i = 0; i < errors->error_count; i++ )
+	for( int i = 0; i < parse->errors->error_count; i++ )
 	{
-		fprintf(file, "\t{&err%i, %i},\n", i, errors->catalog[i].critical);
+		fprintf(parse->file, "\t{&err%i, %i},\n", i, parse->errors->catalog[i].critical);
 	}
-	fprintf(file, "};\n");
+	fprintf(parse->file, "};\n");
 }
 
-static void writeErrorEnum(const error_catalog_t *errors, FILE *file)
+static void writeErrorEnum(const parseTag_t *parse)
 {
 	// write errors enum
-	fprintf(file, "typedef enum\n");
-	fprintf(file, "{\n");
+	fprintf(parse->file, "typedef enum\n");
+	fprintf(parse->file, "{\n");
 
-	for( int i = 0; i < errors->error_count; i++ )
+	for( int i = 0; i < parse->errors->error_count; i++ )
 	{
-		fprintf(file, "\t%s,\n", errors->catalog[i].name);
+		fprintf(parse->file, "\t%s,\n", parse->errors->catalog[i].name);
 	}
-	fprintf(file, "\tERROR_COUNT\n");
-	fprintf(file, "} err_codes_t;\n\n");
+	fprintf(parse->file, "\tERROR_COUNT\n");
+	fprintf(parse->file, "} err_codes_t;\n\n");
 }
