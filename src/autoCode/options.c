@@ -16,25 +16,43 @@
 
 #include "tokenizer.h"
 
-#define HAVE_OPTIONS(X)            \
-	X(HAVE_TM_VER, "--tm_ver")     \
-	X(HAVE_TM_BUILD, "--tm_build") \
-	X(HAVE_ERRORS, "--errors")     \
-	X(HAVE_INITRC, "--initrc")     \
-	X(HAVE_PARSETAG, "--parsetag") \
-	X(HAVE_HALINIT, "--halinit")   \
-	X(HAVE_HALDEFINE, "--haldefine")
+static void funcTmVer(const char *value, options_list_t *opt);
+static void funcTmBuild(const char *value, options_list_t *opt);
+static void funcErrors(const char *value, options_list_t *opt);
+static void funcInitrc(const char *value, options_list_t *opt);
+static void funcParsetag(const char *value, options_list_t *opt);
+static void funcHalInit(const char *value, options_list_t *opt);
+static void funcHalDefine(const char *value, options_list_t *opt);
 
+#define HAVE_OPTIONS(X)            \
+	X(HAVE_TM_VER, "--tm_ver", funcTmVer)     \
+	X(HAVE_TM_BUILD, "--tm_build", funcTmBuild) \
+	X(HAVE_ERRORS, "--errors", funcErrors)     \
+	X(HAVE_INITRC, "--initrc", funcInitrc)     \
+	X(HAVE_PARSETAG, "--parsetag", funcParsetag) \
+	X(HAVE_HALINIT, "--halinit", funcHalInit)   \
+	X(HAVE_HALDEFINE, "--haldefine", funcHalDefine)
+
+static const struct
+{
+	const char *name;
+	void (*func)(const char *value, options_list_t *opt);
+} options_cmds[] = {
+#define X(e, s, f) {(s), (f)},
+	HAVE_OPTIONS(X)
+#undef X	
+	{NULL, NULL}};
+					
 enum
 {
-#define X(e, s) e,
+#define X(e, s, f) e,
 	HAVE_OPTIONS(X)
 #undef X
 		HAVE_COUNT
 } have_options_id;
 
 static const char *have_to_string[HAVE_COUNT] = {
-#define X(e, s) [e] = (s),
+#define X(e, s, f) [e] = (s),
 	HAVE_OPTIONS(X)
 #undef X
 };
@@ -43,12 +61,13 @@ static int have_options_count[HAVE_COUNT];
 
 static const char *string_from_have(const int id)
 {
-#define X(e, s) \
+#define X(e, s, f) \
 	if( id == (e) ) { return have_to_string[e]; }
 	HAVE_OPTIONS(X)
 #undef X
 	return NULL;
 }
+
 static void funcTmVer(const char *value, options_list_t *opt)
 {
 	strncpy(opt->tm_ver, value, BYTE_INDEX);
@@ -90,20 +109,6 @@ static void funcHalDefine(const char *value, options_list_t *opt)
 	strncpy(opt->file_haldefine_list, value, BYTE_INDEX);
 	have_options_count[HAVE_HALDEFINE]++;
 }
-
-static const struct
-{
-	const char *name;
-	void (*func)(const char *value, options_list_t *opt);
-
-} options_cmds[] = {{"--tm_ver", funcTmVer},
-					{"--tm_build", funcTmBuild},
-					{"--errors", funcErrors},
-					{"--initrc", funcInitrc},
-					{"--parsetag", funcParsetag},
-					{"--halinit", funcHalInit},
-					{"--haldefine", funcHalDefine},
-					{NULL, NULL}};
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
 {
