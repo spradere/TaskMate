@@ -18,7 +18,7 @@
 	#error "NOT ALLOWED INCLUDE : hal_init.h"
 #endif
 
-// [autoCode_tag] hal init
+// [autoCode_tag] hal_init
 // clang-format off
 /*
  * do not edit code between tag

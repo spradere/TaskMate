@@ -22,7 +22,7 @@ static rl_data_base_t to_run;
 void rl_Alloc(void)
 {
 
-	// [autoCode_tag] run_levels alloc
+	// [autoCode_tag] runlevels_alloc
 // clang-format off
 /*
  * do not edit code between tag

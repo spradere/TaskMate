@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3refactor parseTag", MSG_TO_LCD);
+		msgWriteText(chan, "\3ref. parseTag 02", MSG_TO_LCD);
 	}
 
 	msgProcess();

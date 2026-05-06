@@ -23,7 +23,7 @@
 
 #include "interfaces/runLevel_define.h"
 
-// [autoCode_tag] run_levels define
+// [autoCode_tag] runlevels_define
 // clang-format off
 /*
  * do not edit code between tag
