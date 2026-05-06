@@ -16,7 +16,7 @@
 
 #include "tm_libc/tm_string.h"
 
-// [autoCode_tag] error catalog
+// [autoCode_tag] error_catalog
 // clang-format off
 /*
  * do not edit code between tag

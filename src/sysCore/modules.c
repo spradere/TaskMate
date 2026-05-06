@@ -76,7 +76,7 @@ void mod_threadsAlloc(void)
 		thread->canary_high = TM_MOD_CANARY;
 	}
 
-	// [autoCode_tag] threads alloc
+	// [autoCode_tag] threads_alloc
 // clang-format off
 /*
  * do not edit code between tag
@@ -126,7 +126,7 @@ void mod_threadsAlloc(void)
 
 void mod_driversAlloc(void)
 {
-	// [autoCode_tag] drivers alloc
+	// [autoCode_tag] drivers_alloc
 // clang-format off
 /*
  * do not edit code between tag
