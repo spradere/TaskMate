@@ -21,7 +21,7 @@ typedef enum
 	ERROR_HIGH
 } err_critical_t;
 
-// [autoCode_tag] error enum
+// [autoCode_tag] error_enum
 // clang-format off
 /*
  * do not edit code between tag

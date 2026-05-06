@@ -18,7 +18,7 @@
 	#error "NOT ALLOWED INCLUDE : modules_list.h"
 #endif
 
-// [autoCode_tag] modules list
+// [autoCode_tag] modules_list
 // clang-format off
 /*
  * do not edit code between tag

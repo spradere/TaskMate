@@ -14,7 +14,7 @@
 #ifndef HAL_DEFINE_H
 #define HAL_DEFINE_H
 
-// [autoCode_tag] hal define
+// [autoCode_tag] hal_define
 // clang-format off
 /*
  * do not edit code between tag

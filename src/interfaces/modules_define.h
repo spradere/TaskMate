@@ -18,7 +18,7 @@
 	#error "NOT ALLOWED INCLUDE : modules_define.h"
 #endif
 
-// [autoCode_tag] modules count
+// [autoCode_tag] modules_count
 // clang-format off
 /*
  * do not edit code between tag
