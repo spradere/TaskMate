@@ -37,7 +37,6 @@ static void writeModulesList(const parseTag_t *parse);
 static void writeHalDefine(const parseTag_t *parse);
 static void writeHalInit(const parseTag_t *parse);
 
-// TODO change tag format in TaskMate source files
 #define HAVE_TAG(X) \
 	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc) \
 	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc) \
@@ -101,6 +100,9 @@ static int tagCmdDispatch(const char *cmd, const parseTag_t *parse)
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const options_list_t *auto_options)
 {
+	// initialise required options
+	for( int i = 0; i < HAVE_COUNT; i++ ) { have_tag_count[i] = 0; }
+	
 	// open source and tmp file
 	msgInfo("open <%s>", file_name);
 
@@ -188,12 +190,29 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 		exit(1);
 	}
 
-	// TODO add have count check
-	
 	fileCmpReplace(&file_src, &file_tmp);
 
 	fileClose(&file_src, __FILE__, __LINE__);
 	fileClose(&file_tmp, __FILE__, __LINE__);
+}
+
+void parseTagHave(void)
+{
+	// test required options	
+	for( int i = 0; i < HAVE_COUNT; i++ )
+	{
+		if( have_tag_count[i] == 0 )
+		{
+			msgError("required autoCode tag %s is not set", string_from_have(i));
+			//exit(1);
+		}
+
+		if( have_tag_count[i] > 1 )
+		{
+			msgError("required autoCode tag %s is multiple set", string_from_have(i));
+			//exit(1);
+		}
+	}
 }
 
 static void writeHalInit(const parseTag_t *parse)
@@ -210,6 +229,7 @@ static void writeHalInit(const parseTag_t *parse)
 		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
+	have_tag_count[HAVE_HAL_INIT]++;
 }
 
 static void writeHalDefine(const parseTag_t *parse)
@@ -226,6 +246,7 @@ static void writeHalDefine(const parseTag_t *parse)
 		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
+	have_tag_count[HAVE_HAL_DEFINE]++;
 }
 
 static void writeModulesList(const parseTag_t *parse)
@@ -251,6 +272,7 @@ static void writeModulesList(const parseTag_t *parse)
 	{
 		fprintf(parse->file, "#include \"hal/public/%s.h\"\n", mod->modules[i].name);
 	}
+	have_tag_count[HAVE_MOD_LIST]++;
 }
 
 static void writeRunlevelDefine(const parseTag_t *parse)
@@ -272,6 +294,8 @@ static void writeRunlevelDefine(const parseTag_t *parse)
 	fprintf(parse->file, "\tuint8_t current;\n");
 	fprintf(parse->file, "\tuint8_t next;\n");
 	fprintf(parse->file, "} rl_data_base_t;\n\n");
+
+	have_tag_count[HAVE_RUNLEVEL_DEFINE]++;
 }
 
 static void writeModulesCount(const parseTag_t *parse)
@@ -282,12 +306,15 @@ static void writeModulesCount(const parseTag_t *parse)
 	fprintf(parse->file,
 			"#define TM_MOD_THREAD_COUNT %i\n",
 			parse->data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
+			
+	have_tag_count[HAVE_MOD_COUNT]++;
 }
 
 static void writeInfo(const parseTag_t *parse)
 {
 	fprintf(parse->file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", parse->auto_options->tm_ver);
 	fprintf(parse->file, "const uint16_t tm_build = %i;\n", atoi(parse->auto_options->tm_build));
+	have_tag_count[HAVE_INFO]++;
 }
 
 static void writeThreadsAlloc(const parseTag_t *parse)
@@ -320,6 +347,8 @@ static void writeThreadsAlloc(const parseTag_t *parse)
 
 		threads_count++;
 	}
+	fprintf(stderr, "HAVE_TREADS_ALLOC ++\n");
+	have_tag_count[HAVE_THREADS_ALLOC]++;
 }
 
 static void writeDriversAlloc(const parseTag_t *parse)
@@ -342,6 +371,7 @@ static void writeDriversAlloc(const parseTag_t *parse)
 		fprintf(parse->file, "\t\t.stop = %sStop\n", mod->modules[i].name);
 		fprintf(parse->file, "\t};\n");
 	}
+	have_tag_count[HAVE_DRIVERS_ALLOC]++;
 }
 
 static void writeRunlevelsAlloc(const parseTag_t *parse)
@@ -377,6 +407,8 @@ static void writeRunlevelsAlloc(const parseTag_t *parse)
 
 	fprintf(parse->file, "\tto_run.current=RUN_CORE;\n");
 	fprintf(parse->file, "\tto_run.next=RUN_CORE;\n");
+	
+	have_tag_count[HAVE_RUNLEVEL_ALLOC]++;
 }
 
 static void writeErrorCatalog(const parseTag_t *parse)
@@ -394,6 +426,8 @@ static void writeErrorCatalog(const parseTag_t *parse)
 		fprintf(parse->file, "\t{&err%i, %i},\n", i, parse->errors->catalog[i].critical);
 	}
 	fprintf(parse->file, "};\n");
+	
+	have_tag_count[HAVE_ERROR_CATALOG]++;
 }
 
 static void writeErrorEnum(const parseTag_t *parse)
@@ -408,4 +442,6 @@ static void writeErrorEnum(const parseTag_t *parse)
 	}
 	fprintf(parse->file, "\tERROR_COUNT\n");
 	fprintf(parse->file, "} err_codes_t;\n\n");
+	
+	have_tag_count[HAVE_ERROR_ENUM]=0;
 }

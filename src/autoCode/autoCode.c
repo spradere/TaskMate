@@ -90,6 +90,7 @@ int main(int argn, const char *argv[])
 		parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);
 	}
 	fileClose(&ftag, __FILE__, __LINE__);
+	parseTagHave();
 
 	// print all info about modules
 	printModules(&data_base);
