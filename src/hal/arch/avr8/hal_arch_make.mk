@@ -8,6 +8,9 @@
 #
 ################################################################################
 
+.ifndef HAL_ARCH_MAKE_MK
+HAL_ARCH_MAKE_MK = 1
+
 # Registration in the global system
 VAL_HW_STACK += avr8
 PATH_AVR8 = ${PATH_SOURCES}/hal/arch/avr8
@@ -51,6 +54,6 @@ CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT
 CFLAGS += -ffunction-sections -fdata-sections -flto
 LFLGAS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 
-
+.endif
 
 

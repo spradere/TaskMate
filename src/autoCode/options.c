@@ -24,13 +24,13 @@ static void funcParsetag(const char *value, options_list_t *opt);
 static void funcHalInit(const char *value, options_list_t *opt);
 static void funcHalDefine(const char *value, options_list_t *opt);
 
-#define HAVE_OPTIONS(X)            \
-	X(HAVE_TM_VER, "--tm_ver", funcTmVer)     \
-	X(HAVE_TM_BUILD, "--tm_build", funcTmBuild) \
-	X(HAVE_ERRORS, "--errors", funcErrors)     \
-	X(HAVE_INITRC, "--initrc", funcInitrc)     \
+#define HAVE_OPTIONS(X)                          \
+	X(HAVE_TM_VER, "--tm_ver", funcTmVer)        \
+	X(HAVE_TM_BUILD, "--tm_build", funcTmBuild)  \
+	X(HAVE_ERRORS, "--errors", funcErrors)       \
+	X(HAVE_INITRC, "--initrc", funcInitrc)       \
 	X(HAVE_PARSETAG, "--parsetag", funcParsetag) \
-	X(HAVE_HALINIT, "--halinit", funcHalInit)   \
+	X(HAVE_HALINIT, "--halinit", funcHalInit)    \
 	X(HAVE_HALDEFINE, "--haldefine", funcHalDefine)
 
 static const struct
@@ -40,9 +40,9 @@ static const struct
 } options_cmds[] = {
 #define X(e, s, f) {(s), (f)},
 	HAVE_OPTIONS(X)
-#undef X	
-	{NULL, NULL}};
-					
+#undef X
+		{NULL, NULL}};
+
 enum
 {
 #define X(e, s, f) e,
@@ -127,7 +127,7 @@ void options(const char *file_name, options_list_t *opt)
 {
 	// initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
-	
+
 	// proceed options from files
 	file_t file;
 	fileInit(&file);

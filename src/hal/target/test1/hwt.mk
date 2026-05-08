@@ -8,9 +8,14 @@
 #
 ################################################################################
 
+.ifndef HWT_MK
+HWT_MK = 1
+
 # Registration in the global system
 VAL_HW_STACK = test1
 PATHS_SOURCES = ${PATH_SOURCES}/hal/target/test1
 CFLAGS += -DHWT_test1
 
 .include "${PATH_SOURCES}/hal/board/arduinoMega/hal_board_make.mk"
+
+.endif
