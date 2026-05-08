@@ -37,18 +37,18 @@ static void writeModulesList(const parseTag_t *parse);
 static void writeHalDefine(const parseTag_t *parse);
 static void writeHalInit(const parseTag_t *parse);
 
-#define HAVE_TAG(X) \
-	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc) \
-	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc) \
-	X(HAVE_RUNLEVEL_ALLOC, "runlevels_alloc", writeRunlevelsAlloc) \
+#define HAVE_TAG(X)                                                  \
+	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc)        \
+	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc)        \
+	X(HAVE_RUNLEVEL_ALLOC, "runlevels_alloc", writeRunlevelsAlloc)   \
 	X(HAVE_RUNLEVEL_DEFINE, "runlevels_define", writeRunlevelDefine) \
-	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum) \
-	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog) \
-	X(HAVE_INFO, "system_info", writeInfo) \
-	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine) \
-	X(HAVE_HAL_INIT, "hal_init", writeHalInit) \
-	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount) \
-	X(HAVE_MOD_LIST, "modules_list", writeModulesList) \
+	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)                 \
+	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog)        \
+	X(HAVE_INFO, "system_info", writeInfo)                           \
+	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)                 \
+	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                       \
+	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)            \
+	X(HAVE_MOD_LIST, "modules_list", writeModulesList)
 
 static const struct
 {
@@ -57,8 +57,8 @@ static const struct
 } tags_cmds[] = {
 #define X(e, s, f) {(s), (f)},
 	HAVE_TAG(X)
-#undef X	
-	{NULL, NULL}};		 
+#undef X
+		{NULL, NULL}};
 
 enum
 {
@@ -97,12 +97,16 @@ static int tagCmdDispatch(const char *cmd, const parseTag_t *parse)
 	}
 	return -1;
 }
-void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
-			  const options_list_t *auto_options)
+
+void parseTagInit(void)
 {
 	// initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_tag_count[i] = 0; }
-	
+}
+
+void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
+			  const options_list_t *auto_options)
+{
 	// open source and tmp file
 	msgInfo("open <%s>", file_name);
 
@@ -115,11 +119,10 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	fileInit(&file_tmp);
 	fileMakeTmp(file_src.name, &file_tmp, __FILE__, __LINE__);
 
-	parseTag_t parse = {
-		.data_base = data_base,
-		.file = file_tmp.stream,
-		.errors = errors,
-		.auto_options = auto_options};
+	parseTag_t parse = {.data_base = data_base,
+						.file = file_tmp.stream,
+						.errors = errors,
+						.auto_options = auto_options};
 
 	// read form source
 	int tag_section = 0;
@@ -164,16 +167,15 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 			tag_section = 1;
 
-			int err=tagCmdDispatch(tok.tokens[2], &parse);
-			
+			int err = tagCmdDispatch(tok.tokens[2], &parse);
+
 			if( err != 0 )
 			{
-				msgError(
-					"unknown tag [%s:%i] %s\n", file_name, file_line_number, tok.tokens[2]);
+				msgError("unknown tag [%s:%i] %s\n", file_name, file_line_number, tok.tokens[2]);
 				exit(1);
 			}
 		}
-			
+
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
 		{
 			fprintf(file_tmp.stream, "// clang-format on\n");
@@ -198,19 +200,19 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 void parseTagHave(void)
 {
-	// test required options	
+	// test required options
 	for( int i = 0; i < HAVE_COUNT; i++ )
 	{
 		if( have_tag_count[i] == 0 )
 		{
 			msgError("required autoCode tag %s is not set", string_from_have(i));
-			//exit(1);
+			exit(1);
 		}
 
 		if( have_tag_count[i] > 1 )
 		{
 			msgError("required autoCode tag %s is multiple set", string_from_have(i));
-			//exit(1);
+			exit(1);
 		}
 	}
 }
@@ -229,7 +231,9 @@ static void writeHalInit(const parseTag_t *parse)
 		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
+	
 	have_tag_count[HAVE_HAL_INIT]++;
+
 }
 
 static void writeHalDefine(const parseTag_t *parse)
@@ -246,6 +250,7 @@ static void writeHalDefine(const parseTag_t *parse)
 		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
+
 	have_tag_count[HAVE_HAL_DEFINE]++;
 }
 
@@ -279,7 +284,10 @@ static void writeRunlevelDefine(const parseTag_t *parse)
 {
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
-		fprintf(parse->file, "#define RUN_LEVEL%i_THREADS_COUNT %i\n", i, parse->data_base->threads_count[i]);
+		fprintf(parse->file,
+				"#define RUN_LEVEL%i_THREADS_COUNT %i\n",
+				i,
+				parse->data_base->threads_count[i]);
 	}
 	// structure
 	fprintf(parse->file, "\ntypedef struct\n");
@@ -306,7 +314,7 @@ static void writeModulesCount(const parseTag_t *parse)
 	fprintf(parse->file,
 			"#define TM_MOD_THREAD_COUNT %i\n",
 			parse->data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
-			
+
 	have_tag_count[HAVE_MOD_COUNT]++;
 }
 
@@ -347,7 +355,6 @@ static void writeThreadsAlloc(const parseTag_t *parse)
 
 		threads_count++;
 	}
-	fprintf(stderr, "HAVE_TREADS_ALLOC ++\n");
 	have_tag_count[HAVE_THREADS_ALLOC]++;
 }
 
@@ -407,7 +414,7 @@ static void writeRunlevelsAlloc(const parseTag_t *parse)
 
 	fprintf(parse->file, "\tto_run.current=RUN_CORE;\n");
 	fprintf(parse->file, "\tto_run.next=RUN_CORE;\n");
-	
+
 	have_tag_count[HAVE_RUNLEVEL_ALLOC]++;
 }
 
@@ -426,7 +433,7 @@ static void writeErrorCatalog(const parseTag_t *parse)
 		fprintf(parse->file, "\t{&err%i, %i},\n", i, parse->errors->catalog[i].critical);
 	}
 	fprintf(parse->file, "};\n");
-	
+
 	have_tag_count[HAVE_ERROR_CATALOG]++;
 }
 
@@ -442,6 +449,6 @@ static void writeErrorEnum(const parseTag_t *parse)
 	}
 	fprintf(parse->file, "\tERROR_COUNT\n");
 	fprintf(parse->file, "} err_codes_t;\n\n");
-	
-	have_tag_count[HAVE_ERROR_ENUM]=0;
+
+	have_tag_count[HAVE_ERROR_ENUM]++;
 }
