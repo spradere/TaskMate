@@ -19,8 +19,8 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 
 > <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
 >
->  <span style="color:green">461 commits • 123 source files • 6801 lines of code •
-> binary size : 6552 bytes (Flash) • ram usage : 2027 bytes</span>
+>  <span style="color:green">498 commits • 131 source files • 7302 lines of code •
+> binary size : 6432 bytes (Flash) • ram usage : 2013 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -34,7 +34,7 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 
 ## ⬆️ TaskMate Layers
 
-![System Layer Diagram](doc/TaskMate_layers_v8.png)
+![System Layer Diagram](doc/TaskMate_layers_v9.png)
 
 
 The diagram shows the current layered architecture of TaskMate.
