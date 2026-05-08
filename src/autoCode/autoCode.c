@@ -84,6 +84,7 @@ int main(int argn, const char *argv[])
 	ftag.name = auto_options.file_parsetag_list;
 	fileOpen(&ftag, "r", FILE_READONLY, __FILE__, __LINE__);
 
+	parseTagInit();
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, ftag.stream) )
 	{
 		tokenizer(&tok);

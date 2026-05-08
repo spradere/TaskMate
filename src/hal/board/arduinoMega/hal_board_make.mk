@@ -8,6 +8,9 @@
 #
 ################################################################################
 
+.ifndef HAL_BOARD_MAKE_MK
+HAL_BOARD_MAKE_MK = 1
+
 # Registration in the global system
 VAL_HW_STACK += arduinoMega
 PATH_ARDUINOMEGA = ${PATH_SOURCES}/hal/board/arduinoMega
@@ -25,3 +28,5 @@ CFLAGS += -DF_CPU=${VAL_CPU_FREQ}
 
 VAL_PROGRAMMER = avrispmkII
 VAL_PROGRAMMER_PORT = /dev/ttyU0
+
+.endif
