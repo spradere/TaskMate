@@ -1,3 +1,5 @@
+	refactor option and parseTag fucntion dispatcher
+	refactor build system and autoCode to remove fixed arch/mcu/board structure
 	refactor makefiles variables name, add prefix_
 	use awk scripts for cloc and memory useage
 	refactor autoCode use only parseTag() and delete writeHeader()
