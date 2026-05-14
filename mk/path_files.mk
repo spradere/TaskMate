@@ -34,13 +34,13 @@ FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
-PATHS_SOURCES += ${PATH_SOURCES}/sysCore
-PATHS_SOURCES += ${PATH_SOURCES}/sysCall
-PATHS_SOURCES += ${PATH_SOURCES}/services
-PATHS_SOURCES += ${PATH_SOURCES}/tasks
-PATHS_SOURCES += ${PATH_SOURCES}/tm_libc
-PATHS_SOURCES += ${PATH_SOURCES}/interfaces
-PATHS_SOURCES += ${PATH_SOURCES}/hal/public
+PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/sysCore
+PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/sysCall
+PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/services
+#PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/tasks
+PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/tm_libc
+PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/interfaces
+PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/hal/public
 
 # log files
 FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
@@ -55,16 +55,16 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 
-FILES_PARSE_TAG = ${PATH_SOURCES}/sysCore/runLevel.h \
-	${PATH_SOURCES}/sysCore/runLevel.c \
-	${PATH_SOURCES}/sysCall/error.c \
-	${PATH_SOURCES}/interfaces/error_catalog.h \
-	${PATH_SOURCES}/hal/public/hal_sysInfo.c \
-	${PATH_SOURCES}/interfaces/modules_define.h \
-	${PATH_SOURCES}/sysCore/modules.c \
-	${PATH_SOURCES}/sysCore/modules_list.h \
-	${PATH_SOURCES}/hal/public/hal_define.h \
-	${PATH_SOURCES}/sysCore/hal_init.h
+FILES_PARSE_TAG = ${PATH_SRCS_SYSTEM}/sysCore/runLevel.h \
+	${PATH_SRCS_SYSTEM}/sysCore/runLevel.c \
+	${PATH_SRCS_SYSTEM}/sysCall/error.c \
+	${PATH_SRCS_SYSTEM}/interfaces/error_catalog.h \
+	${PATH_SRCS_SYSTEM}/hal/public/hal_sysInfo.c \
+	${PATH_SRCS_SYSTEM}/interfaces/modules_define.h \
+	${PATH_SRCS_SYSTEM}/sysCore/modules.c \
+	${PATH_SRCS_SYSTEM}/sysCore/modules_list.h \
+	${PATH_SRCS_SYSTEM}/hal/public/hal_define.h \
+	${PATH_SRCS_SYSTEM}/sysCore/hal_init.h
 
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
@@ -73,10 +73,10 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 # git ignore
 FILE_GIT_IGNORE = .gitignore
 FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
-PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SOURCES} ${PATH_SCRIPTS}
+PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SRCS_SYSTEM} ${PATH_SCRIPTS}
 VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
-VAL_GIT_ALLOWED.${PATH_SOURCES} = *.c *.h *.rc *.err *.mk
+VAL_GIT_ALLOWED.${PATH_SRCS_SYSTEM} = *.c *.h *.rc *.err *.mk
 VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md

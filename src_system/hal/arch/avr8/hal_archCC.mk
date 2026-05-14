@@ -20,13 +20,13 @@ ${FILE_TARGET}: ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
 
 # compile
-${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}
+${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c}
 	@printf "\n%sCompilation ...%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c} ${.TARGET}
+	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c}} \
-		-c ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SOURCES}%.c} -o ${.TARGET}
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c}} \
+		-c ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c} -o ${.TARGET}
 
 upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.
@@ -92,7 +92,7 @@ tidy_TaskMate:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy19 $(FILES_SRC) ${FILES_SRC_H} --\
 	-I/root/code/TaskMate/current/ \
-	-I/root/code/TaskMate/current/${PATH_SOURCES}/ \
+	-I/root/code/TaskMate/current/${PATH_SRCS_SYSTEM}/ \
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.1.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \

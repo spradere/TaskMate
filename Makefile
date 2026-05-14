@@ -13,7 +13,8 @@
 ################################################################################
 
 # Main directories
-PATH_SOURCES = src
+PATH_SRCS_SYSTEM = src_system
+PATH_SRCS_USER = src_user
 PATH_BUILDS = build
 PATH_LOGS = log
 PATH_MAKEFILES = mk
