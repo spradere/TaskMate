@@ -55,16 +55,16 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 
-FILES_PARSE_TAG = src/sysCore/runLevel.h \
-	src/sysCore/runLevel.c \
-	src/sysCall/error.c \
-	src/interfaces/error_catalog.h \
-	src/hal/public/hal_sysInfo.c \
-	src/interfaces/modules_define.h \
-	src/sysCore/modules.c \
-	src/sysCore/modules_list.h \
-	src/hal/public/hal_define.h \
-	src/sysCore/hal_init.h
+FILES_PARSE_TAG = ${PATH_SOURCES}/sysCore/runLevel.h \
+	${PATH_SOURCES}/sysCore/runLevel.c \
+	${PATH_SOURCES}/sysCall/error.c \
+	${PATH_SOURCES}/interfaces/error_catalog.h \
+	${PATH_SOURCES}/hal/public/hal_sysInfo.c \
+	${PATH_SOURCES}/interfaces/modules_define.h \
+	${PATH_SOURCES}/sysCore/modules.c \
+	${PATH_SOURCES}/sysCore/modules_list.h \
+	${PATH_SOURCES}/hal/public/hal_define.h \
+	${PATH_SOURCES}/sysCore/hal_init.h
 
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
