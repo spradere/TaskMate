@@ -87,39 +87,39 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(0);
 
-	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
-	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread0_name, "msg");
-	mod->name = &thread0_name;
-	mod->status = 19;
-	mod->main = msg;
-
-	mod = mod_threadGetPointer(1);
-
-	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
-	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread1_name, "scli");
-	mod->name = &thread1_name;
-	mod->status = 19;
-	mod->main = scli;
-
-	mod = mod_threadGetPointer(2);
-
 	hal_threadContextInit(task1, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread2_name, "task1");
-	mod->name = &thread2_name;
+	TM_STR_ROM_NEW(thread0_name, "task1");
+	mod->name = &thread0_name;
 	mod->status = 12;
 	mod->main = task1;
 
-	mod = mod_threadGetPointer(3);
+	mod = mod_threadGetPointer(1);
 
 	hal_threadContextInit(task2, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread3_name, "task2");
-	mod->name = &thread3_name;
+	TM_STR_ROM_NEW(thread1_name, "task2");
+	mod->name = &thread1_name;
 	mod->status = 12;
 	mod->main = task2;
+
+	mod = mod_threadGetPointer(2);
+
+	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
+	mod->software_time_counter = 0;
+	TM_STR_ROM_NEW(thread2_name, "msg");
+	mod->name = &thread2_name;
+	mod->status = 19;
+	mod->main = msg;
+
+	mod = mod_threadGetPointer(3);
+
+	hal_threadContextInit(scli, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
+	mod->software_time_counter = 0;
+	TM_STR_ROM_NEW(thread3_name, "scli");
+	mod->name = &thread3_name;
+	mod->status = 19;
+	mod->main = scli;
 // clang-format on
 	// [/tag]
 }

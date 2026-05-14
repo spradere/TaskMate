@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3find ???", MSG_TO_LCD);
+		msgWriteText(chan, "\3sys + user 10", MSG_TO_LCD);
 	}
 
 	msgProcess();

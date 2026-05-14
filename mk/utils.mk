@@ -83,7 +83,7 @@ tidy_autoCode:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy $(FILES_AUTOCOE_SRC) ${FILES_AUTOCOE_SRC_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/${PATH_SOURCES}/
+	-I/root/code/TaskMate/TaskMate_current/${PATH_SRCS_SYSTEM}/
 .PHONY:tidy_autoCode
 
 help:

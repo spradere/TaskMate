@@ -13,13 +13,13 @@ HAL_MCU_MAKE_MK = 1
 
 # Registration in the global system
 VAL_HW_STACK += atmega2560
-PATH_ATMEGA2560 = ${PATH_SOURCES}/hal/mcu/atmega2560
+PATH_ATMEGA2560 = ${PATH_SRCS_SYSTEM}/hal/mcu/atmega2560
 PATHS_SOURCES += ${PATH_ATMEGA2560}
 FILES_HALINIT += ${PATH_ATMEGA2560}/hal_mcuInit.h
 FILES_HALDEFINE += ${PATH_ATMEGA2560}/hal_mcu_define.h
 CFLAGS += -DMCU_atmega2560
 
-.include "${PATH_SOURCES}/hal/arch/avr8/hal_arch_make.mk"
+.include "${PATH_SRCS_SYSTEM}/hal/arch/avr8/hal_arch_make.mk"
 
 # MCU settings
 VAL_MCU_SERIAL = atmega2560
