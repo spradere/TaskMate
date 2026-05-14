@@ -20,8 +20,15 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 // string macros
+#define CONCAT2(a,b) a##b
+#define CONCAT(a,b) CONCAT2(a,b)
 #define STRING2(x) #x
 #define INT_TO_STRING(x) STRING2(x)
+
+// store source file name in ROM
 #define TM_STORE_FILE_NAME(name) TM_STR_ROM_NEW(name, __FILE_NAME__)
+
+// generate unique name
+#define UNIQUE_NAME(prefix) CONCAT(prefix, __LINE__)
 
 #endif

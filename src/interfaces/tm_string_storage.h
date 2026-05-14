@@ -15,6 +15,8 @@
 #ifndef TM_STRING_STORAGE_H
 #define TM_STRING_STORAGE_H
 
+#define TM_STRING_SIZE_MAX 255
+
 // tm_string implementation
 typedef enum
 {

@@ -30,7 +30,7 @@ void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
 
 void tm_schedulerStart(void)
 {
-	mod_threadSetCurrent(2);
+	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
 	hal_setStackPointer(mod->stack_pointer);
 
