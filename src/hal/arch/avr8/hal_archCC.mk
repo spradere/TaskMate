@@ -90,9 +90,9 @@ tidy_TaskMate:
 #help [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
 	@printf "\n%sTidy TaskMate static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@clang-tidy $(FILES_SRC) ${FILES_SRC_H} --\
-	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/${PATH_SOURCES}/ \
+	@clang-tidy19 $(FILES_SRC) ${FILES_SRC_H} --\
+	-I/root/code/TaskMate/current/ \
+	-I/root/code/TaskMate/current/${PATH_SOURCES}/ \
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.1.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \

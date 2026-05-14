@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3TODO cleanup", MSG_TO_LCD);
+		msgWriteText(chan, "\3find ???", MSG_TO_LCD);
 	}
 
 	msgProcess();
