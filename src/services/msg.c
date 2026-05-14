@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3func dispatcher ", MSG_TO_LCD);
+		msgWriteText(chan, "\3TODO cleanup", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -100,27 +100,6 @@ void msgFreeChannel(uint8_t channel)
 
 void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
 {
-	// TODO wait for MSG_FLAG_SEND here to avoid overwriting the message
-	// char debug[64];
-	// uint8_t flag = channels[channel].status & (1 << MSG_FLAG_SEND);
-	// tm_snprintf(debug,64,"[msg:write] debug status=%i flag=<%i>\n",channels[channel].status, flag
-	// );
-
-	// hal_usartWriteString(debug);
-	// hal_usartSendTXBuffer();
-
-	/*if(flag == MSG_FLAG_SEND)
-	{
-		do
-		{
-			//sc_handYield();
-			flag = channels[channel].status & (1 << MSG_FLAG_SEND);
-			//hal_usartWriteChar('#');
-			//hal_usartSendTXBuffer();
-		}
-		while(flag == MSG_FLAG_SEND);
-	}*/
-
 	tm_strncpy(channels[channel].text, msg, MSG_SIZE_MAX);
 
 	channels[channel].status &= (uint8_t)~MSG_TO_MASK;
