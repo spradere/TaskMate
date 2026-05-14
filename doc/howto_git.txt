@@ -5,6 +5,12 @@
 git commit -am "Tag version to 0.7"
 git tag -a v0.7 -m "TaskMate 0.7 - New feature"
 git push --tags
+git push
+
+make merge ???
+git switch main
+git push --tags
+git switch test
 
 #################################################
 # 2 repo workflow github/test codeberg/main

@@ -1,4 +1,6 @@
-	refactor option and parseTag fucntion dispatcher
+TaskMate 0.28
+
+	refactor autoCode option and parseTag function dispatcher
 	refactor build system and autoCode to remove fixed arch/mcu/board structure
 	refactor makefiles variables name, add prefix_
 	use awk scripts for cloc and memory useage

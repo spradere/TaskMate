@@ -12,14 +12,14 @@
  *
  */
 
+#include "interfaces/tm_string_storage.h"
 #include "tm_libc/tm_string.h"
 
 void tm_strncpy(char *dest, const char *src, uint8_t n)
 {
 	uint8_t i = 0;
 
-	// TODO remove magic number 255, replace with TM_STRING_SIZE_MAX
-	while( (i < n) && (src[i] != 0) && (i < 255) )
+	while( (i < n) && (src[i] != 0) && (i < TM_STRING_SIZE_MAX) )
 	{
 		dest[i] = src[i];
 		i++;

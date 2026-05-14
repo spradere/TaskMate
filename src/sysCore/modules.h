@@ -33,8 +33,7 @@ typedef struct
 
 	void (*main)(void);
 
-	// TODO check if volatile is needed for software_time_counter
-	uint16_t software_time_counter;
+	volatile uint16_t software_time_counter;
 
 	hal_stack_word_t *stack_pointer;
 
