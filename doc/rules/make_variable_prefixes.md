@@ -1,6 +1,15 @@
-# Makefile variable prefix guide
+# 🏷️ Makefile variable prefix guide
 
 This project uses prefixed variable names to make Makefiles easier to read and safer to extend.
+
+## Practical naming rule
+
+When adding new variables:
+
+- Use `PATH_` for one directory, `PATHS_` for a list of directories.
+- Use `FILE_` for one file, `FILES_` for a list/glob-derived set.
+- Use `VAL_` for non-path scalar values.
+- Use `OPT_` for toggles/options expected to be user-tunable.
 
 ## Prefixes
 
@@ -30,13 +39,5 @@ This project uses prefixed variable names to make Makefiles easier to read and s
 5. **Use per-file `CFLAGS_*` only for exceptions** (e.g., specific privileged modules).
    - Keep global flags in common `CFLAGS` and local deviations in `CFLAGS_<source>`.
 
-## Practical naming rule
-
-When adding new variables:
-
-- Use `PATH_` for one directory, `PATHS_` for a list of directories.
-- Use `FILE_` for one file, `FILES_` for a list/glob-derived set.
-- Use `VAL_` for non-path scalar values.
-- Use `OPT_` for toggles/options expected to be user-tunable.
 
 This keeps variable intent obvious during maintenance and hardware-target composition.

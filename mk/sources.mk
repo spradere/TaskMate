@@ -12,9 +12,11 @@
 # Sources
 ################################################################################
 
+OPT_FIND_EXCLUDE = ! -path '*/.*'
+
 # Sources files and objects
-FILES_SRC != find ${PATHS_SOURCES} -maxdepth 1 -type f -name "*.c"
-FILES_SRC_H != find ${PATHS_SOURCES} -maxdepth 1 -type f -name "*.h"
+FILES_SRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.c"
+FILES_SRC_H != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 
 FILES_OBJ = ${FILES_SRC:${PATH_SOURCES}/%.c=${PATH_BUILD_TARGET}/%.o}
 
@@ -25,24 +27,24 @@ FILE_DEPS_ALL = ${PATH_BUILD_TARGET}/.deps.d
 .sinclude "${FILE_DEPS_ALL}"
 
 # autoCode
-FILES_AUTOCOE_SRC != find ${PATH_SOURCES}/autoCode -maxdepth 1 -type f -name "*.c"
-FILES_AUTOCOE_SRC_H != find ${PATH_SOURCES}/autoCode -maxdepth 1 -type f -name "*.h"
+FILES_AUTOCOE_SRC != find ${PATH_SOURCES}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
+FILES_AUTOCOE_SRC_H != find ${PATH_SOURCES}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 
 VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 FILE_AUTOCODE_LOG_STAMP = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
-FILES_INITRC != find ${PATHS_SOURCES} -maxdepth 1 -type f -name "*.rc"
+FILES_INITRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.rc"
 
 # Global error
-FILES_ERROR != find ${PATHS_SOURCES} -maxdepth 1  -type f -name "*.err" | sort
+FILES_ERROR != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort
 
 # Documentation files
-FILES_DOC != find ${PATH_DOCS} -maxdepth 3 -type f -name "*.md"; \
-		find ${PATH_DOCS} -maxdepth 3 -type f -name "*.txt"
+FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \
+		find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.txt"
 
 # mk files
-FILES_MK_MK != find  ./${PATH_MAKEFILES} -maxdepth 1 -type f -name "*.mk"
-FILES_MK_HAL != find ./${PATH_SOURCES}/hal -maxdepth 3 -type f -name "*.mk"
+FILES_MK_MK != find  ./${PATH_MAKEFILES} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
+FILES_MK_HAL != find ./${PATH_SOURCES}/hal ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 
 FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL}
