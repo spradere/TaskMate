@@ -1,0 +1,21 @@
+################################################################################
+#
+# TaskMate Project
+# (c) 2026 PRADERE Sebastien
+#
+# This file is part of TaskMate and is distributed under the BSD-2-Clause License.
+# See the LICENSE file for full license terms.
+#
+################################################################################
+
+.ifndef HWT_MK
+HWT_MK = 1
+
+# Registration in the global system
+VAL_HW_STACK = test1
+PATHS_SOURCES = ${PATH_SRCS_USER}/target/test1
+CFLAGS += -DHWT_test1
+
+.include "${PATH_SRCS_HAL}/board/arduinoMega/hal_board_make.mk"
+
+.endif

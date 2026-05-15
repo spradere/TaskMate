@@ -1,0 +1,5 @@
+# tasks init.rc
+# default run level run_user
+
+task1 -type_user -run_user
+task2 -type_user -run_user
