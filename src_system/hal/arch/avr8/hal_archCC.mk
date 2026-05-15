@@ -20,13 +20,13 @@ ${FILE_TARGET}: ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
 
 # compile
-${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c}
+${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 	@printf "\n%sCompilation ...%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c} ${.TARGET}
+	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} ${.TARGET}
 	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c}} \
-		-c ${.TARGET:${PATH_BUILD_TARGET}%.o=${PATH_SRCS_SYSTEM}%.c} -o ${.TARGET}
+	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}} \
+		-c ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} -o ${.TARGET}
 
 upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.

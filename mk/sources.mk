@@ -18,7 +18,8 @@ OPT_FIND_EXCLUDE = ! -path '*/.*'
 FILES_SRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_SRC_H != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 
-FILES_OBJ = ${FILES_SRC:${PATH_SRCS_SYSTEM}/%.c=${PATH_BUILD_TARGET}/%.o}
+#FILES_OBJ = ${FILES_SRC:${PATH_SRCS_SYSTEM}/%.c=${PATH_BUILD_TARGET}/%.o}
+FILES_OBJ = ${FILES_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Dependency files
 FILES_DEP = ${FILES_OBJ:.o=.d}
