@@ -18,8 +18,8 @@
 #include "tm_libc/tm_string.h"
 
 // Send message to :
-#include "hal/public/hal_lcd.h"
-#include "hal/public/hal_usart.h"
+#include "public/hal_lcd.h"
+#include "public/hal_usart.h"
 
 // private message channel internals
 #define MSG_FLAG_IN_USE 3
@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3sys + user 100", MSG_TO_LCD);
+		msgWriteText(chan, "\3sys + user 1000", MSG_TO_LCD);
 	}
 
 	msgProcess();

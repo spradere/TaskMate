@@ -34,7 +34,7 @@
 
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
-	#include "hal/public/hal_tmlibc.h" // macro TM_STR_* hal definitions
+	#include "public/hal_tmlibc.h" // macro TM_STR_* hal definitions
 
 	void tm_strncpy(char *dest, const char *src, uint8_t n);
 

@@ -14,8 +14,8 @@
 
 #include "sysCore/boot.h"
 
-#include "hal/public/hal_i2c.h"
-#include "hal/public/hal_usart.h"
+#include "public/hal_i2c.h"
+#include "public/hal_usart.h"
 #include "interfaces/runLevel_define.h"
 #include "sysCore/gpio.h"
 #include "sysCore/hal_init.h"

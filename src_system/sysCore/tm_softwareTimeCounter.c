@@ -14,7 +14,7 @@
 
 #include "sysCore/tm_softwareTimeCounter.h"
 
-#include "hal/public/hal_timerSTC.h"
+#include "public/hal_timerSTC.h"
 #include "sysCore/modules.h"
 
 static void tm_softwareTimeCounter(void);

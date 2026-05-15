@@ -14,7 +14,6 @@
 
 # default target / new system
 HWT ?= test1
-#FILE_HWT_MK = ${PATH_SRCS_SYSTEM}/hal/target/${HWT}/hwt.mk
 FILE_HWT_MK = ${PATH_SRCS_USER}/target/${HWT}/hwt.mk
 
 .if !exists(${FILE_HWT_MK})
