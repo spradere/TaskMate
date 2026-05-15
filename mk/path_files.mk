@@ -39,7 +39,7 @@ PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/sysCall
 PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/services
 PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/tm_libc
 PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/interfaces
-PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/hal/public
+PATHS_SOURCES += ${PATH_SRCS_HAL}/public
 PATHS_SOURCES += ${PATH_SRCS_USER}/tasks
 
 # log files
@@ -59,13 +59,13 @@ FILES_PARSE_TAG = ${PATH_SRCS_SYSTEM}/sysCore/runLevel.h \
 	${PATH_SRCS_SYSTEM}/sysCore/runLevel.c \
 	${PATH_SRCS_SYSTEM}/sysCall/error.c \
 	${PATH_SRCS_SYSTEM}/interfaces/error_catalog.h \
-	${PATH_SRCS_SYSTEM}/hal/public/hal_sysInfo.c \
 	${PATH_SRCS_SYSTEM}/interfaces/modules_define.h \
 	${PATH_SRCS_SYSTEM}/sysCore/modules.c \
 	${PATH_SRCS_SYSTEM}/sysCore/modules_list.h \
-	${PATH_SRCS_SYSTEM}/hal/public/hal_define.h \
-	${PATH_SRCS_SYSTEM}/sysCore/hal_init.h
-
+	${PATH_SRCS_SYSTEM}/sysCore/hal_init.h \
+	${PATH_SRCS_HAL}/public/hal_define.h \
+	${PATH_SRCS_HAL}/public/hal_sysInfo.c 	
+	
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
 FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
