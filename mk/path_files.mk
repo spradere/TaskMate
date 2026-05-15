@@ -73,10 +73,13 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 # git ignore
 FILE_GIT_IGNORE = .gitignore
 FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
-PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SRCS_SYSTEM} ${PATH_SCRIPTS}
+PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} \
+	${PATH_SRCS_SYSTEM} ${PATH_SRCS_HAL} ${PATH_SRCS_USER}
 VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
 VAL_GIT_ALLOWED.${PATH_SRCS_SYSTEM} = *.c *.h *.rc *.err *.mk
+VAL_GIT_ALLOWED.${PATH_SRCS_HAL} = *.c *.h *.rc *.err *.mk
+VAL_GIT_ALLOWED.${PATH_SRCS_USER} = *.c *.h *.rc *.err *.mk
 VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
