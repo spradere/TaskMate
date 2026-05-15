@@ -46,6 +46,6 @@ FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \
 
 # mk files
 FILES_MK_MK != find  ./${PATH_MAKEFILES} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
-FILES_MK_HAL != find ./${PATH_SRCS_SYSTEM}/hal ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
+FILES_MK_HAL != find ./${PATH_SRCS_HAL} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 
 FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL}

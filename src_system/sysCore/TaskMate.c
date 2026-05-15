@@ -14,10 +14,10 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_lcd.h"
-#include "hal/public/hal_rtc.h"
-#include "hal/public/hal_sysInfo.h"
-#include "hal/public/panic.h"
+#include "public/hal_lcd.h"
+#include "public/hal_rtc.h"
+#include "public/hal_sysInfo.h"
+#include "public/panic.h"
 #include "interfaces/macros.h"
 #include "interfaces/options.h"
 #include "sysCore/boot.h"

@@ -16,11 +16,11 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_context.h"
-#include "hal/public/hal_int.h"
-#include "hal/public/hal_stack.h"
-#include "hal/public/hal_timerSched.h"
-#include "hal/public/panic.h"
+#include "public/hal_context.h"
+#include "public/hal_int.h"
+#include "public/hal_stack.h"
+#include "public/hal_timerSched.h"
+#include "public/panic.h"
 #include "sysCore/modules.h"
 
 // static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
