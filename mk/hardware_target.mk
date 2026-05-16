@@ -14,7 +14,7 @@
 
 # default target / new system
 HWT ?= test1
-FILE_HWT_MK = ${PATH_SRCS_USER}/target/${HWT}/hwt.mk
+FILE_HWT_MK = ${PATH_SRCS}/user/target/${HWT}/hwt.mk
 
 .if !exists(${FILE_HWT_MK})
 .error Target not found >>>${HWT}<<<

@@ -1,0 +1,40 @@
+/*
+ * TaskMate Project
+ * (c) 2026 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
+ * See the LICENSE file for full license terms.
+ */
+
+/**
+ * @file task1.c
+ * @brief tasks task1 implementation.
+ *
+ */
+
+#include "user/tasks/task1.h"
+
+#include "system/services/msg.h"
+#include "system/sysCall/sc_gpio.h"
+#include "system/sysCall/sysCall.h"
+#include "tm_libc/tm_stdio.h"
+
+uint8_t task1_msg_channel;
+
+void task1(void)
+{
+
+	if( msgRequestChannel(&task1_msg_channel) == ERR_NO_ERROR )
+	{
+		msgWriteText(task1_msg_channel, "[task1] hello !\n", MSG_TO_USART);
+	}
+
+	while( 1 )
+	{
+
+		sc_gpio_signalToggle(GPIO_SIGNAL_TASK1_LED);
+
+		sc_threadSetSTC(50);
+		while( sc_threadGetSTC() > 0 );
+	}
+}
