@@ -136,7 +136,7 @@ void mod_driversAlloc(void)
 	mod_driver_item_t *mod;
 
 	mod = mod_driverGetPointer(0);
-	TM_STR_ROM_NEW(driver0_name, "hal_lcd");
+	TM_STR_ROM_NEW(driver0_name, "lcd");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver0_name,
@@ -147,7 +147,7 @@ void mod_driversAlloc(void)
 	};
 
 	mod = mod_driverGetPointer(1);
-	TM_STR_ROM_NEW(driver1_name, "hal_rtc");
+	TM_STR_ROM_NEW(driver1_name, "rtc");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver1_name,
@@ -158,7 +158,7 @@ void mod_driversAlloc(void)
 	};
 
 	mod = mod_driverGetPointer(2);
-	TM_STR_ROM_NEW(driver2_name, "hal_timerSched");
+	TM_STR_ROM_NEW(driver2_name, "timerSched");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver2_name,
@@ -169,7 +169,7 @@ void mod_driversAlloc(void)
 	};
 
 	mod = mod_driverGetPointer(3);
-	TM_STR_ROM_NEW(driver3_name, "hal_timerSTC");
+	TM_STR_ROM_NEW(driver3_name, "timerSTC");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver3_name,
@@ -180,7 +180,7 @@ void mod_driversAlloc(void)
 	};
 
 	mod = mod_driverGetPointer(4);
-	TM_STR_ROM_NEW(driver4_name, "hal_i2c");
+	TM_STR_ROM_NEW(driver4_name, "i2c");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver4_name,
@@ -191,7 +191,7 @@ void mod_driversAlloc(void)
 	};
 
 	mod = mod_driverGetPointer(5);
-	TM_STR_ROM_NEW(driver5_name, "hal_usart");
+	TM_STR_ROM_NEW(driver5_name, "usart");
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver5_name,
