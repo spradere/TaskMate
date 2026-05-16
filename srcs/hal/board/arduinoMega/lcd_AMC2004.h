@@ -1,0 +1,27 @@
+/*
+ * TaskMate Project
+ * (c) 2026 PRADERE Sebastien
+ *
+ * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
+ * See the LICENSE file for full license terms.
+ */
+
+/**
+ * @file lcd_AMC2004.h
+ * @brief arduinoMega hal_lcd_AMC2004_impl header declarations.
+ *
+ */
+
+#ifndef HAL_LCD_AMC2004_IMPL_H
+#define HAL_LCD_AMC2004_IMPL_H
+
+#include <stdint.h>
+
+void hal_lcdInit(void);
+void hal_lcdStart(void);
+void hal_lcdStop(void);
+void hal_lcdClear(void);
+void hal_lcdSetCursor(uint8_t row, uint8_t col);
+void hal_lcdWriteString(const char *str);
+
+#endif

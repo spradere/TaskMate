@@ -79,7 +79,7 @@ It works only with **physical** ports and bits.
 
 ---
 
-### 3. Board mapping (hal/board/${BOARD}/hal_boardInit.c)
+### 3. Board mapping (hal/board/${BOARD}/boardInit.c)
 
 **Role**
 
@@ -156,7 +156,7 @@ Example: adding arm32v7m
 	- context switching,
 	- atomic operations,
 	- low-level interrupt handling.
-	- hal_arch_init.rc entries for new drivers
+	- arch_init.rc entries for new drivers
 
 - Extend the Makefile to accept: `ARCH=arm32v7m`
 
@@ -171,7 +171,7 @@ Example: adding stm32g474
 - Implement MCU-specific peripherals:
 
 	- timers, USART, GPIO, I²C, ADC, …
-	- hal_mcu_init.rc entries for new drivers
+	- mcu_init.rc entries for new drivers
 
 - Extend the Makefile to map: `MCU=stm32g474`
 
@@ -186,7 +186,7 @@ Example: adding nucleoG474RE
 - Implement:
 	- pin mapping (LEDs, buttons, debug USART)
 	- board-specific initialization
-	- hal_board_init.rc entries for new drivers
+	- board_init.rc entries for new drivers
 
 - Extend the Makefile to map: `BOARD=nucleoG474RE`
 

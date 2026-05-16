@@ -13,7 +13,7 @@
 
 #include "system/sysCore/gpio.h"
 
-#include "hal/public/hal_gpio.h"
+#include "hal/public/gpio.h"
 #include "system/sysCore/hal_init.h"
 
 static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
