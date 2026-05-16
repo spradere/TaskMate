@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_I2C_H
-#define PUBLIC_I2C_H
+#ifndef HAL_PUBLIC_I2C_H
+#define HAL_PUBLIC_I2C_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/i2c.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_I2C)
 	#error "No hal implementation for i2c on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_I2C_H

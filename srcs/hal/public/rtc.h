@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_RTC_H
-#define PUBLIC_RTC_H
+#ifndef HAL_PUBLIC_RTC_H
+#define HAL_PUBLIC_RTC_H
 
 #if defined(HWT_test1)
 	#include "hal/drivers/rtc_ZS_042/rtc_ZS042.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_RTC)
 	#error "No hal implementation for rtc on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_RTC_H

@@ -38,4 +38,4 @@ void fileInit(file_t *file);
 void fileOpen( file_t *file, const char *mode, int special_mode, const char *caller, int line);
 void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, int line);
 
-#endif
+#endif // AUTOCODE_FILEUTILITY_H

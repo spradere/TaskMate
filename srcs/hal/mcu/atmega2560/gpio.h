@@ -29,4 +29,4 @@ void hal_gpioPinInit(const hal_pin_t *pin);
 void hal_gpioPinWrite(const hal_pin_t pin, bool value);
 bool hal_gpioPinRead(const hal_pin_t pin);
 
-#endif
+#endif // ATMEGA2560_GPIO_H

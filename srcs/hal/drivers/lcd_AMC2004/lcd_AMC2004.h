@@ -24,4 +24,4 @@ void hal_lcdClear(void);
 void hal_lcdSetCursor(uint8_t row, uint8_t col);
 void hal_lcdWriteString(const char *str);
 
-#endif
+#endif // LCD_AMC2004_LCD_AMC2004_H

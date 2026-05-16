@@ -25,4 +25,4 @@ void hal_timerSchedStart(void);
 void hal_timerSchedStop(void);
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr);
 
-#endif
+#endif // ATMEGA2560_TIMERSCHED_H
