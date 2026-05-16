@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef ERROR_H
-#define ERROR_H
+#ifndef SYSCALL_ERROR_H
+#define SYSCALL_ERROR_H
 
 #include <stdint.h>
 

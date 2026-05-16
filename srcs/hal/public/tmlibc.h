@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_TMLIBC_H
-#define HAL_TMLIBC_H
+#ifndef PUBLIC_TMLIBC_H
+#define PUBLIC_TMLIBC_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/tmlibc.h"

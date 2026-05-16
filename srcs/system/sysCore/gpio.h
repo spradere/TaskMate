@@ -11,8 +11,8 @@
  * @brief sysCore gpio header declarations.
  */
 
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef SYSCORE_GPIO_H
+#define SYSCORE_GPIO_H
 
 #include <stdbool.h>
 #include <stdint.h>

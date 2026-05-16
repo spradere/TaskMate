@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef RUNLEVEL_H
-#define RUNLEVEL_H
+#ifndef SYSCORE_RUNLEVEL_H
+#define SYSCORE_RUNLEVEL_H
 
 #include <stdint.h>
 

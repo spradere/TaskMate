@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef GPIO_SIGNALS_H
-#define GPIO_SIGNALS_H
+#ifndef INTERFACES_GPIO_SIGNALS_H
+#define INTERFACES_GPIO_SIGNALS_H
 
 typedef enum
 {

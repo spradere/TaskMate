@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PRINTMODULES_H
-#define PRINTMODULES_H
+#ifndef AUTOCODE_PRINTMODULES_H
+#define AUTOCODE_PRINTMODULES_H
 
 #include "autoCode.h"
 

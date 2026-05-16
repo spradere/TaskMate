@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_LCD_H
-#define HAL_LCD_H
+#ifndef PUBLIC_LCD_H
+#define PUBLIC_LCD_H
 
 #if defined(HWT_test1)
 	#include "hal/drivers/lcd_AMC2004/lcd_AMC2004.h"

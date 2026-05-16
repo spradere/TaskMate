@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef OPTIONS_H
-#define OPTIONS_H
+#ifndef AUTOCODE_OPTIONS_H
+#define AUTOCODE_OPTIONS_H
 
 #include "autoCode.h"
 #include "fileUtility.h"

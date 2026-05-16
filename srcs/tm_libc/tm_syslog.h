@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_SYSLOG_H
-#define TM_SYSLOG_H
+#ifndef TM_LIBC_TM_SYSLOG_H
+#define TM_LIBC_TM_SYSLOG_H
 
 // clang-format off
 

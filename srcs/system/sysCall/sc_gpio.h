@@ -11,8 +11,8 @@
  * @brief sysCall sc_gpio header declarations.
  */
 
-#ifndef SC_GPIO_H
-#define SC_GPIO_H
+#ifndef SYSCALL_SC_GPIO_H
+#define SYSCALL_SC_GPIO_H
 
 #include <stdbool.h>
 #include <stdint.h>

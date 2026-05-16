@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_MCUINIT_H
-#define HAL_MCUINIT_H
+#ifndef ATMEGA2560_MCUINIT_H
+#define ATMEGA2560_MCUINIT_H
 
 void hal_mcuInit(void);
 

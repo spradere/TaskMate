@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef INITRCCMDDISPATCH_H
-#define INITRCCMDDISPATCH_H
+#ifndef AUTOCODE_INITRCCMDDISPATCH_H
+#define AUTOCODE_INITRCCMDDISPATCH_H
 
 #include "autoCode.h"
 
