@@ -142,7 +142,7 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERRO
 		}' ${FILE_AUTOCODE_LOG_STAMP}
 
 # Special rule for autoCode with clang, not arch specialized compiler
-AUTOCODE_CFLAGS = -I${PATH_SRCS_SYSTEM}/ 
+AUTOCODE_CFLAGS = -I${PATH_SRCS}/ 
 AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
