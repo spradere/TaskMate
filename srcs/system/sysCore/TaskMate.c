@@ -14,9 +14,9 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_lcd.h"
-#include "hal/public/hal_rtc.h"
-#include "hal/public/hal_sysInfo.h"
+#include "hal/public/lcd.h"
+#include "hal/public/rtc.h"
+#include "hal/public/sysInfo.h"
 #include "hal/public/panic.h"
 #include "interfaces/macros.h"
 #include "interfaces/options.h"

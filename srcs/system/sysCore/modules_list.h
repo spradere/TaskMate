@@ -30,12 +30,12 @@
 #include "system/services/msg.h"
 #include "system/services/scli.h"
 
-#include "hal/public/hal_lcd.h"
-#include "hal/public/hal_rtc.h"
-#include "hal/public/hal_timerSched.h"
-#include "hal/public/hal_timerSTC.h"
-#include "hal/public/hal_i2c.h"
-#include "hal/public/hal_usart.h"
+#include "hal/public/lcd.h"
+#include "hal/public/rtc.h"
+#include "hal/public/timerSched.h"
+#include "hal/public/timerSTC.h"
+#include "hal/public/i2c.h"
+#include "hal/public/usart.h"
 // clang-format on
 // [/tag]
 
