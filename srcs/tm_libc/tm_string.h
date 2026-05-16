@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_STRING_H
-#define TM_STRING_H
+#ifndef TM_LIBC_TM_STRING_H
+#define TM_LIBC_TM_STRING_H
 
 // clang-format off
 

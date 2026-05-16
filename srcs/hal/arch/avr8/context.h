@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_CONTEXT_IMPL_H
-#define HAL_CONTEXT_IMPL_H
+#ifndef AVR8_CONTEXT_H
+#define AVR8_CONTEXT_H
 
 #include <avr/io.h>
 

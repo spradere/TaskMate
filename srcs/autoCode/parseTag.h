@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PARSETAG_H
-#define PARSETAG_H
+#ifndef AUTOCODE_PARSETAG_H
+#define AUTOCODE_PARSETAG_H
 
 #include "autoCode.h"
 #include "globalError.h"

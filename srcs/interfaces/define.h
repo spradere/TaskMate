@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_DEFINE_H
-#define TM_DEFINE_H
+#ifndef INTERFACES_DEFINE_H
+#define INTERFACES_DEFINE_H
 
 // general system definitions
 #define NULL ((void *)0)

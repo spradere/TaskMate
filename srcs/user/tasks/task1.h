@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TASK1_H
-#define TASK1_H
+#ifndef TASKS_TASK1_H
+#define TASKS_TASK1_H
 
 void task1(void);
 

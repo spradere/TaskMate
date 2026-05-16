@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_SNPRINTF_H
-#define TM_SNPRINTF_H
+#ifndef TM_LIBC_TM_SNPRINTF_H
+#define TM_LIBC_TM_SNPRINTF_H
 
 #include <stdarg.h>
 #include <stdint.h>
