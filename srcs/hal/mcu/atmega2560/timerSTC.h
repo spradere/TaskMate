@@ -22,4 +22,4 @@ void hal_timerSTCStart(void);
 void hal_timerSTCStop(void);
 void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr);
 
-#endif
+#endif // ATMEGA2560_TIMERSTC_H

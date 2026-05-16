@@ -29,4 +29,4 @@ static inline __attribute__((always_inline)) hal_stack_word_t *hal_getStackPoint
 	return (hal_stack_word_t *)SP;
 }
 
-#endif
+#endif // AVR8_STACK_H

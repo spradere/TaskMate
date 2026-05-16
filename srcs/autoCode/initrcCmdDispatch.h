@@ -26,6 +26,5 @@ typedef struct
 
 int initrcCmdDispatch(const char *cmd, module_item_t *mod);
 
-
-#endif
+#endif // AUTOCODE_INITRCCMDDISPATCH_H
 

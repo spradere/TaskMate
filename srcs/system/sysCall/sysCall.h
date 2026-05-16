@@ -29,4 +29,4 @@ void sc_flagClear(uint8_t flag);
 void sc_flagSet(uint8_t flag);
 uint8_t sc_flagGet(uint8_t flag);
 
-#endif
+#endif // SYSCALL_SYSCALL_H

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_LCD_H
-#define PUBLIC_LCD_H
+#ifndef HAL_PUBLIC_LCD_H
+#define HAL_PUBLIC_LCD_H
 
 #if defined(HWT_test1)
 	#include "hal/drivers/lcd_AMC2004/lcd_AMC2004.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_LCD)
 	#error "No hal implementation for lcd on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_LCD_H

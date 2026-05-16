@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_TIMERSCHED_H
-#define PUBLIC_TIMERSCHED_H
+#ifndef HAL_PUBLIC_TIMERSCHED_H
+#define HAL_PUBLIC_TIMERSCHED_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/timerSched.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_TIMER_SCHED)
 	#error "No hal implementation for scheduler timer on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_TIMERSCHED_H

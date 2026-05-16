@@ -45,4 +45,4 @@ typedef enum
 // clang-format on
 // [/tag]
 
-#endif
+#endif // INTERFACES_ERROR_CATALOG_H

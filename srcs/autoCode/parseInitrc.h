@@ -19,4 +19,4 @@
 
 void parseInitrc(modules_database_t *data_base, const char *file_initrc_name);
 
-#endif
+#endif // AUTOCODE_PARSEINITRC_H
