@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_SOFTWARETIMECOUNTER_H
-#define TM_SOFTWARETIMECOUNTER_H
+#ifndef SYSCORE_TM_SOFTWARETIMECOUNTER_H
+#define SYSCORE_TM_SOFTWARETIMECOUNTER_H
 
 void tm_softwareTimeCounterInit(void);
 

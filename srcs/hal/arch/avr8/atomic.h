@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ATOMIC_IMPL_H
-#define HAL_ATOMIC_IMPL_H
+#ifndef AVR8_ATOMIC_H
+#define AVR8_ATOMIC_H
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

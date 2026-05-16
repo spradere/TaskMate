@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef SCLI_H
-#define SCLI_H
+#ifndef SERVICES_SCLI_H
+#define SERVICES_SCLI_H
 
 void scli(void);
 

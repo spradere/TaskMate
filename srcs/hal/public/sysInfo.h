@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_SYSINFO_H
-#define HAL_SYSINFO_H
+#ifndef PUBLIC_SYSINFO_H
+#define PUBLIC_SYSINFO_H
 
 #include <stdint.h>
 

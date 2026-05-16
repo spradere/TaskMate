@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef AUTOCODE_H
-#define AUTOCODE_H
+#ifndef AUTOCODE_AUTOCODE_H
+#define AUTOCODE_AUTOCODE_H
 
 #define BYTE_INDEX 256
 

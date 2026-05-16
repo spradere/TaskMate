@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_I2C_IMPL_H
-#define HAL_I2C_IMPL_H
+#ifndef ATMEGA2560_I2C_H
+#define ATMEGA2560_I2C_H
 
 #include <stdbool.h>
 #include <stdint.h>

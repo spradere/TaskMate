@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_USART_H
-#define HAL_USART_H
+#ifndef PUBLIC_USART_H
+#define PUBLIC_USART_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/usart.h"

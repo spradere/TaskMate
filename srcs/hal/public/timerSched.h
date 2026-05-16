@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_TIMERSCHED_H
-#define HAL_TIMERSCHED_H
+#ifndef PUBLIC_TIMERSCHED_H
+#define PUBLIC_TIMERSCHED_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/timerSched.h"

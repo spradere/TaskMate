@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_GPIO_IMPL_H
-#define HAL_GPIO_IMPL_H
+#ifndef ATMEGA2560_GPIO_H
+#define ATMEGA2560_GPIO_H
 
 #include <stdbool.h>
 

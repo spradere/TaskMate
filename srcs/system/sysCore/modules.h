@@ -11,8 +11,8 @@
  * @brief sysCore modules header declarations.
  */
 
-#ifndef MODULES_H
-#define MODULES_H
+#ifndef SYSCORE_MODULES_H
+#define SYSCORE_MODULES_H
 
 #include <stdint.h>
 
