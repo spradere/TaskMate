@@ -20,8 +20,8 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 // string macros
-#define CONCAT2(a,b) a##b
-#define CONCAT(a,b) CONCAT2(a,b)
+#define CONCAT2(a, b) a##b
+#define CONCAT(a, b) CONCAT2(a, b)
 #define STRING2(x) #x
 #define INT_TO_STRING(x) STRING2(x)
 

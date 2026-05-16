@@ -15,9 +15,9 @@
 #include <stdint.h>
 
 #include "hal/public/lcd.h"
+#include "hal/public/panic.h"
 #include "hal/public/rtc.h"
 #include "hal/public/sysInfo.h"
-#include "hal/public/panic.h"
 #include "interfaces/macros.h"
 #include "interfaces/options.h"
 #include "system/sysCore/boot.h"

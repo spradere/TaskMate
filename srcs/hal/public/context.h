@@ -29,4 +29,3 @@
 #endif
 
 #endif // HAL_PUBLIC_CONTEXT_H
-
