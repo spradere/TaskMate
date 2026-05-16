@@ -1,5 +1,2 @@
-# drivers init.rc
-# default run level run_driver
+# board arduino mega init.rc
 
-lcd -type_driver -run_driver
-rtc -type_driver -run_driver

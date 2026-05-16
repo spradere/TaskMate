@@ -1,5 +1,4 @@
-# drivers init.rc
-# default run level run_driver
+# mcu atmega2560 init.rc
 
 timerSched -type_driver -run_core
 timerSTC -type_driver -run_core

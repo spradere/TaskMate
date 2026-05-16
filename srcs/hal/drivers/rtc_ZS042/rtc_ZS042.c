@@ -12,7 +12,7 @@
  *
  */
 
-#include "hal/board/arduinoMega/rtc_ZS042.h"
+#include "hal/drivers/rtc_ZS042/rtc_ZS042.h"
 
 #include "hal/mcu/atmega2560/i2c.h"
 
