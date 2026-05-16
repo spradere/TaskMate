@@ -373,9 +373,9 @@ static void writeDriversAlloc(const parseTag_t *parse)
 		fprintf(parse->file, "\t{\n");
 		fprintf(parse->file, "\t\t.name = &driver%i_name,\n", i);
 		fprintf(parse->file, "\t\t.status = %i,\n", mod->modules[i].status);
-		fprintf(parse->file, "\t\t.init = %sInit,\n", mod->modules[i].name);
-		fprintf(parse->file, "\t\t.start = %sStart,\n", mod->modules[i].name);
-		fprintf(parse->file, "\t\t.stop = %sStop\n", mod->modules[i].name);
+		fprintf(parse->file, "\t\t.init = hal_%sInit,\n", mod->modules[i].name);
+		fprintf(parse->file, "\t\t.start = hal_%sStart,\n", mod->modules[i].name);
+		fprintf(parse->file, "\t\t.stop = hal_%sStop\n", mod->modules[i].name);
 		fprintf(parse->file, "\t};\n");
 	}
 	have_tag_count[HAVE_DRIVERS_ALLOC]++;
