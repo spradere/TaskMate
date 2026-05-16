@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_RTC_H
-#define HAL_RTC_H
+#ifndef PUBLIC_RTC_H
+#define PUBLIC_RTC_H
 
 #if defined(HWT_test1)
 	#include "hal/drivers/rtc_ZS_042/rtc_ZS042.h"

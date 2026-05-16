@@ -11,8 +11,8 @@
  * @brief hal define
  */
 
-#ifndef HAL_DEFINE_H
-#define HAL_DEFINE_H
+#ifndef PUBLIC_DEFINE_H
+#define PUBLIC_DEFINE_H
 
 // [autoCode_tag] hal_define
 // clang-format off

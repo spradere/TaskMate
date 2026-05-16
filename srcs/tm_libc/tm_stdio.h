@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_STDIO_H
-#define TM_STDIO_H
+#ifndef TM_LIBC_TM_STDIO_H
+#define TM_LIBC_TM_STDIO_H
 
 // clang-format off
 

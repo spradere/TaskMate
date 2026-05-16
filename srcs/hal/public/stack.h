@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_STACK_H
-#define HAL_STACK_H
+#ifndef PUBLIC_STACK_H
+#define PUBLIC_STACK_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : stack.h"

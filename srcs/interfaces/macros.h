@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_MACROS_H
-#define TM_MACROS_H
+#ifndef INTERFACES_MACROS_H
+#define INTERFACES_MACROS_H
 
 // general system macros
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))

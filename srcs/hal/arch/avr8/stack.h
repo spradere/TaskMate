@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_STACK_IMPL_H
-#define HAL_STACK_IMPL_H
+#ifndef AVR8_STACK_H
+#define AVR8_STACK_H
 
 #include <avr/io.h> // get SP
 #include <stdint.h>

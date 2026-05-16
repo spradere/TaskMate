@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PARSEINITRC_H
-#define PARSEINITRC_H
+#ifndef AUTOCODE_PARSEINITRC_H
+#define AUTOCODE_PARSEINITRC_H
 
 #include "autoCode.h"
 

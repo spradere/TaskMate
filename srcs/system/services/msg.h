@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef MSG_H
-#define MSG_H
+#ifndef SERVICES_MSG_H
+#define SERVICES_MSG_H
 
 #include <stdint.h>
 

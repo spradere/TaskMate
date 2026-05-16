@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_CONTEXT_H
-#define HAL_CONTEXT_H
+#ifndef PUBLIC_CONTEXT_H
+#define PUBLIC_CONTEXT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : context.h"

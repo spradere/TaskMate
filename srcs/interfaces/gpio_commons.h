@@ -11,8 +11,8 @@
  * @brief interfaces gpio_commons header declarations.
  */
 
-#ifndef GPIO_COMMONS_H
-#define GPIO_COMMONS_H
+#ifndef INTERFACES_GPIO_COMMONS_H
+#define INTERFACES_GPIO_COMMONS_H
 
 typedef enum
 {
