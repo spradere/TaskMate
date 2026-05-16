@@ -20,7 +20,7 @@
 #endif
 
 #if defined(ARCH_avr8)
-	#include "hal/arch/avr8/int.h"
+	#include "hal/arch/avr8/interrupt.h"
 	#define HAL_INT
 #endif
 

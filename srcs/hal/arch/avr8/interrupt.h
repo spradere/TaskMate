@@ -7,7 +7,7 @@
  */
 
 /**
- * @file int.h
+ * @file interrupt.h
  * @brief avr8 hal_int_impl header declarations.
  *
  */
