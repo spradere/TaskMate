@@ -65,8 +65,8 @@ and determines which folder under `hal/` is parsed.
 | `sysCore/modules.c`      					| Modules data for drivers and threads    |
 | `sysCore/hal_init.h`						| List of hardware target `_init.h`       |
 |												|										|
-| `hal/public/hal_sysInfo.c`      					| Hardware target name arch/mcu/board    |
-| `hal/public/hal_define.h`						| List of hardware target `_define.h` |
+| `hal/public/sysInfo.c`      					| Hardware target name arch/mcu/board    |
+| `hal/public/define.h`						| List of hardware target `_define.h` |
 
 
 ---

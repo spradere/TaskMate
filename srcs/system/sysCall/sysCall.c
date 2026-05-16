@@ -14,7 +14,7 @@
 
 #include "system/sysCall/sysCall.h"
 
-#include "hal/public/hal_atomic.h"
+#include "hal/public/atomic.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
 
