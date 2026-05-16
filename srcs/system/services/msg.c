@@ -18,8 +18,8 @@
 #include "tm_libc/tm_string.h"
 
 // Send message to :
-#include "hal/public/hal_lcd.h"
-#include "hal/public/hal_usart.h"
+#include "hal/public/lcd.h"
+#include "hal/public/usart.h"
 
 // private message channel internals
 #define MSG_FLAG_IN_USE 3

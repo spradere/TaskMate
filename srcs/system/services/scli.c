@@ -16,7 +16,7 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_usart.h"
+#include "hal/public/usart.h"
 #include "system/services/msg.h"
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_syslog.h"

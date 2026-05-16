@@ -62,8 +62,8 @@ FILES_PARSE_TAG = ${PATH_SRCS}/system/sysCore/runLevel.h \
 	${PATH_SRCS}/system/sysCore/modules.c \
 	${PATH_SRCS}/system/sysCore/modules_list.h \
 	${PATH_SRCS}/system/sysCore/hal_init.h \
-	${PATH_SRCS}/hal/public/hal_define.h \
-	${PATH_SRCS}/hal/public/hal_sysInfo.c 	
+	${PATH_SRCS}/hal/public/define.h \
+	${PATH_SRCS}/hal/public/sysInfo.c 	
 	
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
