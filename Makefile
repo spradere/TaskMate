@@ -15,7 +15,7 @@
 # Main directories
 PATH_SRCS = srcs
 PATH_BUILDS = build
-PATH_LOGS = log
+PATH_LOGS = ${PATH_BUILDS}/log
 PATH_MAKEFILES = mk
 PATH_DOCS = doc
 PATH_SCRIPTS = scripts
