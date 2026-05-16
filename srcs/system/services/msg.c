@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3hal->drivers 30", MSG_TO_LCD);
+		msgWriteText(chan, "\3wire sig -> target 00", MSG_TO_LCD);
 	}
 
 	msgProcess();
