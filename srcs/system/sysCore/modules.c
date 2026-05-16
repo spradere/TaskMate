@@ -15,7 +15,7 @@
 
 #include <stddef.h>
 
-#include "hal/public/hal_context.h"
+#include "hal/public/context.h"
 #include "system/sysCore/modules_list.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
