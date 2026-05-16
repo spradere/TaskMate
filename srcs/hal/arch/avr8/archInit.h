@@ -17,4 +17,4 @@
 
 void hal_archInit(void);
 
-#endif
+#endif // AVR8_ARCHINIT_H

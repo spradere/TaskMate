@@ -33,4 +33,4 @@ typedef struct
 
 void tokenizer(tokenizer_t *tok);
 
-#endif
+#endif // AUTOCODE_TOKENIZER_H

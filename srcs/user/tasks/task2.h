@@ -17,4 +17,4 @@
 
 void task2(void);
 
-#endif
+#endif // TASKS_TASK2_H

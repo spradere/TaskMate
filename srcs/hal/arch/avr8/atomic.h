@@ -32,4 +32,4 @@ static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_state
 	SREG = state;
 }
 
-#endif
+#endif // AVR8_ATOMIC_H

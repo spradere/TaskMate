@@ -31,4 +31,4 @@
 // clang-format on
 // [/tag]
 
-#endif
+#endif // SYSCORE_HAL_INIT_H
