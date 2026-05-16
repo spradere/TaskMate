@@ -32,4 +32,4 @@ static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void)
 	asm volatile("cli \n\t");
 }
 
-#endif
+#endif // AVR8_INTERRUPT_H

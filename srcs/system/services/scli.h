@@ -17,4 +17,4 @@
 
 void scli(void);
 
-#endif
+#endif // SERVICES_SCLI_H

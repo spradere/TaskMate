@@ -30,4 +30,4 @@ err_codes_t hal_usartTestBufferRx(void);
 err_codes_t hal_usartTestBufferTx(void);
 err_codes_t hal_usartWriteString(const char *str);
 
-#endif
+#endif // ATMEGA2560_USART_H

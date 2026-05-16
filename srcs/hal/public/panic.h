@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_PANIC_H
-#define PUBLIC_PANIC_H
+#ifndef HAL_PUBLIC_PANIC_H
+#define HAL_PUBLIC_PANIC_H
 
 #include "hal/public/int.h"
 #include "hal/public/usart.h"
@@ -31,4 +31,4 @@
 		while( 1 );                                \
 	} while( 0 )
 
-#endif
+#endif // HAL_PUBLIC_PANIC_H

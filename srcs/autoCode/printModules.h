@@ -19,4 +19,4 @@
 
 void printModules(const modules_database_t *data_base);
 
-#endif
+#endif // AUTOCODE_PRINTMODULES_H

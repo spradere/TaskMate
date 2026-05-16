@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_CONTEXT_H
-#define PUBLIC_CONTEXT_H
+#ifndef HAL_PUBLIC_CONTEXT_H
+#define HAL_PUBLIC_CONTEXT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : context.h"
@@ -27,4 +27,5 @@
 #if !defined(HAL_CONTEXT)
 	#error "No hal implementation for context switch on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_CONTEXT_H

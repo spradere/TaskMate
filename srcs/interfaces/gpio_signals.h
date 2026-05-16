@@ -23,4 +23,4 @@ typedef enum
 	GPIO_SIGNAL_COUNT
 } gpio_signal_t;
 
-#endif
+#endif // INTERFACES_GPIO_SIGNALS_H

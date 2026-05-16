@@ -28,4 +28,4 @@ typedef struct
 
 const tm_string_t *err_getMessage(uint8_t num);
 
-#endif
+#endif // SYSCALL_ERROR_H

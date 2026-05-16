@@ -30,4 +30,4 @@ typedef struct
 	const tm_string_storage_t storage;
 } tm_string_t;
 
-#endif
+#endif // INTERFACES_TM_STRING_STORAGE_H

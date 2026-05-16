@@ -31,4 +31,4 @@
 // generate unique name
 #define UNIQUE_NAME(prefix) CONCAT(prefix, __LINE__)
 
-#endif
+#endif // INTERFACES_MACROS_H

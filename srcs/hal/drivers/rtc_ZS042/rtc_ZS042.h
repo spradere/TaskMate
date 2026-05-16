@@ -34,4 +34,4 @@ void hal_rtcStop(void);
 uint8_t hal_rtcRead(hal_rtc_time_t *t);
 uint8_t hal_rtcWrite(const hal_rtc_time_t *t);
 
-#endif
+#endif // RTC_ZS042_RTC_ZS042_H

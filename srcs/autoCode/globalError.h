@@ -42,4 +42,4 @@ typedef struct
 
 void globalError(const char *src_name, error_catalog_t *errors);
 
-#endif
+#endif // AUTOCODE_GLOBALERROR_H

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_GPIO_H
-#define PUBLIC_GPIO_H
+#ifndef HAL_PUBLIC_GPIO_H
+#define HAL_PUBLIC_GPIO_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/gpio.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_GPIO)
 	#error "No hal implementation for gpio on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_GPIO_H

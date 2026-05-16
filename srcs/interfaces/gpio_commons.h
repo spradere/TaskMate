@@ -29,4 +29,4 @@ typedef enum
 	GPIO_PIN_PULL_DOWN
 } gpio_pin_pull_t;
 
-#endif
+#endif // INTERFACES_GPIO_COMMONS_H

@@ -30,4 +30,5 @@
 #endif
 
 // clang-format on
-#endif
+
+#endif // TM_LIBC_TM_STDIO_H

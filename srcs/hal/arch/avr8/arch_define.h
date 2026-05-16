@@ -32,4 +32,4 @@ typedef struct
 	volatile uint8_t *pin;
 } hal_port_t;
 
-#endif
+#endif // AVR8_ARCH_DEFINE_H

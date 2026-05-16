@@ -26,4 +26,4 @@ int tm_vprintf(tm_string_t format, va_list args);
 int tm_snprintf(char *ptr, uint8_t size, tm_string_t format, ...);
 int tm_vsnprintf(char *ptr, uint8_t size, tm_string_t format, va_list args);
 
-#endif
+#endif // TM_LIBC_TM_SNPRINTF_H
