@@ -13,7 +13,6 @@
 ################################################################################
 
 # Final full HW path
-#PATH_BUILD_TARGET = ${PATH_BUILDS}/${ARCH}_${MCU}_${BOARD}
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 
 # Targets
@@ -34,13 +33,13 @@ FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
-PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/sysCore
-PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/sysCall
-PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/services
-PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/tm_libc
-PATHS_SOURCES += ${PATH_SRCS_SYSTEM}/interfaces
-PATHS_SOURCES += ${PATH_SRCS_HAL}/public
-PATHS_SOURCES += ${PATH_SRCS_USER}/tasks
+PATHS_SOURCES += ${PATH_SRCS}/system/sysCore
+PATHS_SOURCES += ${PATH_SRCS}/system/sysCall
+PATHS_SOURCES += ${PATH_SRCS}/system/services
+PATHS_SOURCES += ${PATH_SRCS}/tm_libc
+PATHS_SOURCES += ${PATH_SRCS}/interfaces
+PATHS_SOURCES += ${PATH_SRCS}/hal/public
+PATHS_SOURCES += ${PATH_SRCS}/user/tasks
 
 # log files
 FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
@@ -55,16 +54,16 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 
-FILES_PARSE_TAG = ${PATH_SRCS_SYSTEM}/sysCore/runLevel.h \
-	${PATH_SRCS_SYSTEM}/sysCore/runLevel.c \
-	${PATH_SRCS_SYSTEM}/sysCall/error.c \
-	${PATH_SRCS_SYSTEM}/interfaces/error_catalog.h \
-	${PATH_SRCS_SYSTEM}/interfaces/modules_define.h \
-	${PATH_SRCS_SYSTEM}/sysCore/modules.c \
-	${PATH_SRCS_SYSTEM}/sysCore/modules_list.h \
-	${PATH_SRCS_SYSTEM}/sysCore/hal_init.h \
-	${PATH_SRCS_HAL}/public/hal_define.h \
-	${PATH_SRCS_HAL}/public/hal_sysInfo.c 	
+FILES_PARSE_TAG = ${PATH_SRCS}/system/sysCore/runLevel.h \
+	${PATH_SRCS}/system/sysCore/runLevel.c \
+	${PATH_SRCS}/system/sysCall/error.c \
+	${PATH_SRCS}/interfaces/error_catalog.h \
+	${PATH_SRCS}/interfaces/modules_define.h \
+	${PATH_SRCS}/system/sysCore/modules.c \
+	${PATH_SRCS}/system/sysCore/modules_list.h \
+	${PATH_SRCS}/system/sysCore/hal_init.h \
+	${PATH_SRCS}/hal/public/hal_define.h \
+	${PATH_SRCS}/hal/public/hal_sysInfo.c 	
 	
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
@@ -73,13 +72,10 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 # git ignore
 FILE_GIT_IGNORE = .gitignore
 FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
-PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} \
-	${PATH_SRCS_SYSTEM} ${PATH_SRCS_HAL} ${PATH_SRCS_USER}
+PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
-VAL_GIT_ALLOWED.${PATH_SRCS_SYSTEM} = *.c *.h *.rc *.err *.mk
-VAL_GIT_ALLOWED.${PATH_SRCS_HAL} = *.c *.h *.rc *.err *.mk
-VAL_GIT_ALLOWED.${PATH_SRCS_USER} = *.c *.h *.rc *.err *.mk
+VAL_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk
 VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md

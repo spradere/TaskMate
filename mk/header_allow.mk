@@ -12,32 +12,32 @@
 # Allowed source access to system critical headers
 ################################################################################
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/modules.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/modules.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/tm_scheduler.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/tm_scheduler.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/TaskMate.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/TaskMate.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/boot.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/boot.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/runLevel.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/runLevel.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/tm_softwareTimeCounter.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/tm_softwareTimeCounter.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCall/sysCall.c = \
+CFLAGS_${PATH_SRCS}/system/sysCall/sysCall.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS_SYSTEM}/sysCore/gpio.c = \
+CFLAGS_${PATH_SRCS}/system/sysCore/gpio.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED
 
 
@@ -46,7 +46,7 @@ _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
-	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS_SYSTEM} -v h_check_log=${FILE_H_CHECK_LOG} \
+	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS} -v h_check_log=${FILE_H_CHECK_LOG} \
 		-f ${PATH_SCRIPTS}/header_allow.awk "${FILE_H_ALLOW_CONF}"
 
 
