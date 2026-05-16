@@ -22,7 +22,7 @@ void gpio_signalsInit(void)
 {
 	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
 	{
-		hal_boardWireSignal(signal_table, i);
+		targetWireSignal(signal_table, i);
 		hal_gpioPinInit(&signal_table[i].pin);
 	}
 }

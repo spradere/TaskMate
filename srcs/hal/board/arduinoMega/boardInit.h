@@ -15,10 +15,7 @@
 #ifndef ARDUINOMEGA_BOARDINIT_H
 #define ARDUINOMEGA_BOARDINIT_H
 
-#include "hal/mcu/atmega2560/gpio.h"
-#include "interfaces/gpio_signals.h"
 
 void hal_boardInit(void);
-void hal_boardWireSignal(hal_signal_t *table, gpio_signal_t signal);
 
 #endif // ARDUINOMEGA_BOARDINIT_H

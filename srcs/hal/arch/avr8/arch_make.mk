@@ -13,10 +13,12 @@ HAL_ARCH_MAKE_MK = 1
 
 # Registration in the global system
 VAL_HW_STACK += avr8
+
 PATH_AVR8 = ${PATH_SRCS}/hal/arch/avr8
 PATHS_SOURCES += ${PATH_AVR8}
 FILES_HALINIT += ${PATH_AVR8}/archInit.h
 FILES_HALDEFINE += ${PATH_AVR8}/arch_define.h
+
 CFLAGS += -DARCH_avr8
 # allow interfaces/module_define.h usage
 CFLAGS_${PATH_SRCS}/hal/arch/avr8/context.c = \
