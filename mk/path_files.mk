@@ -33,9 +33,9 @@ FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
-PATHS_SOURCES += ${PATH_SRCS}/system/sysCore
-PATHS_SOURCES += ${PATH_SRCS}/system/sysCall
-PATHS_SOURCES += ${PATH_SRCS}/system/services
+PATHS_SOURCES += ${PATH_SRCS}/system
+#PATHS_SOURCES += ${PATH_SRCS}/system/sysCall
+#PATHS_SOURCES += ${PATH_SRCS}/system/services
 PATHS_SOURCES += ${PATH_SRCS}/tm_libc
 PATHS_SOURCES += ${PATH_SRCS}/interfaces
 PATHS_SOURCES += ${PATH_SRCS}/hal/public
@@ -48,7 +48,6 @@ FILE_RSYNC_LOG = ${PATH_LOGS}/rsync.log
 FILE_H_CHECK_LOG = ${PATH_LOGS}/headers_check.log
 
 # scripts
-PATH_SCRIPTS = scripts
 FILE_H_ALLOW_CONF = mk/header_allow.conf
 
 # autoCode
