@@ -19,7 +19,7 @@
 #include <util/atomic.h>
 
 #include "hal/arch/avr8/context.h"
-#include "hal/arch/avr8/int.h"
+#include "hal/arch/avr8/interrupt.h"
 #include "hal/arch/avr8/stack.h"
 #include "interfaces/define.h"
 // #include "tm_libc/tm_syslog.h"
