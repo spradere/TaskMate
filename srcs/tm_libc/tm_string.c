@@ -12,8 +12,9 @@
  *
  */
 
-#include "interfaces/tm_string_storage.h"
 #include "tm_libc/tm_string.h"
+
+#include "interfaces/tm_string_storage.h"
 
 void tm_strncpy(char *dest, const char *src, uint8_t n)
 {

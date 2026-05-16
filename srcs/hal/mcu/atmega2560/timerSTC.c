@@ -24,10 +24,7 @@
 const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
 
 static hal_timerSTCCallback_t STC_callback = NULL;
-void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
-{
-	STC_callback = func_ptr;
-}
+void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr) { STC_callback = func_ptr; }
 
 void hal_timerSTCInit(void)
 {

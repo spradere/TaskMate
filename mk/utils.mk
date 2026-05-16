@@ -32,9 +32,10 @@ doc:
 .PHONY: doc
 
 _cloc_data:
-	cloc * --exclude-dir=${PATH_BUILDS},${PATH_LOGS:T} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
+	# :T modifier because cloc don't handle full path with --exclude-dir option
+	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
 	@printf "\n" >> ${FILE_CLOCRAW}
-	@cloc * --exclude-dir=${PATH_BUILDS},${PATH_LOGS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${FILE_CLOCRAW}
+	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${FILE_CLOCRAW}
 	@awk -v file="${FILE_CLOCDATA}" -f ${PATH_SCRIPTS}/cloc_data.awk ${FILE_CLOCRAW}
 .PHONY: _cloc_data
 

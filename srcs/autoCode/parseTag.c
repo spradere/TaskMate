@@ -231,9 +231,8 @@ static void writeHalInit(const parseTag_t *parse)
 		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
 	}
 	fileClose(&file_list, __FILE__, __LINE__);
-	
-	have_tag_count[HAVE_HAL_INIT]++;
 
+	have_tag_count[HAVE_HAL_INIT]++;
 }
 
 static void writeHalDefine(const parseTag_t *parse)
