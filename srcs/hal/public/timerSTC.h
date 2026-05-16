@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_TIMERSTC_H
-#define PUBLIC_TIMERSTC_H
+#ifndef HAL_PUBLIC_TIMERSTC_H
+#define HAL_PUBLIC_TIMERSTC_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/timerSTC.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_TIMERSTC)
 	#error "No hal implementation for Software Time Counter on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_TIMERSTC_H

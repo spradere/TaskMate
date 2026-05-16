@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_TMLIBC_H
-#define PUBLIC_TMLIBC_H
+#ifndef HAL_PUBLIC_TMLIBC_H
+#define HAL_PUBLIC_TMLIBC_H
 
 #if defined(MCU_atmega2560)
 	#include "hal/mcu/atmega2560/tmlibc.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_TMLIBC)
 	#error "No hal implementation for tm_libc on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_TMLIBC_H

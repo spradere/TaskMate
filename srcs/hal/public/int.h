@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_INT_H
-#define PUBLIC_INT_H
+#ifndef HAL_PUBLIC_INT_H
+#define HAL_PUBLIC_INT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : int.h"
@@ -27,4 +27,5 @@
 #if !defined(HAL_INT)
 	#error "No hal implementation for int on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_INT_H

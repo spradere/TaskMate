@@ -26,4 +26,4 @@
 _Static_assert(0, "Select exactly one libc, external or internal");
 #endif
 
-#endif
+#endif // INTERFACES_OPTIONS_H

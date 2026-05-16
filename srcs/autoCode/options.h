@@ -32,4 +32,4 @@ typedef struct
 
 void options(const char *file_name, options_list_t *opt);
 
-#endif
+#endif // AUTOCODE_OPTIONS_H

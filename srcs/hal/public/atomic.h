@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_ATOMIC_H
-#define PUBLIC_ATOMIC_H
+#ifndef HAL_PUBLIC_ATOMIC_H
+#define HAL_PUBLIC_ATOMIC_H
 
 #if defined(ARCH_avr8)
 	#include "hal/arch/avr8/atomic.h"
@@ -23,4 +23,5 @@
 #if !defined(HAL_ATOMIC)
 	#error "No hal implementation for atomic block on selected hardware target."
 #endif
-#endif
+
+#endif // HAL_PUBLIC_ATOMIC_H

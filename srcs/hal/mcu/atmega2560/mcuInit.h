@@ -17,4 +17,4 @@
 
 void hal_mcuInit(void);
 
-#endif
+#endif // ATMEGA2560_MCUINIT_H

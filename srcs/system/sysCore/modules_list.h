@@ -39,4 +39,4 @@
 // clang-format on
 // [/tag]
 
-#endif
+#endif // SYSCORE_MODULES_LIST_H

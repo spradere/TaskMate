@@ -17,4 +17,4 @@
 
 void boot(void);
 
-#endif
+#endif // SYSCORE_BOOT_H

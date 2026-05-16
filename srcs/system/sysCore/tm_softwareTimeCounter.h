@@ -17,4 +17,4 @@
 
 void tm_softwareTimeCounterInit(void);
 
-#endif
+#endif // SYSCORE_TM_SOFTWARETIMECOUNTER_H

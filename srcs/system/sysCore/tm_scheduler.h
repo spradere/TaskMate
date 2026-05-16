@@ -19,4 +19,4 @@ void tm_schedulerInit(void);
 void tm_schedulerStart(void);
 void tm_schedulerCoop(void);
 
-#endif
+#endif // SYSCORE_TM_SCHEDULER_H
