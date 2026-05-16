@@ -71,4 +71,4 @@ mod_thread_item_t *mod_threadGetPointer(uint8_t id);
 void mod_threadsAlloc(void);
 void mod_driversAlloc(void);
 
-#endif
+#endif // SYSCORE_MODULES_H

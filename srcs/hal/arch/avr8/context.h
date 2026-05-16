@@ -104,4 +104,4 @@ static inline __attribute__((always_inline)) void hal_contextRestore(void)
 void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 						   hal_stack_word_t *stack_top);
 
-#endif
+#endif // AVR8_CONTEXT_H

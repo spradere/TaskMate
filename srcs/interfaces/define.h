@@ -18,4 +18,4 @@
 // general system definitions
 #define NULL ((void *)0)
 
-#endif
+#endif // INTERFACES_DEFINE_H

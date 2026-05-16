@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PUBLIC_SYSINFO_H
-#define PUBLIC_SYSINFO_H
+#ifndef HAL_PUBLIC_SYSINFO_H
+#define HAL_PUBLIC_SYSINFO_H
 
 #include <stdint.h>
 
@@ -27,4 +27,4 @@ typedef struct
 
 void hal_sysInfoGet(const hal_info_t **dest);
 
-#endif
+#endif // HAL_PUBLIC_SYSINFO_H

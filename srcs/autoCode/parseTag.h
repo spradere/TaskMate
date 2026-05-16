@@ -23,4 +23,4 @@ void parseTagInit(void);
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors, const options_list_t *auto_options);
 void parseTagHave(void);
 
-#endif
+#endif // AUTOCODE_PARSETAG_H
