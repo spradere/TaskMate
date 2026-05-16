@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef SYSCALL_H
-#define SYSCALL_H
+#ifndef SYSCALL_SYSCALL_H
+#define SYSCALL_SYSCALL_H
 
 #include <stdint.h>
 

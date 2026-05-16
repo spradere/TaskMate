@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef BOOT_H
-#define BOOT_H
+#ifndef SYSCORE_BOOT_H
+#define SYSCORE_BOOT_H
 
 void boot(void);
 

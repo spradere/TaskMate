@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ARCHINIT_H
-#define HAL_ARCHINIT_H
+#ifndef AVR8_ARCHINIT_H
+#define AVR8_ARCHINIT_H
 
 void hal_archInit(void);
 

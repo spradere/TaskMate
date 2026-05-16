@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_INT_IMPL_H
-#define HAL_INT_IMPL_H
+#ifndef AVR8_INTERRUPT_H
+#define AVR8_INTERRUPT_H
 
 #include <avr/io.h>
 

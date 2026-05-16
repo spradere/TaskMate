@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_BOARDINIT_H
-#define HAL_BOARDINIT_H
+#ifndef ARDUINOMEGA_BOARDINIT_H
+#define ARDUINOMEGA_BOARDINIT_H
 
 #include "hal/mcu/atmega2560/gpio.h"
 #include "interfaces/gpio_signals.h"

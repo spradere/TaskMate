@@ -11,8 +11,8 @@
  * @brief error catalog
  */
 
-#ifndef ERROR_CATALOG_H
-#define ERROR_CATALOG_H
+#ifndef INTERFACES_ERROR_CATALOG_H
+#define INTERFACES_ERROR_CATALOG_H
 
 typedef enum
 {

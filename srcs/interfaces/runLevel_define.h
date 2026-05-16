@@ -11,8 +11,8 @@
  * @brief interfaces run level header declarations.
  */
 
-#ifndef RUNLEVEL_DEFINE_H
-#define RUNLEVEL_DEFINE_H
+#ifndef INTERFACES_RUNLEVEL_DEFINE_H
+#define INTERFACES_RUNLEVEL_DEFINE_H
 
 #if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : runLevel_define.h"

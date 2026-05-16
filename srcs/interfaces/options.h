@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_OPTIONS_H
-#define TM_OPTIONS_H
+#ifndef INTERFACES_OPTIONS_H
+#define INTERFACES_OPTIONS_H
 
 // debug options
 #define VERBOSE_LEVEL 0

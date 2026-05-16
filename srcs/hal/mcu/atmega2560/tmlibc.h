@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_TMLIBC_IMPL_H
-#define HAL_TMLIBC_IMPL_H
+#ifndef ATMEGA2560_TMLIBC_H
+#define ATMEGA2560_TMLIBC_H
 
 // clang-format off
 

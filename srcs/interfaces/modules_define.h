@@ -11,8 +11,8 @@
  * @brief interfaces modules_define header declarations.
  */
 
-#ifndef MODULES_DEFINE_H
-#define MODULES_DEFINE_H
+#ifndef INTERFACES_MODULES_DEFINE_H
+#define INTERFACES_MODULES_DEFINE_H
 
 #if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : modules_define.h"
