@@ -7,12 +7,7 @@
  */
 
 /**
- * @file boardInit.c
- * @brief arduinoMega hal_boardInit implementation.
+ * @file target_define.h
+ * @brief user target_define header declarations.
  *
  */
-
-#include "hal/board/arduinoMega/boardInit.h"
-
-void hal_boardInit(void) {}
-
