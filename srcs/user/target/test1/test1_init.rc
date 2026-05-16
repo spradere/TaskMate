@@ -1,0 +1,7 @@
+# hardware target test1 init.rc
+
+lcd -type_driver -run_driver
+rtc -type_driver -run_driver
+
+task1 -type_user -run_user
+task2 -type_user -run_user

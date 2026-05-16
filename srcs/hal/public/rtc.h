@@ -15,8 +15,8 @@
 #ifndef HAL_RTC_H
 #define HAL_RTC_H
 
-#if defined(BOARD_arduinoMega)
-	#include "hal/board/arduinoMega/rtc_ZS042.h"
+#if defined(HWT_test1)
+	#include "hal/drivers/rtc_ZS_042/rtc_ZS042.h"
 	#define HAL_RTC
 #endif
 

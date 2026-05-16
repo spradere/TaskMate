@@ -14,6 +14,7 @@ HWT_MK = 1
 # Registration in the global system
 VAL_HW_STACK = test1
 PATHS_SOURCES = ${PATH_SRCS}/user/target/test1
+	
 CFLAGS += -DHWT_test1
 
 .include "${PATH_SRCS}/hal//board/arduinoMega/board_make.mk"

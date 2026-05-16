@@ -15,8 +15,8 @@
 #ifndef HAL_LCD_H
 #define HAL_LCD_H
 
-#if defined(BOARD_arduinoMega)
-	#include "hal/board/arduinoMega/lcd_AMC2004.h"
+#if defined(HWT_test1)
+	#include "hal/drivers/lcd_AMC2004/lcd_AMC2004.h"
 	#define HAL_LCD
 #endif
 

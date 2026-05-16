@@ -39,6 +39,7 @@ PATHS_SOURCES += ${PATH_SRCS}/system/services
 PATHS_SOURCES += ${PATH_SRCS}/tm_libc
 PATHS_SOURCES += ${PATH_SRCS}/interfaces
 PATHS_SOURCES += ${PATH_SRCS}/hal/public
+PATHS_SOURCES += ${PATH_SRCS}/hal/drivers
 PATHS_SOURCES += ${PATH_SRCS}/user/tasks
 
 # log files
