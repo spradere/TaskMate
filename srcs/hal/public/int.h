@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_INT_H
-#define HAL_INT_H
+#ifndef PUBLIC_INT_H
+#define PUBLIC_INT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
 	#error "NOT ALLOWED INCLUDE : int.h"

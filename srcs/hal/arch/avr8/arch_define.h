@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ARCH_DEFINE_H
-#define HAL_ARCH_DEFINE_H
+#ifndef AVR8_ARCH_DEFINE_H
+#define AVR8_ARCH_DEFINE_H
 
 #include <stdint.h>
 

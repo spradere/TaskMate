@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ATOMIC_H
-#define HAL_ATOMIC_H
+#ifndef PUBLIC_ATOMIC_H
+#define PUBLIC_ATOMIC_H
 
 #if defined(ARCH_avr8)
 	#include "hal/arch/avr8/atomic.h"

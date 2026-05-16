@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_SCHEDULER_H
-#define TM_SCHEDULER_H
+#ifndef SYSCORE_TM_SCHEDULER_H
+#define SYSCORE_TM_SCHEDULER_H
 
 void tm_schedulerInit(void);
 void tm_schedulerStart(void);

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_TIMERSCHED_IMPL_H
-#define HAL_TIMERSCHED_IMPL_H
+#ifndef ATMEGA2560_TIMERSCHED_H
+#define ATMEGA2560_TIMERSCHED_H
 
 #include "hal/arch/avr8/arch_define.h"
 

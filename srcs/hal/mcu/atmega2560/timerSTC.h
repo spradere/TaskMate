@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_TIMERSTC_IMPL_H
-#define HAL_TIMERSTC_IMPL_H
+#ifndef ATMEGA2560_TIMERSTC_H
+#define ATMEGA2560_TIMERSTC_H
 
 typedef void (*hal_timerSTCCallback_t)(void);
 

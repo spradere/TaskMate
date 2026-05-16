@@ -12,7 +12,7 @@
  *
  */
 
-#ifndef HAL_BOARD_DEFINE_H
-#define HAL_BOARD_DEFINE_H
+#ifndef ARDUINOMEGA_BOARD_DEFINE_H
+#define ARDUINOMEGA_BOARD_DEFINE_H
 
 #endif

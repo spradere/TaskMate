@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
+#ifndef AUTOCODE_TOKENIZER_H
+#define AUTOCODE_TOKENIZER_H
 
 #include "autoCode.h"
 

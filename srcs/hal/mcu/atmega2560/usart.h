@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_USART_IMPL_H
-#define HAL_USART_IMPL_H
+#ifndef ATMEGA2560_USART_H
+#define ATMEGA2560_USART_H
 
 #include <stdbool.h>
 #include <stdint.h>

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef GLOBALERROR_H
-#define GLOBALERROR_H
+#ifndef AUTOCODE_GLOBALERROR_H
+#define AUTOCODE_GLOBALERROR_H
 
 #include "autoCode.h"
 

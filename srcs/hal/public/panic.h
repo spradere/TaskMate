@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef PANIC_H
-#define PANIC_H
+#ifndef PUBLIC_PANIC_H
+#define PUBLIC_PANIC_H
 
 #include "hal/public/int.h"
 #include "hal/public/usart.h"
