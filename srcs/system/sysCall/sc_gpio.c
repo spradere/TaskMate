@@ -8,7 +8,7 @@
 
 /**
  * @file sc_gpio.c
- * @brief sysCall sc_gpio implementation.
+ * @brief sc gpio implementation.
  */
 
 #include "system/sysCall/sc_gpio.h"

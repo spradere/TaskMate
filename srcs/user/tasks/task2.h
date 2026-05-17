@@ -8,7 +8,7 @@
 
 /**
  * @file task2.h
- * @brief tasks task2 header declarations.
+ * @brief task2 header declarations.
  *
  */
 

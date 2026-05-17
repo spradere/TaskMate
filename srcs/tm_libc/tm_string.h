@@ -8,7 +8,7 @@
 
 /**
  * @file tm_string.h
- * @brief tm_libc tm_string header declarations.
+ * @brief tm string header declarations.
  *
  */
 

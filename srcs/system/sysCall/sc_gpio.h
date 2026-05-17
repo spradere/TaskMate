@@ -8,7 +8,7 @@
 
 /**
  * @file sc_gpio.h
- * @brief sysCall sc_gpio header declarations.
+ * @brief sc gpio header declarations.
  */
 
 #ifndef SYSCALL_SC_GPIO_H

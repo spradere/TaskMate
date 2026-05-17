@@ -8,7 +8,7 @@
 
 /**
  * @file tm_scheduler.h
- * @brief sysCore tm_scheduler header declarations.
+ * @brief tm scheduler header declarations.
  *
  */
 

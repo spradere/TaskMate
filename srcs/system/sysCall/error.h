@@ -8,7 +8,7 @@
 
 /**
  * @file error.h
- * @brief sysCall error header declarations.
+ * @brief error header declarations.
  *
  */
 

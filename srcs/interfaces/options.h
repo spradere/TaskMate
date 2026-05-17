@@ -8,7 +8,7 @@
 
 /**
  * @file options.h
- * @brief TaskMate options declarations.
+ * @brief options header declarations.
  *
  */
 

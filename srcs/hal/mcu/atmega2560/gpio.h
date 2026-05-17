@@ -8,7 +8,7 @@
 
 /**
  * @file gpio.h
- * @brief atmega2560 hal_gpio_impl header declarations.
+ * @brief gpio header declarations.
  *
  */
 

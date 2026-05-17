@@ -8,7 +8,7 @@
 
 /**
  * @file stack.h
- * @brief avr8 hal_stack_impl header declarations.
+ * @brief stack header declarations.
  *
  */
 

@@ -8,7 +8,7 @@
 
 /**
  * @file timerSched.h
- * @brief public hal_timerSched header declarations.
+ * @brief timer sched header declarations.
  *
  */
 

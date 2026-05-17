@@ -8,7 +8,7 @@
 
 /**
  * @file mcuInit.h
- * @brief atmega2560 hal_mcuInit header declarations.
+ * @brief mcu init header declarations.
  *
  */
 

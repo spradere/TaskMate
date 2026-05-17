@@ -8,7 +8,7 @@
 
 /**
  * @file targetInit.h
- * @brief user targetInit header declarations.
+ * @brief target init header declarations.
  *
  */
  

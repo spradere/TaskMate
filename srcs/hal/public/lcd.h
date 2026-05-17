@@ -8,7 +8,7 @@
 
 /**
  * @file lcd.h
- * @brief public hal_lcd_AMC2004 header declarations.
+ * @brief lcd header declarations.
  *
  */
 

@@ -8,7 +8,7 @@
 
 /**
  * @file boardInit.c
- * @brief arduinoMega hal_boardInit implementation.
+ * @brief board init implementation.
  *
  */
 

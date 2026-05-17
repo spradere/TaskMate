@@ -8,7 +8,7 @@
 
 /**
  * @file lcd_AMC2004.h
- * @brief arduinoMega hal_lcd_AMC2004_impl header declarations.
+ * @brief lcd amc2004 header declarations.
  *
  */
 

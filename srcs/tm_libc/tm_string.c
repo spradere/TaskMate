@@ -8,7 +8,7 @@
 
 /**
  * @file tm_string.c
- * @brief tm_libc tm_string implementation.
+ * @brief tm string implementation.
  *
  */
 

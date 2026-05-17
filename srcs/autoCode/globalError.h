@@ -8,7 +8,7 @@
 
 /**
  * @file globalError.h
- * @brief autoCode globalError header declarations.
+ * @brief global error header declarations.
  *
  */
 

@@ -8,7 +8,7 @@
 
 /**
  * @file autoCode.c
- * @brief autoCode implementation.
+ * @brief auto code implementation.
  *
  * - Simple and reliable, read plain text init.rc files
  * - Write code for #include / static allocation / initialisation directly in code

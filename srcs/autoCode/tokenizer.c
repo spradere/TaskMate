@@ -8,7 +8,7 @@
 
 /**
  * @file tokenizer.c
- * @brief autoCode tokenizer implementation.
+ * @brief tokenizer implementation.
  *
  */
 

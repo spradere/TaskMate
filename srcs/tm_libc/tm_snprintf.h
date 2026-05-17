@@ -8,7 +8,7 @@
 
 /**
  * @file tm_snprintf.h
- * @brief tm_libc tm_snprintf header declarations.
+ * @brief tm snprintf header declarations.
  *
  */
 

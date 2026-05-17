@@ -8,7 +8,7 @@
 
 /**
  * @file tm_softwareTimeCounter.c
- * @brief sysCore tm_softwareTimeCounter implementation.
+ * @brief tm software time counter implementation.
  *
  */
 
