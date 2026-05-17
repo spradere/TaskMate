@@ -17,9 +17,9 @@ TaskMate operating system is designed for microcontrollers. Its architecture is 
 maintain a clear separation between build
 logic, system behavior, and hardware dependencies, ensuring both portability and maintainability.
 
-> <span style="color:green"> **Project Stats (v0.27 [^1] )**</span>
+> <span style="color:green"> **Project Stats (v0.28 [^1] )**</span>
 >
->  <span style="color:green">498 commits • 131 source files • 7302 lines of code •
+>  <span style="color:green">522 commits • 134 source files • 7353 lines of code •
 > binary size : 6432 bytes (Flash) • ram usage : 2013 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
@@ -32,9 +32,9 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 
 ---
 
-## ⬆️ TaskMate Layers
+## ⬆️ TaskMate Layers - Run Time
 
-![System Layer Diagram](doc/TaskMate_layers_v9.png)
+![System Layer Diagram](doc/TaskMate_layers_v10.png)
 
 
 The diagram shows the current layered architecture of TaskMate.
@@ -59,7 +59,7 @@ TaskMate uses a custom **Build system** that fully manages dependencies and work
 
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
-![Build system](doc/build_v2.png)
+![Build system](doc/build_v3.png)
 
 ---
 
@@ -104,7 +104,7 @@ making the system easier to evolve and refactor.
 
 AutoCode is used to generate parts of the system from simple configuration files.
 It helps maintain consistency, reduce boilerplate, and keep the overall structure aligned with the intended architecture.
-All generation happens at compile time, with static allocation, ensuring zero runtime overhead and fully deterministic behavior.
+All generation happens at build time, with static allocation, ensuring zero runtime overhead and fully deterministic behavior.
 
 
 See : [Portability](doc/rules/portability.md)
