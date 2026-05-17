@@ -120,6 +120,7 @@ void mod_threadsAlloc(void)
 	mod->name = &thread3_name;
 	mod->status = 19;
 	mod->main = scli;
+
 // clang-format on
 	// [/tag]
 }
@@ -200,6 +201,7 @@ void mod_driversAlloc(void)
 		.start = hal_usartStart,
 		.stop = hal_usartStop
 	};
+
 // clang-format on
 	// [/tag]
 }

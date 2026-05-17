@@ -1,3 +1,4 @@
+	move GPIO wiring to user/target
 	add driver directory to HAL
 	remove hal_ prefix and _impl suffix for HAL sources files
 	code base separation for system/hal/user
