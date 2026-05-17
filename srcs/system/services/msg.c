@@ -8,7 +8,7 @@
 
 /**
  * @file msg.c
- * @brief services msg implementation.
+ * @brief msg implementation.
  */
 
 #include "system/services/msg.h"

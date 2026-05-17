@@ -8,7 +8,7 @@
 
 /**
  * @file archInit.h
- * @brief avr8 hal_archInit header declarations.
+ * @brief arch init header declarations.
  *
  */
 

@@ -8,7 +8,7 @@
 
 /**
  * @file parseInitrc.c
- * @brief autoCode parseInitrc implementation.
+ * @brief parse initrc implementation.
  *
  */
 

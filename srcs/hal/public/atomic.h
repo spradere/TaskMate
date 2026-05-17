@@ -8,7 +8,7 @@
 
 /**
  * @file atomic.h
- * @brief public hal_atomic header declarations.
+ * @brief atomic header declarations.
  *
  */
 

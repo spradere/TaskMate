@@ -8,7 +8,7 @@
 
 /**
  * @file globalError.c
- * @brief autoCode globalError implementation.
+ * @brief global error implementation.
  *
  */
 

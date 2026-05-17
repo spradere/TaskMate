@@ -8,7 +8,7 @@
 
 /**
  * @file scli.c
- * @brief services scli implementation.
+ * @brief scli implementation.
  *
  */
 

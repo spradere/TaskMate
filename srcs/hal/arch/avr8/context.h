@@ -8,7 +8,7 @@
 
 /**
  * @file context.h
- * @brief avr8 hal_context_impl header declarations.
+ * @brief context header declarations.
  *
  */
 

@@ -8,6 +8,6 @@
 
 /**
  * @file target_define.h
- * @brief user target_define header declarations.
+ * @brief target define header declarations.
  *
  */

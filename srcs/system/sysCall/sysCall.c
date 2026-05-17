@@ -8,7 +8,7 @@
 
 /**
  * @file sysCall.c
- * @brief sysCall implementation.
+ * @brief sys call implementation.
  *
  */
 

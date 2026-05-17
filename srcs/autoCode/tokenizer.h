@@ -8,7 +8,7 @@
 
 /**
  * @file tokenizer.h
- * @brief autoCode tokenizer header declarations.
+ * @brief tokenizer header declarations.
  *
  */
 

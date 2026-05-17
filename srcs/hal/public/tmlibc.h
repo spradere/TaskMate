@@ -8,7 +8,7 @@
 
 /**
  * @file tmlibc.h
- * @brief public hal_tmlibc header declarations.
+ * @brief tmlibc header declarations.
  *
  */
 

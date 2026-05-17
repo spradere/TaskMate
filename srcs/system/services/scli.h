@@ -8,7 +8,7 @@
 
 /**
  * @file scli.h
- * @brief services scli header declarations.
+ * @brief scli header declarations.
  *
  */
 

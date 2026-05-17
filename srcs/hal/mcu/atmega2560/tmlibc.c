@@ -8,7 +8,7 @@
 
 /**
  * @file tmlibc.c
- * @brief atmega2560 hal_tmlibc_impl implementation.
+ * @brief tmlibc implementation.
  *
  */
 

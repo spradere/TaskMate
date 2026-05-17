@@ -8,7 +8,7 @@
 
 /**
  * @file rtc_ZS042.h
- * @brief arduinoMega hal_rtc_ZS042_impl header declarations.
+ * @brief rtc zs042 header declarations.
  *
  */
 

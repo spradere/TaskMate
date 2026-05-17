@@ -8,7 +8,7 @@
 
 /**
  * @file int.h
- * @brief public hal_int header declarations.
+ * @brief int header declarations.
  *
  */
 

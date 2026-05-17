@@ -8,7 +8,7 @@
 
 /**
  * @file runLevel.c
- * @brief sysCore runLevel implementation.
+ * @brief run level implementation.
  *
  */
 

@@ -8,7 +8,7 @@
 
 /**
  * @file gpio.c
- * @brief sysCore gpio implementation.
+ * @brief gpio implementation.
  */
 
 #include "system/sysCore/gpio.h"

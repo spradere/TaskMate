@@ -8,7 +8,7 @@
 
 /**
  * @file panic.h
- * @brief public panic header declarations.
+ * @brief panic header declarations.
  *
  */
 

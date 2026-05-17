@@ -8,7 +8,7 @@
 
 /**
  * @file gpio.h
- * @brief public hal_gpio header declarations.
+ * @brief gpio header declarations.
  *
  */
 

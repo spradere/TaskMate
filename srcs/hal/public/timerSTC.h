@@ -8,7 +8,7 @@
 
 /**
  * @file timerSTC.h
- * @brief public hal_timerSTC header declarations.
+ * @brief timer stc header declarations.
  *
  */
 
