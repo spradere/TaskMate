@@ -11,7 +11,7 @@
  * @brief target init header declarations.
  *
  */
- 
+
 #include "hal/public/gpio.h"
 #include "interfaces/gpio_signals.h"
 

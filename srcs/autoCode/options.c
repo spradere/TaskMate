@@ -25,16 +25,15 @@ static void funcHalInit(const char *value, options_list_t *opt);
 static void funcHalDefine(const char *value, options_list_t *opt);
 static void funcGpioSignals(const char *value, options_list_t *opt);
 
-#define HAVE_OPTIONS(X)                          \
-	X(HAVE_TM_VER, "--tm_ver", funcTmVer)        \
-	X(HAVE_TM_BUILD, "--tm_build", funcTmBuild)  \
-	X(HAVE_ERRORS, "--errors", funcErrors)       \
-	X(HAVE_INITRC, "--initrc", funcInitrc)       \
-	X(HAVE_PARSETAG, "--parsetag", funcParsetag) \
-	X(HAVE_HALINIT, "--halinit", funcHalInit)    \
+#define HAVE_OPTIONS(X)                             \
+	X(HAVE_TM_VER, "--tm_ver", funcTmVer)           \
+	X(HAVE_TM_BUILD, "--tm_build", funcTmBuild)     \
+	X(HAVE_ERRORS, "--errors", funcErrors)          \
+	X(HAVE_INITRC, "--initrc", funcInitrc)          \
+	X(HAVE_PARSETAG, "--parsetag", funcParsetag)    \
+	X(HAVE_HALINIT, "--halinit", funcHalInit)       \
 	X(HAVE_HALDEFINE, "--haldefine", funcHalDefine) \
 	X(HAVE_GPIO_SIGNALS, "--gpio_signals", funcGpioSignals)
-	
 
 static const struct
 {

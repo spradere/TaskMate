@@ -15,4 +15,3 @@
 #include "hal/board/arduinoMega/boardInit.h"
 
 void hal_boardInit(void) {}
-
