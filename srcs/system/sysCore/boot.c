@@ -8,7 +8,7 @@
 
 /**
  * @file boot.c
- * @brief sysCore boot implementation.
+ * @brief boot implementation.
  *
  */
 

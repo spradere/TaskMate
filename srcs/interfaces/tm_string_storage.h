@@ -8,7 +8,7 @@
 
 /**
  * @file tm_string_storage.h
- * @brief interfaces tm_string_storage header declarations.
+ * @brief tm string storage header declarations.
  *
  */
 

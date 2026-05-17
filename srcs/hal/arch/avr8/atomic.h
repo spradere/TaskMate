@@ -8,7 +8,7 @@
 
 /**
  * @file atomic.h
- * @brief avr8 hal_atomic_impl header declarations.
+ * @brief atomic header declarations.
  *
  */
 

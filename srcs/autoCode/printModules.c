@@ -8,7 +8,7 @@
 
 /**
  * @file printModules.c
- * @brief autoCode printModules implementation.
+ * @brief print modules implementation.
  *
  */
 

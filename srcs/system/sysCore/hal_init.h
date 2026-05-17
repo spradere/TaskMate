@@ -8,7 +8,7 @@
 
 /**
  * @file hal_init.h
- * @brief hal init
+ * @brief hal init header declarations.
  */
 
 #ifndef SYSCORE_HAL_INIT_H

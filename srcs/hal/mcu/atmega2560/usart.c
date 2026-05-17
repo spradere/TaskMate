@@ -8,7 +8,7 @@
 
 /**
  * @file usart.c
- * @brief atmega2560 hal_usart_impl implementation.
+ * @brief usart implementation.
  *
  */
 

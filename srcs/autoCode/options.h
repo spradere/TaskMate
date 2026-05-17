@@ -8,7 +8,7 @@
 
 /**
  * @file options.h
- * @brief autoCode options header declarations.
+ * @brief options header declarations.
  *
  */
 

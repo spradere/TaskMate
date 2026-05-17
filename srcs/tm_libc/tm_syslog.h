@@ -8,7 +8,7 @@
 
 /**
  * @file tm_syslog.h
- * @brief tm_libc tm_syslog header declarations.
+ * @brief tm syslog header declarations.
  *
  */
 

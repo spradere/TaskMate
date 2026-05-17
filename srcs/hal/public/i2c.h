@@ -8,7 +8,7 @@
 
 /**
  * @file i2c.h
- * @brief public hal_i2c header declarations.
+ * @brief i2c header declarations.
  *
  */
 

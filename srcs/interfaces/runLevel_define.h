@@ -8,7 +8,7 @@
 
 /**
  * @file runLevel_define.h
- * @brief interfaces run level header declarations.
+ * @brief run level define header declarations.
  */
 
 #ifndef INTERFACES_RUNLEVEL_DEFINE_H

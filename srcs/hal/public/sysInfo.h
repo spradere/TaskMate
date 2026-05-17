@@ -8,7 +8,7 @@
 
 /**
  * @file sysInfo.h
- * @brief public hal_sysInfo header declarations.
+ * @brief sys info header declarations.
  *
  */
 

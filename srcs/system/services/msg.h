@@ -8,7 +8,7 @@
 
 /**
  * @file msg.h
- * @brief services msg header declarations.
+ * @brief msg header declarations.
  *
  */
 

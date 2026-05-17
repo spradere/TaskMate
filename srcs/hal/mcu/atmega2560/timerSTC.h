@@ -8,7 +8,7 @@
 
 /**
  * @file timerSTC.h
- * @brief atmega2560 hal_timerSTC_impl header declarations.
+ * @brief timer stc header declarations.
  *
  */
 
