@@ -8,7 +8,7 @@
 
 /**
  * @file printModules.h
- * @brief autoCode printModules header declarations.
+ * @brief print modules header declarations.
  *
  */
 

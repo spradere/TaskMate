@@ -8,7 +8,7 @@
 
 /**
  * @file board_define.h
- * @brief arduinoMega board_define header declarations.
+ * @brief board define header declarations.
  *
  */
 

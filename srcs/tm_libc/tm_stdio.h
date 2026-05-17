@@ -8,7 +8,7 @@
 
 /**
  * @file tm_stdio.h
- * @brief tm_libc tm_stdio header declarations.
+ * @brief tm stdio header declarations.
  *
  */
 

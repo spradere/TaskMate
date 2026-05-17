@@ -8,7 +8,7 @@
 
 /**
  * @file initrcCmdDispatch.h
- * @brief autoCode initrcCmdDispatch header declarations.
+ * @brief initrc cmd dispatch header declarations.
  *
  */
 

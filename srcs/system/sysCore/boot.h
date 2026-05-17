@@ -8,7 +8,7 @@
 
 /**
  * @file boot.h
- * @brief sysCore boot header declarations.
+ * @brief boot header declarations.
  *
  */
 

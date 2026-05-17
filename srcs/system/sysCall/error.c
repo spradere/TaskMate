@@ -8,7 +8,7 @@
 
 /**
  * @file error.c
- * @brief sysCall error implementation.
+ * @brief error implementation.
  *
  */
 

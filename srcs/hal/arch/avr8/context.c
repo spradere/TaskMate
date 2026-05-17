@@ -8,7 +8,7 @@
 
 /**
  * @file context.c
- * @brief avr8 hal_context_impl implementation.
+ * @brief context implementation.
  *
  */
 

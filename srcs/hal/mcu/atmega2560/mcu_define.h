@@ -8,7 +8,7 @@
 
 /**
  * @file mcu_define.h
- * @brief atmega2560 mcu_define header declarations.
+ * @brief mcu define header declarations.
  *
  */
 

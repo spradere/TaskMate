@@ -8,7 +8,7 @@
 
 /**
  * @file gpio_signals.h
- * @brief interfaces gpio_signals header declarations.
+ * @brief gpio signals header declarations.
  *
  */
 

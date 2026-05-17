@@ -7,8 +7,8 @@
  */
 
 /**
- * @file targetdInit.c
- * @brief user targetInit implementation.
+ * @file targetInit.c
+ * @brief target init implementation.
  *
  */
 

@@ -8,7 +8,7 @@
 
 /**
  * @file tm_snprintf.c
- * @brief tm_libc tm_snprintf implementation.
+ * @brief tm snprintf implementation.
  *
  */
 

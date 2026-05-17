@@ -8,7 +8,7 @@
 
 /**
  * @file usart.h
- * @brief public hal_usart header declarations.
+ * @brief usart header declarations.
  *
  */
 

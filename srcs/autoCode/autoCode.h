@@ -8,7 +8,7 @@
 
 /**
  * @file autoCode.h
- * @brief autoCode header declarations.
+ * @brief auto code header declarations.
  *
  */
 

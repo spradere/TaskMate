@@ -8,7 +8,7 @@
 
 /**
  * @file timerSched.h
- * @brief atmega2560 hal_timerSched_impl header declarations.
+ * @brief timer sched header declarations.
  *
  */
 

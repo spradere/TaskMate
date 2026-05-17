@@ -8,7 +8,7 @@
 
 /**
  * @file parseTag.h
- * @brief autoCode parseTag header declarations.
+ * @brief parse tag header declarations.
  *
  */
 

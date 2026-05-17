@@ -8,7 +8,7 @@
 
 /**
  * @file modules_define.h
- * @brief interfaces modules_define header declarations.
+ * @brief modules define header declarations.
  */
 
 #ifndef INTERFACES_MODULES_DEFINE_H

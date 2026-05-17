@@ -8,7 +8,7 @@
 
 /**
  * @file fileUtility.h
- * @brief autoCode fileUtility header declarations.
+ * @brief file utility header declarations.
  *
  */
 

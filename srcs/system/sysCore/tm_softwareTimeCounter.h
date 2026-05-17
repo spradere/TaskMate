@@ -8,7 +8,7 @@
 
 /**
  * @file tm_softwareTimeCounter.h
- * @brief sysCore tm_softwareTimeCounter header declarations.
+ * @brief tm software time counter header declarations.
  *
  */
 
