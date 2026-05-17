@@ -15,7 +15,6 @@
 #ifndef ARDUINOMEGA_BOARDINIT_H
 #define ARDUINOMEGA_BOARDINIT_H
 
-
 void hal_boardInit(void);
 
 #endif // ARDUINOMEGA_BOARDINIT_H

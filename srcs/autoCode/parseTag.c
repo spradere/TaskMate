@@ -49,7 +49,7 @@ static void writeGpioSignals(const parseTag_t *parse);
 	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)                 \
 	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                       \
 	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)            \
-	X(HAVE_MOD_LIST, "modules_list", writeModulesList)				 \
+	X(HAVE_MOD_LIST, "modules_list", writeModulesList)               \
 	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)
 
 static const struct
@@ -228,20 +228,20 @@ static void writeGpioSignals(const parseTag_t *parse)
 
 	fprintf(parse->file, "typedef enum\n");
 	fprintf(parse->file, "{\n");
-	
+
 	tokenizer_t tok;
 	int line = 0;
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_signals.stream) )
 	{
 		tokenizer(&tok);
 		line++;
-		if( (tok.count !=0) && (tok.tokens[0][0] != '#') )
+		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
 		{
-			if(tok.count > 1) 
+			if( tok.count > 1 )
 			{
-				msgError("in file %s wrong token count line %i\n", file_signals.name, line); 
+				msgError("in file %s wrong token count line %i\n", file_signals.name, line);
 				exit(1);
-			}	
+			}
 			fprintf(parse->file, "\t%s,\n", tok.tokens[0]);
 		}
 	}
