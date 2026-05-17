@@ -29,6 +29,7 @@
 #include "srcs/hal/board/arduinoMega/boardInit.h"
 #include "srcs/hal/mcu/atmega2560/mcuInit.h"
 #include "srcs/hal/arch/avr8/archInit.h"
+
 // clang-format on
 // [/tag]
 

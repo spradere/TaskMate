@@ -39,6 +39,7 @@ void rl_Alloc(void)
 	};
 	to_run.current=RUN_CORE;
 	to_run.next=RUN_CORE;
+
 // clang-format on
 	// [/tag]
 }

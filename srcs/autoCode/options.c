@@ -23,6 +23,7 @@ static void funcInitrc(const char *value, options_list_t *opt);
 static void funcParsetag(const char *value, options_list_t *opt);
 static void funcHalInit(const char *value, options_list_t *opt);
 static void funcHalDefine(const char *value, options_list_t *opt);
+static void funcGpioSignals(const char *value, options_list_t *opt);
 
 #define HAVE_OPTIONS(X)                          \
 	X(HAVE_TM_VER, "--tm_ver", funcTmVer)        \
@@ -31,7 +32,9 @@ static void funcHalDefine(const char *value, options_list_t *opt);
 	X(HAVE_INITRC, "--initrc", funcInitrc)       \
 	X(HAVE_PARSETAG, "--parsetag", funcParsetag) \
 	X(HAVE_HALINIT, "--halinit", funcHalInit)    \
-	X(HAVE_HALDEFINE, "--haldefine", funcHalDefine)
+	X(HAVE_HALDEFINE, "--haldefine", funcHalDefine) \
+	X(HAVE_GPIO_SIGNALS, "--gpio_signals", funcGpioSignals)
+	
 
 static const struct
 {
@@ -108,6 +111,12 @@ static void funcHalDefine(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_haldefine_list, value, BYTE_INDEX);
 	have_options_count[HAVE_HALDEFINE]++;
+}
+
+static void funcGpioSignals(const char *value, options_list_t *opt)
+{
+	strncpy(opt->file_gpio_signals, value, BYTE_INDEX);
+	have_options_count[HAVE_GPIO_SIGNALS]++;
 }
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)

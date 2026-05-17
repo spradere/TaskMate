@@ -25,6 +25,7 @@
 #include "srcs/hal/board/arduinoMega/board_define.h"
 #include "srcs/hal/mcu/atmega2560/mcu_define.h"
 #include "srcs/hal/arch/avr8/arch_define.h"
+
 // clang-format on
 // [/tag]
 
