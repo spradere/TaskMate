@@ -8,7 +8,7 @@
 
 /**
  * @file sysInfo.c
- * @brief public hal_sysInfo implementation.
+ * @brief sys info implementation.
  *
  */
 

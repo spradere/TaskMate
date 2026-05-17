@@ -8,7 +8,7 @@
 
 /**
  * @file modules.c
- * @brief sysCore modules implementation.
+ * @brief modules implementation.
  */
 
 #include "system/sysCore/modules.h"

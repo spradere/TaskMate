@@ -8,7 +8,7 @@
 
 /**
  * @file tm_syslog.c
- * @brief tm_libc tm_syslog implementation.
+ * @brief tm syslog implementation.
  *
  */
 

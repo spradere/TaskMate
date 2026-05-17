@@ -8,7 +8,7 @@
 
 /**
  * @file gpio.h
- * @brief sysCore gpio header declarations.
+ * @brief gpio header declarations.
  */
 
 #ifndef SYSCORE_GPIO_H

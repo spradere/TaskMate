@@ -8,7 +8,7 @@
 
 /**
  * @file options.c
- * @brief autoCode options implementation.
+ * @brief options implementation.
  *
  */
 

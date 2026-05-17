@@ -8,7 +8,7 @@
 
 /**
  * @file modules_list.h
- * @brief modules list
+ * @brief modules list header declarations.
  */
 
 #ifndef SYSCORE_MODULES_LIST_H

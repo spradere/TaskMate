@@ -8,7 +8,7 @@
 
 /**
  * @file error_catalog.h
- * @brief error catalog
+ * @brief error catalog header declarations.
  */
 
 #ifndef INTERFACES_ERROR_CATALOG_H

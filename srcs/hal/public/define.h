@@ -8,7 +8,7 @@
 
 /**
  * @file define.h
- * @brief hal define
+ * @brief define header declarations.
  */
 
 #ifndef HAL_PUBLIC_DEFINE_H

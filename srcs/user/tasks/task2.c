@@ -8,7 +8,7 @@
 
 /**
  * @file task2.c
- * @brief tasks task2 implementation.
+ * @brief task2 implementation.
  *
  */
 

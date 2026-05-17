@@ -8,7 +8,7 @@
 
 /**
  * @file sysCall.h
- * @brief sysCall header declarations.
+ * @brief sys call header declarations.
  *
  */
 

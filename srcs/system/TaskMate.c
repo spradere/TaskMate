@@ -8,7 +8,7 @@
 
 /**
  * @file TaskMate.c
- * @brief TaskMate implementation.
+ * @brief task mate implementation.
  *
  */
 

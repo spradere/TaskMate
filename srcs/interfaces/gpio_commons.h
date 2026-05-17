@@ -8,7 +8,7 @@
 
 /**
  * @file gpio_commons.h
- * @brief interfaces gpio_commons header declarations.
+ * @brief gpio commons header declarations.
  */
 
 #ifndef INTERFACES_GPIO_COMMONS_H

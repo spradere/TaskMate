@@ -6,7 +6,8 @@
  * See the LICENSE file for full license terms.
  */
 /**
- * @brief atmega2560 hal_mcuInit implementation.
+ * @file mcuInit.c
+ * @brief mcu init implementation.
  */
 
 #include "hal/mcu/atmega2560/mcuInit.h"

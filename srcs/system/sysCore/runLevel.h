@@ -8,7 +8,7 @@
 
 /**
  * @file runLevel.h
- * @brief sysCore runLevel header declarations.
+ * @brief run level header declarations.
  *
  */
 

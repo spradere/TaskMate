@@ -8,7 +8,7 @@
 
 /**
  * @file macros.h
- * @brief TaskMate general macro.
+ * @brief macros header declarations.
  *
  */
 

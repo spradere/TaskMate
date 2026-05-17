@@ -6,7 +6,8 @@
  * See the LICENSE file for full license terms.
  */
 /**
- * @brief avr8 hal_archInit implementation.
+ * @file archInit.c
+ * @brief arch init implementation.
  */
 
 #include "hal/arch/avr8/archInit.h"

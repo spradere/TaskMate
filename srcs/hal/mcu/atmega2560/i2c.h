@@ -8,7 +8,7 @@
 
 /**
  * @file i2c.h
- * @brief atmega2560 hal_i2c_impl header declarations.
+ * @brief i2c header declarations.
  *
  */
 

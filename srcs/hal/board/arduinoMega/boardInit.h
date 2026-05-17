@@ -8,7 +8,7 @@
 
 /**
  * @file boardInit.h
- * @brief arduinoMega hal_boardInit header declarations.
+ * @brief board init header declarations.
  *
  */
 

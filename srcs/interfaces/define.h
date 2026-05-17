@@ -8,7 +8,7 @@
 
 /**
  * @file define.h
- * @brief TaskMate general definitions.
+ * @brief define header declarations.
  *
  */
 

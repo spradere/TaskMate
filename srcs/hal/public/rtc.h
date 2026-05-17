@@ -8,7 +8,7 @@
 
 /**
  * @file rtc.h
- * @brief public hal_rtc_ZS042 header declarations.
+ * @brief rtc header declarations.
  *
  */
 
