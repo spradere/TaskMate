@@ -94,11 +94,10 @@ tidy_TaskMate:
 	-I/root/code/TaskMate/current/ \
 	-I/root/code/TaskMate/current/${PATH_SRCS}/ \
 	-isystem /usr/local/avr/include \
-	-isystem /usr/local/lib/gcc/avr/14.1.0 \
+	-isystem /usr/local/lib/gcc/avr/14.2.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-	-DF_CPU=${VAL_CPU_FREQ} \
-	-DHAL_SYSTEM_CRITICAL_API_ALLOWED \
-	-DAUTOINCLUDE_HAL_SYSTEM_CRITICAL_ALLOWED
+	-DF_CPU=${VAL_CPU_FREQ} ${CFLAGS} ${LFLAGS}
+
 .PHONY: tidy_TaskMate
 
 modules_size: all

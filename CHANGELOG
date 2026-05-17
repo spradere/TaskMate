@@ -1,3 +1,4 @@
+	upgarde includes guards with parent directory and #endif closing comment 
 	move GPIO wiring to user/target
 	add driver directory to HAL
 	remove hal_ prefix and _impl suffix for HAL sources files

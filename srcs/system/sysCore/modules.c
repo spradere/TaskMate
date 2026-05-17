@@ -67,11 +67,9 @@ void mod_threadsAlloc(void)
 	tm_syslog(TM_STR("[modules.c] sizeof(mod_thread_item_t)       = %i\n"),
 			  (unsigned)sizeof(mod_thread_item_t));
 
-	mod_thread_item_t *thread;
-
 	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{
-		thread = mod_threadGetPointer(i);
+		mod_thread_item_t thread = mod_threadGetPointer(i);
 		thread->canary_low = TM_MOD_CANARY;
 		thread->canary_high = TM_MOD_CANARY;
 	}
