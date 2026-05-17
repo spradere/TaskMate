@@ -31,7 +31,7 @@ static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
-	uintptr_t p = (uintptr_t)func_ptr;
+	//uintptr_t p = (uintptr_t)func_ptr;
 	// tm_syslog(TM_STR("[timer sched] callback = 0x%04x\n"), (p << 1));
 	sched_callback = func_ptr;
 }

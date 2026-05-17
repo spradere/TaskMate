@@ -42,7 +42,7 @@ void hal_i2cStart(void)
 		TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
 		while( !(TWCR & (1 << TWINT)) );
 
-		if( (hal_i2cWrite((adr << 1) | 0)) == TW_MT_SLA_ACK )
+		if( (hal_i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
 		{
 			// tm_syslog(TM_STR("\tfound SLA+W 0x%02x\n"), (adr));
 		}

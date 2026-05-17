@@ -82,7 +82,7 @@ tidy_autoCode:
 #help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@clang-tidy $(FILES_AUTOCOE_SRC) ${FILES_AUTOCOE_SRC_H} --\
+	@clang-tidy19 $(FILES_AUTOCOE_SRC) ${FILES_AUTOCOE_SRC_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/${PATH_SRCS}/
 .PHONY:tidy_autoCode
