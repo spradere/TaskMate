@@ -48,6 +48,7 @@ typedef struct
 	uint8_t next;
 } rl_data_base_t;
 
+
 // clang-format on
 // [/tag]
 

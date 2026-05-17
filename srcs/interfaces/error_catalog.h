@@ -42,6 +42,7 @@ typedef enum
 	ERROR_COUNT
 } err_codes_t;
 
+
 // clang-format on
 // [/tag]
 

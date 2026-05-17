@@ -45,6 +45,7 @@ const err_item_t error_catalog[] =
 	{&err7, 1},
 	{&err8, 1},
 };
+
 // clang-format on
 // [/tag]
 

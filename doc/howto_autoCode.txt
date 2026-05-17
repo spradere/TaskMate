@@ -6,3 +6,4 @@
 4. Add an entry in autoCode/options.h.
 5. Add an entry in autoCode/options.c.
 6. if needed Add file to parse in mk/path_files.mk:FILES_PARSE_TAG =
+7. add tag handling in autoCode/parseTag.c

@@ -13,6 +13,7 @@
 ################################################################################
 
 FNR == 1  {
+	file = FILENAME
     tmp = FILENAME ".tmp"
    	printf("") > tmp
    	flag_modified = 0
@@ -41,7 +42,7 @@ $1 == "build_cnt" {
 END {
 	if (flag_modified == 1)
 	{
-		cmd = sprintf("mv %s %s\n", tmp, FILENAME)
+		cmd = sprintf("mv %s %s\n", tmp, file)
 		system(cmd)
  	} else {
 	cmd = sprintf("rm %s\n", tmp)

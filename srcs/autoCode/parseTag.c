@@ -36,6 +36,7 @@ static void writeErrorEnum(const parseTag_t *parse);
 static void writeModulesList(const parseTag_t *parse);
 static void writeHalDefine(const parseTag_t *parse);
 static void writeHalInit(const parseTag_t *parse);
+static void writeGpioSignals(const parseTag_t *parse);
 
 #define HAVE_TAG(X)                                                  \
 	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc)        \
@@ -48,7 +49,8 @@ static void writeHalInit(const parseTag_t *parse);
 	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)                 \
 	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                       \
 	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)            \
-	X(HAVE_MOD_LIST, "modules_list", writeModulesList)
+	X(HAVE_MOD_LIST, "modules_list", writeModulesList)				 \
+	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)
 
 static const struct
 {
@@ -178,7 +180,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
 		{
-			fprintf(file_tmp.stream, "// clang-format on\n");
+			fprintf(file_tmp.stream, "\n// clang-format on\n");
 			msgInfo("end tag");
 			tag_section = 0;
 		}
@@ -215,6 +217,39 @@ void parseTagHave(void)
 			exit(1);
 		}
 	}
+}
+
+static void writeGpioSignals(const parseTag_t *parse)
+{
+	file_t file_signals;
+	fileInit(&file_signals);
+	file_signals.name = (char *)parse->auto_options->file_gpio_signals;
+	fileOpen(&file_signals, "r", FILE_READONLY, __FILE__, __LINE__);
+
+	fprintf(parse->file, "typedef enum\n");
+	fprintf(parse->file, "{\n");
+	
+	tokenizer_t tok;
+	int line = 0;
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_signals.stream) )
+	{
+		tokenizer(&tok);
+		line++;
+		if( (tok.count !=0) && (tok.tokens[0][0] != '#') )
+		{
+			if(tok.count > 1) 
+			{
+				msgError("in file %s wrong token count line %i\n", file_signals.name, line); 
+				exit(1);
+			}	
+			fprintf(parse->file, "\t%s,\n", tok.tokens[0]);
+		}
+	}
+	fprintf(parse->file, "\tGPIO_SIGNAL_COUNT\n");
+	fprintf(parse->file, "} gpio_signal_t;\n");
+
+	fileClose(&file_signals, __FILE__, __LINE__);
+	have_tag_count[HAVE_GPIO_SIGNALS]++;
 }
 
 static void writeHalInit(const parseTag_t *parse)

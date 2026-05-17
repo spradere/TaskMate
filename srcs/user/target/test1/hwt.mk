@@ -19,6 +19,11 @@ PATHS_SOURCES = ${PATH_TEST1}
 FILES_HALINIT = ${PATH_TEST1}/targetInit.h
 FILES_HALDEFINE = ${PATH_TEST1}/target_define.h
 
+FILE_GPIO_SIGNALS = ${PATH_TEST1}/signals.gpio
+.if !exists(${FILE_GPIO_SIGNALS})
+.error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
+.endif
+
 CFLAGS += -DHWT_test1
 
 .include "${PATH_SRCS}/hal//board/arduinoMega/board_make.mk"

@@ -28,6 +28,8 @@ typedef struct
 	char file_parsetag_list[BYTE_INDEX];
 	char file_halinit_list[BYTE_INDEX];
 	char file_haldefine_list[BYTE_INDEX];
+	char file_gpio_signals[BYTE_INDEX];
+	
 } options_list_t;
 
 void options(const char *file_name, options_list_t *opt);

@@ -34,8 +34,6 @@ FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
 # Source directories
 PATHS_SOURCES += ${PATH_SRCS}/system
-#PATHS_SOURCES += ${PATH_SRCS}/system/sysCall
-#PATHS_SOURCES += ${PATH_SRCS}/system/services
 PATHS_SOURCES += ${PATH_SRCS}/tm_libc
 PATHS_SOURCES += ${PATH_SRCS}/interfaces
 PATHS_SOURCES += ${PATH_SRCS}/hal/public
@@ -63,8 +61,9 @@ FILES_PARSE_TAG = ${PATH_SRCS}/system/sysCore/runLevel.h \
 	${PATH_SRCS}/system/sysCore/modules_list.h \
 	${PATH_SRCS}/system/sysCore/hal_init.h \
 	${PATH_SRCS}/hal/public/define.h \
-	${PATH_SRCS}/hal/public/sysInfo.c 	
-	
+	${PATH_SRCS}/hal/public/sysInfo.c \
+	${PATH_SRCS}/interfaces/gpio_signals.h 	
+		
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
 FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
@@ -75,7 +74,7 @@ FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
 PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
-VAL_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk
+VAL_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio
 VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 VAL_GIT_ALLOWED = .clang-format .clang-tidy \
 	audit_todo CHANGELOG LICENSE Makefile README.md
