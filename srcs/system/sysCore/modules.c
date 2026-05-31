@@ -69,7 +69,7 @@ void mod_threadsAlloc(void)
 
 	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{
-		mod_thread_item_t thread = mod_threadGetPointer(i);
+		mod_thread_item_t *thread = mod_threadGetPointer(i);
 		thread->canary_low = TM_MOD_CANARY;
 		thread->canary_high = TM_MOD_CANARY;
 	}
