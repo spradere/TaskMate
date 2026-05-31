@@ -12,7 +12,7 @@
  *
  */
 
-#include "tm_libc/tm_snprintf.h"
+#include "tm_snprintf.h"
 
 #include "hal/public/tmlibc.h"
 #include "interfaces/define.h"

@@ -10,6 +10,6 @@
  * @brief arch init implementation.
  */
 
-#include "hal/arch/avr8/archInit.h"
+#include "archInit.h"
 
 void hal_archInit(void) {}

@@ -12,6 +12,6 @@
  *
  */
 
-#include "hal/board/arduinoMega/boardInit.h"
+#include "boardInit.h"
 
 void hal_boardInit(void) {}

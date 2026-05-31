@@ -12,9 +12,9 @@
  *
  */
 
-#include "hal/public/sysInfo.h"
+#include "sysInfo.h"
 
-#include "hal/public/tmlibc.h"
+#include "tmlibc.h"
 
 // [autoCode_tag] system_info
 // clang-format off

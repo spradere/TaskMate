@@ -12,7 +12,7 @@
  *
  */
 
-#include "user/target/test1/targetInit.h"
+#include "targetInit.h"
 
 #include <avr/io.h>
 #include <stdbool.h>

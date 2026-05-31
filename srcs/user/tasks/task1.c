@@ -12,7 +12,7 @@
  *
  */
 
-#include "user/tasks/task1.h"
+#include "task1.h"
 
 #include "system/services/msg.h"
 #include "system/sysCall/sc_gpio.h"
