@@ -18,7 +18,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "tm_libc/tm_string.h"
+#include "tm_string.h"
 
 int tm_printf(tm_string_t format, ...);
 int tm_vprintf(tm_string_t format, va_list args);

@@ -12,11 +12,11 @@
  *
  */
 
-#include "hal/mcu/atmega2560/usart.h"
+#include "usart.h"
 
 #include <avr/interrupt.h>
 
-#include "hal/mcu/atmega2560/mcu_define.h" // get usart baud rate
+#include "mcu_define.h" // get usart baud rate
 
 // Circular buffers
 // always use a power of two for buffer size to avoid use of modulo

@@ -12,7 +12,7 @@
  *
  */
 
-#include "hal/arch/avr8/context.h"
+#include "context.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

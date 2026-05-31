@@ -12,9 +12,9 @@
  *
  */
 
-#include "tm_libc/tm_syslog.h"
+#include "tm_syslog.h"
 
-#include "tm_libc/tm_stdio.h"
+#include "tm_stdio.h"
 
 void tm_syslog(const tm_string_t format, ...)
 {

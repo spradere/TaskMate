@@ -15,8 +15,8 @@
 #ifndef HAL_PUBLIC_PANIC_H
 #define HAL_PUBLIC_PANIC_H
 
-#include "hal/public/int.h"
-#include "hal/public/usart.h"
+#include "int.h"
+#include "usart.h"
 
 #define panic(msg)                                 \
 	do {                                           \

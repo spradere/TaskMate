@@ -12,12 +12,12 @@
  *
  */
 
-#include "hal/mcu/atmega2560/i2c.h"
+#include "i2c.h"
 
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "hal/mcu/atmega2560/mcu_define.h" // get i2c frequency
+#include "mcu_define.h" // get i2c frequency
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)

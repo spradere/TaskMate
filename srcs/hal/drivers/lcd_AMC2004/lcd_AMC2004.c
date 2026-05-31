@@ -12,7 +12,7 @@
  *
  */
 
-#include "hal/drivers/lcd_AMC2004/lcd_AMC2004.h"
+#include "lcd_AMC2004.h"
 
 #include <util/delay.h>
 

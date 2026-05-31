@@ -12,7 +12,7 @@
  *
  */
 
-#include "hal/mcu/atmega2560/timerSched.h"
+#include "timerSched.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

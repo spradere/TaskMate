@@ -12,7 +12,7 @@
  *
  */
 
-#include "tm_libc/tm_string.h"
+#include "tm_string.h"
 
 #include "interfaces/tm_string_storage.h"
 

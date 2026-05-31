@@ -12,7 +12,7 @@
  *
  */
 
-#include "hal/mcu/atmega2560/timerSTC.h"
+#include "timerSTC.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

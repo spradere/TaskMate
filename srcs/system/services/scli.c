@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/services/scli.h"
+#include "scli.h"
 
 #include <stdint.h>
 
