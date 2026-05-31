@@ -11,7 +11,7 @@
  * @brief msg implementation.
  */
 
-#include "system/services/msg.h"
+#include "msg.h"
 
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_stdio.h"

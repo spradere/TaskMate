@@ -12,7 +12,7 @@
  *
  */
 
-#include "hal/mcu/atmega2560/gpio.h"
+#include "gpio.h"
 
 #include <avr/io.h>
 #include <stdbool.h>

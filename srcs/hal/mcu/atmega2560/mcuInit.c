@@ -10,6 +10,6 @@
  * @brief mcu init implementation.
  */
 
-#include "hal/mcu/atmega2560/mcuInit.h"
+#include "mcuInit.h"
 
 void hal_mcuInit(void) {}

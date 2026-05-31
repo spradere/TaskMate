@@ -12,9 +12,9 @@
  *
  */
 
-#include "hal/mcu/atmega2560/tmlibc.h"
+#include "tmlibc.h"
 
-#include "hal/mcu/atmega2560/usart.h"
+#include "usart.h"
 
 void hal_stdio_putChar(char ch)
 {
