@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/sysCore/tm_scheduler.h"
+#include "tm_scheduler.h"
 
 #include <stdint.h>
 

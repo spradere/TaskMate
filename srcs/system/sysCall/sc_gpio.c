@@ -11,7 +11,7 @@
  * @brief sc gpio implementation.
  */
 
-#include "system/sysCall/sc_gpio.h"
+#include "sc_gpio.h"
 
 #include "system/sysCore/gpio.h"
 

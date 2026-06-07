@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/sysCall/error.h"
+#include "error.h"
 
 #include "tm_libc/tm_string.h"
 

@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/sysCore/tm_softwareTimeCounter.h"
+#include "tm_softwareTimeCounter.h"
 
 #include "hal/public/timerSTC.h"
 #include "system/sysCore/modules.h"
