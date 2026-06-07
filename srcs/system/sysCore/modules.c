@@ -11,7 +11,7 @@
  * @brief modules implementation.
  */
 
-#include "system/sysCore/modules.h"
+#include "modules.h"
 
 #include <stddef.h>
 

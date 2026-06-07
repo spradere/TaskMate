@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/sysCall/sysCall.h"
+#include "sysCall.h"
 
 #include "hal/public/atomic.h"
 #include "system/sysCore/modules.h"

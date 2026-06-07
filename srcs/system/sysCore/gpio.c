@@ -11,7 +11,7 @@
  * @brief gpio implementation.
  */
 
-#include "system/sysCore/gpio.h"
+#include "gpio.h"
 
 #include "hal/public/gpio.h"
 #include "system/sysCore/hal_init.h"

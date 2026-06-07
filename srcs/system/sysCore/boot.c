@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/sysCore/boot.h"
+#include "boot.h"
 
 #include "hal/public/i2c.h"
 #include "hal/public/usart.h"

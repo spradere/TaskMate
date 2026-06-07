@@ -12,7 +12,7 @@
  *
  */
 
-#include "system/sysCore/runLevel.h"
+#include "runLevel.h"
 
 static rl_data_base_t to_run;
 
