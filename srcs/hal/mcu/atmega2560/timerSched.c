@@ -44,36 +44,57 @@ void hal_timerSchedInit(void)
 	TIMSK1 |= (uint8_t)(1u << OCIE1A);
 }
 
+#define ATMEGA2560_TIMERSCHED_START TCCR1B = (uint8_t)(1u << CS11)
 void hal_timerSchedStart(void)
 {
-	TCNT1 = 0;
-	TCCR1B = (uint8_t)(1u << CS11); // pre scaler = 8
+	ATMEGA2560_TIMERSCHED_START; 
 	// TCCR1B = (uint8_t)((1u << CS12) | (1u << CS10)); // pre scaler = 1024
 }
 
+#define ATMEGA2560_TIMERSCHED_STOP TCCR1B &= (uint8_t)~(1u << CS11); TCNT1 = 0
 void hal_timerSchedStop(void)
 {
-	TCCR1B &= (uint8_t)~(1u << CS11); // pre scaler = no source
+	ATMEGA2560_TIMERSCHED_STOP; 
+	/*asm volatile( 
+		"lds r24, %0\n\t"
+		"andi r24, %1\n\t"
+		"sts  %0, r24\n\t"
+		"sts %2,r1 \n\t"
+		"sts %3,r1 \n\t"
+		:
+		: "M" (_SFR_MEM_ADDR(TCCR1B)), "n" ((uint8_t)~(1u << CS11)),
+		"M" (_SFR_MEM_ADDR(TCNT1L)), "M" (_SFR_MEM_ADDR(TCNT1H))
+		: "r24"
+	);*/
 }
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	hal_contextSave();
-	hal_timerSchedStop();
+	asm volatile(AVR8_CONTEXT_SAVE);
+	//hal_contextSave();
+	
+	//hal_timerSchedStop();
+	ATMEGA2560_TIMERSCHED_STOP;
 
-	hal_stack_word_t *sp_current;
-	hal_stack_word_t *sp_next;
+	hal_stack_word_t *sp_current = (hal_stack_word_t*)SP;
+	hal_stack_word_t *sp_next = (hal_stack_word_t*)SP;
 
-	sp_current = hal_getStackPointer();
-
-	sp_next = sp_current;
+	//sp_current = hal_getStackPointer();
+	//sp_next = sp_current;
 
 	// scheduler callback
 	if( sched_callback != NULL ) { sp_next = sched_callback(sp_current); }
 
-	hal_timerSchedStart();
-	hal_setStackPointer(sp_next);
-	hal_contextRestore();
-	hal_setGlobalInterupt();
-	hal_returnFromInterupt();
+	//hal_timerSchedStart();
+	ATMEGA2560_TIMERSCHED_START;
+	
+	//hal_setStackPointer(sp_next);
+	SP = (uintptr_t)sp_next;
+	
+	asm volatile(AVR8_CONTEXT_RESTORE);
+	//hal_contextRestore();
+	
+	//hal_setGlobalInterupt();
+	asm volatile("reti \n\t");
+	//hal_returnFromInterupt();
 }

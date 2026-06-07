@@ -19,11 +19,12 @@
 
 #include "hal/arch/avr8/arch_define.h" // get stack_word_t
 
-#define AVR8_PUSH_ALL_REGS \
+#define AVR8_CONTEXT_SAVE  \
 	"push r0 \n\t"         \
 	"in r0, __SREG__ \n\t" \
 	"push r0 \n\t"         \
 	"push r1 \n\t"         \
+	"clr r1 \n\t"		   \
 	"push r2 \n\t"         \
 	"push r3 \n\t"         \
 	"push r4 \n\t"         \
@@ -55,7 +56,7 @@
 	"push r30 \n\t"        \
 	"push r31 \n\t"
 
-#define AVR8_POP_ALL_REGS   \
+#define AVR8_CONTEXT_RESTORE \
 	"pop r31 \n\t"          \
 	"pop r30 \n\t"          \
 	"pop r29 \n\t"          \
@@ -91,14 +92,14 @@
 	"out __SREG__, r0 \n\t" \
 	"pop r0	\n\t"
 
-static inline __attribute__((always_inline)) void hal_contextSave(void)
+/*static inline __attribute__((always_inline)) void hal_contextSave(void)
 {
 	asm volatile(AVR8_PUSH_ALL_REGS);
-}
+}*/
 
 static inline __attribute__((always_inline)) void hal_contextRestore(void)
 {
-	asm volatile(AVR8_POP_ALL_REGS);
+	asm volatile(AVR8_CONTEXT_RESTORE);
 }
 
 void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
