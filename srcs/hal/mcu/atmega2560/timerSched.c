@@ -45,28 +45,58 @@ void hal_timerSchedInit(void)
 }
 
 #define ATMEGA2560_TIMERSCHED_START TCCR1B = (uint8_t)(1u << CS11)
+#define TIMER_SCHED_START \
+	"lds r24, %0\n\t" \
+	"ori r24, %1\n\t" \
+	"sts  %0, r24\n\t" \
+	: \
+	: "M" (_SFR_MEM_ADDR(TCCR1B)), "n" ((uint8_t)(1u << CS11)) \
+	: "r24"
+
 void hal_timerSchedStart(void)
 {
 	ATMEGA2560_TIMERSCHED_START; 
+	asm volatile(TIMER_SCHED_START);
+		
 	// TCCR1B = (uint8_t)((1u << CS12) | (1u << CS10)); // pre scaler = 1024
 }
 
-#define ATMEGA2560_TIMERSCHED_STOP TCCR1B &= (uint8_t)~(1u << CS11); TCNT1 = 0
+#define ATMEGA2560_TIMERSCHED_STOP ;
+#define TIMER_SCHED_STOP \
+	"lds r24, %0\n\t" \
+	"andi r24, %1\n\t" \
+	"sts  %0, r24\n\t" \
+	"sts %2,r1 \n\t" \
+	"sts %3,r1 \n\t" \
+	: \
+	: "M" (_SFR_MEM_ADDR(TCCR1B)), "n" ((uint8_t)~(1u << CS11)), \
+	"M" (_SFR_MEM_ADDR(TCNT1H)), "M" (_SFR_MEM_ADDR(TCNT1L)) \
+	: "r24"
+	
 void hal_timerSchedStop(void)
 {
 	ATMEGA2560_TIMERSCHED_STOP; 
-	/*asm volatile( 
-		"lds r24, %0\n\t"
-		"andi r24, %1\n\t"
-		"sts  %0, r24\n\t"
-		"sts %2,r1 \n\t"
-		"sts %3,r1 \n\t"
-		:
-		: "M" (_SFR_MEM_ADDR(TCCR1B)), "n" ((uint8_t)~(1u << CS11)),
-		"M" (_SFR_MEM_ADDR(TCNT1L)), "M" (_SFR_MEM_ADDR(TCNT1H))
-		: "r24"
-	);*/
+	asm volatile(TIMER_SCHED_STOP);
 }
+
+#define CALL_BACK \
+	"in r24, 0x3d \n\t" \
+	"in r25, 0x3e \n\t" \
+	"in r18, 0x3d \n\t" \
+	"in r19, 0x3e \n\t" \
+	"lds r30, %0 \n\t" \
+	"lds r31, %1 \n\t" \
+	"movw r28,r18 \n\t" \
+	"sbiw r30,0x00 \n\t" \
+	"breq .+4 \n\t" \
+	"eicall \n\t" \
+	"movw r18,r24 \n\t" \
+	"out 0x3e, r29 \n\t" \
+	"out 0x3d, r28 \n\t" \
+	: \
+	: "M" (sched_callback), "M" (sched_callback)+1 \
+	: "r24", "r25", "r18", "r19", "r30", "r31", "r28", "r29"
+	
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
@@ -74,7 +104,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	//hal_contextSave();
 	
 	//hal_timerSchedStop();
-	ATMEGA2560_TIMERSCHED_STOP;
+	// ATMEGA2560_TIMERSCHED_STOP;
+	asm volatile(TIMER_SHED_STOP);
 
 	hal_stack_word_t *sp_current = (hal_stack_word_t*)SP;
 	hal_stack_word_t *sp_next = (hal_stack_word_t*)SP;
@@ -86,7 +117,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	if( sched_callback != NULL ) { sp_next = sched_callback(sp_current); }
 
 	//hal_timerSchedStart();
-	ATMEGA2560_TIMERSCHED_START;
+	//ATMEGA2560_TIMERSCHED_START;
+	asm volatile(TIMER_SHED_START);
 	
 	//hal_setStackPointer(sp_next);
 	SP = (uintptr_t)sp_next;
