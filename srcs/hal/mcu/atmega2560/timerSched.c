@@ -55,7 +55,7 @@ void hal_timerSchedInit(void)
 
 void hal_timerSchedStart(void)
 {
-	ATMEGA2560_TIMERSCHED_START; 
+	//ATMEGA2560_TIMERSCHED_START; 
 	asm volatile(TIMER_SCHED_START);
 		
 	// TCCR1B = (uint8_t)((1u << CS12) | (1u << CS10)); // pre scaler = 1024
@@ -75,7 +75,7 @@ void hal_timerSchedStart(void)
 	
 void hal_timerSchedStop(void)
 {
-	ATMEGA2560_TIMERSCHED_STOP; 
+	//ATMEGA2560_TIMERSCHED_STOP; 
 	asm volatile(TIMER_SCHED_STOP);
 }
 
@@ -85,16 +85,16 @@ void hal_timerSchedStop(void)
 	"in r18, 0x3d \n\t" \
 	"in r19, 0x3e \n\t" \
 	"lds r30, %0 \n\t" \
-	"lds r31, %1 \n\t" \
+	"lds r31, %1+1 \n\t" \
 	"movw r28,r18 \n\t" \
 	"sbiw r30,0x00 \n\t" \
 	"breq .+4 \n\t" \
 	"eicall \n\t" \
-	"movw r18,r24 \n\t" \
+	"movw r28,r24 \n\t" \
 	"out 0x3e, r29 \n\t" \
 	"out 0x3d, r28 \n\t" \
 	: \
-	: "M" (sched_callback), "M" (sched_callback)+1 \
+	: "m" (sched_callback), "m" ((sched_callback)) \
 	: "r24", "r25", "r18", "r19", "r30", "r31", "r28", "r29"
 	
 
@@ -104,24 +104,25 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	//hal_contextSave();
 	
 	//hal_timerSchedStop();
-	// ATMEGA2560_TIMERSCHED_STOP;
-	asm volatile(TIMER_SHED_STOP);
+	//ATMEGA2560_TIMERSCHED_STOP;
+	asm volatile(TIMER_SCHED_STOP);
 
-	hal_stack_word_t *sp_current = (hal_stack_word_t*)SP;
+	/*hal_stack_word_t *sp_current = (hal_stack_word_t*)SP;
 	hal_stack_word_t *sp_next = (hal_stack_word_t*)SP;
 
 	//sp_current = hal_getStackPointer();
 	//sp_next = sp_current;
 
 	// scheduler callback
-	if( sched_callback != NULL ) { sp_next = sched_callback(sp_current); }
+	if( sched_callback != NULL ) { sp_next = sched_callback(sp_current); }*/
+	asm volatile(CALL_BACK);
 
 	//hal_timerSchedStart();
 	//ATMEGA2560_TIMERSCHED_START;
-	asm volatile(TIMER_SHED_START);
+	asm volatile(TIMER_SCHED_START);
 	
 	//hal_setStackPointer(sp_next);
-	SP = (uintptr_t)sp_next;
+	//SP = (uintptr_t)sp_next;
 	
 	asm volatile(AVR8_CONTEXT_RESTORE);
 	//hal_contextRestore();
@@ -129,4 +130,5 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	//hal_setGlobalInterupt();
 	asm volatile("reti \n\t");
 	//hal_returnFromInterupt();
+	//asm volatile(CALL_BACK);
 }
