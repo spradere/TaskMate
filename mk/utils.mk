@@ -60,7 +60,7 @@ note:
 
 cppcheck:
 #help [global] cppcheck static code analysis for autoCode and TaskMate.
-	@printf "\n%sCount lines of codes%s\n\n" \
+	@printf "\n%scppcheck static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cppcheck -I/root/code/TaskMate/TaskMate_current/ \
 		--enable=all --inconclusive --force \
