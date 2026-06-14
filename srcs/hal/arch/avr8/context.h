@@ -23,8 +23,8 @@
 	"push r0 \n\t"         \
 	"in r0, __SREG__ \n\t" \
 	"push r0 \n\t"         \
-	"push r1 \n\t"         \
 	"clr r1 \n\t"          \
+	"push r1 \n\t"         \
 	"push r2 \n\t"         \
 	"push r3 \n\t"         \
 	"push r4 \n\t"         \
