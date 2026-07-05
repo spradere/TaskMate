@@ -19,14 +19,25 @@ ${FILE_TARGET}: ${FILES_OBJ}
 	@${CC} ${CFLAGS} ${LFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
 
+# compiler wrapper
+COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 # compile
-${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
+${FILES_OBJ}: ${COMPILE_SRC}
 	@printf "\n%sCompilation ...%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} ${.TARGET}
-	@mkdir -p ${.TARGET:H}
-	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}} \
-		-c ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} -o ${.TARGET}
+	    "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "source : <%s> -> <%s>\n" \
+	    "${COMPILE_SRC}" "${.TARGET}"
+	@mkdir -p "${.TARGET:H}"
+	@${CC} ${CFLAGS} ${CFLAGS_${COMPILE_SRC}} \
+	    -c "${COMPILE_SRC}" -o "${.TARGET}"
+
+#${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
+#	@printf "\n%sCompilation ...%s\n\n" \
+#		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+#	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} ${.TARGET}
+#	@mkdir -p ${.TARGET:H}
+#	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}} \
+#		-c ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} -o ${.TARGET}
 
 upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.
