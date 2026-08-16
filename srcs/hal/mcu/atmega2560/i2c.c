@@ -33,7 +33,7 @@ void hal_i2cInit(void)
 
 void hal_i2cStart(void)
 {
-	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
+	reg8_setBit(TWCR, TWEN); // Enable TWI
 
 	// address test
 	// tm_syslog(TM_STR("[i2c] scan ...\n"));

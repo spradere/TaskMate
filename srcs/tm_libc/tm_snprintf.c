@@ -22,6 +22,8 @@ static void tm_putChar(char ch);
 
 #define SNPRINTF_BUFF_TEMP_SIZE 32
 
+static uint8_t lock = 0;
+
 // structure for buffer data
 struct buff_t
 {
@@ -94,6 +96,9 @@ static void tm_putChar(char ch)
 
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
+	while( lock == 1 );
+	lock = 1;
+
 	// store variables
 	buff.ptr = ptr;
 	buff.size = size;
@@ -180,5 +185,6 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	}
 
 	tm_putChar(0); // close string
+	lock = 0;
 	return buff.index;
 }
