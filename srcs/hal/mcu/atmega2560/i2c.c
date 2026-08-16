@@ -40,8 +40,10 @@ void hal_i2cStart(void)
 	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
 	{
 		// start comm
-		TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
-		while( !(TWCR & (1 << TWINT)) );
+		reg8_setBit(TWCR, TWSTA);
+		reg8_setBit(TWCR, TWEN);
+		reg8_setBit(TWCR, TWINT);
+		while( !reg8_getBit(TWCR, TWINT) );
 
 		if( (hal_i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
 		{
@@ -59,8 +61,10 @@ void hal_i2cStop(void)
 
 uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 {
-	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
-	while( !(TWCR & (1 << TWINT)) );
+	reg8_setBit(TWCR, TWSTA);
+	reg8_setBit(TWCR, TWEN);
+	reg8_setBit(TWCR, TWINT);
+	while( !reg8_getBit(TWCR, TWINT) );
 
 	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 	{
@@ -71,13 +75,19 @@ uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 	return hal_i2cWrite((address << 1) | rw);
 }
 
-void hal_i2cCommStop(void) { TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); }
+void hal_i2cCommStop(void)
+{
+	reg8_setBit(TWCR, TWSTO);
+	reg8_setBit(TWCR, TWEN);
+	reg8_setBit(TWCR, TWINT);
+}
 
 uint8_t hal_i2cWrite(uint8_t data)
 {
 	TWDR = data;
-	TWCR = (1 << TWEN) | (1 << TWINT);
-	while( !(TWCR & (1 << TWINT)) );
+	reg8_setBit(TWCR, TWEN);
+	reg8_setBit(TWCR, TWINT);
+	while( !reg8_getBit(TWCR, TWINT) );
 
 	return TW_STATUS;
 }
@@ -85,11 +95,18 @@ uint8_t hal_i2cWrite(uint8_t data)
 uint8_t hal_i2cRead(uint8_t *data, bool ack)
 {
 	if( ack )
-		TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
+	{
+		reg8_setBit(TWCR, TWEN);
+		reg8_setBit(TWCR, TWINT);
+		reg8_setBit(TWCR, TWEA);
+	}
 	else
-		TWCR = (1 << TWEN) | (1 << TWINT);
+	{
+		reg8_setBit(TWCR, TWEN);
+		reg8_setBit(TWCR, TWINT);
+	}
 
-	while( !(TWCR & (1 << TWINT)) );
+	while( !reg8_getBit(TWCR, TWINT) );
 
 	*data = TWDR;
 	return TW_STATUS;
