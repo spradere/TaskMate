@@ -64,7 +64,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3naked C->asm 01", MSG_TO_LCD);
+		msgWriteText(chan, "\3naked C->asm 10", MSG_TO_LCD);
 	}
 
 	msgProcess();

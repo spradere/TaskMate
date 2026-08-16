@@ -15,20 +15,13 @@
 #ifndef HAL_PUBLIC_PANIC_H
 #define HAL_PUBLIC_PANIC_H
 
-#include "int.h"
-#include "usart.h"
+#if defined(ARCH_avr8)
+	#include "hal/arch/avr8/panic.h"
+	#define HAL_PANIC
+#endif
 
-#define panic(msg)                                 \
-	do {                                           \
-		hal_clearGlobalInterupt();                 \
-		hal_usartSendTXBuffer();                   \
-		hal_usartWriteString("\nSYSTEM PANIC : "); \
-		hal_usartSendTXBuffer();                   \
-		hal_usartWriteString(msg);                 \
-		hal_usartSendTXBuffer();                   \
-		hal_usartWriteString(", halt.");           \
-		hal_usartSendTXBuffer();                   \
-		while( 1 );                                \
-	} while( 0 )
+#if !defined(HAL_PANIC)
+	#error "No hal implementation for panic on selected hardware target."
+#endif
 
 #endif // HAL_PUBLIC_PANIC_H

@@ -53,9 +53,6 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	if( thread->canary_low != TM_MOD_CANARY ) { panic("canary low 1"); }
 	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 1"); }
 
-	// enable global INT to let run hal_timerRTC and hal_usart sCLI
-	// hal_setGlobalInterupt();
-
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
 
@@ -66,6 +63,6 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	if( thread->canary_low != TM_MOD_CANARY ) { panic("canary low 2"); }
 	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 2"); }
 
-	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	thread = mod_threadGetPointer(current);
 	return thread->stack_pointer;
 }

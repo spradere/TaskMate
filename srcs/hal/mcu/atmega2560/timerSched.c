@@ -71,17 +71,15 @@ void hal_timerSchedStop(void)
 #define TM_SCHED_CALL_BACK                         \
 	"in r24, 0x3d \n\t"                            \
 	"in r25, 0x3e \n\t"                            \
-	"in r18, 0x3d \n\t"                            \
-	"in r19, 0x3e \n\t"                            \
 	"lds r30, %0 \n\t"                             \
 	"lds r31, %0+1 \n\t"                           \
-	"movw r28,r18 \n\t"                            \
+	"movw r28,r24 \n\t"                            \
 	"sbiw r30,0x00 \n\t"                           \
 	"breq .+4 \n\t"                                \
 	"eicall \n\t"                                  \
 	"out 0x3e, r25 \n\t"                           \
 	"out 0x3d, r24 \n\t" : : "m"(sched_callback)   \
-	: "r24", "r25", "r18", "r19", "r30", "r31", "r28", "r29"
+	: "r24", "r25", "r30", "r31", "r28", "r29"
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
