@@ -13,6 +13,7 @@
 
 #include "msg.h"
 
+#include "interfaces/macros.h"
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_stdio.h"
 #include "tm_libc/tm_string.h"
@@ -85,7 +86,7 @@ err_codes_t msgRequestChannel(uint8_t *channel)
 	{
 		if( (channels[i].status & (uint8_t)(1u << MSG_FLAG_IN_USE)) == 0 )
 		{
-			channels[i].status |= (uint8_t)(1u << MSG_FLAG_IN_USE);
+			reg8_setBit(channels[i].status, MSG_FLAG_IN_USE);
 			*channel = i;
 			return ERR_NO_ERROR;
 		}
@@ -93,10 +94,7 @@ err_codes_t msgRequestChannel(uint8_t *channel)
 	return ERR_MSG_OUT_OF_FREE_CHANNEL;
 }
 
-void msgFreeChannel(uint8_t channel)
-{
-	channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_IN_USE);
-}
+void msgFreeChannel(uint8_t channel) { reg8_clearBit(channels[channel].status, MSG_FLAG_IN_USE); }
 
 void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
 {
@@ -104,7 +102,7 @@ void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
 
 	channels[channel].status &= (uint8_t)~MSG_TO_MASK;
 	channels[channel].status |= dest;
-	channels[channel].status |= (uint8_t)(1u << MSG_FLAG_SEND);
+	reg8_setBit(channels[channel].status, MSG_FLAG_SEND);
 }
 
 static void msgProcess(void)
@@ -134,7 +132,7 @@ static void msgProcess(void)
 
 					hal_usartWriteString(channels[channel].text);
 					hal_usartSendTXBuffer();
-					channels[channel].status &= (uint8_t)~(1u << MSG_FLAG_SEND);
+					reg8_clearBit(channels[channel].status, MSG_FLAG_SEND);
 					break;
 
 				case MSG_TO_NULL:
