@@ -23,6 +23,7 @@
 
 #define reg8_setBit(reg, bit) ((reg) |= (uint8_t)(1u << (bit)))
 #define reg8_clearBit(reg, bit) ((reg) &= (uint8_t)~(1u << (bit)))
+#define reg8_getBit(reg, bit) ((reg) & (uint8_t)(1u << (bit)))
 
 // string macros
 #define CONCAT2(a, b) a##b
