@@ -15,9 +15,14 @@
 #ifndef INTERFACES_MACROS_H
 #define INTERFACES_MACROS_H
 
+#include <stdint.h>
+
 // general system macros
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
+#define reg8_setBit(reg, bit) ((reg) |= (uint8_t)(1u << (bit)))
+#define reg8_clearBit(reg, bit) ((reg) &= (uint8_t)~(1u << (bit)))
 
 // string macros
 #define CONCAT2(a, b) a##b

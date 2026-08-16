@@ -17,6 +17,7 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
+#include "interfaces/macros.h"
 #include "mcu_define.h" // get i2c frequency
 
 // NOLINTBEGIN
@@ -53,7 +54,7 @@ void hal_i2cStart(void)
 
 void hal_i2cStop(void)
 {
-	TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
+	reg8_clearBit(TWCR, TWEN); // Stop TWI
 }
 
 uint8_t hal_i2cCommStart(uint8_t address, bool rw)

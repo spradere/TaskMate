@@ -19,6 +19,7 @@
 #include <util/atomic.h>
 
 #include "interfaces/define.h"
+#include "interfaces/macros.h"
 // #include "tm_libc/tm_syslog.h"
 
 const int hal_timerSTC_OVERFLOW_COUNT = 625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
@@ -37,13 +38,13 @@ void hal_timerSTCInit(void)
 void hal_timerSTCStart(void)
 {
 	// start by enabling interrupt
-	TIMSK3 |= (uint8_t)(1u << OCIE3A);
+	reg8_setBit(TIMSK3, OCIE3A);
 }
 
 void hal_timerSTCStop(void)
 {
 	// stop by disabling interrupt
-	TIMSK3 &= (uint8_t)~(1u << OCIE3A);
+	reg8_clearBit(TIMSK3, OCIE3A);
 }
 
 ISR(TIMER3_COMPA_vect)

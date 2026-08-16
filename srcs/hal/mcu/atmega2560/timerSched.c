@@ -22,6 +22,7 @@
 #include "hal/arch/avr8/interrupt.h"
 #include "hal/arch/avr8/stack.h"
 #include "interfaces/define.h"
+#include "interfaces/macros.h"
 
 const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
@@ -32,9 +33,9 @@ void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_ca
 void hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler
-	TCCR1B |= (uint8_t)(1u << WGM12); // CTC mode
+	reg8_setBit(TCCR1B, WGM12); // CTC mode
 	OCR1A = TIMER1_OVERFLOW_COUNT;
-	TIMSK1 |= (uint8_t)(1u << OCIE1A);
+	reg8_setBit(TIMSK1, OCIE1A);
 }
 
 #define TIMER_SCHED_START                              \

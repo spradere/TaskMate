@@ -18,6 +18,7 @@
 #include <stdbool.h>
 
 #include "hal/arch/avr8/arch_define.h"
+#include "interfaces/macros.h"
 
 static const hal_port_t mcu_ports[PORT_COUNT] = {
 	[PORT_A] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
@@ -43,23 +44,20 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 {
 	if( pin->mode == GPIO_PIN_MODE_INPUT )
 	{
-		*(mcu_ports[pin->port].ddr) &= (uint8_t)~(1u << pin->number);
+		reg8_clearBit(*(mcu_ports[pin->port].ddr), pin->number);
 	}
 	if( pin->mode == GPIO_PIN_MODE_OUTPUT_PP )
 	{
-		*(mcu_ports[pin->port].ddr) |= (uint8_t)(1u << pin->number);
+		reg8_setBit(*(mcu_ports[pin->port].ddr), pin->number);
 	}
 
-	if( pin->pull == GPIO_PIN_PULL_UP )
-	{
-		*(mcu_ports[pin->port].port) |= (uint8_t)(1u << pin->number);
-	}
+	if( pin->pull == GPIO_PIN_PULL_UP ) { reg8_setBit(*(mcu_ports[pin->port].port), pin->number); }
 }
 
 void hal_gpioPinWrite(const hal_pin_t pin, bool value)
 {
-	if( value ) { *(mcu_ports[pin.port].port) |= (uint8_t)(1u << pin.number); }
-	else { *(mcu_ports[pin.port].port) &= (uint8_t)~(1u << pin.number); }
+	if( value ) { reg8_setBit(*(mcu_ports[pin.port].port), pin.number); }
+	else { reg8_clearBit(*(mcu_ports[pin.port].port), pin.number); }
 }
 
 bool hal_gpioPinRead(const hal_pin_t pin)

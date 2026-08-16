@@ -16,6 +16,7 @@
 
 #include <avr/interrupt.h>
 
+#include "interfaces/macros.h"
 #include "mcu_define.h" // get usart baud rate
 
 // Circular buffers
@@ -50,7 +51,7 @@ void hal_usartInit(void)
 
 void hal_usartStart(void)
 {
-	UCSR1B |= (uint8_t)(1u << RXCIE1); // enable Rx interrupt
+	reg8_setBit(UCSR1B, RXCIE1); // enable Rx interrupt
 }
 
 void hal_usartStop(void)
