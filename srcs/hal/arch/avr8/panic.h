@@ -15,7 +15,6 @@
 #ifndef HAL_AVR8_PANIC_H
 #define HAL_AVR8_PANIC_H
 
-void panic(const char *msg)
-    __attribute__((noreturn, cold));
+void panic(const char *msg) __attribute__((noreturn, cold));
 
 #endif // HAL_AVR8_PANIC_H

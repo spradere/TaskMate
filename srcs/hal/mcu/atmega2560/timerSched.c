@@ -27,10 +27,7 @@ const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^
 
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 
-void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
-{
-	sched_callback = func_ptr;
-}
+void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_callback = func_ptr; }
 
 void hal_timerSchedInit(void)
 {
@@ -47,10 +44,7 @@ void hal_timerSchedInit(void)
 						   "n"((uint8_t)(1u << CS11))  \
 		: "r24"
 
-void hal_timerSchedStart(void)
-{
-	asm volatile(TIMER_SCHED_START);
-}
+void hal_timerSchedStart(void) { asm volatile(TIMER_SCHED_START); }
 
 #define TIMER_SCHED_STOP                              \
 	"lds r24, %0\n\t"                                 \
@@ -63,31 +57,28 @@ void hal_timerSchedStart(void)
 						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
 		: "r24"
 
-void hal_timerSchedStop(void)
-{
-	asm volatile(TIMER_SCHED_STOP);
-}
+void hal_timerSchedStop(void) { asm volatile(TIMER_SCHED_STOP); }
 
-#define TM_SCHED_CALL_BACK                         \
-	"in r24, 0x3d \n\t"                            \
-	"in r25, 0x3e \n\t"                            \
-	"lds r30, %0 \n\t"                             \
-	"lds r31, %0+1 \n\t"                           \
-	"movw r28,r24 \n\t"                            \
-	"sbiw r30,0x00 \n\t"                           \
-	"breq .+4 \n\t"                                \
-	"eicall \n\t"                                  \
-	"out 0x3e, r25 \n\t"                           \
-	"out 0x3d, r24 \n\t" : : "m"(sched_callback)   \
-	: "r24", "r25", "r30", "r31", "r28", "r29"
+#define TM_SCHED_CALL_BACK                       \
+	"in r24, 0x3d \n\t"                          \
+	"in r25, 0x3e \n\t"                          \
+	"lds r30, %0 \n\t"                           \
+	"lds r31, %0+1 \n\t"                         \
+	"movw r28,r24 \n\t"                          \
+	"sbiw r30,0x00 \n\t"                         \
+	"breq .+4 \n\t"                              \
+	"eicall \n\t"                                \
+	"out 0x3e, r25 \n\t"                         \
+	"out 0x3d, r24 \n\t" : : "m"(sched_callback) \
+		: "r24", "r25", "r30", "r31", "r28", "r29"
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
 	asm volatile(AVR8_CONTEXT_SAVE);
 	asm volatile(TIMER_SCHED_STOP);
-	
+
 	asm volatile(TM_SCHED_CALL_BACK);
-	
+
 	asm volatile(TIMER_SCHED_START);
 	asm volatile(AVR8_CONTEXT_RESTORE);
 	asm volatile("reti \n\t");

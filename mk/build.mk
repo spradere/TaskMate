@@ -83,7 +83,7 @@
 .endif
 
 all: _system_critical_check ${FILE_AUTOCODE_STAMP} _dependency ${FILE_TARGET} _mcu_memory_data _cloc_data
-#help [global] System build.
+#help [global] Taskmate build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 

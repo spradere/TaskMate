@@ -3,7 +3,7 @@
 - check type for strings / data ->  char for text, uint8_t for data
 - hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit access to SFR registers
 - #define -> typedef enum
-- libc/snprintf() module memory size 0x270 is too high - atomicity issues
+- libc/vsnprintf() atomicity issues -> lock ?
 - Doxigen documentation : only in .h for API and general operations
 - change int type hal/ -> uint16 -> typedef to match arch size
 - drivers : test at init, check init bofore start
