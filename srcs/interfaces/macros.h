@@ -35,11 +35,11 @@
 #define _32BS(bit) ((uint32_t)(1UL << (bit)))
 #define _64BS(bit) ((uint64_t)(1ULL << (bit)))
 
-#define _REG_BS(reg, bit)                            \
+#define _REG_BS(reg, bit)               \
 	((sizeof(reg) == 1) ? _8BS(bit) :   \
      (sizeof(reg) == 2) ? _16BS(bit) :  \
-     (sizeof(reg) == 4) ? _32BS(bit)) : \
-						  _64BS(bit)
+     (sizeof(reg) == 4) ? _32BS(bit) :  \
+						  _64BS(bit))
 // n elements macros
 #define _SET_BITS_1(reg, a) _REG_BS(reg, a)
 
@@ -57,10 +57,8 @@
 	_REG_SELECT(__VA_ARGS__, _SET_BITS_4, _SET_BITS_3, _SET_BITS_2, _SET_BITS_1)(reg, __VA_ARGS__)
 
 // user api macros
-#define reg_setBit(reg, ...) ((reg) |= _SET_BITS(reg, __VA_ARGS__))
-
-#define reg_clearBit(reg, ...) ((reg) &= ~(_SET_BITS(reg, __VA_ARGS__)))
-
+#define reg_setBit(reg, ...) ((reg) |= _SET_BITS((reg), __VA_ARGS__))
+#define reg_clearBit(reg, ...) ((reg) &= (__typeof__(reg))~(_SET_BITS((reg), __VA_ARGS__)))
 #define reg_getBit(reg, bit) ((reg) & _REG_BS((reg), (bit)))
 
 /*

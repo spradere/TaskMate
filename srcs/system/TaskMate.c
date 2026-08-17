@@ -106,7 +106,7 @@ int main(void)
 
 	tm_syslog(TM_STR("[modules] threads\n"));
 
-	for( int num = 0; num < TM_MOD_THREAD_COUNT; num++ )
+	for( uint8_t num = 0; num < TM_MOD_THREAD_COUNT; num++ )
 	{
 		mod_thread_item_t *mod_t;
 		mod_t = mod_threadGetPointer(num);

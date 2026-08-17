@@ -7,16 +7,16 @@
  */
 
 /**
- * @file int.h
- * @brief int header declarations.
+ * @file interrupt.h
+ * @brief interrupt header declarations.
  *
  */
 
-#ifndef HAL_PUBLIC_INT_H
-#define HAL_PUBLIC_INT_H
+#ifndef HAL_PUBLIC_INTERRUPT_H
+#define HAL_PUBLIC_INTERRUPT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : int.h"
+	#error "NOT ALLOWED INCLUDE : interrupt.h"
 #endif
 
 #if defined(ARCH_avr8)
@@ -25,7 +25,7 @@
 #endif
 
 #if !defined(HAL_INT)
-	#error "No hal implementation for int on selected hardware target."
+	#error "No hal implementation for interrupt on selected hardware target."
 #endif
 
-#endif // HAL_PUBLIC_INT_H
+#endif // HAL_PUBLIC_INTERRUPT_H

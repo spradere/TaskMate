@@ -24,7 +24,7 @@
 #include "interfaces/define.h"
 #include "interfaces/macros.h"
 
-const int TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
+const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 

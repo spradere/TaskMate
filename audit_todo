@@ -1,9 +1,7 @@
 - general types have to be replaced with custom typedef, to follow hardware portability or translation unit specifications
-- check << or >> for constant typing -> replace with a setBit clearBit macro ?
 - check type for strings / data ->  char for text, uint8_t for data
 - hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit access to SFR registers
-- #define -> typedef enum
-- libc/vsnprintf() atomicity issues -> lock ?
+- #define <-> typedef enum
 - Doxigen documentation : only in .h for API and general operations
 - change int type hal/ -> uint16 -> typedef to match arch size
 - drivers : test at init, check init bofore start

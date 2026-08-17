@@ -35,7 +35,7 @@ void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 	*(sp--) = SREG;
 
 	// registers R1-R31
-	for( int i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
+	for( uint8_t i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
 
 	*stack_pointer = sp;
 }
