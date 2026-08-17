@@ -38,7 +38,7 @@ void scli(void)
 		scliEcho(); // Echo echo echo echo echo echo echo
 
 		sc_threadSetSTC(100);
-		while( sc_threadGetSTC() > 0 ) { sc_handYield(); };
+		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
 	}
 }
 

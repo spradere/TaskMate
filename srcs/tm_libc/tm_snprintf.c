@@ -16,6 +16,7 @@
 
 #include "hal/public/tmlibc.h"
 #include "interfaces/define.h"
+#include "system/sysCall/sysCall.h"
 
 static void baseConvert(uint16_t value, uint8_t base);
 static void tm_putChar(char ch);
@@ -96,7 +97,7 @@ static void tm_putChar(char ch)
 
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
-	while( lock == 1 );
+	if( lock == 1 ) { sc_coopYield(); }
 	lock = 1;
 
 	// store variables

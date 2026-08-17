@@ -17,7 +17,6 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "interfaces/macros.h"
 #include "mcu_define.h" // get i2c frequency
 
 // NOLINTBEGIN
@@ -33,15 +32,15 @@ void hal_i2cInit(void)
 
 void hal_i2cStart(void)
 {
-	reg_setBit(TWCR, TWEN); // Enable TWI
+	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
 	// address test
 	// tm_syslog(TM_STR("[i2c] scan ...\n"));
 	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
 	{
 		// start comm
-		reg_setBit(TWCR, TWSTA, TWEN, TWINT);
-		while( !reg_getBit(TWCR, TWINT) );
+		TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
+		while( !(TWCR & (1 << TWINT)) );
 
 		if( (hal_i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
 		{
@@ -54,13 +53,13 @@ void hal_i2cStart(void)
 
 void hal_i2cStop(void)
 {
-	reg_clearBit(TWCR, TWEN); // Stop TWI
+	TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
 }
 
 uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 {
-	reg_setBit(TWCR, TWSTA, TWEN, TWINT);
-	while( !reg_getBit(TWCR, TWINT) );
+	TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
+	while( !(TWCR & (1 << TWINT)) );
 
 	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 	{
@@ -71,16 +70,13 @@ uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 	return hal_i2cWrite((address << 1) | rw);
 }
 
-void hal_i2cCommStop(void)
-{
-	reg_setBit(TWCR, TWSTO, TWEN, TWINT);
-}
+void hal_i2cCommStop(void) { TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); }
 
 uint8_t hal_i2cWrite(uint8_t data)
 {
 	TWDR = data;
-	reg_setBit(TWCR, TWEN, TWINT);
-	while( !reg_getBit(TWCR, TWINT) );
+	TWCR = (1 << TWEN) | (1 << TWINT);
+	while( !(TWCR & (1 << TWINT)) );
 
 	return TW_STATUS;
 }
@@ -88,15 +84,11 @@ uint8_t hal_i2cWrite(uint8_t data)
 uint8_t hal_i2cRead(uint8_t *data, bool ack)
 {
 	if( ack )
-	{
-		reg_setBit(TWCR, TWEN, TWINT, TWEA);
-	}
+		TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
 	else
-	{
-		reg_setBit(TWCR, TWEN, TWINT);
-	}
+		TWCR = (1 << TWEN) | (1 << TWINT);
 
-	while( !reg_getBit(TWCR, TWINT) );
+	while( !(TWCR & (1 << TWINT)) );
 
 	*data = TWDR;
 	return TW_STATUS;

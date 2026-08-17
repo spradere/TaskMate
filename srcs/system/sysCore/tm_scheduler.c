@@ -21,6 +21,7 @@
 #include "hal/public/panic.h"
 #include "hal/public/stack.h"
 #include "hal/public/timerSched.h"
+#include "interfaces/macros.h"
 #include "system/sysCore/modules.h"
 
 // static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
@@ -39,7 +40,7 @@ void tm_schedulerStart(void)
 	hal_returnFromInterupt();
 }
 
-void tm_schedulerCoop(void) {}
+void tm_schedulerCoop(void) { hal_timerSchedLoad(); }
 
 hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 {
@@ -64,5 +65,6 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 2"); }
 
 	thread = mod_threadGetPointer(current);
+	reg_clearBit(thread->status, TM_MOD_THREAD_YIELDED);
 	return thread->stack_pointer;
 }

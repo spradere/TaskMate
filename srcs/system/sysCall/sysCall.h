@@ -20,7 +20,7 @@
 void sc_threadSetSTC(uint16_t count);
 uint16_t sc_threadGetSTC(void);
 
-void sc_handYield(void);
+void sc_coopYield(void);
 
 // system status flags
 #define FLAG_DUMMY 0x01

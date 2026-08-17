@@ -35,11 +35,11 @@
 #define _32BS(bit) ((uint32_t)(1UL << (bit)))
 #define _64BS(bit) ((uint64_t)(1ULL << (bit)))
 
-#define _REG_BS(reg, bit)               \
-	((sizeof(reg) == 1) ? _8BS(bit) :   \
-     (sizeof(reg) == 2) ? _16BS(bit) :  \
-     (sizeof(reg) == 4) ? _32BS(bit) :  \
-						  _64BS(bit))
+#define _REG_BS(reg, bit)              \
+	((sizeof(reg) == 1)	  ? _8BS(bit)  \
+	 : (sizeof(reg) == 2) ? _16BS(bit) \
+	 : (sizeof(reg) == 4) ? _32BS(bit) \
+						  : _64BS(bit))
 // n elements macros
 #define _SET_BITS_1(reg, a) _REG_BS(reg, a)
 

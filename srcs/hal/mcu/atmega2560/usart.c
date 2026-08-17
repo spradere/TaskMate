@@ -45,8 +45,10 @@ void hal_usartInit(void)
 	UBRR1H = (uint8_t)(ubrr >> 8);
 	UBRR1L = (uint8_t)ubrr;
 
-	reg_setBit(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
-	reg_setBit(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
+	UCSR1B = (1 << RXEN1) | (1 << TXEN1); // Enable Tx Rx
+	UCSR1C = (1 << UCSZ11) | (1 << UCSZ10); // 8-bit data, 1 stop bit, no parity
+	// reg_setBit(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
+	// reg_setBit(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
 }
 
 void hal_usartStart(void)

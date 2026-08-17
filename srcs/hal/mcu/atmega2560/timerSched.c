@@ -30,6 +30,15 @@ static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_callback = func_ptr; }
 
+void hal_timerSchedLoad(void)
+{
+#define LOAD_GUARD 4
+	const uint16_t LOAD = TIMER1_OVERFLOW_COUNT - LOAD_GUARD;
+
+	TCNT1L = LOAD & 0xFF;
+	TCNT1H = LOAD >> 8;
+}
+
 void hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler

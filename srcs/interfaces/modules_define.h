@@ -50,6 +50,7 @@
 #define TM_MOD_THREAD_TYPE_USER 3
 #define TM_MOD_THREAD_TYPE_SYS 4
 #define TM_MOD_THREAD_DEAD 5
+#define TM_MOD_THREAD_YIELDED 6
 
 // driver status bits
 // bit [2 1 0 ] is run level

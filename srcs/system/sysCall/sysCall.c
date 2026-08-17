@@ -15,6 +15,9 @@
 #include "sysCall.h"
 
 #include "hal/public/atomic.h"
+#include "hal/public/timerSched.h"
+#include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
 
@@ -22,7 +25,6 @@ static uint8_t system_status = 0;
 
 void sc_threadSetSTC(uint16_t count)
 {
-	// ATOMIC_BLOCK(ATOMIC_FORCEON) { mod_threadSetSTC(count); }
 	hal_atomic_state_t state = hal_atomicStart();
 	mod_threadSetSTC(count);
 	hal_atomicEnd(state);
@@ -30,17 +32,20 @@ void sc_threadSetSTC(uint16_t count)
 
 uint16_t sc_threadGetSTC(void)
 {
-	// ATOMIC_BLOCK(ATOMIC_FORCEON) { return mod_threadGetSTC(); }
 	hal_atomic_state_t state = hal_atomicStart();
 	uint16_t timer = mod_threadGetSTC();
 	hal_atomicEnd(state);
-
 	return timer;
 }
 
-void sc_handYield(void)
+void sc_coopYield(void)
 {
-	// tm_schedulerCoop();
+	hal_atomic_state_t state = hal_atomicStart();
+	mod_thread_item_t *thread = mod_threadGetPointer(mod_threadGetCurrent());
+	reg_setBit(thread->status, TM_MOD_THREAD_YIELDED);
+	tm_schedulerCoop();
+	hal_atomicEnd(state);
+	while( reg_getBit(thread->status, TM_MOD_THREAD_YIELDED) );
 }
 
 void sc_flagClear(uint8_t flag) { system_status &= ~flag; }

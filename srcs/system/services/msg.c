@@ -57,7 +57,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "[msg] canal test to USART\n", MSG_TO_USART);
+		msgWriteText(chan, "[msg] canal test to USART 101\n", MSG_TO_USART);
 	}
 
 	msgProcess();
@@ -65,7 +65,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3get macro 10", MSG_TO_LCD);
+		msgWriteText(chan, "\3sysCall yield 11", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -76,7 +76,7 @@ void msg(void)
 		msgProcess();
 
 		sc_threadSetSTC(100);
-		while( sc_threadGetSTC() > 0 ) { sc_handYield(); };
+		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
 	}
 }
 
