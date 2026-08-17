@@ -33,9 +33,9 @@ void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_ca
 void hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler
-	reg8_setBit(TCCR1B, WGM12); // CTC mode
+	reg_setBit(TCCR1B, WGM12); // CTC mode
 	OCR1A = TIMER1_OVERFLOW_COUNT;
-	reg8_setBit(TIMSK1, OCIE1A);
+	reg_setBit(TIMSK1, OCIE1A);
 }
 
 #define TIMER_SCHED_START                              \

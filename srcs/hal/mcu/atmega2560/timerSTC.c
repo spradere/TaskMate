@@ -31,21 +31,20 @@ void hal_timerSTCInit(void)
 {
 
 	// Set up timer3 for RTC
-	reg8_setBit(TCCR3B, WGM32); // CTC mode
-	reg8_setBit(TCCR3B, CS32); // Pre scaler 256
+	reg_setBit(TCCR3B, WGM32, CS32); // CTC mode, prescaler 256
 	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
 }
 
 void hal_timerSTCStart(void)
 {
 	// start by enabling interrupt
-	reg8_setBit(TIMSK3, OCIE3A);
+	reg_setBit(TIMSK3, OCIE3A);
 }
 
 void hal_timerSTCStop(void)
 {
 	// stop by disabling interrupt
-	reg8_clearBit(TIMSK3, OCIE3A);
+	reg_clearBit(TIMSK3, OCIE3A);
 }
 
 ISR(TIMER3_COMPA_vect)

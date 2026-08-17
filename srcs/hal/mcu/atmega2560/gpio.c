@@ -44,20 +44,20 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 {
 	if( pin->mode == GPIO_PIN_MODE_INPUT )
 	{
-		reg8_clearBit(*(mcu_ports[pin->port].ddr), pin->number);
+		reg_clearBit(*(mcu_ports[pin->port].ddr), pin->number);
 	}
 	if( pin->mode == GPIO_PIN_MODE_OUTPUT_PP )
 	{
-		reg8_setBit(*(mcu_ports[pin->port].ddr), pin->number);
+		reg_setBit(*(mcu_ports[pin->port].ddr), pin->number);
 	}
 
-	if( pin->pull == GPIO_PIN_PULL_UP ) { reg8_setBit(*(mcu_ports[pin->port].port), pin->number); }
+	if( pin->pull == GPIO_PIN_PULL_UP ) { reg_setBit(*(mcu_ports[pin->port].port), pin->number); }
 }
 
 void hal_gpioPinWrite(const hal_pin_t pin, bool value)
 {
-	if( value ) { reg8_setBit(*(mcu_ports[pin.port].port), pin.number); }
-	else { reg8_clearBit(*(mcu_ports[pin.port].port), pin.number); }
+	if( value ) { reg_setBit(*(mcu_ports[pin.port].port), pin.number); }
+	else { reg_clearBit(*(mcu_ports[pin.port].port), pin.number); }
 }
 
 bool hal_gpioPinRead(const hal_pin_t pin)
