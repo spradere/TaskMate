@@ -17,7 +17,7 @@
 #include <stdint.h>
 
 #include "hal/public/context.h"
-#include "hal/public/int.h"
+#include "hal/public/interrupt.h"
 #include "hal/public/panic.h"
 #include "hal/public/stack.h"
 #include "hal/public/timerSched.h"
