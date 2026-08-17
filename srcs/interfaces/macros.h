@@ -21,9 +21,51 @@
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-#define reg8_setBit(reg, bit) ((reg) |= (uint8_t)(1u << (bit)))
-#define reg8_clearBit(reg, bit) ((reg) &= (uint8_t)~(1u << (bit)))
-#define reg8_getBit(reg, bit) ((reg) & (uint8_t)(1u << (bit)))
+// #define reg8_setBit(reg, bit) ((reg) |= (uint8_t)(1u << (bit)))
+// #define reg8_clearBit(reg, bit) ((reg) &= (uint8_t)~(1u << (bit)))
+// #define reg8_getBit(reg, bit) ((reg) & (uint8_t)(1u << (bit)))
+
+/*
+ * bit manupulation macros
+ */
+
+// masks
+#define _8BS(bit) ((uint8_t)(1u << (bit)))
+#define _16BS(bit) ((uint16_t)(1u << (bit)))
+#define _32BS(bit) ((uint32_t)(1UL << (bit)))
+#define _64BS(bit) ((uint64_t)(1ULL << (bit)))
+
+#define _REG_BS(reg, bit)                            \
+	((sizeof(reg) == 1) ? _8BS(bit) :   \
+     (sizeof(reg) == 2) ? _16BS(bit) :  \
+     (sizeof(reg) == 4) ? _32BS(bit)) : \
+						  _64BS(bit)
+// n elements macros
+#define _SET_BITS_1(reg, a) _REG_BS(reg, a)
+
+#define _SET_BITS_2(reg, a, b) (_REG_BS(reg, a) | _REG_BS(reg, b))
+
+#define _SET_BITS_3(reg, a, b, c) (_REG_BS(reg, a) | _REG_BS(reg, b) | _REG_BS(reg, c))
+
+#define _SET_BITS_4(reg, a, b, c, d) \
+	(_REG_BS(reg, a) | _REG_BS(reg, b) | _REG_BS(reg, c) | _REG_BS(reg, d))
+
+// selection macros
+#define _REG_SELECT(_1, _2, _3, _4, NAME, ...) NAME
+
+#define _SET_BITS(reg, ...) \
+	_REG_SELECT(__VA_ARGS__, _SET_BITS_4, _SET_BITS_3, _SET_BITS_2, _SET_BITS_1)(reg, __VA_ARGS__)
+
+// user api macros
+#define reg_setBit(reg, ...) ((reg) |= _SET_BITS(reg, __VA_ARGS__))
+
+#define reg_clearBit(reg, ...) ((reg) &= ~(_SET_BITS(reg, __VA_ARGS__)))
+
+#define reg_getBit(reg, bit) ((reg) & _REG_BS((reg), (bit)))
+
+/*
+ * other macros
+ */
 
 // string macros
 #define CONCAT2(a, b) a##b
