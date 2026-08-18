@@ -42,10 +42,10 @@ void sc_coopYield(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
 	mod_thread_item_t *thread = mod_threadGetPointer(mod_threadGetCurrent());
-	reg_setBit(thread->status, TM_MOD_THREAD_YIELDED);
+	TM_SETBIT(thread->status, TM_MOD_THREAD_YIELDED);
 	tm_schedulerCoop();
 	hal_atomicEnd(state);
-	while( reg_getBit(thread->status, TM_MOD_THREAD_YIELDED) );
+	while( TM_GETBIT(thread->status, TM_MOD_THREAD_YIELDED) );
 }
 
 void sc_flagClear(uint8_t flag) { system_status &= ~flag; }

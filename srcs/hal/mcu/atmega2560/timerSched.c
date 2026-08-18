@@ -42,9 +42,9 @@ void hal_timerSchedLoad(void)
 void hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler
-	reg_setBit(TCCR1B, WGM12); // CTC mode
+	TM_SETBIT(TCCR1B, WGM12); // CTC mode
 	OCR1A = TIMER1_OVERFLOW_COUNT;
-	reg_setBit(TIMSK1, OCIE1A);
+	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
 }
 
 #define TIMER_SCHED_START                              \

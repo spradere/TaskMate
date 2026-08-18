@@ -45,15 +45,15 @@ void hal_usartInit(void)
 	UBRR1H = (uint8_t)(ubrr >> 8);
 	UBRR1L = (uint8_t)ubrr;
 
-	UCSR1B = (1 << RXEN1) | (1 << TXEN1); // Enable Tx Rx
-	UCSR1C = (1 << UCSZ11) | (1 << UCSZ10); // 8-bit data, 1 stop bit, no parity
-	// reg_setBit(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
-	// reg_setBit(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
+	//UCSR1B = (1 << RXEN1) | (1 << TXEN1); // Enable Tx Rx
+	//UCSR1C = (1 << UCSZ11) | (1 << UCSZ10); // 8-bit data, 1 stop bit, no parity
+	TM_WRITEBIT(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
+	TM_WRITEBIT(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
 }
 
 void hal_usartStart(void)
 {
-	reg_setBit(UCSR1B, RXCIE1); // enable Rx interrupt
+	TM_SETBIT(UCSR1B, RXCIE1); // enable Rx interrupt
 }
 
 void hal_usartStop(void)
@@ -100,7 +100,7 @@ void hal_usartSendTXBuffer(void)
 {
 	while( !CB_EMPTY(buffer_tx_head, buffer_tx_tail) )
 	{
-		while( !reg_getBit(UCSR1A, UDRE1) ); // Wait for empty transmit buffer
+		while( !TM_GETBIT(UCSR1A, UDRE1) ); // Wait for empty transmit buffer
 		UDR1 = buffer_tx[buffer_tx_tail]; // Put data into buffer, sends the data
 
 		buffer_tx_tail = CB_NEXT(buffer_tx_tail);

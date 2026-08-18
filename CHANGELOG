@@ -1,3 +1,4 @@
+	new implementation for cooperative hand yield
 	add bit manipulation macros, automatic size fit (8-64 bits) and variadic
 	context switch in ASM, implements avr-gcc ABI
 	upgarde includes guards with parent directory and #endif closing comment 

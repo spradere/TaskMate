@@ -65,6 +65,6 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 2"); }
 
 	thread = mod_threadGetPointer(current);
-	reg_clearBit(thread->status, TM_MOD_THREAD_YIELDED);
+	TM_CLEARBIT(thread->status, TM_MOD_THREAD_YIELDED);
 	return thread->stack_pointer;
 }

@@ -57,9 +57,10 @@
 	_REG_SELECT(__VA_ARGS__, _SET_BITS_4, _SET_BITS_3, _SET_BITS_2, _SET_BITS_1)(reg, __VA_ARGS__)
 
 // user api macros
-#define reg_setBit(reg, ...) ((reg) |= _SET_BITS((reg), __VA_ARGS__))
-#define reg_clearBit(reg, ...) ((reg) &= (__typeof__(reg))~(_SET_BITS((reg), __VA_ARGS__)))
-#define reg_getBit(reg, bit) ((reg) & _REG_BS((reg), (bit)))
+#define TM_WRITEBIT(reg, ...) ((reg) = _SET_BITS((reg), __VA_ARGS__))
+#define TM_SETBIT(reg, ...) ((reg) |= _SET_BITS((reg), __VA_ARGS__))
+#define TM_CLEARBIT(reg, ...) ((reg) &= (__typeof__(reg))~(_SET_BITS((reg), __VA_ARGS__)))
+#define TM_GETBIT(reg, bit) ((reg) & _REG_BS((reg), (bit)))
 
 /*
  * other macros

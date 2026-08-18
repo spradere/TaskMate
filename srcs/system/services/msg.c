@@ -57,7 +57,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "[msg] canal test to USART 101\n", MSG_TO_USART);
+		msgWriteText(chan, "[msg] canal test to USART 110\n", MSG_TO_USART);
 	}
 
 	msgProcess();
@@ -65,7 +65,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3sysCall yield 11", MSG_TO_LCD);
+		msgWriteText(chan, "\3TM_* macro 1100", MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -86,7 +86,7 @@ err_codes_t msgRequestChannel(uint8_t *channel)
 	{
 		if( (channels[i].status & (uint8_t)(1u << MSG_FLAG_IN_USE)) == 0 )
 		{
-			reg_setBit(channels[i].status, MSG_FLAG_IN_USE);
+			TM_SETBIT(channels[i].status, MSG_FLAG_IN_USE);
 			*channel = i;
 			return ERR_NO_ERROR;
 		}
@@ -94,7 +94,7 @@ err_codes_t msgRequestChannel(uint8_t *channel)
 	return ERR_MSG_OUT_OF_FREE_CHANNEL;
 }
 
-void msgFreeChannel(uint8_t channel) { reg_clearBit(channels[channel].status, MSG_FLAG_IN_USE); }
+void msgFreeChannel(uint8_t channel) { TM_CLEARBIT(channels[channel].status, MSG_FLAG_IN_USE); }
 
 void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
 {
@@ -102,7 +102,7 @@ void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
 
 	channels[channel].status &= (uint8_t)~MSG_TO_MASK;
 	channels[channel].status |= dest;
-	reg_setBit(channels[channel].status, MSG_FLAG_SEND);
+	TM_SETBIT(channels[channel].status, MSG_FLAG_SEND);
 }
 
 static void msgProcess(void)
@@ -132,7 +132,7 @@ static void msgProcess(void)
 
 					hal_usartWriteString(channels[channel].text);
 					hal_usartSendTXBuffer();
-					reg_clearBit(channels[channel].status, MSG_FLAG_SEND);
+					TM_CLEARBIT(channels[channel].status, MSG_FLAG_SEND);
 					break;
 
 				case MSG_TO_NULL:
