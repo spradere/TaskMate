@@ -65,7 +65,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3TM_* macro 1100", MSG_TO_LCD);
+		msgWriteText(chan, "\3TM_* macro 1111", MSG_TO_LCD);
 	}
 
 	msgProcess();

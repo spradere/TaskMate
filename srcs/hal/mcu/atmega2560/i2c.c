@@ -16,8 +16,9 @@
 
 #include <avr/io.h>
 #include <util/twi.h>
-#include "tm_libc/tm_syslog.h"
+
 #include "mcu_define.h" // get i2c frequency
+#include "tm_libc/tm_syslog.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -39,10 +40,10 @@ void hal_i2cStart(void)
 	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
 	{
 		// start comm
-		//TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
+		// TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
 		TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
-		//while( !(TWCR & (1 << TWINT)) );
-		while( !(TM_GETBIT(TWCR,TWINT)) );
+		// while( !(TWCR & (1 << TWINT)) );
+		while( !(TM_GETBIT(TWCR, TWINT)) );
 
 		if( (hal_i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
 		{
@@ -55,14 +56,14 @@ void hal_i2cStart(void)
 
 void hal_i2cStop(void)
 {
-	//TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
+	// TWCR &= (uint8_t)~(1u << TWEN); // Stop TWI
 	TM_CLEARBIT(TWCR, TWEN);
 }
 
 uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 {
-	//TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
-	//while( !(TWCR & (1 << TWINT)) );
+	// TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT);
+	// while( !(TWCR & (1 << TWINT)) );
 	TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 	while( !(TM_GETBIT(TWCR, TWINT)) );
 	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
@@ -74,18 +75,18 @@ uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 	return hal_i2cWrite((address << 1) | rw);
 }
 
-void hal_i2cCommStop(void) 
-{ 
-	//TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT); 
-	TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT); 
+void hal_i2cCommStop(void)
+{
+	// TWCR = (1 << TWSTO) | (1 << TWEN) | (1 << TWINT);
+	TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT);
 }
 
 uint8_t hal_i2cWrite(uint8_t data)
 {
 	TWDR = data;
-	//TWCR = (1 << TWEN) | (1 << TWINT);
+	// TWCR = (1 << TWEN) | (1 << TWINT);
 	TM_WRITEBIT(TWCR, TWEN, TWINT);
-	//while( !(TWCR & (1 << TWINT)) );
+	// while( !(TWCR & (1 << TWINT)) );
 	while( !(TM_GETBIT(TWCR, TWINT)) );
 
 	return TW_STATUS;
@@ -95,17 +96,17 @@ uint8_t hal_i2cRead(uint8_t *data, bool ack)
 {
 	if( ack )
 	{
-		//TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
+		// TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWEA);
 		TM_WRITEBIT(TWCR, TWEN, TWINT, TWEA);
 	}
 	else
 	{
-		//TWCR = (1 << TWEN) | (1 << TWINT);
+		// TWCR = (1 << TWEN) | (1 << TWINT);
 		TM_WRITEBIT(TWCR, TWEN, TWINT);
 	}
-	//while( !(TWCR & (1 << TWINT)) );
+	// while( !(TWCR & (1 << TWINT)) );
 	while( !(TM_GETBIT(TWCR, TWINT)) );
-	
+
 	*data = TWDR;
 	return TW_STATUS;
 }
