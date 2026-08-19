@@ -22,7 +22,6 @@
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
-	// #define tm_syslog syslog !!! functions signatures do not match
 #endif
 
 #if TM_LIBC_TASKMATE
