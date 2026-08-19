@@ -24,7 +24,6 @@
 #include "interfaces/macros.h"
 #include "system/sysCore/modules.h"
 
-// static hal_stack_word_t *tm_schedulerRR(hal_stack_word_t * stack_pointer);
 static hal_timerSchedCallback_func_t tm_schedulerRR;
 
 void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }

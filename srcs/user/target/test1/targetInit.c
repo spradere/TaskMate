@@ -46,7 +46,4 @@ void targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
 	}
 
 	// set default values for inputs
-	// table[signal]->pin.mode = GPIO_PIN_MODE_INPUT;
-	// table[signal]->pin.pull = GPIO_PIN_PULL_UP;
-	// table[signal]->active_high = false;
 }

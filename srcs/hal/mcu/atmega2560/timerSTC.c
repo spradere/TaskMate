@@ -20,7 +20,6 @@
 
 #include "interfaces/define.h"
 #include "interfaces/macros.h"
-// #include "tm_libc/tm_syslog.h"
 
 const uint16_t hal_timerSTC_OVERFLOW_COUNT =
 	625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
@@ -33,7 +32,6 @@ void hal_timerSTCInit(void)
 
 	// Set up timer3 for RTC
 	TM_WRITEBIT(TCCR3B, WGM32, CS32); // CTC mode, prescaler 256
-	// TCCR3B = (1 << WGM32) | (1 << CS32); // CTC mode, pre scaler 256
 	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
 }
 

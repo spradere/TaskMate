@@ -50,8 +50,6 @@ void msg(void)
 	}
 
 	// run
-	// hal_usartWriteString("[msg] starting message server\n");
-	// hal_usartSendTXBuffer();
 
 	uint8_t chan;
 
