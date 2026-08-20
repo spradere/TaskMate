@@ -21,7 +21,7 @@
 void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 {
 	// open list files
-	msgInfo("open <%s>", initrc_name);
+	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
 
 	file_t initrc_list;
 	fileInit(&initrc_list);
@@ -44,10 +44,10 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count [%s:%i] is %i, should be 3",
-						 initrc_name,
-						 file_line_number,
-						 tok.count);
+				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 3",
+								   initrc_name,
+								   file_line_number,
+								   tok.count);
 				exit(1);
 			}
 
@@ -62,7 +62,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 				int err = initrcCmdDispatch(tok.tokens[i], &mod_tmp);
 				if( err == -1 )
 				{
-					msgError(
+					AUTOCODE_MSG_ERROR(
 						"unknown command [%s:%i] %s", initrc_name, file_line_number, tok.tokens[i]);
 					exit(1);
 				}
@@ -71,11 +71,12 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			// process name
 			if( strlen(tok.tokens[0]) > TM_MOD_NAME_SIZE_MAX )
 			{
-				msgError("Name too long <%s> is over %i", tok.tokens[0], TM_MOD_NAME_SIZE_MAX);
+				AUTOCODE_MSG_ERROR(
+					"Name too long <%s> is over %i", tok.tokens[0], TM_MOD_NAME_SIZE_MAX);
 				exit(1);
 			}
 
-			msgInfo("found module : %s", tok.tokens[0]);
+			AUTOCODE_MSG_INFO("found module : %s", tok.tokens[0]);
 
 			// ok go on with selected type in initrc
 			module_type_t *mod = &data_base->modules_type[mod_tmp.type];
@@ -86,10 +87,10 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			{
 				if( strcmp(mod->modules[j].name, tok.tokens[0]) == 0 )
 				{
-					msgError("duplicate name [%s:%i] %s\n\n",
-							 initrc_name,
-							 file_line_number,
-							 tok.tokens[0]);
+					AUTOCODE_MSG_ERROR("duplicate name [%s:%i] %s\n\n",
+									   initrc_name,
+									   file_line_number,
+									   tok.tokens[0]);
 					exit(1);
 				}
 			}
@@ -97,22 +98,22 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			// check options
 			if( mod_tmp.set_runlevel < 1 )
 			{
-				msgError("Module %s : -run_* option is not set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -run_* option is not set", tok.tokens[0]);
 				exit(1);
 			}
 			if( mod_tmp.set_runlevel > 1 )
 			{
-				msgError("Module %s : -run_* option is multiple set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -run_* option is multiple set", tok.tokens[0]);
 				exit(1);
 			}
 			if( mod_tmp.set_type < 1 )
 			{
-				msgError("Module %s : -type_* option is not set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -type_* option is not set", tok.tokens[0]);
 				exit(1);
 			}
 			if( mod_tmp.set_type > 1 )
 			{
-				msgError("Module %s : -type_* option is multiple set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -type_* option is multiple set", tok.tokens[0]);
 				exit(1);
 			}
 
@@ -120,7 +121,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			int index = mod->modules_count;
 			if( index > TM_MOD_COUNT_MAX )
 			{
-				msgError("too much modules > %i type=%i\n", index, mod_tmp.type);
+				AUTOCODE_MSG_ERROR("too much modules > %i type=%i\n", index, mod_tmp.type);
 				exit(1);
 			}
 

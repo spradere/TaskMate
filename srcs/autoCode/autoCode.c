@@ -37,15 +37,16 @@
 #include "printModules.h"
 #include "tokenizer.h"
 
-static void setupDB(modules_database_t *data_base);
-static void threadCountLevel(modules_database_t *data_base);
+static void setupDatabase(modules_database_t *data_base);
+static void countThreadsByRunLevel(modules_database_t *data_base);
 
 int main(int argn, const char *argv[])
 {
 	// get options
 	if( argn != 2 )
 	{
-		msgError("autoCode bad argn (is %i, not 2)\n\tuse autoCode configuration_file", argn);
+		AUTOCODE_MSG_ERROR("autoCode bad argn (is %i, not 2)\n\tuse autoCode configuration_file",
+						   argn);
 		exit(1);
 	}
 
@@ -58,7 +59,7 @@ int main(int argn, const char *argv[])
 
 	// setup data base
 	modules_database_t data_base;
-	setupDB(&data_base);
+	setupDatabase(&data_base);
 
 	// read init.rc file and store data in data base
 	file_t finitrc;
@@ -76,7 +77,7 @@ int main(int argn, const char *argv[])
 	fileClose(&finitrc, __FILE__, __LINE__);
 
 	// count thread for each level
-	threadCountLevel(&data_base);
+	countThreadsByRunLevel(&data_base);
 
 	// parse tag and generate code
 	file_t ftag;
@@ -99,7 +100,7 @@ int main(int argn, const char *argv[])
 	return 0;
 }
 
-static void setupDB(modules_database_t *data_base)
+static void setupDatabase(modules_database_t *data_base)
 {
 	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
 	{
@@ -117,7 +118,7 @@ static void setupDB(modules_database_t *data_base)
 	}
 }
 
-static void threadCountLevel(modules_database_t *data_base)
+static void countThreadsByRunLevel(modules_database_t *data_base)
 {
 	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
 	{

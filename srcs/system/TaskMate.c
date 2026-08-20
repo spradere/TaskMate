@@ -33,7 +33,7 @@ TM_STORE_FILE_NAME(file_name);
 // display hardware target informations
 #if VERBOSE_LEVEL > 0
 	#pragma message "TM_VERSION  = " TM_VERSION
-	#pragma message "BUILD  = " INT_TO_STRING(BUILD_CNT)
+	#pragma message "BUILD  = " TM_STRINGIFY(BUILD_CNT)
 #endif
 
 int main(void)

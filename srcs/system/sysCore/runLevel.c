@@ -19,7 +19,7 @@ static rl_data_base_t to_run;
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
-void rl_Alloc(void)
+void rl_alloc(void)
 {
 
 	// [autoCode_tag] runlevels_alloc

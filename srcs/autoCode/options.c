@@ -16,24 +16,24 @@
 
 #include "tokenizer.h"
 
-static void funcTmVer(const char *value, options_list_t *opt);
-static void funcTmBuild(const char *value, options_list_t *opt);
-static void funcErrors(const char *value, options_list_t *opt);
-static void funcInitrc(const char *value, options_list_t *opt);
-static void funcParsetag(const char *value, options_list_t *opt);
-static void funcHalInit(const char *value, options_list_t *opt);
-static void funcHalDefine(const char *value, options_list_t *opt);
-static void funcGpioSignals(const char *value, options_list_t *opt);
+static void setTmVersion(const char *value, options_list_t *opt);
+static void setTmBuild(const char *value, options_list_t *opt);
+static void setErrorsFile(const char *value, options_list_t *opt);
+static void setInitrcFile(const char *value, options_list_t *opt);
+static void setParseTagFile(const char *value, options_list_t *opt);
+static void setHalInitFile(const char *value, options_list_t *opt);
+static void setHalDefineFile(const char *value, options_list_t *opt);
+static void setGpioSignalsFile(const char *value, options_list_t *opt);
 
-#define HAVE_OPTIONS(X)                             \
-	X(HAVE_TM_VER, "--tm_ver", funcTmVer)           \
-	X(HAVE_TM_BUILD, "--tm_build", funcTmBuild)     \
-	X(HAVE_ERRORS, "--errors", funcErrors)          \
-	X(HAVE_INITRC, "--initrc", funcInitrc)          \
-	X(HAVE_PARSETAG, "--parsetag", funcParsetag)    \
-	X(HAVE_HALINIT, "--halinit", funcHalInit)       \
-	X(HAVE_HALDEFINE, "--haldefine", funcHalDefine) \
-	X(HAVE_GPIO_SIGNALS, "--gpio_signals", funcGpioSignals)
+#define HAVE_OPTIONS(X)                                \
+	X(HAVE_TM_VER, "--tm_ver", setTmVersion)           \
+	X(HAVE_TM_BUILD, "--tm_build", setTmBuild)         \
+	X(HAVE_ERRORS, "--errors", setErrorsFile)          \
+	X(HAVE_INITRC, "--initrc", setInitrcFile)          \
+	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)    \
+	X(HAVE_HALINIT, "--halinit", setHalInitFile)       \
+	X(HAVE_HALDEFINE, "--haldefine", setHalDefineFile) \
+	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile)
 
 static const struct
 {
@@ -51,7 +51,7 @@ enum
 	HAVE_OPTIONS(X)
 #undef X
 		HAVE_COUNT
-} have_options_id;
+};
 
 static const char *have_to_string[HAVE_COUNT] = {
 #define X(e, s, f) [e] = (s),
@@ -70,49 +70,49 @@ static const char *string_from_have(const int id)
 	return NULL;
 }
 
-static void funcTmVer(const char *value, options_list_t *opt)
+static void setTmVersion(const char *value, options_list_t *opt)
 {
 	strncpy(opt->tm_ver, value, BYTE_INDEX);
 	have_options_count[HAVE_TM_VER]++;
 }
 
-static void funcTmBuild(const char *value, options_list_t *opt)
+static void setTmBuild(const char *value, options_list_t *opt)
 {
 	strncpy(opt->tm_build, value, BYTE_INDEX);
 	have_options_count[HAVE_TM_BUILD]++;
 }
 
-static void funcErrors(const char *value, options_list_t *opt)
+static void setErrorsFile(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_errors_list, value, BYTE_INDEX);
 	have_options_count[HAVE_ERRORS]++;
 }
 
-static void funcInitrc(const char *value, options_list_t *opt)
+static void setInitrcFile(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_initrc_list, value, BYTE_INDEX);
 	have_options_count[HAVE_INITRC]++;
 }
 
-static void funcParsetag(const char *value, options_list_t *opt)
+static void setParseTagFile(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_parsetag_list, value, BYTE_INDEX);
 	have_options_count[HAVE_PARSETAG]++;
 }
 
-static void funcHalInit(const char *value, options_list_t *opt)
+static void setHalInitFile(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_halinit_list, value, BYTE_INDEX);
 	have_options_count[HAVE_HALINIT]++;
 }
 
-static void funcHalDefine(const char *value, options_list_t *opt)
+static void setHalDefineFile(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_haldefine_list, value, BYTE_INDEX);
 	have_options_count[HAVE_HALDEFINE]++;
 }
 
-static void funcGpioSignals(const char *value, options_list_t *opt)
+static void setGpioSignalsFile(const char *value, options_list_t *opt)
 {
 	strncpy(opt->file_gpio_signals, value, BYTE_INDEX);
 	have_options_count[HAVE_GPIO_SIGNALS]++;
@@ -144,7 +144,7 @@ void options(const char *file_name, options_list_t *opt)
 
 	int file_line_number = 0;
 	tokenizer_t tok;
-	msgInfo("read file %s", file_name);
+	AUTOCODE_MSG_INFO("read file %s", file_name);
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file.stream) )
 	{
 		file_line_number++;
@@ -154,23 +154,23 @@ void options(const char *file_name, options_list_t *opt)
 		{
 			if( tok.count == 2 )
 			{
-				msgInfo("parsing %s = %s", tok.tokens[0], tok.tokens[1]);
+				AUTOCODE_MSG_INFO("parsing %s = %s", tok.tokens[0], tok.tokens[1]);
 
 				int err = optionCmdDispatch(tok.tokens[0], tok.tokens[1], opt);
 
 				if( err != 0 )
 				{
-					msgError(
+					AUTOCODE_MSG_ERROR(
 						"unknown option [%s:%i] %s\n", file.name, file_line_number, tok.tokens[0]);
 					exit(1);
 				}
 			}
 			else
 			{
-				msgError("wrong token count [%s:%i] is %i, should be 2",
-						 file.name,
-						 file_line_number,
-						 tok.count);
+				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 2",
+								   file.name,
+								   file_line_number,
+								   tok.count);
 				exit(1);
 			}
 		}
@@ -181,13 +181,13 @@ void options(const char *file_name, options_list_t *opt)
 	{
 		if( have_options_count[i] == 0 )
 		{
-			msgError("required autoCode option %s is not set", string_from_have(i));
+			AUTOCODE_MSG_ERROR("required autoCode option %s is not set", string_from_have(i));
 			exit(1);
 		}
 
 		if( have_options_count[i] > 1 )
 		{
-			msgError("required autoCode option %s is multiple set", string_from_have(i));
+			AUTOCODE_MSG_ERROR("required autoCode option %s is multiple set", string_from_have(i));
 			exit(1);
 		}
 	}

@@ -35,7 +35,7 @@ void boot(void)
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
-	rl_Alloc();
+	rl_alloc();
 
 	// hal hardware init
 	tm_syslog(TM_STR("[boot] hal hardware init\n"));

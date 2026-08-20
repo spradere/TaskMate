@@ -23,16 +23,18 @@ static void tm_putChar(char ch);
 
 #define SNPRINTF_BUFF_TEMP_SIZE 32
 
-static uint8_t lock = 0;
+static uint8_t tm_snprintf_lock = 0;
 
 // structure for buffer data
-struct buff_t
+typedef struct
 {
 	char *ptr;
 	uint8_t size;
 	uint8_t index;
 	uint8_t padding;
-} buff;
+} tm_snprintf_buffer_t;
+
+static tm_snprintf_buffer_t tm_snprintf_buffer;
 
 // reverse order base converter
 static void baseConvert(uint16_t value, uint8_t base)
@@ -54,7 +56,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 		}
 	}
 
-	while( pos < buff.padding ) { tmp[pos++] = '0'; }
+	while( pos < tm_snprintf_buffer.padding ) { tmp[pos++] = '0'; }
 
 	// reverse order
 	while( pos > 0 ) { tm_putChar(tmp[--pos]); }
@@ -87,24 +89,27 @@ int tm_vprintf(const tm_string_t format, va_list args)
 
 static void tm_putChar(char ch)
 {
-	if( buff.ptr != NULL )
+	if( tm_snprintf_buffer.ptr != NULL )
 	{
-		if( (buff.index + 1) < buff.size ) { buff.ptr[buff.index++] = ch; }
+		if( (tm_snprintf_buffer.index + 1) < tm_snprintf_buffer.size )
+		{
+			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index++] = ch;
+		}
 	}
 
-	if( buff.ptr == NULL ) { hal_stdio_putChar(ch); }
+	if( tm_snprintf_buffer.ptr == NULL ) { hal_stdio_putChar(ch); }
 }
 
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
-	if( lock == 1 ) { sc_coopYield(); }
-	lock = 1;
+	if( tm_snprintf_lock == 1 ) { sc_coopYield(); }
+	tm_snprintf_lock = 1;
 
 	// store variables
-	buff.ptr = ptr;
-	buff.size = size;
-	buff.index = 0;
-	buff.padding = 0;
+	tm_snprintf_buffer.ptr = ptr;
+	tm_snprintf_buffer.size = size;
+	tm_snprintf_buffer.index = 0;
+	tm_snprintf_buffer.padding = 0;
 
 	uint8_t format_index = 0;
 	char format_c = hal_string_getChar(&format, format_index++);
@@ -118,8 +123,8 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 			if( (format_c) == '0' )
 			{
 				format_c = hal_string_getChar(&format, format_index++);
-				buff.padding = (uint8_t)(format_c - 48); // atoi
-				if( buff.padding > 9 ) { return 0; }
+				tm_snprintf_buffer.padding = (uint8_t)(format_c - 48); // atoi
+				if( tm_snprintf_buffer.padding > 9 ) { return 0; }
 				format_c = hal_string_getChar(&format, format_index++);
 			}
 
@@ -169,7 +174,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 							break;
 					}
 					baseConvert(value, base);
-					buff.padding = 0;
+					tm_snprintf_buffer.padding = 0;
 					break;
 				}
 
@@ -186,6 +191,6 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	}
 
 	tm_putChar(0); // close string
-	lock = 0;
-	return buff.index;
+	tm_snprintf_lock = 0;
+	return tm_snprintf_buffer.index;
 }

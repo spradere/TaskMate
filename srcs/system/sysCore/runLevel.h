@@ -52,6 +52,6 @@ typedef struct
 // clang-format on
 // [/tag]
 
-void rl_Alloc(void);
+void rl_alloc(void);
 
 #endif // SYSCORE_RUNLEVEL_H

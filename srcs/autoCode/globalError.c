@@ -19,7 +19,7 @@
 
 void globalError(const char *src_name, error_catalog_t *errors)
 {
-	msgInfo("open file.err <%s>", src_name);
+	AUTOCODE_MSG_INFO("open file.err <%s>", src_name);
 
 	// open files
 	file_t file_src;
@@ -41,17 +41,17 @@ void globalError(const char *src_name, error_catalog_t *errors)
 		{
 			if( tok.count != 3 )
 			{
-				msgError("wrong token count != 3 tok.line [%s:%i] <%s>",
-						 file_src.name,
-						 file_src_line_number,
-						 tok.line);
+				AUTOCODE_MSG_ERROR("wrong token count != 3 tok.line [%s:%i] <%s>",
+								   file_src.name,
+								   file_src_line_number,
+								   tok.line);
 			}
 
 			for( int i = 0; i < error_index; i++ )
 			{
 				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
 				{
-					msgError("Duplicate error name <%s>", tok.tokens[0]);
+					AUTOCODE_MSG_ERROR("Duplicate error name <%s>", tok.tokens[0]);
 					exit(1);
 				}
 			}
@@ -73,7 +73,7 @@ void globalError(const char *src_name, error_catalog_t *errors)
 			}
 			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
 			{
-				msgError("wrong critical argument <%s>", tok.tokens[2]);
+				AUTOCODE_MSG_ERROR("wrong critical argument <%s>", tok.tokens[2]);
 				exit(1);
 			}
 
@@ -81,7 +81,7 @@ void globalError(const char *src_name, error_catalog_t *errors)
 
 			if( error_index == ERROR_COUNT_MAX )
 			{
-				msgError("Too many errors > %i", ERROR_COUNT_MAX);
+				AUTOCODE_MSG_ERROR("Too many errors > %i", ERROR_COUNT_MAX);
 				exit(1);
 			}
 			errors->error_count = error_index;

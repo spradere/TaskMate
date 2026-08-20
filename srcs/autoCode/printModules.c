@@ -16,9 +16,9 @@
 
 void printModules(const modules_database_t *data_base)
 {
-	msgInfo("+++ modules informations +++\n");
+	AUTOCODE_MSG_INFO("+++ modules informations +++\n");
 
-	msgInfo("found drivers :");
+	AUTOCODE_MSG_INFO("found drivers :");
 	const module_type_t *driver = &data_base->modules_type[TM_MOD_DRIVERS_ID];
 	for( int i = 0; i < driver->modules_count; i++ )
 	{
@@ -29,7 +29,7 @@ void printModules(const modules_database_t *data_base)
 	}
 	printf("\n");
 
-	msgInfo("found threads :");
+	AUTOCODE_MSG_INFO("found threads :");
 	const module_type_t *threads = &data_base->modules_type[TM_MOD_THREAD_ID];
 	for( int i = 0; i < threads->modules_count; i++ )
 	{
@@ -41,7 +41,7 @@ void printModules(const modules_database_t *data_base)
 	}
 	printf("\n");
 
-	msgInfo("threads by run level :");
+	AUTOCODE_MSG_INFO("threads by run level :");
 	char name[BYTE_INDEX];
 	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
 	{
@@ -63,7 +63,7 @@ void printModules(const modules_database_t *data_base)
 				strncpy(name, "RUN_USER", sizeof(name));
 				break;
 			default:
-				msgError("unknown run level");
+				AUTOCODE_MSG_ERROR("unknown run level");
 				printf("\t =%i ?\n", i);
 				exit(1);
 				break;
