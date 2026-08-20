@@ -122,6 +122,11 @@ provides technical guidance. Moreover, it enables efficient
 research on related topics by summarizing and contextualizing complex technical
 information, helping me focus on building rather than endlessly searching.
 
+Codex is now also used, mainly for audits and complex refactors. It runs in a
+sandboxed environment on a separate machine and under a dedicated account.
+Its changes go through a double merge before reaching the main project branch;
+this review process does not make AI output automatically correct.
+
 ---
 
 ## ️📜 License

@@ -3,26 +3,48 @@
 ## Historical developments
 TaskMate started as AVR-centric code, then moved to a layered HAL model (notably around v0.21) with architecture (`hal/arch`), MCU (`hal/mcu`), and board (`hal/board`) separation. This progressively removed direct hardware code from `sysCore` and enabled cleaner portability planning (amd64 test path, arm target roadmap).
 
-## Current implementation
-HAL remains split by hardware granularity:
-- `arch`: context, stack model, low-level startup.
-- `mcu`: peripherals (GPIO, timers, USART, I2C).
-- `board`: physical wiring and board-specific devices.
+After v0.28, the repository completed a broader system/user/HAL split, removed the old `hal_` and
+`_impl` source-file naming, and introduced `hal/drivers` for reusable device drivers. Target-specific
+GPIO wiring moved into `user/target`, while AVR context save/restore and scheduler-timer work moved
+progressively into explicit assembly. Panic handling moved to the AVR architecture layer, interrupt
+headers were clarified, and common register-bit operations were centralised.
 
-Public HAL headers in `hal/public/` present stable include entry points, while selected target files are pulled through generated auto headers. This keeps target selection centralized and avoids ad-hoc includes across upper layers.
+## Current implementation
+The only implemented hardware stack is `avr8 / atmega2560 / arduinoMega`, selected by the `test1`
+hardware target. Its responsibilities are currently divided as follows:
+
+- `hal/arch/avr8`: register context layout, stack-pointer access, interrupt/atomic primitives, context
+  creation and restoration, architecture startup, and panic;
+- `hal/mcu/atmega2560`: GPIO, I2C, USART, the 1 ms scheduler timer, the 10 ms software-counter timer,
+  MCU startup, and AVR string/output support;
+- `hal/board/arduinoMega`: the board startup hook;
+- `hal/drivers`: the AMC2004 LCD and ZS042 RTC device implementations.
+
+Headers in `hal/public/` select a concrete implementation using the target symbols emitted by the Make
+fragments and fail compilation when no implementation exists. autoCode generates the combined target
+definition and startup-header lists. At runtime, boot calls architecture, MCU, and board hooks, builds the
+GPIO mapping, and starts generated drivers by their configured run level.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Clear `arch -> mcu -> board` separation is now materially cleaner after inversion fixes.
-- Lower-level register manipulation is isolated in MCU/arch implementations.
-- Public façade headers reduce direct include sprawl in non-HAL layers.
+- Context switching, interrupt control, timers, and MCU registers are concentrated in target-specific
+  files rather than scattered through tasks or services.
+- Public selection headers provide one include path per HAL capability and reject missing implementations
+  at compile time.
+- Static driver registration and callback wiring keep firmware allocation deterministic.
+- The USART uses fixed-size power-of-two buffers, and thread stacks include canaries checked during
+  scheduling.
 
 ### Remaining weaknesses
-- Some service code still calls HAL user APIs directly, bypassing stricter syscall mediation.
-- Board signal mapping is still imperative and not yet data-driven/generated.
-- Capability contracts (mandatory vs optional drivers) are still convention-based.
-
-## Future improvements for industrial-grade embedded RTOS
-- Define explicit HAL capability traits with compile-time conformance checks.
-- Move board mapping to declarative generated tables with validation.
-- Add host-side HAL behavioral tests (mock/fake backend) for non-target regression coverage.
+- Dependency boundaries are not yet clean: services and `TaskMate.c` call HAL APIs directly, the I2C HAL
+  logs through `tm_libc`, the AVR panic implementation depends directly on the ATmega2560 USART, and
+  generic device drivers include the concrete MCU I2C header.
+- `hal/public` exposes concrete implementation headers rather than stable neutral contracts; capability
+  requirements remain encoded as preprocessor branches and naming conventions.
+- Architecture, MCU, and board startup hooks are currently empty, while boot contains special-case USART
+  startup and later starts the generated USART driver again.
+- The AVR context layout is constrained to code below 64 KiB because the third program-counter byte is
+  not restored. Inline/naked ISR assembly has no host-side behavioral test or automated cycle-budget
+  validation.
+- Several peripheral operations poll indefinitely or block while transmitting, and pointer/index/time-out
+  contracts are incomplete.
