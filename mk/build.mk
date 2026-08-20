@@ -49,7 +49,7 @@
 	@printf "git tag : " >> "${FILE_BUILD_INFO}"
 	@git describe --tags >> "${FILE_BUILD_INFO}"
 	@printf "${CC} : " >> "${FILE_BUILD_INFO}"
-	@printf "${CC_VER}\n" >> "${FILE_BUILD_INFO}"
+	@printf "${VAL_CC_VERSION}\n" >> "${FILE_BUILD_INFO}"
 
 .if make(upload) || make(all)
 	@printf "%s\n" "${COLOUR_WHITE_BOLD}"
@@ -143,15 +143,15 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERRO
 		}' ${FILE_AUTOCODE_LOG_STAMP}
 
 # Special rule for autoCode with clang, not arch specialized compiler
-AUTOCODE_CFLAGS = -I${PATH_SRCS}/ 
-AUTOCODE_CFLAGS += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
+CFLAGS_AUTOCODE = -I${PATH_SRCS}/
+CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
 
 ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
 	@printf "\n%sCompiling autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang ${AUTOCODE_CFLAGS} ${FILES_AUTOCOE_SRC} -o ${FILE_AUTOCODE_TARGET}
+	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
 # Files list for autoCode
 ${FILE_ERROR_LIST}: ${FILES_ERROR}

@@ -29,7 +29,7 @@ FILE_ARCH_CC = ${PATH_SRCS}/hal/arch/avr8/archCC.mk
 
 # compiler for arch avr8
 CC = avr-gcc
-CC_VER != avr-gcc -dumpversion
+VAL_CC_VERSION != avr-gcc -dumpversion
 
 # General options
 CFLAGS += -Os -MMD -MP
@@ -54,8 +54,7 @@ CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
-LFLGAS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
+LDFLAGS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 
 .endif
-
 

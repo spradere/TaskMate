@@ -68,7 +68,7 @@ cppcheck:
 		--suppress=missingInclude \
 		--check-level=exhaustive \
 		${FILES_SRC} \
-		${FILES_AUTOCOE_SRC}
+		${FILES_AUTOCODE_SRC}
 .PHONY: cppcheck
 
 clang_format:
