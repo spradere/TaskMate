@@ -118,9 +118,7 @@ Although **no code from ChatGPT is ever copied directly** into the TaskMate sour
 tree, the project would never have reached its current level of maturity without
 the assistance of AI. ChatGPT has been a great tool for structuring ideas,
 learning new concepts, and refining both code and architectural design. It
-provides technical guidance. Moreover, it enables efficient
-research on related topics by summarizing and contextualizing complex technical
-information, helping me focus on building rather than endlessly searching.
+provides technical guidance. 
 
 Codex is now also used, mainly for audits and complex refactors. It runs in a
 sandboxed environment on a separate machine and under a dedicated account.
