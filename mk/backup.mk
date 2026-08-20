@@ -16,12 +16,12 @@ gitignore: ${FILE_GIT_IGNORE_STAMP}
 #help [global] generate gitignore file
 .PHONY: gitignore
 
-push: ${FILE_GIT_IGNORE_STAMP}
-#help [global] Git push routine, use command line : # make push OPT_COMMIT_MESSAGE="message"
-	@printf "\n%sGit routine for \"${OPT_COMMIT_MESSAGE}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
+push: gitignore
+#help [global] Git push routine, use command line : # make push M="message"
+	@printf "\n%sGit routine for \"${M}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git add .
-	@git commit -m "${OPT_COMMIT_MESSAGE}"
+	@git commit -m "${M}"
 	@git push
 	@printf "\n"
 .PHONY: push
