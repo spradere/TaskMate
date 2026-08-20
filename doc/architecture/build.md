@@ -42,7 +42,5 @@ protect critical headers, while `scripts/header_allow.awk` scans the source tree
   preprocessor dependencies, and protects only patterns explicitly listed in its configuration.
 - Target compatibility is encoded by nested Make includes rather than by a separately validated
   capability model; only the `test1 / arduinoMega / atmega2560 / avr8` stack is present today.
-- The autoCode executable rule refers to misspelled prerequisite variables, so changes to generator
-  sources are not reliably represented by that rule's dependency list.
 - Build metadata includes dates, Git descriptions, and an incrementing revision count; reproducible
   firmware has not yet been demonstrated with pinned tool versions and clean generated-state checks.

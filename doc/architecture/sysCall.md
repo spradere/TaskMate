@@ -33,7 +33,5 @@ memory isolation; it is a C API and architectural boundary.
   `tm_libc` calls `sc_coopYield()` from below the syscall layer.
 - GPIO wrappers perform no signal bounds/configuration checks, and error lookup exposes only text rather
   than a complete error contract.
-- `sc_flagGet()` uses `&=` and therefore modifies global status while reading it; flag set/clear/read also
-  have no documented concurrency contract.
 - Cooperative yield assumes task context and a running scheduler, but task/boot/ISR validity is not
   encoded in the API. The spin after requesting a switch has no explicit timeout or misuse detection.

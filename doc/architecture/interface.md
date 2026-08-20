@@ -34,7 +34,5 @@ generated kernel configuration.
   public scope is broader and less neutral than its rules imply.
 - `macros.h` uses GNU `__typeof__` and register-oriented size dispatch, while `define.h` provides its own
   `NULL`; these choices reduce compiler neutrality and overlap standard C facilities.
-- The generated GPIO enum is hardware-target/application specific, and there is no versioning or
-  compile-time compatibility marker for generated enums and structures.
 - Contracts remain incomplete for timers, serial transport, scheduling context, ISR safety, optional HAL
   capabilities, and structured error handling.

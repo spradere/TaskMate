@@ -21,8 +21,6 @@
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
 
-static uint8_t system_status = 0;
-
 void sc_threadSetSTC(uint16_t count)
 {
 	hal_atomic_state_t state = hal_atomicStart();
@@ -47,7 +45,3 @@ void sc_coopYield(void)
 	hal_atomicEnd(state);
 	while( TM_GETBIT(thread->status, TM_MOD_THREAD_YIELDED) );
 }
-
-void sc_flagClear(uint8_t flag) { system_status &= ~flag; }
-void sc_flagSet(uint8_t flag) { system_status |= flag; }
-uint8_t sc_flagGet(uint8_t flag) { return system_status &= flag; }
