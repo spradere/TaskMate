@@ -19,8 +19,8 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 
 > <span style="color:green"> **Project Stats (v0.28 [^1] )**</span>
 >
->  <span style="color:green">541 commits • 134 source files • 7430 lines of code •
-> binary size : 6432 bytes (Flash) • ram usage : 2013 bytes</span>
+>  <span style="color:green">564 commits • 136 source files • 7562 lines of code •
+> binary size : 6598 bytes (Flash) • ram usage : 2012 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -122,8 +122,6 @@ provides technical guidance. Moreover, it enables efficient
 research on related topics by summarizing and contextualizing complex technical
 information, helping me focus on building rather than endlessly searching.
 
-See : [The Story of TaskMate and the AI Companion](doc/the_AI_companion.md)
-
 ---
 
 ## ️📜 License
@@ -164,4 +162,4 @@ strengths and weaknesses of source code, and future improvements.
 - Operating System Design, The Xinu Approach, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 
-[^1]: ⚠️ Warning : Versions 1.37, 2.71, 3.14 and 4.2 are intentionally skipped. Universe backward compatibility constraints apply.
+[^1]: ⚠️ Warning : Versions 1.37, 2.71, 3.14, 4.2 and 5.11 are intentionally skipped. Universe backward compatibility constraints apply.
