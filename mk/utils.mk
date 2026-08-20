@@ -54,7 +54,7 @@ note:
 #help [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCOE_SRC} ${FILES_AUTOCOE_SRC_H}
+	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 
 .PHONY: note
 
@@ -75,14 +75,14 @@ clang_format:
 #help [global] Formatting code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang-format19 -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCOE_SRC}
+	clang-format19 -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC}
 .PHONY: clang_format
 
 tidy_autoCode:
 #help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@clang-tidy19 $(FILES_AUTOCOE_SRC) ${FILES_AUTOCOE_SRC_H} --\
+	@clang-tidy19 $(FILES_AUTOCODE_SRC) ${FILES_AUTOCODE_SRC_H} --\
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/${PATH_SRCS}/
 .PHONY:tidy_autoCode
