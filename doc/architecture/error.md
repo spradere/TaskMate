@@ -3,24 +3,36 @@
 ## Historical developments
 TaskMate initially handled failures in a local, ad-hoc way inside each module. As the project grew and module count increased, this approach made diagnostics inconsistent and difficult to maintain. Around v0.23-v0.26, the project introduced a system-wide error model: modules declare symbolic error entries in `.err` files, `autoCode` validates and aggregates them at build time, and runtime code consumes a generated catalog through `sysCall/error.*`. This transition moved error ownership from scattered string literals toward a centralized contract.
 
+After v0.28, error declarations moved with their owners into the separated system and HAL trees. The
+build now discovers and sorts the selected target's `*.err` files, while recent naming and include-path
+cleanup kept the generated enum usable by HAL drivers, services, and sysCall code.
+
 ## Current implementation
-Error flow combines build-time generation and runtime lookup:
-- `.err` inputs are merged and validated by `autoCode`.
-- generated catalog/types are provided through interface-visible headers.
-- runtime lookup remains in `sysCall/error.*` with bounded indexed access.
+Each non-comment `*.err` line declares a symbolic name, a quoted message, and a `LOW`, `MID`, or `HIGH`
+criticality. The build concatenates the selected files into `build/<target>/errors_all.err`; autoCode
+rejects duplicate names and unknown criticality values, then generates:
+
+- `err_codes_t` and `ERROR_COUNT` in `interfaces/error_catalog.h`;
+- ROM-backed messages and `err_item_t` entries in `system/sysCall/error.c`.
+
+HAL drivers and services return `err_codes_t` values directly. The runtime API currently exposes only
+`err_getMessage(uint8_t)`, which returns the generated string pointer for an in-range code and a null
+pointer otherwise. Criticality is stored in the catalog but is not exposed through a public accessor or
+used to select a runtime response.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Single global namespace for error codes.
-- Duplicate/malformed entries are caught before firmware build completes.
-- Static catalog layout is deterministic and memory-safe for embedded use.
+- Symbolic codes, messages, and criticality originate from one generated catalog.
+- Duplicate names, malformed declarations, and invalid severity words are detected at generation time.
+- The firmware uses fixed-size enum/table data and ROM-backed text rather than runtime allocation.
+- Message lookup checks its index before reading the generated array.
 
 ### Remaining weaknesses
-- Runtime policy still treats errors mostly as diagnostics, not action contracts.
-- Severity metadata is available but underexploited in recovery flow.
-- Escalation ownership across services/tasks/kernel remains fragmented.
-
-## Future improvements for industrial-grade embedded RTOS
-- Map severities to deterministic runtime actions (retry/degrade/safe-state).
-- Expose richer structured metadata (module, context, timestamp correlation).
-- Add fault-injection and recovery-path tests in CI.
+- The only public lookup returns a message; callers cannot query criticality, error owner, or a prescribed
+  recovery action through the API.
+- Return-code handling is inconsistent: several callers ignore HAL/service failures, and null output
+  pointers are not validated consistently before drivers write through them.
+- The catalog uses an 8-bit lookup index and fixed generator limits without a documented compatibility or
+  extension policy.
+- There is no structured runtime record containing context, occurrence count, timestamp, or originating
+  module, and no tested escalation path from driver failure to safe state.
