@@ -35,8 +35,7 @@ implementation is intentionally much smaller than a conforming C stdio/string li
 - Formatting uses global mutable state. If already locked it yields only once and then proceeds without
   rechecking ownership; an invalid padding path returns without clearing the lock. It is therefore not
   reentrant or ISR-safe.
-- `tm_strncpy()` can write the terminator at index `n`, which exceeds a destination whose capacity is
-  exactly `n`; pointer and zero-size contracts are also not validated consistently.
+- `tm_strncpy()` pointer and zero-size contracts are also not validated consistently.
 - Formatting supports only 16-bit unsigned conversion behavior despite `%i`, has no negative/long values,
   precision, multi-digit width, or standard `snprintf` return semantics guarantee.
 - `tm_libc` depends on sysCall for cooperative yield and on the MCU-oriented HAL string contract, which
