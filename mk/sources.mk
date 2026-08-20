@@ -27,8 +27,8 @@ FILE_DEPS_ALL = ${PATH_BUILD_TARGET}/.deps.d
 .sinclude "${FILE_DEPS_ALL}"
 
 # autoCode
-FILES_AUTOCOE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
-FILES_AUTOCOE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
+FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
+FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 
 VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"

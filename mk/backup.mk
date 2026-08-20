@@ -17,11 +17,11 @@ gitignore: ${FILE_GIT_IGNORE_STAMP}
 .PHONY: gitignore
 
 push: ${FILE_GIT_IGNORE_STAMP}
-#help [global] Git push routine, use command line : # make push M="message"
-	@printf "\n%sGit routine for \"${M}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
+#help [global] Git push routine, use command line : # make push OPT_COMMIT_MESSAGE="message"
+	@printf "\n%sGit routine for \"${OPT_COMMIT_MESSAGE}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@git add .
-	@git commit -m "${M}"
+	@git commit -m "${OPT_COMMIT_MESSAGE}"
 	@git push
 	@printf "\n"
 .PHONY: push
@@ -56,13 +56,13 @@ ${FILE_GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_fil
 .for dir in ${PATHS_GIT_ALLOWED}
 	@printf "!${dir}/\n" >> "${FILE_GIT_IGNORE}"
 	@printf "!${dir}/**/\n" >> "${FILE_GIT_IGNORE}"
-.for file in ${VAL_GIT_ALLOWED.${dir}}
+.for file in ${FILES_GIT_ALLOWED.${dir}}
 	@printf "!${dir}/**/${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 .endfor
 
 	@printf "\n# allowed files\n" >> "${FILE_GIT_IGNORE}"
-.for file in ${VAL_GIT_ALLOWED}
+.for file in ${FILES_GIT_ALLOWED}
 	@printf "!${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 	@touch ${FILE_GIT_IGNORE_STAMP}

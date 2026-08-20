@@ -9,27 +9,27 @@
 ################################################################################
 
 # output files
-FILE_HEX = ${PATH_BUILD_TARGET}/${FILE_TARGET}.hex
-FILE_ELF = ${PATH_BUILD_TARGET}/${FILE_TARGET}.elf
+FILE_HEX = ${FILE_TARGET}.hex
+FILE_ELF = ${FILE_TARGET}.elf
 
 # link
 ${FILE_TARGET}: ${FILES_OBJ}
 	@printf "\n%sLinking%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${CC} ${CFLAGS} ${LFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
+	@${CC} ${CFLAGS} ${LDFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
 
 # compiler wrapper
-COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
+FILE_COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 # compile
-${FILES_OBJ}: ${COMPILE_SRC}
+${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@printf "\n%sCompilation ...%s\n\n" \
 	    "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "source : <%s> -> <%s>\n" \
-	    "${COMPILE_SRC}" "${.TARGET}"
+	    "${FILE_COMPILE_SRC}" "${.TARGET}"
 	@mkdir -p "${.TARGET:H}"
-	@${CC} ${CFLAGS} ${CFLAGS_${COMPILE_SRC}} \
-	    -c "${COMPILE_SRC}" -o "${.TARGET}"
+	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
+	    -c "${FILE_COMPILE_SRC}" -o "${.TARGET}"
 
 #${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 #	@printf "\n%sCompilation ...%s\n\n" \
@@ -107,7 +107,7 @@ tidy_TaskMate:
 	-isystem /usr/local/avr/include \
 	-isystem /usr/local/lib/gcc/avr/14.2.0 \
 	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-	-DF_CPU=${VAL_CPU_FREQ} ${CFLAGS} ${LFLAGS}
+	-DF_CPU=${VAL_CPU_FREQ} ${CFLAGS} ${LDFLAGS}
 
 .PHONY: tidy_TaskMate
 

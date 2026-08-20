@@ -16,7 +16,7 @@
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 
 # Targets
-FILE_TARGET = ${PATH_BUILDS_TARGET}/TaskMate
+FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 
 # USB
@@ -72,11 +72,11 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 FILE_GIT_IGNORE = .gitignore
 FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
 PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
-VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
-VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
-VAL_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio
-VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
-VAL_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
+FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
+FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
+FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio
+FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
+FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
