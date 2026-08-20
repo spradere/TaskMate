@@ -17,7 +17,7 @@
 
 .MAIN: all
 
-.BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
+.BEGIN: gitignore ${FILE_PROGRAMS_CHECK_STAMP}
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
 
@@ -100,7 +100,7 @@ ${FILE_PROGRAMS_CHECK_STAMP}:
 	@printf "${COLOUR_RESET}"
 .endif
 
-all: gitignore _system_critical_check ${FILE_AUTOCODE_STAMP} _dependency ${FILE_TARGET} _mcu_memory_data _cloc_data
+all: _system_critical_check ${FILE_AUTOCODE_STAMP} _dependency ${FILE_TARGET} _mcu_memory_data _cloc_data
 #help [global] Taskmate build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

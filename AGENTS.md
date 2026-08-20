@@ -9,6 +9,19 @@ and `doc/rules/`, especially `style.md`, `interfaces.md`,
 `arch_boundary_enforcement.md`, `portability.md`, `autoCode.md`, and
 `TaskMate_prefixes.md`.
 
+## Embedded constraints
+
+Take MCU constraints into account:
+- 8/16/32-bit CPU
+- integer promotions
+- interrupt context
+- atomicity
+- flash/RAM cost
+- volatile register semantics
+- the build system is a part of the system
+
+Do not propose a generic amd64 desktop-oriented solutions.
+
 ## Architecture
 
 ```text
@@ -39,8 +52,8 @@ tasks, services -> sysCall -> HAL -> interfaces
   files use the BSD-2-Clause banner from `doc/licence_header.txt`; C headers and
   sources also include a Doxygen `@file` / `@brief` block.
 - Types are `snake_case_t`; constants/enums are `UPPER_SNAKE_CASE`; static data
-  is descriptive `snake_case`. Use prefixes only for real boundaries: `tm_`,
-  `sc_`, `gpio_`, `err_`, `mod_`, and `rl_` are established examples.
+  is descriptive `snake_case`; functions are descriptive camelCase. Use prefixes 
+  only for real boundaries: `tm_`, `sc_`, `gpio_`, `err_`, `mod_`, and `rl_`.
 - Comments explain intent and constraints, not the obvious code.
 
 ## autoCode

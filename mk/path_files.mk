@@ -20,7 +20,7 @@ FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
 
-# Programs called by the Makefiles
+# Programs called by Makefiles
 VAL_REQUIRED_PROGRAMS = awk \
 	avr-gcc \
 	avr-nm \
