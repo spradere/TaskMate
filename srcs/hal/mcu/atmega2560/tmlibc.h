@@ -25,8 +25,8 @@
 
 // macro for in file scope string storage
 #define TM_STR_ROM_NEW(name, txt) \
-	static const char UNIQUE_NAME(name)[] PROGMEM = (txt); \
-	static const tm_string_t (name) = {.text = UNIQUE_NAME(name), .storage = TM_MEM_ROM}
+	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
+	static const tm_string_t (name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
 // macro for in function scope string storage
 #define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })

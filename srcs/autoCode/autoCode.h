@@ -17,10 +17,10 @@
 
 #define BYTE_INDEX 256
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 // get TaskMate define
 #define TM_SYSTEM_CRITICAL_ALLOWED
@@ -28,13 +28,13 @@
 #include "system/sysCore/runLevel.h"
 
 // message macro
-#define msgError(format, ...) \
-	do { \
-	fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__); \
-	perror("\t"); } \
-	while(0)
+#define AUTOCODE_MSG_ERROR(format, ...)                                                          \
+	do {                                                                                         \
+		fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__); \
+		perror("\t");                                                                            \
+	} while( 0 )
 
-#define msgInfo(format, ...) \
+#define AUTOCODE_MSG_INFO(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
 // modules structures
@@ -46,14 +46,14 @@ typedef struct
 	unsigned char subtype;
 	int set_runlevel;
 	int set_type;
-	
+
 } module_item_t;
 
 typedef struct
 {
 	module_item_t modules[TM_MOD_COUNT_MAX];
 	int modules_count;
-	
+
 } module_type_t;
 
 typedef struct

@@ -76,7 +76,7 @@ VAL_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 VAL_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
 VAL_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio
 VAL_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
-VAL_GIT_ALLOWED = .clang-format .clang-tidy \
+VAL_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
 
 # Global error
