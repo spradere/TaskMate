@@ -35,8 +35,7 @@ generated but currently private run-level table also live in sysCore.
 - Generated run-level thread lists, `current`, and `next` are allocated but never consulted. The scheduler
   cycles through every thread regardless of run level, dead state, or readiness; yielded state is only
   cleared when a thread is selected.
-- Module getter/setter functions do not validate indexes, and the scheduler's second canary check still
-  examines the outgoing thread rather than the newly selected one.
+- Module getter/setter functions do not validate indexes.
 - Boot special-cases USART before driver allocation/start and does not track init/start/stop state or
   unwind a partial startup failure. The top-level file also contains target-specific experimental code.
 - Shared module status, current-thread state, counters, and ISR callbacks have only partial atomicity and

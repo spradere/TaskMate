@@ -20,4 +20,8 @@ error.md P2
 GPIO.md P2
 HAL.md P2
 interfaces.md P2
+services.md P3
+sysCall.md P3
+sysCore.md P2
+
 
