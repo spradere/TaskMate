@@ -18,6 +18,44 @@ PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 # Targets
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
+FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
+
+# Programs called by the Makefiles
+VAL_REQUIRED_PROGRAMS = awk \
+	avr-gcc \
+	avr-nm \
+	avr-objcopy \
+	avr-objdump \
+	avr-size \
+	avrdude \
+	bmake \
+	cat \
+	clang \
+	clang-format19 \
+	clang-tidy19 \
+	cloc \
+	cppcheck \
+	ctags \
+	cut \
+	date \
+	doxygen \
+	find \
+	geany \
+	git \
+	grep \
+	head \
+	ls \
+	mkdir \
+	mount \
+	printf \
+	rm \
+	rsync \
+	sed \
+	sort \
+	touch \
+	umount \
+	vim \
+	xargs
 
 # USB
 PATH_USBKEY = /media/usbkey
