@@ -115,20 +115,17 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 	switch( cmd )
 	{
 		case TM_DRIVER_CTRL_INIT:
-			hal_i2cInit();
-			break;
+			return hal_i2cInit();
 		case TM_DRIVER_CTRL_START:
-			hal_i2cStart();
-			break;
+			return hal_i2cStart();
 		case TM_DRIVER_CTRL_STOP:
-			hal_i2cStop();
-			break;
+			return hal_i2cStop();
 		case TM_DRIVER_STATUS_RLSET:
 			i2c_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
 			i2c_status |= val;
 			return 0;
 		case TM_DRIVER_STATUS_RLGET:
-			return i2c_status &= TM_DRIVER_RL_MASK;
+			return i2c_status & TM_DRIVER_RL_MASK;
 		case TM_DRIVER_STATUS_SETBIT:
 			TM_SETBIT(i2c_status, val);
 			return 0;
@@ -140,7 +137,6 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 		default:
 			return TM_DRIVER_UNKNOW;
 	}
-	return 0;
 }
 
 // NOLINTEND
