@@ -26,7 +26,11 @@
 static uint8_t buf[7];
 static hal_driver_status_t rtc_status;
 
-static uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
+static uint8_t hal_rtcInit(void);
+static uint8_t hal_rtcStart(void);
+static uint8_t hal_rtcStop(void);
+
+uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
@@ -62,13 +66,13 @@ static uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
 static uint8_t bcdToBin(uint8_t bcd) { return (uint8_t)((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
 static uint8_t binToBcd(uint8_t val) { return (uint8_t)((val / 10u) << 4) | (val % 10u); }
 
-uint8_t hal_rtcInit(void)
+static uint8_t hal_rtcInit(void)
 {
 	hal_rtcControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
 	return 0;
 }
 
-uint8_t hal_rtcStart(void)
+static uint8_t hal_rtcStart(void)
 {
 	if( (hal_rtcControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
 		(hal_rtcControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
@@ -80,7 +84,7 @@ uint8_t hal_rtcStart(void)
 	return 0;
 }
 
-uint8_t hal_rtcStop(void)
+static uint8_t hal_rtcStop(void)
 {
 	hal_rtcControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
 	return 0;

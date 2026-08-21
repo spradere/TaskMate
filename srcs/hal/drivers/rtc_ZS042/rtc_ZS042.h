@@ -28,9 +28,7 @@ typedef struct
 	uint8_t year; // 0-99
 } hal_rtc_time_t;
 
-uint8_t hal_rtcInit(void);
-uint8_t hal_rtcStart(void);
-uint8_t hal_rtcStop(void);
+uint8_t hal_rtcControl(uint8_t cmd, uint8_t val);
 uint8_t hal_rtcRead(hal_rtc_time_t *t);
 uint8_t hal_rtcWrite(const hal_rtc_time_t *t);
 

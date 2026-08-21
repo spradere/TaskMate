@@ -30,7 +30,11 @@ const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 1
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 static hal_driver_status_t timer_sched_status;
 
-static uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
+static uint8_t hal_timerSchedInit(void);
+static uint8_t hal_timerSchedStart(void);
+static uint8_t hal_timerSchedStop(void);
+
+uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
@@ -74,7 +78,7 @@ void hal_timerSchedLoad(void)
 	TCNT1H = LOAD >> 8;
 }
 
-uint8_t hal_timerSchedInit(void)
+static uint8_t hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TM_SETBIT(TCCR1B, WGM12); // CTC mode
@@ -92,7 +96,7 @@ uint8_t hal_timerSchedInit(void)
 						   "n"((uint8_t)(1u << CS11))  \
 		: "r24"
 
-uint8_t hal_timerSchedStart(void)
+static uint8_t hal_timerSchedStart(void)
 {
 	if( (hal_timerSchedControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
 		(hal_timerSchedControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
@@ -116,7 +120,7 @@ uint8_t hal_timerSchedStart(void)
 						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
 		: "r24"
 
-uint8_t hal_timerSchedStop(void)
+static uint8_t hal_timerSchedStop(void)
 {
 	asm volatile(TIMER_SCHED_STOP);
 	hal_timerSchedControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);

@@ -22,9 +22,7 @@
 typedef hal_stack_word_t *hal_timerSchedCallback_func_t(hal_stack_word_t *stack_pointer);
 typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
 
-uint8_t hal_timerSchedInit(void);
-uint8_t hal_timerSchedStart(void);
-uint8_t hal_timerSchedStop(void);
+uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val);
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr);
 void hal_timerSchedLoad(void);
 
