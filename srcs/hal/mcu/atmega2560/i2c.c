@@ -29,7 +29,11 @@
 
 static hal_driver_status_t i2c_status;
 
-static uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
+static uint8_t hal_i2cInit(void);
+static uint8_t hal_i2cStart(void);
+static uint8_t hal_i2cStop(void);
+
+uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
@@ -62,7 +66,7 @@ static uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 	return 0;
 }
 
-uint8_t hal_i2cInit(void)
+static uint8_t hal_i2cInit(void)
 {
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Pre scaler = 1
@@ -71,7 +75,7 @@ uint8_t hal_i2cInit(void)
 	return 0;
 }
 
-uint8_t hal_i2cStart(void)
+static uint8_t hal_i2cStart(void)
 {
 	if( (hal_i2cControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
 		(hal_i2cControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
@@ -101,7 +105,7 @@ uint8_t hal_i2cStart(void)
 	return 0;
 }
 
-uint8_t hal_i2cStop(void)
+static uint8_t hal_i2cStop(void)
 {
 	TM_CLEARBIT(TWCR, TWEN);
 

@@ -17,9 +17,7 @@
 
 #include <stdint.h>
 
-uint8_t hal_lcdInit(void);
-uint8_t hal_lcdStart(void);
-uint8_t hal_lcdStop(void);
+uint8_t hal_lcdControl(uint8_t cmd, uint8_t val);
 void hal_lcdClear(void);
 void hal_lcdSetCursor(uint8_t row, uint8_t col);
 void hal_lcdWriteString(const char *str);

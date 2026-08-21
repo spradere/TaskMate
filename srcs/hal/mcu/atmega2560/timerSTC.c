@@ -28,7 +28,11 @@ const uint16_t hal_timerSTC_OVERFLOW_COUNT =
 static hal_timerSTCCallback_t stc_callback = NULL;
 static hal_driver_status_t timer_stc_status;
 
-static uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
+static uint8_t hal_timerSTCInit(void);
+static uint8_t hal_timerSTCStart(void);
+static uint8_t hal_timerSTCStop(void);
+
+uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
@@ -63,7 +67,7 @@ static uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 
 void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr) { stc_callback = func_ptr; }
 
-uint8_t hal_timerSTCInit(void)
+static uint8_t hal_timerSTCInit(void)
 {
 
 	// Set up timer3 for RTC
@@ -74,7 +78,7 @@ uint8_t hal_timerSTCInit(void)
 	return 0;
 }
 
-uint8_t hal_timerSTCStart(void)
+static uint8_t hal_timerSTCStart(void)
 {
 	if( (hal_timerSTCControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
 		(hal_timerSTCControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
@@ -89,7 +93,7 @@ uint8_t hal_timerSTCStart(void)
 	return 0;
 }
 
-uint8_t hal_timerSTCStop(void)
+static uint8_t hal_timerSTCStop(void)
 {
 	// stop by disabling interrupt
 	TM_CLEARBIT(TIMSK3, OCIE3A);

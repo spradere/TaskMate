@@ -24,10 +24,13 @@
 // NOLINT(readability-magic-numbers)
 
 static void lcdAMC2004SendCommand(uint8_t command);
+static uint8_t hal_lcdInit(void);
+static uint8_t hal_lcdStart(void);
+static uint8_t hal_lcdStop(void);
 
 static hal_driver_status_t lcd_status;
 
-static uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
+uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
@@ -66,7 +69,7 @@ static uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-uint8_t hal_lcdInit(void)
+static uint8_t hal_lcdInit(void)
 {
 	_delay_ms(50); // Wait for LCD to power up
 
@@ -83,7 +86,7 @@ uint8_t hal_lcdInit(void)
 	return 0;
 }
 
-uint8_t hal_lcdStart(void)
+static uint8_t hal_lcdStart(void)
 {
 	if( (hal_lcdControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
 		(hal_lcdControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
@@ -98,7 +101,7 @@ uint8_t hal_lcdStart(void)
 	return 0;
 }
 
-uint8_t hal_lcdStop(void)
+static uint8_t hal_lcdStop(void)
 {
 	// nothing to do.
 	hal_lcdControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);

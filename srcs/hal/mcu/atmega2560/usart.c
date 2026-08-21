@@ -40,7 +40,11 @@ static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 static hal_driver_status_t usart_status;
 
-static uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
+static uint8_t hal_usartInit(void);
+static uint8_t hal_usartStart(void);
+static uint8_t hal_usartStop(void);
+
+uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
@@ -73,7 +77,7 @@ static uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
 	return 0;
 }
 
-uint8_t hal_usartInit(void)
+static uint8_t hal_usartInit(void)
 {
 	uint16_t ubrr = (F_CPU / (16UL * USART_BAUD_RATE)) - 1;
 
@@ -87,7 +91,7 @@ uint8_t hal_usartInit(void)
 	return 0;
 }
 
-uint8_t hal_usartStart(void)
+static uint8_t hal_usartStart(void)
 {
 	if( (hal_usartControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
 		(hal_usartControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
@@ -101,7 +105,7 @@ uint8_t hal_usartStart(void)
 	return 0;
 }
 
-uint8_t hal_usartStop(void)
+static uint8_t hal_usartStop(void)
 {
 	// nothing to do ?
 	hal_usartControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
