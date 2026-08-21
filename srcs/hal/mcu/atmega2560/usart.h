@@ -20,9 +20,9 @@
 
 #include "interfaces/error_catalog.h"
 
-void hal_usartInit(void);
-void hal_usartStart(void);
-void hal_usartStop(void);
+uint8_t hal_usartInit(void);
+uint8_t hal_usartStart(void);
+uint8_t hal_usartStop(void);
 err_codes_t hal_usartRead(uint8_t *data);
 err_codes_t hal_usartWriteChar(uint8_t data);
 void hal_usartSendTXBuffer(void);

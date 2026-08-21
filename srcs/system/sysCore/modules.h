@@ -49,9 +49,9 @@ typedef struct
 	const tm_string_t *name;
 	uint8_t status;
 
-	void (*init)(void);
-	void (*start)(void);
-	void (*stop)(void);
+	uint8_t (*init)(void);
+	uint8_t (*start)(void);
+	uint8_t (*stop)(void);
 
 } mod_driver_item_t;
 

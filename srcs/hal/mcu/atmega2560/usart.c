@@ -38,7 +38,7 @@ static volatile uint8_t buffer_tx[HAL_USART_BUFFER_SIZE];
 static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 
-void hal_usartInit(void)
+uint8_t hal_usartInit(void)
 {
 	uint16_t ubrr = (F_CPU / (16UL * USART_BAUD_RATE)) - 1;
 
@@ -47,16 +47,21 @@ void hal_usartInit(void)
 
 	TM_WRITEBIT(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
 	TM_WRITEBIT(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
+
+	return 0;
 }
 
-void hal_usartStart(void)
+uint8_t hal_usartStart(void)
 {
 	TM_SETBIT(UCSR1B, RXCIE1); // enable Rx interrupt
+
+	return 0;
 }
 
-void hal_usartStop(void)
+uint8_t hal_usartStop(void)
 {
 	// nothing to do ?
+	return 0;
 }
 
 // USART1 Rx Interrupt Handler (Triggered when data is received)

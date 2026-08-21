@@ -29,7 +29,7 @@ static void lcdAMC2004SendCommand(uint8_t command);
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-void hal_lcdInit(void)
+uint8_t hal_lcdInit(void)
 {
 	_delay_ms(50); // Wait for LCD to power up
 
@@ -41,17 +41,22 @@ void hal_lcdInit(void)
 	_delay_ms(11);
 	lcdAMC2004SendCommand(0x06); // Entry Mode: Cursor moves right, no shift
 	_delay_us(110);
+
+	return 0;
 }
 
-void hal_lcdStart(void)
+uint8_t hal_lcdStart(void)
 {
 	hal_lcdClear();
 	hal_lcdWriteString("lcdAMC2004 ready");
+
+	return 0;
 }
 
-void hal_lcdStop(void)
+uint8_t hal_lcdStop(void)
 {
 	// nothing to do.
+	return 0;
 }
 
 void lcdAMC2004SendCommand(uint8_t command)
