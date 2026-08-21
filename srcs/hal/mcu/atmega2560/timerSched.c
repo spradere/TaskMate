@@ -120,20 +120,17 @@ uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 	switch( cmd )
 	{
 		case TM_DRIVER_CTRL_INIT:
-			hal_timerSchedInit();
-			break;
+			return hal_timerSchedInit();
 		case TM_DRIVER_CTRL_START:
-			hal_timerSchedStart();
-			break;
+			return hal_timerSchedStart();
 		case TM_DRIVER_CTRL_STOP:
-			hal_timerSchedStop();
-			break;
+			return hal_timerSchedStop();
 		case TM_DRIVER_STATUS_RLSET:
 			timer_sched_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
 			timer_sched_status |= val;
 			return 0;
 		case TM_DRIVER_STATUS_RLGET:
-			return timer_sched_status &= TM_DRIVER_RL_MASK;
+			return timer_sched_status & TM_DRIVER_RL_MASK;
 		case TM_DRIVER_STATUS_SETBIT:
 			TM_SETBIT(timer_sched_status, val);
 			return 0;
@@ -145,5 +142,4 @@ uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 		default:
 			return TM_DRIVER_UNKNOW;
 	}
-	return 0;
 }

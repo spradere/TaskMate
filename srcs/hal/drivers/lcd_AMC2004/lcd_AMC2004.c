@@ -107,20 +107,17 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 	switch( cmd )
 	{
 		case TM_DRIVER_CTRL_INIT:
-			hal_lcdInit();
-			break;
+			return hal_lcdInit();
 		case TM_DRIVER_CTRL_START:
-			hal_lcdStart();
-			break;
+			return hal_lcdStart();
 		case TM_DRIVER_CTRL_STOP:
-			hal_lcdStop();
-			break;
+			return hal_lcdStop();
 		case TM_DRIVER_STATUS_RLSET:
 			lcd_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
 			lcd_status |= val;
 			return 0;
 		case TM_DRIVER_STATUS_RLGET:
-			return lcd_status &= TM_DRIVER_RL_MASK;
+			return lcd_status & TM_DRIVER_RL_MASK;
 		case TM_DRIVER_STATUS_SETBIT:
 			TM_SETBIT(lcd_status, val);
 			return 0;
@@ -132,7 +129,6 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 		default:
 			return TM_DRIVER_UNKNOW;
 	}
-	return 0;
 }
 
 // NOLINTEND

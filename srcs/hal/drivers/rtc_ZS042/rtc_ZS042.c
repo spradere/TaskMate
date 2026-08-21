@@ -99,20 +99,17 @@ uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
 	switch( cmd )
 	{
 		case TM_DRIVER_CTRL_INIT:
-			hal_rtcInit();
-			break;
+			return hal_rtcInit();
 		case TM_DRIVER_CTRL_START:
-			hal_rtcStart();
-			break;
+			return hal_rtcStart();
 		case TM_DRIVER_CTRL_STOP:
-			hal_rtcStop();
-			break;
+			return hal_rtcStop();
 		case TM_DRIVER_STATUS_RLSET:
 			rtc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
 			rtc_status |= val;
 			return 0;
 		case TM_DRIVER_STATUS_RLGET:
-			return rtc_status &= TM_DRIVER_RL_MASK;
+			return rtc_status & TM_DRIVER_RL_MASK;
 		case TM_DRIVER_STATUS_SETBIT:
 			TM_SETBIT(rtc_status, val);
 			return 0;
@@ -124,7 +121,6 @@ uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
 		default:
 			return TM_DRIVER_UNKNOW;
 	}
-	return 0;
 }
 
 // NOLINTEND

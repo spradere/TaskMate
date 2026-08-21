@@ -76,20 +76,17 @@ uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 	switch( cmd )
 	{
 		case TM_DRIVER_CTRL_INIT:
-			hal_timerSTCInit();
-			break;
+			return hal_timerSTCInit();
 		case TM_DRIVER_CTRL_START:
-			hal_timerSTCStart();
-			break;
+			return hal_timerSTCStart();
 		case TM_DRIVER_CTRL_STOP:
-			hal_timerSTCStop();
-			break;
+			return hal_timerSTCStop();
 		case TM_DRIVER_STATUS_RLSET:
 			timer_stc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
 			timer_stc_status |= val;
 			return 0;
 		case TM_DRIVER_STATUS_RLGET:
-			return timer_stc_status &= TM_DRIVER_RL_MASK;
+			return timer_stc_status & TM_DRIVER_RL_MASK;
 		case TM_DRIVER_STATUS_SETBIT:
 			TM_SETBIT(timer_stc_status, val);
 			return 0;
@@ -101,5 +98,4 @@ uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 		default:
 			return TM_DRIVER_UNKNOW;
 	}
-	return 0;
 }
