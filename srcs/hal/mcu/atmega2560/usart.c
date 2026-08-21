@@ -16,6 +16,7 @@
 
 #include <avr/interrupt.h>
 
+#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
 #include "mcu_define.h" // get usart baud rate
 
@@ -37,6 +38,40 @@ static volatile uint8_t buffer_rx[HAL_USART_BUFFER_SIZE];
 static volatile uint8_t buffer_tx[HAL_USART_BUFFER_SIZE];
 static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
+static hal_driver_status_t usart_status;
+
+static uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_usartInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_usartStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_usartStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			usart_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			usart_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return usart_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(usart_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(usart_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(usart_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
+}
 
 uint8_t hal_usartInit(void)
 {
@@ -48,19 +83,28 @@ uint8_t hal_usartInit(void)
 	TM_WRITEBIT(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
 	TM_WRITEBIT(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
 
+	hal_usartControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
 	return 0;
 }
 
 uint8_t hal_usartStart(void)
 {
+	if( (hal_usartControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
+		(hal_usartControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	{
+		return TM_DRIVER_UNKNOW;
+	}
+
 	TM_SETBIT(UCSR1B, RXCIE1); // enable Rx interrupt
 
+	hal_usartControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 
 uint8_t hal_usartStop(void)
 {
 	// nothing to do ?
+	hal_usartControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 

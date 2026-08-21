@@ -17,11 +17,48 @@
 #include <util/delay.h>
 
 #include "hal/mcu/atmega2560/i2c.h"
+#include "interfaces/drivers.h"
+#include "interfaces/macros.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
 static void lcdAMC2004SendCommand(uint8_t command);
+
+static hal_driver_status_t lcd_status;
+
+static uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_lcdInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_lcdStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_lcdStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			lcd_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			lcd_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return lcd_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(lcd_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(lcd_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(lcd_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
+}
 
 #define LCDAMC2004_I2C_ADDR 0x3C // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
@@ -42,20 +79,29 @@ uint8_t hal_lcdInit(void)
 	lcdAMC2004SendCommand(0x06); // Entry Mode: Cursor moves right, no shift
 	_delay_us(110);
 
+	hal_lcdControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
 	return 0;
 }
 
 uint8_t hal_lcdStart(void)
 {
+	if( (hal_lcdControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
+		(hal_lcdControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	{
+		return TM_DRIVER_UNKNOW;
+	}
+
 	hal_lcdClear();
 	hal_lcdWriteString("lcdAMC2004 ready");
 
+	hal_lcdControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 
 uint8_t hal_lcdStop(void)
 {
 	// nothing to do.
+	hal_lcdControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 

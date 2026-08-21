@@ -22,11 +22,46 @@
 #include "hal/arch/avr8/interrupt.h"
 #include "hal/arch/avr8/stack.h"
 #include "interfaces/define.h"
+#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
 
 const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
+static hal_driver_status_t timer_sched_status;
+
+static uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_timerSchedInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_timerSchedStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_timerSchedStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			timer_sched_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			timer_sched_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return timer_sched_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(timer_sched_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(timer_sched_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(timer_sched_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
+}
 
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_callback = func_ptr; }
 
@@ -46,6 +81,7 @@ uint8_t hal_timerSchedInit(void)
 	OCR1A = TIMER1_OVERFLOW_COUNT;
 	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
 
+	hal_timerSchedControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
 	return 0;
 }
 
@@ -58,7 +94,14 @@ uint8_t hal_timerSchedInit(void)
 
 uint8_t hal_timerSchedStart(void)
 {
+	if( (hal_timerSchedControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
+		(hal_timerSchedControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	{
+		return TM_DRIVER_UNKNOW;
+	}
+
 	asm volatile(TIMER_SCHED_START);
+	hal_timerSchedControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 
@@ -76,6 +119,7 @@ uint8_t hal_timerSchedStart(void)
 uint8_t hal_timerSchedStop(void)
 {
 	asm volatile(TIMER_SCHED_STOP);
+	hal_timerSchedControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 
