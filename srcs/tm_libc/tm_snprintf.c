@@ -91,14 +91,11 @@ static void tm_putChar(char ch)
 {
 	if( tm_snprintf_buffer.ptr != NULL )
 	{
-		if( (tm_snprintf_buffer.index + 1) < (tm_snprintf_buffer.size -1) )
+		if( (tm_snprintf_buffer.index + 1) < (tm_snprintf_buffer.size - 1) )
 		{
 			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index++] = ch;
 		}
-		else
-		{ 
-			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index-1] = 0;
-		}
+		else { tm_snprintf_buffer.ptr[tm_snprintf_buffer.index - 1] = 0; }
 	}
 
 	if( tm_snprintf_buffer.ptr == NULL ) { hal_stdio_putChar(ch); }
@@ -195,7 +192,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	}
 
 	tm_putChar(0); // close string
-	
+
 exit:
 
 	tm_snprintf_lock = 0;

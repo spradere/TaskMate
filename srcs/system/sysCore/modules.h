@@ -47,11 +47,8 @@ typedef struct
 typedef struct
 {
 	const tm_string_t *name;
-	uint8_t status;
 
-	uint8_t (*init)(void);
-	uint8_t (*start)(void);
-	uint8_t (*stop)(void);
+	uint8_t (*control)(uint8_t, uint8_t);
 
 } mod_driver_item_t;
 

@@ -14,21 +14,25 @@
 
 #include "boot.h"
 
-#include "hal/public/i2c.h"
 #include "hal/public/usart.h"
+#include "interfaces/drivers.h"
 #include "interfaces/runLevel_define.h"
 #include "system/sysCore/gpio.h"
 #include "system/sysCore/hal_init.h"
 #include "system/sysCore/modules.h"
+#include "system/sysCore/modules_list.h"
 #include "system/sysCore/runLevel.h"
 #include "tm_libc/tm_syslog.h"
 
 void boot(void)
 {
 	// system startup
-	hal_usartInit();
-	hal_usartStart();
-	tm_syslog(TM_STR("\n\n[boot] booting ...\n"));
+	// hal_usartInit();
+	// hal_usartStart();
+	hal_usartControl(TM_DRIVER_CTRL_INIT, 0);
+	hal_usartControl(TM_DRIVER_CTRL_START, 0);
+
+	tm_syslog(TM_STR("\n\n[boot] System startup ...\n"));
 
 	// system static allocation init
 	tm_syslog(TM_STR("[boot] system static allocation\n"));
@@ -51,10 +55,14 @@ void boot(void)
 		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 		{
 			mod_driver_item_t *mod = mod_driverGetPointer(i);
-			if( (mod->status & RUN_LEVEL_MASK) == runlevel )
+
+			if( (*(mod->control))(TM_DRIVER_STATUS_RLGET, 0) == runlevel )
 			{
-				(*(mod->init))();
-				(*(mod->start))();
+				tm_syslog(TM_STR("[boot] driver <%s> ..."), mod->name);
+				(*(mod->control))(TM_DRIVER_CTRL_INIT, 0);
+				tm_syslog(TM_STR(" init ..."), mod->name);
+				(*(mod->control))(TM_DRIVER_CTRL_START, 0);
+				tm_syslog(TM_STR(" start ... ok\n"), mod->name);
 			}
 		}
 	}

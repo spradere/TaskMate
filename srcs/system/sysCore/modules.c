@@ -16,6 +16,7 @@
 #include <stddef.h>
 
 #include "hal/public/context.h"
+#include "interfaces/drivers.h"
 #include "system/sysCore/modules_list.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
@@ -136,68 +137,56 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(0);
 	TM_STR_ROM_NEW(driver0_name, "lcd");
+	hal_lcdControl(TM_DRIVER_STATUS_RLSET, 2);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver0_name,
-		.status = 2,
-		.init = hal_lcdInit,
-		.start = hal_lcdStart,
-		.stop = hal_lcdStop
+		.control = hal_lcdControl
 	};
 
 	mod = mod_driverGetPointer(1);
 	TM_STR_ROM_NEW(driver1_name, "rtc");
+	hal_rtcControl(TM_DRIVER_STATUS_RLSET, 2);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver1_name,
-		.status = 2,
-		.init = hal_rtcInit,
-		.start = hal_rtcStart,
-		.stop = hal_rtcStop
+		.control = hal_rtcControl
 	};
 
 	mod = mod_driverGetPointer(2);
 	TM_STR_ROM_NEW(driver2_name, "timerSched");
+	hal_timerSchedControl(TM_DRIVER_STATUS_RLSET, 0);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver2_name,
-		.status = 1,
-		.init = hal_timerSchedInit,
-		.start = hal_timerSchedStart,
-		.stop = hal_timerSchedStop
+		.control = hal_timerSchedControl
 	};
 
 	mod = mod_driverGetPointer(3);
 	TM_STR_ROM_NEW(driver3_name, "timerSTC");
+	hal_timerSTCControl(TM_DRIVER_STATUS_RLSET, 1);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver3_name,
-		.status = 1,
-		.init = hal_timerSTCInit,
-		.start = hal_timerSTCStart,
-		.stop = hal_timerSTCStop
+		.control = hal_timerSTCControl
 	};
 
 	mod = mod_driverGetPointer(4);
 	TM_STR_ROM_NEW(driver4_name, "i2c");
+	hal_i2cControl(TM_DRIVER_STATUS_RLSET, 1);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver4_name,
-		.status = 1,
-		.init = hal_i2cInit,
-		.start = hal_i2cStart,
-		.stop = hal_i2cStop
+		.control = hal_i2cControl
 	};
 
 	mod = mod_driverGetPointer(5);
 	TM_STR_ROM_NEW(driver5_name, "usart");
+	hal_usartControl(TM_DRIVER_STATUS_RLSET, 1);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver5_name,
-		.status = 1,
-		.init = hal_usartInit,
-		.start = hal_usartStart,
-		.stop = hal_usartStop
+		.control = hal_usartControl
 	};
 
 // clang-format on

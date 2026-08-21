@@ -71,7 +71,7 @@ cppcheck:
 		${FILES_AUTOCODE_SRC}
 .PHONY: cppcheck
 
-clang_format:
+format:
 #help [global] Formatting code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

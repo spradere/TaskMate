@@ -21,15 +21,23 @@
 #include "hal/public/panic.h"
 #include "hal/public/stack.h"
 #include "hal/public/timerSched.h"
+#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
 #include "system/sysCore/modules.h"
+#include "system/sysCore/modules_list.h"
 
 static hal_timerSchedCallback_func_t tm_schedulerRR;
 
-void tm_schedulerInit(void) { hal_timerSchedSetCallback(tm_schedulerRR); }
+void tm_schedulerInit(void)
+{
+	hal_timerSchedSetCallback(tm_schedulerRR);
+	hal_timerSchedControl(TM_DRIVER_CTRL_INIT, 0);
+}
 
 void tm_schedulerStart(void)
 {
+	hal_timerSchedControl(TM_DRIVER_CTRL_START, 0);
+
 	mod_threadSetCurrent(0);
 	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
 	hal_setStackPointer(mod->stack_pointer);
@@ -59,7 +67,7 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	if( ++current == TM_MOD_THREAD_COUNT ) { current = 0; }
 	mod_threadSetCurrent(current);
 	thread = mod_threadGetPointer(current);
-	
+
 	// canary check
 	if( thread->canary_low != TM_MOD_CANARY ) { panic("canary low 2"); }
 	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 2"); }

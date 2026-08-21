@@ -61,10 +61,7 @@ void msg(void)
 	msgProcess();
 	msgFreeChannel(chan);
 
-	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
-	{
-		msgWriteText(chan, "\3name xyz", MSG_TO_LCD);
-	}
+	if( msgRequestChannel(&chan) == ERR_NO_ERROR ) { msgWriteText(chan, "\3name xyz", MSG_TO_LCD); }
 
 	msgProcess();
 	msgFreeChannel(chan);

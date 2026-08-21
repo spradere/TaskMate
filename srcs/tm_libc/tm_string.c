@@ -20,7 +20,7 @@ void tm_strncpy(char *dest, const char *src, uint8_t n)
 {
 	uint8_t i = 0;
 
-	while( (i < n) && (src[i] != 0) && (i < (TM_STRING_SIZE_MAX -1)) )
+	while( (i < n) && (src[i] != 0) && (i < (TM_STRING_SIZE_MAX - 1)) )
 	{
 		dest[i] = src[i];
 		i++;

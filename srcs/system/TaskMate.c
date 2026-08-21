@@ -50,7 +50,7 @@ int main(void)
 	 * ************************************************************************************************/
 
 	// RTC external module test
-	tm_syslog(TM_STR("[boot] hal RTC init\n"));
+	tm_syslog(TM_STR("[info] hal RTC init\n"));
 	hal_rtc_time_t t;
 	t.hours = 18;
 	t.minutes = 54;
@@ -118,7 +118,7 @@ int main(void)
 	 * ************************************************************************************************/
 
 	// start scheduler
-	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));
+	tm_syslog(TM_STR("[info] start round-robin scheduler\n"));
 
 	tm_softwareTimeCounterInit();
 
