@@ -28,9 +28,6 @@ CFLAGS_${PATH_SRCS}/system/sysCore/boot.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS}/system/sysCore/runLevel.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
 CFLAGS_${PATH_SRCS}/system/sysCore/tm_softwareTimeCounter.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
@@ -48,5 +45,4 @@ _system_critical_check:
 
 	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS} -v h_check_log=${FILE_H_CHECK_LOG} \
 		-f ${PATH_SCRIPTS}/header_allow.awk "${FILE_H_ALLOW_CONF}"
-
 

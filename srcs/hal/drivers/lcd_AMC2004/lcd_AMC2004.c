@@ -59,8 +59,6 @@ static uint8_t hal_lcdStart(void)
 	}
 
 	hal_lcdClear();
-	hal_lcdWriteString("lcdAMC2004 ready");
-
 	hal_lcdControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
 	return 0;
 }

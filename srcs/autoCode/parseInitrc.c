@@ -53,8 +53,8 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 
 			// reset tmp module
 			mod_tmp.status = 0;
-			mod_tmp.set_runlevel = 0;
-			mod_tmp.set_type = 0;
+			mod_tmp.cnt_set_runlevel = 0;
+			mod_tmp.cnt_set_type = 0;
 
 			// parse commands
 			for( int i = 1; i < tok.count; i++ )
@@ -96,22 +96,22 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			}
 
 			// check options
-			if( mod_tmp.set_runlevel < 1 )
+			if( mod_tmp.cnt_set_runlevel < 1 )
 			{
 				AUTOCODE_MSG_ERROR("Module %s : -run_* option is not set", tok.tokens[0]);
 				exit(1);
 			}
-			if( mod_tmp.set_runlevel > 1 )
+			if( mod_tmp.cnt_set_runlevel > 1 )
 			{
 				AUTOCODE_MSG_ERROR("Module %s : -run_* option is multiple set", tok.tokens[0]);
 				exit(1);
 			}
-			if( mod_tmp.set_type < 1 )
+			if( mod_tmp.cnt_set_type < 1 )
 			{
 				AUTOCODE_MSG_ERROR("Module %s : -type_* option is not set", tok.tokens[0]);
 				exit(1);
 			}
-			if( mod_tmp.set_type > 1 )
+			if( mod_tmp.cnt_set_type > 1 )
 			{
 				AUTOCODE_MSG_ERROR("Module %s : -type_* option is multiple set", tok.tokens[0]);
 				exit(1);

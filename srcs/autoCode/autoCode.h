@@ -25,7 +25,7 @@
 // get TaskMate define
 #define TM_SYSTEM_CRITICAL_ALLOWED
 #include "interfaces/modules_define.h"
-#include "system/sysCore/runLevel.h"
+#include "interfaces/runLevel_define.h"
 
 // message macro
 #define AUTOCODE_MSG_ERROR(format, ...)                                                          \
@@ -44,8 +44,8 @@ typedef struct
 	unsigned char status;
 	unsigned char type;
 	unsigned char subtype;
-	int set_runlevel;
-	int set_type;
+	int cnt_set_runlevel;
+	int cnt_set_type;
 
 } module_item_t;
 
@@ -59,9 +59,7 @@ typedef struct
 typedef struct
 {
 	module_type_t modules_type[TM_MOD_TYPE_COUNT];
-	int run_level_module_count[TM_MOD_TYPE_COUNT][RUN_LEVEL_COUNT];
-	int threads_count[RUN_LEVEL_COUNT];
-
+	
 } modules_database_t;
 
 #endif // AUTOCODE_AUTOCODE_H

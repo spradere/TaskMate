@@ -3,5 +3,5 @@
 timerSched -type_driver -run_none
 timerSTC -type_driver -run_core
 i2c -type_driver -run_core
-usart -type_driver -run_core
+usart -type_driver -run_none
 

@@ -182,7 +182,7 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(5);
 	TM_STR_ROM_NEW(driver5_name, "usart");
-	hal_usartControl(TM_DRIVER_STATUS_RLSET, 1);
+	hal_usartControl(TM_DRIVER_STATUS_RLSET, 0);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver5_name,

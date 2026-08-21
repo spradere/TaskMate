@@ -21,14 +21,11 @@
 #include "system/sysCore/hal_init.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/modules_list.h"
-#include "system/sysCore/runLevel.h"
 #include "tm_libc/tm_syslog.h"
 
 void boot(void)
 {
 	// system startup
-	// hal_usartInit();
-	// hal_usartStart();
 	hal_usartControl(TM_DRIVER_CTRL_INIT, 0);
 	hal_usartControl(TM_DRIVER_CTRL_START, 0);
 
@@ -39,7 +36,6 @@ void boot(void)
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
-	rl_alloc();
 
 	// hal hardware init
 	tm_syslog(TM_STR("[boot] hal hardware init\n"));

@@ -38,7 +38,6 @@
 #include "tokenizer.h"
 
 static void setupDatabase(modules_database_t *data_base);
-static void countThreadsByRunLevel(modules_database_t *data_base);
 
 int main(int argn, const char *argv[])
 {
@@ -76,9 +75,6 @@ int main(int argn, const char *argv[])
 	}
 	fileClose(&finitrc, __FILE__, __LINE__);
 
-	// count thread for each level
-	countThreadsByRunLevel(&data_base);
-
 	// parse tag and generate code
 	file_t ftag;
 	fileInit(&ftag);
@@ -104,33 +100,11 @@ static void setupDatabase(modules_database_t *data_base)
 {
 	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
 	{
-		for( int j = 0; j < RUN_LEVEL_COUNT; j++ ) { data_base->run_level_module_count[i][j] = 0; }
-	}
-
-	for( int i = 0; i < TM_MOD_TYPE_COUNT; i++ )
-	{
 		data_base->modules_type[i].modules_count = 0;
 		for( int j = 0; j < TM_MOD_COUNT_MAX; j++ )
 		{
-			data_base->modules_type[i].modules[j].set_runlevel = 0;
-			data_base->modules_type[i].modules[j].set_type = 0;
+			data_base->modules_type[i].modules[j].cnt_set_runlevel = 0;
+			data_base->modules_type[i].modules[j].cnt_set_type = 0;
 		}
-	}
-}
-
-static void countThreadsByRunLevel(modules_database_t *data_base)
-{
-	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
-	{
-
-		// count thread for each run level
-		int thread_count = 0;
-
-		for( int i = 1; i <= level; i++ )
-		{
-			thread_count += data_base->run_level_module_count[TM_MOD_THREAD_ID][i];
-		}
-
-		data_base->threads_count[level] = thread_count;
 	}
 }

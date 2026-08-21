@@ -90,8 +90,7 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 
-FILES_PARSE_TAG = ${PATH_SRCS}/system/sysCore/runLevel.h \
-	${PATH_SRCS}/system/sysCore/runLevel.c \
+FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCall/error.c \
 	${PATH_SRCS}/interfaces/error_catalog.h \
 	${PATH_SRCS}/interfaces/modules_define.h \
@@ -108,7 +107,6 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 
 # git ignore
 FILE_GIT_IGNORE = .gitignore
-FILE_GIT_IGNORE_STAMP = ${PATH_BUILD_TARGET}/.gitignore_stamp
 PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf

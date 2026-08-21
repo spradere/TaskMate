@@ -25,12 +25,10 @@ typedef struct
 	const options_list_t *auto_options;
 } parse_tag_t;
 
-static void writeRunlevelDefine(const parse_tag_t *parse);
 static void writeModulesCount(const parse_tag_t *parse);
 static void writeInfo(const parse_tag_t *parse);
 static void writeDriversAlloc(const parse_tag_t *parse);
 static void writeThreadsAlloc(const parse_tag_t *parse);
-static void writeRunlevelsAlloc(const parse_tag_t *parse);
 static void writeErrorCatalog(const parse_tag_t *parse);
 static void writeErrorEnum(const parse_tag_t *parse);
 static void writeModulesList(const parse_tag_t *parse);
@@ -38,18 +36,16 @@ static void writeHalDefine(const parse_tag_t *parse);
 static void writeHalInit(const parse_tag_t *parse);
 static void writeGpioSignals(const parse_tag_t *parse);
 
-#define HAVE_TAG(X)                                                  \
-	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc)        \
-	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc)        \
-	X(HAVE_RUNLEVEL_ALLOC, "runlevels_alloc", writeRunlevelsAlloc)   \
-	X(HAVE_RUNLEVEL_DEFINE, "runlevels_define", writeRunlevelDefine) \
-	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)                 \
-	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog)        \
-	X(HAVE_INFO, "system_info", writeInfo)                           \
-	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)                 \
-	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                       \
-	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)            \
-	X(HAVE_MOD_LIST, "modules_list", writeModulesList)               \
+#define HAVE_TAG(X)                                           \
+	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc) \
+	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc) \
+	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)          \
+	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog) \
+	X(HAVE_INFO, "system_info", writeInfo)                    \
+	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)          \
+	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                \
+	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)     \
+	X(HAVE_MOD_LIST, "modules_list", writeModulesList)        \
 	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)
 
 static const struct
@@ -317,32 +313,6 @@ static void writeModulesList(const parse_tag_t *parse)
 	have_tag_count[HAVE_MOD_LIST]++;
 }
 
-static void writeRunlevelDefine(const parse_tag_t *parse)
-{
-	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
-	{
-		fprintf(parse->file,
-				"#define RUN_LEVEL%i_THREADS_COUNT %i\n",
-				i,
-				parse->data_base->threads_count[i]);
-	}
-	// structure
-	fprintf(parse->file, "\ntypedef struct\n");
-	fprintf(parse->file, "{\n");
-
-	for( int i = 0; i < RUN_LEVEL_COUNT; i++ )
-	{
-		fprintf(parse->file, "\tuint8_t level%i[RUN_LEVEL%i_THREADS_COUNT + 1];\n", i, i);
-	}
-
-	fprintf(parse->file, "\tuint8_t *levels[%i];\n", RUN_LEVEL_COUNT);
-	fprintf(parse->file, "\tuint8_t current;\n");
-	fprintf(parse->file, "\tuint8_t next;\n");
-	fprintf(parse->file, "} rl_data_base_t;\n\n");
-
-	have_tag_count[HAVE_RUNLEVEL_DEFINE]++;
-}
-
 static void writeModulesCount(const parse_tag_t *parse)
 {
 	fprintf(parse->file,
@@ -416,43 +386,6 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 		fprintf(parse->file, "\t};\n");
 	}
 	have_tag_count[HAVE_DRIVERS_ALLOC]++;
-}
-
-static void writeRunlevelsAlloc(const parse_tag_t *parse)
-{
-	// data
-	fprintf(parse->file, "\tto_run = (rl_data_base_t){\n");
-
-	for( int level = 0; level < RUN_LEVEL_COUNT; level++ )
-	{
-
-		fprintf(parse->file, "\t\t.level%i = {%i", level, parse->data_base->threads_count[level]);
-
-		// write threads list for run level
-		int threads_count = 0;
-		const module_type_t *mod;
-
-		mod = &parse->data_base->modules_type[TM_MOD_THREAD_ID];
-
-		for( int i = 0; i < mod->modules_count; i++ )
-		{
-			if( (mod->modules[i].status & RUN_LEVEL_MASK) <= level )
-			{
-				fprintf(parse->file, ",%i", threads_count++);
-			}
-		}
-		fprintf(parse->file, "},\n");
-	}
-
-	fprintf(parse->file,
-			"\t\t.levels = {to_run.level0, to_run.level1, to_run.level2, "
-			"to_run.level3, to_run.level4}\n");
-	fprintf(parse->file, "\t};\n");
-
-	fprintf(parse->file, "\tto_run.current=RUN_CORE;\n");
-	fprintf(parse->file, "\tto_run.next=RUN_CORE;\n");
-
-	have_tag_count[HAVE_RUNLEVEL_ALLOC]++;
 }
 
 static void writeErrorCatalog(const parse_tag_t *parse)

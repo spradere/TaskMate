@@ -12,11 +12,7 @@
 # Backup
 ################################################################################
 
-gitignore: ${FILE_GIT_IGNORE_STAMP}
-#help [global] generate gitignore file
-.PHONY: gitignore
-
-push: gitignore
+push: ${FILE_GIT_IGNORE}
 #help [global] Git push routine, use command line : # make push M="message"
 	@printf "\n%sGit routine for \"${M}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -46,9 +42,8 @@ merge:
 	@git switch test
 .PHONY: merge
 
-
 # Write .gitignore file
-${FILE_GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
+${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "# exclude everything\n" > "${FILE_GIT_IGNORE}"
 	@printf "*\n" >> "${FILE_GIT_IGNORE}"
 
@@ -65,7 +60,6 @@ ${FILE_GIT_IGNORE_STAMP}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_fil
 .for file in ${FILES_GIT_ALLOWED}
 	@printf "!${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
-	@touch ${FILE_GIT_IGNORE_STAMP}
 
 backup:
 #help [global] USB key backup with current git tag in directory.
