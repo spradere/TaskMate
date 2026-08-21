@@ -17,6 +17,8 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
+#include "interfaces/drivers.h"
+#include "interfaces/macros.h"
 #include "mcu_define.h" // get i2c frequency
 #include "tm_libc/tm_syslog.h"
 
@@ -25,16 +27,58 @@
 
 #define I2C_TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
 
+static hal_driver_status_t i2c_status;
+
+static uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_i2cInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_i2cStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_i2cStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			i2c_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			i2c_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return i2c_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(i2c_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(i2c_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(i2c_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
+}
+
 uint8_t hal_i2cInit(void)
 {
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Pre scaler = 1
 
+	hal_i2cControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
 	return 0;
 }
 
 uint8_t hal_i2cStart(void)
 {
+	if( (hal_i2cControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
+		(hal_i2cControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	{
+		return TM_DRIVER_UNKNOW;
+	}
+
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
 	// address test
@@ -53,6 +97,7 @@ uint8_t hal_i2cStart(void)
 		hal_i2cCommStop();
 	}
 
+	hal_i2cControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 
@@ -60,6 +105,7 @@ uint8_t hal_i2cStop(void)
 {
 	TM_CLEARBIT(TWCR, TWEN);
 
+	hal_i2cControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
 	return 0;
 }
 
@@ -76,10 +122,7 @@ uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 	return hal_i2cWrite((address << 1) | rw);
 }
 
-void hal_i2cCommStop(void)
-{
-	TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT);
-}
+void hal_i2cCommStop(void) { TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT); }
 
 uint8_t hal_i2cWrite(uint8_t data)
 {
@@ -92,14 +135,8 @@ uint8_t hal_i2cWrite(uint8_t data)
 
 uint8_t hal_i2cRead(uint8_t *data, bool ack)
 {
-	if( ack )
-	{
-		TM_WRITEBIT(TWCR, TWEN, TWINT, TWEA);
-	}
-	else
-	{
-		TM_WRITEBIT(TWCR, TWEN, TWINT);
-	}
+	if( ack ) { TM_WRITEBIT(TWCR, TWEN, TWINT, TWEA); }
+	else { TM_WRITEBIT(TWCR, TWEN, TWINT); }
 	while( !(TM_GETBIT(TWCR, TWINT)) );
 
 	*data = TWDR;
