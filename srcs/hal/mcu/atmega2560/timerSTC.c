@@ -28,43 +28,6 @@ const uint16_t hal_timerSTC_OVERFLOW_COUNT =
 static hal_timerSTCCallback_t stc_callback = NULL;
 static hal_driver_status_t timer_stc_status;
 
-static uint8_t hal_timerSTCInit(void);
-static uint8_t hal_timerSTCStart(void);
-static uint8_t hal_timerSTCStop(void);
-
-uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
-{
-	switch( cmd )
-	{
-		case TM_DRIVER_CTRL_INIT:
-			hal_timerSTCInit();
-			break;
-		case TM_DRIVER_CTRL_START:
-			hal_timerSTCStart();
-			break;
-		case TM_DRIVER_CTRL_STOP:
-			hal_timerSTCStop();
-			break;
-		case TM_DRIVER_STATUS_RLSET:
-			timer_stc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
-			timer_stc_status |= val;
-			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return timer_stc_status &= TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
-			TM_SETBIT(timer_stc_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
-			TM_CLEARBIT(timer_stc_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
-			return TM_GETBIT(timer_stc_status, val);
-		default:
-			return TM_DRIVER_UNKNOW;
-	}
-	return 0;
-}
-
 void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr) { stc_callback = func_ptr; }
 
 static uint8_t hal_timerSTCInit(void)
@@ -106,4 +69,37 @@ ISR(TIMER3_COMPA_vect)
 {
 	// Software time counter callback
 	if( stc_callback != NULL ) { stc_callback(); }
+}
+
+uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_timerSTCInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_timerSTCStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_timerSTCStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			timer_stc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			timer_stc_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return timer_stc_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(timer_stc_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(timer_stc_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(timer_stc_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
 }

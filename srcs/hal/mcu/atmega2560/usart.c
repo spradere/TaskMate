@@ -40,43 +40,6 @@ static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 static hal_driver_status_t usart_status;
 
-static uint8_t hal_usartInit(void);
-static uint8_t hal_usartStart(void);
-static uint8_t hal_usartStop(void);
-
-uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
-{
-	switch( cmd )
-	{
-		case TM_DRIVER_CTRL_INIT:
-			hal_usartInit();
-			break;
-		case TM_DRIVER_CTRL_START:
-			hal_usartStart();
-			break;
-		case TM_DRIVER_CTRL_STOP:
-			hal_usartStop();
-			break;
-		case TM_DRIVER_STATUS_RLSET:
-			usart_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
-			usart_status |= val;
-			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return usart_status &= TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
-			TM_SETBIT(usart_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
-			TM_CLEARBIT(usart_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
-			return TM_GETBIT(usart_status, val);
-		default:
-			return TM_DRIVER_UNKNOW;
-	}
-	return 0;
-}
-
 static uint8_t hal_usartInit(void)
 {
 	uint16_t ubrr = (F_CPU / (16UL * USART_BAUD_RATE)) - 1;
@@ -187,4 +150,37 @@ err_codes_t hal_usartWriteString(const char *str)
 		};
 	}
 	return ERR_NO_ERROR;
+}
+
+uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_usartInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_usartStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_usartStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			usart_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			usart_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return usart_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(usart_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(usart_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(usart_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
 }
