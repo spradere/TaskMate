@@ -54,8 +54,8 @@
 
 // driver status bits
 // bit [2 1 0 ] is run level
-#define TM_MOD_DRIVER_LOCK 3
-#define TM_MOD_DRIVER_DEAD 4
-#define TM_MOD_DRIVER_INIT 5
+//#define TM_MOD_DRIVER_LOCK 3
+//#define TM_MOD_DRIVER_DEAD 4
+//#define TM_MOD_DRIVER_INIT 5
 
 #endif // INTERFACES_MODULES_DEFINE_H
