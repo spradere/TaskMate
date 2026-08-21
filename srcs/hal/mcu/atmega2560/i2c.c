@@ -29,43 +29,6 @@
 
 static hal_driver_status_t i2c_status;
 
-static uint8_t hal_i2cInit(void);
-static uint8_t hal_i2cStart(void);
-static uint8_t hal_i2cStop(void);
-
-uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
-{
-	switch( cmd )
-	{
-		case TM_DRIVER_CTRL_INIT:
-			hal_i2cInit();
-			break;
-		case TM_DRIVER_CTRL_START:
-			hal_i2cStart();
-			break;
-		case TM_DRIVER_CTRL_STOP:
-			hal_i2cStop();
-			break;
-		case TM_DRIVER_STATUS_RLSET:
-			i2c_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
-			i2c_status |= val;
-			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return i2c_status &= TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
-			TM_SETBIT(i2c_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
-			TM_CLEARBIT(i2c_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
-			return TM_GETBIT(i2c_status, val);
-		default:
-			return TM_DRIVER_UNKNOW;
-	}
-	return 0;
-}
-
 static uint8_t hal_i2cInit(void)
 {
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
@@ -145,6 +108,39 @@ uint8_t hal_i2cRead(uint8_t *data, bool ack)
 
 	*data = TWDR;
 	return TW_STATUS;
+}
+
+uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_i2cInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_i2cStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_i2cStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			i2c_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			i2c_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return i2c_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(i2c_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(i2c_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(i2c_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
 }
 
 // NOLINTEND

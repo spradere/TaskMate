@@ -26,43 +26,6 @@
 static uint8_t buf[7];
 static hal_driver_status_t rtc_status;
 
-static uint8_t hal_rtcInit(void);
-static uint8_t hal_rtcStart(void);
-static uint8_t hal_rtcStop(void);
-
-uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
-{
-	switch( cmd )
-	{
-		case TM_DRIVER_CTRL_INIT:
-			hal_rtcInit();
-			break;
-		case TM_DRIVER_CTRL_START:
-			hal_rtcStart();
-			break;
-		case TM_DRIVER_CTRL_STOP:
-			hal_rtcStop();
-			break;
-		case TM_DRIVER_STATUS_RLSET:
-			rtc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
-			rtc_status |= val;
-			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return rtc_status &= TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
-			TM_SETBIT(rtc_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
-			TM_CLEARBIT(rtc_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
-			return TM_GETBIT(rtc_status, val);
-		default:
-			return TM_DRIVER_UNKNOW;
-	}
-	return 0;
-}
-
 static uint8_t bcdToBin(uint8_t bcd) { return (uint8_t)((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
 static uint8_t binToBcd(uint8_t val) { return (uint8_t)((val / 10u) << 4) | (val % 10u); }
 
@@ -130,4 +93,38 @@ uint8_t hal_rtcWrite(const hal_rtc_time_t *t)
 
 	return 0;
 }
+
+uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_rtcInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_rtcStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_rtcStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			rtc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			rtc_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return rtc_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(rtc_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(rtc_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(rtc_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
+}
+
 // NOLINTEND

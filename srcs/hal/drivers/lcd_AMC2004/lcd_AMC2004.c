@@ -24,44 +24,8 @@
 // NOLINT(readability-magic-numbers)
 
 static void lcdAMC2004SendCommand(uint8_t command);
-static uint8_t hal_lcdInit(void);
-static uint8_t hal_lcdStart(void);
-static uint8_t hal_lcdStop(void);
 
 static hal_driver_status_t lcd_status;
-
-uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
-{
-	switch( cmd )
-	{
-		case TM_DRIVER_CTRL_INIT:
-			hal_lcdInit();
-			break;
-		case TM_DRIVER_CTRL_START:
-			hal_lcdStart();
-			break;
-		case TM_DRIVER_CTRL_STOP:
-			hal_lcdStop();
-			break;
-		case TM_DRIVER_STATUS_RLSET:
-			lcd_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
-			lcd_status |= val;
-			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return lcd_status &= TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
-			TM_SETBIT(lcd_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
-			TM_CLEARBIT(lcd_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
-			return TM_GETBIT(lcd_status, val);
-		default:
-			return TM_DRIVER_UNKNOW;
-	}
-	return 0;
-}
 
 #define LCDAMC2004_I2C_ADDR 0x3C // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
@@ -136,6 +100,39 @@ void hal_lcdWriteString(const char *str)
 
 	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
 	hal_i2cCommStop();
+}
+
+uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_lcdInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_lcdStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_lcdStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			lcd_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			lcd_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return lcd_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(lcd_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(lcd_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(lcd_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
 }
 
 // NOLINTEND

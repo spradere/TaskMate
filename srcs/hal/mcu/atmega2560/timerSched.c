@@ -30,43 +30,6 @@ const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 1
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 static hal_driver_status_t timer_sched_status;
 
-static uint8_t hal_timerSchedInit(void);
-static uint8_t hal_timerSchedStart(void);
-static uint8_t hal_timerSchedStop(void);
-
-uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
-{
-	switch( cmd )
-	{
-		case TM_DRIVER_CTRL_INIT:
-			hal_timerSchedInit();
-			break;
-		case TM_DRIVER_CTRL_START:
-			hal_timerSchedStart();
-			break;
-		case TM_DRIVER_CTRL_STOP:
-			hal_timerSchedStop();
-			break;
-		case TM_DRIVER_STATUS_RLSET:
-			timer_sched_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
-			timer_sched_status |= val;
-			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return timer_sched_status &= TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
-			TM_SETBIT(timer_sched_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
-			TM_CLEARBIT(timer_sched_status, val);
-			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
-			return TM_GETBIT(timer_sched_status, val);
-		default:
-			return TM_DRIVER_UNKNOW;
-	}
-	return 0;
-}
-
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_callback = func_ptr; }
 
 void hal_timerSchedLoad(void)
@@ -150,4 +113,37 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	asm volatile(TIMER_SCHED_START);
 	asm volatile(AVR8_CONTEXT_RESTORE);
 	asm volatile("reti \n\t");
+}
+
+uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
+{
+	switch( cmd )
+	{
+		case TM_DRIVER_CTRL_INIT:
+			hal_timerSchedInit();
+			break;
+		case TM_DRIVER_CTRL_START:
+			hal_timerSchedStart();
+			break;
+		case TM_DRIVER_CTRL_STOP:
+			hal_timerSchedStop();
+			break;
+		case TM_DRIVER_STATUS_RLSET:
+			timer_sched_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+			timer_sched_status |= val;
+			return 0;
+		case TM_DRIVER_STATUS_RLGET:
+			return timer_sched_status &= TM_DRIVER_RL_MASK;
+		case TM_DRIVER_STATUS_SETBIT:
+			TM_SETBIT(timer_sched_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_CLEARBIT:
+			TM_CLEARBIT(timer_sched_status, val);
+			return 0;
+		case TM_DRIVER_STATUS_GETBIT:
+			return TM_GETBIT(timer_sched_status, val);
+		default:
+			return TM_DRIVER_UNKNOW;
+	}
+	return 0;
 }
