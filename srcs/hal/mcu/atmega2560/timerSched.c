@@ -39,12 +39,14 @@ void hal_timerSchedLoad(void)
 	TCNT1H = LOAD >> 8;
 }
 
-void hal_timerSchedInit(void)
+uint8_t hal_timerSchedInit(void)
 {
 	// Set up timer1 interrupt for scheduler
 	TM_SETBIT(TCCR1B, WGM12); // CTC mode
 	OCR1A = TIMER1_OVERFLOW_COUNT;
 	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
+
+	return 0;
 }
 
 #define TIMER_SCHED_START                              \
@@ -54,7 +56,11 @@ void hal_timerSchedInit(void)
 						   "n"((uint8_t)(1u << CS11))  \
 		: "r24"
 
-void hal_timerSchedStart(void) { asm volatile(TIMER_SCHED_START); }
+uint8_t hal_timerSchedStart(void)
+{
+	asm volatile(TIMER_SCHED_START);
+	return 0;
+}
 
 #define TIMER_SCHED_STOP                              \
 	"lds r24, %0\n\t"                                 \
@@ -67,7 +73,11 @@ void hal_timerSchedStart(void) { asm volatile(TIMER_SCHED_START); }
 						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
 		: "r24"
 
-void hal_timerSchedStop(void) { asm volatile(TIMER_SCHED_STOP); }
+uint8_t hal_timerSchedStop(void)
+{
+	asm volatile(TIMER_SCHED_STOP);
+	return 0;
+}
 
 #define TM_SCHED_CALL_BACK                       \
 	"in r24, 0x3d \n\t"                          \

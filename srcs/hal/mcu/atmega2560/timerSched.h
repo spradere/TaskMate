@@ -15,14 +15,16 @@
 #ifndef ATMEGA2560_TIMERSCHED_H
 #define ATMEGA2560_TIMERSCHED_H
 
+#include <stdint.h>
+
 #include "hal/arch/avr8/arch_define.h"
 
 typedef hal_stack_word_t *hal_timerSchedCallback_func_t(hal_stack_word_t *stack_pointer);
 typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
 
-void hal_timerSchedInit(void);
-void hal_timerSchedStart(void);
-void hal_timerSchedStop(void);
+uint8_t hal_timerSchedInit(void);
+uint8_t hal_timerSchedStart(void);
+uint8_t hal_timerSchedStop(void);
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr);
 void hal_timerSchedLoad(void);
 

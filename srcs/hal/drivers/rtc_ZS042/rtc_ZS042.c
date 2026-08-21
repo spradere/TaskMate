@@ -26,9 +26,9 @@ static uint8_t buf[7];
 static uint8_t bcdToBin(uint8_t bcd) { return (uint8_t)((bcd >> 4) * 10u) + (bcd & 0x0Fu); }
 static uint8_t binToBcd(uint8_t val) { return (uint8_t)((val / 10u) << 4) | (val % 10u); }
 
-void hal_rtcInit(void) {}
-void hal_rtcStart(void) {}
-void hal_rtcStop(void) {}
+uint8_t hal_rtcInit(void) { return 0; }
+uint8_t hal_rtcStart(void) { return 0; }
+uint8_t hal_rtcStop(void) { return 0; }
 
 uint8_t hal_rtcRead(hal_rtc_time_t *t)
 {

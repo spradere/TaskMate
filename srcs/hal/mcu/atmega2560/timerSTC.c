@@ -27,24 +27,30 @@ const uint16_t hal_timerSTC_OVERFLOW_COUNT =
 static hal_timerSTCCallback_t stc_callback = NULL;
 void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr) { stc_callback = func_ptr; }
 
-void hal_timerSTCInit(void)
+uint8_t hal_timerSTCInit(void)
 {
 
 	// Set up timer3 for RTC
 	TM_WRITEBIT(TCCR3B, WGM32, CS32); // CTC mode, prescaler 256
 	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
+
+	return 0;
 }
 
-void hal_timerSTCStart(void)
+uint8_t hal_timerSTCStart(void)
 {
 	// start by enabling interrupt
 	TM_SETBIT(TIMSK3, OCIE3A);
+
+	return 0;
 }
 
-void hal_timerSTCStop(void)
+uint8_t hal_timerSTCStop(void)
 {
 	// stop by disabling interrupt
 	TM_CLEARBIT(TIMSK3, OCIE3A);
+
+	return 0;
 }
 
 ISR(TIMER3_COMPA_vect)

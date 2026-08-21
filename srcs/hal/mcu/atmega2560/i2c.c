@@ -25,13 +25,15 @@
 
 #define I2C_TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
 
-void hal_i2cInit(void)
+uint8_t hal_i2cInit(void)
 {
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Pre scaler = 1
+
+	return 0;
 }
 
-void hal_i2cStart(void)
+uint8_t hal_i2cStart(void)
 {
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
@@ -50,11 +52,15 @@ void hal_i2cStart(void)
 
 		hal_i2cCommStop();
 	}
+
+	return 0;
 }
 
-void hal_i2cStop(void)
+uint8_t hal_i2cStop(void)
 {
 	TM_CLEARBIT(TWCR, TWEN);
+
+	return 0;
 }
 
 uint8_t hal_i2cCommStart(uint8_t address, bool rw)
