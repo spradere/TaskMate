@@ -29,6 +29,18 @@
 
 static hal_driver_status_t i2c_status;
 
+static uint8_t hal_i2cGetStatus(void)
+{
+	if( TM_GETBIT(i2c_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	if( TM_GETBIT(i2c_status, DRV_BIT_INIT) == 0 )
+	{
+		if( TM_GETBIT(i2c_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
+		return DRV_STATE_ERROR;
+	}
+	if( TM_GETBIT(i2c_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	return DRV_STATE_RUNNING;
+}
+
 static uint8_t hal_i2cInit(void)
 {
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
@@ -134,6 +146,8 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 			return 0;
 		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(i2c_status, val);
+		case DRV_CTRL_GETSTATUS:
+			return hal_i2cGetStatus();
 		default:
 			return DRV_UNKNOW;
 	}

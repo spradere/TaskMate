@@ -33,6 +33,18 @@ static hal_driver_status_t lcd_status;
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
+static uint8_t hal_lcdGetStatus(void)
+{
+	if( TM_GETBIT(lcd_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
+	{
+		if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
+		return DRV_STATE_ERROR;
+	}
+	if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	return DRV_STATE_RUNNING;
+}
+
 static uint8_t hal_lcdInit(void)
 {
 	_delay_ms(50); // Wait for LCD to power up
@@ -124,6 +136,8 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 			return 0;
 		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(lcd_status, val);
+		case DRV_CTRL_GETSTATUS:
+			return hal_lcdGetStatus();
 		default:
 			return DRV_UNKNOW;
 	}
