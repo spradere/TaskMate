@@ -24,7 +24,7 @@
  */
 
 TM_STR_ROM_NEW(tm_ver, "0.28");
-const uint16_t tm_build = 590;
+const uint16_t tm_build = 595;
 
 // clang-format on
 // [/tag]

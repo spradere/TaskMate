@@ -42,7 +42,7 @@ static uint8_t hal_timerSTCGetStatus(void)
 
 uint8_t hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
 {
-	if( hal_timerSTCGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	if( hal_timerSTCGetStatus() >= DRV_STATE_INITIALIZED ) { return DRV_STATE_ERROR; }
 	stc_callback = func_ptr;
 	return 0;
 }

@@ -1,3 +1,4 @@
+	add drivers status and runtime control
 	move data from modules DB to drivers, implement hal_<driver>Control()
 	new implementation for cooperative hand yield
 	add bit manipulation macros, automatic size fit (8-64 bits) and variadic

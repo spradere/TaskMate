@@ -44,7 +44,7 @@ static uint8_t hal_timerSchedGetStatus(void)
 
 uint8_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
-	if( hal_timerSchedGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	if( hal_timerSchedGetStatus() >= DRV_STATE_INITIALIZED ) { return DRV_STATE_ERROR; }
 	sched_callback = func_ptr;
 	return 0;
 }
