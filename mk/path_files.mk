@@ -117,7 +117,7 @@ FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
 FILES_GIT_EXCLUDED = \
-	${PATH_SRCS}/interface/taskmate_info.h
+	${PATH_SRCS}/interfaces/taskmate_info.h
 
 # Global error
 FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/errors_all.err
