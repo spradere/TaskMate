@@ -45,22 +45,9 @@ upload: all _mcu_memory_show
 _mcu_memory_data:
 		@avr-size -G -d ${FILE_ELF} > ${FILE_MEMRAW}
 
-		@awk -v flash_total_k="${VAL_FLASH_SIZE_K}" -v ram_total_k="${VAL_RAM_SIZE_K}" '\
-		NR==2 { \
-		text  = $$1; \
-		data  = $$2; \
-		bss   = $$3; \
-		flash = text + data; \
-		ram   = data + bss; \
-		flash_total = flash_total_k * 1024; \
-		ram_total = ram_total_k * 1024; \
-		flash_pct = (flash / (flash_total)) * 100; \
-		ram_pct   = (ram / (ram_total)) * 100; \
-		printf("Memory used total %%\n") > "${FILE_MEMDATA}"; \
-		printf("Flash %d %d %f\n", flash, flash_total, flash_pct) >> "${FILE_MEMDATA}"; \
-		printf("RAM %d %d %f\n", ram, ram_total, ram_pct) >> "${FILE_MEMDATA}"; \
-		close("${FILE_MEMDATA}"); \
-		}' ${FILE_MEMRAW}
+		@awk -v flash_total_k="${VAL_FLASH_SIZE_K}" -v ram_total_k="${VAL_RAM_SIZE_K}" \
+			-v output_file="${FILE_MEMDATA}" -f ${PATH_SCRIPTS}/avr_memory_data.awk \
+			"${FILE_MEMRAW}"
 .PHONY: _mcu_memory_data
 
 _mcu_memory_show: _mcu_memory_data
@@ -68,14 +55,7 @@ _mcu_memory_show: _mcu_memory_data
 	@cat ${FILE_MEMRAW}
 
 	@printf "${COLOUR_WHITE_BOLD}Memory usage :\n"
-	@awk '\
-	NR > 1 { \
-		name  = $$1; \
-		use = $$2; \
-		total = $$3; \
-		pct = $$4; \
-		printf("\t%-10s : %d / %d bytes (%0.1f%%)\n", name, use, total, pct); \
-		}' ${FILE_MEMDATA}
+	@awk -f ${PATH_SCRIPTS}/avr_memory_show.awk "${FILE_MEMDATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: _mcu_memory_show
 

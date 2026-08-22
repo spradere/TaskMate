@@ -68,24 +68,9 @@ ${FILE_PROGRAMS_CHECK_STAMP}:
 	@printf "\t%-16s : %s\n" "Hardware target" "${VAL_HW_STACK}"
 	@printf "\t%-16s : %s\n" "build" "${VAL_BUILD_CNT}"
 
-	@awk '\
-		$$1 == "code_total" { \
-			printf("\t%-16s : %s\n", "lines of code", $$2); \
-		}' ${FILE_CLOCDATA}
+	@awk -f ${PATH_SCRIPTS}/build_summary_cloc.awk "${FILE_CLOCDATA}"
 
-	@awk '\
-		NR > 1 { \
-		name = $$1; \
-		pct  = $$4; \
-		printf("\t%-16s : %0.1f%%\n", name, pct); \
-		if ($$4 > 98) \
-			{\
-			printf("${COLOUR_RED_BOLD}\t>>> ERROR: usage high > 98%% <<< ${COLOUR_RESET}\n"); \
-			exit(1); \
-			} \
-		if ($$4 > 85) \
-			printf("${COLOUR_YELLOW_BOLD}\t>>> WARNING: usage high > 85%% <<< ${COLOUR_CYAN_BOLD}\n"); \
-		}' ${FILE_MEMDATA}
+	@awk ${COLOURS_AWK} -f ${PATH_SCRIPTS}/build_summary_memory.awk "${FILE_MEMDATA}"
 
 	@printf "${COLOUR_RESET}"
 .endif
@@ -124,26 +109,8 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@touch ${FILE_AUTOCODE_STAMP}
 
 	# proceed log
-	@awk ${COLOURS_AWK} '\
-		$$1 == "[fileUtility.c]" { \
-			if($$4 ~ /^\*/) {\
-				temp = $$0; \
-				sub(/^[^*]*/,"",temp); \
-				print temp; \
-				} \
-			} \
-		$$4 == "keep" { \
-			temp = $$0; \
-			sub(/^[^:]*: /,"",temp); \
-			print COLOUR_CYAN, temp, COLOUR_RESET; \
-			print temp >> "${FILE_AUTOCODE_LOG_STAMP}"; \
-		}\
-		$$4 == "change" { \
-			temp = $$0; \
-			sub(/^[^:]*: /,"",temp); \
-			print COLOUR_YELLOW, temp, COLOUR_RESET; \
-			print temp >> "${FILE_AUTOCODE_LOG_STAMP}"; \
-		}' ${FILE_AUTOCODE_LOG_STAMP}
+	@awk ${COLOURS_AWK} -v log_file="${FILE_AUTOCODE_LOG_STAMP}" \
+		-f ${PATH_SCRIPTS}/autocode_log.awk "${FILE_AUTOCODE_LOG_STAMP}"
 
 # Special rule for autoCode with clang, not arch specialized compiler
 CFLAGS_AUTOCODE = -I${PATH_SRCS}/
