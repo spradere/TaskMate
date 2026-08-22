@@ -25,7 +25,7 @@
 
 uint8_t hal_i2cControl(uint8_t cmd, uint8_t val);
 uint8_t hal_i2cCommStart(uint8_t address, bool rw);
-void hal_i2cCommStop(void);
+uint8_t hal_i2cCommStop(void);
 uint8_t hal_i2cWrite(uint8_t data);
 uint8_t hal_i2cRead(uint8_t *data, bool ack);
 

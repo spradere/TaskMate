@@ -28,8 +28,6 @@ const uint16_t hal_timerSTC_OVERFLOW_COUNT =
 static hal_timerSTCCallback_t stc_callback = NULL;
 static hal_driver_status_t timer_stc_status;
 
-void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr) { stc_callback = func_ptr; }
-
 static uint8_t hal_timerSTCGetStatus(void)
 {
 	if( TM_GETBIT(timer_stc_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
@@ -40,6 +38,13 @@ static uint8_t hal_timerSTCGetStatus(void)
 	}
 	if( TM_GETBIT(timer_stc_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
+}
+
+uint8_t hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
+{
+	if( hal_timerSTCGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	stc_callback = func_ptr;
+	return 0;
 }
 
 static uint8_t hal_timerSTCInit(void)

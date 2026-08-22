@@ -23,6 +23,7 @@
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
+static void lcdAMC2004Clear(void);
 static void lcdAMC2004SendCommand(uint8_t command);
 
 static hal_driver_status_t lcd_status;
@@ -36,6 +37,7 @@ static hal_driver_status_t lcd_status;
 static uint8_t hal_lcdGetStatus(void)
 {
 	if( TM_GETBIT(lcd_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
 	{
 		if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
@@ -70,7 +72,7 @@ static uint8_t hal_lcdStart(void)
 		return DRV_UNKNOW;
 	}
 
-	hal_lcdClear();
+	lcdAMC2004Clear();
 	hal_lcdControl(DRV_CTRL_SETBIT, DRV_BIT_START);
 	return 0;
 }
@@ -91,25 +93,36 @@ void lcdAMC2004SendCommand(uint8_t command)
 	_delay_us(200); // Small delay for LCD to process the command
 }
 
-void hal_lcdClear(void)
+static void lcdAMC2004Clear(void)
 {
 	lcdAMC2004SendCommand(0x01);
 	_delay_ms(2);
 }
 
-void hal_lcdSetCursor(uint8_t row, uint8_t col)
+uint8_t hal_lcdClear(void)
 {
-	const uint8_t row_offsets[] = {0x00, 0x40, 0x14, 0x54};
-	lcdAMC2004SendCommand(0x80 | (col + row_offsets[row]));
+	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	lcdAMC2004Clear();
+	return 0;
 }
 
-void hal_lcdWriteString(const char *str)
+uint8_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 {
+	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	const uint8_t row_offsets[] = {0x00, 0x40, 0x14, 0x54};
+	lcdAMC2004SendCommand(0x80 | (col + row_offsets[row]));
+	return 0;
+}
+
+uint8_t hal_lcdWriteString(const char *str)
+{
+	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(LCDAMC2004_DATA);
 
 	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
 	hal_i2cCommStop();
+	return 0;
 }
 
 uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)

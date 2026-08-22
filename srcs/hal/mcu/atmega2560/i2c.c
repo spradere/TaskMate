@@ -29,6 +29,9 @@
 
 static hal_driver_status_t i2c_status;
 
+static void i2cCommStop(void);
+static uint8_t i2cWrite(uint8_t data);
+
 static uint8_t hal_i2cGetStatus(void)
 {
 	if( TM_GETBIT(i2c_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
@@ -68,12 +71,12 @@ static uint8_t hal_i2cStart(void)
 		TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 		while( !(TM_GETBIT(TWCR, TWINT)) );
 
-		if( (hal_i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
+		if( (i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
 		{
 			tm_syslog(TM_STR("\tfound SLA+W 0x%02x\n"), (adr));
 		}
 
-		hal_i2cCommStop();
+		i2cCommStop();
 	}
 
 	hal_i2cControl(DRV_CTRL_SETBIT, DRV_BIT_START);
@@ -90,20 +93,28 @@ static uint8_t hal_i2cStop(void)
 
 uint8_t hal_i2cCommStart(uint8_t address, bool rw)
 {
+	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 	while( !(TM_GETBIT(TWCR, TWINT)) );
 	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 	{
-		hal_i2cCommStop();
+		i2cCommStop();
 		return TW_STATUS;
 	}
 
-	return hal_i2cWrite((address << 1) | rw);
+	return i2cWrite((address << 1) | rw);
 }
 
-void hal_i2cCommStop(void) { TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT); }
+static void i2cCommStop(void) { TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT); }
 
-uint8_t hal_i2cWrite(uint8_t data)
+uint8_t hal_i2cCommStop(void)
+{
+	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	i2cCommStop();
+	return 0;
+}
+
+static uint8_t i2cWrite(uint8_t data)
 {
 	TWDR = data;
 	TM_WRITEBIT(TWCR, TWEN, TWINT);
@@ -112,8 +123,15 @@ uint8_t hal_i2cWrite(uint8_t data)
 	return TW_STATUS;
 }
 
+uint8_t hal_i2cWrite(uint8_t data)
+{
+	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	return i2cWrite(data);
+}
+
 uint8_t hal_i2cRead(uint8_t *data, bool ack)
 {
+	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	if( ack ) { TM_WRITEBIT(TWCR, TWEN, TWINT, TWEA); }
 	else { TM_WRITEBIT(TWCR, TWEN, TWINT); }
 	while( !(TM_GETBIT(TWCR, TWINT)) );

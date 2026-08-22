@@ -40,6 +40,8 @@ static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 static hal_driver_status_t usart_status;
 
+static err_codes_t usartWriteChar(uint8_t data);
+
 static uint8_t hal_usartGetStatus(void)
 {
 	if( TM_GETBIT(usart_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
@@ -103,6 +105,7 @@ ISR(USART1_RX_vect)
 // Read a character from Rx buffer (non-blocking)
 err_codes_t hal_usartRead(uint8_t *data)
 {
+	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
 	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 
 	*data = buffer_rx[buffer_rx_tail];
@@ -111,7 +114,7 @@ err_codes_t hal_usartRead(uint8_t *data)
 }
 
 // Write a character to Tx buffer
-err_codes_t hal_usartWriteChar(uint8_t data)
+static err_codes_t usartWriteChar(uint8_t data)
 {
 	uint8_t next_head = CB_NEXT(buffer_tx_head);
 	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
@@ -121,9 +124,16 @@ err_codes_t hal_usartWriteChar(uint8_t data)
 	return ERR_NO_ERROR;
 }
 
-// send Tx buffer to usart
-void hal_usartSendTXBuffer(void)
+err_codes_t hal_usartWriteChar(uint8_t data)
 {
+	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
+	return usartWriteChar(data);
+}
+
+// send Tx buffer to usart
+err_codes_t hal_usartSendTXBuffer(void)
+{
+	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
 	while( !CB_EMPTY(buffer_tx_head, buffer_tx_tail) )
 	{
 		while( !TM_GETBIT(UCSR1A, UDRE1) ); // Wait for empty transmit buffer
@@ -131,11 +141,13 @@ void hal_usartSendTXBuffer(void)
 
 		buffer_tx_tail = CB_NEXT(buffer_tx_tail);
 	}
+	return ERR_NO_ERROR;
 }
 
 // test Rx buffer
 err_codes_t hal_usartTestBufferRx(void)
 {
+	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
 	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 	if( CB_FULL(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
 
@@ -145,6 +157,7 @@ err_codes_t hal_usartTestBufferRx(void)
 // test Tx buffer
 err_codes_t hal_usartTestBufferTx(void)
 {
+	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
 	if( CB_EMPTY(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
 	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
 
@@ -154,9 +167,10 @@ err_codes_t hal_usartTestBufferTx(void)
 // write string to Tx buffer
 err_codes_t hal_usartWriteString(const char *str)
 {
+	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
 	while( *str )
 	{
-		if( hal_usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL )
+		if( usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL )
 		{
 			return ERR_HAL_USART_TX_BUFFER_FULL;
 		};
