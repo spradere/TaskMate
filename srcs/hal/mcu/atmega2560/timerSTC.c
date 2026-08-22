@@ -37,22 +37,22 @@ static uint8_t hal_timerSTCInit(void)
 	TM_WRITEBIT(TCCR3B, WGM32, CS32); // CTC mode, prescaler 256
 	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
 
-	hal_timerSTCControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
+	hal_timerSTCControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
 	return 0;
 }
 
 static uint8_t hal_timerSTCStart(void)
 {
-	if( (hal_timerSTCControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
-		(hal_timerSTCControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	if( (hal_timerSTCControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
+		(hal_timerSTCControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return TM_DRIVER_UNKNOW;
+		return DRV_UNKNOW;
 	}
 
 	// start by enabling interrupt
 	TM_SETBIT(TIMSK3, OCIE3A);
 
-	hal_timerSTCControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
+	hal_timerSTCControl(DRV_CTRL_SETBIT, DRV_BIT_START);
 	return 0;
 }
 
@@ -61,7 +61,7 @@ static uint8_t hal_timerSTCStop(void)
 	// stop by disabling interrupt
 	TM_CLEARBIT(TIMSK3, OCIE3A);
 
-	hal_timerSTCControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
+	hal_timerSTCControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
 	return 0;
 }
 
@@ -75,27 +75,27 @@ uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
-		case TM_DRIVER_CTRL_INIT:
+		case DRV_CTRL_INIT:
 			return hal_timerSTCInit();
-		case TM_DRIVER_CTRL_START:
+		case DRV_CTRL_START:
 			return hal_timerSTCStart();
-		case TM_DRIVER_CTRL_STOP:
+		case DRV_CTRL_STOP:
 			return hal_timerSTCStop();
-		case TM_DRIVER_STATUS_RLSET:
-			timer_stc_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+		case DRV_CTRL_RLSET:
+			timer_stc_status &= (hal_driver_status_t)~DRV_RL_MASK;
 			timer_stc_status |= val;
 			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return timer_stc_status & TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
+		case DRV_CTRL_RLGET:
+			return timer_stc_status & DRV_RL_MASK;
+		case DRV_CTRL_SETBIT:
 			TM_SETBIT(timer_stc_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
+		case DRV_CTRL_CLEARBIT:
 			TM_CLEARBIT(timer_stc_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
+		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(timer_stc_status, val);
 		default:
-			return TM_DRIVER_UNKNOW;
+			return DRV_UNKNOW;
 	}
 }

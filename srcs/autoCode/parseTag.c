@@ -376,7 +376,7 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 		fprintf(parse->file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
 		fprintf(parse->file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
 		fprintf(parse->file,
-				"\thal_%sControl(TM_DRIVER_STATUS_RLSET, %i);\n",
+				"\thal_%sControl(DRV_CTRL_RLSET, %i);\n",
 				mod->modules[i].name,
 				mod->modules[i].status);
 		fprintf(parse->file, "\t*(mod) = (mod_driver_item_t)\n");

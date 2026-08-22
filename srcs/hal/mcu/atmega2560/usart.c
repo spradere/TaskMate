@@ -50,28 +50,28 @@ static uint8_t hal_usartInit(void)
 	TM_WRITEBIT(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
 	TM_WRITEBIT(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
 
-	hal_usartControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
+	hal_usartControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
 	return 0;
 }
 
 static uint8_t hal_usartStart(void)
 {
-	if( (hal_usartControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
-		(hal_usartControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	if( (hal_usartControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
+		(hal_usartControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return TM_DRIVER_UNKNOW;
+		return DRV_UNKNOW;
 	}
 
 	TM_SETBIT(UCSR1B, RXCIE1); // enable Rx interrupt
 
-	hal_usartControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
+	hal_usartControl(DRV_CTRL_SETBIT, DRV_BIT_START);
 	return 0;
 }
 
 static uint8_t hal_usartStop(void)
 {
 	// nothing to do ?
-	hal_usartControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
+	hal_usartControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
 	return 0;
 }
 
@@ -156,27 +156,27 @@ uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
-		case TM_DRIVER_CTRL_INIT:
+		case DRV_CTRL_INIT:
 			return hal_usartInit();
-		case TM_DRIVER_CTRL_START:
+		case DRV_CTRL_START:
 			return hal_usartStart();
-		case TM_DRIVER_CTRL_STOP:
+		case DRV_CTRL_STOP:
 			return hal_usartStop();
-		case TM_DRIVER_STATUS_RLSET:
-			usart_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+		case DRV_CTRL_RLSET:
+			usart_status &= (hal_driver_status_t)~DRV_RL_MASK;
 			usart_status |= val;
 			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return usart_status & TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
+		case DRV_CTRL_RLGET:
+			return usart_status & DRV_RL_MASK;
+		case DRV_CTRL_SETBIT:
 			TM_SETBIT(usart_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
+		case DRV_CTRL_CLEARBIT:
 			TM_CLEARBIT(usart_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
+		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(usart_status, val);
 		default:
-			return TM_DRIVER_UNKNOW;
+			return DRV_UNKNOW;
 	}
 }

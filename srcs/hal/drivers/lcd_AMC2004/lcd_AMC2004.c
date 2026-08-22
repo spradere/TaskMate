@@ -46,27 +46,27 @@ static uint8_t hal_lcdInit(void)
 	lcdAMC2004SendCommand(0x06); // Entry Mode: Cursor moves right, no shift
 	_delay_us(110);
 
-	hal_lcdControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
+	hal_lcdControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
 	return 0;
 }
 
 static uint8_t hal_lcdStart(void)
 {
-	if( (hal_lcdControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
-		(hal_lcdControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	if( (hal_lcdControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
+		(hal_lcdControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return TM_DRIVER_UNKNOW;
+		return DRV_UNKNOW;
 	}
 
 	hal_lcdClear();
-	hal_lcdControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
+	hal_lcdControl(DRV_CTRL_SETBIT, DRV_BIT_START);
 	return 0;
 }
 
 static uint8_t hal_lcdStop(void)
 {
 	// nothing to do.
-	hal_lcdControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
+	hal_lcdControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
 	return 0;
 }
 
@@ -104,28 +104,28 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
-		case TM_DRIVER_CTRL_INIT:
+		case DRV_CTRL_INIT:
 			return hal_lcdInit();
-		case TM_DRIVER_CTRL_START:
+		case DRV_CTRL_START:
 			return hal_lcdStart();
-		case TM_DRIVER_CTRL_STOP:
+		case DRV_CTRL_STOP:
 			return hal_lcdStop();
-		case TM_DRIVER_STATUS_RLSET:
-			lcd_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+		case DRV_CTRL_RLSET:
+			lcd_status &= (hal_driver_status_t)~DRV_RL_MASK;
 			lcd_status |= val;
 			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return lcd_status & TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
+		case DRV_CTRL_RLGET:
+			return lcd_status & DRV_RL_MASK;
+		case DRV_CTRL_SETBIT:
 			TM_SETBIT(lcd_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
+		case DRV_CTRL_CLEARBIT:
 			TM_CLEARBIT(lcd_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
+		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(lcd_status, val);
 		default:
-			return TM_DRIVER_UNKNOW;
+			return DRV_UNKNOW;
 	}
 }
 

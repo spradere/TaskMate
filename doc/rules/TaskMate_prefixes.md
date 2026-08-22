@@ -22,6 +22,19 @@
 
 ---
 
+### ● `DRV_` — Driver interface constants
+
+**Portable control operations and state definitions shared by drivers**
+
+- Names the constants declared by the neutral driver interface
+- Keeps the driver control protocol distinct from TaskMate core constants
+- Uses `DRV_CTRL_` for every operation accepted by a driver control function
+
+👉 This prefix is reserved for the **portable driver contract**, not for
+hardware-specific implementation details.
+
+---
+
 ### ● `sc_` — Security boundary (system calls)
 
 **Controlled and limited access from tasks to system functionality**

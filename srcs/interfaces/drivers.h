@@ -17,23 +17,23 @@
 #include <stdint.h>
 
 // driver control
-#define TM_DRIVER_CTRL_INIT 1
-#define TM_DRIVER_CTRL_START 2
-#define TM_DRIVER_CTRL_STOP 3
-#define TM_DRIVER_STATUS_RLSET 4
-#define TM_DRIVER_STATUS_RLGET 5
-#define TM_DRIVER_STATUS_SETBIT 6
-#define TM_DRIVER_STATUS_CLEARBIT 7
-#define TM_DRIVER_STATUS_GETBIT 8
-#define TM_DRIVER_UNKNOW 99
+#define DRV_CTRL_INIT 1
+#define DRV_CTRL_START 2
+#define DRV_CTRL_STOP 3
+#define DRV_CTRL_RLSET 4
+#define DRV_CTRL_RLGET 5
+#define DRV_CTRL_SETBIT 6
+#define DRV_CTRL_CLEARBIT 7
+#define DRV_CTRL_GETBIT 8
+#define DRV_UNKNOW 99
 
 // driver status bits
 typedef uint8_t hal_driver_status_t;
 
 // bit [2 1 0 ] is run level
-#define TM_DRIVER_RL_MASK 0x07
-#define TM_DRIVER_BIT_INIT 3
-#define TM_DRIVER_BIT_START 4
-#define TM_DRIVER_BIT_DEAD 5
+#define DRV_RL_MASK 0x07
+#define DRV_BIT_INIT 3
+#define DRV_BIT_START 4
+#define DRV_BIT_DEAD 5
 
 #endif // INTERFACES_DRIVERS_H

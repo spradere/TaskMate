@@ -34,16 +34,16 @@ static uint8_t hal_i2cInit(void)
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Pre scaler = 1
 
-	hal_i2cControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_INIT);
+	hal_i2cControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
 	return 0;
 }
 
 static uint8_t hal_i2cStart(void)
 {
-	if( (hal_i2cControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_INIT) == 0) ||
-		(hal_i2cControl(TM_DRIVER_STATUS_GETBIT, TM_DRIVER_BIT_DEAD) != 0) )
+	if( (hal_i2cControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
+		(hal_i2cControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return TM_DRIVER_UNKNOW;
+		return DRV_UNKNOW;
 	}
 
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
@@ -64,7 +64,7 @@ static uint8_t hal_i2cStart(void)
 		hal_i2cCommStop();
 	}
 
-	hal_i2cControl(TM_DRIVER_STATUS_SETBIT, TM_DRIVER_BIT_START);
+	hal_i2cControl(DRV_CTRL_SETBIT, DRV_BIT_START);
 	return 0;
 }
 
@@ -72,7 +72,7 @@ static uint8_t hal_i2cStop(void)
 {
 	TM_CLEARBIT(TWCR, TWEN);
 
-	hal_i2cControl(TM_DRIVER_STATUS_CLEARBIT, TM_DRIVER_BIT_START);
+	hal_i2cControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
 	return 0;
 }
 
@@ -114,28 +114,28 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 {
 	switch( cmd )
 	{
-		case TM_DRIVER_CTRL_INIT:
+		case DRV_CTRL_INIT:
 			return hal_i2cInit();
-		case TM_DRIVER_CTRL_START:
+		case DRV_CTRL_START:
 			return hal_i2cStart();
-		case TM_DRIVER_CTRL_STOP:
+		case DRV_CTRL_STOP:
 			return hal_i2cStop();
-		case TM_DRIVER_STATUS_RLSET:
-			i2c_status &= (hal_driver_status_t)~TM_DRIVER_RL_MASK;
+		case DRV_CTRL_RLSET:
+			i2c_status &= (hal_driver_status_t)~DRV_RL_MASK;
 			i2c_status |= val;
 			return 0;
-		case TM_DRIVER_STATUS_RLGET:
-			return i2c_status & TM_DRIVER_RL_MASK;
-		case TM_DRIVER_STATUS_SETBIT:
+		case DRV_CTRL_RLGET:
+			return i2c_status & DRV_RL_MASK;
+		case DRV_CTRL_SETBIT:
 			TM_SETBIT(i2c_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_CLEARBIT:
+		case DRV_CTRL_CLEARBIT:
 			TM_CLEARBIT(i2c_status, val);
 			return 0;
-		case TM_DRIVER_STATUS_GETBIT:
+		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(i2c_status, val);
 		default:
-			return TM_DRIVER_UNKNOW;
+			return DRV_UNKNOW;
 	}
 }
 

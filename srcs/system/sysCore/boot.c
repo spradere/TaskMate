@@ -26,8 +26,8 @@
 void boot(void)
 {
 	// system startup
-	hal_usartControl(TM_DRIVER_CTRL_INIT, 0);
-	hal_usartControl(TM_DRIVER_CTRL_START, 0);
+	hal_usartControl(DRV_CTRL_INIT, 0);
+	hal_usartControl(DRV_CTRL_START, 0);
 
 	tm_syslog(TM_STR("\n\n[boot] System startup ...\n"));
 
@@ -52,12 +52,12 @@ void boot(void)
 		{
 			mod_driver_item_t *mod = mod_driverGetPointer(i);
 
-			if( (*(mod->control))(TM_DRIVER_STATUS_RLGET, 0) == runlevel )
+			if( (*(mod->control))(DRV_CTRL_RLGET, 0) == runlevel )
 			{
 				tm_syslog(TM_STR("[boot] driver <%s> ..."), mod->name);
-				(*(mod->control))(TM_DRIVER_CTRL_INIT, 0);
+				(*(mod->control))(DRV_CTRL_INIT, 0);
 				tm_syslog(TM_STR(" init ..."), mod->name);
-				(*(mod->control))(TM_DRIVER_CTRL_START, 0);
+				(*(mod->control))(DRV_CTRL_START, 0);
 				tm_syslog(TM_STR(" start ... ok\n"), mod->name);
 			}
 		}
