@@ -14,15 +14,22 @@
 
 #include "tm_string.h"
 
-#include "interfaces/tm_string_storage.h"
-
-void tm_strncpy(char *dest, const char *src, uint8_t n)
+void tm_strncpy(char *dest, tm_string_t src, uint8_t n)
 {
 	uint8_t i = 0;
 
-	while( (i < n) && (src[i] != 0) && (i < (TM_STRING_SIZE_MAX - 1)) )
+	if( (dest == 0) || (n == 0) ) { return; }
+	if( src.text == 0 )
 	{
-		dest[i] = src[i];
+		dest[0] = 0;
+		return;
+	}
+
+	while( (i < (uint8_t)(n - 1)) && (i < (TM_STRING_SIZE_MAX - 1)) )
+	{
+		char src_char = hal_string_getChar(&src, i);
+		if( src_char == 0 ) { break; }
+		dest[i] = src_char;
 		i++;
 	}
 	dest[i] = 0;

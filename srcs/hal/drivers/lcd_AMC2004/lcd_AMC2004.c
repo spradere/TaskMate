@@ -17,6 +17,7 @@
 #include <util/delay.h>
 
 #include "hal/mcu/atmega2560/i2c.h"
+#include "hal/public/tmlibc.h"
 #include "interfaces/drivers.h"
 #include "interfaces/macros.h"
 
@@ -114,13 +115,23 @@ uint8_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 	return 0;
 }
 
-uint8_t hal_lcdWriteString(const char *str)
+uint8_t hal_lcdWriteString(tm_string_t str)
 {
+	uint8_t index = 0;
+
 	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	if( str.text == 0 ) { return DRV_STATE_ERROR; }
+
 	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(LCDAMC2004_DATA);
 
-	while( *str ) { hal_i2cWrite((uint8_t)*str++); }
+	while( index < TM_STRING_SIZE_MAX )
+	{
+		char str_char = hal_string_getChar(&str, index);
+		if( str_char == 0 ) { break; }
+		hal_i2cWrite((uint8_t)str_char);
+		index++;
+	}
 	hal_i2cCommStop();
 	return 0;
 }

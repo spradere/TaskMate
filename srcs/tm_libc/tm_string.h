@@ -36,7 +36,7 @@
 	#include <stdint.h>
 	#include "hal/public/tmlibc.h" // macro TM_STR_* hal definitions
 
-	void tm_strncpy(char *dest, const char *src, uint8_t n);
+	void tm_strncpy(char *dest, tm_string_t src, uint8_t n);
 
 
 #endif

@@ -55,7 +55,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "[msg] canal test to USART 110\n", MSG_TO_USART);
+		msgWriteText(chan, TM_STR("[msg] canal test to USART 110\n"), MSG_TO_USART);
 	}
 
 	msgProcess();
@@ -63,7 +63,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, "\3driver go wild 00", MSG_TO_LCD);
+		msgWriteText(chan, TM_STR("\3driver go wild 00"), MSG_TO_LCD);
 	}
 
 	msgProcess();
@@ -94,7 +94,7 @@ err_codes_t msgRequestChannel(uint8_t *channel)
 
 void msgFreeChannel(uint8_t channel) { TM_CLEARBIT(channels[channel].status, MSG_FLAG_IN_USE); }
 
-void msgWriteText(uint8_t channel, const char *msg, uint8_t dest)
+void msgWriteText(uint8_t channel, tm_string_t msg, uint8_t dest)
 {
 	tm_strncpy(channels[channel].text, msg, MSG_SIZE_MAX);
 
@@ -123,12 +123,12 @@ static void msgProcess(void)
 					}
 					channels[channel].text[i_dest] = 0;
 
-					hal_lcdWriteString(channels[channel].text);
+					hal_lcdWriteString(TM_STR_RAM(channels[channel].text));
 					break;
 
 				case MSG_TO_USART:
 
-					hal_usartWriteString(channels[channel].text);
+					hal_usartWriteString(TM_STR_RAM(channels[channel].text));
 					hal_usartSendTXBuffer();
 					TM_CLEARBIT(channels[channel].status, MSG_FLAG_SEND);
 					break;
@@ -137,7 +137,7 @@ static void msgProcess(void)
 					break;
 
 				default:
-					hal_usartWriteString("[msg.c:118] error unknown destination\n");
+					hal_usartWriteString(TM_STR("[msg.c:118] error unknown destination\n"));
 					hal_usartSendTXBuffer();
 			}
 		}

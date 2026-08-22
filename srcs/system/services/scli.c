@@ -19,6 +19,7 @@
 #include "hal/public/usart.h"
 #include "system/services/msg.h"
 #include "system/sysCall/sysCall.h"
+#include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
 static uint8_t scli_msg_channel;
@@ -30,7 +31,7 @@ void scli(void)
 
 	if( msgRequestChannel(&scli_msg_channel) == ERR_NO_ERROR )
 	{
-		msgWriteText(scli_msg_channel, "[scli] ready to work\n", MSG_TO_USART);
+		msgWriteText(scli_msg_channel, TM_STR("[scli] ready to work\n"), MSG_TO_USART);
 	}
 
 	while( 1 )
@@ -57,6 +58,6 @@ static void scliEcho(void)
 		}
 		line[i] = 0;
 
-		msgWriteText(scli_msg_channel, line, MSG_TO_USART);
+		msgWriteText(scli_msg_channel, TM_STR_RAM(line), MSG_TO_USART);
 	}
 }

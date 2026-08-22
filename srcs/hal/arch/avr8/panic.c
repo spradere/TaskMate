@@ -15,17 +15,18 @@
 #include "panic.h"
 
 #include "hal/arch/avr8/interrupt.h"
-#include "hal/mcu/atmega2560/usart.h"
+#include "hal/public/tmlibc.h"
+#include "hal/public/usart.h"
 
-void panic(const char *msg)
+void panic(tm_string_t msg)
 {
 	hal_clearGlobalInterupt();
 	hal_usartSendTXBuffer();
-	hal_usartWriteString("\nSYSTEM PANIC : ");
+	hal_usartWriteString(TM_STR("\nSYSTEM PANIC : "));
 	hal_usartSendTXBuffer();
 	hal_usartWriteString(msg);
 	hal_usartSendTXBuffer();
-	hal_usartWriteString(", halt.");
+	hal_usartWriteString(TM_STR(", halt."));
 	hal_usartSendTXBuffer();
 	while( 1 );
 }
