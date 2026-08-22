@@ -20,6 +20,6 @@
 typedef void (*hal_timerSTCCallback_t)(void);
 
 uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val);
-void hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr);
+uint8_t hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr);
 
 #endif // ATMEGA2560_TIMERSTC_H

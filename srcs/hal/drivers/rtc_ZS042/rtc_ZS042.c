@@ -32,6 +32,7 @@ static uint8_t binToBcd(uint8_t val) { return (uint8_t)((val / 10u) << 4) | (val
 static uint8_t hal_rtcGetStatus(void)
 {
 	if( TM_GETBIT(rtc_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	if( TM_GETBIT(rtc_status, DRV_BIT_INIT) == 0 )
 	{
 		if( TM_GETBIT(rtc_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
@@ -67,6 +68,7 @@ static uint8_t hal_rtcStop(void)
 
 uint8_t hal_rtcRead(hal_rtc_time_t *t)
 {
+	if( hal_rtcGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	hal_i2cCommStart(ZS042_I2C_ADDR, HAL_I2C_WRITE);
 	hal_i2cWrite(0x00); // start register
 
@@ -90,6 +92,7 @@ uint8_t hal_rtcRead(hal_rtc_time_t *t)
 
 uint8_t hal_rtcWrite(const hal_rtc_time_t *t)
 {
+	if( hal_rtcGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 	buf[0] = binToBcd(t->seconds & 0x7F); // bit 7 = 0, clock ON
 	buf[1] = binToBcd(t->minutes);
 	buf[2] = binToBcd(t->hours) & 0x3F; // mode 24h

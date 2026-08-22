@@ -18,8 +18,8 @@
 #include <stdint.h>
 
 uint8_t hal_lcdControl(uint8_t cmd, uint8_t val);
-void hal_lcdClear(void);
-void hal_lcdSetCursor(uint8_t row, uint8_t col);
-void hal_lcdWriteString(const char *str);
+uint8_t hal_lcdClear(void);
+uint8_t hal_lcdSetCursor(uint8_t row, uint8_t col);
+uint8_t hal_lcdWriteString(const char *str);
 
 #endif // LCD_AMC2004_LCD_AMC2004_H

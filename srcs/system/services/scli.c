@@ -51,7 +51,7 @@ static void scliEcho(void)
 		uint8_t i = 0;
 		char line[128];
 
-		while( (hal_usartRead(&data) != ERR_HAL_USART_RX_BUFFER_EMPTY) && (i < (sizeof(line) - 1)) )
+		while( (hal_usartRead(&data) == ERR_NO_ERROR) && (i < (sizeof(line) - 1)) )
 		{
 			line[i++] = (char)data;
 		}

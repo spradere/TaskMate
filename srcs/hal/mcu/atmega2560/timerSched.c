@@ -30,8 +30,6 @@ const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 1
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 static hal_driver_status_t timer_sched_status;
 
-void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_callback = func_ptr; }
-
 static uint8_t hal_timerSchedGetStatus(void)
 {
 	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
@@ -44,13 +42,22 @@ static uint8_t hal_timerSchedGetStatus(void)
 	return DRV_STATE_RUNNING;
 }
 
-void hal_timerSchedLoad(void)
+uint8_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
+	if( hal_timerSchedGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	sched_callback = func_ptr;
+	return 0;
+}
+
+uint8_t hal_timerSchedLoad(void)
+{
+	if( hal_timerSchedGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
 #define LOAD_GUARD 4
 	const uint16_t LOAD = TIMER1_OVERFLOW_COUNT - LOAD_GUARD;
 
 	TCNT1L = LOAD & 0xFF;
 	TCNT1H = LOAD >> 8;
+	return 0;
 }
 
 static uint8_t hal_timerSchedInit(void)
