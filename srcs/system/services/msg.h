@@ -18,6 +18,7 @@
 #include <stdint.h>
 
 #include "interfaces/error_catalog.h"
+#include "interfaces/tm_string_storage.h"
 
 // bits [2 1 0] is destination
 #define MSG_TO_MASK 0x07
@@ -28,7 +29,7 @@
 void msg(void);
 
 err_codes_t msgRequestChannel(uint8_t *channel_id);
-void msgWriteText(uint8_t channel_id, const char *msg, uint8_t dest);
+void msgWriteText(uint8_t channel_id, tm_string_t msg, uint8_t dest);
 void msgFreeChannel(uint8_t channel);
 
 #endif // SERVICES_MSG_H

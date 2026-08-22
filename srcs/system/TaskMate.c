@@ -73,7 +73,7 @@ int main(void)
 	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s %i"), info->tm_ver, info->tm_build);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
-	hal_lcdWriteString(msg);
+	hal_lcdWriteString(TM_STR_RAM(msg));
 
 	tm_snprintf(msg,
 				sizeof(msg),
@@ -84,7 +84,7 @@ int main(void)
 				t.hours,
 				t.minutes);
 	hal_lcdSetCursor(1, 0);
-	hal_lcdWriteString(msg);
+	hal_lcdWriteString(TM_STR_RAM(msg));
 
 	/*// test error catalog
 	tm_syslog(TM_STR("[info] error catalog\n"));
@@ -125,7 +125,7 @@ int main(void)
 	tm_schedulerInit();
 	tm_schedulerStart();
 
-	panic("\nsystem launch fail");
+	panic(TM_STR("\nsystem launch fail"));
 
 	return 0; // You should never get here
 }

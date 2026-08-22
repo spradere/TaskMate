@@ -25,6 +25,7 @@
 #include "interfaces/macros.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/modules_list.h"
+#include "tm_libc/tm_string.h"
 
 static hal_timerSchedCallback_func_t tm_schedulerRR;
 
@@ -58,8 +59,8 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	thread->stack_pointer = stack_pointer;
 
 	// canary check
-	if( thread->canary_low != TM_MOD_CANARY ) { panic("canary low 1"); }
-	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 1"); }
+	if( thread->canary_low != TM_MOD_CANARY ) { panic(TM_STR("canary low 1")); }
+	if( thread->canary_high != TM_MOD_CANARY ) { panic(TM_STR("canary high 1")); }
 
 	// switch thread
 	uint8_t current = mod_threadGetCurrent();
@@ -69,8 +70,8 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	thread = mod_threadGetPointer(current);
 
 	// canary check
-	if( thread->canary_low != TM_MOD_CANARY ) { panic("canary low 2"); }
-	if( thread->canary_high != TM_MOD_CANARY ) { panic("canary high 2"); }
+	if( thread->canary_low != TM_MOD_CANARY ) { panic(TM_STR("canary low 2")); }
+	if( thread->canary_high != TM_MOD_CANARY ) { panic(TM_STR("canary high 2")); }
 
 	TM_CLEARBIT(thread->status, TM_MOD_THREAD_YIELDED);
 	return thread->stack_pointer;

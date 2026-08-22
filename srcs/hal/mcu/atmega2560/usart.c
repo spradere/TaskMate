@@ -19,6 +19,7 @@
 #include "interfaces/drivers.h"
 #include "interfaces/macros.h"
 #include "mcu_define.h" // get usart baud rate
+#include "tmlibc.h"
 
 // Circular buffers
 // always use a power of two for buffer size to avoid use of modulo
@@ -165,15 +166,22 @@ err_codes_t hal_usartTestBufferTx(void)
 }
 
 // write string to Tx buffer
-err_codes_t hal_usartWriteString(const char *str)
+err_codes_t hal_usartWriteString(tm_string_t str)
 {
+	uint8_t index = 0;
+
 	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
-	while( *str )
+	if( str.text == 0 ) { return ERR_RUNTIME; }
+
+	while( index < TM_STRING_SIZE_MAX )
 	{
-		if( usartWriteChar((uint8_t)*str++) == ERR_HAL_USART_TX_BUFFER_FULL )
+		char str_char = hal_string_getChar(&str, index);
+		if( str_char == 0 ) { break; }
+		if( usartWriteChar((uint8_t)str_char) == ERR_HAL_USART_TX_BUFFER_FULL )
 		{
 			return ERR_HAL_USART_TX_BUFFER_FULL;
 		};
+		index++;
 	}
 	return ERR_NO_ERROR;
 }
