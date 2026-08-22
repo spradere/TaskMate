@@ -62,14 +62,14 @@ PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
 
 # Build info
-FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.h
+FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
 
 FILE_CLOCRAW = ${PATH_BUILDS}/cloc_raw
 FILE_CLOCDATA = ${PATH_BUILDS}/cloc_data
 FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 
-FILE_TASKMATE_INFO = ${PATH_SRCS}/interfaces/taskmate_info.txt
+FILE_TASKMATE_INFO = ${PATH_SRCS}/interfaces/taskmate_info.h
 
 # Source directories
 PATHS_SOURCES += ${PATH_SRCS}/system
