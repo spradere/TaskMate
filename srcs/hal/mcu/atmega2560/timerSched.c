@@ -32,6 +32,18 @@ static hal_driver_status_t timer_sched_status;
 
 void hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr) { sched_callback = func_ptr; }
 
+static uint8_t hal_timerSchedGetStatus(void)
+{
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
+	{
+		if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
+		return DRV_STATE_ERROR;
+	}
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	return DRV_STATE_RUNNING;
+}
+
 void hal_timerSchedLoad(void)
 {
 #define LOAD_GUARD 4
@@ -139,6 +151,8 @@ uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 			return 0;
 		case DRV_CTRL_GETBIT:
 			return TM_GETBIT(timer_sched_status, val);
+		case DRV_CTRL_GETSTATUS:
+			return hal_timerSchedGetStatus();
 		default:
 			return DRV_UNKNOW;
 	}
