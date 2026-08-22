@@ -49,7 +49,7 @@ mod_thread_item_t *mod_threadGetPointer(uint8_t id) { return &mod_data_base.thre
 
 void mod_threadsAlloc(void)
 {
-	tm_syslog(TM_STR("[modules.c] offsetof(name)                  = %i\n"),
+/*	tm_syslog(TM_STR("[modules.c] offsetof(name)                  = %i\n"),
 			  (unsigned)offsetof(mod_thread_item_t, name));
 	tm_syslog(TM_STR("[modules.c] offsetof(status)                = %i\n"),
 			  (unsigned)offsetof(mod_thread_item_t, status));
@@ -66,7 +66,7 @@ void mod_threadsAlloc(void)
 	tm_syslog(TM_STR("[modules.c] offsetof(canary_high)           = %i\n"),
 			  (unsigned)offsetof(mod_thread_item_t, canary_high));
 	tm_syslog(TM_STR("[modules.c] sizeof(mod_thread_item_t)       = %i\n"),
-			  (unsigned)sizeof(mod_thread_item_t));
+			  (unsigned)sizeof(mod_thread_item_t));*/
 
 	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{

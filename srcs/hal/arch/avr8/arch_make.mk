@@ -32,7 +32,7 @@ CC = avr-gcc
 VAL_CC_VERSION != avr-gcc -dumpversion
 
 # General options
-CFLAGS += -Os -MMD -MP
+CFLAGS += -Os -MMD -MP -mrelax
 
 # General warnings
 CFLAGS += -Wall -Wextra -Wshadow -Werror=shadow -Wswitch -Wswitch-enum -Wformat=2 -Wformat-security

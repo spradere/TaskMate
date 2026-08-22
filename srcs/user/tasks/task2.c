@@ -23,12 +23,6 @@ uint8_t task2_msg_channel;
 
 void task2(void)
 {
-
-	if( msgRequestChannel(&task2_msg_channel) == ERR_NO_ERROR )
-	{
-		msgWriteText(task2_msg_channel, "[task2] task2 here !\n", MSG_TO_USART);
-	}
-
 	while( 1 )
 	{
 		sc_gpio_signalToggle(GPIO_SIGNAL_TASK2_LED);

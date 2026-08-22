@@ -23,12 +23,6 @@ uint8_t task1_msg_channel;
 
 void task1(void)
 {
-
-	if( msgRequestChannel(&task1_msg_channel) == ERR_NO_ERROR )
-	{
-		msgWriteText(task1_msg_channel, "[task1] hello !\n", MSG_TO_USART);
-	}
-
 	while( 1 )
 	{
 

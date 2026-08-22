@@ -31,14 +31,6 @@ ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
 	    -c "${FILE_COMPILE_SRC}" -o "${.TARGET}"
 
-#${FILES_OBJ}: ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
-#	@printf "\n%sCompilation ...%s\n\n" \
-#		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-#	@printf "source : <%s> -> <%s>\n" ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} ${.TARGET}
-#	@mkdir -p ${.TARGET:H}
-#	@${CC} ${CFLAGS} ${CFLAGS_${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}} \
-#		-c ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c} -o ${.TARGET}
-
 upload: all _mcu_memory_show
 #help [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
