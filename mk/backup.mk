@@ -22,18 +22,6 @@ push: ${FILE_GIT_IGNORE}
 	@printf "\n"
 .PHONY: push
 
-pull:
-#help [global] Git pull routine
-	@git fetch
-	@git status
-	@printf "%sPress ENTER to continue or Ctrl C to exit%s\n" \
-		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
-	@read dummy_var
-	@git stash
-	@git merge test
-	@git stash pop
-.PHONY: pull
-
 merge:
 #help [global] Git merge test -> main routine
 	@git switch main
@@ -59,6 +47,11 @@ ${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "\n# allowed files\n" >> "${FILE_GIT_IGNORE}"
 .for file in ${FILES_GIT_ALLOWED}
 	@printf "!${file}\n" >> "${FILE_GIT_IGNORE}"
+.endfor
+
+	@printf "\n# excluded files\n" >> "${FILE_GIT_IGNORE}"
+.for file in ${FILES_GIT_EXCLUDED}
+	@printf "${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 
 backup:

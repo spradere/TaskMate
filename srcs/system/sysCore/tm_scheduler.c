@@ -29,9 +29,9 @@
 
 static hal_timerSchedCallback_func_t tm_schedulerRR;
 
-void tm_schedulerInit(void) 
-{ 
-	hal_timerSchedControl(DRV_CTRL_INIT, 0); 
+void tm_schedulerInit(void)
+{
+	hal_timerSchedControl(DRV_CTRL_INIT, 0);
 	hal_timerSchedSetCallback(tm_schedulerRR);
 }
 

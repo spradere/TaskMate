@@ -26,7 +26,6 @@ typedef struct
 } parse_tag_t;
 
 static void writeModulesCount(const parse_tag_t *parse);
-static void writeInfo(const parse_tag_t *parse);
 static void writeDriversAlloc(const parse_tag_t *parse);
 static void writeThreadsAlloc(const parse_tag_t *parse);
 static void writeErrorCatalog(const parse_tag_t *parse);
@@ -41,7 +40,6 @@ static void writeGpioSignals(const parse_tag_t *parse);
 	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc) \
 	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)          \
 	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog) \
-	X(HAVE_INFO, "system_info", writeInfo)                    \
 	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)          \
 	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                \
 	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)     \
@@ -323,13 +321,6 @@ static void writeModulesCount(const parse_tag_t *parse)
 			parse->data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
 
 	have_tag_count[HAVE_MOD_COUNT]++;
-}
-
-static void writeInfo(const parse_tag_t *parse)
-{
-	fprintf(parse->file, "TM_STR_ROM_NEW(tm_ver, \"%s\");\n", parse->auto_options->tm_ver);
-	fprintf(parse->file, "const uint16_t tm_build = %i;\n", atoi(parse->auto_options->tm_build));
-	have_tag_count[HAVE_INFO]++;
 }
 
 static void writeThreadsAlloc(const parse_tag_t *parse)

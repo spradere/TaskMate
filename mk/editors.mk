@@ -20,11 +20,6 @@ ${FILE_TAGS_STAMP}: ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC} ${FILES_AU
 	@ctags -f ${FILE_TAGS} -a ${FILES_AUTOCODE_SRC_H}
 	@touch ${FILE_TAGS_STAMP}
 
-vim_all: ${FILE_TAGS_STAMP}
-#help [global] open Vim with all TaskMate sources files .c .h (no autoCode)
-	vim ${FILES_SRC} ${FILES_SRC_H}
-.PHONY: vim_all
-
 vim_mk: ${FILE_TAGS_STAMP}
 #help [global] open Vim with all Makefiles .mk
 	vim ${FILES_MK}

@@ -20,21 +20,11 @@
 .BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
-
-.if exists(${FILE_TM_INFO})
-	@awk ${COLOURS_AWK} -v tm_version_make=${VAL_TM_VERSION} -v build_cnt_make=${VAL_BUILD_CNT} \
-		-f ${PATH_SCRIPTS}/tm_info.awk "${FILE_TM_INFO}"
-.endif
-
-.if !exists(${FILE_TM_INFO})
-	@printf "#####################################\n" > "${FILE_TM_INFO}"
-	@printf "# TaskMate informations informations \n" >> "${FILE_TM_INFO}"
-	@printf "#####################################\n\n" >> "${FILE_TM_INFO}"
-
-	@printf "tm_version %s\n" "${VAL_TM_VERSION}" >> "${FILE_TM_INFO}"
-	@printf "build_cnt %s\n" "${VAL_BUILD_CNT}" >> "${FILE_TM_INFO}"
-.endif
-
+	
+	@printf "%s\n" "#define TM_VER_MAJOR ${VAL_TM_VER_MAJOR}" > "${FILE_TASKMATE_INFO}"
+	@printf "%s\n" "#define TM_VER_MINOR ${VAL_TM_VER_MINOR}" >> "${FILE_TASKMATE_INFO}"
+	@printf "%s\n" "#define TM_BUILD ${VAL_BUILD_CNT}" >> "${FILE_TASKMATE_INFO}"
+	
 # Check programs once on the first Make invocation in the project
 ${FILE_PROGRAMS_CHECK_STAMP}:
 	@printf "%sChecking required programs ...%s\n" \
@@ -111,9 +101,8 @@ _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
 
 # autoCode and required files
-${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
-							${FILE_TM_INFO} ${FILE_PARSE_TAG_LIST} \
-							${FILE_HALINIT_LIST} ${FILE_HALDEFINE_LIST}
+${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
+						${FILE_PARSE_TAG_LIST} ${FILE_HALINIT_LIST} ${FILE_HALDEFINE_LIST}
 
 	@printf "\n%sautoCode, init.rc or related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -122,11 +111,6 @@ ${FILE_AUTOCODE_STAMP}: 	${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERRO
 .endif
 
 	# write autoCode options
-	@printf "# TaskMate version\n" > "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--tm_ver ${VAL_TM_VERSION}" >> "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--tm_build ${VAL_BUILD_CNT}" >> "${FILE_AUTOCODE_CONFIG}"
-
-	@printf "\n# files list\n" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"

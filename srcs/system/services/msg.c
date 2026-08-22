@@ -63,7 +63,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, TM_STR("\3driver go wild 00"), MSG_TO_LCD);
+		msgWriteText(chan, TM_STR("\3driver go wild XxX"), MSG_TO_LCD);
 	}
 
 	msgProcess();

@@ -62,13 +62,14 @@ PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
 
 # Build info
-FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
-FILE_TM_INFO = ${PATH_BUILDS}/tm_info.txt
+FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.h
 
 FILE_CLOCRAW = ${PATH_BUILDS}/cloc_raw
 FILE_CLOCDATA = ${PATH_BUILDS}/cloc_data
 FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
+
+FILE_TASKMATE_INFO = ${PATH_SRCS}/interfaces/taskmate_info.txt
 
 # Source directories
 PATHS_SOURCES += ${PATH_SRCS}/system
@@ -89,6 +90,8 @@ FILE_H_ALLOW_CONF = mk/header_allow.conf
 # autoCode
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
+FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
+FILE_AUTOCODE_LOG_STAMP = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
 FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCall/error.c \
@@ -98,7 +101,6 @@ FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCore/modules_list.h \
 	${PATH_SRCS}/system/sysCore/hal_init.h \
 	${PATH_SRCS}/hal/public/define.h \
-	${PATH_SRCS}/hal/public/sysInfo.c \
 	${PATH_SRCS}/interfaces/gpio_signals.h 	
 		
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
@@ -114,6 +116,8 @@ FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
+FILES_GIT_EXCLUDED = \
+	${PATH_SRCS}/interface/taskmate_info.h
 
 # Global error
 FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/errors_all.err

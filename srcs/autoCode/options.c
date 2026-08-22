@@ -16,8 +16,6 @@
 
 #include "tokenizer.h"
 
-static void setTmVersion(const char *value, options_list_t *opt);
-static void setTmBuild(const char *value, options_list_t *opt);
 static void setErrorsFile(const char *value, options_list_t *opt);
 static void setInitrcFile(const char *value, options_list_t *opt);
 static void setParseTagFile(const char *value, options_list_t *opt);
@@ -26,8 +24,6 @@ static void setHalDefineFile(const char *value, options_list_t *opt);
 static void setGpioSignalsFile(const char *value, options_list_t *opt);
 
 #define HAVE_OPTIONS(X)                                \
-	X(HAVE_TM_VER, "--tm_ver", setTmVersion)           \
-	X(HAVE_TM_BUILD, "--tm_build", setTmBuild)         \
 	X(HAVE_ERRORS, "--errors", setErrorsFile)          \
 	X(HAVE_INITRC, "--initrc", setInitrcFile)          \
 	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)    \
@@ -68,18 +64,6 @@ static const char *string_from_have(const int id)
 	HAVE_OPTIONS(X)
 #undef X
 	return NULL;
-}
-
-static void setTmVersion(const char *value, options_list_t *opt)
-{
-	strncpy(opt->tm_ver, value, BYTE_INDEX);
-	have_options_count[HAVE_TM_VER]++;
-}
-
-static void setTmBuild(const char *value, options_list_t *opt)
-{
-	strncpy(opt->tm_build, value, BYTE_INDEX);
-	have_options_count[HAVE_TM_BUILD]++;
 }
 
 static void setErrorsFile(const char *value, options_list_t *opt)

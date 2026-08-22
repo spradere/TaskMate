@@ -21,8 +21,6 @@
 // autoCode option structure
 typedef struct
 {
-	char tm_ver[BYTE_INDEX];
-	char tm_build[BYTE_INDEX];
 	char file_errors_list[BYTE_INDEX];
 	char file_initrc_list[BYTE_INDEX];
 	char file_parsetag_list[BYTE_INDEX];

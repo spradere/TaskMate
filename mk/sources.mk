@@ -29,10 +29,8 @@ FILE_DEPS_ALL = ${PATH_BUILD_TARGET}/.deps.d
 # autoCode
 FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
-FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 
 VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
-FILE_AUTOCODE_LOG_STAMP = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
 FILES_INITRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.rc"
 

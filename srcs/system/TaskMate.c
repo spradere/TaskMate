@@ -17,9 +17,9 @@
 #include "hal/public/lcd.h"
 #include "hal/public/panic.h"
 #include "hal/public/rtc.h"
-#include "hal/public/sysInfo.h"
 #include "interfaces/macros.h"
 #include "interfaces/options.h"
+#include "interfaces/taskmate_info.h"
 #include "system/sysCore/boot.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
@@ -41,9 +41,8 @@ int main(void)
 	// system start up
 	boot();
 
-	const hal_info_t *info;
-	hal_sysInfoGet(&info);
-	tm_syslog(TM_STR("[info] %s v%s build : %i\n"), &file_name, info->tm_ver, info->tm_build);
+	tm_syslog(
+		TM_STR("[info] %s v%i.%i build : %i\n"), &file_name, TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
 	/* *************************************************************************************************
 	 * test / experimental zone, before scheduler run
@@ -70,7 +69,8 @@ int main(void)
 			  t.minutes);
 
 	char msg[40];
-	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %s %i"), info->tm_ver, info->tm_build);
+	tm_snprintf(
+		msg, sizeof(msg), TM_STR("TaskMate %i.%i %i"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	hal_lcdClear();
 	hal_lcdSetCursor(0, 0);
 	hal_lcdWriteString(TM_STR_RAM(msg));
