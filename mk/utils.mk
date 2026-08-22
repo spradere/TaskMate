@@ -91,15 +91,5 @@ help:
 #help [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@awk ${COLOURS_AWK} '\
-		/^([A-Za-z0-9][A-Za-z0-9_-]*):/ { \
-			print COLOUR_HELP_TARGET $$1 COLOUR_RESET; \
-			} \
-		$$1 == "#help" {\
-			printf("  %s%s%s", COLOUR_HELP_TAG, $$2, COLOUR_RESET); \
-			temp = $$0; \
-			sub(/.*\]/,"",temp); \
-			print temp; \
-		}\
-	' ${FILES_MK}
+	@awk ${COLOURS_AWK} -f ${PATH_SCRIPTS}/make_help.awk ${FILES_MK}
 .PHONY: help
