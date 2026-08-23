@@ -15,7 +15,7 @@
 #include "boot.h"
 
 #include "hal/public/usart.h"
-#include "interfaces/drivers.h"
+#include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
 #include "system/sysCore/gpio.h"
 #include "system/sysCore/hal_init.h"

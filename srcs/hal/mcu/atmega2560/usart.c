@@ -16,8 +16,9 @@
 
 #include <avr/interrupt.h>
 
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
+#include "interfaces/runLevel_define.h"
 #include "mcu_define.h" // get usart baud rate
 #include "tmlibc.h"
 
@@ -197,11 +198,11 @@ uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_usartStop();
 		case DRV_CTRL_RLSET:
-			usart_status &= (hal_driver_status_t)~DRV_RL_MASK;
+			usart_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
 			usart_status |= val;
 			return 0;
 		case DRV_CTRL_RLGET:
-			return usart_status & DRV_RL_MASK;
+			return usart_status & RL_LEVEL_MASK;
 		case DRV_CTRL_SETBIT:
 			TM_SETBIT(usart_status, val);
 			return 0;

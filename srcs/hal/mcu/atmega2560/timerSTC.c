@@ -19,8 +19,9 @@
 #include <util/atomic.h>
 
 #include "interfaces/define.h"
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
+#include "interfaces/runLevel_define.h"
 
 const uint16_t hal_timerSTC_OVERFLOW_COUNT =
 	625; // Interrupt every 10ms (10.10^-3 x 16.10^6 )/256 = 625
@@ -99,11 +100,11 @@ uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_timerSTCStop();
 		case DRV_CTRL_RLSET:
-			timer_stc_status &= (hal_driver_status_t)~DRV_RL_MASK;
+			timer_stc_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
 			timer_stc_status |= val;
 			return 0;
 		case DRV_CTRL_RLGET:
-			return timer_stc_status & DRV_RL_MASK;
+			return timer_stc_status & RL_LEVEL_MASK;
 		case DRV_CTRL_SETBIT:
 			TM_SETBIT(timer_stc_status, val);
 			return 0;

@@ -34,6 +34,27 @@ CFLAGS_${PATH_SRCS}/system/sysCore/tm_softwareTimeCounter.c = \
 CFLAGS_${PATH_SRCS}/system/sysCall/sysCall.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
+CFLAGS_${PATH_SRCS}/system/services/commands/driver.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
+CFLAGS_${PATH_SRCS}/hal/drivers/lcd_AMC2004/lcd_AMC2004.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
+CFLAGS_${PATH_SRCS}/hal/drivers/rtc_ZS042/rtc_ZS042.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
+CFLAGS_${PATH_SRCS}/hal/mcu/atmega2560/i2c.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
+CFLAGS_${PATH_SRCS}/hal/mcu/atmega2560/timerSched.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
+CFLAGS_${PATH_SRCS}/hal/mcu/atmega2560/timerSTC.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
+CFLAGS_${PATH_SRCS}/hal/mcu/atmega2560/usart.c = \
+	-DTM_SYSTEM_CRITICAL_ALLOWED
+
 CFLAGS_${PATH_SRCS}/system/sysCore/gpio.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED
 
@@ -45,4 +66,3 @@ _system_critical_check:
 
 	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS} -v h_check_log=${FILE_H_CHECK_LOG} \
 		-f ${PATH_SCRIPTS}/header_allow.awk "${FILE_H_ALLOW_CONF}"
-

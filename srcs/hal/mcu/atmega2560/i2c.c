@@ -17,8 +17,9 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
+#include "interfaces/runLevel_define.h"
 #include "mcu_define.h" // get i2c frequency
 #include "tm_libc/tm_syslog.h"
 
@@ -151,11 +152,11 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_i2cStop();
 		case DRV_CTRL_RLSET:
-			i2c_status &= (hal_driver_status_t)~DRV_RL_MASK;
+			i2c_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
 			i2c_status |= val;
 			return 0;
 		case DRV_CTRL_RLGET:
-			return i2c_status & DRV_RL_MASK;
+			return i2c_status & RL_LEVEL_MASK;
 		case DRV_CTRL_SETBIT:
 			TM_SETBIT(i2c_status, val);
 			return 0;

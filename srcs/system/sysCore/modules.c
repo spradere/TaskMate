@@ -16,7 +16,7 @@
 #include <stddef.h>
 
 #include "hal/public/context.h"
-#include "interfaces/drivers.h"
+#include "interfaces/modules_define.h"
 #include "system/sysCore/modules_list.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
