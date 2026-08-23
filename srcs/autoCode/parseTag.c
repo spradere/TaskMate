@@ -349,6 +349,7 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 				mod->modules[i].name);
 		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", threads_count);
 		fprintf(parse->file, "\tmod->status = %i;\n", mod->modules[i].status);
+		fprintf(parse->file, "\tmod->saved_run_level = %i;\n", RL_RUN_NONE);
 		fprintf(parse->file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 		threads_count++;

@@ -23,7 +23,7 @@
 #include "system/sysCore/tm_scheduler.h"
 #include "tm_libc/tm_string.h"
 
-static bool sc_threadRunLevelSet(const char *name, uint8_t run_level);
+static mod_thread_item_t *sc_threadGetPointer(const char *name);
 
 void sc_threadSetSTC(uint16_t count)
 {
@@ -40,9 +40,50 @@ uint16_t sc_threadGetSTC(void)
 	return timer;
 }
 
-bool sc_threadStart(const char *name) { return sc_threadRunLevelSet(name, RL_RUN_USER); }
+bool sc_threadStart(const char *name, uint8_t initial_run_level)
+{
+	if( initial_run_level >= RL_RUN_LEVEL_COUNT ) { return false; }
 
-bool sc_threadStop(const char *name) { return sc_threadRunLevelSet(name, RL_RUN_NONE); }
+	mod_thread_item_t *thread = sc_threadGetPointer(name);
+	if( thread == 0 ) { return false; }
+
+	hal_atomic_state_t state = hal_atomicStart();
+	uint8_t current_run_level = RL_GET_RUN_LEVEL(thread->status);
+
+	if( current_run_level != RL_RUN_NONE )
+	{
+		hal_atomicEnd(state);
+		return true;
+	}
+
+	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
+	if( (thread->saved_run_level == RL_RUN_NONE) ||
+		(thread->saved_run_level >= RL_RUN_LEVEL_COUNT) )
+	{
+		hal_atomicEnd(state);
+		return false;
+	}
+
+	thread->status &= (uint8_t)~RL_RUN_LEVEL_MASK;
+	thread->status |= thread->saved_run_level;
+	hal_atomicEnd(state);
+	return true;
+}
+
+bool sc_threadStop(const char *name)
+{
+	mod_thread_item_t *thread = sc_threadGetPointer(name);
+	if( thread == 0 ) { return false; }
+
+	hal_atomic_state_t state = hal_atomicStart();
+	uint8_t current_run_level = RL_GET_RUN_LEVEL(thread->status);
+
+	thread->saved_run_level = current_run_level;
+	thread->status &= (uint8_t)~RL_RUN_LEVEL_MASK;
+
+	hal_atomicEnd(state);
+	return true;
+}
 
 void sc_coopYield(void)
 {
@@ -54,9 +95,9 @@ void sc_coopYield(void)
 	while( TM_GETBIT(thread->status, TM_MOD_THREAD_YIELDED) );
 }
 
-static bool sc_threadRunLevelSet(const char *name, uint8_t run_level)
+static mod_thread_item_t *sc_threadGetPointer(const char *name)
 {
-	if( name == 0 ) { return false; }
+	if( name == 0 ) { return 0; }
 
 	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{
@@ -64,13 +105,9 @@ static bool sc_threadRunLevelSet(const char *name, uint8_t run_level)
 		if( (thread->name != 0) &&
 			tm_strncmp(*thread->name, TM_STR_RAM(name), TM_MOD_NAME_SIZE_MAX) == 0 )
 		{
-			hal_atomic_state_t state = hal_atomicStart();
-			thread->status &= (uint8_t)~RL_RUN_LEVEL_MASK;
-			thread->status |= run_level;
-			hal_atomicEnd(state);
-			return true;
+			return thread;
 		}
 	}
 
-	return false;
+	return 0;
 }

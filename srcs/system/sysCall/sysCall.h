@@ -21,7 +21,7 @@
 void sc_threadSetSTC(uint16_t count);
 uint16_t sc_threadGetSTC(void);
 
-bool sc_threadStart(const char *name);
+bool sc_threadStart(const char *name, uint8_t initial_run_level);
 bool sc_threadStop(const char *name);
 
 void sc_coopYield(void);
