@@ -13,6 +13,7 @@
 
 #include "thread.h"
 
+#include "interfaces/define.h"
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
@@ -27,11 +28,13 @@ typedef struct
 
 static bool threadStart(uint8_t argc, char *argv[]);
 static bool threadStop(uint8_t argc, char *argv[]);
+static bool threadHelp(uint8_t argc, char *argv[]);
 static bool threadRunLevelParse(const char *text, uint8_t *run_level);
 
 static const thread_option_t thread_options[] = {
-	{"-start", threadStart},
-	{"-stop", threadStop},
+	{"start", threadStart},
+	{"stop", threadStop},
+	{"help", threadHelp},
 	{0, 0},
 };
 
@@ -39,8 +42,7 @@ bool thread(uint8_t argc, char *argv[])
 {
 	if( (argc < 2) || (argv == 0) )
 	{
-		tm_syslog(TM_STR("[thread] usage: thread -start <name> [runlevel:1..4]\n"));
-		tm_syslog(TM_STR("[thread] usage: thread -stop <name>\n"));
+		threadHelp(0, NULL);
 		return false;
 	}
 
@@ -53,15 +55,25 @@ bool thread(uint8_t argc, char *argv[])
 		}
 	}
 
-	tm_syslog(TM_STR("[thread] options are (-start | -stop)\n"));
+	threadHelp(0, NULL);
 	return false;
+}
+
+static bool threadHelp(uint8_t argc, char *argv[])
+{
+	tm_syslog(TM_STR("[thread] usage:\n"));
+
+	tm_syslog(TM_STR("\tthread start <name> [runlevel:1..4]\n"));
+	tm_syslog(TM_STR("\tthread stop <name>\n"));
+	tm_syslog(TM_STR("\tthread help\n"));
+	return true;
 }
 
 static bool threadStart(uint8_t argc, char *argv[])
 {
 	if( (argc != 3) && (argc != 4) )
 	{
-		tm_syslog(TM_STR("[thread] usage: thread -start <name> [runlevel:1..4]\n"));
+		threadHelp(0, NULL);
 		return false;
 	}
 
@@ -80,7 +92,7 @@ static bool threadStart(uint8_t argc, char *argv[])
 	}
 
 	tm_string_t thread_name = TM_STR_RAM(argv[2]);
-	tm_syslog(TM_STR("[thread] unable to start %s: name or runlevel invalid\n"), &thread_name);
+	tm_syslog(TM_STR("[thread] %s not started: bad name or runlevel\n"), &thread_name);
 	return false;
 }
 
@@ -88,7 +100,7 @@ static bool threadStop(uint8_t argc, char *argv[])
 {
 	if( argc != 3 )
 	{
-		tm_syslog(TM_STR("[thread] usage: thread -stop <name>\n"));
+		threadHelp(0, NULL);
 		return false;
 	}
 
