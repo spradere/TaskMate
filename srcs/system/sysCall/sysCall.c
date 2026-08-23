@@ -40,6 +40,21 @@ uint16_t sc_threadGetSTC(void)
 	return timer;
 }
 
+uint16_t sc_threadGetCount(void) { return TM_MOD_THREAD_COUNT; }
+
+bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level)
+{
+	if( (id >= TM_MOD_THREAD_COUNT) || (name == 0) || (run_level == 0) ) { return false; }
+
+	hal_atomic_state_t state = hal_atomicStart();
+	mod_thread_item_t *thread = mod_threadGetPointer((uint8_t)id);
+	*name = thread->name;
+	*run_level = RL_GET_RUN_LEVEL(thread->status);
+	hal_atomicEnd(state);
+
+	return *name != 0;
+}
+
 bool sc_threadStart(const char *name, uint8_t initial_run_level)
 {
 	mod_thread_item_t *thread = sc_threadGetPointer(name);

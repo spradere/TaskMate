@@ -18,9 +18,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "interfaces/tm_string_storage.h"
+
 void sc_threadSetSTC(uint16_t count);
 uint16_t sc_threadGetSTC(void);
 
+uint16_t sc_threadGetCount(void);
+bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level);
 bool sc_threadStart(const char *name, uint8_t initial_run_level);
 bool sc_threadStop(const char *name);
 
