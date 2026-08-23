@@ -62,8 +62,7 @@ void scli(void)
 	while( 1 )
 	{
 		scliRead();
-
-		sc_threadSetSTC(100);
+		sc_threadSetSTC(50);
 		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
 	}
 }
@@ -72,33 +71,17 @@ static void scliRead(void)
 {
 	uint8_t data;
 
-	while( hal_usartRead(&data) == ERR_NO_ERROR )
+	if( hal_usartTestBufferRx() != ERR_HAL_USART_RX_BUFFER_EMPTY )
 	{
-		if( (data == '\r') || (data == '\n') )
-		{
-			if( scli_line_overflow )
-			{
-				tm_syslog(TM_STR("[scli] error: command too long\n"));
-				scli_line_overflow = false;
-				scli_line_length = 0;
-			}
-			else if( scli_line_length > 0 ) { scliLineProcess(); }
-			continue;
-		}
+		uint8_t i = 0;
 
-		if( (data == '\b') || (data == 0x7f) )
+		while( (hal_usartRead(&data) == ERR_NO_ERROR) && (i < (sizeof(scli_line) - 1)) )
 		{
-			if( scli_line_length > 0 ) { scli_line_length--; }
-			continue;
+			scli_line[i++] = (char)data;
 		}
+		scli_line[i] = 0;
 
-		if( (data < ' ') || (data > '~') ) { continue; }
-
-		if( scli_line_length < (SCLI_LINE_SIZE - 1) )
-		{
-			scli_line[scli_line_length++] = (char)data;
-		}
-		else { scli_line_overflow = true; }
+		scliLineProcess();
 	}
 }
 
@@ -106,7 +89,6 @@ static void scliLineProcess(void)
 {
 	char *argv[SCLI_ARGUMENT_COUNT_MAX];
 
-	scli_line[scli_line_length] = 0;
 	uint8_t argc = scliTokenize(scli_line, argv);
 	if( (argc > 0) && !scliCommandDispatch(argc, argv) )
 	{

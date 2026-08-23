@@ -25,13 +25,8 @@ vim_mk: ${FILE_TAGS_STAMP}
 	vim ${FILES_MK}
 .PHONY: vim_mk
 
-geany_doc:
-#help [global] open Vim with all documentation files .md .txt
-	geany ${FILES_DOC}
-.PHONY: geany_doc
-
-geany_autoCode:
-#help [global] open Vim with all autoCode sources files .c .h
+geany_all:
+#help [global] open Geany with all sources files .c .h
 	geany ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 .PHONY: geany_autoCode
 
@@ -40,7 +35,7 @@ geany_mk:
 	geany ${FILES_MK}
 .PHONY: geany_mk
 
-geany_all:
+geany_tm:
 #help [global] open Geany with all TaskMate sources files .c .h (no autoCode)
 	geany ${FILES_SRC} ${FILES_SRC_H}
 .PHONY: geany_all

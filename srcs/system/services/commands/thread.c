@@ -39,7 +39,7 @@ bool thread(uint8_t argc, char *argv[])
 {
 	if( (argc != 3) || (argv == 0) )
 	{
-		tm_syslog(TM_STR("[scli] usage: thread (-start | -stop) <thread_name>\n"));
+		tm_syslog(TM_STR("[thread] bad argn, use : thread (-start | -stop) <thread_name>\n"));
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool thread(uint8_t argc, char *argv[])
 		}
 	}
 
-	tm_syslog(TM_STR("[scli] usage: thread (-start | -stop) <thread_name>\n"));
+	tm_syslog(TM_STR("[thread] options are (-start | -stop)\n"));
 	return false;
 }
 
@@ -60,12 +60,12 @@ static bool threadStart(const char *name)
 	if( sc_threadStart(name) )
 	{
 		tm_string_t thread_name = TM_STR_RAM(name);
-		tm_syslog(TM_STR("[scli] thread -start %s\n"), &thread_name);
+		tm_syslog(TM_STR("[thread] %s started\n"), &thread_name);
 		return true;
 	}
 
 	tm_string_t thread_name = TM_STR_RAM(name);
-	tm_syslog(TM_STR("[scli] error: thread not found %s\n"), &thread_name);
+	tm_syslog(TM_STR("[thread] name not found %s\n"), &thread_name);
 	return false;
 }
 
@@ -74,12 +74,12 @@ static bool threadStop(const char *name)
 	if( sc_threadStop(name) )
 	{
 		tm_string_t thread_name = TM_STR_RAM(name);
-		tm_syslog(TM_STR("[scli] thread -stop %s\n"), &thread_name);
+		tm_syslog(TM_STR("[thread] %s stop\n"), &thread_name);
 		return true;
 	}
 
 	tm_string_t thread_name = TM_STR_RAM(name);
-	tm_syslog(TM_STR("[scli] error: thread not found %s\n"), &thread_name);
+	tm_syslog(TM_STR("[thread] name not found %s\n"), &thread_name);
 	return false;
 }
 
