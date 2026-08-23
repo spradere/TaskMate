@@ -46,7 +46,7 @@ void boot(void)
 	gpio_signalsInit();
 
 	// start drivers
-	for( uint8_t runlevel = 1; runlevel < RUN_LEVEL_COUNT; runlevel++ )
+	for( uint8_t runlevel = 1; runlevel < RL_RUN_LEVEL_COUNT; runlevel++ )
 	{
 		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 		{
