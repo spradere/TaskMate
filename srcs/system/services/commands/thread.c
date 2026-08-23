@@ -28,12 +28,14 @@ typedef struct
 
 static bool threadStart(uint8_t argc, char *argv[]);
 static bool threadStop(uint8_t argc, char *argv[]);
+static bool threadList(uint8_t argc, char *argv[]);
 static bool threadHelp(uint8_t argc, char *argv[]);
 static bool threadRunLevelParse(const char *text, uint8_t *run_level);
 
 static const thread_option_t thread_options[] = {
 	{"start", threadStart},
 	{"stop", threadStop},
+	{"threads", threadList},
 	{"help", threadHelp},
 	{0, 0},
 };
@@ -65,7 +67,32 @@ static bool threadHelp(uint8_t argc, char *argv[])
 
 	tm_syslog(TM_STR("\tthread start <name> [runlevel:1..4]\n"));
 	tm_syslog(TM_STR("\tthread stop <name>\n"));
+	tm_syslog(TM_STR("\tthread threads\n"));
 	tm_syslog(TM_STR("\tthread help\n"));
+	return true;
+}
+
+static bool threadList(uint8_t argc, char *argv[])
+{
+	(void)argv;
+
+	if( argc != 2 )
+	{
+		threadHelp(0, NULL);
+		return false;
+	}
+
+	tm_syslog(TM_STR("[thread] threads:\n"));
+	const uint16_t thread_count = sc_threadGetCount();
+	for( uint16_t id = 0; id < thread_count; id++ )
+	{
+		const tm_string_t *name;
+		uint8_t run_level;
+		if( !sc_threadGetInfo(id, &name, &run_level) ) { return false; }
+
+		tm_syslog(TM_STR("\t%s runlevel=%i\n"), name, run_level);
+	}
+
 	return true;
 }
 
