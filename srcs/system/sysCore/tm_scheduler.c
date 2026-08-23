@@ -23,11 +23,13 @@
 #include "hal/public/timerSched.h"
 #include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/runLevel_define.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/modules_list.h"
 #include "tm_libc/tm_string.h"
 
 static hal_timerSchedCallback_func_t tm_schedulerRR;
+static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current);
 
 void tm_schedulerInit(void)
 {
@@ -39,8 +41,7 @@ void tm_schedulerStart(void)
 {
 	hal_timerSchedControl(DRV_CTRL_START, 0);
 
-	mod_threadSetCurrent(0);
-	mod_thread_item_t *mod = mod_threadGetPointer(mod_threadGetCurrent());
+	mod_thread_item_t *mod = tm_schedulerSelectNext(TM_MOD_THREAD_COUNT - 1);
 	hal_setStackPointer(mod->stack_pointer);
 
 	hal_contextRestore();
@@ -63,11 +64,7 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 	if( thread->canary_high != TM_MOD_CANARY ) { panic(TM_STR("canary high 1")); }
 
 	// switch thread
-	uint8_t current = mod_threadGetCurrent();
-
-	if( ++current == TM_MOD_THREAD_COUNT ) { current = 0; }
-	mod_threadSetCurrent(current);
-	thread = mod_threadGetPointer(current);
+	thread = tm_schedulerSelectNext(mod_threadGetCurrent());
 
 	// canary check
 	if( thread->canary_low != TM_MOD_CANARY ) { panic(TM_STR("canary low 2")); }
@@ -75,4 +72,21 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 
 	TM_CLEARBIT(thread->status, TM_MOD_THREAD_YIELDED);
 	return thread->stack_pointer;
+}
+
+static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current)
+{
+	for( uint8_t count = 0; count < TM_MOD_THREAD_COUNT; count++ )
+	{
+		if( ++current == TM_MOD_THREAD_COUNT ) { current = 0; }
+
+		mod_thread_item_t *thread = mod_threadGetPointer(current);
+		if( RL_GET_RUN_LEVEL(thread->status) != RL_RUN_NONE )
+		{
+			mod_threadSetCurrent(current);
+			return thread;
+		}
+	}
+
+	panic(TM_STR("no runnable thread"));
 }

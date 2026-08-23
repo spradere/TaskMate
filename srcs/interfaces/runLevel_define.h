@@ -19,13 +19,15 @@
 #endif
 
 // run levels definitions
-#define RUN_NONE 0
-#define RUN_CORE 1
-#define RUN_DRIVER 2
-#define RUN_SERVICE 3
-#define RUN_USER 4
+#define RL_RUN_NONE 0
+#define RL_RUN_CORE 1
+#define RL_RUN_DRIVER 2
+#define RL_RUN_SERVICE 3
+#define RL_RUN_USER 4
 
-#define RUN_LEVEL_MASK 0x07
-#define RUN_LEVEL_COUNT 5
+#define RL_RUN_LEVEL_MASK 0x07
+#define RL_RUN_LEVEL_COUNT 5
+
+#define RL_GET_RUN_LEVEL(status) ((status) & RL_RUN_LEVEL_MASK)
 
 #endif // INTERFACES_RUNLEVEL_DEFINE_H

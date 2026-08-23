@@ -15,10 +15,14 @@
 #ifndef SYSCALL_SYSCALL_H
 #define SYSCALL_SYSCALL_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 void sc_threadSetSTC(uint16_t count);
 uint16_t sc_threadGetSTC(void);
+
+bool sc_threadStart(const char *name);
+bool sc_threadStop(const char *name);
 
 void sc_coopYield(void);
 

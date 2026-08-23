@@ -16,27 +16,27 @@
 
 static void funcRunNone(module_item_t *mod)
 {
-	mod->status |= RUN_NONE;
+	mod->status |= RL_RUN_NONE;
 	mod->cnt_set_runlevel++;
 }
 static void funcRunCore(module_item_t *mod)
 {
-	mod->status |= RUN_CORE;
+	mod->status |= RL_RUN_CORE;
 	mod->cnt_set_runlevel++;
 }
 static void funcRunDriver(module_item_t *mod)
 {
-	mod->status |= RUN_DRIVER;
+	mod->status |= RL_RUN_DRIVER;
 	mod->cnt_set_runlevel++;
 }
 static void funcRunService(module_item_t *mod)
 {
-	mod->status |= RUN_SERVICE;
+	mod->status |= RL_RUN_SERVICE;
 	mod->cnt_set_runlevel++;
 }
 static void funcRunUser(module_item_t *mod)
 {
-	mod->status |= RUN_USER;
+	mod->status |= RL_RUN_USER;
 	mod->cnt_set_runlevel++;
 }
 static void funcTypeDriver(module_item_t *mod)
