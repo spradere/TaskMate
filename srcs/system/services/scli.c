@@ -18,6 +18,7 @@
 #include <stdint.h>
 
 #include "hal/public/usart.h"
+#include "system/services/commands/driver.h"
 #include "system/services/commands/thread.h"
 #include "system/services/msg.h"
 #include "system/sysCall/sysCall.h"
@@ -44,6 +45,7 @@ static uint8_t scliTokenize(char *line, char *argv[]);
 static bool scliCommandDispatch(uint8_t argc, char *argv[]);
 
 static const scli_cmd_t scli_commands[] = {
+	{"driver", driver},
 	{"thread", thread},
 	{0, 0},
 };
@@ -87,8 +89,9 @@ static void scliLineProcess(void)
 		tm_syslog(TM_STR("[scli] error: unknown command %s\n"), &command);
 		for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
 		{
-			tm_syslog(TM_STR("\tcmd %s\n"), TM_STR_RAM(scli_commands[i].name));
-		}		
+			tm_string_t command_name = TM_STR_RAM(scli_commands[i].name);
+			tm_syslog(TM_STR("\tcmd %s\n"), &command_name);
+		}
 	}
 	scli_line_length = 0;
 }
