@@ -29,7 +29,7 @@
 typedef struct
 {
 	const tm_string_t *name;
-	uint8_t status;
+	volatile uint8_t status;
 
 	void (*main)(void);
 

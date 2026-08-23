@@ -55,8 +55,7 @@ uint8_t hal_timerSchedLoad(void)
 #define LOAD_GUARD 4
 	const uint16_t LOAD = TIMER1_OVERFLOW_COUNT - LOAD_GUARD;
 
-	TCNT1L = LOAD & 0xFF;
-	TCNT1H = LOAD >> 8;
+	TCNT1 = LOAD;
 	return 0;
 }
 
