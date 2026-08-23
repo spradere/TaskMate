@@ -23,7 +23,6 @@
 #include "system/sysCore/tm_scheduler.h"
 #include "tm_libc/tm_string.h"
 
-static bool sc_threadNameEquals(const tm_string_t *registered_name, const char *name);
 static bool sc_threadRunLevelSet(const char *name, uint8_t run_level);
 
 void sc_threadSetSTC(uint16_t count)
@@ -55,20 +54,6 @@ void sc_coopYield(void)
 	while( TM_GETBIT(thread->status, TM_MOD_THREAD_YIELDED) );
 }
 
-static bool sc_threadNameEquals(const tm_string_t *registered_name, const char *name)
-{
-	if( (registered_name == 0) || (name == 0) ) { return false; }
-
-	for( uint8_t i = 0; i < TM_MOD_NAME_SIZE_MAX; i++ )
-	{
-		char registered_char = hal_string_getChar(registered_name, i);
-		if( registered_char != name[i] ) { return false; }
-		if( registered_char == 0 ) { return true; }
-	}
-
-	return false;
-}
-
 static bool sc_threadRunLevelSet(const char *name, uint8_t run_level)
 {
 	if( name == 0 ) { return false; }
@@ -76,7 +61,8 @@ static bool sc_threadRunLevelSet(const char *name, uint8_t run_level)
 	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{
 		mod_thread_item_t *thread = mod_threadGetPointer(i);
-		if( sc_threadNameEquals(thread->name, name) )
+		if( (thread->name != 0) &&
+			tm_strncmp(*thread->name, TM_STR_RAM(name), TM_MOD_NAME_SIZE_MAX) == 0 )
 		{
 			hal_atomic_state_t state = hal_atomicStart();
 			thread->status &= (uint8_t)~RL_RUN_LEVEL_MASK;
