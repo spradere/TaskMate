@@ -53,6 +53,8 @@ void mod_threadsAlloc(void)
 				  (unsigned)offsetof(mod_thread_item_t, name));
 		tm_syslog(TM_STR("[modules.c] offsetof(status)                = %i\n"),
 				  (unsigned)offsetof(mod_thread_item_t, status));
+		tm_syslog(TM_STR("[modules.c] offsetof(saved_run_level)       = %i\n"),
+				  (unsigned)offsetof(mod_thread_item_t, saved_run_level));
 		tm_syslog(TM_STR("[modules.c] offsetof(main)                  = %i\n"),
 				  (unsigned)offsetof(mod_thread_item_t, main));
 		tm_syslog(TM_STR("[modules.c] offsetof(software_time_counter) = %i\n"),
@@ -91,6 +93,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread0_name, "task1");
 	mod->name = &thread0_name;
 	mod->status = 12;
+	mod->saved_run_level = 0;
 	mod->main = task1;
 
 	mod = mod_threadGetPointer(1);
@@ -100,6 +103,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread1_name, "task2");
 	mod->name = &thread1_name;
 	mod->status = 12;
+	mod->saved_run_level = 0;
 	mod->main = task2;
 
 	mod = mod_threadGetPointer(2);
@@ -109,6 +113,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread2_name, "msg");
 	mod->name = &thread2_name;
 	mod->status = 19;
+	mod->saved_run_level = 0;
 	mod->main = msg;
 
 	mod = mod_threadGetPointer(3);
@@ -118,6 +123,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread3_name, "scli");
 	mod->name = &thread3_name;
 	mod->status = 19;
+	mod->saved_run_level = 0;
 	mod->main = scli;
 
 // clang-format on
