@@ -37,7 +37,7 @@ void printModules(const modules_database_t *data_base)
 			   i,
 			   threads->modules[i].name,
 			   RL_GET_RUN_LEVEL(threads->modules[i].status),
-			   threads->modules[i].status & (~RL_RUN_LEVEL_MASK));
+			   threads->modules[i].status & (~RL_LEVEL_MASK));
 	}
 	printf("\n");
 }

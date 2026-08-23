@@ -63,7 +63,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, TM_STR("\3AWK don't go wild"), MSG_TO_LCD);
+		msgWriteText(chan, TM_STR("\3sCLI test III"), MSG_TO_LCD);
 	}
 
 	msgProcess();

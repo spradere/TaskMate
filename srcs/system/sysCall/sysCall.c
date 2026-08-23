@@ -42,30 +42,15 @@ uint16_t sc_threadGetSTC(void)
 
 bool sc_threadStart(const char *name, uint8_t initial_run_level)
 {
-	if( initial_run_level >= RL_RUN_LEVEL_COUNT ) { return false; }
-
 	mod_thread_item_t *thread = sc_threadGetPointer(name);
 	if( thread == 0 ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
 	uint8_t current_run_level = RL_GET_RUN_LEVEL(thread->status);
 
-	if( current_run_level != RL_RUN_NONE )
-	{
-		hal_atomicEnd(state);
-		return true;
-	}
-
 	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
-	if( (thread->saved_run_level == RL_RUN_NONE) ||
-		(thread->saved_run_level >= RL_RUN_LEVEL_COUNT) )
-	{
-		hal_atomicEnd(state);
-		return false;
-	}
+	else {thread->status &= (uint8_t)~RL_LEVEL_MASK;thread->status |= thread->saved_run_level;}
 
-	thread->status &= (uint8_t)~RL_RUN_LEVEL_MASK;
-	thread->status |= thread->saved_run_level;
 	hal_atomicEnd(state);
 	return true;
 }
@@ -79,7 +64,7 @@ bool sc_threadStop(const char *name)
 	uint8_t current_run_level = RL_GET_RUN_LEVEL(thread->status);
 
 	thread->saved_run_level = current_run_level;
-	thread->status &= (uint8_t)~RL_RUN_LEVEL_MASK;
+	thread->status &= (uint8_t)~RL_LEVEL_MASK;
 
 	hal_atomicEnd(state);
 	return true;

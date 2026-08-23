@@ -343,13 +343,12 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 				mod->modules[i].name);
 
 		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
-		fprintf(parse->file,
-				"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
-				threads_count,
-				mod->modules[i].name);
+		fprintf(parse->file, "\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
+				threads_count, mod->modules[i].name);
 		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", threads_count);
 		fprintf(parse->file, "\tmod->status = %i;\n", mod->modules[i].status);
-		fprintf(parse->file, "\tmod->saved_run_level = %i;\n", RL_RUN_NONE);
+		fprintf(parse->file, "\tmod->saved_run_level = %i;\n", 
+				mod->modules[i].status & RL_LEVEL_MASK);
 		fprintf(parse->file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 		threads_count++;

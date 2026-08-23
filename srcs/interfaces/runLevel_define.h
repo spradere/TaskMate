@@ -25,9 +25,9 @@
 #define RL_RUN_SERVICE 3
 #define RL_RUN_USER 4
 
-#define RL_RUN_LEVEL_MASK 0x07
-#define RL_RUN_LEVEL_COUNT 5
+#define RL_LEVEL_MASK 0x07
+#define RL_LEVEL_COUNT 5
 
-#define RL_GET_RUN_LEVEL(status) ((status) & RL_RUN_LEVEL_MASK)
+#define RL_GET_RUN_LEVEL(status) ((status) & RL_LEVEL_MASK)
 
 #endif // INTERFACES_RUNLEVEL_DEFINE_H

@@ -93,7 +93,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread0_name, "task1");
 	mod->name = &thread0_name;
 	mod->status = 12;
-	mod->saved_run_level = 0;
+	mod->saved_run_level = 4;
 	mod->main = task1;
 
 	mod = mod_threadGetPointer(1);
@@ -103,7 +103,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread1_name, "task2");
 	mod->name = &thread1_name;
 	mod->status = 12;
-	mod->saved_run_level = 0;
+	mod->saved_run_level = 4;
 	mod->main = task2;
 
 	mod = mod_threadGetPointer(2);
@@ -113,7 +113,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread2_name, "msg");
 	mod->name = &thread2_name;
 	mod->status = 19;
-	mod->saved_run_level = 0;
+	mod->saved_run_level = 3;
 	mod->main = msg;
 
 	mod = mod_threadGetPointer(3);
@@ -123,7 +123,7 @@ void mod_threadsAlloc(void)
 	TM_STR_ROM_NEW(thread3_name, "scli");
 	mod->name = &thread3_name;
 	mod->status = 19;
-	mod->saved_run_level = 0;
+	mod->saved_run_level = 3;
 	mod->main = scli;
 
 // clang-format on
