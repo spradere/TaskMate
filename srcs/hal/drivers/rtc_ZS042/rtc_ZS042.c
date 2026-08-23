@@ -15,8 +15,9 @@
 #include "rtc_ZS042.h"
 
 #include "hal/mcu/atmega2560/i2c.h"
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
+#include "interfaces/runLevel_define.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -120,11 +121,11 @@ uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_rtcStop();
 		case DRV_CTRL_RLSET:
-			rtc_status &= (hal_driver_status_t)~DRV_RL_MASK;
+			rtc_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
 			rtc_status |= val;
 			return 0;
 		case DRV_CTRL_RLGET:
-			return rtc_status & DRV_RL_MASK;
+			return rtc_status & RL_LEVEL_MASK;
 		case DRV_CTRL_SETBIT:
 			TM_SETBIT(rtc_status, val);
 			return 0;

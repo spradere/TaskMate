@@ -22,8 +22,9 @@
 #include "hal/arch/avr8/interrupt.h"
 #include "hal/arch/avr8/stack.h"
 #include "interfaces/define.h"
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
+#include "interfaces/runLevel_define.h"
 
 const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
@@ -144,11 +145,11 @@ uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_timerSchedStop();
 		case DRV_CTRL_RLSET:
-			timer_sched_status &= (hal_driver_status_t)~DRV_RL_MASK;
+			timer_sched_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
 			timer_sched_status |= val;
 			return 0;
 		case DRV_CTRL_RLGET:
-			return timer_sched_status & DRV_RL_MASK;
+			return timer_sched_status & RL_LEVEL_MASK;
 		case DRV_CTRL_SETBIT:
 			TM_SETBIT(timer_sched_status, val);
 			return 0;

@@ -18,8 +18,9 @@
 
 #include "hal/mcu/atmega2560/i2c.h"
 #include "hal/public/tmlibc.h"
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
+#include "interfaces/modules_define.h"
+#include "interfaces/runLevel_define.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -147,11 +148,11 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_lcdStop();
 		case DRV_CTRL_RLSET:
-			lcd_status &= (hal_driver_status_t)~DRV_RL_MASK;
+			lcd_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
 			lcd_status |= val;
 			return 0;
 		case DRV_CTRL_RLGET:
-			return lcd_status & DRV_RL_MASK;
+			return lcd_status & RL_LEVEL_MASK;
 		case DRV_CTRL_SETBIT:
 			TM_SETBIT(lcd_status, val);
 			return 0;

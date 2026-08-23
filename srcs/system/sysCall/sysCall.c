@@ -16,7 +16,6 @@
 
 #include "hal/public/atomic.h"
 #include "hal/public/timerSched.h"
-#include "interfaces/drivers.h"
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
