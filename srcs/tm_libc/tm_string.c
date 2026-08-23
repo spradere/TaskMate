@@ -14,6 +14,24 @@
 
 #include "tm_string.h"
 
+int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n)
+{
+	for( uint8_t i = 0; i < n; i++ )
+	{
+		uint8_t left_char = 0;
+		uint8_t right_char = 0;
+
+		if( left.text != 0 ) { left_char = (uint8_t)hal_string_getChar(&left, i); }
+		if( right.text != 0 ) { right_char = (uint8_t)hal_string_getChar(&right, i); }
+
+		if( left_char < right_char ) { return -1; }
+		if( left_char > right_char ) { return 1; }
+		if( left_char == 0 ) { return 0; }
+	}
+
+	return 0;
+}
+
 void tm_strncpy(char *dest, tm_string_t src, uint8_t n)
 {
 	uint8_t i = 0;

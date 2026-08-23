@@ -44,7 +44,6 @@ static void scliRead(void);
 static void scliLineProcess(void);
 static uint8_t scliTokenize(char *line, char *argv[]);
 static bool scliCommandDispatch(uint8_t argc, char *argv[]);
-static bool scliStringEquals(const char *left, const char *right);
 
 static const scli_command_t scli_commands[] = {
 	{"thread", thread},
@@ -121,25 +120,12 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[])
 {
 	for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
 	{
-		if( scliStringEquals(argv[0], scli_commands[i].name) )
+		if( tm_strncmp(
+				TM_STR_RAM(argv[0]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) == 0 )
 		{
 			scli_commands[i].func(argc, argv);
 			return true;
 		}
-	}
-
-	return false;
-}
-
-static bool scliStringEquals(const char *left, const char *right)
-{
-	if( (left == 0) || (right == 0) ) { return false; }
-
-	while( *left == *right )
-	{
-		if( *left == 0 ) { return true; }
-		left++;
-		right++;
 	}
 
 	return false;

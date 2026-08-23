@@ -27,7 +27,6 @@ typedef struct
 
 static bool threadStart(const char *name);
 static bool threadStop(const char *name);
-static bool threadStringEquals(const char *left, const char *right);
 
 static const thread_option_t thread_options[] = {
 	{"-start", threadStart},
@@ -45,7 +44,8 @@ bool thread(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; thread_options[i].name != 0; i++ )
 	{
-		if( threadStringEquals(argv[1], thread_options[i].name) )
+		if( tm_strncmp(
+				TM_STR_RAM(argv[1]), TM_STR_RAM(thread_options[i].name), TM_STRING_SIZE_MAX) == 0 )
 		{
 			return thread_options[i].func(argv[2]);
 		}
@@ -80,19 +80,5 @@ static bool threadStop(const char *name)
 
 	tm_string_t thread_name = TM_STR_RAM(name);
 	tm_syslog(TM_STR("[thread] name not found %s\n"), &thread_name);
-	return false;
-}
-
-static bool threadStringEquals(const char *left, const char *right)
-{
-	if( (left == 0) || (right == 0) ) { return false; }
-
-	while( *left == *right )
-	{
-		if( *left == 0 ) { return true; }
-		left++;
-		right++;
-	}
-
 	return false;
 }

@@ -23,6 +23,7 @@
 
 #if TM_LIBC_CSTD
 	#include <string.h>
+	#define tm_strncmp strncmp
 	#define tm_strncpy strncpy
 
 	#define TM_STR_RAM(string) (string)
@@ -36,6 +37,7 @@
 	#include <stdint.h>
 	#include "hal/public/tmlibc.h" // macro TM_STR_* hal definitions
 
+	int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n);
 	void tm_strncpy(char *dest, tm_string_t src, uint8_t n);
 
 
