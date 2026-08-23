@@ -61,7 +61,6 @@ bool sc_threadStart(const char *name, uint8_t initial_run_level)
 	if( thread == 0 ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	uint8_t current_run_level = RL_GET_RUN_LEVEL(thread->status);
 
 	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
 	else {thread->status &= (uint8_t)~RL_LEVEL_MASK;thread->status |= thread->saved_run_level;}

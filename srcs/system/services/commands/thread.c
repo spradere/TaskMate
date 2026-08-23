@@ -18,13 +18,13 @@
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
-typedef bool (*thread_option_func_t)(uint8_t argc, char *argv[]);
+typedef bool (*thread_cmd_func_t)(uint8_t argc, char *argv[]);
 
 typedef struct
 {
 	const char *name;
-	thread_option_func_t func;
-} thread_option_t;
+	thread_cmd_func_t func;
+} thread_cmd_t;
 
 static bool threadStart(uint8_t argc, char *argv[]);
 static bool threadStop(uint8_t argc, char *argv[]);
@@ -32,28 +32,28 @@ static bool threadList(uint8_t argc, char *argv[]);
 static bool threadHelp(uint8_t argc, char *argv[]);
 static bool threadRunLevelParse(const char *text, uint8_t *run_level);
 
-static const thread_option_t thread_options[] = {
+static const thread_cmd_t thread_cmd[] = {
 	{"start", threadStart},
 	{"stop", threadStop},
-	{"threads", threadList},
+	{"list", threadList},
 	{"help", threadHelp},
 	{0, 0},
 };
 
 bool thread(uint8_t argc, char *argv[])
 {
-	if( (argc < 2) || (argv == 0) )
+	if( argc < 2 )
 	{
 		threadHelp(0, NULL);
 		return false;
 	}
 
-	for( uint8_t i = 0; thread_options[i].name != 0; i++ )
+	for( uint8_t i = 0; thread_cmd[i].name != 0; i++ )
 	{
 		if( tm_strncmp(
-				TM_STR_RAM(argv[1]), TM_STR_RAM(thread_options[i].name), TM_STRING_SIZE_MAX) == 0 )
+				TM_STR_RAM(argv[1]), TM_STR_RAM(thread_cmd[i].name), TM_STRING_SIZE_MAX) == 0 )
 		{
-			return thread_options[i].func(argc, argv);
+			return thread_cmd[i].func(argc, argv);
 		}
 	}
 
@@ -63,24 +63,22 @@ bool thread(uint8_t argc, char *argv[])
 
 static bool threadHelp(uint8_t argc, char *argv[])
 {
+	(void)argc;
+	(void)argv;
+	
 	tm_syslog(TM_STR("[thread] usage:\n"));
 
 	tm_syslog(TM_STR("\tthread start <name> [runlevel:1..4]\n"));
 	tm_syslog(TM_STR("\tthread stop <name>\n"));
-	tm_syslog(TM_STR("\tthread threads\n"));
+	tm_syslog(TM_STR("\tthread list\n"));
 	tm_syslog(TM_STR("\tthread help\n"));
 	return true;
 }
 
 static bool threadList(uint8_t argc, char *argv[])
 {
+	(void)argc;
 	(void)argv;
-
-	if( argc != 2 )
-	{
-		threadHelp(0, NULL);
-		return false;
-	}
 
 	tm_syslog(TM_STR("[thread] threads:\n"));
 	const uint16_t thread_count = sc_threadGetCount();
