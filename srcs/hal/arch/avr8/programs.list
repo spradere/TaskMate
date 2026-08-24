@@ -1,0 +1,7 @@
+# Programs specific to the AVR8 architecture
+avr-gcc
+avr-nm
+avr-objcopy
+avr-objdump
+avr-size
+avrdude
