@@ -25,7 +25,7 @@
 	@printf "%s\n" "#define TM_VER_MINOR ${VAL_TM_VER_MINOR}" >> "${FILE_TASKMATE_INFO}"
 	@printf "%s\n" "#define TM_BUILD ${VAL_BUILD_CNT}" >> "${FILE_TASKMATE_INFO}"
 	
-# Check programs once on the first Make invocation in the project
+# Check required programs once
 ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
 	@printf "%sChecking required programs ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

@@ -16,7 +16,7 @@ FILE_AVR8_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.avr8_programs_check_stamp
 
 .BEGIN: ${FILE_AVR8_PROGRAMS_CHECK_STAMP}
 
-# Check AVR8 programs once and repeat the check when the list changes
+# Check AVR8 required programs once
 ${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
 	@printf "%sChecking AVR8 programs ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -101,4 +101,4 @@ modules_size: all
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf
 	avr-nm --format=bsd --size-sort -r ${PATH_BUILD_TARGET}/TaskMate.elf | head -20
-.PHONY: mem_size
+.PHONY: modules_size

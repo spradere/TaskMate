@@ -76,7 +76,7 @@ format:
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format19 -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC}
-.PHONY: clang_format
+.PHONY: format
 
 tidy_autoCode:
 #help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
