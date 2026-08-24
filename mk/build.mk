@@ -26,20 +26,10 @@
 	@printf "%s\n" "#define TM_BUILD ${VAL_BUILD_CNT}" >> "${FILE_TASKMATE_INFO}"
 	
 # Check programs once on the first Make invocation in the project
-${FILE_PROGRAMS_CHECK_STAMP}:
+${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
 	@printf "%sChecking required programs ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@missing_programs=""; \
-	for program in ${VAL_REQUIRED_PROGRAMS}; do \
-		if ! command -v "$${program}" >/dev/null 2>&1; then \
-			missing_programs="$${missing_programs} $${program}"; \
-		fi; \
-	done; \
-	if [ -n "$${missing_programs}" ]; then \
-		printf "%sMissing required programs:%s%s\n" \
-			"${COLOUR_FAIL}" "$${missing_programs}" "${COLOUR_RESET}"; \
-		exit 1; \
-	fi
+	@${FILE_PROGRAMS_CHECK_SCRIPT} "${FILE_PROGRAMS_LIST}"
 	@mkdir -p "${PATH_BUILDS}"
 	@touch "${FILE_PROGRAMS_CHECK_STAMP}"
 

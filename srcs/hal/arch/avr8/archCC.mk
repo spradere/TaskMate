@@ -11,6 +11,18 @@
 # output files
 FILE_HEX = ${FILE_TARGET}.hex
 FILE_ELF = ${FILE_TARGET}.elf
+FILE_AVR8_PROGRAMS_LIST = ${PATH_AVR8}/programs.list
+FILE_AVR8_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.avr8_programs_check_stamp
+
+.BEGIN: ${FILE_AVR8_PROGRAMS_CHECK_STAMP}
+
+# Check AVR8 programs once and repeat the check when the list changes
+${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
+	@printf "%sChecking AVR8 programs ...%s\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@${FILE_PROGRAMS_CHECK_SCRIPT} "${FILE_AVR8_PROGRAMS_LIST}"
+	@mkdir -p "${PATH_BUILDS}"
+	@touch "${FILE_AVR8_PROGRAMS_CHECK_STAMP}"
 
 # link
 ${FILE_TARGET}: ${FILES_OBJ}

@@ -19,43 +19,8 @@ PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
-
-# Programs called by Makefiles
-VAL_REQUIRED_PROGRAMS = awk \
-	avr-gcc \
-	avr-nm \
-	avr-objcopy \
-	avr-objdump \
-	avr-size \
-	avrdude \
-	bmake \
-	cat \
-	clang \
-	clang-format19 \
-	clang-tidy19 \
-	cloc \
-	cppcheck \
-	ctags \
-	cut \
-	date \
-	doxygen \
-	find \
-	geany \
-	git \
-	grep \
-	head \
-	ls \
-	mkdir \
-	mount \
-	printf \
-	rm \
-	rsync \
-	sed \
-	sort \
-	touch \
-	umount \
-	vim \
-	xargs
+FILE_PROGRAMS_LIST = ${PATH_MAKEFILES}/programs.list
+FILE_PROGRAMS_CHECK_SCRIPT = ${PATH_SCRIPTS}/check_programs.sh
 
 # USB
 PATH_USBKEY = /media/usbkey
@@ -111,9 +76,9 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 FILE_GIT_IGNORE = .gitignore
 PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
-FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf
-FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio
-FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk
+FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf *.list
+FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list
+FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
 FILES_GIT_EXCLUDED = \
