@@ -63,7 +63,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, TM_STR("\3sCLI test III"), MSG_TO_LCD);
+		msgWriteText(chan, TM_STR("\3HEX hex 16^16"), MSG_TO_LCD);
 	}
 
 	msgProcess();

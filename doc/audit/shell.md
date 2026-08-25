@@ -138,23 +138,6 @@ chargement du Makefile.
 
 ## Duplications à résoudre dans Make
 
-### Construire le fichier HEX comme un véritable artefact
-
-La commande de conversion ELF vers HEX est dupliquée dans `upload` et `dump`
-([`archCC.mk`](../../srcs/hal/arch/avr8/archCC.mk#L46) et
-[`archCC.mk`](../../srcs/hal/arch/avr8/archCC.mk#L75)).
-
-Cette duplication ne justifie pas un script. Le fichier HEX est un artefact du build et doit
-disposer d'une règle :
-
-```make
-${FILE_HEX}: ${FILE_ELF}
-	@avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
-```
-
-Les cibles `upload` et `dump` pourraient alors dépendre de `${FILE_HEX}`. Le graphe Make exprimerait
-directement la relation ELF vers HEX et éviterait les conversions inutiles.
-
 ### Factoriser les recettes de contrôle des programmes
 
 Les contrôles général et AVR8 utilisent déjà correctement
@@ -260,14 +243,6 @@ gestion d'erreur complexe.
 
 ## Anomalies connexes
 
-L'analyse a également relevé plusieurs incohérences indépendantes de l'extraction shell :
-
-- `geany_all` déclare `.PHONY: geany_autoCode` et `geany_tm` déclare `.PHONY: geany_all`
-  ([`editors.mk`](../../mk/editors.mk#L28)) ;
-- `format` déclare `.PHONY: clang_format`
-  ([`utils.mk`](../../mk/utils.mk#L74)) ;
-- `modules_size` déclare `.PHONY: mem_size`
-  ([`archCC.mk`](../../srcs/hal/arch/avr8/archCC.mk#L98)) ;
 - la pipeline `ls | head | xargs cat` de `autoCode_alone` gère mal l'absence de journal
   ([`build.mk`](../../mk/build.mk#L147)).
 

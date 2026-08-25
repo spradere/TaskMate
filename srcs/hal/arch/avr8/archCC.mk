@@ -43,13 +43,14 @@ ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
 	    -c "${FILE_COMPILE_SRC}" -o "${.TARGET}"
 
-upload: all _mcu_memory_show
+# hex file generation
+${FILE_HEX}: ${FILE_ELF}
+	@avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
+	
+upload: all _mcu_memory_show ${FILE_HEX}
 #help [avr8] Upload firmware to mcu via Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${VAL_BUILD_CNT} "${COLOUR_RESET}"
-	# FILE_ELF to hex format
-	@avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
-	# Upload to Atmega
 	avrdude -c ${VAL_PROGRAMMER} -p ${VAL_MCU_SERIAL} -U flash:w:${FILE_HEX}:i -P ${VAL_PROGRAMMER_PORT} -D
 .PHONY: upload
 
@@ -72,11 +73,10 @@ _mcu_memory_show: _mcu_memory_data
 .PHONY: _mcu_memory_show
 
 
-dump: all
+dump: all ${FILE_HEX}
 #help [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
 	avr-objdump -D -m avr6 ${FILE_HEX} > "${PATH_BUILD_TARGET}/hex.txt"
 	avr-objdump -D -m avr6 ${FILE_ELF} > "${PATH_BUILD_TARGET}/elf.txt"
 .PHONY: dump
