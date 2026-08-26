@@ -17,6 +17,7 @@ PATH_SRCS = srcs
 PATH_BUILDS = build
 PATH_LOGS = ${PATH_BUILDS}/log
 PATH_MAKEFILES = mk
+PATH_CONF = conf
 PATH_DOCS = doc
 PATH_SCRIPTS = scripts
 
@@ -30,6 +31,7 @@ PATH_SCRIPTS = scripts
 
 # Proceed files
 .include "${PATH_MAKEFILES}/path_files.mk"
+.include "${PATH_MAKEFILES}/hardware_taget.mk"
 .include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
 

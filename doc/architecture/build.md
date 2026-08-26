@@ -23,7 +23,8 @@ autoCode generation, dependency aggregation, AVR compilation/linking, memory-usa
 line counting. Objects, dependency files, maps, firmware output, autoCode configuration, and stamps live
 under `build/`, with firmware artifacts separated by the selected hardware stack. Compile-time guards
 protect critical headers, while `scripts/header_allow.awk` scans the source tree against
-`mk/header_allow.conf` before compilation.
+`conf/header_allow.conf` before compilation. The complete hardware stack is also checked against
+`conf/hardware-tagets.conf` before compilation.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
@@ -40,7 +41,7 @@ protect critical headers, while `scripts/header_allow.awk` scans the source tree
   tools; several analysis, backup, USB, and programmer paths are still machine-specific.
 - The header allow-list check searches text with `grep`. It can match comments, cannot resolve indirect
   preprocessor dependencies, and protects only patterns explicitly listed in its configuration.
-- Target compatibility is encoded by nested Make includes rather than by a separately validated
-  capability model; only the `test1 / arduinoMega / atmega2560 / avr8` stack is present today.
+- Target compatibility is encoded by nested Make includes and validated against a flat list of complete
+  stacks; only the `test1 / arduinoMega / atmega2560 / avr8` stack is present today.
 - Build metadata includes dates, Git descriptions, and an incrementing revision count; reproducible
   firmware has not yet been demonstrated with pinned tool versions and clean generated-state checks.
