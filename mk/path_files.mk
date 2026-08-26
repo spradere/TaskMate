@@ -19,8 +19,10 @@ PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
-FILE_PROGRAMS_LIST = ${PATH_MAKEFILES}/programs.list
+FILE_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
 FILE_PROGRAMS_CHECK_SCRIPT = ${PATH_SCRIPTS}/check_programs.sh
+FILE_HARDWARE_TARGETS_CONF = ${PATH_CONF}/hardware-tagets.conf
+FILE_HARDWARE_TARGET_CHECK_SCRIPT = ${PATH_SCRIPTS}/hardware_target.awk
 
 # USB
 PATH_USBKEY = /media/usbkey
@@ -50,7 +52,7 @@ FILE_RSYNC_LOG = ${PATH_LOGS}/rsync.log
 FILE_H_CHECK_LOG = ${PATH_LOGS}/headers_check.log
 
 # scripts
-FILE_H_ALLOW_CONF = mk/header_allow.conf
+FILE_H_ALLOW_CONF = ${PATH_CONF}/header_allow.conf
 
 # autoCode
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
@@ -74,7 +76,8 @@ FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 
 # git ignore
 FILE_GIT_IGNORE = .gitignore
-PATHS_GIT_ALLOWED = ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
+PATHS_GIT_ALLOWED = ${PATH_CONF} ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
+FILES_GIT_ALLOWED.${PATH_CONF} = *.conf
 FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf *.list
 FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list

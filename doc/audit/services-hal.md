@@ -183,7 +183,7 @@ les services.
 ## Limite du contrôle de frontières
 
 Le contrôle de build analyse uniquement les motifs déclarés dans
-[`mk/header_allow.conf`](../../mk/header_allow.conf#L15). Les façades `hal/public/lcd.h`,
+[`conf/header_allow.conf`](../../conf/header_allow.conf#L15). Les façades `hal/public/lcd.h`,
 `hal/public/usart.h` et `hal/public/tmlibc.h` n'y sont pas déclarées. Les dépendances identifiées
 dans cet audit sont donc acceptées silencieusement par la vérification actuelle.
 
