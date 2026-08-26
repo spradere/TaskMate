@@ -14,10 +14,6 @@
 #ifndef INTERFACES_RUNLEVEL_DEFINE_H
 #define INTERFACES_RUNLEVEL_DEFINE_H
 
-#if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : runLevel_define.h"
-#endif
-
 // run levels definitions
 #define RL_RUN_NONE 0
 #define RL_RUN_CORE 1

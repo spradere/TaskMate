@@ -16,10 +16,6 @@
 
 #include <stdint.h>
 
-#if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : modules_define.h"
-#endif
-
 // [autoCode_tag] modules_count
 // clang-format off
 /*
