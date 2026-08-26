@@ -2,16 +2,22 @@ AUDIT :
 - general types have to be replaced with custom typedef, to follow hardware portability or translation unit specifications
 - check type for strings / data ->  char for text, uint8_t for data
 - hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit access to SFR registers
-- #define <-> typedef enum
+- #define <-> typedef enum, list in enum. use avrgcc -fshort-enums option for uint8_t size
 - Doxigen documentation : only in .h for API and general operations
-- drivers : test at init, check init bofore start
-- autocode (and TaskMate ?) : check if string pointer is not null before process data
+
 
 TODO :
+- autocode and TaskMate : check if string pointer is not null before process data
+- drivers : test at init (and start ?)
+- test for valid target stack
+- remove AVR code from mk/*
+- new grammar check for forbidden #include
+- drivers returns status, setup error code and emit event.
 - add system task to handle runlevels
-- glogal error system
+- glogal status/error/event system
+- error types flow/warning/fail/panic
 - IPC / message server
-- memory slab allocator
+- memory slab allocator uint64_t bitmap
 
 CODEX AUDIT : architectures notes, priority P3 delay - P2 technical debt - P1 fail
 autocode.md P2

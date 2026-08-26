@@ -21,7 +21,7 @@ FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
 FILE_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
 FILE_PROGRAMS_CHECK_SCRIPT = ${PATH_SCRIPTS}/check_programs.sh
-FILE_HARDWARE_TARGETS_CONF = ${PATH_CONF}/hardware-tagets.conf
+FILE_HARDWARE_TARGETS_CONF = ${PATH_CONF}/hardware-targets.conf
 FILE_HARDWARE_TARGET_CHECK_SCRIPT = ${PATH_SCRIPTS}/hardware_target.awk
 
 # USB
@@ -79,7 +79,7 @@ FILE_GIT_IGNORE = .gitignore
 PATHS_GIT_ALLOWED = ${PATH_CONF} ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 FILES_GIT_ALLOWED.${PATH_CONF} = *.conf
 FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
-FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *.conf *.list
+FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *
 FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\

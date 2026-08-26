@@ -20,8 +20,9 @@
 .BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
-	
-	@printf "%s\n" "#define TM_VER_MAJOR ${VAL_TM_VER_MAJOR}" > "${FILE_TASKMATE_INFO}"
+
+	@printf "// TaskMate informations, for use anywhere in the system\n\n"  > "${FILE_TASKMATE_INFO}"
+	@printf "%s\n" "#define TM_VER_MAJOR ${VAL_TM_VER_MAJOR}" >> "${FILE_TASKMATE_INFO}"
 	@printf "%s\n" "#define TM_VER_MINOR ${VAL_TM_VER_MINOR}" >> "${FILE_TASKMATE_INFO}"
 	@printf "%s\n" "#define TM_BUILD ${VAL_BUILD_CNT}" >> "${FILE_TASKMATE_INFO}"
 	

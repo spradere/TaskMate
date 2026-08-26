@@ -31,7 +31,6 @@ PATH_SCRIPTS = scripts
 
 # Proceed files
 .include "${PATH_MAKEFILES}/path_files.mk"
-.include "${PATH_MAKEFILES}/hardware_taget.mk"
 .include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
 
