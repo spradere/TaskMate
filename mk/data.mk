@@ -20,5 +20,3 @@ VAL_TM_VER_MINOR != echo ${VAL_TM_VERSION} | cut -d'.' -f2
 # Build counter
 VAL_BUILD_CNT != git rev-list --count HEAD
 
-# Get upstream
-VAL_UPSTREAM != git rev-parse --abbrev-ref --symbolic-full-name @{u}

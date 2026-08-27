@@ -12,24 +12,6 @@
 # Backup
 ################################################################################
 
-push: ${FILE_GIT_IGNORE}
-#help [global] Git push routine, use command line : # make push M="message"
-	@printf "\n%sGit routine for \"${M}\" commit -> ${VAL_UPSTREAM} %s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@git add .
-	@git commit -m "${M}"
-	@git push
-	@printf "\n"
-.PHONY: push
-
-merge:
-#help [global] Git merge test -> main routine
-	@git switch main
-	@git merge --no-ff test
-	@git push
-	@git switch test
-.PHONY: merge
-
 # Write .gitignore file
 ${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "# exclude everything\n" > "${FILE_GIT_IGNORE}"
