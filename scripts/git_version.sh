@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ################################################################################
 #
 # TaskMate Project
@@ -9,14 +11,12 @@
 ################################################################################
 
 ################################################################################
-# Data
+# Print the TaskMate version derived from the closest Git tag
 ################################################################################
 
-# TaskMate version from tag
-VAL_TM_VERSION != ${FILE_GIT_VERSION_SCRIPT}
-VAL_TM_VER_MAJOR = ${VAL_TM_VERSION:C/\..*//}
-VAL_TM_VER_MINOR = ${VAL_TM_VERSION:C/^[^.]*\.//:C/\..*//}
-
-# Build counter
-VAL_BUILD_CNT != git rev-list --count HEAD
-
+if git_description=$(git describe --tags 2>/dev/null); then
+	git_version=${git_description%%-*}
+	printf "%s\n" "${git_version#v}"
+else
+	printf "0.00\n"
+fi
