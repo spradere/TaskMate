@@ -20,6 +20,7 @@ PATH_MAKEFILES = mk
 PATH_CONF = conf
 PATH_DOCS = doc
 PATH_SCRIPTS = scripts
+FILE_GIT_VERSION_SCRIPT = ${PATH_SCRIPTS}/git_version.sh
 
 # Build data
 .include "${PATH_MAKEFILES}/options.mk"
