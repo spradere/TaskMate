@@ -81,7 +81,7 @@ _dependency:
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
 						${FILE_PARSE_TAG_LIST} ${FILE_HALINIT_LIST} ${FILE_HALDEFINE_LIST}
 
-	@printf "\n%sautoCode, init.rc or related files have changed -> run autoCode%s\n\n" \
+	@printf "\n%sautoCode, related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@rm -f ${FILE_AUTOCODE_LOG}*

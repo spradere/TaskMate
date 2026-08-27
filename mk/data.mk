@@ -14,8 +14,8 @@
 
 # TaskMate version from tag
 VAL_TM_VERSION != ${FILE_GIT_VERSION_SCRIPT}
-VAL_TM_VER_MAJOR = ${VAL_TM_VERSION:C/\..*//}
-VAL_TM_VER_MINOR = ${VAL_TM_VERSION:C/^[^.]*\.//:C/\..*//}
+VAL_TM_VER_MAJOR != echo ${VAL_TM_VERSION} | cut -d'.' -f1
+VAL_TM_VER_MINOR != echo ${VAL_TM_VERSION} | cut -d'.' -f2
 
 # Build counter
 VAL_BUILD_CNT != git rev-list --count HEAD

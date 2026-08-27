@@ -74,7 +74,7 @@ FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
 FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 
-# git ignore
+# git
 FILE_GIT_IGNORE = .gitignore
 PATHS_GIT_ALLOWED = ${PATH_CONF} ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 FILES_GIT_ALLOWED.${PATH_CONF} = *.conf
@@ -86,6 +86,8 @@ FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
 FILES_GIT_EXCLUDED = \
 	${PATH_SRCS}/interfaces/taskmate_info.h
+	
+FILE_GIT_VERSION_SCRIPT = ${PATH_SCRIPTS}/git_version.sh
 
 # Global error
 FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/errors_all.err
