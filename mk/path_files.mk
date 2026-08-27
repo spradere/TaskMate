@@ -87,8 +87,6 @@ FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 FILES_GIT_EXCLUDED = \
 	${PATH_SRCS}/interfaces/taskmate_info.h
 	
-FILE_GIT_VERSION_SCRIPT = ${PATH_SCRIPTS}/git_version.sh
-
 # Global error
 FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/errors_all.err
 

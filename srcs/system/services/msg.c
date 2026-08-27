@@ -63,7 +63,7 @@ void msg(void)
 
 	if( msgRequestChannel(&chan) == ERR_NO_ERROR )
 	{
-		msgWriteText(chan, TM_STR("\3HW target check"), MSG_TO_LCD);
+		msgWriteText(chan, TM_STR("\3makefiles ..."), MSG_TO_LCD);
 	}
 
 	msgProcess();
