@@ -24,8 +24,6 @@ CFLAGS += -DBOARD_arduinoMega
 # board settings
 VAL_CPU_FREQ = 16000000UL
 
-CFLAGS += -DF_CPU=${VAL_CPU_FREQ}
-
 VAL_PROGRAMMER = avrispmkII
 VAL_PROGRAMMER_PORT = /dev/ttyU0
 

@@ -25,7 +25,7 @@ CFLAGS += -DMCU_atmega2560
 
 # MCU settings
 VAL_MCU_SERIAL = atmega2560
-CFLAGS += -mmcu=${VAL_MCU_SERIAL}
+VAL_MCU_ARCHTYPE = avr6
 
 # atmega2560 flash is 128 kB, PCHH is not implemented in context switch so flash is limited to 64 kB
 VAL_FLASH_SIZE_K=64

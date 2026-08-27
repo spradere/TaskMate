@@ -20,9 +20,6 @@ FILES_HALINIT += ${PATH_AVR8}/archInit.h
 FILES_HALDEFINE += ${PATH_AVR8}/arch_define.h
 
 CFLAGS += -DARCH_avr8
-# allow interfaces/module_define.h usage
-CFLAGS_${PATH_SRCS}/hal/arch/avr8/context.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
 	
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SRCS}/hal/arch/avr8/archCC.mk
@@ -33,6 +30,7 @@ VAL_CC_VERSION != avr-gcc -dumpversion
 
 # General options
 CFLAGS += -Os -MMD -MP -mrelax
+CFLAGS += -DF_CPU=${VAL_CPU_FREQ} -mmcu=${VAL_MCU_SERIAL}
 
 # General warnings
 CFLAGS += -Wall -Wextra -Wshadow -Werror=shadow -Wswitch -Wswitch-enum -Wformat=2 -Wformat-security

@@ -77,23 +77,9 @@ dump: all ${FILE_HEX}
 #help [avr8] Disassemble machine code in .hex and .elf
 	@printf "\n%sGenerate debugging informations%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	avr-objdump -D -m avr6 ${FILE_HEX} > "${PATH_BUILD_TARGET}/hex.txt"
-	avr-objdump -D -m avr6 ${FILE_ELF} > "${PATH_BUILD_TARGET}/elf.txt"
+	avr-objdump -D -m ${VAL_MCU_ARCHTYPE} ${FILE_HEX} > "${PATH_BUILD_TARGET}/hex.txt"
+	avr-objdump -D -m ${VAL_MCU_ARCHTYPE} ${FILE_ELF} > "${PATH_BUILD_TARGET}/elf.txt"
 .PHONY: dump
-
-tidy_TaskMate:
-#help [avr8] tidy static code analysis for TaskMate, configuration /.clang-tidy.
-	@printf "\n%sTidy TaskMate static code test%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@clang-tidy19 $(FILES_SRC) ${FILES_SRC_H} --\
-	-I/root/code/TaskMate/current/ \
-	-I/root/code/TaskMate/current/${PATH_SRCS}/ \
-	-isystem /usr/local/avr/include \
-	-isystem /usr/local/lib/gcc/avr/14.2.0 \
-	-D__AVR__=6 -D__AVR_ATmega2560__=1 \
-	-DF_CPU=${VAL_CPU_FREQ} ${CFLAGS} ${LDFLAGS}
-
-.PHONY: tidy_TaskMate
 
 modules_size: all
 #help [avr8] List module size sorted from highest.
