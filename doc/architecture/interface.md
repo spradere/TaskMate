@@ -24,15 +24,22 @@ generated kernel configuration.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Interface headers have no upward or target-implementation includes.
-- Shared enums and storage types let HAL and upper layers agree without duplicating definitions.
-- Generated error, GPIO, module, and run-level values keep selected-target metadata consistent.
-- Compile guards limit access to kernel-critical generated definitions.
+- `interfaces/` remains a deliberately transversal, dependency-neutral layer with no HAL, sysCore,
+  sysCall, service, task, or target-implementation includes.
+- Shared GPIO, error, string-storage, run-level, and driver-control definitions let system and HAL
+  code agree without duplicating representations.
+- Generated error, GPIO, and module-count values keep selected-target metadata consistent with
+  runtime tables.
+- Contracts use compact data with no runtime allocation or dispatch cost of their own.
 
 ### Remaining weaknesses
-- Portable contracts and protected generated kernel configuration share one directory, so the layer's
-  public scope is broader and less neutral than its rules imply.
-- `macros.h` uses GNU `__typeof__` and register-oriented size dispatch, while `define.h` provides its own
-  `NULL`; these choices reduce compiler neutrality and overlap standard C facilities.
-- Contracts remain incomplete for timers, serial transport, scheduling context, ISR safety, optional HAL
-  capabilities, and structured error handling.
+- `modules_define.h` combines the public driver protocol, thread-status layout, generator limits,
+  stack sizing, and generated kernel counts, coupling separate consumers to one broad contract.
+- `macros.h` uses GNU `__typeof__` and register-oriented size dispatch, while `define.h` provides
+  its own `NULL`; these choices reduce compiler neutrality and overlap standard C facilities.
+- Driver commands, states, status bits, module types, and run levels are raw integer macros. Values
+  are weakly typed and setters do not consistently mask or validate their range.
+- `TM_MOD_COUNT_MAX` permits 256 entries while generated runtime counts and loops commonly use
+  `uint8_t`, leaving the maximum configuration outside the runtime index domain.
+- Contracts remain incomplete for timers, serial transport, scheduling context, ISR safety,
+  optional HAL capabilities, and structured error handling.

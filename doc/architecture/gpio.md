@@ -23,16 +23,18 @@ on-board LED and the two example task LEDs.
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Tasks use generated logical identifiers and never manipulate AVR registers directly.
-- Target wiring, logical state, and register access have distinct source locations.
+- Target wiring, logical state, HAL selection, and register access have distinct source locations.
 - Tables are statically allocated, and the normal read/write path has fixed execution cost.
 - Unsupported target/MCU combinations fail through the HAL public header selection.
 
 ### Remaining weaknesses
 - `active_high` is written by the target but never applied by sysCore, so logical reads, writes, and
   toggles currently expose physical polarity.
-- Signal, port, and pin indexes are not checked. `targetWireSignal()` cannot report an unconfigured
-  signal, and default values can silently produce a valid-looking but incorrect mapping.
-- Interface modes include open-drain, high-impedance, and pull-down, but the ATmega2560 implementation
-  handles only input, push-pull output, and pull-up.
-- Wiring remains imperative and repeated per signal; there is no generated completeness or duplicate-pin
-  validation, debounce layer, edge queue, or explicit ISR/concurrency contract.
+- Signal, table, port, and pin inputs are not checked. `targetWireSignal()` has no result value, and
+  its defaults can silently turn a missing mapping into a valid-looking pin configuration.
+- Interface modes include open-drain, high-impedance, and pull-down, but the ATmega2560
+  implementation handles only input, push-pull output, and pull-up; only ports A and B are
+  described.
+- Toggle is implemented as an unprotected read followed by a write. Wiring also lacks generated
+  completeness/duplicate-pin validation, debounce, edge delivery, and an explicit ISR/concurrency
+  contract.

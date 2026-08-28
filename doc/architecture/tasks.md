@@ -21,15 +21,17 @@ interrupts still preempt the task during that wait.
 ## Well-built code and implementation weaknesses
 ### Strengths
 - The two tasks are small, deterministic examples with no direct HAL or register access.
-- Logical GPIO and message-service APIs demonstrate the intended top-layer dependency direction.
+- Generated logical GPIO calls demonstrate the intended user -> sysCall -> sysCore -> HAL direction.
 - Generated registration and fixed stacks avoid runtime allocation and startup discovery.
-- Their identical shape makes scheduler and GPIO behavior easy to compare on hardware.
+- Their identical, bounded loop bodies make scheduler and GPIO behavior easy to compare on hardware.
 
 ### Remaining weaknesses
-- Both tasks spin on `sc_threadGetSTC()` and do not use the available cooperative-yield call, so they
-  consume every assigned CPU slice while delayed.
-- Period, deadline, priority, stack need, and worst-case execution time are not declared or checked; the
-  `RUN_USER` status currently does not affect scheduler eligibility.
-- Reserved message channels are never released, and startup errors have no retry or fallback behavior.
-- Channel handles are writable global variables rather than private task state, and there are no task
-  watchdog, overrun, or fault-containment hooks.
+- Both tasks spin on `sc_threadGetSTC()` and do not use the cooperative-yield call, so they consume
+  every assigned CPU slice while delayed.
+- Period, deadline, priority, stack need, and worst-case execution time are not declared or checked;
+  the fixed 256-byte stack is assigned without per-task sizing evidence.
+- Run levels currently provide only runnable/stopped gating for threads; `RUN_USER` has no
+  scheduling policy distinct from service threads.
+- Both files retain unused message/stdio includes and externally visible message-channel globals
+  from removed startup-message code, so the examples expose stale state without using the service.
+- There are no task watchdog, overrun, failure-reporting, or fault-containment hooks.

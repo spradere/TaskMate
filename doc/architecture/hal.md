@@ -27,24 +27,27 @@ GPIO mapping, and starts generated drivers by their configured run level.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Context switching, interrupt control, timers, and MCU registers are concentrated in target-specific
-  files rather than scattered through tasks or services.
-- Public selection headers provide one include path per HAL capability and reject missing implementations
-  at compile time.
-- Static driver registration and callback wiring keep firmware allocation deterministic.
+- Context switching, interrupt control, timers, and MCU registers are concentrated in
+  target-specific files rather than scattered through tasks or services.
+- Public selection headers provide one include path per HAL capability and reject missing
+  implementations at compile time.
+- All six registered drivers expose one control entry point with run-level, lifecycle, status, and
+  bit queries; operational APIs reject calls while their driver is not running.
+- Static generated driver registration and callback wiring keep firmware allocation deterministic.
 - The USART uses fixed-size power-of-two buffers, and thread stacks include canaries checked during
   scheduling.
 
 ### Remaining weaknesses
-- Dependency boundaries are not yet clean: services and `TaskMate.c` call HAL APIs directly, the I2C HAL
-  logs through `tm_libc`, the AVR panic implementation depends directly on the ATmega2560 USART, and
-  generic device drivers include the concrete MCU I2C header.
-- `hal/public` exposes concrete implementation headers rather than stable neutral contracts; capability
-  requirements remain encoded as preprocessor branches and naming conventions.
-- Architecture, MCU, and board startup hooks are currently empty, while boot contains special-case USART
-  startup and later starts the generated USART driver again.
-- The AVR context layout is constrained to code below 64 KiB because the third program-counter byte is
-  not restored. Inline/naked ISR assembly has no host-side behavioral test or automated cycle-budget
-  validation.
-- Several peripheral operations poll indefinitely or block while transmitting, and pointer/index/time-out
-  contracts are incomplete.
+- The temporary service-to-HAL bridge and experimental calls in `TaskMate.c` bypass the intended
+  normal path. Generic LCD/RTC drivers include the concrete ATmega2560 I2C header, and AVR panic
+  assumes the selected USART capability.
+- `hal/public` exposes concrete implementation headers rather than stable neutral contracts;
+  capability requirements remain encoded as preprocessor branches and naming conventions.
+- Architecture, MCU, and board startup hooks are empty. Boot special-cases run-level-zero USART and
+  the scheduler timer, ignores lifecycle returns, reports success unconditionally, and cannot unwind
+  a partial hardware startup.
+- I2C and USART contain unbounded polling or synchronous transmission. LCD/RTC ignore I2C failures,
+  and pointer, LCD row/column, address, and timeout contracts remain incomplete.
+- Initial AVR thread frames hard-code the third program-counter byte to zero, and the build
+  deliberately caps usable flash at 64 KiB. Naked context-switch assembly has no automated ABI,
+  behavioral, cycle, or stack-depth validation.
