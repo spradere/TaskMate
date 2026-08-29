@@ -25,18 +25,24 @@ generated but currently private run-level table also live in sysCore.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Thread control blocks, stacks, driver records, and lifecycle tables are statically allocated with no
-  runtime heap use.
+- Thread control blocks, stacks, driver records, and lifecycle tables are statically allocated with
+  no runtime heap use.
 - Context-switch mechanism is delegated to HAL/AVR code while selection policy remains in sysCore.
-- Stack canaries are initialised for every thread and checked during scheduling.
+- The scheduler now selects only threads with a non-zero run level, clears cooperative-yield state
+  on resume, and panics explicitly when no runnable thread exists.
+- Stack canaries are initialised for every thread and checked on both sides of every context switch.
 - Separate 1 ms scheduling and 10 ms delay counters provide simple, predictable timing primitives.
 
 ### Remaining weaknesses
-- Generated run-level thread lists, `current`, and `next` are allocated but never consulted. The scheduler
-  cycles through every thread regardless of run level, dead state, or readiness; yielded state is only
-  cleared when a thread is selected.
-- Module getter/setter functions do not validate indexes.
-- Boot special-cases USART before driver allocation/start and does not track init/start/stop state or
-  unwind a partial startup failure. The top-level file also contains target-specific experimental code.
-- Shared module status, current-thread state, counters, and ISR callbacks have only partial atomicity and
-  volatility documentation. There are no priority, deadline, blocking, idle-thread, or overrun semantics.
+- Non-zero thread run levels have identical round-robin eligibility; dead/type bits do not affect
+  selection, and there are no priority, readiness, blocking, deadline, idle-thread, or overrun
+  semantics. Stopping every thread ends in panic rather than an idle state.
+- Module pointer and current-thread getters/setters do not validate indexes. `thread_current` is
+  shared with the scheduler ISR but is neither volatile nor governed by a documented access
+  contract.
+- Boot special-cases USART, ignores every lifecycle result, logs success unconditionally, and cannot
+  unwind a partial startup. Scheduler and software-counter timer setup also ignore callback/control
+  failures.
+- Stack canaries detect only boundary corruption at a context switch; there is no stack high-water
+  measurement or per-thread sizing evidence. The top-level file still contains target-specific
+  RTC/LCD experimental code before scheduler start.

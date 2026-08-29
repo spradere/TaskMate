@@ -26,16 +26,23 @@ service registry beyond the generated module database.
 ### Strengths
 - Service threads, stacks, channels, and message buffers have fixed memory costs.
 - autoCode gives services the same explicit type and run-level metadata as other modules.
-- The cooperative wait path allows another thread to run instead of intentionally consuming every slice.
-- Message routing and CLI parsing are kept outside the scheduler and kernel data structures.
+- The cooperative wait path allows another thread to run instead of intentionally consuming every
+  slice.
+- SCLI uses fixed line/argument bounds, table-driven dispatch, RAM/ROM-aware comparisons, and
+  explicit thread/driver list and lifecycle commands through syscalls.
+- Message routing and command parsing remain outside scheduler policy and kernel data structures.
 
 ### Remaining weaknesses
-- Both services bypass syscall mediation for USART/LCD access, coupling reusable system services to the
-  current HAL and selected devices.
-- Channel reservation, writing, processing, and release have no atomic protection or ownership model;
-  indexes and output pointers are not validated.
-- The message service performs synchronous HAL output, mixes transport with LCD-specific presentation,
-  and does not consistently clear send state for every destination. A failed initial reservation can
-  also leave the local channel value undefined before release.
-- There is no bounded queue/backpressure policy, delivery result, drop counter, timeout, or fairness
-  guarantee. The CLI is an echo prototype rather than a command parser and still polls the UART.
+- The temporary service-to-HAL bridge remains across the two services for USART and LCD access. It
+  must be removed rather than extended with new direct hardware dependencies.
+- Channel reservation, writing, processing, and release have no atomic protection or ownership
+  model;
+  channel indexes and output pointers are not validated. Startup frees an undefined or stale channel
+  ID after a failed initial reservation.
+- Message delivery is synchronous, ignores HAL results, embeds LCD presentation, and clears the send
+  bit only for USART; LCD and null destinations can therefore be processed repeatedly.
+- SCLI polls the UART and processes each received chunk immediately instead of accumulating a
+  terminated line. `scli_line_length` is unused, long input is split, and excess arguments are
+  silently truncated.
+- There is no queue/backpressure policy, delivery result, drop counter, timeout, or fairness
+  guarantee for producers or transports.

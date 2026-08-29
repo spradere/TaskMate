@@ -23,16 +23,21 @@ used to select a runtime response.
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Symbolic codes, messages, and criticality originate from one generated catalog.
-- Duplicate names, malformed declarations, and invalid severity words are detected at generation time.
+- Duplicate names, malformed declarations, and invalid severity words are detected during
+  generation.
 - The firmware uses fixed-size enum/table data and ROM-backed text rather than runtime allocation.
-- Message lookup checks its index before reading the generated array.
+- Message lookup checks its index before reading the generated array, and HAL operations now reject
+  use when their driver lifecycle state is not running.
 
 ### Remaining weaknesses
-- The only public lookup returns a message; callers cannot query criticality, error owner, or a prescribed
-  recovery action through the API.
-- Return-code handling is inconsistent: several callers ignore HAL/service failures, and null output
-  pointers are not validated consistently before drivers write through them.
-- The catalog uses an 8-bit lookup index and fixed generator limits without a documented compatibility or
-  extension policy.
-- There is no structured runtime record containing context, occurrence count, timestamp, or originating
-  module, and no tested escalation path from driver failure to safe state.
+- The only public lookup returns a message; callers cannot query criticality, error owner, or a
+  prescribed recovery action through the API.
+- Error signaling is fragmented between `err_codes_t`, raw `uint8_t` lifecycle returns, and
+  `DRV_STATE_*` values. Success is not uniform, and many boot, service, LCD, RTC, and I2C call sites
+  discard downstream failures.
+- Output pointers remain unchecked in USART read, I2C read, RTC read/write, and message-channel
+  allocation paths, so some reported errors still coexist with unchecked memory access.
+- The generator exposes a 256-slot catalog limit while lookup and several loops use 8-bit indexes;
+  terminal-count handling and the ABI extension policy are undocumented.
+- There is no structured runtime record containing context, occurrence count, timestamp, or
+  originating module, and no tested escalation path from driver failure to safe state.

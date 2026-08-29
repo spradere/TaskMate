@@ -27,18 +27,25 @@ run-level tables, error codes, and logical GPIO identifiers at build time.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Required options and tags are counted, and missing or duplicate declarations stop generation.
-- Module type/run-level declarations, names, duplicate names, error severities, and GPIO token counts
-  receive explicit validation.
-- Static generated tables avoid runtime discovery and dynamic allocation in the firmware.
-- Content comparison avoids rebuilding files whose generated content is unchanged.
+- Required options and output tags are counted; missing, duplicated, or unknown declarations stop
+  generation.
+- Module types, run levels, same-type duplicate names, error severities, and GPIO line token counts
+  receive explicit validation before the firmware is compiled.
+- Generated records include fixed thread contexts, saved run levels, driver control callbacks, and
+  ROM-backed names, avoiding runtime discovery and dynamic allocation.
+- Generation is integrated into the dependency graph, produces a reviewable log, and preserves an
+  existing destination when its generated content is unchanged.
 
 ### Remaining weaknesses
-- Replacement is performed one destination at a time; a failure in a later file can therefore leave an
-  earlier generated file updated. The pipeline is not transactional as a whole.
-- The generator includes protected runtime headers and knows their concrete structures, tag names, and
-  destination layout, creating tight coupling between host tooling and kernel internals.
-- Parsing relies on fixed-size buffers and a custom tokenizer without a versioned input schema. Some
-  limit checks and file-comparison paths need stronger boundary and failure testing.
-- There is no automated proof that identical inputs produce byte-identical outputs, nor a manifest that
-  records input checksums and generator version.
+- Replacement is performed one destination at a time. It removes the old file before renaming the
+  temporary file, ignores `remove()`/`rename()` failures, and cannot roll back earlier replacements.
+- Fixed-size parsing silently truncates excess tokens and long lines. Module-name and module-count
+  checks contain boundary conditions that can admit an out-of-bounds terminating byte or array
+  index.
+- File comparison uses `feof()` before checking the result of `fgets()`, so unequal-length or failed
+  reads can compare stale buffer contents. Paths copied with `strncpy()` are not explicitly
+  terminated.
+- The host generator includes runtime interface definitions and emits concrete kernel structures,
+  include paths, status encodings, and callback names, tightly coupling both sides of the build.
+- There is no automated valid/invalid corpus, boundary test suite, failure-injection test, or
+  manifest recording input hashes and generator/tool versions.

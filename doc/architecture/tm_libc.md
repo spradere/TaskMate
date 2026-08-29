@@ -26,18 +26,21 @@ implementation is intentionally much smaller than a conforming C stdio/string li
 ## Well-built code and implementation weaknesses
 ### Strengths
 - ROM-aware strings avoid copying diagnostic text into scarce AVR RAM.
-- The supported formatting subset is explicit and has fixed temporary storage.
-- Compile-time selection keeps call sites stable between internal and standard-library modes.
-- The output backend is selected through a HAL public entry point rather than AVR register access in the
-  formatter itself.
+- `tm_strncmp()` compares RAM/ROM descriptors without temporary copies, and `tm_strncpy()` handles
+  null text, zero capacity, bounded copy, and termination when capacity is available.
+- The supported formatting subset and its temporary storage are fixed; there is no heap allocation.
+- Invalid padding exits through the common cleanup path instead of leaving the formatter lock set.
+- The output backend is selected through a HAL public entry point rather than AVR register access in
+  the formatter itself.
 
 ### Remaining weaknesses
-- Formatting uses global mutable state. If already locked it yields only once and then proceeds without
-  rechecking ownership; an invalid padding path returns without clearing the lock. It is therefore not
-  reentrant or ISR-safe.
-- `tm_strncpy()` pointer and zero-size contracts are also not validated consistently.
-- Formatting supports only 16-bit unsigned conversion behavior despite `%i`, has no negative/long values,
-  precision, multi-digit width, or standard `snprintf` return semantics guarantee.
-- `tm_libc` depends on sysCall for cooperative yield and on the MCU-oriented HAL string contract, which
-  complicates its intended position as a low-level reusable library. Logging has no levels, sink policy,
-  backpressure result, or bounded-time guarantee.
+- Formatting still uses one global buffer and a non-atomic byte lock. Contention yields only once
+  and does not recheck ownership, so preemption, nesting, or ISR use can corrupt shared state.
+- The buffer-capacity test can write before a non-null buffer of size 0, 1, or 2, underuses larger
+  buffers, and returns stored length rather than standard `snprintf` would-have-written length.
+- Numeric formatting reads 16-bit unsigned values despite `%i` and default variadic promotions. It
+  lacks signed values, wider types, precision, multi-digit width, and bounded format/string indexes.
+- The `TM_LIBC_CSTD` branch does not provide a complete compatible surface, notably for
+  descriptor-based string calls and `tm_syslog`; only the TaskMate branch is exercised by the build.
+- Logging has no levels, sink policy, delivery/backpressure result, or bounded-time guarantee, and
+  its current HAL output may synchronously flush USART data.

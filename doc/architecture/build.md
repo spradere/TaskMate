@@ -28,20 +28,28 @@ protect critical headers, while `scripts/header_allow.awk` scans the source tree
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Build, source discovery, hardware selection, policy checks, utilities, and backup rules are separated
-  into focused Make fragments.
-- A missing hardware target, missing GPIO declaration file, unavailable HAL implementation, or forbidden
-  critical include fails before firmware execution.
+- Build, source discovery, hardware selection, policy checks, utilities, and backup rules are
+  separated into focused Make fragments.
+- Compiler, linker, memory-report, and programmer rules now live under the AVR architecture, while
+  MCU and board fragments contribute their own target values and source paths.
+- A missing hardware target, incomplete hardware stack, missing GPIO declaration file, unavailable
+  HAL implementation, or forbidden critical include fails before firmware execution.
 - Target-specific objects and reports stay under a predictable `build/<hardware-stack>/` path.
-- The AVR configuration enables a broad warning set, link-time optimisation, section garbage collection,
-  dependency files, and explicit flash/RAM reporting.
+- The AVR configuration enables a broad warning set, link-time optimisation, section garbage
+  collection, dependency files, and explicit flash/RAM reporting.
 
 ### Remaining weaknesses
-- The build depends on BSD `bmake`, many Unix utilities, Git state, AVR tools, and host-installed analysis
-  tools; several analysis, backup, USB, and programmer paths are still machine-specific.
-- The header allow-list check searches text with `grep`. It can match comments, cannot resolve indirect
-  preprocessor dependencies, and protects only patterns explicitly listed in its configuration.
-- Target compatibility is encoded by nested Make includes and validated against a flat list of complete
-  stacks; only the `test1 / arduinoMega / atmega2560 / avr8` stack is present today.
-- Build metadata includes dates, Git descriptions, and an incrementing revision count; reproducible
-  firmware has not yet been demonstrated with pinned tool versions and clean generated-state checks.
+- The portable required-program list includes documentation, analysis, backup, and editor tools;
+  their absence blocks even `clean`. Stamp caching also does not recheck tools until inputs change.
+- The header allow-list parser is structured, but detection still delegates to recursive text
+  `grep`. It can match comments, misses semantic/transitive includes, and protects only configured
+  patterns.
+- Target compatibility is encoded by nested Make includes and validated against a flat list of
+  complete stacks; only `test1 / arduinoMega / atmega2560 / avr8` is present today.
+- Source and `*.rc` discovery use unsorted `find` output, so compile/link and module ordering can
+  depend on filesystem enumeration even though error-file discovery is sorted.
+- Build metadata includes dates, Git state, and a revision count, while tool versions are not
+  pinned.
+  `.BEGIN` also rewrites an ignored generated header in `srcs/interfaces/` on every invocation.
+- The build remains tied to BSD `bmake`, Unix utilities, AVR tools, and machine-specific
+  USB/programmer paths; no second hardware stack currently exercises the intended portability.

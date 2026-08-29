@@ -24,14 +24,23 @@ memory isolation; it is a C API and architectural boundary.
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Thread-counter access is protected against the timer ISR updating the same 16-bit state on AVR8.
+- Thread information and lifecycle APIs validate names/outputs, use RAM/ROM-aware comparison, and
+  update run-level state in AVR atomic sections; the scheduler now skips stopped threads.
+- Driver count, information, and lifecycle calls use one generated control callback per driver
+  instead of exposing private lifecycle functions to services.
 - Upper-layer GPIO code uses logical signal types and does not receive physical pin structures.
 - The cooperative-yield mechanism reuses the existing scheduler interrupt and adds no dynamic state.
-- APIs remain small and inexpensive on the current target.
 
 ### Remaining weaknesses
-- The boundary is incomplete: services and the top-level startup still call HAL directly, while
-  `tm_libc` calls `sc_coopYield()` from below the syscall layer.
-- GPIO wrappers perform no signal bounds/configuration checks, and error lookup exposes only text rather
-  than a complete error contract.
+- The temporary service HAL bridge and top-level experimental HAL calls still leave the syscall
+  boundary incomplete. The transversal `tm_libc` dependency is intentional and is not part of that
+  bridge.
+- `sc_threadStart()` accepts unvalidated run levels and, when no saved level exists, records the
+  supplied level without applying it to status. Repeated `sc_threadStop()` overwrites the saved
+  level with `RL_RUN_NONE`.
+- GPIO wrappers perform no signal bounds/configuration checks, and error lookup exposes only text
+  rather than a complete error contract.
 - Cooperative yield assumes task context and a running scheduler, but task/boot/ISR validity is not
-  encoded in the API. The spin after requesting a switch has no explicit timeout or misuse detection.
+  encoded in the API. The timer-load result is ignored and the resume spin has no timeout.
+- Driver lifecycle calls collapse all control failures to `bool`, while multi-call status reporting
+  is not an atomic snapshot. The declared `sc_flagClear/Set/Get()` API has no implementation.
