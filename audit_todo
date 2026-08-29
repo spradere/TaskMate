@@ -9,8 +9,6 @@ AUDIT :
 TODO :
 - autocode and TaskMate : check if string pointer is not null before process data
 - drivers : test at init (and start ?)
-- test for valid target stack
-- remove AVR code from mk/*
 - new grammar check for forbidden #include
 - drivers returns status, setup error code and emit event.
 - add system task to handle runlevels

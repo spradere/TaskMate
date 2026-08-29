@@ -41,9 +41,6 @@ protect critical headers, while `scripts/header_allow.awk` scans the source tree
 ### Remaining weaknesses
 - The portable required-program list includes documentation, analysis, backup, and editor tools;
   their absence blocks even `clean`. Stamp caching also does not recheck tools until inputs change.
-- The header allow-list parser is structured, but detection still delegates to recursive text
-  `grep`. It can match comments, misses semantic/transitive includes, and protects only configured
-  patterns.
 - Target compatibility is encoded by nested Make includes and validated against a flat list of
   complete stacks; only `test1 / arduinoMega / atmega2560 / avr8` is present today.
 - Source and `*.rc` discovery use unsorted `find` output, so compile/link and module ordering can

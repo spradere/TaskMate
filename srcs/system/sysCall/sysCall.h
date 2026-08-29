@@ -37,11 +37,4 @@ bool sc_driverStop(const char *name);
 
 void sc_coopYield(void);
 
-// system status flags
-#define FLAG_DUMMY 0x01
-
-void sc_flagClear(uint8_t flag);
-void sc_flagSet(uint8_t flag);
-uint8_t sc_flagGet(uint8_t flag);
-
 #endif // SYSCALL_SYSCALL_H

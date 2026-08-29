@@ -14,7 +14,7 @@
 
 #include "rtc_ZS042.h"
 
-#include "hal/mcu/atmega2560/i2c.h"
+#include "hal/public/i2c.h"
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"

@@ -39,8 +39,7 @@ GPIO mapping, and starts generated drivers by their configured run level.
 
 ### Remaining weaknesses
 - The temporary service-to-HAL bridge and experimental calls in `TaskMate.c` bypass the intended
-  normal path. Generic LCD/RTC drivers include the concrete ATmega2560 I2C header, and AVR panic
-  assumes the selected USART capability.
+  normal path.
 - `hal/public` exposes concrete implementation headers rather than stable neutral contracts;
   capability requirements remain encoded as preprocessor branches and naming conventions.
 - Architecture, MCU, and board startup hooks are empty. Boot special-cases run-level-zero USART and

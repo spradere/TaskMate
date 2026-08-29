@@ -16,7 +16,7 @@
 
 #include <util/delay.h>
 
-#include "hal/mcu/atmega2560/i2c.h"
+#include "hal/public/i2c.h"
 #include "hal/public/tmlibc.h"
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"

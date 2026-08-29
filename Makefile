@@ -23,7 +23,6 @@ PATH_SCRIPTS = scripts
 
 # Build data
 .include "${PATH_MAKEFILES}/options.mk"
-FILE_GIT_VERSION_SCRIPT = ${PATH_SCRIPTS}/git_version.sh
 .include "${PATH_MAKEFILES}/data.mk"
 .include "${PATH_MAKEFILES}/colours.mk"
 

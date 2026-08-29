@@ -43,4 +43,4 @@ memory isolation; it is a C API and architectural boundary.
 - Cooperative yield assumes task context and a running scheduler, but task/boot/ISR validity is not
   encoded in the API. The timer-load result is ignored and the resume spin has no timeout.
 - Driver lifecycle calls collapse all control failures to `bool`, while multi-call status reporting
-  is not an atomic snapshot. The declared `sc_flagClear/Set/Get()` API has no implementation.
+  is not an atomic snapshot.

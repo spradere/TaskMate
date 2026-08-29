@@ -1,3 +1,4 @@
+	polish makefiles and drivers structure
 	add tm_strncmp()
 	fisrt command line on sCLI
 	add drivers status and runtime control

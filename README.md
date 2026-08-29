@@ -19,8 +19,8 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 
 > <span style="color:green"> **Project Stats (v0.28 [^1] )**</span>
 >
->  <span style="color:green">620 commits • 141 source files • 8013 lines of code •
-> binary size : 8798 bytes (Flash) • ram usage : 1807 bytes</span>
+>  <span style="color:green">652 commits • 145 source files • 8364 lines of code •
+> binary size : 11080 bytes (Flash) • ram usage : 1866 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -165,4 +165,4 @@ strengths and weaknesses of source code.
 - Operating System Design, The Xinu Approach, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 
-[^1]: ⚠️ Warning : Versions 1.37, 2.71, 3.14, 4.2 and 5.11 are intentionally skipped. Universe backward compatibility constraints apply.
+[^1]: ⚠️ Warning : Versions 0.71, 1.37, 2.71, 3.14, 4.2 and 5.11 are intentionally skipped. Universe backward compatibility constraints apply.

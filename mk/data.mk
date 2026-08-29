@@ -13,7 +13,7 @@
 ################################################################################
 
 # TaskMate version from tag
-VAL_TM_VERSION != ${FILE_GIT_VERSION_SCRIPT}
+VAL_TM_VERSION != ${PATH_SCRIPTS}/git_version.sh
 VAL_TM_VER_MAJOR != echo ${VAL_TM_VERSION} | cut -d'.' -f1
 VAL_TM_VER_MINOR != echo ${VAL_TM_VERSION} | cut -d'.' -f2
 

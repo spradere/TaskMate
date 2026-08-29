@@ -39,7 +39,5 @@ generated kernel configuration.
   its own `NULL`; these choices reduce compiler neutrality and overlap standard C facilities.
 - Driver commands, states, status bits, module types, and run levels are raw integer macros. Values
   are weakly typed and setters do not consistently mask or validate their range.
-- `TM_MOD_COUNT_MAX` permits 256 entries while generated runtime counts and loops commonly use
-  `uint8_t`, leaving the maximum configuration outside the runtime index domain.
 - Contracts remain incomplete for timers, serial transport, scheduling context, ISR safety,
   optional HAL capabilities, and structured error handling.
