@@ -9,7 +9,7 @@
 ################################################################################
 
 ################################################################################
-# autoCode fiels and rules
+# autoCode files and rules
 ################################################################################
 
 # autoCode files
@@ -31,7 +31,14 @@ FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
 FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
-FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/errors_all.err
+FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/files_error
+FILE_ERROR_CAT = ${PATH_BUILD_TARGET}/errors.err
+
+FILE_INITRC_DEPS = ${PATH_BUILD_TARGET}/files_initrc.deps
+FILE_PARSE_TAG_DEPS = ${PATH_BUILD_TARGET}/files_to_parse.deps
+FILE_HALINIT_DEPS = ${PATH_BUILD_TARGET}/files_halinit.deps
+FILE_HALDEFINE_DEPS = ${PATH_BUILD_TARGET}/files_haldefine.deps
+FILE_ERROR_DEPS = ${PATH_BUILD_TARGET}/files_error.deps
 
 # autoCode launch and required files
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
@@ -44,8 +51,9 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 .endif
 
 	# write autoCode options
+	@cat ${FILES_ERROR} > "${FILE_ERROR_CAT}"
 	@printf "# autoCode options\n" > "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--errors ${FILE_ERROR_CAT}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--halinit ${FILE_HALINIT_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
@@ -71,31 +79,53 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
-# Files list for autoCode
-${FILE_ERROR_LIST}: ${FILES_ERROR}
-	@printf "\n%sCat all *.err files in one for autoCode%s\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cat ${FILES_ERROR} > "${FILE_ERROR_LIST}"
+# dependency generation
+${FILE_INITRC_DEPS}: .PHONY
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_INITRC_DEPS}" "${FILE_INITRC_LIST}"
 
-${FILE_INITRC_LIST}: ${FILES_INITRC}
+${FILE_PARSE_TAG_DEPS}: .PHONY
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_PARSE_TAG_DEPS}" "${FILE_PARSE_TAG_LIST}"		
+	
+${FILE_HALINIT_DEPS}: .PHONY
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_HALINIT_DEPS}" "${FILE_HALINIT_LIST}"
+
+${FILE_HALDEFINE_DEPS}: .PHONY
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_HALDEFINE_DEPS}" "${FILE_HALDEFINE_LIST}"
+		
+${FILE_ERROR_DEPS}: .PHONY
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_ERROR_DEPS}" "${FILE_ERROR_LIST}"
+				
+# Files list for autoCode
+${FILE_ERROR_LIST}: ${FILES_ERROR} ${FILE_ERROR_DEPS}
+	@printf "" > ${FILE_ERROR_LIST}
+.for file in ${FILES_ERROR}
+	@printf "%s\n" ${file} >> ${FILE_ERROR_LIST}
+.endfor
+
+${FILE_INITRC_LIST}: ${FILES_INITRC} ${FILE_INITRC_DEPS}
 	@printf "" > ${FILE_INITRC_LIST}
 .for file in ${FILES_INITRC}
 	@printf "%s\n" ${file} >> ${FILE_INITRC_LIST}
 .endfor
 
-${FILE_PARSE_TAG_LIST}: ${FILES_PARSE_TAG}
+${FILE_PARSE_TAG_LIST}: ${FILES_PARSE_TAG} ${FILE_PARSE_TAG_DEPS}
 	@printf "" > ${FILE_PARSE_TAG_LIST}
 .for file in ${FILES_PARSE_TAG}
 	@printf "%s\n" ${file} >> ${FILE_PARSE_TAG_LIST}
 .endfor
 
-${FILE_HALINIT_LIST}: ${FILES_HALINIT}
+${FILE_HALINIT_LIST}: ${FILES_HALINIT} ${FILE_HALINIT_DEPS}
 	@printf "" > ${FILE_HALINIT_LIST}
 .for file in ${FILES_HALINIT}
 	@printf "%s\n" ${file} >> ${FILE_HALINIT_LIST}
 .endfor
 
-${FILE_HALDEFINE_LIST}: ${FILES_HALDEFINE}
+${FILE_HALDEFINE_LIST}: ${FILES_HALDEFINE} ${FILE_HALDEFINE_DEPS}
 	@printf "" > ${FILE_HALDEFINE_LIST}
 .for file in ${FILES_HALDEFINE}
 	@printf "%s\n" ${file} >> ${FILE_HALDEFINE_LIST}

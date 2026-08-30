@@ -31,7 +31,6 @@ TM_STR_ROM_NEW(err4, "No error");
 TM_STR_ROM_NEW(err5, "Pointer is NULL");
 TM_STR_ROM_NEW(err6, "Most useless error in the world");
 TM_STR_ROM_NEW(err7, "Second most useless error");
-TM_STR_ROM_NEW(err8, "msg no more free channels");
 
 const err_item_t error_catalog[] = 
 {
@@ -43,7 +42,6 @@ const err_item_t error_catalog[] =
 	{&err5, 1},
 	{&err6, 1},
 	{&err7, 1},
-	{&err8, 1},
 };
 
 // clang-format on

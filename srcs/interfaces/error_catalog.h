@@ -38,7 +38,6 @@ typedef enum
 	ERR_NULL_POINTER,
 	ERR_UNKNOW,
 	ERR_RUNTIME,
-	ERR_MSG_OUT_OF_FREE_CHANNEL,
 	ERROR_COUNT
 } err_codes_t;
 
