@@ -32,7 +32,7 @@
 // Definitions for autoCode
 #define TM_MOD_COUNT_MAX 256
 
-#define TM_MOD_DRIVERS_ID 0
+#define TM_MOD_DRIVER_ID 0
 #define TM_MOD_THREAD_ID 1
 #define TM_MOD_THREAD_SYS_ID 2
 #define TM_MOD_THREAD_USER_ID 3
@@ -53,7 +53,7 @@
 #define DRV_CTRL_CLEARBIT 7
 #define DRV_CTRL_GETBIT 8
 #define DRV_CTRL_GETSTATUS 9
-#define DRV_UNKNOW 99
+#define DRV_UNKNOWN 99
 
 // Driver status bits
 typedef uint8_t hal_driver_status_t;

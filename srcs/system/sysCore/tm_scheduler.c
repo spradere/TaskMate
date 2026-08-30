@@ -45,8 +45,8 @@ void tm_schedulerStart(void)
 
 	hal_setStackPointer(mod->stack_pointer);
 	hal_contextRestore();
-	hal_setGlobalInterupt();
-	hal_returnFromInterupt();
+	hal_setGlobalInterrupt();
+	hal_returnFromInterrupt();
 }
 
 void tm_schedulerCoop(void) { hal_timerSchedLoad(); }

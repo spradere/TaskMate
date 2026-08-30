@@ -64,7 +64,7 @@ static uint8_t hal_timerSTCStart(void)
 	if( (hal_timerSTCControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
 		(hal_timerSTCControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return DRV_UNKNOW;
+		return DRV_UNKNOWN;
 	}
 
 	// Start by enabling the interrupt
@@ -116,6 +116,6 @@ uint8_t hal_timerSTCControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_GETSTATUS:
 			return hal_timerSTCGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return DRV_UNKNOWN;
 	}
 }

@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 
-#include "interfaces/gpio_commons.h"
+#include "interfaces/gpio_common.h"
 
 // Frequencies
 #define USART_BAUD_RATE 9600

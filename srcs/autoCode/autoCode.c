@@ -39,15 +39,15 @@
 
 static void setupDatabase(modules_database_t *data_base);
 
-int main(int argn, const char *argv[])
+int main(int argc, const char *argv[])
 {
 	tokenizer_t tok;
 	
 	// Get options
-	if( argn != 2 )
+	if( argc != 2 )
 	{
-		AUTOCODE_MSG_ERROR("autoCode bad argn (is %i, not 2)\n\tuse autoCode configuration_file",
-						   argn);
+		AUTOCODE_MSG_ERROR("autoCode bad argc (is %i, not 2)\n\tuse autoCode configuration_file",
+						   argc);
 		exit(1);
 	}
 

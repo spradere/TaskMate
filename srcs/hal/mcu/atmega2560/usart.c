@@ -75,7 +75,7 @@ static uint8_t hal_usartStart(void)
 	if( (hal_usartControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
 		(hal_usartControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return DRV_UNKNOW;
+		return DRV_UNKNOWN;
 	}
 
 	TM_SETBIT(UCSR1B, RXCIE1); // enable Rx interrupt
@@ -214,6 +214,6 @@ uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_GETSTATUS:
 			return hal_usartGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return DRV_UNKNOWN;
 	}
 }

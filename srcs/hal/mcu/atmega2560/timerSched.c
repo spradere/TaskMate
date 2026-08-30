@@ -83,7 +83,7 @@ static uint8_t hal_timerSchedStart(void)
 	if( (hal_timerSchedControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
 		(hal_timerSchedControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return DRV_UNKNOW;
+		return DRV_UNKNOWN;
 	}
 
 	asm volatile(TIMER_SCHED_START);
@@ -109,7 +109,7 @@ static uint8_t hal_timerSchedStop(void)
 	return 0;
 }
 
-#define TM_SCHED_CALL_BACK                       \
+#define TM_SCHED_CALLBACK                        \
 	"in r24, 0x3d \n\t"                          \
 	"in r25, 0x3e \n\t"                          \
 	"lds r30, %0 \n\t"                           \
@@ -127,7 +127,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	asm volatile(AVR8_CONTEXT_SAVE);
 	asm volatile(TIMER_SCHED_STOP);
 
-	asm volatile(TM_SCHED_CALL_BACK);
+	asm volatile(TM_SCHED_CALLBACK);
 
 	asm volatile(TIMER_SCHED_START);
 	asm volatile(AVR8_CONTEXT_RESTORE);
@@ -161,6 +161,6 @@ uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_GETSTATUS:
 			return hal_timerSchedGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return DRV_UNKNOWN;
 	}
 }

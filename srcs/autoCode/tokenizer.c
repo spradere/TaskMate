@@ -41,16 +41,16 @@ void tokenizer(tokenizer_t *tok)
 
 		// Read and store one token
 		int index_token = 0;
-		char cut_charter = ' ';
+		char cut_character = ' ';
 
 		if( tok->line[index_line] == '"' ) // switch to string mode for this token
 		{
-			cut_charter = '"';
+			cut_character = '"';
 			index_line++;
 			tok->tokens[token_current][index_token++] = '"';
 		}
 
-		while( (tok->line[index_line] != cut_charter) && (tok->line[index_line] != '\t') &&
+		while( (tok->line[index_line] != cut_character) && (tok->line[index_line] != '\t') &&
 			   (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
 			   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)) )
 		{

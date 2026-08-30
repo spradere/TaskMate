@@ -59,7 +59,7 @@ static uint8_t hal_i2cStart(void)
 	if( (hal_i2cControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
 		(hal_i2cControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return DRV_UNKNOW;
+		return DRV_UNKNOWN;
 	}
 
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
@@ -168,7 +168,7 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_GETSTATUS:
 			return hal_i2cGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return DRV_UNKNOWN;
 	}
 }
 

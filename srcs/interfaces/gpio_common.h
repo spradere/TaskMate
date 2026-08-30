@@ -7,12 +7,12 @@
  */
 
 /**
- * @file gpio_commons.h
- * @brief gpio commons header declarations.
+ * @file gpio_common.h
+ * @brief gpio common header declarations.
  */
 
-#ifndef INTERFACES_GPIO_COMMONS_H
-#define INTERFACES_GPIO_COMMONS_H
+#ifndef INTERFACES_GPIO_COMMON_H
+#define INTERFACES_GPIO_COMMON_H
 
 typedef enum
 {
@@ -29,4 +29,4 @@ typedef enum
 	GPIO_PIN_PULL_DOWN
 } gpio_pin_pull_t;
 
-#endif // INTERFACES_GPIO_COMMONS_H
+#endif // INTERFACES_GPIO_COMMON_H

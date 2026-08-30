@@ -304,7 +304,7 @@ static void writeModulesList(const parse_tag_t *parse)
 	}
 	fprintf(parse->file, "\n");
 
-	mod = &parse->data_base->modules_type[TM_MOD_DRIVERS_ID];
+	mod = &parse->data_base->modules_type[TM_MOD_DRIVER_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
@@ -317,7 +317,7 @@ static void writeModulesCount(const parse_tag_t *parse)
 {
 	fprintf(parse->file,
 			"#define TM_MOD_DRIVER_COUNT %i\n",
-			parse->data_base->modules_type[TM_MOD_DRIVERS_ID].modules_count);
+			parse->data_base->modules_type[TM_MOD_DRIVER_ID].modules_count);
 	fprintf(parse->file,
 			"#define TM_MOD_THREAD_COUNT %i\n",
 			parse->data_base->modules_type[TM_MOD_THREAD_ID].modules_count);
@@ -381,7 +381,7 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 
 static void writeDriversAlloc(const parse_tag_t *parse)
 {
-	const module_type_t *mod = &parse->data_base->modules_type[TM_MOD_DRIVERS_ID];
+	const module_type_t *mod = &parse->data_base->modules_type[TM_MOD_DRIVER_ID];
 
 	fprintf(parse->file, "\tmod_driver_item_t *mod;\n");
 

@@ -54,7 +54,7 @@ static uint8_t hal_rtcStart(void)
 	if( (hal_rtcControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
 		(hal_rtcControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return DRV_UNKNOW;
+		return DRV_UNKNOWN;
 	}
 
 	hal_rtcControl(DRV_CTRL_SETBIT, DRV_BIT_START);
@@ -137,7 +137,7 @@ uint8_t hal_rtcControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_GETSTATUS:
 			return hal_rtcGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return DRV_UNKNOWN;
 	}
 }
 

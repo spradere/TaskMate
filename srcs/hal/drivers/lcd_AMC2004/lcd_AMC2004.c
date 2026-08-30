@@ -71,7 +71,7 @@ static uint8_t hal_lcdStart(void)
 	if( (hal_lcdControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
 		(hal_lcdControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
 	{
-		return DRV_UNKNOW;
+		return DRV_UNKNOWN;
 	}
 
 	lcdAMC2004Clear();
@@ -164,7 +164,7 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_GETSTATUS:
 			return hal_lcdGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return DRV_UNKNOWN;
 	}
 }
 
