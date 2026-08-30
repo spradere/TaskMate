@@ -29,7 +29,7 @@ void globalError(const char *src_name, error_catalog_t *errors)
 
 	// read form source
 	int file_src_line_number = 0;
-	int error_index = 0;
+	int error_index = errors->error_count;
 	tokenizer_t tok;
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
@@ -57,7 +57,9 @@ void globalError(const char *src_name, error_catalog_t *errors)
 			}
 			strncpy(errors->catalog[error_index].name, tok.tokens[0], BYTE_INDEX);
 			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
-
+			
+			AUTOCODE_MSG_INFO("[%i] %s", error_index, tok.tokens[0]);
+			
 			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
 			if( strcmp(tok.tokens[2], "LOW") == 0 )
 			{

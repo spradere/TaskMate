@@ -41,6 +41,8 @@ static void setupDatabase(modules_database_t *data_base);
 
 int main(int argn, const char *argv[])
 {
+	tokenizer_t tok;
+	
 	// get options
 	if( argn != 2 )
 	{
@@ -52,21 +54,31 @@ int main(int argn, const char *argv[])
 	options_list_t auto_options;
 	options(argv[1], &auto_options);
 
-	// global error system
-	error_catalog_t errors_catalog;
-	globalError(auto_options.file_errors_list, &errors_catalog);
-
 	// setup data base
 	modules_database_t data_base;
 	setupDatabase(&data_base);
+		
+	// read error files and store in error catalog
+	error_catalog_t errors_catalog;
+	errors_catalog.error_count = 0;
+	
+	file_t ferror;
+	fileInit(&ferror);
+	ferror.name = auto_options.file_errors_list;
+	fileOpen(&ferror, "r", FILE_READONLY, __FILE__, __LINE__);
 
+	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, ferror.stream) )
+	{
+		tokenizer(&tok);
+		globalError(tok.tokens[0], &errors_catalog);	
+	}
+	fileClose(&ferror, __FILE__, __LINE__);	
+	
 	// read init.rc file and store data in data base
 	file_t finitrc;
 	fileInit(&finitrc);
 	finitrc.name = auto_options.file_initrc_list;
 	fileOpen(&finitrc, "r", FILE_READONLY, __FILE__, __LINE__);
-
-	tokenizer_t tok;
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, finitrc.stream) )
 	{
