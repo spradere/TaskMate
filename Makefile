@@ -36,6 +36,7 @@ PATH_SCRIPTS = scripts
 
 # Make global process
 .include "${PATH_MAKEFILES}/build.mk"
+.include "${PATH_MAKEFILES}/autoCode.mk"
 .include "${PATH_MAKEFILES}/utils.mk"
 .include "${PATH_MAKEFILES}/backup.mk"
 .include "${PATH_MAKEFILES}/editors.mk"

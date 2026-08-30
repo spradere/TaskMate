@@ -14,6 +14,8 @@
 
 #include "parseTag.h"
 
+#include <stdbool.h>
+
 #include "fileUtility.h"
 #include "tokenizer.h"
 
@@ -325,17 +327,29 @@ static void writeModulesCount(const parse_tag_t *parse)
 
 static void writeThreadsAlloc(const parse_tag_t *parse)
 {
-	int threads_count = 0;
+	int threads_count = 1;
+	int thread_index;
+	bool in_system = false;
+	bool system_thread_found = false;
 	const module_type_t *mod;
 
 	fprintf(parse->file, "\tmod_thread_item_t *mod;\n");
 
 	mod = &parse->data_base->modules_type[TM_MOD_THREAD_ID];
 
+	// list other threads
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
+		// first thread must be system
+		if( strcmp(mod->modules[i].name, "system") == 0 )
+		{
+			thread_index = 0;
+			in_system = true;
+			system_thread_found = true;
+		}
+		else { thread_index = threads_count; }
 
-		fprintf(parse->file, "\n\tmod = mod_threadGetPointer(%i);\n", threads_count);
+		fprintf(parse->file, "\n\tmod = mod_threadGetPointer(%i);\n", thread_index);
 
 		fprintf(parse->file,
 				"\n\thal_threadContextInit(%s, &(mod->stack_pointer), "
@@ -343,17 +357,26 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 				mod->modules[i].name);
 
 		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
-		fprintf(parse->file, "\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
-				threads_count, mod->modules[i].name);
-		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", threads_count);
+		fprintf(parse->file,
+				"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
+				thread_index,
+				mod->modules[i].name);
+		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", thread_index);
 		fprintf(parse->file, "\tmod->status = %i;\n", mod->modules[i].status);
-		fprintf(parse->file, "\tmod->saved_run_level = %i;\n", 
-				mod->modules[i].status & RL_LEVEL_MASK);
+		fprintf(
+			parse->file, "\tmod->saved_run_level = %i;\n", mod->modules[i].status & RL_LEVEL_MASK);
 		fprintf(parse->file, "\tmod->main = %s;\n", mod->modules[i].name);
 
-		threads_count++;
+		if( in_system == false ) { threads_count++; }
+		in_system = false;
 	}
 	have_tag_count[HAVE_THREADS_ALLOC]++;
+
+	if( system_thread_found == false )
+	{
+		AUTOCODE_MSG_ERROR("thread system was not found.");
+		exit(0);
+	}
 }
 
 static void writeDriversAlloc(const parse_tag_t *parse)

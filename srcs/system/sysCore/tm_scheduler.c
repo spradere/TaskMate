@@ -41,9 +41,9 @@ void tm_schedulerStart(void)
 {
 	hal_timerSchedControl(DRV_CTRL_START, 0);
 
-	mod_thread_item_t *mod = tm_schedulerSelectNext(TM_MOD_THREAD_COUNT - 1);
-	hal_setStackPointer(mod->stack_pointer);
+	mod_thread_item_t *mod = mod_threadGetPointer(0);
 
+	hal_setStackPointer(mod->stack_pointer);
 	hal_contextRestore();
 	hal_setGlobalInterupt();
 	hal_returnFromInterupt();

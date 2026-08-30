@@ -24,4 +24,3 @@ void system(void)
 		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
 	}
 }
-
