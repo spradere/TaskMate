@@ -25,10 +25,12 @@
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
 
-static void lcdAMC2004Clear(void);
-static void lcdAMC2004SendCommand(uint8_t command);
+static hal_driver_state_t lcdAMC2004Clear(void);
+static hal_driver_state_t lcdAMC2004SendCommand(uint8_t command);
+static hal_driver_state_t lcdSetError(err_codes_t error);
 
 static hal_driver_status_t lcd_status;
+static err_codes_t lcd_last_error = ERR_NO_ERROR;
 
 #define LCDAMC2004_I2C_ADDR 0x3C // AiP31068L I2C address (Write mode)
 #define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
@@ -36,110 +38,173 @@ static hal_driver_status_t lcd_status;
 #define LCDAMC2004_RAW 4
 #define LCDAMC2004_COL 20
 
-static uint8_t hal_lcdGetStatus(void)
+static hal_driver_state_t lcdSetError(err_codes_t error)
 {
-	if( TM_GETBIT(lcd_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
-	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	lcd_last_error = error;
+	return DRV_STATE_ERROR;
+}
+
+static hal_driver_state_t hal_lcdGetStatus(void)
+{
+	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 )
+	{
+		lcd_last_error = ERR_HAL_DRIVER_DEAD;
+		return DRV_STATE_DEAD;
+	}
+	if( TM_GETBIT(lcd_status, DRV_BIT_ERROR) != 0 )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_INVALID_STATE);
+	}
+	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+	}
 	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
 	{
 		if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
-		return DRV_STATE_ERROR;
+		return lcdSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
 	if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
-static uint8_t hal_lcdInit(void)
+static hal_driver_state_t lcdRequireRunning(void)
 {
-	_delay_ms(50); // Wait for LCD to power up
-
-	lcdAMC2004SendCommand(0x38); // Function Set: 8-bit mode, 2 lines, 5x8 dots
-	_delay_us(110);
-	lcdAMC2004SendCommand(0x0C); // Display ON, Cursor OFF, Blink OFF
-	_delay_us(110);
-	lcdAMC2004SendCommand(0x01); // Clear Display
-	_delay_ms(11);
-	lcdAMC2004SendCommand(0x06); // Entry Mode: Cursor moves right, no shift
-	_delay_us(110);
-
-	hal_lcdControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
-	return 0;
+	hal_driver_state_t state = hal_lcdGetStatus();
+	if( (state == DRV_STATE_OFF) || (state == DRV_STATE_INITIALIZED) )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_NOT_RUNNING);
+	}
+	return state;
 }
 
-static uint8_t hal_lcdStart(void)
+static hal_driver_state_t hal_lcdInit(void)
 {
-	if( (hal_lcdControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
-		(hal_lcdControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
+	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
+	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING )
 	{
-		return DRV_UNKNOW;
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
 
-	lcdAMC2004Clear();
-	hal_lcdControl(DRV_CTRL_SETBIT, DRV_BIT_START);
-	return 0;
+	_delay_ms(50); // Wait for LCD to power up
+
+	if( lcdAMC2004SendCommand(0x38) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	// Function Set: 8-bit mode, 2 lines, 5x8 dots
+	_delay_us(110);
+	if( lcdAMC2004SendCommand(0x0C) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	// Display ON, Cursor OFF, Blink OFF
+	_delay_us(110);
+	if( lcdAMC2004SendCommand(0x01) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	// Clear Display
+	_delay_ms(11);
+	if( lcdAMC2004SendCommand(0x06) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	// Entry Mode: Cursor moves right, no shift
+	_delay_us(110);
+
+	TM_SETBIT(lcd_status, DRV_BIT_INIT);
+	lcd_last_error = ERR_NO_ERROR;
+	return DRV_STATE_INITIALIZED;
 }
 
-static uint8_t hal_lcdStop(void)
+static hal_driver_state_t hal_lcdStart(void)
+{
+	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
+	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
+	}
+	if( lcdAMC2004Clear() == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+
+	TM_SETBIT(lcd_status, DRV_BIT_START);
+	return DRV_STATE_RUNNING;
+}
+
+static hal_driver_state_t hal_lcdStop(void)
 {
 	// nothing to do.
-	hal_lcdControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
-	return 0;
+	TM_CLEARBIT(lcd_status, DRV_BIT_START);
+	return hal_lcdGetStatus();
 }
 
-void lcdAMC2004SendCommand(uint8_t command)
+static hal_driver_state_t lcdAMC2004SendCommand(uint8_t command)
 {
-	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE);
-	hal_i2cWrite(LCDAMC2004_CMD); // Control byte: RS=0, RW=0
-	hal_i2cWrite(command);
-	hal_i2cCommStop();
+	if( hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+	}
+	if( hal_i2cWrite(LCDAMC2004_CMD) == DRV_STATE_ERROR )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+	}
+	if( hal_i2cWrite(command) == DRV_STATE_ERROR )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+	}
+	if( hal_i2cCommStop() == DRV_STATE_ERROR ) { return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY); }
 	_delay_us(200); // Small delay for LCD to process the command
+	return DRV_STATE_RUNNING;
 }
 
-static void lcdAMC2004Clear(void)
+static hal_driver_state_t lcdAMC2004Clear(void)
 {
-	lcdAMC2004SendCommand(0x01);
+	if( lcdAMC2004SendCommand(0x01) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
 	_delay_ms(2);
+	return DRV_STATE_RUNNING;
 }
 
-uint8_t hal_lcdClear(void)
+hal_driver_state_t hal_lcdClear(void)
 {
-	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
-	lcdAMC2004Clear();
-	return 0;
+	hal_driver_state_t state = lcdRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	return lcdAMC2004Clear();
 }
 
-uint8_t hal_lcdSetCursor(uint8_t row, uint8_t col)
+hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 {
-	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	hal_driver_state_t state = lcdRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( (row >= LCDAMC2004_RAW) || (col >= LCDAMC2004_COL) )
+	{
+		return lcdSetError(ERR_HAL_LCD_CURSOR_OUT_OF_RANGE);
+	}
 	const uint8_t row_offsets[] = {0x00, 0x40, 0x14, 0x54};
-	lcdAMC2004SendCommand(0x80 | (col + row_offsets[row]));
-	return 0;
+	return lcdAMC2004SendCommand((uint8_t)(0x80u | (col + row_offsets[row])));
 }
 
-uint8_t hal_lcdWriteString(tm_string_t str)
+hal_driver_state_t hal_lcdWriteString(tm_string_t str)
 {
 	uint8_t index = 0;
 
-	if( hal_lcdGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
-	if( str.text == 0 ) { return DRV_STATE_ERROR; }
+	hal_driver_state_t state = lcdRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( str.text == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
 
-	hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE);
-	hal_i2cWrite(LCDAMC2004_DATA);
+	if( hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+	}
+	if( hal_i2cWrite(LCDAMC2004_DATA) == DRV_STATE_ERROR )
+	{
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+	}
 
 	while( index < TM_STRING_SIZE_MAX )
 	{
 		char str_char = hal_string_getChar(&str, index);
 		if( str_char == 0 ) { break; }
-		hal_i2cWrite((uint8_t)str_char);
+		if( hal_i2cWrite((uint8_t)str_char) == DRV_STATE_ERROR )
+		{
+			return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
+		}
 		index++;
 	}
-	hal_i2cCommStop();
-	return 0;
+	if( hal_i2cCommStop() == DRV_STATE_ERROR ) { return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY); }
+	return DRV_STATE_RUNNING;
 }
 
-uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
+hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_control_data_t *data)
 {
-	switch( cmd )
+	switch( command )
 	{
 		case DRV_CTRL_INIT:
 			return hal_lcdInit();
@@ -148,23 +213,50 @@ uint8_t hal_lcdControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_lcdStop();
 		case DRV_CTRL_RLSET:
+			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data->run_level >= RL_LEVEL_COUNT )
+			{
+				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
 			lcd_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			lcd_status |= val;
-			return 0;
+			lcd_status |= data->run_level;
+			return hal_lcdGetStatus();
 		case DRV_CTRL_RLGET:
-			return lcd_status & RL_LEVEL_MASK;
+			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			data->run_level = lcd_status & RL_LEVEL_MASK;
+			return hal_lcdGetStatus();
 		case DRV_CTRL_SETBIT:
-			TM_SETBIT(lcd_status, val);
-			return 0;
+			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_SETBIT(lcd_status, data->status_bit);
+			return hal_lcdGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			TM_CLEARBIT(lcd_status, val);
-			return 0;
+			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_CLEARBIT(lcd_status, data->status_bit);
+			return hal_lcdGetStatus();
 		case DRV_CTRL_GETBIT:
-			return TM_GETBIT(lcd_status, val);
+			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			data->bit_value = TM_GETBIT(lcd_status, data->status_bit) != 0;
+			return hal_lcdGetStatus();
 		case DRV_CTRL_GETSTATUS:
 			return hal_lcdGetStatus();
+		case DRV_CTRL_GETLASTERROR:
+			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			data->error = lcd_last_error;
+			return hal_lcdGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return lcdSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
 }
 

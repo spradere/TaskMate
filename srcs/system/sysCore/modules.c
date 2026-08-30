@@ -140,10 +140,12 @@ void mod_driversAlloc(void)
  */
 
 	mod_driver_item_t *mod;
+	hal_driver_control_data_t control_data;
 
 	mod = mod_driverGetPointer(0);
 	TM_STR_ROM_NEW(driver0_name, "lcd");
-	hal_lcdControl(DRV_CTRL_RLSET, 2);
+	control_data.run_level = 2;
+	hal_lcdControl(DRV_CTRL_RLSET, &control_data);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver0_name,
@@ -152,7 +154,8 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(1);
 	TM_STR_ROM_NEW(driver1_name, "rtc");
-	hal_rtcControl(DRV_CTRL_RLSET, 2);
+	control_data.run_level = 2;
+	hal_rtcControl(DRV_CTRL_RLSET, &control_data);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver1_name,
@@ -161,7 +164,8 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(2);
 	TM_STR_ROM_NEW(driver2_name, "timerSched");
-	hal_timerSchedControl(DRV_CTRL_RLSET, 0);
+	control_data.run_level = 0;
+	hal_timerSchedControl(DRV_CTRL_RLSET, &control_data);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver2_name,
@@ -170,7 +174,8 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(3);
 	TM_STR_ROM_NEW(driver3_name, "timerSTC");
-	hal_timerSTCControl(DRV_CTRL_RLSET, 1);
+	control_data.run_level = 1;
+	hal_timerSTCControl(DRV_CTRL_RLSET, &control_data);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver3_name,
@@ -179,7 +184,8 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(4);
 	TM_STR_ROM_NEW(driver4_name, "i2c");
-	hal_i2cControl(DRV_CTRL_RLSET, 1);
+	control_data.run_level = 1;
+	hal_i2cControl(DRV_CTRL_RLSET, &control_data);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver4_name,
@@ -188,7 +194,8 @@ void mod_driversAlloc(void)
 
 	mod = mod_driverGetPointer(5);
 	TM_STR_ROM_NEW(driver5_name, "usart");
-	hal_usartControl(DRV_CTRL_RLSET, 0);
+	control_data.run_level = 0;
+	hal_usartControl(DRV_CTRL_RLSET, &control_data);
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver5_name,

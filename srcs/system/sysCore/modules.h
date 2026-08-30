@@ -49,7 +49,7 @@ typedef struct
 {
 	const tm_string_t *name;
 
-	uint8_t (*control)(uint8_t, uint8_t);
+	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *);
 
 } mod_driver_item_t;
 

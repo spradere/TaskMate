@@ -51,8 +51,10 @@ void boot(void)
 		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 		{
 			mod_driver_item_t *mod = mod_driverGetPointer(i);
+			hal_driver_control_data_t control_data;
 
-			if( (*(mod->control))(DRV_CTRL_RLGET, 0) == runlevel )
+			if( ((*(mod->control))(DRV_CTRL_RLGET, &control_data) != DRV_STATE_ERROR) &&
+				(control_data.run_level == runlevel) )
 			{
 				tm_syslog(TM_STR("[boot] driver <%s> ..."), mod->name);
 				(*(mod->control))(DRV_CTRL_INIT, 0);

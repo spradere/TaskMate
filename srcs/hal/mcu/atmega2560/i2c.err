@@ -1,0 +1,5 @@
+# ATmega2560 I2C driver errors
+ERR_HAL_I2C_START_FAILED "HAL I2C start condition failed" MID
+ERR_HAL_I2C_ADDRESS_NACK "HAL I2C address was not acknowledged" LOW
+ERR_HAL_I2C_WRITE_FAILED "HAL I2C write failed" MID
+ERR_HAL_I2C_READ_FAILED "HAL I2C read failed" MID

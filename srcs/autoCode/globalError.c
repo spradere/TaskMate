@@ -57,23 +57,23 @@ void globalError(const char *src_name, error_catalog_t *errors)
 			}
 			strncpy(errors->catalog[error_index].name, tok.tokens[0], BYTE_INDEX);
 			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
-			
+
 			AUTOCODE_MSG_INFO("[%i] %s", error_index, tok.tokens[0]);
-			
-			errors->catalog[error_index].critical = ERROR_NOT_DEFINED;
+
+			errors->catalog[error_index].critical = AUTOCODE_ERROR_NOT_DEFINED;
 			if( strcmp(tok.tokens[2], "LOW") == 0 )
 			{
-				errors->catalog[error_index].critical = ERROR_LOW;
+				errors->catalog[error_index].critical = AUTOCODE_ERROR_LOW;
 			}
 			if( strcmp(tok.tokens[2], "MID") == 0 )
 			{
-				errors->catalog[error_index].critical = ERROR_MID;
+				errors->catalog[error_index].critical = AUTOCODE_ERROR_MID;
 			}
 			if( strcmp(tok.tokens[2], "HIGH") == 0 )
 			{
-				errors->catalog[error_index].critical = ERROR_HIGH;
+				errors->catalog[error_index].critical = AUTOCODE_ERROR_HIGH;
 			}
-			if( errors->catalog[error_index].critical == ERROR_NOT_DEFINED )
+			if( errors->catalog[error_index].critical == AUTOCODE_ERROR_NOT_DEFINED )
 			{
 				AUTOCODE_MSG_ERROR("wrong critical argument <%s>", tok.tokens[2]);
 				exit(1);

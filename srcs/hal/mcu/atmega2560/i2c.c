@@ -29,37 +29,66 @@
 #define I2C_TWBR_VALUE ((F_CPU / I2C_FREQ - 16) / 2)
 
 static hal_driver_status_t i2c_status;
+static err_codes_t i2c_last_error = ERR_NO_ERROR;
 
 static void i2cCommStop(void);
 static uint8_t i2cWrite(uint8_t data);
+static hal_driver_state_t i2cSetError(err_codes_t error);
 
-static uint8_t hal_i2cGetStatus(void)
+static hal_driver_state_t i2cSetError(err_codes_t error)
 {
-	if( TM_GETBIT(i2c_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	i2c_last_error = error;
+	return DRV_STATE_ERROR;
+}
+
+static hal_driver_state_t hal_i2cGetStatus(void)
+{
+	if( TM_GETBIT(i2c_status, DRV_BIT_DEAD) != 0 )
+	{
+		i2c_last_error = ERR_HAL_DRIVER_DEAD;
+		return DRV_STATE_DEAD;
+	}
+	if( TM_GETBIT(i2c_status, DRV_BIT_ERROR) != 0 )
+	{
+		return i2cSetError(ERR_HAL_DRIVER_INVALID_STATE);
+	}
 	if( TM_GETBIT(i2c_status, DRV_BIT_INIT) == 0 )
 	{
 		if( TM_GETBIT(i2c_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
-		return DRV_STATE_ERROR;
+		return i2cSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
 	if( TM_GETBIT(i2c_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
-static uint8_t hal_i2cInit(void)
+static hal_driver_state_t i2cRequireRunning(void)
 {
+	hal_driver_state_t state = hal_i2cGetStatus();
+	if( (state == DRV_STATE_OFF) || (state == DRV_STATE_INITIALIZED) )
+	{
+		return i2cSetError(ERR_HAL_DRIVER_NOT_RUNNING);
+	}
+	return state;
+}
+
+static hal_driver_state_t hal_i2cInit(void)
+{
+	if( hal_i2cGetStatus() == DRV_STATE_DEAD ) { return i2cSetError(ERR_HAL_DRIVER_DEAD); }
+
 	TWBR = (uint8_t)I2C_TWBR_VALUE; // Set baud rate
 	TWSR = 0x00; // Pre scaler = 1
 
-	hal_i2cControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
-	return 0;
+	TM_SETBIT(i2c_status, DRV_BIT_INIT);
+	i2c_last_error = ERR_NO_ERROR;
+	return DRV_STATE_INITIALIZED;
 }
 
-static uint8_t hal_i2cStart(void)
+static hal_driver_state_t hal_i2cStart(void)
 {
-	if( (hal_i2cControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
-		(hal_i2cControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
+	if( TM_GETBIT(i2c_status, DRV_BIT_DEAD) != 0 ) { return i2cSetError(ERR_HAL_DRIVER_DEAD); }
+	if( TM_GETBIT(i2c_status, DRV_BIT_INIT) == 0 )
 	{
-		return DRV_UNKNOW;
+		return i2cSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
@@ -80,39 +109,53 @@ static uint8_t hal_i2cStart(void)
 		i2cCommStop();
 	}
 
-	hal_i2cControl(DRV_CTRL_SETBIT, DRV_BIT_START);
-	return 0;
+	TM_SETBIT(i2c_status, DRV_BIT_START);
+	return DRV_STATE_RUNNING;
 }
 
-static uint8_t hal_i2cStop(void)
+static hal_driver_state_t hal_i2cStop(void)
 {
 	TM_CLEARBIT(TWCR, TWEN);
 
-	hal_i2cControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
-	return 0;
+	TM_CLEARBIT(i2c_status, DRV_BIT_START);
+	return hal_i2cGetStatus();
 }
 
-uint8_t hal_i2cCommStart(uint8_t address, bool rw)
+hal_driver_state_t hal_i2cCommStart(uint8_t address, hal_i2c_direction_t direction)
 {
-	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	hal_driver_state_t state = i2cRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( (address > 0x7Fu) || ((direction != HAL_I2C_WRITE) && (direction != HAL_I2C_READ)) )
+	{
+		return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+	}
 	TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 	while( !(TM_GETBIT(TWCR, TWINT)) );
 	if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 	{
 		i2cCommStop();
-		return TW_STATUS;
+		return i2cSetError(ERR_HAL_I2C_START_FAILED);
 	}
 
-	return i2cWrite((address << 1) | rw);
+	const uint8_t twi_status = i2cWrite((uint8_t)((address << 1) | direction));
+	const uint8_t expected_status = (direction == HAL_I2C_READ) ? TW_MR_SLA_ACK : TW_MT_SLA_ACK;
+	if( twi_status != expected_status )
+	{
+		i2cCommStop();
+		return i2cSetError(ERR_HAL_I2C_ADDRESS_NACK);
+	}
+
+	return DRV_STATE_RUNNING;
 }
 
 static void i2cCommStop(void) { TM_WRITEBIT(TWCR, TWSTO, TWEN, TWINT); }
 
-uint8_t hal_i2cCommStop(void)
+hal_driver_state_t hal_i2cCommStop(void)
 {
-	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	hal_driver_state_t state = i2cRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
 	i2cCommStop();
-	return 0;
+	return DRV_STATE_RUNNING;
 }
 
 static uint8_t i2cWrite(uint8_t data)
@@ -124,26 +167,45 @@ static uint8_t i2cWrite(uint8_t data)
 	return TW_STATUS;
 }
 
-uint8_t hal_i2cWrite(uint8_t data)
+hal_driver_state_t hal_i2cWrite(uint8_t data)
 {
-	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
-	return i2cWrite(data);
+	hal_driver_state_t state = i2cRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( i2cWrite(data) != TW_MT_DATA_ACK )
+	{
+		i2cCommStop();
+		return i2cSetError(ERR_HAL_I2C_WRITE_FAILED);
+	}
+	return DRV_STATE_RUNNING;
 }
 
-uint8_t hal_i2cRead(uint8_t *data, bool ack)
+hal_driver_state_t hal_i2cRead(uint8_t *data, hal_i2c_ack_t ack)
 {
-	if( hal_i2cGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	hal_driver_state_t state = i2cRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+	if( (ack != HAL_I2C_NACK) && (ack != HAL_I2C_ACK) )
+	{
+		return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+	}
 	if( ack ) { TM_WRITEBIT(TWCR, TWEN, TWINT, TWEA); }
 	else { TM_WRITEBIT(TWCR, TWEN, TWINT); }
 	while( !(TM_GETBIT(TWCR, TWINT)) );
 
+	const uint8_t expected_status = (ack == HAL_I2C_ACK) ? TW_MR_DATA_ACK : TW_MR_DATA_NACK;
+	if( TW_STATUS != expected_status )
+	{
+		i2cCommStop();
+		return i2cSetError(ERR_HAL_I2C_READ_FAILED);
+	}
+
 	*data = TWDR;
-	return TW_STATUS;
+	return DRV_STATE_RUNNING;
 }
 
-uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
+hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_control_data_t *data)
 {
-	switch( cmd )
+	switch( command )
 	{
 		case DRV_CTRL_INIT:
 			return hal_i2cInit();
@@ -152,23 +214,50 @@ uint8_t hal_i2cControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_i2cStop();
 		case DRV_CTRL_RLSET:
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			if( data->run_level >= RL_LEVEL_COUNT )
+			{
+				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
 			i2c_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			i2c_status |= val;
-			return 0;
+			i2c_status |= data->run_level;
+			return hal_i2cGetStatus();
 		case DRV_CTRL_RLGET:
-			return i2c_status & RL_LEVEL_MASK;
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			data->run_level = i2c_status & RL_LEVEL_MASK;
+			return hal_i2cGetStatus();
 		case DRV_CTRL_SETBIT:
-			TM_SETBIT(i2c_status, val);
-			return 0;
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_SETBIT(i2c_status, data->status_bit);
+			return hal_i2cGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			TM_CLEARBIT(i2c_status, val);
-			return 0;
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_CLEARBIT(i2c_status, data->status_bit);
+			return hal_i2cGetStatus();
 		case DRV_CTRL_GETBIT:
-			return TM_GETBIT(i2c_status, val);
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			data->bit_value = TM_GETBIT(i2c_status, data->status_bit) != 0;
+			return hal_i2cGetStatus();
 		case DRV_CTRL_GETSTATUS:
 			return hal_i2cGetStatus();
+		case DRV_CTRL_GETLASTERROR:
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			data->error = i2c_last_error;
+			return hal_i2cGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return i2cSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
 }
 

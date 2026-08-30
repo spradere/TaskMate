@@ -36,6 +36,7 @@ FILES_INITRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.rc"
 
 # Global error
 FILES_ERROR != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort
+FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
 
 # Documentation files
 FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \

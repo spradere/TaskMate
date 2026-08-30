@@ -25,7 +25,7 @@
 
 static mod_thread_item_t *sc_threadGetPointer(const char *name);
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
-static bool sc_driverControl(const char *name, uint8_t command);
+static bool sc_driverControl(const char *name, hal_driver_control_t command);
 
 void sc_threadSetSTC(uint16_t count)
 {
@@ -103,15 +103,25 @@ bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 	mod_driver_item_t *driver = mod_driverGetPointer((uint8_t)id);
 	if( (driver->name == 0) || (driver->control == 0) ) { return false; }
 
-	*name = driver->name;
-	*run_level = driver->control(DRV_CTRL_RLGET, 0);
+	hal_driver_control_data_t control_data;
+	if( driver->control(DRV_CTRL_RLGET, &control_data) == DRV_STATE_ERROR ) { return false; }
+	*run_level = control_data.run_level;
 	*status_bits = 0;
 
-	for( uint8_t bit = DRV_BIT_INIT; bit <= DRV_BIT_DEAD; bit++ )
+	static const hal_driver_status_bit_t status_bit[] = {
+		DRV_BIT_INIT,
+		DRV_BIT_START,
+		DRV_BIT_ERROR,
+		DRV_BIT_DEAD,
+	};
+	for( uint8_t i = 0; i < (sizeof(status_bit) / sizeof(status_bit[0])); i++ )
 	{
-		if( driver->control(DRV_CTRL_GETBIT, bit) != 0 ) { TM_SETBIT(*status_bits, bit); }
+		control_data.status_bit = status_bit[i];
+		if( driver->control(DRV_CTRL_GETBIT, &control_data) == DRV_STATE_ERROR ) { return false; }
+		if( control_data.bit_value ) { TM_SETBIT(*status_bits, status_bit[i]); }
 	}
 
+	*name = driver->name;
 	return *name != 0;
 }
 
@@ -165,10 +175,11 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 	return 0;
 }
 
-static bool sc_driverControl(const char *name, uint8_t command)
+static bool sc_driverControl(const char *name, hal_driver_control_t command)
 {
 	mod_driver_item_t *driver = sc_driverGetPointer(name);
 	if( driver == 0 ) { return false; }
 
-	return driver->control(command, 0) == 0;
+	hal_driver_state_t state = driver->control(command, 0);
+	return (state != DRV_STATE_ERROR) && (state != DRV_STATE_DEAD);
 }

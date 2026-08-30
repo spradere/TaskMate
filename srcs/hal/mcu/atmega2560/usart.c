@@ -41,23 +41,51 @@ static volatile uint8_t buffer_tx[HAL_USART_BUFFER_SIZE];
 static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
 static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
 static hal_driver_status_t usart_status;
+// Shared with the RX ISR; err_codes_t is one byte on the AVR8 build (-fshort-enums).
+static volatile err_codes_t usart_last_error = ERR_NO_ERROR;
 
 static err_codes_t usartWriteChar(uint8_t data);
+static hal_driver_state_t usartSetError(err_codes_t error);
 
-static uint8_t hal_usartGetStatus(void)
+static hal_driver_state_t usartSetError(err_codes_t error)
 {
-	if( TM_GETBIT(usart_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	usart_last_error = error;
+	return DRV_STATE_ERROR;
+}
+
+static hal_driver_state_t hal_usartGetStatus(void)
+{
+	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0 )
+	{
+		usart_last_error = ERR_HAL_DRIVER_DEAD;
+		return DRV_STATE_DEAD;
+	}
+	if( TM_GETBIT(usart_status, DRV_BIT_ERROR) != 0 )
+	{
+		return usartSetError(ERR_HAL_DRIVER_INVALID_STATE);
+	}
 	if( TM_GETBIT(usart_status, DRV_BIT_INIT) == 0 )
 	{
 		if( TM_GETBIT(usart_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
-		return DRV_STATE_ERROR;
+		return usartSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
 	if( TM_GETBIT(usart_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
-static uint8_t hal_usartInit(void)
+static hal_driver_state_t usartRequireRunning(void)
 {
+	hal_driver_state_t state = hal_usartGetStatus();
+	if( (state == DRV_STATE_OFF) || (state == DRV_STATE_INITIALIZED) )
+	{
+		return usartSetError(ERR_HAL_DRIVER_NOT_RUNNING);
+	}
+	return state;
+}
+
+static hal_driver_state_t hal_usartInit(void)
+{
+	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0 ) { return usartSetError(ERR_HAL_DRIVER_DEAD); }
 	uint16_t ubrr = (F_CPU / (16UL * USART_BAUD_RATE)) - 1;
 
 	UBRR1H = (uint8_t)(ubrr >> 8);
@@ -66,29 +94,30 @@ static uint8_t hal_usartInit(void)
 	TM_WRITEBIT(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
 	TM_WRITEBIT(UCSR1C, UCSZ11, UCSZ10); // 8-bit data, 1 stop bit, no parity
 
-	hal_usartControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
-	return 0;
+	TM_SETBIT(usart_status, DRV_BIT_INIT);
+	usart_last_error = ERR_NO_ERROR;
+	return DRV_STATE_INITIALIZED;
 }
 
-static uint8_t hal_usartStart(void)
+static hal_driver_state_t hal_usartStart(void)
 {
-	if( (hal_usartControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
-		(hal_usartControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
+	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0 ) { return usartSetError(ERR_HAL_DRIVER_DEAD); }
+	if( TM_GETBIT(usart_status, DRV_BIT_INIT) == 0 )
 	{
-		return DRV_UNKNOW;
+		return usartSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
 	TM_SETBIT(UCSR1B, RXCIE1); // enable Rx interrupt
 
-	hal_usartControl(DRV_CTRL_SETBIT, DRV_BIT_START);
-	return 0;
+	TM_SETBIT(usart_status, DRV_BIT_START);
+	return DRV_STATE_RUNNING;
 }
 
-static uint8_t hal_usartStop(void)
+static hal_driver_state_t hal_usartStop(void)
 {
 	// nothing to do ?
-	hal_usartControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
-	return 0;
+	TM_CLEARBIT(usart_status, DRV_BIT_START);
+	return hal_usartGetStatus();
 }
 
 // USART1 Rx Interrupt Handler (Triggered when data is received)
@@ -102,17 +131,23 @@ ISR(USART1_RX_vect)
 		buffer_rx[buffer_rx_head] = data;
 		buffer_rx_head = next_head;
 	}
+	else { usart_last_error = ERR_HAL_USART_RX_BUFFER_FULL; }
 }
 
 // Read a character from Rx buffer (non-blocking)
-err_codes_t hal_usartRead(uint8_t *data)
+hal_driver_state_t hal_usartRead(uint8_t *data)
 {
-	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
-	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
+	hal_driver_state_t state = usartRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) )
+	{
+		return usartSetError(ERR_HAL_USART_RX_BUFFER_EMPTY);
+	}
 
 	*data = buffer_rx[buffer_rx_tail];
 	buffer_rx_tail = CB_NEXT(buffer_rx_tail);
-	return ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
 }
 
 // Write a character to Tx buffer
@@ -126,16 +161,20 @@ static err_codes_t usartWriteChar(uint8_t data)
 	return ERR_NO_ERROR;
 }
 
-err_codes_t hal_usartWriteChar(uint8_t data)
+hal_driver_state_t hal_usartWriteChar(uint8_t data)
 {
-	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
-	return usartWriteChar(data);
+	hal_driver_state_t state = usartRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	err_codes_t error = usartWriteChar(data);
+	if( error != ERR_NO_ERROR ) { return usartSetError(error); }
+	return DRV_STATE_RUNNING;
 }
 
 // send Tx buffer to usart
-err_codes_t hal_usartSendTXBuffer(void)
+hal_driver_state_t hal_usartSendTXBuffer(void)
 {
-	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
+	hal_driver_state_t state = usartRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
 	while( !CB_EMPTY(buffer_tx_head, buffer_tx_tail) )
 	{
 		while( !TM_GETBIT(UCSR1A, UDRE1) ); // Wait for empty transmit buffer
@@ -143,36 +182,51 @@ err_codes_t hal_usartSendTXBuffer(void)
 
 		buffer_tx_tail = CB_NEXT(buffer_tx_tail);
 	}
-	return ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
 }
 
 // test Rx buffer
-err_codes_t hal_usartTestBufferRx(void)
+hal_driver_state_t hal_usartTestBufferRx(void)
 {
-	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
-	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
-	if( CB_FULL(buffer_rx_head, buffer_rx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
+	hal_driver_state_t state = usartRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) )
+	{
+		return usartSetError(ERR_HAL_USART_RX_BUFFER_EMPTY);
+	}
+	if( CB_FULL(buffer_rx_head, buffer_rx_tail) )
+	{
+		return usartSetError(ERR_HAL_USART_RX_BUFFER_FULL);
+	}
 
-	return ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
 }
 
 // test Tx buffer
-err_codes_t hal_usartTestBufferTx(void)
+hal_driver_state_t hal_usartTestBufferTx(void)
 {
-	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
-	if( CB_EMPTY(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_EMPTY; }
-	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_RX_BUFFER_FULL; }
+	hal_driver_state_t state = usartRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( CB_EMPTY(buffer_tx_head, buffer_tx_tail) )
+	{
+		return usartSetError(ERR_HAL_USART_TX_BUFFER_EMPTY);
+	}
+	if( CB_FULL(buffer_tx_head, buffer_tx_tail) )
+	{
+		return usartSetError(ERR_HAL_USART_TX_BUFFER_FULL);
+	}
 
-	return ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
 }
 
 // write string to Tx buffer
-err_codes_t hal_usartWriteString(tm_string_t str)
+hal_driver_state_t hal_usartWriteString(tm_string_t str)
 {
 	uint8_t index = 0;
 
-	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
-	if( str.text == 0 ) { return ERR_RUNTIME; }
+	hal_driver_state_t state = usartRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( str.text == 0 ) { return usartSetError(ERR_NULL_POINTER); }
 
 	while( index < TM_STRING_SIZE_MAX )
 	{
@@ -180,16 +234,16 @@ err_codes_t hal_usartWriteString(tm_string_t str)
 		if( str_char == 0 ) { break; }
 		if( usartWriteChar((uint8_t)str_char) == ERR_HAL_USART_TX_BUFFER_FULL )
 		{
-			return ERR_HAL_USART_TX_BUFFER_FULL;
+			return usartSetError(ERR_HAL_USART_TX_BUFFER_FULL);
 		};
 		index++;
 	}
-	return ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
 }
 
-uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
+hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_control_data_t *data)
 {
-	switch( cmd )
+	switch( command )
 	{
 		case DRV_CTRL_INIT:
 			return hal_usartInit();
@@ -198,22 +252,49 @@ uint8_t hal_usartControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_usartStop();
 		case DRV_CTRL_RLSET:
+			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data->run_level >= RL_LEVEL_COUNT )
+			{
+				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
 			usart_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			usart_status |= val;
-			return 0;
+			usart_status |= data->run_level;
+			return hal_usartGetStatus();
 		case DRV_CTRL_RLGET:
-			return usart_status & RL_LEVEL_MASK;
+			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			data->run_level = usart_status & RL_LEVEL_MASK;
+			return hal_usartGetStatus();
 		case DRV_CTRL_SETBIT:
-			TM_SETBIT(usart_status, val);
-			return 0;
+			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_SETBIT(usart_status, data->status_bit);
+			return hal_usartGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			TM_CLEARBIT(usart_status, val);
-			return 0;
+			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_CLEARBIT(usart_status, data->status_bit);
+			return hal_usartGetStatus();
 		case DRV_CTRL_GETBIT:
-			return TM_GETBIT(usart_status, val);
+			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			data->bit_value = TM_GETBIT(usart_status, data->status_bit) != 0;
+			return hal_usartGetStatus();
 		case DRV_CTRL_GETSTATUS:
 			return hal_usartGetStatus();
+		case DRV_CTRL_GETLASTERROR:
+			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			data->error = usart_last_error;
+			return hal_usartGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return usartSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
 }

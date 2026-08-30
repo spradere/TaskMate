@@ -14,7 +14,10 @@
 #ifndef INTERFACES_MODULES_DEFINE_H
 #define INTERFACES_MODULES_DEFINE_H
 
+#include <stdbool.h>
 #include <stdint.h>
+
+#include "interfaces/error_catalog.h"
 
 // [autoCode_tag] modules_count
 // clang-format off
@@ -44,31 +47,49 @@
 #define TM_MOD_THREAD_STACK_SIZE 256
 
 // driver control
-#define DRV_CTRL_INIT 1
-#define DRV_CTRL_START 2
-#define DRV_CTRL_STOP 3
-#define DRV_CTRL_RLSET 4
-#define DRV_CTRL_RLGET 5
-#define DRV_CTRL_SETBIT 6
-#define DRV_CTRL_CLEARBIT 7
-#define DRV_CTRL_GETBIT 8
-#define DRV_CTRL_GETSTATUS 9
-#define DRV_UNKNOW 99
+typedef enum
+{
+	DRV_CTRL_INIT,
+	DRV_CTRL_START,
+	DRV_CTRL_STOP,
+	DRV_CTRL_RLSET,
+	DRV_CTRL_RLGET,
+	DRV_CTRL_SETBIT,
+	DRV_CTRL_CLEARBIT,
+	DRV_CTRL_GETBIT,
+	DRV_CTRL_GETSTATUS,
+	DRV_CTRL_GETLASTERROR
+} hal_driver_control_t;
 
 // driver status bits
 typedef uint8_t hal_driver_status_t;
 
 // bits [2:0] contain the run level
-#define DRV_BIT_INIT 3
-#define DRV_BIT_START 4
-#define DRV_BIT_ERROR 5
-#define DRV_BIT_DEAD 6
+typedef enum
+{
+	DRV_BIT_INIT = 3,
+	DRV_BIT_START,
+	DRV_BIT_ERROR,
+	DRV_BIT_DEAD
+} hal_driver_status_bit_t;
 
 // driver status
-#define DRV_STATE_OFF 1
-#define DRV_STATE_INITIALIZED 2
-#define DRV_STATE_RUNNING 3
-#define DRV_STATE_ERROR 4
+typedef enum
+{
+	DRV_STATE_OFF,
+	DRV_STATE_INITIALIZED,
+	DRV_STATE_RUNNING,
+	DRV_STATE_ERROR,
+	DRV_STATE_DEAD
+} hal_driver_state_t;
+
+typedef union
+{
+	uint8_t run_level;
+	hal_driver_status_bit_t status_bit;
+	bool bit_value;
+	err_codes_t error;
+} hal_driver_control_data_t;
 
 // thread status bits
 // bit [2 1 0 ] is run level

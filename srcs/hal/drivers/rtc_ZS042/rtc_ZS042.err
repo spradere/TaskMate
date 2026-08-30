@@ -1,0 +1,2 @@
+# ZS042 RTC driver errors
+ERR_HAL_RTC_TIME_OUT_OF_RANGE "HAL RTC time value is out of range" LOW

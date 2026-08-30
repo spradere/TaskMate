@@ -30,45 +30,76 @@ const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 1
 
 static hal_timerSchedCallback_ptr_t sched_callback = NULL;
 static hal_driver_status_t timer_sched_status;
+static err_codes_t timer_sched_last_error = ERR_NO_ERROR;
 
-static uint8_t hal_timerSchedGetStatus(void)
+static hal_driver_state_t timerSchedSetError(err_codes_t error)
 {
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0 ) { return DRV_STATE_ERROR; }
+	timer_sched_last_error = error;
+	return DRV_STATE_ERROR;
+}
+
+static hal_driver_state_t hal_timerSchedGetStatus(void)
+{
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
+	{
+		timer_sched_last_error = ERR_HAL_DRIVER_DEAD;
+		return DRV_STATE_DEAD;
+	}
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0 )
+	{
+		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
+	}
 	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
 	{
 		if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
-		return DRV_STATE_ERROR;
+		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
 	if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
-uint8_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
+static hal_driver_state_t timerSchedRequireRunning(void)
 {
-	// if( hal_timerSchedGetStatus() >= DRV_STATE_INITIALIZED ) { return DRV_STATE_ERROR; }
-	sched_callback = func_ptr;
-	return 0;
+	hal_driver_state_t state = hal_timerSchedGetStatus();
+	if( (state == DRV_STATE_OFF) || (state == DRV_STATE_INITIALIZED) )
+	{
+		return timerSchedSetError(ERR_HAL_DRIVER_NOT_RUNNING);
+	}
+	return state;
 }
 
-uint8_t hal_timerSchedLoad(void)
+hal_driver_state_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
-	if( hal_timerSchedGetStatus() != DRV_STATE_RUNNING ) { return DRV_STATE_ERROR; }
+	if( func_ptr == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
+	sched_callback = func_ptr;
+	return hal_timerSchedGetStatus();
+}
+
+hal_driver_state_t hal_timerSchedLoad(void)
+{
+	hal_driver_state_t state = timerSchedRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
 #define LOAD_GUARD 4
 	const uint16_t LOAD = TIMER1_OVERFLOW_COUNT - LOAD_GUARD;
 
 	TCNT1 = LOAD;
-	return 0;
+	return DRV_STATE_RUNNING;
 }
 
-static uint8_t hal_timerSchedInit(void)
+static hal_driver_state_t hal_timerSchedInit(void)
 {
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
+	{
+		return timerSchedSetError(ERR_HAL_DRIVER_DEAD);
+	}
 	// Set up timer1 interrupt for scheduler
 	TM_SETBIT(TCCR1B, WGM12); // CTC mode
 	OCR1A = TIMER1_OVERFLOW_COUNT;
 	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
 
-	hal_timerSchedControl(DRV_CTRL_SETBIT, DRV_BIT_INIT);
-	return 0;
+	TM_SETBIT(timer_sched_status, DRV_BIT_INIT);
+	timer_sched_last_error = ERR_NO_ERROR;
+	return DRV_STATE_INITIALIZED;
 }
 
 #define TIMER_SCHED_START                              \
@@ -78,17 +109,20 @@ static uint8_t hal_timerSchedInit(void)
 						   "n"((uint8_t)(1u << CS11))  \
 		: "r24"
 
-static uint8_t hal_timerSchedStart(void)
+static hal_driver_state_t hal_timerSchedStart(void)
 {
-	if( (hal_timerSchedControl(DRV_CTRL_GETBIT, DRV_BIT_INIT) == 0) ||
-		(hal_timerSchedControl(DRV_CTRL_GETBIT, DRV_BIT_DEAD) != 0) )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
 	{
-		return DRV_UNKNOW;
+		return timerSchedSetError(ERR_HAL_DRIVER_DEAD);
+	}
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
+	{
+		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
 	asm volatile(TIMER_SCHED_START);
-	hal_timerSchedControl(DRV_CTRL_SETBIT, DRV_BIT_START);
-	return 0;
+	TM_SETBIT(timer_sched_status, DRV_BIT_START);
+	return DRV_STATE_RUNNING;
 }
 
 #define TIMER_SCHED_STOP                              \
@@ -102,11 +136,11 @@ static uint8_t hal_timerSchedStart(void)
 						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
 		: "r24"
 
-static uint8_t hal_timerSchedStop(void)
+static hal_driver_state_t hal_timerSchedStop(void)
 {
 	asm volatile(TIMER_SCHED_STOP);
-	hal_timerSchedControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
-	return 0;
+	TM_CLEARBIT(timer_sched_status, DRV_BIT_START);
+	return hal_timerSchedGetStatus();
 }
 
 #define TM_SCHED_CALL_BACK                       \
@@ -134,9 +168,10 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	asm volatile("reti \n\t");
 }
 
-uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
+hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
+										 hal_driver_control_data_t *data)
 {
-	switch( cmd )
+	switch( command )
 	{
 		case DRV_CTRL_INIT:
 			return hal_timerSchedInit();
@@ -145,22 +180,49 @@ uint8_t hal_timerSchedControl(uint8_t cmd, uint8_t val)
 		case DRV_CTRL_STOP:
 			return hal_timerSchedStop();
 		case DRV_CTRL_RLSET:
+			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data->run_level >= RL_LEVEL_COUNT )
+			{
+				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
 			timer_sched_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			timer_sched_status |= val;
-			return 0;
+			timer_sched_status |= data->run_level;
+			return hal_timerSchedGetStatus();
 		case DRV_CTRL_RLGET:
-			return timer_sched_status & RL_LEVEL_MASK;
+			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			data->run_level = timer_sched_status & RL_LEVEL_MASK;
+			return hal_timerSchedGetStatus();
 		case DRV_CTRL_SETBIT:
-			TM_SETBIT(timer_sched_status, val);
-			return 0;
+			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_SETBIT(timer_sched_status, data->status_bit);
+			return hal_timerSchedGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			TM_CLEARBIT(timer_sched_status, val);
-			return 0;
+			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_CLEARBIT(timer_sched_status, data->status_bit);
+			return hal_timerSchedGetStatus();
 		case DRV_CTRL_GETBIT:
-			return TM_GETBIT(timer_sched_status, val);
+			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			data->bit_value = TM_GETBIT(timer_sched_status, data->status_bit) != 0;
+			return hal_timerSchedGetStatus();
 		case DRV_CTRL_GETSTATUS:
 			return hal_timerSchedGetStatus();
+		case DRV_CTRL_GETLASTERROR:
+			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			data->error = timer_sched_last_error;
+			return hal_timerSchedGetStatus();
 		default:
-			return DRV_UNKNOW;
+			return timerSchedSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
 }
