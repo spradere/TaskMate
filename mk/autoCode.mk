@@ -32,7 +32,6 @@ FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_HALINIT_LIST = ${PATH_BUILD_TARGET}/files_halinit
 FILE_HALDEFINE_LIST = ${PATH_BUILD_TARGET}/files_haldefine
 FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/files_error
-FILE_ERROR_CAT = ${PATH_BUILD_TARGET}/errors.err
 
 FILE_INITRC_DEPS = ${PATH_BUILD_TARGET}/files_initrc.deps
 FILE_PARSE_TAG_DEPS = ${PATH_BUILD_TARGET}/files_to_parse.deps
@@ -51,7 +50,6 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 .endif
 
 	# write autoCode options
-	#@cat ${FILES_ERROR} > "${FILE_ERROR_CAT}"
 	@printf "# autoCode options\n" > "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
