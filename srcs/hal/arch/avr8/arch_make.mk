@@ -29,7 +29,7 @@ CC = avr-gcc
 VAL_CC_VERSION != avr-gcc -dumpversion
 
 # General options
-CFLAGS += -Os -MMD -MP -mrelax
+CFLAGS += -Os -MMD -MP -mrelax -fshort-enums
 CFLAGS += -DF_CPU=${VAL_CPU_FREQ} -mmcu=${VAL_MCU_SERIAL}
 
 # General warnings
@@ -48,7 +48,9 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 
 # Command line #include and #define
 CFLAGS += -I${PATH_SRCS} -I./
-CFLAGS += -DVAL_TM_VERSION=\"${VAL_TM_VERSION}\" -DVAL_BUILD_CNT=${VAL_BUILD_CNT}
+CFLAGS += 	-DTM_VER_MAJOR=${VAL_TM_VER_MAJOR} \
+			-DTM_VER_MINOR=${VAL_TM_VER_MINOR} \
+			-DTM_BUILD=${VAL_BUILD_CNT}
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
