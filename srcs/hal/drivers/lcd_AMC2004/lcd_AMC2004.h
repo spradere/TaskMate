@@ -17,11 +17,12 @@
 
 #include <stdint.h>
 
+#include "interfaces/modules_define.h"
 #include "interfaces/tm_string_storage.h"
 
-uint8_t hal_lcdControl(uint8_t cmd, uint8_t val);
-uint8_t hal_lcdClear(void);
-uint8_t hal_lcdSetCursor(uint8_t row, uint8_t col);
-uint8_t hal_lcdWriteString(tm_string_t str);
+hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_control_data_t *data);
+hal_driver_state_t hal_lcdClear(void);
+hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col);
+hal_driver_state_t hal_lcdWriteString(tm_string_t str);
 
 #endif // LCD_AMC2004_LCD_AMC2004_H

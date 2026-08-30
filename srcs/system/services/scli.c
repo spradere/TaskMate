@@ -63,11 +63,11 @@ static void scliRead(void)
 {
 	uint8_t data;
 
-	if( hal_usartTestBufferRx() != ERR_HAL_USART_RX_BUFFER_EMPTY )
+	if( hal_usartTestBufferRx() == DRV_STATE_RUNNING )
 	{
 		uint8_t i = 0;
 
-		while( (hal_usartRead(&data) == ERR_NO_ERROR) && (i < (sizeof(scli_line) - 1)) )
+		while( (hal_usartRead(&data) == DRV_STATE_RUNNING) && (i < (sizeof(scli_line) - 1)) )
 		{
 			scli_line[i++] = (char)data;
 		}

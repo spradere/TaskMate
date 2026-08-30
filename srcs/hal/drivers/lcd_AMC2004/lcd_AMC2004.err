@@ -1,0 +1,2 @@
+# AMC2004 LCD driver errors
+ERR_HAL_LCD_CURSOR_OUT_OF_RANGE "HAL LCD cursor is out of range" LOW

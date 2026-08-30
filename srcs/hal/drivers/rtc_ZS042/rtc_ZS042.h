@@ -17,6 +17,8 @@
 
 #include <stdint.h>
 
+#include "interfaces/modules_define.h"
+
 typedef struct
 {
 	uint8_t seconds; // 0-59
@@ -28,8 +30,8 @@ typedef struct
 	uint8_t year; // 0-99
 } hal_rtc_time_t;
 
-uint8_t hal_rtcControl(uint8_t cmd, uint8_t val);
-uint8_t hal_rtcRead(hal_rtc_time_t *t);
-uint8_t hal_rtcWrite(const hal_rtc_time_t *t);
+hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_control_data_t *data);
+hal_driver_state_t hal_rtcRead(hal_rtc_time_t *time);
+hal_driver_state_t hal_rtcWrite(const hal_rtc_time_t *time);
 
 #endif // RTC_ZS042_RTC_ZS042_H

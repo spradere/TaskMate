@@ -15,18 +15,26 @@
 #ifndef ATMEGA2560_I2C_H
 #define ATMEGA2560_I2C_H
 
-#include <stdbool.h>
 #include <stdint.h>
 
-#define HAL_I2C_READ 1
-#define HAL_I2C_WRITE 0
-#define HAL_I2C_ACK 1
-#define HAL_I2C_NACK 0
+#include "interfaces/modules_define.h"
 
-uint8_t hal_i2cControl(uint8_t cmd, uint8_t val);
-uint8_t hal_i2cCommStart(uint8_t address, bool rw);
-uint8_t hal_i2cCommStop(void);
-uint8_t hal_i2cWrite(uint8_t data);
-uint8_t hal_i2cRead(uint8_t *data, bool ack);
+typedef enum
+{
+	HAL_I2C_WRITE,
+	HAL_I2C_READ
+} hal_i2c_direction_t;
+
+typedef enum
+{
+	HAL_I2C_NACK,
+	HAL_I2C_ACK
+} hal_i2c_ack_t;
+
+hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_control_data_t *data);
+hal_driver_state_t hal_i2cCommStart(uint8_t address, hal_i2c_direction_t direction);
+hal_driver_state_t hal_i2cCommStop(void);
+hal_driver_state_t hal_i2cWrite(uint8_t data);
+hal_driver_state_t hal_i2cRead(uint8_t *data, hal_i2c_ack_t ack);
 
 #endif // ATMEGA2560_I2C_H
