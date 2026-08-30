@@ -25,19 +25,19 @@
 
 void boot(void)
 {
-	// system startup
+	// System startup
 	hal_usartControl(DRV_CTRL_INIT, 0);
 	hal_usartControl(DRV_CTRL_START, 0);
 
 	tm_syslog(TM_STR("\n\n[boot] System startup ...\n"));
 
-	// system static allocation init
+	// Initialise static system allocations
 	tm_syslog(TM_STR("[boot] system static allocation\n"));
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
 
-	// hal hardware init
+	// Initialise HAL hardware
 	tm_syslog(TM_STR("[boot] hal hardware init\n"));
 
 	hal_archInit();
@@ -45,7 +45,7 @@ void boot(void)
 	hal_boardInit();
 	gpio_signalsInit();
 
-	// start drivers
+	// Start drivers
 	for( uint8_t runlevel = 1; runlevel < RL_LEVEL_COUNT; runlevel++ )
 	{
 		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )

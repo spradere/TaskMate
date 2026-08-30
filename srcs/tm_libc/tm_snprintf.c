@@ -25,7 +25,7 @@ static void tm_putChar(char ch);
 
 static uint8_t tm_snprintf_lock = 0;
 
-// structure for buffer data
+// Buffer data structure
 typedef struct
 {
 	char *ptr;
@@ -36,7 +36,7 @@ typedef struct
 
 static tm_snprintf_buffer_t tm_snprintf_buffer;
 
-// reverse order base converter
+// Reverse-order base converter
 static void baseConvert(uint16_t value, uint8_t base)
 {
 	const char digits[] = "0123456789abcdef";
@@ -44,7 +44,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	char tmp[SNPRINTF_BUFF_TEMP_SIZE];
 	uint8_t pos = 0;
 
-	// reverse order convert
+	// Convert in reverse order
 	if( value == 0 ) { tmp[pos++] = '0'; }
 	else
 	{
@@ -58,7 +58,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 
 	while( pos < tm_snprintf_buffer.padding ) { tmp[pos++] = '0'; }
 
-	// reverse order
+	// Reverse order
 	while( pos > 0 ) { tm_putChar(tmp[--pos]); }
 }
 
@@ -106,7 +106,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	if( tm_snprintf_lock == 1 ) { sc_coopYield(); }
 	tm_snprintf_lock = 1;
 
-	// store variables
+	// Store variables
 	tm_snprintf_buffer.ptr = ptr;
 	tm_snprintf_buffer.size = size;
 	tm_snprintf_buffer.index = 0;

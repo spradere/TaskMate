@@ -98,14 +98,14 @@ static int tagCmdDispatch(const char *cmd, const parse_tag_t *parse)
 
 void parseTagInit(void)
 {
-	// initialise required options
+	// Initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_tag_count[i] = 0; }
 }
 
 void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
 			  const options_list_t *auto_options)
 {
-	// open source and tmp file
+	// Open source and temporary files
 	AUTOCODE_MSG_INFO("open <%s>", file_name);
 
 	file_t file_src;
@@ -122,7 +122,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 						 .errors = errors,
 						 .auto_options = auto_options};
 
-	// read form source
+	// Read from source
 	int tag_section = 0;
 	int file_line_number = 0;
 	tokenizer_t tok;
@@ -200,7 +200,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 
 void parseTagHave(void)
 {
-	// test required options
+	// Test required options
 	for( int i = 0; i < HAVE_COUNT; i++ )
 	{
 		if( have_tag_count[i] == 0 )
@@ -337,10 +337,10 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 
 	mod = &parse->data_base->modules_type[TM_MOD_THREAD_ID];
 
-	// list other threads
+	// List other threads
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		// first thread must be system
+		// The first thread must be the system thread
 		if( strcmp(mod->modules[i].name, "system") == 0 )
 		{
 			thread_index = 0;
@@ -423,7 +423,7 @@ static void writeErrorCatalog(const parse_tag_t *parse)
 
 static void writeErrorEnum(const parse_tag_t *parse)
 {
-	// write errors enum
+	// Write the error enum
 	fprintf(parse->file, "typedef enum\n");
 	fprintf(parse->file, "{\n");
 

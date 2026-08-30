@@ -9,7 +9,7 @@
 ################################################################################
 
 ################################################################################
-# Directories, path and files
+# Directories, paths, and files
 ################################################################################
 
 # Final full HW path
@@ -28,7 +28,7 @@ FILE_HARDWARE_TARGET_CHECK_SCRIPT = ${PATH_SCRIPTS}/hardware_target.awk
 PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
 
-# Build info
+# Build information
 FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
 
 FILE_CLOCRAW = ${PATH_BUILDS}/cloc_raw
@@ -44,15 +44,15 @@ PATHS_SOURCES += ${PATH_SRCS}/hal/public
 PATHS_SOURCES += ${PATH_SRCS}/hal/drivers
 PATHS_SOURCES += ${PATH_SRCS}/user/tasks
 
-# log files
+# Log files
 FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
 FILE_RSYNC_LOG = ${PATH_LOGS}/rsync.log
 FILE_H_CHECK_LOG = ${PATH_LOGS}/headers_check.log
 
-# scripts
+# Scripts
 FILE_H_ALLOW_CONF = ${PATH_CONF}/header_allow.conf
 
-# git
+# Git
 FILE_GIT_IGNORE = .gitignore
 PATHS_GIT_ALLOWED = ${PATH_CONF} ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} ${PATH_SRCS}
 FILES_GIT_ALLOWED.${PATH_CONF} = *.conf

@@ -32,7 +32,7 @@ doc:
 .PHONY: doc
 
 _cloc_data:
-	# :T modifier because cloc don't handle full path with --exclude-dir option
+	# Use :T because cloc does not handle a full path with the --exclude-dir option
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
 	@printf "\n" >> ${FILE_CLOCRAW}
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${FILE_CLOCRAW}
@@ -40,7 +40,7 @@ _cloc_data:
 .PHONY: _cloc_data
 
 cloc: _cloc_data
-#help [global] Count lines of codes.
+#help [global] Count lines of code.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -72,7 +72,7 @@ cppcheck:
 .PHONY: cppcheck
 
 format:
-#help [global] Formatting code with clang-format, configuration /.clang-format.
+#help [global] Format code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format19 -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC}

@@ -10,12 +10,12 @@
  * @file autoCode.c
  * @brief auto code implementation.
  *
- * - Simple and reliable, read plain text init.rc files
- * - Write code for #include / static allocation / initialisation directly in code
+ * - Simple and reliable; reads plain-text init.rc files
+ * - Writes includes, static allocations, and initialisation directly into code
  *
  * @note
- * tag format is a one-line C comment: // [autoCode_tag] <object> <action>
- * end tag zone: // [/tag]
+ * Tag format is a one-line C comment: // [autoCode_tag] <object> <action>
+ * End-tag format: // [/tag]
  *
  */
 
@@ -43,7 +43,7 @@ int main(int argn, const char *argv[])
 {
 	tokenizer_t tok;
 	
-	// get options
+	// Get options
 	if( argn != 2 )
 	{
 		AUTOCODE_MSG_ERROR("autoCode bad argn (is %i, not 2)\n\tuse autoCode configuration_file",
@@ -54,11 +54,11 @@ int main(int argn, const char *argv[])
 	options_list_t auto_options;
 	options(argv[1], &auto_options);
 
-	// setup data base
+	// Set up database
 	modules_database_t data_base;
 	setupDatabase(&data_base);
 		
-	// read error files and store in error catalog
+	// Read error files and store entries in the error catalog
 	error_catalog_t errors_catalog;
 	errors_catalog.error_count = 0;
 	
@@ -74,7 +74,7 @@ int main(int argn, const char *argv[])
 	}
 	fileClose(&ferror, __FILE__, __LINE__);	
 	
-	// read init.rc file and store data in data base
+	// Read init.rc files and store entries in the database
 	file_t finitrc;
 	fileInit(&finitrc);
 	finitrc.name = auto_options.file_initrc_list;
@@ -87,7 +87,7 @@ int main(int argn, const char *argv[])
 	}
 	fileClose(&finitrc, __FILE__, __LINE__);
 
-	// parse tag and generate code
+	// Parse tags and generate code
 	file_t ftag;
 	fileInit(&ftag);
 	ftag.name = auto_options.file_parsetag_list;
@@ -102,7 +102,7 @@ int main(int argn, const char *argv[])
 	fileClose(&ftag, __FILE__, __LINE__);
 	parseTagHave();
 
-	// print all info about modules
+	// Print module information
 	printModules(&data_base);
 	filePrintModified();
 	return 0;

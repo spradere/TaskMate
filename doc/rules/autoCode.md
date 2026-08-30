@@ -40,7 +40,7 @@ for the target architecture and how they should be initialised.
 | global errors	| `build/errors_all.err`				| Global error catalog		|
 | Drivers       | `hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers |
 | 				| `hal/mcu/<mcu_name>/drivers_init.rc` | |
-| 				| `hal/board/<borad_name>/drivers_init.rc` | |
+| 				| `hal/board/<board_name>/drivers_init.rc` | |
 | Services      | `services/services_init.rc`        | System-level services  |
 | User Tasks    | `tasks/tasks_init.rc`              | User-level or application tasks          |
 
@@ -89,8 +89,8 @@ as the primary diagnostic tool when modifying system configuration or autoCode i
 
 - ✔️ Internal validation of tags, indexes and duplicate entries
 - ✔️ Detailed logging with file and line number
-- ✔️ Timestamped .autoCode_stamp file for Makefile dependency tracking
-- 🔒 Only replaces generated files when all steps complete successfully and if the new file differs from the old one
+- ✔️ Timestamped `.autoCode_stamp` file for Makefile dependency tracking
+- 🔒 Replaces generated files only when all steps complete successfully and the new file differs from the old one
 
 Together, these safeguards ensure that autoCode behaves as a **transactional generator:**
 either the entire configuration is validated and a consistent set of files is produced,

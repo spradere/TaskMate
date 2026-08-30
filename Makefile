@@ -9,7 +9,7 @@
 ################################################################################
 
 ################################################################################
-# Main makefile
+# Main Makefile
 ################################################################################
 
 # Main directories
@@ -29,7 +29,7 @@ PATH_SCRIPTS = scripts
 # Hardware target choice
 .include "${PATH_MAKEFILES}/hardware_target.mk"
 
-# Proceed files
+# File processing
 .include "${PATH_MAKEFILES}/path_files.mk"
 .include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
@@ -41,5 +41,5 @@ PATH_SCRIPTS = scripts
 .include "${PATH_MAKEFILES}/backup.mk"
 .include "${PATH_MAKEFILES}/editors.mk"
 
-# Make arch specific
+# Architecture-specific Make logic
 .include "${FILE_ARCH_CC}"

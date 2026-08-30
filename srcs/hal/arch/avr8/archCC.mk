@@ -8,7 +8,7 @@
 #
 ################################################################################
 
-# output files
+# Output files
 FILE_HEX = ${FILE_TARGET}.hex
 FILE_ELF = ${FILE_TARGET}.elf
 FILE_AVR8_PROGRAMS_LIST = ${PATH_AVR8}/programs.list
@@ -26,16 +26,16 @@ ${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${FILE_PROGRAMS_CH
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@touch "${FILE_AVR8_PROGRAMS_CHECK_STAMP}"
 
-# link
+# Link
 ${FILE_TARGET}: ${FILES_OBJ}
 	@printf "\n%sLinking%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${CC} ${CFLAGS} ${LDFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
 
-# compiler wrapper
+# Compiler wrapper
 FILE_COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
-# compile
+# Compile
 ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@printf "\n%sCompilation ...%s\n\n" \
 	    "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -45,18 +45,18 @@ ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
 	    -c "${FILE_COMPILE_SRC}" -o "${.TARGET}"
 
-# hex file generation
+# HEX file generation
 ${FILE_HEX}: ${FILE_ELF}
 	@avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
 	
 upload: all _mcu_memory_show ${FILE_HEX}
-#help [avr8] Upload firmware to mcu via Arduino board.
+#help [avr8] Upload firmware to the MCU via the Arduino board.
 	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${VAL_BUILD_CNT} "${COLOUR_RESET}"
 	avrdude -c ${VAL_PROGRAMMER} -p ${VAL_MCU_SERIAL} -U flash:w:${FILE_HEX}:i -P ${VAL_PROGRAMMER_PORT} -D
 .PHONY: upload
 
-# memory usage
+# Memory usage
 _mcu_memory_data:
 		@avr-size -G -d ${FILE_ELF} > ${FILE_MEMRAW}
 
@@ -84,7 +84,7 @@ dump: all ${FILE_HEX}
 .PHONY: dump
 
 modules_size: all
-#help [avr8] List module size sorted from highest.
+#help [avr8] List module sizes from largest to smallest.
 	@printf "\n%sList module size%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf

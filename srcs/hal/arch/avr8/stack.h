@@ -15,7 +15,7 @@
 #ifndef AVR8_STACK_H
 #define AVR8_STACK_H
 
-#include <avr/io.h> // get SP
+#include <avr/io.h> // Get SP
 #include <stdint.h>
 
 #include "hal/arch/avr8/arch_define.h"

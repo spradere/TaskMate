@@ -12,7 +12,7 @@
 # Hardware target selection and test
 ################################################################################
 
-# default target / new system
+# Default target
 HWT ?= test1
 FILE_HWT_MK = ${PATH_SRCS}/user/target/${HWT}/hwt.mk
 

@@ -15,7 +15,7 @@
 #ifndef INTERFACES_DEFINE_H
 #define INTERFACES_DEFINE_H
 
-// general system definitions
+// General system definitions
 #define NULL ((void *)0)
 
 #endif // INTERFACES_DEFINE_H

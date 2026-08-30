@@ -19,27 +19,27 @@ void tokenizer(tokenizer_t *tok)
 	int index_line = 0;
 	int token_current;
 
-	// reset tokens
+	// Reset tokens
 	for( token_current = 0; token_current < TOKEN_COUNT_MAX; token_current++ )
 	{
 		tok->tokens[token_current][0] = 0;
 	}
 
-	// start reading line to extract arguments
+	// Start reading the line to extract arguments
 	token_current = 0;
 	tok->count = 0;
 
 	while( (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
 		   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (token_current < TOKEN_COUNT_MAX) )
 	{
-		// get off leading space or tab
+		// Skip leading spaces and tabs
 		while( ((tok->line[index_line] == ' ') || (tok->line[index_line] == '\t')) &&
 			   (index_line < TOKEN_LINE_SIZE_MAX - 1) )
 		{
 			index_line++;
 		}
 
-		// read and store one token
+		// Read and store one token
 		int index_token = 0;
 		char cut_charter = ' ';
 

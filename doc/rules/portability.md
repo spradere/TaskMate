@@ -10,7 +10,7 @@ rather than an introductory overview.
 - the directory structure (arch/, mcu/, board/)
 - the build system (Makefile variables: ARCH, MCU, BOARD)
 - autoCode generator for system initialisation.
-- C preprocessor conditional statements
+- C preprocessor conditionals
 
 These rules prevent:
 
@@ -32,7 +32,7 @@ Its goals are:
 - **Safety checks at runtime** (no unconfigured signal can be used)
 - **Simple API for tasks** (gpioSignalSet(), gpioSignalGet())
 
-The design follows a strict layered model :
+The design follows a strict layered model:
 
 | layer | classification |
 |-------|----------------|
@@ -49,7 +49,7 @@ The design follows a strict layered model :
 **Role**
 
 This is the **lowest-level** GPIO driver, directly manipulating MCU registers.
-It knows the physical ports of the micro-controller
+It knows the physical ports of the microcontroller
  (`PORTA`, `DDRA`, `PINA` on AVR; `GPIOA->ODR`, `GPIOA->BSRR` on STM32).
 
 **Responsibilities**

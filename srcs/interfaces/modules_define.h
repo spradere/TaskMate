@@ -29,7 +29,7 @@
 // clang-format on
 // [/tag]
 
-// definitions for autoCode
+// Definitions for autoCode
 #define TM_MOD_COUNT_MAX 256
 
 #define TM_MOD_DRIVERS_ID 0
@@ -40,10 +40,10 @@
 #define TM_MOD_TYPE_COUNT 2
 #define TM_MOD_NAME_SIZE_MAX 32
 
-// system
+// System
 #define TM_MOD_THREAD_STACK_SIZE 256
 
-// driver control
+// Driver control
 #define DRV_CTRL_INIT 1
 #define DRV_CTRL_START 2
 #define DRV_CTRL_STOP 3
@@ -55,23 +55,23 @@
 #define DRV_CTRL_GETSTATUS 9
 #define DRV_UNKNOW 99
 
-// driver status bits
+// Driver status bits
 typedef uint8_t hal_driver_status_t;
 
-// bits [2:0] contain the run level
+// Bits [2:0] contain the run level
 #define DRV_BIT_INIT 3
 #define DRV_BIT_START 4
 #define DRV_BIT_ERROR 5
 #define DRV_BIT_DEAD 6
 
-// driver status
+// Driver status
 #define DRV_STATE_OFF 1
 #define DRV_STATE_INITIALIZED 2
 #define DRV_STATE_RUNNING 3
 #define DRV_STATE_ERROR 4
 
-// thread status bits
-// bit [2 1 0 ] is run level
+// Thread status bits
+// Bits [2:0] contain the run level
 #define TM_MOD_THREAD_TYPE_USER 3
 #define TM_MOD_THREAD_TYPE_SYS 4
 #define TM_MOD_THREAD_DEAD 5

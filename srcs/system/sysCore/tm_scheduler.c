@@ -55,18 +55,18 @@ hal_stack_word_t *tm_schedulerRR(hal_stack_word_t *stack_pointer)
 {
 	mod_thread_item_t *thread;
 
-	// save current thread context
+	// Save the current thread context
 	thread = mod_threadGetPointer(mod_threadGetCurrent());
 	thread->stack_pointer = stack_pointer;
 
-	// canary check
+	// Canary check
 	if( thread->canary_low != TM_MOD_CANARY ) { panic(TM_STR("canary low 1")); }
 	if( thread->canary_high != TM_MOD_CANARY ) { panic(TM_STR("canary high 1")); }
 
-	// switch thread
+	// Switch threads
 	thread = tm_schedulerSelectNext(mod_threadGetCurrent());
 
-	// canary check
+	// Canary check
 	if( thread->canary_low != TM_MOD_CANARY ) { panic(TM_STR("canary low 2")); }
 	if( thread->canary_high != TM_MOD_CANARY ) { panic(TM_STR("canary high 2")); }
 

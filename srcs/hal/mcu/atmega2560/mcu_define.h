@@ -19,11 +19,11 @@
 
 #include "interfaces/gpio_commons.h"
 
-// frequencies
+// Frequencies
 #define USART_BAUD_RATE 9600
 #define I2C_FREQ 100000UL // Standard mode 100 kHz
 
-// atmega2560 ports
+// ATmega2560 ports
 typedef enum
 {
 	PORT_A,
@@ -42,7 +42,7 @@ typedef enum
 	PORT_COUNT
 } hal_port_list_t;
 
-// atmega2560 pin structure
+// ATmega2560 pin structure
 typedef struct
 {
 	hal_port_list_t port;

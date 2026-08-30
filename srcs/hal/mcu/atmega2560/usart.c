@@ -19,11 +19,11 @@
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
-#include "mcu_define.h" // get usart baud rate
+#include "mcu_define.h" // Get the USART baud rate
 #include "tmlibc.h"
 
 // Circular buffers
-// always use a power of two for buffer size to avoid use of modulo
+// Always use a power of two for the buffer size to avoid modulo operations
 #define HAL_USART_BUFFER_SIZE 64
 
 _Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
@@ -86,12 +86,12 @@ static uint8_t hal_usartStart(void)
 
 static uint8_t hal_usartStop(void)
 {
-	// nothing to do ?
+	// Nothing to do?
 	hal_usartControl(DRV_CTRL_CLEARBIT, DRV_BIT_START);
 	return 0;
 }
 
-// USART1 Rx Interrupt Handler (Triggered when data is received)
+// USART1 RX interrupt handler (triggered when data is received)
 ISR(USART1_RX_vect)
 {
 	uint8_t next_head = CB_NEXT(buffer_rx_head);
@@ -104,7 +104,7 @@ ISR(USART1_RX_vect)
 	}
 }
 
-// Read a character from Rx buffer (non-blocking)
+// Read a character from the RX buffer (non-blocking)
 err_codes_t hal_usartRead(uint8_t *data)
 {
 	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
@@ -115,7 +115,7 @@ err_codes_t hal_usartRead(uint8_t *data)
 	return ERR_NO_ERROR;
 }
 
-// Write a character to Tx buffer
+// Write a character to the TX buffer
 static err_codes_t usartWriteChar(uint8_t data)
 {
 	uint8_t next_head = CB_NEXT(buffer_tx_head);
@@ -132,7 +132,7 @@ err_codes_t hal_usartWriteChar(uint8_t data)
 	return usartWriteChar(data);
 }
 
-// send Tx buffer to usart
+// Send the TX buffer to the USART
 err_codes_t hal_usartSendTXBuffer(void)
 {
 	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
@@ -146,7 +146,7 @@ err_codes_t hal_usartSendTXBuffer(void)
 	return ERR_NO_ERROR;
 }
 
-// test Rx buffer
+// Test the RX buffer
 err_codes_t hal_usartTestBufferRx(void)
 {
 	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
@@ -156,7 +156,7 @@ err_codes_t hal_usartTestBufferRx(void)
 	return ERR_NO_ERROR;
 }
 
-// test Tx buffer
+// Test the TX buffer
 err_codes_t hal_usartTestBufferTx(void)
 {
 	if( hal_usartGetStatus() != DRV_STATE_RUNNING ) { return ERR_RUNTIME; }
@@ -166,7 +166,7 @@ err_codes_t hal_usartTestBufferTx(void)
 	return ERR_NO_ERROR;
 }
 
-// write string to Tx buffer
+// Write a string to the TX buffer
 err_codes_t hal_usartWriteString(tm_string_t str)
 {
 	uint8_t index = 0;
