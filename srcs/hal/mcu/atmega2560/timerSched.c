@@ -117,7 +117,9 @@ static hal_driver_state_t hal_timerSchedStart(void)
 	}
 	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
 	{
+
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
+
 	}
 
 	asm volatile(TIMER_SCHED_START);
@@ -143,7 +145,7 @@ static hal_driver_state_t hal_timerSchedStop(void)
 	return hal_timerSchedGetStatus();
 }
 
-#define TM_SCHED_CALL_BACK                       \
+#define TM_SCHED_CALLBACK                        \
 	"in r24, 0x3d \n\t"                          \
 	"in r25, 0x3e \n\t"                          \
 	"lds r30, %0 \n\t"                           \
@@ -161,7 +163,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
 	asm volatile(AVR8_CONTEXT_SAVE);
 	asm volatile(TIMER_SCHED_STOP);
 
-	asm volatile(TM_SCHED_CALL_BACK);
+	asm volatile(TM_SCHED_CALLBACK);
 
 	asm volatile(TIMER_SCHED_START);
 	asm volatile(AVR8_CONTEXT_RESTORE);

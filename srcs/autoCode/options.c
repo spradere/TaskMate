@@ -117,10 +117,10 @@ static int optionCmdDispatch(const char *cmd, const char *value, options_list_t 
 
 void options(const char *file_name, options_list_t *opt)
 {
-	// initialise required options
+	// Initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
 
-	// proceed options from files
+	// Process options from files
 	file_t file;
 	fileInit(&file);
 	file.name = (char *)file_name;
@@ -160,7 +160,7 @@ void options(const char *file_name, options_list_t *opt)
 		}
 	}
 
-	// test required options
+	// Test required options
 	for( int i = 0; i < HAVE_COUNT; i++ )
 	{
 		if( have_options_count[i] == 0 )

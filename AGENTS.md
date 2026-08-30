@@ -20,7 +20,7 @@ Take MCU constraints into account:
 - volatile register semantics
 - the build system is a part of the system
 
-Do not propose a generic amd64 desktop-oriented solutions.
+Do not propose a generic amd64 desktop-oriented solution.
 
 ## Architecture
 
@@ -86,7 +86,7 @@ does not relax their documented APIs or build-enforced access rules.
   files use the BSD-2-Clause banner from `doc/licence_header.txt`; C headers and
   sources also include a Doxygen `@file` / `@brief` block.
 - Types are `snake_case_t`; constants/enums are `UPPER_SNAKE_CASE`; static data
-  is descriptive `snake_case`; functions are descriptive camelCase. Use prefixes 
+  is descriptive `snake_case`; functions are descriptive camelCase. Use prefixes
   only for real boundaries: `tm_`, `sc_`, `gpio_`, `err_`, `mod_`, and `rl_`.
 - Comments explain intent and constraints, not the obvious code.
 

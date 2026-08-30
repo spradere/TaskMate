@@ -25,16 +25,16 @@
 void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 						   hal_stack_word_t *stack_top)
 {
-	// stack init
+	// Stack initialisation
 	hal_stack_word_t *sp = stack_top;
 
 	*(sp--) = (uint8_t)((uintptr_t)func & 0xFF); // PCL;
 	*(sp--) = (uint8_t)(((uintptr_t)func >> 8u) & 0xFF); // PCH
-	*(sp--) = 0x00; // PCHH is always 0 if flash code size < 128k
+	*(sp--) = 0x00; // PCHH is always 0 if the flash code size is below 128 kB
 	*(sp--) = 0x00; // R0
 	*(sp--) = SREG;
 
-	// registers R1-R31
+	// Registers R1-R31
 	for( uint8_t i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
 
 	*stack_pointer = sp;

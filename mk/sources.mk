@@ -14,7 +14,7 @@
 
 OPT_FIND_EXCLUDE = ! -path '*/.*'
 
-# Sources files and objects
+# Source files and objects
 FILES_SRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_SRC_H != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 
@@ -42,7 +42,7 @@ FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
 FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \
 		find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.txt"
 
-# mk files
+# Makefiles
 FILES_MK_MK != find  ./${PATH_MAKEFILES} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 FILES_MK_HAL != find ./${PATH_SRCS}/hal ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 

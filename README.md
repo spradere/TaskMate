@@ -13,14 +13,14 @@ At a much smaller scale and within my own limits, this project is also a way to 
 step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
-TaskMate operating system is designed for microcontrollers. Its architecture is structured to
+The TaskMate operating system is designed for microcontrollers. Its architecture is structured to
 maintain a clear separation between build
 logic, system behavior, and hardware dependencies, ensuring both portability and maintainability.
 
 > <span style="color:green"> **Project Stats (v0.28 [^1] )**</span>
 >
 >  <span style="color:green">652 commits • 145 source files • 8364 lines of code •
-> binary size : 11080 bytes (Flash) • ram usage : 1866 bytes</span>
+> binary size: 11080 bytes (Flash) • RAM usage: 1866 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -50,9 +50,9 @@ tasks—but always through controlled and indirect interactions.
 
 ---
 
-## ⚙️ Build System
+## ⚙️ Build system
 
-TaskMate uses a custom **Build system** that fully manages dependencies and workflow.
+TaskMate uses a custom **build system** that fully manages dependencies and workflow.
 
 - Automatic recompilation based on file changes, including headers and configuration files.
 - CLI commands like `make upload`, `make push` and `make backup`.
@@ -107,8 +107,8 @@ It helps maintain consistency, reduce boilerplate, and keep the overall structur
 All generation happens at build time, with static allocation, ensuring zero runtime overhead and fully deterministic behavior.
 
 
-See : [Portability](doc/rules/portability.md)
-See : [More about autoCode](doc/rules/autoCode.md)
+See: [Portability](doc/rules/portability.md)
+See: [More about autoCode](doc/rules/autoCode.md)
 
 ---
 
@@ -118,7 +118,7 @@ Although **no code from ChatGPT is ever copied directly** into the TaskMate sour
 tree, the project would never have reached its current level of maturity without
 the assistance of AI. ChatGPT has been a great tool for structuring ideas,
 learning new concepts, and refining both code and architectural design. It
-provides technical guidance. 
+provides technical guidance.
 
 Codex is now also used, mainly for audits and complex refactors. It runs in a
 sandboxed environment on a separate machine and under a dedicated account.
@@ -137,7 +137,7 @@ and disclaimer as described in the `LICENSE` file.
 
 ---
 
-## 📟  Hardware setup : avr8 - atmega2560 - Arduino mega board
+## 📟 Hardware setup: AVR8 - ATmega2560 - Arduino Mega board
 
 ![Arduino mega board](doc/hardware_mega.jpg)
 
@@ -151,9 +151,9 @@ and disclaimer as described in the `LICENSE` file.
 
 **Architecture :**
 
-You will find more information about the architecture in the doc/architecture/files.
+You will find more information about the architecture in the files under `doc/architecture/`.
 These files contain information about the development history, current implementation,
-strengths and weaknesses of source code.
+strengths and weaknesses of the source code.
 
 **Books :**
 
@@ -165,4 +165,4 @@ strengths and weaknesses of source code.
 - Operating System Design, The Xinu Approach, third edition, author Douglas Comer, publisher CRC Press, ISBN 978-1-032-98099-7
 - The design and implementation of the FreeBSD operating system, second edition, authors Marshall Kirk McKusick, George V. Neville-Niel and Robert N.M. Watson, publisher Addison-Wesley, ISBN 978-0-312-96897-2
 
-[^1]: ⚠️ Warning : Versions 0.71, 1.37, 2.71, 3.14, 4.2 and 5.11 are intentionally skipped. Universe backward compatibility constraints apply.
+[^1]: ⚠️ Warning: Versions 0.71, 1.37, 2.71, 3.14, 4.2 and 5.11 are intentionally skipped. Universe backward compatibility constraints apply.

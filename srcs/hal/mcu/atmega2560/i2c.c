@@ -20,7 +20,7 @@
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
-#include "mcu_define.h" // get i2c frequency
+#include "mcu_define.h" // Get the I2C frequency
 #include "tm_libc/tm_syslog.h"
 
 // NOLINTBEGIN
@@ -88,16 +88,18 @@ static hal_driver_state_t hal_i2cStart(void)
 	if( TM_GETBIT(i2c_status, DRV_BIT_DEAD) != 0 ) { return i2cSetError(ERR_HAL_DRIVER_DEAD); }
 	if( TM_GETBIT(i2c_status, DRV_BIT_INIT) == 0 )
 	{
+
 		return i2cSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
+
 	}
 
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
-	// address test
+	// Address test
 	tm_syslog(TM_STR("[i2c] scan ...\n"));
 	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
 	{
-		// start comm
+		// Start communication
 		TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 		while( !(TM_GETBIT(TWCR, TWINT)) );
 
@@ -257,7 +259,9 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			data->error = i2c_last_error;
 			return hal_i2cGetStatus();
 		default:
+
 			return i2cSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
+
 	}
 }
 

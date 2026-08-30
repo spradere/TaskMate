@@ -14,9 +14,7 @@
 # Compare files and replace if different
 ################################################################################
 
-shift
-
-printf '%s\n' ${2} > "${1}.tmp"
+printf '%s\n' "${2}" > "${1}.tmp"
 
 if ! cmp -s "${1}.tmp" "${1}"; then
 	mv "${1}.tmp" "${1}"

@@ -16,14 +16,14 @@ The following rules define how the `interfaces/` layer must be used.
 
 ## Rule 1 — Interface independence
 
-The ``interfaces/`` layer must not depend on any higher or lower system layer.
+The `interfaces/` layer must not depend on any higher or lower system layer.
 
 It may only include:
 
 - basic C types
 - minimal common headers
 
-Examples: `stdint.h` `stdbool.h` `tm_types.h`
+Examples: `stdint.h`, `stdbool.h`, `tm_types.h`
 
 No dependency from `interfaces/` to `HAL`, `sysCall`, `services`, or `tasks` is allowed.
 

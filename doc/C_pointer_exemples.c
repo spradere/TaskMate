@@ -1,13 +1,13 @@
 /**
  * @file C_pointer_exemples.c
- * @brief c pointer exemples implementation.
+ * @brief C pointer examples.
  */
 
 // Summary for pointers to functions
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * ! Warning: this file is only a small summary about passing pointers to !
- * ! functions, not a full working code: many memory leaks append.        !
+ * ! functions, not fully working code: many memory leaks occur.          !
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 /* Aliases for pointers:

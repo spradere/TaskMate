@@ -1,4 +1,4 @@
-# 🧭 Code and files prefixes — One-page guidelines
+# 🧭 Code and file prefixes — One-page guidelines
 
 ## 🏷️ In TaskMate, prefixes are used deliberately and sparingly.
 

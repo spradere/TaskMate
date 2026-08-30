@@ -17,17 +17,17 @@
 
 #include <avr/io.h>
 
-static inline __attribute__((always_inline)) void hal_returnFromInterupt(void)
+static inline __attribute__((always_inline)) void hal_returnFromInterrupt(void)
 {
 	asm volatile("reti \n\t");
 }
 
-static inline __attribute__((always_inline)) void hal_setGlobalInterupt(void)
+static inline __attribute__((always_inline)) void hal_setGlobalInterrupt(void)
 {
 	asm volatile("sei \n\t");
 }
 
-static inline __attribute__((always_inline)) void hal_clearGlobalInterupt(void)
+static inline __attribute__((always_inline)) void hal_clearGlobalInterrupt(void)
 {
 	asm volatile("cli \n\t");
 }

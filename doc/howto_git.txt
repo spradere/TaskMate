@@ -21,7 +21,7 @@ git push --tags
 git switch test
 
 #################################################
-# 2 repo workflow github/test codeberg/main
+# Two-repository workflow: github/test and codeberg/main
 ##################################################
 
 Work on test:
@@ -31,12 +31,12 @@ git pull
 # work
 make push M="Hello there"
 
-When code is clean, push to Codeberg :
+When the code is clean, push to Codeberg:
 
 make merge
 
 ##################################################
-# 2 repo setup github/test codeberg/main
+# Two-repository setup: github/test and codeberg/main
 ##################################################
 
 # set name email
@@ -54,7 +54,7 @@ git push -u github test
 git branch --set-upstream-to=codeberg/main main
 git branch --set-upstream-to=github/test test
 
-# delete a remonte
+# delete a remote
 git remote remove github
 
 # delete branch
@@ -69,12 +69,12 @@ git branch -vv
 # save
 ##################################################
 
-# normal save :
+# normal save:
 	git add .
 	git commit -m "comment"
 	git push
 
-# list last commits :
+# list latest commits:
 	git log --oneline
 
 # list local / remote branches
@@ -110,7 +110,7 @@ git merge origin/main
 # get repo size
 git count-objects -vH
 
-# search in commits, without merge, most add
+# search commits, excluding merges, for the largest additions
 git log --no-merges --numstat --date=iso-strict --pretty="C %H %ad %s" \
 | awk '
   /^[0-9]/ { add += $1; next }
@@ -153,7 +153,7 @@ git push --mirror origin
 
 # 5 - check on codeberg
 
-#6 - clone
+# 6 - clone
 cd /root/code/TaskMate
 mv TaskMate_current TaskMate_old_after_rewrite
 git clone git@codeberg.org:Doul09/TaskMate.git TaskMate_current

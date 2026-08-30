@@ -22,7 +22,7 @@ void tm_softwareTimeCounterInit(void) { hal_timerSTCSetCallback(tm_softwareTimeC
 
 void tm_softwareTimeCounter(void)
 {
-	// RTC decrement
+	// Decrement the RTC
 	for( uint8_t i = 0; i < TM_MOD_THREAD_COUNT; i++ )
 	{
 		mod_thread_item_t *mod = mod_threadGetPointer(i);

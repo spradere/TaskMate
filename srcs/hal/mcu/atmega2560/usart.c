@@ -19,11 +19,11 @@
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
-#include "mcu_define.h" // get usart baud rate
+#include "mcu_define.h" // Get the USART baud rate
 #include "tmlibc.h"
 
 // Circular buffers
-// always use a power of two for buffer size to avoid use of modulo
+// Always use a power of two for the buffer size to avoid modulo operations
 #define HAL_USART_BUFFER_SIZE 64
 
 _Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
@@ -120,7 +120,7 @@ static hal_driver_state_t hal_usartStop(void)
 	return hal_usartGetStatus();
 }
 
-// USART1 Rx Interrupt Handler (Triggered when data is received)
+// USART1 RX interrupt handler (triggered when data is received)
 ISR(USART1_RX_vect)
 {
 	uint8_t next_head = CB_NEXT(buffer_rx_head);
@@ -150,7 +150,7 @@ hal_driver_state_t hal_usartRead(uint8_t *data)
 	return DRV_STATE_RUNNING;
 }
 
-// Write a character to Tx buffer
+// Write a character to the TX buffer
 static err_codes_t usartWriteChar(uint8_t data)
 {
 	uint8_t next_head = CB_NEXT(buffer_tx_head);

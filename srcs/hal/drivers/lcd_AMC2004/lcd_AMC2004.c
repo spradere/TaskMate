@@ -111,7 +111,9 @@ static hal_driver_state_t hal_lcdStart(void)
 	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
 	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
 	{
+
 		return lcdSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
+
 	}
 	if( lcdAMC2004Clear() == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
 
@@ -256,7 +258,9 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			data->error = lcd_last_error;
 			return hal_lcdGetStatus();
 		default:
+
 			return lcdSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
+
 	}
 }
 

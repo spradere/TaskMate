@@ -35,7 +35,7 @@
 
 #if TM_LIBC_TASKMATE
 	#include <stdint.h>
-	#include "hal/public/tmlibc.h" // macro TM_STR_* hal definitions
+	#include "hal/public/tmlibc.h" // HAL definitions for the TM_STR_* macros
 
 	int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n);
 	void tm_strncpy(char *dest, tm_string_t src, uint8_t n);

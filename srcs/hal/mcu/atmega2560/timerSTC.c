@@ -83,14 +83,16 @@ static hal_driver_state_t hal_timerSTCStart(void)
 {
 	if( TM_GETBIT(timer_stc_status, DRV_BIT_DEAD) != 0 )
 	{
+
 		return timerSTCSetError(ERR_HAL_DRIVER_DEAD);
 	}
 	if( TM_GETBIT(timer_stc_status, DRV_BIT_INIT) == 0 )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
+
 	}
 
-	// start by enabling interrupt
+	// Start by enabling the interrupt
 	TM_SETBIT(TIMSK3, OCIE3A);
 
 	TM_SETBIT(timer_stc_status, DRV_BIT_START);
@@ -99,7 +101,7 @@ static hal_driver_state_t hal_timerSTCStart(void)
 
 static hal_driver_state_t hal_timerSTCStop(void)
 {
-	// stop by disabling interrupt
+	// Stop by disabling the interrupt
 	TM_CLEARBIT(TIMSK3, OCIE3A);
 
 	TM_CLEARBIT(timer_stc_status, DRV_BIT_START);
@@ -167,6 +169,8 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			data->error = timer_stc_last_error;
 			return hal_timerSTCGetStatus();
 		default:
+
 			return timerSTCSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
+
 	}
 }

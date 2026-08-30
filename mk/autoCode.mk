@@ -38,10 +38,16 @@ FILE_PARSE_TAG_DEPS = ${PATH_BUILD_TARGET}/files_to_parse.deps
 FILE_HALINIT_DEPS = ${PATH_BUILD_TARGET}/files_halinit.deps
 FILE_HALDEFINE_DEPS = ${PATH_BUILD_TARGET}/files_haldefine.deps
 FILE_ERROR_DEPS = ${PATH_BUILD_TARGET}/files_error.deps
+FILE_GPIO_SIGNALS_DEPS = ${PATH_BUILD_TARGET}/gpio_signals.deps
+
+# Check dynamic dependencies before evaluating the autoCode stamp.
+_autocode: _autocode_dependency_check .WAIT ${FILE_AUTOCODE_STAMP}
+.PHONY: _autocode
 
 # autoCode launch and required files
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
-						${FILE_PARSE_TAG_LIST} ${FILE_HALINIT_LIST} ${FILE_HALDEFINE_LIST}
+						${FILE_PARSE_TAG_LIST} ${FILE_HALINIT_LIST} ${FILE_HALDEFINE_LIST} \
+						${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS}
 
 	@printf "\n%sautoCode, related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -49,7 +55,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@rm -f ${FILE_AUTOCODE_LOG}*
 .endif
 
-	# write autoCode options
+	# Write autoCode options
 	@printf "# autoCode options\n" > "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
@@ -58,15 +64,15 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--haldefine ${FILE_HALDEFINE_LIST}" >> "${FILE_AUTOCODE_CONFIG}"	
 	@printf "%s\n" "--gpio_signals ${FILE_GPIO_SIGNALS}" >> "${FILE_AUTOCODE_CONFIG}"
 		
-	# launch autoCode
+	# Launch autoCode
 	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
 	@touch ${FILE_AUTOCODE_STAMP}
 
-	# proceed log
+	# Process log
 	@awk ${COLOURS_AWK} -v log_file="${FILE_AUTOCODE_LOG_DATED}" \
 		-f ${PATH_SCRIPTS}/autocode_log.awk "${FILE_AUTOCODE_LOG_DATED}"
 
-# Special rule for autoCode with clang, not arch specialized compiler
+# Special rule for autoCode with Clang, not the architecture-specific compiler
 CFLAGS_AUTOCODE = -I${PATH_SRCS}/
 CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
@@ -77,27 +83,22 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
-# dependency generation
-${FILE_INITRC_DEPS}: .PHONY
+# Dependency generation
+_autocode_dependency_check:
 	@${PATH_SCRIPTS}/compare_replace.sh \
-		"${FILE_INITRC_DEPS}" "${FILE_INITRC_LIST}"
+		"${FILE_INITRC_DEPS}" "${FILES_INITRC}"
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_PARSE_TAG_DEPS}" "${FILES_PARSE_TAG}"
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_HALINIT_DEPS}" "${FILES_HALINIT}"
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_HALDEFINE_DEPS}" "${FILES_HALDEFINE}"
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_ERROR_DEPS}" "${FILES_ERROR}"
+	@${PATH_SCRIPTS}/compare_replace.sh \
+		"${FILE_GPIO_SIGNALS_DEPS}" "${FILE_GPIO_SIGNALS}"
+.PHONY: _autocode_dependency_check
 
-${FILE_PARSE_TAG_DEPS}: .PHONY
-	@${PATH_SCRIPTS}/compare_replace.sh \
-		"${FILE_PARSE_TAG_DEPS}" "${FILE_PARSE_TAG_LIST}"		
-	
-${FILE_HALINIT_DEPS}: .PHONY
-	@${PATH_SCRIPTS}/compare_replace.sh \
-		"${FILE_HALINIT_DEPS}" "${FILE_HALINIT_LIST}"
-
-${FILE_HALDEFINE_DEPS}: .PHONY
-	@${PATH_SCRIPTS}/compare_replace.sh \
-		"${FILE_HALDEFINE_DEPS}" "${FILE_HALDEFINE_LIST}"
-		
-${FILE_ERROR_DEPS}: .PHONY
-	@${PATH_SCRIPTS}/compare_replace.sh \
-		"${FILE_ERROR_DEPS}" "${FILE_ERROR_LIST}"
-				
 # Files list for autoCode
 ${FILE_ERROR_LIST}: ${FILES_ERROR} ${FILE_ERROR_DEPS}
 	@printf "" > ${FILE_ERROR_LIST}
@@ -135,6 +136,6 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@rm -f "${FILE_AUTOCODE_STAMP}"
-	@${MAKE} ${FILE_AUTOCODE_STAMP}
+	@${MAKE} _autocode
 	@ls -t ${FILE_AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 .PHONY: autoCode_alone

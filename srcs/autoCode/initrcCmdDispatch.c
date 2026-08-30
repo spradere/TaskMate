@@ -41,7 +41,7 @@ static void funcRunUser(module_item_t *mod)
 }
 static void funcTypeDriver(module_item_t *mod)
 {
-	mod->type = TM_MOD_DRIVERS_ID;
+	mod->type = TM_MOD_DRIVER_ID;
 	mod->cnt_set_type++;
 }
 static void funcTypeService(module_item_t *mod)

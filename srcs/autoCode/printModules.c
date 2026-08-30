@@ -19,7 +19,7 @@ void printModules(const modules_database_t *data_base)
 	AUTOCODE_MSG_INFO("+++ modules informations +++\n");
 
 	AUTOCODE_MSG_INFO("found drivers :");
-	const module_type_t *driver = &data_base->modules_type[TM_MOD_DRIVERS_ID];
+	const module_type_t *driver = &data_base->modules_type[TM_MOD_DRIVER_ID];
 	for( int i = 0; i < driver->modules_count; i++ )
 	{
 		printf("\tdrivers[%i] \"%s\" runlevel=%i\n",

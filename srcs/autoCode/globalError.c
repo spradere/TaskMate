@@ -21,13 +21,13 @@ void globalError(const char *src_name, error_catalog_t *errors)
 {
 	AUTOCODE_MSG_INFO("open file.err <%s>", src_name);
 
-	// open files
+	// Open files
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
 	fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__);
 
-	// read form source
+	// Read from source
 	int file_src_line_number = 0;
 	int error_index = errors->error_count;
 	tokenizer_t tok;
