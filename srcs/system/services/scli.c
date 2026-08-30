@@ -20,7 +20,6 @@
 #include "hal/public/usart.h"
 #include "system/services/commands/driver.h"
 #include "system/services/commands/thread.h"
-#include "system/services/msg.h"
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"

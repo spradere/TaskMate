@@ -1,3 +1,5 @@
+TaskMate 0.29
+
 	polish makefiles and drivers structure
 	add tm_strncmp()
 	fisrt command line on sCLI

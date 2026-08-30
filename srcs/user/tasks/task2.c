@@ -14,7 +14,6 @@
 
 #include "task2.h"
 
-#include "system/services/msg.h"
 #include "system/sysCall/sc_gpio.h"
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_stdio.h"

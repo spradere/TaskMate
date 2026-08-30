@@ -108,13 +108,13 @@ void mod_threadsAlloc(void)
 
 	mod = mod_threadGetPointer(2);
 
-	hal_threadContextInit(msg, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
+	hal_threadContextInit(system, &(mod->stack_pointer), &(mod->stack[TM_MOD_THREAD_STACK_SIZE - 1]));
 	mod->software_time_counter = 0;
-	TM_STR_ROM_NEW(thread2_name, "msg");
+	TM_STR_ROM_NEW(thread2_name, "system");
 	mod->name = &thread2_name;
 	mod->status = 19;
 	mod->saved_run_level = 3;
-	mod->main = msg;
+	mod->main = system;
 
 	mod = mod_threadGetPointer(3);
 

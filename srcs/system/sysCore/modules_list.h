@@ -27,7 +27,7 @@
 
 #include "user/tasks/task1.h"
 #include "user/tasks/task2.h"
-#include "system/services/msg.h"
+#include "system/services/system.h"
 #include "system/services/scli.h"
 
 #include "hal/public/lcd.h"

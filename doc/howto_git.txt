@@ -7,8 +7,9 @@ git tag -a v0.7 -m "TaskMate 0.7 - New feature"
 git push --tags
 git push
 
-make merge ???
 git switch main
+git merge test
+git push
 git push --tags
 git switch test
 
