@@ -62,7 +62,7 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT
 .endif
 
 all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check \
-	${FILE_AUTOCODE_STAMP} _dependency \
+	_autocode _dependency \
 	${FILE_TARGET} _mcu_memory_data _cloc_data
 #help [global] Taskmate build.
 	@printf "\n%sBuild complete%s\n\n" \
@@ -71,5 +71,4 @@ all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check \
 # dependency files used to compile sources if related header or source was edited
 _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
-
 
