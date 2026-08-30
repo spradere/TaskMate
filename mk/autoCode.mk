@@ -55,7 +55,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@rm -f ${FILE_AUTOCODE_LOG}*
 .endif
 
-	# write autoCode options
+	# Write autoCode options
 	@printf "# autoCode options\n" > "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
@@ -64,15 +64,15 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--haldefine ${FILE_HALDEFINE_LIST}" >> "${FILE_AUTOCODE_CONFIG}"	
 	@printf "%s\n" "--gpio_signals ${FILE_GPIO_SIGNALS}" >> "${FILE_AUTOCODE_CONFIG}"
 		
-	# launch autoCode
+	# Launch autoCode
 	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
 	@touch ${FILE_AUTOCODE_STAMP}
 
-	# proceed log
+	# Process log
 	@awk ${COLOURS_AWK} -v log_file="${FILE_AUTOCODE_LOG_DATED}" \
 		-f ${PATH_SCRIPTS}/autocode_log.awk "${FILE_AUTOCODE_LOG_DATED}"
 
-# Special rule for autoCode with clang, not arch specialized compiler
+# Special rule for autoCode with Clang, not the architecture-specific compiler
 CFLAGS_AUTOCODE = -I${PATH_SRCS}/
 CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \

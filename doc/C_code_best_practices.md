@@ -15,7 +15,7 @@
 11. [Error messages: Informative, precise, human-readable](#11-error-messages-informative-precise-human-readable)
 12. [Refactoring mindset](#12-refactoring-mindset)
 13. [Git Commit Message Guidelines](#13-git-commit-message-guidelines)
-14. [Endnote](#14-Endnote)
+14. [Endnote](#14-endnote)
 
 ---
 
@@ -45,7 +45,7 @@ Modularity, strict API, and clean headers
 Code is read more than it is written. Prioritise understandable variable names and structure.
 
 * Code is for humans first, compilers second.
-Don't write clever code. Write code you'd understand a year from now with a hangover.
+  Don't write clever code. Write code you'd understand a year from now with a hangover.
 
 * Use meaningful names.
 `status_t file_status;` is good. `int fs;` is not.
@@ -60,7 +60,7 @@ Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
 
 ## 3. 🛠️ Maintainability: Avoid cryptic names and magic numbers
 
-Use meaningful names, constants, and enum instead of hard coded values.
+Use meaningful names, constants, and enums instead of hard-coded values.
 
 * Avoid magic numbers.
 Use `#define TIMEOUT_MS 1000` instead of `if(t > 1000)`.
@@ -84,7 +84,7 @@ file_status = STATUS_DEFAULT;   // good
 
 ## 4. 📈 Scalability and Extensibility
 
-Use data structures and algorithms
+Use data structures and algorithms.
 
 * Data-driven design beats control-flow spaghetti.
 Instead of a long if/else chain, use function pointer arrays, lookup tables, or dispatch maps.
@@ -189,7 +189,7 @@ Especially in embedded or timing-sensitive code—always say what the units are.
 * Don't: `delay = 200;`
 * Do: `delay_ms = 200; // 200 ms delay between measurements`
 
-### 8.7. Explain why not something was done
+### 8.7. Explain why something was not done
 
 Prevent future bugs by documenting why something wasn't done.
 Do:
@@ -223,7 +223,7 @@ The golden rule: If a comment just rewords the code, delete it.
 * Don't: `index++; // increment index`
 * Do: `index++; // move to next task in round-robin scheduler`
 
-### 8.11 Three comment maturity levels
+### 8.11. Three comment maturity levels
 
 1. Describe what the code does (beginner)
 2. Explain the logic's purpose (intermediate)
@@ -259,7 +259,7 @@ messageError();    // clear
 
 ## 11. ⚠️ Error messages: Informative, precise, human-readable
 
-Provide file, line, nature of the problem, actual vs. expected values. Solution.
+Provide the file, line, nature of the problem, actual vs. expected values, and a solution.
 
 * Includes source file + line of the error → Pinpoint precision
 * States clearly what went wrong → Not vague
@@ -283,7 +283,7 @@ Provide file, line, nature of the problem, actual vs. expected values. Solution.
 
 * Where the problem is
 * What went wrong
-* Actual vs expected values
+* Actual vs. expected values
 
 **Example:**
 ```
@@ -334,7 +334,7 @@ Each message should begin with a **verb prefix** followed by a short description
 
 ### Possible prefixes:
 - `add` — for new files, features, or logic
-- `remove` — for deleted code, features, or clean-up
+- `remove` — for deleted code, features, or cleanup
 - `fix` — for bug fixes or corrections
 - `change` — for modifications, refactors, or renames
 - `upgrade` / `update`

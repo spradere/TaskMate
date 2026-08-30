@@ -24,7 +24,7 @@ CFLAGS += -DARCH_avr8
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SRCS}/hal/arch/avr8/archCC.mk
 
-# compiler for arch avr8
+# Compiler for the AVR8 architecture
 CC = avr-gcc
 VAL_CC_VERSION != avr-gcc -dumpversion
 

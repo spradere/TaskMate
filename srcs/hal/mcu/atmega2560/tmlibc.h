@@ -23,19 +23,19 @@
 #include "interfaces/macros.h"
 #include "interfaces/tm_string_storage.h"
 
-// macro for in file scope string storage
+// Macro for file-scope string storage
 #define TM_STR_ROM_NEW(name, txt) \
 	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
 	static const tm_string_t (name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
-// macro for in function scope string storage
+// Macro for function-scope string storage
 #define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
 #define TM_STR_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
 
-// default storage for avr8
+// Default storage for AVR8
 #define TM_STR(string) TM_STR_ROM(string)
 
-// functions
+// Functions
 void hal_stdio_putChar(char ch);
 char hal_string_getChar(const tm_string_t *str, uint8_t index);
 

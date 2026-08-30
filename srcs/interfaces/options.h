@@ -15,7 +15,7 @@
 #ifndef INTERFACES_OPTIONS_H
 #define INTERFACES_OPTIONS_H
 
-// debug options
+// Debug options
 #define VERBOSE_LEVEL 0
 
 // libc selection

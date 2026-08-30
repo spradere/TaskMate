@@ -21,7 +21,7 @@ CFLAGS += -DBOARD_arduinoMega
 
 .include "${PATH_SRCS}/hal/mcu/atmega2560/mcu_make.mk"
 
-# board settings
+# Board settings
 VAL_CPU_FREQ = 16000000UL
 
 VAL_PROGRAMMER = avrispmkII

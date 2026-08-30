@@ -12,8 +12,8 @@
 # Build rules
 ################################################################################
 
-# Info about help system : targets begins with '_' or '$' are internal system only
-# they'll not be displayed with 'make help'
+# Help system: targets beginning with '_' or '$' are internal only
+# and are not displayed by 'make help'.
 
 .MAIN: all
 
@@ -64,11 +64,11 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT
 all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check \
 	_autocode _dependency \
 	${FILE_TARGET} _mcu_memory_data _cloc_data
-#help [global] Taskmate build.
+#help [global] TaskMate build.
 	@printf "\n%sBuild complete%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
-# dependency files used to compile sources if related header or source was edited
+# Dependency files used to compile sources when a related header or source file changes
 _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
 

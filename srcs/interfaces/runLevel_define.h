@@ -14,7 +14,7 @@
 #ifndef INTERFACES_RUNLEVEL_DEFINE_H
 #define INTERFACES_RUNLEVEL_DEFINE_H
 
-// run levels definitions
+// Run-level definitions
 #define RL_RUN_NONE 0
 #define RL_RUN_CORE 1
 #define RL_RUN_DRIVER 2

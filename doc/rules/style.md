@@ -138,7 +138,7 @@ static const hal_port_t mcu_ports[PORT_COUNT];
 
 ```c
 GPIO_PIN_MODE_OUTPUT_PP, // push-pull
-#endif // INTERFACES_GPIO_COMMONS_H
+#endif // INTERFACES_GPIO_COMMON_H
 ```
 
 ## Generated Code

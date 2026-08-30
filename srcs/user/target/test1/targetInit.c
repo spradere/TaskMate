@@ -19,7 +19,7 @@
 
 void targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
 {
-	// set default values for output
+	// Set default values for outputs
 	table[signal].pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
 	table[signal].pin.pull = GPIO_PIN_PULL_NONE;
 	table[signal].active_high = true;
@@ -45,5 +45,5 @@ void targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
 		return;
 	}
 
-	// set default values for inputs
+	// Set default values for inputs
 }

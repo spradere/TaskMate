@@ -9,7 +9,7 @@
 ################################################################################
 
 ################################################################################
-# Allowed source access to system critical headers
+# Allowed source access to system-critical headers
 ################################################################################
 
 CFLAGS_${PATH_SRCS}/system/sysCore/modules.c = \
@@ -41,7 +41,7 @@ CFLAGS_${PATH_SRCS}/system/sysCore/gpio.c = \
 	-DHAL_SYSTEM_CRITICAL_ALLOWED
 
 
-# Check #include for system critical features
+# Check includes for system-critical features
 _system_critical_check:
 	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

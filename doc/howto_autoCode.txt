@@ -1,9 +1,9 @@
-# How to add option from makefile to TaskMate via autoCode
+# How to pass an option from a Makefile to TaskMate via autoCode
 
-1. If needed, set the path and file names in mk/path_files.mk.
-2. Get and process data in mk/sources.mk.
-3. Add data to autoCode_config in mk/build.mk.
-4. Add an entry in autoCode/options.h.
-5. Add an entry in autoCode/options.c.
-6. if needed Add file to parse in mk/path_files.mk:FILES_PARSE_TAG =
-7. add tag handling in autoCode/parseTag.c
+1. If needed, set the path and file names in `mk/path_files.mk`.
+2. Get and process data in `mk/sources.mk`.
+3. Add data to `autoCode_config` in `mk/build.mk`.
+4. Add an entry in `autoCode/options.h`.
+5. Add an entry in `autoCode/options.c`.
+6. If needed, add the file to parse to `FILES_PARSE_TAG` in `mk/path_files.mk`.
+7. Add tag handling in `autoCode/parseTag.c`.

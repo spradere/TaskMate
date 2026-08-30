@@ -44,7 +44,7 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
-	# Test if USB key is mount, do if not
+	# Mount the USB key if necessary
 	@if mount | grep -q "${PATH_USBKEY}"; then \
 		printf "%sUSB key already mounted ${PATH_USBKEY}%s\n" \
 			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
@@ -64,7 +64,7 @@ backup:
 		--exclude="${PATH_LOGS}" \
 		"${PATH_USBKEY}${VAL_TM_BACKUP_DIR}/" > "${FILE_RSYNC_LOG}"
 
-	# umount
+	# Unmount
 	@printf "%sUmount ${PATH_USBKEY}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@umount ${PATH_USBKEY}

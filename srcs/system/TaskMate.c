@@ -8,7 +8,7 @@
 
 /**
  * @file TaskMate.c
- * @brief task mate implementation.
+ * @brief TaskMate implementation.
  *
  */
 
@@ -29,7 +29,7 @@
 
 TM_STORE_FILE_NAME(file_name);
 
-// display hardware target informations
+// Display hardware target information
 #if VERBOSE_LEVEL > 0
 	#pragma message "TM_VERSION  = " TM_VERSION
 	#pragma message "BUILD  = " TM_STRINGIFY(BUILD_CNT)
@@ -37,17 +37,17 @@ TM_STORE_FILE_NAME(file_name);
 
 int main(void)
 {
-	// system start up
+	// System startup
 	boot();
 
 	tm_syslog(
 		TM_STR("[info] %s v%i.%i build : %i\n"), &file_name, TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
 	/* *************************************************************************************************
-	 * test / experimental zone, before scheduler run
+	 * Test and experimental zone before the scheduler starts
 	 * ************************************************************************************************/
 
-	// RTC external module test
+	// External RTC module test
 	tm_syslog(TM_STR("[info] hal RTC init\n"));
 	hal_rtc_time_t t;
 	t.hours = 18;
@@ -113,10 +113,10 @@ int main(void)
 	}*/
 
 	/* *************************************************************************************************
-	 * end of test / experimental zone
+	 * End of test and experimental zone
 	 * ************************************************************************************************/
 
-	// start scheduler
+	// Start scheduler
 	tm_syslog(TM_STR("[info] start round-robin scheduler\n"));
 
 	tm_softwareTimeCounterInit();

@@ -17,7 +17,7 @@
 
 #include <avr/io.h>
 
-#include "hal/arch/avr8/arch_define.h" // get stack_word_t
+#include "hal/arch/avr8/arch_define.h" // Get stack_word_t
 
 #define AVR8_CONTEXT_SAVE  \
 	"push r0 \n\t"         \

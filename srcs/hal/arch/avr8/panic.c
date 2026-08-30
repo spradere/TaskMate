@@ -20,7 +20,7 @@
 
 void panic(tm_string_t msg)
 {
-	hal_clearGlobalInterupt();
+	hal_clearGlobalInterrupt();
 	hal_usartSendTXBuffer();
 	hal_usartWriteString(TM_STR("\nSYSTEM PANIC : "));
 	hal_usartSendTXBuffer();

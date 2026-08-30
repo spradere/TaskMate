@@ -22,12 +22,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-// get TaskMate define
+// Get TaskMate definitions
 #define TM_SYSTEM_CRITICAL_ALLOWED
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
 
-// message macro
+// Message macro
 #define AUTOCODE_MSG_ERROR(format, ...)                                                          \
 	do {                                                                                         \
 		fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__); \
@@ -37,7 +37,7 @@
 #define AUTOCODE_MSG_INFO(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
 
-// modules structures
+// Module structures
 typedef struct
 {
 	char name[TM_MOD_NAME_SIZE_MAX];

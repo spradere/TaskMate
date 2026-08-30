@@ -16,12 +16,12 @@
 
 #include <stdint.h>
 
-#include "hal/public/define.h" // get hal_stack_word_t from selected arch
+#include "hal/public/define.h" // Get hal_stack_word_t from the selected architecture
 #include "interfaces/modules_define.h"
 #include "interfaces/tm_string_storage.h"
 
 /*
- * Modules structures
+ * Module structures
  */
 
 #define TM_MOD_CANARY 0xa5a5
@@ -44,7 +44,7 @@ typedef struct
 
 } mod_thread_item_t;
 
-// driver
+// Driver
 typedef struct
 {
 	const tm_string_t *name;
@@ -54,7 +54,7 @@ typedef struct
 } mod_driver_item_t;
 
 /*
- * Modules functions
+ * Module functions
  */
 
 void mod_threadSetCurrent(uint8_t n);
