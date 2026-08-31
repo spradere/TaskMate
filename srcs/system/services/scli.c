@@ -17,9 +17,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "hal/public/usart.h"
 #include "system/services/commands/driver.h"
 #include "system/services/commands/thread.h"
+#include "system/sysCall/error.h"
 #include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
@@ -38,7 +38,7 @@ typedef struct
 static char scli_line[SCLI_LINE_SIZE];
 static uint8_t scli_line_length;
 
-static void scliRead(void);
+static err_codes_t scliRead(void);
 static void scliLineProcess(void);
 static uint8_t scliTokenize(char *line, char *argv[]);
 static bool scliCommandDispatch(uint8_t argc, char *argv[]);
@@ -53,28 +53,38 @@ void scli(void)
 {
 	while( 1 )
 	{
-		scliRead();
+		err_codes_t error = scliRead();
+		if( error != ERR_NO_ERROR )
+		{
+			const tm_string_t *message = err_getMessage((uint8_t)error);
+			if( message != 0 ) { tm_syslog(TM_STR("[scli] error: %s\n"), message); }
+		}
 		sc_threadSetSTC(50);
 		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
 	}
 }
 
-static void scliRead(void)
+static err_codes_t scliRead(void)
 {
-	uint8_t data;
+	uint8_t data = 0;
+	uint8_t i = 0;
+	err_codes_t error = ERR_NO_ERROR;
 
-	if( hal_usartTestBufferRx() == DRV_STATE_RUNNING )
+	while( i < (sizeof(scli_line) - 1) )
 	{
-		uint8_t i = 0;
+		error = sc_usartRead(&data);
+		if( error != ERR_NO_ERROR ) { break; }
+		scli_line[i++] = (char)data;
+	}
 
-		while( (hal_usartRead(&data) == DRV_STATE_RUNNING) && (i < (sizeof(scli_line) - 1)) )
-		{
-			scli_line[i++] = (char)data;
-		}
+	if( i > 0 )
+	{
 		scli_line[i] = 0;
-
 		scliLineProcess();
 	}
+
+	if( error == ERR_HAL_USART_RX_BUFFER_EMPTY ) { return ERR_NO_ERROR; }
+	return error;
 }
 
 static void scliLineProcess(void)

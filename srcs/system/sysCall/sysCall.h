@@ -18,6 +18,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "interfaces/error_catalog.h"
 #include "interfaces/tm_string_storage.h"
 
 void sc_threadSetSTC(uint16_t count);
@@ -34,6 +35,8 @@ bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 bool sc_driverInit(const char *name);
 bool sc_driverStart(const char *name);
 bool sc_driverStop(const char *name);
+
+err_codes_t sc_usartRead(uint8_t *data);
 
 void sc_coopYield(void);
 
