@@ -36,12 +36,9 @@ GPIO mapping, and starts generated drivers by their configured run level.
 - Static generated driver registration and callback wiring keep firmware allocation deterministic.
 - The USART uses fixed-size power-of-two buffers, and thread stacks include canaries checked during
   scheduling.
-- Services no longer include HAL headers or call HAL operations directly; SCLI USART RX is mediated
-  by `sc_usartRead()`.
 
 ### Remaining weaknesses
-- Experimental calls in `TaskMate.c` still bypass the intended normal application path. The former
-  service-to-HAL bridge has been removed and must not be reintroduced.
+- Experimental calls in `TaskMate.c` still bypass the intended normal application path. 
 - `hal/public` exposes concrete implementation headers rather than stable neutral contracts;
   capability requirements remain encoded as preprocessor branches and naming conventions.
 - Architecture, MCU, and board startup hooks are empty. Boot special-cases run-level-zero USART and

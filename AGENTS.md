@@ -35,7 +35,7 @@ stack from top to bottom as increasing hardware specificity:
 - `srcs/system/services/` contains reusable system threads above the kernel. The
   current system and SCLI services use syscalls for thread cooperation. SCLI
   reaches USART RX only through `sc_usartRead()`; no service includes or calls
-  HAL directly. The former lateral bridge must not be reintroduced.
+  HAL directly.
 - `srcs/system/sysCall/` is the C API boundary for task-visible kernel and
   logical GPIO operations. It delegates state and policy to `sysCore` and
   hardware operations through the HAL. It provides no privilege or memory
@@ -62,8 +62,7 @@ stack from top to bottom as increasing hardware specificity:
 
 The normal application paths are therefore tasks -> services -> `sysCall` and
 tasks -> `sysCall`; syscalls then delegate to `sysCore` or `HAL Public` before
-reaching the target implementation and hardware. The former direct
-service-to-HAL bridge has been removed. By contrast, `interfaces` and `tm_libc`
+reaching the target implementation and hardware. By contrast, `interfaces` and `tm_libc`
 are permanent transversal layers by architectural choice; their cross-cutting
 role does not relax their documented APIs or build-enforced access rules.
 

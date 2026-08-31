@@ -33,7 +33,6 @@ share one short AVR atomic section so the RX ISR cannot replace the error betwee
   update run-level state in AVR atomic sections; the scheduler now skips stopped threads.
 - Driver count, information, and lifecycle calls use one generated control callback per driver
   instead of exposing private lifecycle functions to services.
-- SCLI consumes USART RX and its errors through `sc_usartRead()` instead of including the HAL driver.
 - Upper-layer GPIO code uses logical signal types and does not receive physical pin structures.
 - The cooperative-yield mechanism reuses the existing scheduler interrupt and adds no dynamic state.
 

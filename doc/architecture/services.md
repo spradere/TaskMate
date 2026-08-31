@@ -2,8 +2,7 @@
 
 ## Historical developments
 Services were introduced after early core scheduling work to provide reusable system-level threads
-(initially a message server and serial CLI) without mixing application code and kernel internals. Over
-time, services became autoCode-managed modules with run-level metadata and generated allocation. The
+(initially a message server and serial CLI) without mixing application code and kernel internals. The
 message service was later removed.
 
 After v0.28, services moved into `srcs/system/services` as part of the explicit system/user split. Their
@@ -20,7 +19,7 @@ record and stack:
 - `scli` reads USART RX only through `sc_usartRead()`, assembles at most 63 bytes in a fixed local
   buffer, tokenizes the chunk, and dispatches the `driver` and `thread` commands.
 
-The system loop waits for 100 software ticks and SCLI waits for 50; both call `sc_coopYield()` while
+The system and SCLI both call `sc_coopYield()` while
 waiting. Resources are fixed at compile time, with no heap allocation or service registry beyond the
 generated module database.
 
