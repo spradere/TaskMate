@@ -16,6 +16,7 @@
 
 #include "hal/public/atomic.h"
 #include "hal/public/timerSched.h"
+#include "hal/public/usart.h"
 #include "interfaces/macros.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
@@ -130,6 +131,23 @@ bool sc_driverInit(const char *name) { return sc_driverControl(name, DRV_CTRL_IN
 bool sc_driverStart(const char *name) { return sc_driverControl(name, DRV_CTRL_START); }
 
 bool sc_driverStop(const char *name) { return sc_driverControl(name, DRV_CTRL_STOP); }
+
+err_codes_t sc_usartRead(uint8_t *data)
+{
+	if( data == 0 ) { return ERR_NULL_POINTER; }
+
+	/* Keep the failed operation and its error snapshot indivisible from the RX ISR. */
+	hal_atomic_state_t state = hal_atomicStart();
+	if( hal_usartRead(data) == DRV_STATE_RUNNING )
+	{
+		hal_atomicEnd(state);
+		return ERR_NO_ERROR;
+	}
+	hal_driver_control_data_t control_data;
+	hal_usartControl(DRV_CTRL_GETLASTERROR, &control_data);
+	hal_atomicEnd(state);
+	return control_data.error;
+}
 
 void sc_coopYield(void)
 {
