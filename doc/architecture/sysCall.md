@@ -6,13 +6,14 @@ As TaskMate layered architecture matured, `sysCall` became the mediation layer b
 After v0.28, GPIO calls were kept in the dedicated `sc_gpio` façade while the general syscall file was
 adapted to the separated sysCore/HAL tree. In August 2026, an explicit cooperative-yield path was added:
 a thread can mark itself yielded and request an early scheduler-timer interrupt instead of waiting only
-for the next periodic preemption.
+for the next periodic preemption. USART RX was subsequently moved behind `sc_usartRead()`, removing the
+last direct HAL access from the service sources.
 
 ## Current implementation
 The syscall layer currently has three small API groups:
 
 - `sysCall.c` wraps the current thread's 16-bit software counter in an AVR atomic section, implements
-  cooperative yield, and stores one byte of global status flags;
+  cooperative yield, exposes thread and driver lifecycle operations, and mediates USART RX;
 - `sc_gpio.c` delegates logical set/get/toggle operations to the sysCore GPIO table;
 - `error.c` owns the generated error catalog and provides message lookup.
 
@@ -21,6 +22,10 @@ near its compare point, restores the interrupt state, and waits until the round-
 the yielded bit when that thread is selected again. The layer does not perform privilege switching or
 memory isolation; it is a C API and architectural boundary.
 
+`sc_usartRead()` validates its output pointer and translates a successful HAL read to `ERR_NO_ERROR`.
+When the driver rejects the read, the syscall returns its exact last error. The read and error snapshot
+share one short AVR atomic section so the RX ISR cannot replace the error between those operations.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Thread-counter access is protected against the timer ISR updating the same 16-bit state on AVR8.
@@ -28,13 +33,16 @@ memory isolation; it is a C API and architectural boundary.
   update run-level state in AVR atomic sections; the scheduler now skips stopped threads.
 - Driver count, information, and lifecycle calls use one generated control callback per driver
   instead of exposing private lifecycle functions to services.
+- SCLI consumes USART RX and its errors through `sc_usartRead()` instead of including the HAL driver.
 - Upper-layer GPIO code uses logical signal types and does not receive physical pin structures.
 - The cooperative-yield mechanism reuses the existing scheduler interrupt and adds no dynamic state.
 
 ### Remaining weaknesses
-- The temporary service HAL bridge and top-level experimental HAL calls still leave the syscall
-  boundary incomplete. The transversal `tm_libc` dependency is intentional and is not part of that
-  bridge.
+- The service HAL bridge is removed, but the top-level experimental HAL calls in `TaskMate.c` still
+  bypass the normal application path. The transversal `tm_libc` dependency is intentional and is not
+  part of the former bridge.
+- The build-time header policy does not yet forbid every HAL public header from service sources, so
+  the absence of a direct bridge currently also relies on source-level review.
 - `sc_threadStart()` accepts unvalidated run levels and, when no saved level exists, records the
   supplied level without applying it to status. Repeated `sc_threadStop()` overwrites the saved
   level with `RL_RUN_NONE`.

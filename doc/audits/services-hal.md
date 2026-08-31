@@ -14,7 +14,23 @@ Il distingue :
 L'analyse couvre les deux services enregistrés par autoCode, `msg` et `scli`, ainsi que leurs
 commandes. Aucun chemin inverse du HAL vers les services n'a été trouvé.
 
-## Conclusion
+## Mise à jour du 31 août 2026
+
+Ce rapport reste un instantané historique de la révision `365a074`. Dans le code courant :
+
+- `services_init.rc` enregistre `system` et `scli`; le service `msg` et ses accès LCD/USART ont été
+  retirés ;
+- le commit `5109e98` remplace les appels USART directs de SCLI par `sc_usartRead()` ;
+- aucun fichier C ou en-tête de `srcs/system/services/` n'inclut un en-tête HAL ou n'appelle une
+  fonction `hal_*` ;
+- le chemin RX courant est `scliRead -> sc_usartRead -> hal_usartRead`, avec propagation des erreurs
+  du driver par le syscall.
+
+Le pont direct `services -> HAL` décrit ci-dessous n'est donc plus utilisé. Les chemins transversaux
+de `tm_libc` vers son backend matériel existent toujours par conception et ne constituent pas un
+accès HAL écrit directement dans un service.
+
+## Conclusion de l'audit historique
 
 Le code contient quatre chemins d'exécution directs `services -> HAL`, représentant huit sites
 d'appel HAL dans deux unités de compilation :
@@ -40,7 +56,7 @@ implémentations C de services dépendent transitivement du HAL par `tm_string.h
 ### `msg -> LCD`
 
 `msg.c` inclut directement la façade publique LCD
-([msg.c](../../srcs/system/services/msg.c#L22)). Dans la branche `MSG_TO_LCD`, `msgProcess()`
+([msg.c](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/msg.c#L22)). Dans la branche `MSG_TO_LCD`, `msgProcess()`
 appelle successivement :
 
 ```text
@@ -50,7 +66,7 @@ msgProcess
 ```
 
 Les appels se trouvent dans
-[`msgProcess()`](../../srcs/system/services/msg.c#L106), aux lignes 117 et 126.
+[`msgProcess()`](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/msg.c#L106), aux lignes 117 et 126.
 
 La façade sélectionne concrètement le pilote AMC2004 uniquement pour `HWT_test1`
 ([lcd.h](../../srcs/hal/public/lcd.h#L18)). Le service ne peut donc pas être compilé tel quel pour
@@ -59,7 +75,7 @@ une cible sans ce LCD.
 ### `msg -> USART`
 
 `msg.c` inclut aussi directement la façade USART
-([msg.c](../../srcs/system/services/msg.c#L23)). Deux branches atteignent le pilote :
+([msg.c](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/msg.c#L23)). Deux branches atteignent le pilote :
 
 ```text
 MSG_TO_USART
@@ -72,7 +88,7 @@ destination inconnue
 ```
 
 Les appels sont aux lignes 131-132 et 140-141 de
-[`msgProcess()`](../../srcs/system/services/msg.c#L106).
+[`msgProcess()`](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/msg.c#L106).
 
 La façade USART sélectionne directement l'implémentation `atmega2560`
 ([usart.h](../../srcs/hal/public/usart.h#L18)). Cette dépendance empêche de réutiliser `msg` sur un
@@ -81,7 +97,7 @@ autre MCU sans fournir la même capacité ou modifier le service.
 ### `scli -> USART RX`
 
 `scli.c` inclut directement `hal/public/usart.h`
-([scli.c](../../srcs/system/services/scli.c#L20)). Le chemin de lecture est :
+([scli.c](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/scli.c#L20)). Le chemin de lecture est :
 
 ```text
 scliRead
@@ -89,7 +105,7 @@ scliRead
   -> hal_usartRead
 ```
 
-Il se trouve dans [`scliRead()`](../../srcs/system/services/scli.c#L63), aux lignes 67 et 71. Le
+Il se trouve dans [`scliRead()`](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/scli.c#L63), aux lignes 67 et 71. Le
 service dépend ainsi du buffer et des codes d'erreur propres au pilote USART actuel.
 
 ## Défauts observés sur ces chemins
@@ -111,7 +127,7 @@ service.
 ### P1 - Index de ligne LCD non validé
 
 Le premier octet du message devient directement l'argument `row` de `hal_lcdSetCursor()`
-([msg.c](../../srcs/system/services/msg.c#L117)). Le pilote utilise ensuite cet argument pour
+([msg.c](https://github.com/spradere/TaskMate/blob/365a074ce5ed1c2029e7e6a44adcfaa0540ca1ca/srcs/system/services/msg.c#L117)). Le pilote utilise ensuite cet argument pour
 indexer un tableau de quatre offsets sans vérifier sa borne
 ([lcd_AMC2004.c](../../srcs/hal/drivers/lcd_AMC2004/lcd_AMC2004.c#L111)).
 
@@ -191,6 +207,10 @@ Les gardes de compilation protègent quelques interfaces système critiques, mai
 pas une politique générale interdisant les inclusions HAL depuis `srcs/system/services/`.
 
 ## Recommandations
+
+État actuel : la médiation syscall de la lecture série et le retrait des inclusions HAL de `msg` et
+`scli` sont réalisés. Les recommandations restantes sont conservées comme historique ou travaux de
+durcissement, notamment l'interdiction explicite des en-têtes HAL dans la politique de frontières.
 
 1. Introduire des contrats syscall pour la lecture série et les sorties de messages, avec des codes
    de résultat explicites.

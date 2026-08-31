@@ -14,6 +14,13 @@ Il s'agit d'une analyse statique sans modification du code et sans compilation d
 lectures du même diagnostic sont proposées : une destinée à un développeur junior et une destinée
 à un développeur senior.
 
+### Mise à jour du 31 août 2026
+
+Les constats concernant les accès directs de `msg` et `scli` au HAL sont historiques. Le service
+`msg` a été retiré et SCLI lit désormais l'USART par `sc_usartRead()`. Une recherche dans les sources
+et en-têtes actuels de `srcs/system/services/` ne trouve plus d'inclusion HAL ni d'appel `hal_*`.
+Les autres constats de cet audit restent rattachés à la révision `3035005`.
+
 ## Conclusion générale
 
 L'arborescence constitue une base saine pour un RTOS embarqué expérimental. Elle rend visibles les
@@ -85,10 +92,10 @@ Cette composition est visible dans [`hwt.mk`](../../srcs/user/target/test1/hwt.m
 
 ### Point de vigilance
 
-Le nom du dossier indique la responsabilité souhaitée, mais ne garantit pas que toutes les
-dépendances actuelles respectent cette responsabilité. Par exemple, le service de messages inclut
-directement les façades LCD et USART
-([msg.c](../../srcs/system/services/msg.c#L22)).
+Le nom du dossier indique la responsabilité souhaitée, mais ne garantit pas à lui seul que toutes les
+dépendances respectent cette responsabilité. À la révision auditée, le service de messages incluait
+directement les façades LCD et USART. Ce fichier a depuis été retiré et ce chemin direct n'existe plus
+dans les services actuels.
 
 La règle à suivre pour un nouveau code reste :
 
@@ -131,9 +138,9 @@ HAL ou pilotée par le build.
 
 ### Les dépendances réelles traversent encore les couches
 
-Plusieurs relations contredisent la topologie souhaitée :
+À la révision auditée, plusieurs relations contredisaient la topologie souhaitée :
 
-- `msg` et `scli` accèdent directement au HAL LCD/USART ;
+- `msg` et `scli` accédaient directement au HAL LCD/USART ; ce point est maintenant corrigé ;
 - les drivers LCD et RTC incluent le contrôleur I2C concret de l'ATmega2560, par exemple
   [`lcd_AMC2004.c`](../../srcs/hal/drivers/lcd_AMC2004/lcd_AMC2004.c#L19) ;
 - `tm_libc` dépend à la fois du HAL et de `sysCall`
@@ -183,7 +190,8 @@ autre MCU. Cette cible ferait apparaître rapidement :
 
 ### Priorités recommandées
 
-1. Supprimer les dépendances directes `services -> HAL` et `drivers -> MCU concret`.
+1. Maintenir l'absence de dépendance directe `services -> HAL` et supprimer les dépendances
+   `drivers -> MCU concret` restantes.
 2. Faire de `hal/public` une couche de contrats plutôt qu'un ensemble de routeurs vers les headers
    concrets.
 3. Clarifier la position architecturale de `tm_libc` et son rapport au HAL et à `sysCall`.
