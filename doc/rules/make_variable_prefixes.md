@@ -32,7 +32,7 @@ When adding new variables:
    - `PATH_*` variables are declared in `Makefile` and `mk/path_files.mk` and reused everywhere.
 2. **Treat `VAL_*` as source of truth** for dynamic build metadata and hardware settings.
    - Example: `VAL_TM_VERSION` and `VAL_BUILD_CNT` are injected into compiler flags.
-3. **Put optional behavior behind `OPT_*`**, and validate accepted values.
+3. **Put optional behaviour behind `OPT_*`**, and validate accepted values.
    - This pattern is used in `mk/options.mk`.
 4. **Use `FILES_*` for generated lists** (sources, headers, deps) and for target prerequisites.
    - This keeps rules concise and avoids path duplication.

@@ -91,11 +91,11 @@ Using a dedicated prefix avoids ambiguity:
 
 ### ● `rl_` — Run levels
 
-**System lifecycle management**
+**System life cycle management**
 
 - Small and well-defined domain
 - Strong conceptual meaning
-- Explicit lifecycle logic
+- Explicit life cycle logic
 
 👉 A minimal prefix for a **fundamental OS primitive**.
 

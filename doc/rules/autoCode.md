@@ -37,7 +37,7 @@ for the target architecture and how they should be initialised.
 | Type          | Typical Path                          | Description                              |
 |-------------- |----------------------------------------|------------------------------------------|
 | configuration | `build/autoCode_config`				| hardware target, options, files path |
-| global errors	| `build/errors_all.err`				| Global error catalog		|
+| global errors	| `build/errors_all.err`				| Global error catalogue		|
 | Drivers       | `hal/arch/<arch_name>/drivers_init.rc` | Hardware-dependent drivers |
 | 				| `hal/mcu/<mcu_name>/drivers_init.rc` | |
 | 				| `hal/board/<board_name>/drivers_init.rc` | |
@@ -55,8 +55,8 @@ and determines which folder under `hal/` is parsed.
 
 | File                        | Role                                                                 |
 |------------------------------|----------------------------------------------------------------------|
-| `interfaces/error_catalog.h`    					| Global error catalog header    |
-| `sysCall/error.c`      					| Global error catalog data    |
+| `interfaces/error_catalog.h`    					| Global error catalogue header    |
+| `sysCall/error.c`      					| Global error catalogue data    |
 |								 |															|
 | `sysCore/runLevel.h`      					| run level header    |
 | `sysCore/runLevel.c`      					| run level data    |

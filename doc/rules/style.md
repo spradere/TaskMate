@@ -123,7 +123,7 @@ static const hal_port_t mcu_ports[PORT_COUNT];
 
 ## Comments
 
-- Comments should explain intent, constraints, hardware behavior, timing, or
+- Comments should explain intent, constraints, hardware behaviour, timing, or
   non-obvious ordering.
 - Do not repeat what the code already states.
 - Use short section comments for groups of declarations when it improves scanning:
