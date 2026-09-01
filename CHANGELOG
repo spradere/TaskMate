@@ -1,0 +1,170 @@
+	autoCode code upgrade in C and makefiles, error system related
+
+TaskMate 0.29
+
+	polish makefiles and drivers structure
+	add tm_strncmp()
+	first command line on sCLI
+	add drivers status and runtime control
+	move data from modules DB to drivers, implement hal_<driver>Control()
+	new implementation for cooperative hand yield
+	add bit manipulation macros, automatic size fit (8-64 bits) and variadic
+	context switch in ASM, implements avr-gcc ABI
+	upgrade includes guards with parent directory and #endif closing comment 
+	move GPIO wiring to user/target
+	add driver directory to HAL
+	remove hal_ prefix and _impl suffix for HAL sources files
+	code base separation for system/hal/user
+
+TaskMate 0.28
+
+	refactor autoCode option and parseTag function dispatcher
+	refactor build system and autoCode to remove fixed arch/mcu/board structure
+	refactor makefiles variables name, add prefix_
+	use awk scripts for cloc and memory usage
+	refactor autoCode use only parseTag() and delete writeHeader()
+	clean up user/committer name and email
+	change project license for BSD-2-Clause
+
+TaskMate 0.27
+
+	remove auto_hal_user.h and auto_hal_system.h, move headers to hal/public
+	change stack type uintptr_t -> hal_stack_world_t
+	fix context switch after adding callback
+	fix layer leaks, move code in layers sysCore sysCall hal
+	refactor hal/hal_timerScheduler sysCore/tm_scheduler move code in right layer + implement callback
+	gpio refactor better separation logical signal / physical pin
+	build system refactor for minor issues
+
+TaskMate 0.26
+
+	move const string to ROM
+	fix i2c + external rtc
+	add system log + tm_vsnprintf()
+	hal I2C refactor, address mapping
+	update doc due to major refactor
+
+TaskMate 0.25
+
+	add option parser to autoCode
+	spellcheck all project, including comments in C code
+	add prefix to all project tm_ sc_ gpio_ err_ mod_ rl_
+	change mod_t and mod_d -> mod, mod_t is confusing with typedef
+	gather code about modules in modules.h
+	move autoCode sources from utility/autoCode_src -> src/autoCode
+	rename RTC -> STC SoftwareTimeCounter
+	refactor hal headers .h automatic find sources files, sort all headers with clang-format
+	refactor hal_usart with macro for circular buffer handling
+	upgrade message server
+	refactor run level
+	move target info to sysCall
+	add automated help target with help text
+	refactor colours in Makefile
+
+TaskMate 0.24
+
+	refactor all .h
+	add warnings to clang / avr-gcc and fix code
+	refactor autoCode write in tmp file
+	refactor autoCode file_t struct for file name/stream/error handle
+	add target name in TaskMate
+	refactor autoCode variables name
+	refactor autoCode message macro info/error with varg
+
+TaskMate 0.23
+
+	add global error system
+
+TaskMate 0.22
+
+	hal end
+	sysCall/gpio and hal/gpio
+
+TaskMate 0.21
+
+	change versioning scheme
+	change Makefile for system critical include guard
+	remove all avr code from sysCore -> hal
+	modify Makefile and autoCode for arch/mcu/board
+	add tree structure for arch/mcu/board
+	refactor autoCode -> autoCode_2
+	update documentation
+	add HAL directories and files
+	refactoring Makefile -> split + add arch selection
+	refactoring README
+
+TaskMate 0.20
+
+	add memory slab allocation (amd64)
+	add strings manipulations
+	add message server
+	add cooperative yieldHand();  function
+	add run level
+	refactoring autoCode for init.rc files
+	refactoring TaskMate for modules
+
+TaskMate 0.11
+
+	autoCode style refactoring : variables name, comments, messages
+	autoCode read flags in list file to set system flags
+	autoCode.c spliced in many files
+	task formatted to a generic layout
+	Makefile update
+	new initSys.c for all system initialisation
+	TaskMate_tag_expand -> utility/autoCode
+
+TaskMate 0.10_test
+
+	Makefile update
+	new folders doc/log/src/build
+
+TaskMate 0.10
+
+	base of system wide error handling
+
+TaskMate 0.9
+
+	serial command line interface base
+	usart driver
+	lcd system service
+	i2c driver
+
+TaskMate 0.8
+
+	Makefile even big improvements
+	license + documentation
+
+TaskMate 0.7
+
+	Doxygen documentation
+	expand.c program helper to automatically expand task/driver #include/alloc/init in TaskMate.c
+	driver formatted to generic layout (init start stop lock) -> automation
+
+TaskMate 0.6
+
+	git / codeberg use
+	more consistent names
+	major code re-organisation with sub-folder
+
+TaskMate 0.5
+
+	test USART communication; must use another USART to avoid interfering with the USB bootloader / system programmer
+
+TaskMate 0.4
+
+	big file split
+	code cosmetics
+	real time counter
+
+TaskMate 0.3
+
+	main header split (private/public)
+	more consistent names
+	major code cosmetics
+
+TaskMate 0.2
+
+	just one src file TaskMate.c
+	first code written for base system
+
+TaskMate 0.1
