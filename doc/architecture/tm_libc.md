@@ -1,7 +1,7 @@
 # 📚 Architecture Note — tm_libc
 
 ## Historical developments
-`tm_libc` emerged to avoid full libc dependency on constrained targets and to control code size/behavior. Over revisions, it gained formatted output support (`tm_snprintf`, `tm_vsnprintf`) and system logging helpers integrated with target-specific output backends.
+`tm_libc` emerged to avoid full libc dependency on constrained targets and to control code size/behaviour. Over revisions, it gained formatted output support (`tm_snprintf`, `tm_vsnprintf`) and system logging helpers integrated with target-specific output backends.
 
 After v0.28, `tm_libc` moved into the separated source tree and its include paths, Doxygen headers, and
 identifier names were normalised. Formatter fixes accompanied stricter compiler warnings. In August
@@ -29,7 +29,7 @@ implementation is intentionally much smaller than a conforming C stdio/string li
 - `tm_strncmp()` compares RAM/ROM descriptors without temporary copies, and `tm_strncpy()` handles
   null text, zero capacity, bounded copy, and termination when capacity is available.
 - The supported formatting subset and its temporary storage are fixed; there is no heap allocation.
-- Invalid padding exits through the common cleanup path instead of leaving the formatter lock set.
+- Invalid padding exits through the common clean-up path instead of leaving the formatter lock set.
 - The output backend is selected through a HAL public entry point rather than AVR register access in
   the formatter itself.
 
@@ -42,5 +42,5 @@ implementation is intentionally much smaller than a conforming C stdio/string li
   lacks signed values, wider types, precision, multi-digit width, and bounded format/string indexes.
 - The `TM_LIBC_CSTD` branch does not provide a complete compatible surface, notably for
   descriptor-based string calls and `tm_syslog`; only the TaskMate branch is exercised by the build.
-- Logging has no levels, sink policy, delivery/backpressure result, or bounded-time guarantee, and
+- Logging has no levels, sink policy, delivery/back pressure result, or bounded-time guarantee, and
   its current HAL output may synchronously flush USART data.

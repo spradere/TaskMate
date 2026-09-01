@@ -1,8 +1,8 @@
 # TaskMate — agent guide
 
-TaskMate is an experimental, low-level C RTOS for microcontrollers. The current
+TaskMate is an experimental, low-level C RTOS for microcontroller. The current
 target is `avr8 / atmega2560 / Arduino Mega`; preserve portability, deterministic
-behavior, readability, and explicit architectural boundaries.
+behaviour, readability, and explicit architectural boundaries.
 
 Before a substantial change, read the relevant documents in `doc/architecture/`
 and `doc/rules/`, especially `style.md`, `interfaces.md`,
@@ -41,7 +41,7 @@ stack from top to bottom as increasing hardware specificity:
   hardware operations through the HAL. It provides no privilege or memory
   isolation.
 - `srcs/system/sysCore/` owns boot, the static module/thread database, run-level
-  lifecycle data, logical GPIO state, software time counters, and round-robin
+  life cycle data, logical GPIO state, software time counters, and round-robin
   scheduling policy. Architecture-specific context switching, interrupt, and
   timer mechanisms remain in HAL.
 - `srcs/hal/public/` is the target-selecting entry point to hardware

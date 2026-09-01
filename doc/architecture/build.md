@@ -21,7 +21,7 @@ flags.
 The `all` target runs the generated `.gitignore` rule, the architecture-boundary check, target-scoped
 autoCode generation, dependency aggregation, AVR compilation/linking, memory-usage extraction, and
 line counting. Objects, dependency files, maps, firmware output, autoCode configuration, and stamps live
-under `build/`, with firmware artifacts separated by the selected hardware stack. Compile-time guards
+under `build/`, with firmware artefacts separated by the selected hardware stack. Compile-time guards
 protect critical headers, while `scripts/header_allow.awk` scans the source tree against
 `conf/header_allow.conf` before compilation. The complete hardware stack is also checked against
 `conf/hardware-tagets.conf` before compilation.

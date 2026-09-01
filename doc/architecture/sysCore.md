@@ -1,7 +1,7 @@
 # 🧠 Architecture Note — sysCore
 
 ## Historical developments
-`sysCore` grew from a single-file prototype into the kernel heart: module database, run-level structures, scheduler, and software time counters. A major refactor moved MCU-specific code out of core into HAL, while keeping core ownership of policy (thread switching, module lifecycle metadata).
+`sysCore` grew from a single-file prototype into the kernel heart: module database, run-level structures, scheduler, and software time counters. A major refactor moved MCU-specific code out of core into HAL, while keeping core ownership of policy (thread switching, module life cycle metadata).
 
 After v0.28, `TaskMate.c` moved above sysCore and the repository gained explicit system, user, HAL, and
 interface boundaries. Thread/module pointers and include paths were corrected during that transition.
@@ -25,7 +25,7 @@ generated but currently private run-level table also live in sysCore.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Thread control blocks, stacks, driver records, and lifecycle tables are statically allocated with
+- Thread control blocks, stacks, driver records, and life cycle tables are statically allocated with
   no runtime heap use.
 - Context-switch mechanism is delegated to HAL/AVR code while selection policy remains in sysCore.
 - The scheduler now selects only threads with a non-zero run level, clears cooperative-yield state
@@ -40,7 +40,7 @@ generated but currently private run-level table also live in sysCore.
 - Module pointer and current-thread getters/setters do not validate indexes. `thread_current` is
   shared with the scheduler ISR but is neither volatile nor governed by a documented access
   contract.
-- Boot special-cases USART, ignores every lifecycle result, logs success unconditionally, and cannot
+- Boot special-cases USART, ignores every life cycle result, logs success unconditionally, and cannot
   unwind a partial startup. Scheduler and software-counter timer setup also ignore callback/control
   failures.
 - Stack canaries detect only boundary corruption at a context switch; there is no stack high-water

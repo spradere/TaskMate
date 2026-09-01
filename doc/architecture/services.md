@@ -30,9 +30,9 @@ generated module database.
 - The cooperative wait path allows another thread to run instead of intentionally consuming every
   slice.
 - SCLI uses fixed line/argument bounds, table-driven dispatch, RAM/ROM-aware comparisons, and
-  explicit thread/driver list and lifecycle commands through syscalls.
+  explicit thread/driver list and life cycle commands through syscalls.
 - USART RX returns explicit `err_codes_t` values across the syscall boundary. An empty RX buffer is
-  normal polling state; other errors are reported through the error catalog.
+  normal polling state; other errors are reported through the error catalogue.
 - No source or header below `srcs/system/services/` includes a HAL header or calls a `hal_*` API.
 - Command parsing remains outside scheduler policy and kernel data structures.
 

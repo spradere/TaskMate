@@ -23,7 +23,7 @@ interrupts still preempt the task during that wait.
 - The two tasks are small, deterministic examples with no direct HAL or register access.
 - Generated logical GPIO calls demonstrate the intended user -> sysCall -> sysCore -> HAL direction.
 - Generated registration and fixed stacks avoid runtime allocation and startup discovery.
-- Their identical, bounded loop bodies make scheduler and GPIO behavior easy to compare on hardware.
+- Their identical, bounded loop bodies make scheduler and GPIO behaviour easy to compare on hardware.
 
 ### Remaining weaknesses
 - Both tasks spin on `sc_threadGetSTC()` and do not use the cooperative-yield call, so they consume
@@ -31,7 +31,6 @@ interrupts still preempt the task during that wait.
 - Period, deadline, priority, stack need, and worst-case execution time are not declared or checked;
   the fixed 256-byte stack is assigned without per-task sizing evidence.
 - Run levels currently provide only runnable/stopped gating for threads; `RUN_USER` has no
-  scheduling policy distinct from service threads.
-- Both files retain unused message/stdio includes and externally visible message-channel globals
+  scheduling policy distinct from service threads
   from removed startup-message code, so the examples expose stale state without using the service.
 - There are no task watchdog, overrun, failure-reporting, or fault-containment hooks.

@@ -13,9 +13,9 @@ At a much smaller scale and within my own limits, this project is also a way to 
 step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
-The TaskMate operating system is designed for microcontrollers. Its architecture is structured to
+The TaskMate operating system is designed for microcontroller. Its architecture is structured to
 maintain a clear separation between build
-logic, system behavior, and hardware dependencies, ensuring both portability and maintainability.
+logic, system behaviour, and hardware dependencies, ensuring both portability and maintainability.
 
 > <span style="color:green"> **Project Stats (v0.28 [^1] )**</span>
 >
@@ -38,7 +38,7 @@ logic, system behavior, and hardware dependencies, ensuring both portability and
 
 
 The diagram shows the current layered architecture of TaskMate.
-Each layer communicates primarily with its direct neighbors, following a strict top-down model to
+Each layer communicates primarily with its direct neighbours, following a strict top-down model to
 maintain clear boundaries and avoid hidden dependencies.
 
 Some components, such as interfaces and the lightweight libc, play a transversal role across multiple
@@ -65,7 +65,7 @@ TaskMate uses a custom **build system** that fully manages dependencies and work
 
 ## ⏱️ Real-Time Behaviour
 
-Although TaskMate includes preemptive scheduling and a software real-time clock,
+Although TaskMate includes pre-emptive scheduling and a software real-time clock,
 it **is not yet a true real-time operating system** in the strict sense.
 
 At its current stage, TaskMate guarantees **task switching** and **time slicing** with good stability,
@@ -96,7 +96,7 @@ It ensures that all interactions with the kernel are explicit, validated, and we
 **Interfaces**
 
 Interfaces provide neutral contracts between layers.
-They help reduce coupling by defining shared types and behaviors without exposing implementation details,
+They help reduce coupling by defining shared types and behaviours without exposing implementation details,
 making the system easier to evolve and refactor.
 
 
@@ -104,7 +104,7 @@ making the system easier to evolve and refactor.
 
 AutoCode is used to generate parts of the system from simple configuration files.
 It helps maintain consistency, reduce boilerplate, and keep the overall structure aligned with the intended architecture.
-All generation happens at build time, with static allocation, ensuring zero runtime overhead and fully deterministic behavior.
+All generation happens at build time, with static allocation, ensuring zero runtime overhead and fully deterministic behaviour.
 
 
 See: [Portability](doc/rules/portability.md)

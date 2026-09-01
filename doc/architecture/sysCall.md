@@ -1,7 +1,7 @@
 # 📞 Architecture Note — sysCall
 
 ## Historical developments
-As TaskMate layered architecture matured, `sysCall` became the mediation layer between kernel/services/tasks and hardware-oriented implementation. It consolidated thread delay/yield APIs, error catalog access, and GPIO logical operations.
+As TaskMate layered architecture matured, `sysCall` became the mediation layer between kernel/services/tasks and hardware-oriented implementation. It consolidated thread delay/yield APIs, error catalogue access, and GPIO logical operations.
 
 After v0.28, GPIO calls were kept in the dedicated `sc_gpio` façade while the general syscall file was
 adapted to the separated sysCore/HAL tree. In August 2026, an explicit cooperative-yield path was added:
@@ -13,9 +13,9 @@ last direct HAL access from the service sources.
 The syscall layer currently has three small API groups:
 
 - `sysCall.c` wraps the current thread's 16-bit software counter in an AVR atomic section, implements
-  cooperative yield, exposes thread and driver lifecycle operations, and mediates USART RX;
+  cooperative yield, exposes thread and driver life cycle operations, and mediates USART RX;
 - `sc_gpio.c` delegates logical set/get/toggle operations to the sysCore GPIO table;
-- `error.c` owns the generated error catalog and provides message lookup.
+- `error.c` owns the generated error catalogue and provides message lookup.
 
 `sc_coopYield()` disables interrupts, marks the current module as yielded, reloads the scheduler timer
 near its compare point, restores the interrupt state, and waits until the round-robin scheduler clears
@@ -29,10 +29,10 @@ share one short AVR atomic section so the RX ISR cannot replace the error betwee
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Thread-counter access is protected against the timer ISR updating the same 16-bit state on AVR8.
-- Thread information and lifecycle APIs validate names/outputs, use RAM/ROM-aware comparison, and
+- Thread information and life cycle APIs validate names/outputs, use RAM/ROM-aware comparison, and
   update run-level state in AVR atomic sections; the scheduler now skips stopped threads.
-- Driver count, information, and lifecycle calls use one generated control callback per driver
-  instead of exposing private lifecycle functions to services.
+- Driver count, information, and life cycle calls use one generated control callback per driver
+  instead of exposing private life cycle functions to services.
 - Upper-layer GPIO code uses logical signal types and does not receive physical pin structures.
 - The cooperative-yield mechanism reuses the existing scheduler interrupt and adds no dynamic state.
 
@@ -49,5 +49,5 @@ share one short AVR atomic section so the RX ISR cannot replace the error betwee
   rather than a complete error contract.
 - Cooperative yield assumes task context and a running scheduler, but task/boot/ISR validity is not
   encoded in the API. The timer-load result is ignored and the resume spin has no timeout.
-- Driver lifecycle calls collapse all control failures to `bool`, while multi-call status reporting
+- Driver life cycle calls collapse all control failures to `bool`, while multi-call status reporting
   is not an atomic snapshot.
