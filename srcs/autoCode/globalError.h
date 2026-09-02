@@ -16,22 +16,15 @@
 #define AUTOCODE_GLOBALERROR_H
 
 #include "autoCode.h"
+#include "interfaces/error_level.h"
 
 #define ERROR_COUNT_MAX 256
-
-typedef enum
-{
-	AUTOCODE_ERROR_NOT_DEFINED,
-	AUTOCODE_ERROR_LOW,
-	AUTOCODE_ERROR_MID,
-	AUTOCODE_ERROR_HIGH
-} error_critical_t;
 
 typedef struct
 {
 	char name[BYTE_INDEX];
 	char message[BYTE_INDEX];
-	error_critical_t critical;
+	err_level_t level;
 } error_item_t;
 
 typedef struct

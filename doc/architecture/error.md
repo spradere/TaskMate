@@ -8,21 +8,28 @@ build now discovers and sorts the selected target's `*.err` files, while recent 
 cleanup kept the generated enum usable by HAL drivers, services, and sysCall code.
 
 ## Current implementation
-Each non-comment `*.err` line declares a symbolic name, a quoted message, and a `LOW`, `MID`, or `HIGH`
-criticality. The build concatenates the selected files into `build/<target>/errors_all.err`; autoCode
-rejects duplicate names and unknown criticality values, then generates:
+Each non-comment `*.err` line declares a symbolic name, a quoted message, and a level. The four
+levels are defined by TaskMate in `interfaces/error_level.h`:
+
+- `FLOW`: normal interruption of control flow, handled by the thread;
+- `WARN`: abnormal but recoverable interruption, handled by the thread and logged by the system;
+- `FAIL`: component failure, handled by the system and recorded in persistent logs;
+- `PANIC`: critical system problem, handled by the system through a controlled halt.
+
+The build concatenates the selected files into `build/<target>/errors_all.err`; autoCode uses the
+TaskMate `err_level_t` definition, rejects duplicate names and unknown level values, then generates:
 
 - `err_codes_t` and `ERROR_COUNT` in `interfaces/error_catalog.h`;
 - ROM-backed messages and `err_item_t` entries in `system/sysCall/error.c`.
 
-HAL drivers and services return `err_codes_t` values directly. The runtime API currently exposes only
-`err_getMessage(uint8_t)`, which returns the generated string pointer for an in-range code and a null
-pointer otherwise. Criticality is stored in the catalogue but is not exposed through a public accessors or
-used to select a runtime response.
+HAL drivers and services return `err_codes_t` values directly. The runtime API currently exposes
+only `err_getMessage(uint8_t)`, which returns the generated string pointer for an in-range code and a
+null pointer otherwise. The level is stored in the catalogue but is not exposed through a public
+accessor or used to select a runtime response.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Symbolic codes, messages, and criticality originate from one generated catalogue.
+- Symbolic codes, messages, and levels originate from the `*.err` source catalogues.
 - Duplicate names, malformed declarations, and invalid severity words are detected during
   generation.
 - The firmware uses fixed-size enum/table data and ROM-backed text rather than runtime allocation.
@@ -30,7 +37,7 @@ used to select a runtime response.
   use when their driver life cycle state is not running.
 
 ### Remaining weaknesses
-- The only public lookup returns a message; callers cannot query criticality, error owner, or a
+- The only public lookup returns a message; callers cannot query level, error owner, or a
   prescribed recovery action through the API.
 - Error signalling is fragmented between `err_codes_t`, raw `uint8_t` lifecycle returns, and
   `DRV_STATE_*` values. Success is not uniform, and many boot, service, LCD, RTC, and I2C call sites

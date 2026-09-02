@@ -1,8 +1,8 @@
 # Generic HAL driver errors
-ERR_HAL_DRIVER_INVALID_CONTROL "HAL driver control command is invalid" LOW
-ERR_HAL_DRIVER_INVALID_VALUE "HAL driver control value is invalid" LOW
-ERR_HAL_DRIVER_INVALID_STATE "HAL driver state is inconsistent" MID
-ERR_HAL_DRIVER_NOT_INITIALIZED "HAL driver is not initialized" LOW
-ERR_HAL_DRIVER_NOT_RUNNING "HAL driver is not running" LOW
-ERR_HAL_DRIVER_DEAD "HAL driver is dead" HIGH
-ERR_HAL_DRIVER_DEPENDENCY "HAL driver dependency failed" MID
+ERR_HAL_DRIVER_INVALID_CONTROL "HAL driver control command is invalid" WARN
+ERR_HAL_DRIVER_INVALID_VALUE "HAL driver control value is invalid" WARN
+ERR_HAL_DRIVER_INVALID_STATE "HAL driver state is inconsistent" FAIL
+ERR_HAL_DRIVER_NOT_INITIALIZED "HAL driver is not initialized" WARN
+ERR_HAL_DRIVER_NOT_RUNNING "HAL driver is not running" WARN
+ERR_HAL_DRIVER_DEAD "HAL driver is dead" FAIL
+ERR_HAL_DRIVER_DEPENDENCY "HAL driver dependency failed" FAIL

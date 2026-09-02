@@ -30,6 +30,7 @@ typedef struct
 static void writeModulesCount(const parse_tag_t *parse);
 static void writeDriversAlloc(const parse_tag_t *parse);
 static void writeThreadsAlloc(const parse_tag_t *parse);
+static const char *errorLevelName(err_level_t level);
 static void writeErrorCatalog(const parse_tag_t *parse);
 static void writeErrorEnum(const parse_tag_t *parse);
 static void writeModulesList(const parse_tag_t *parse);
@@ -414,11 +415,32 @@ static void writeErrorCatalog(const parse_tag_t *parse)
 
 	for( int i = 0; i < parse->errors->error_count; i++ )
 	{
-		fprintf(parse->file, "\t{&err%i, %i},\n", i, parse->errors->catalog[i].critical);
+		fprintf(parse->file,
+				"\t{&err%i, %s},\n",
+				i,
+				errorLevelName(parse->errors->catalog[i].level));
 	}
 	fprintf(parse->file, "};\n");
 
 	have_tag_count[HAVE_ERROR_CATALOG]++;
+}
+
+static const char *errorLevelName(const err_level_t level)
+{
+	switch( level )
+	{
+		case ERR_LEVEL_FLOW:
+			return "ERR_LEVEL_FLOW";
+		case ERR_LEVEL_WARN:
+			return "ERR_LEVEL_WARN";
+		case ERR_LEVEL_FAIL:
+			return "ERR_LEVEL_FAIL";
+		case ERR_LEVEL_PANIC:
+			return "ERR_LEVEL_PANIC";
+	}
+
+	AUTOCODE_MSG_ERROR("unknown TaskMate error level <%i>", level);
+	exit(1);
 }
 
 static void writeErrorEnum(const parse_tag_t *parse)

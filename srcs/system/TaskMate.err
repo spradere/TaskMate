@@ -1,5 +1,5 @@
 # TaskMate general errors
-ERR_NO_ERROR "No error" LOW
-ERR_NULL_POINTER "Pointer is NULL" LOW
-ERR_UNKNOWN "Most useless error in the world" LOW
-ERR_RUNTIME "Second most useless error" LOW
+ERR_NO_ERROR "No error" FLOW
+ERR_NULL_POINTER "Pointer is NULL" WARN
+ERR_UNKNOWN "Most useless error in the world" FAIL
+ERR_RUNTIME "Second most useless error" PANIC
