@@ -23,7 +23,7 @@
 typedef struct
 {
 	const tm_string_t *name;
-	const err_critical_t critical;
+	const err_level_t level;
 } err_item_t;
 
 const tm_string_t *err_getMessage(uint8_t num);

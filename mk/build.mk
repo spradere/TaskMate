@@ -21,6 +21,21 @@
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
 	
+	@printf "// #####################################\n" > "${FILE_TM_INFO}.tmp"
+	@printf "// # TaskMate informations informations \n" >> "${FILE_TM_INFO}.tmp"
+	@printf "// #####################################\n\n" >> "${FILE_TM_INFO}.tmp"
+
+	@printf "#define TM_VER_MAJOR %s\n" "${VAL_TM_VER_MAJOR}" >> "${FILE_TM_INFO}.tmp"
+	@printf "#define TM_VER_MINOR %s\n" "${VAL_TM_VER_MINOR}" >> "${FILE_TM_INFO}.tmp"
+
+	@printf "#define TM_BUILD %s\n" "${VAL_BUILD_CNT}" >> "${FILE_TM_INFO}.tmp"
+	
+	@if ! cmp -s "${FILE_TM_INFO}.tmp" "${FILE_TM_INFO}"; then \
+		mv "${FILE_TM_INFO}.tmp" "${FILE_TM_INFO}"; \
+	else \
+		rm "${FILE_TM_INFO}.tmp"; \
+	fi
+	
 # Check required programs once
 ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
 	@printf "%sChecking required programs ...%s\n" \

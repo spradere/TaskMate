@@ -48,9 +48,6 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 
 # Command line #include and #define
 CFLAGS += -I${PATH_SRCS} -I./
-CFLAGS += 	-DTM_VER_MAJOR=${VAL_TM_VER_MAJOR} \
-			-DTM_VER_MINOR=${VAL_TM_VER_MINOR} \
-			-DTM_BUILD=${VAL_BUILD_CNT}
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
