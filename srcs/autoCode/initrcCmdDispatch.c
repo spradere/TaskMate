@@ -14,70 +14,54 @@
 
 #include "initrcCmdDispatch.h"
 
-static void funcRunNone(module_item_t *mod)
+static initrc_dispatch_result_t funcRun(const char *data, module_item_t *mod)
 {
-	mod->status |= RL_RUN_NONE;
+	if( strcmp(data, "none") == 0 ) { mod->status |= RL_RUN_NONE; }
+	else if( strcmp(data, "core") == 0 ) { mod->status |= RL_RUN_CORE; }
+	else if( strcmp(data, "driver") == 0 ) { mod->status |= RL_RUN_DRIVER; }
+	else if( strcmp(data, "service") == 0 ) { mod->status |= RL_RUN_SERVICE; }
+	else if( strcmp(data, "user") == 0 ) { mod->status |= RL_RUN_USER; }
+	else { return INITRC_DISPATCH_UNKNOWN_DATA; }
+
 	mod->cnt_set_runlevel++;
-}
-static void funcRunCore(module_item_t *mod)
-{
-	mod->status |= RL_RUN_CORE;
-	mod->cnt_set_runlevel++;
-}
-static void funcRunDriver(module_item_t *mod)
-{
-	mod->status |= RL_RUN_DRIVER;
-	mod->cnt_set_runlevel++;
-}
-static void funcRunService(module_item_t *mod)
-{
-	mod->status |= RL_RUN_SERVICE;
-	mod->cnt_set_runlevel++;
-}
-static void funcRunUser(module_item_t *mod)
-{
-	mod->status |= RL_RUN_USER;
-	mod->cnt_set_runlevel++;
-}
-static void funcTypeDriver(module_item_t *mod)
-{
-	mod->type = TM_MOD_DRIVER_ID;
-	mod->cnt_set_type++;
-}
-static void funcTypeService(module_item_t *mod)
-{
-	mod->type = TM_MOD_THREAD_ID;
-	mod->subtype = TM_MOD_THREAD_TYPE_SYS;
-	mod->status |= (1 << TM_MOD_THREAD_TYPE_SYS);
-	mod->cnt_set_type++;
-}
-static void funcTypeUser(module_item_t *mod)
-{
-	mod->type = TM_MOD_THREAD_ID;
-	mod->subtype = TM_MOD_THREAD_TYPE_USER;
-	mod->status |= (1 << TM_MOD_THREAD_TYPE_USER);
-	mod->cnt_set_type++;
+	return INITRC_DISPATCH_OK;
 }
 
-const initrc_cmd_t initrc_cmds[] = {{"-run_none", funcRunNone},
-									{"-run_core", funcRunCore},
-									{"-run_driver", funcRunDriver},
-									{"-run_service", funcRunService},
-									{"-run_user", funcRunUser},
-									{"-type_driver", funcTypeDriver},
-									{"-type_service", funcTypeService},
-									{"-type_user", funcTypeUser},
-									{NULL, NULL}};
+static initrc_dispatch_result_t funcType(const char *data, module_item_t *mod)
+{
+	if( strcmp(data, "driver") == 0 ) { mod->type = TM_MOD_DRIVER_ID; }
+	else if( strcmp(data, "service") == 0 )
+	{
+		mod->type = TM_MOD_THREAD_ID;
+		mod->subtype = TM_MOD_THREAD_TYPE_SYS;
+		mod->status |= (1 << TM_MOD_THREAD_TYPE_SYS);
+	}
+	else if( strcmp(data, "user") == 0 )
+	{
+		mod->type = TM_MOD_THREAD_ID;
+		mod->subtype = TM_MOD_THREAD_TYPE_USER;
+		mod->status |= (1 << TM_MOD_THREAD_TYPE_USER);
+	}
+	else { return INITRC_DISPATCH_UNKNOWN_DATA; }
 
-int initrcCmdDispatch(const char *cmd, module_item_t *mod)
+	mod->cnt_set_type++;
+	return INITRC_DISPATCH_OK;
+}
+
+static const initrc_cmd_t initrc_cmds[] = {
+	{"-run", funcRun},
+	{"-type", funcType},
+	{NULL, NULL}
+};
+
+initrc_dispatch_result_t initrcCmdDispatch(const char *cmd, const char *data, module_item_t *mod)
 {
 	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
 	{
 		if( strcmp(cmd, initrc_cmds[i].name) == 0 )
 		{
-			(*initrc_cmds[i].func)(mod);
-			return 0;
+			return (*initrc_cmds[i].func)(data, mod);
 		}
 	}
-	return -1;
+	return INITRC_DISPATCH_UNKNOWN_COMMAND;
 }

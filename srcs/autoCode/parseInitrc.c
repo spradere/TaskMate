@@ -42,9 +42,9 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 		// Process arguments
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
-			if( tok.count != 3 )
+			if( tok.count != 5 )
 			{
-				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 3",
+				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 5",
 								   initrc_name,
 								   file_line_number,
 								   tok.count);
@@ -53,17 +53,29 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 
 			// Reset temporary module
 			mod_tmp.status = 0;
+			mod_tmp.type = 0;
+			mod_tmp.subtype = 0;
 			mod_tmp.cnt_set_runlevel = 0;
 			mod_tmp.cnt_set_type = 0;
 
-			// Parse commands
-			for( int i = 1; i < tok.count; i++ )
+			// Parse command/data pairs
+			for( int i = 1; i < tok.count; i += 2 )
 			{
-				int err = initrcCmdDispatch(tok.tokens[i], &mod_tmp);
-				if( err == -1 )
+				initrc_dispatch_result_t result =
+					initrcCmdDispatch(tok.tokens[i], tok.tokens[i + 1], &mod_tmp);
+				if( result == INITRC_DISPATCH_UNKNOWN_COMMAND )
 				{
 					AUTOCODE_MSG_ERROR(
 						"unknown command [%s:%i] %s", initrc_name, file_line_number, tok.tokens[i]);
+					exit(1);
+				}
+				if( result == INITRC_DISPATCH_UNKNOWN_DATA )
+				{
+					AUTOCODE_MSG_ERROR("unknown data [%s:%i] %s for command %s",
+									   initrc_name,
+									   file_line_number,
+									   tok.tokens[i + 1],
+									   tok.tokens[i]);
 					exit(1);
 				}
 			}
@@ -98,22 +110,22 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			// Check options
 			if( mod_tmp.cnt_set_runlevel < 1 )
 			{
-				AUTOCODE_MSG_ERROR("Module %s : -run_* option is not set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -run option is not set", tok.tokens[0]);
 				exit(1);
 			}
 			if( mod_tmp.cnt_set_runlevel > 1 )
 			{
-				AUTOCODE_MSG_ERROR("Module %s : -run_* option is multiple set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -run option is multiple set", tok.tokens[0]);
 				exit(1);
 			}
 			if( mod_tmp.cnt_set_type < 1 )
 			{
-				AUTOCODE_MSG_ERROR("Module %s : -type_* option is not set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -type option is not set", tok.tokens[0]);
 				exit(1);
 			}
 			if( mod_tmp.cnt_set_type > 1 )
 			{
-				AUTOCODE_MSG_ERROR("Module %s : -type_* option is multiple set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -type option is multiple set", tok.tokens[0]);
 				exit(1);
 			}
 
