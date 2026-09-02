@@ -17,14 +17,20 @@
 
 #include "autoCode.h"
 
+typedef enum
+{
+	INITRC_DISPATCH_OK,
+	INITRC_DISPATCH_UNKNOWN_COMMAND,
+	INITRC_DISPATCH_UNKNOWN_DATA
+} initrc_dispatch_result_t;
+
 typedef struct
 {
 	const char *name;
-	void (*func)(module_item_t *mod);
+	initrc_dispatch_result_t (*func)(const char *data, module_item_t *mod);
 
 } initrc_cmd_t;
 
-int initrcCmdDispatch(const char *cmd, module_item_t *mod);
+initrc_dispatch_result_t initrcCmdDispatch(const char *cmd, const char *data, module_item_t *mod);
 
 #endif // AUTOCODE_INITRCCMDDISPATCH_H
-

@@ -14,7 +14,8 @@ project formatting and static-analysis rules.
 configuration file containing the TaskMate version/build number and paths to input lists. The program
 then:
 
-- parses the selected `*.rc` files into fixed-size driver and thread databases;
+- parses the selected `*.rc` files, whose module entries contain separate `-type <data>` and
+  `-run <data>` pairs, into fixed-size driver and thread databases;
 - aggregates `*.err` declarations and their `LOW`, `MID`, or `HIGH` criticality;
 - reads the selected HAL/target header lists and `signals.gpio`;
 - rewrites the tagged regions in module, run-level, error, GPIO, HAL include, and system-information

@@ -34,6 +34,14 @@ dense and optimised without impacting maintainability.
 `autoCode` reads initialisation files describing which modules are active
 for the target architecture and how they should be initialised.
 
+Each module line contains two command/data pairs:
+
+```text
+<module> -type <driver|service|user> -run <none|core|driver|service|user>
+```
+
+The `-type` and `-run` pairs may appear in either order, but each command is required exactly once.
+
 | Type          | Typical Path                          | Description                              |
 |-------------- |----------------------------------------|------------------------------------------|
 | configuration | `build/autoCode_config`				| hardware target, options, files path |
