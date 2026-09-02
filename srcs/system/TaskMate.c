@@ -19,6 +19,7 @@
 #include "hal/public/rtc.h"
 #include "interfaces/macros.h"
 #include "interfaces/options.h"
+#include "interfaces/TaskMate_info.h"
 #include "system/sysCore/boot.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"

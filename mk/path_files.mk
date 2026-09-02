@@ -35,6 +35,7 @@ FILE_CLOCRAW = ${PATH_BUILDS}/cloc_raw
 FILE_CLOCDATA = ${PATH_BUILDS}/cloc_data
 FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
+FILE_TM_INFO = ${PATH_SRCS}/interfaces/TaskMate_info.h
 
 # Source directories
 PATHS_SOURCES += ${PATH_SRCS}/system
@@ -62,8 +63,9 @@ FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list *.awk
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG LICENSE Makefile README.md
-FILES_GIT_EXCLUDED = 
-
+FILES_GIT_EXCLUDED = \
+	${FILE_TM_INFO}
+	
 # Tags
 FILE_TAGS = .tags
 FILE_TAGS_STAMP = ${PATH_BUILD_TARGET}/.tags_stamp
