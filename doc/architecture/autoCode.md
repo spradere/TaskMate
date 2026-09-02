@@ -15,7 +15,7 @@ configuration file containing the TaskMate version/build number and paths to inp
 then:
 
 - parses the selected `*.rc` files into fixed-size driver and thread databases;
-- aggregates `*.err` declarations and their `LOW`, `MID`, or `HIGH` criticality;
+- aggregates `*.err` declarations and their `FLOW`, `WARN`, `FAIL`, or `PANIC` level;
 - reads the selected HAL/target header lists and `signals.gpio`;
 - rewrites the tagged regions in module, run-level, error, GPIO, HAL include, and system-information
   files.
@@ -47,5 +47,7 @@ run-level tables, error codes, and logical GPIO identifiers at build time.
   terminated.
 - The host generator includes runtime interface definitions and emits concrete kernel structures,
   include paths, status encodings, and callback names, tightly coupling both sides of the build.
+  Error levels are nevertheless shared through `interfaces/error_level.h`; autoCode does not
+  redefine them.
 - There is no automated valid/invalid corpus, boundary test suite, failure-injection test, or
   manifest recording input hashes and generator/tool versions.

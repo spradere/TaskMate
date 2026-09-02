@@ -12,7 +12,7 @@ guards were applied consistently, and the register-bit macros used by AVR driver
 `interfaces/` contains no HAL, sysCore, sysCall, service, or task includes. It currently provides:
 
 - common GPIO modes/pulls and the target-generated logical signal enum;
-- the generated error enum and criticality type;
+- the generated error enum and shared `FLOW`/`WARN`/`FAIL`/`PANIC` level type;
 - shared string-storage types and build-time libc/debug options;
 - general bit/string helper macros and a local null definition;
 - protected, generated module-count and run-level definitions used by autoCode and selected core files.
