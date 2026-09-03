@@ -30,7 +30,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 
 	// Variables
 	int file_line_number = 0;
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
 	module_item_t mod_tmp;
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, initrc_list.stream) )
@@ -143,5 +143,6 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			mod->modules[index].subtype = mod_tmp.subtype;
 		}
 	}
+	tokenizerFree(&tok);
 	fileClose(&initrc_list, __FILE__, __LINE__);
 }

@@ -16,57 +16,64 @@
 
 void tokenizer(tokenizer_t *tok)
 {
-	int index_line = 0;
-	int token_current;
-
-	// Reset tokens
-	for( token_current = 0; token_current < TOKEN_COUNT_MAX; token_current++ )
-	{
-		tok->tokens[token_current][0] = 0;
-	}
+	char *cursor = tok->line;
 
 	// Start reading the line to extract arguments
-	token_current = 0;
-	tok->count = 0;
+	tokenizerFree(tok);
 
-	while( (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
-		   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (token_current < TOKEN_COUNT_MAX) )
+	while( (*cursor != '\n') && (*cursor != 0) )
 	{
 		// Skip leading spaces and tabs
-		while( ((tok->line[index_line] == ' ') || (tok->line[index_line] == '\t')) &&
-			   (index_line < TOKEN_LINE_SIZE_MAX - 1) )
+		while( (*cursor == ' ') || (*cursor == '\t') )
 		{
-			index_line++;
+			cursor++;
 		}
 
-		// Read and store one token
-		int index_token = 0;
-		char cut_character = ' ';
+		if( (*cursor == '\n') || (*cursor == 0) ) { break; }
 
-		if( tok->line[index_line] == '"' ) // switch to string mode for this token
+		// Point to one token stored directly in the line
+		char cut_character = ' ';
+		char *token = cursor;
+
+		if( *cursor == '"' ) // switch to string mode for this token
 		{
 			cut_character = '"';
-			index_line++;
-			tok->tokens[token_current][index_token++] = '"';
+			cursor++;
 		}
 
-		while( (tok->line[index_line] != cut_character) && (tok->line[index_line] != '\t') &&
-			   (tok->line[index_line] != '\n') && (tok->line[index_line] != 0) &&
-			   (index_line < (TOKEN_LINE_SIZE_MAX - 1)) && (index_token < (TOKEN_SIZE_MAX - 1)) )
+		while( (*cursor != cut_character) && (*cursor != '\t') && (*cursor != '\n') &&
+			   (*cursor != 0) )
 		{
-			tok->tokens[token_current][index_token++] = tok->line[index_line++];
+			cursor++;
 		}
 
-		if( tok->line[index_line] == '"' )
+		if( *cursor == '"' )
 		{
-			index_line++;
-			tok->tokens[token_current][index_token++] = '"';
+			cursor++;
 		}
 
-		tok->tokens[token_current][index_token] = 0;
+		char **tokens =
+			realloc(tok->tokens, (size_t)(tok->count + 1) * sizeof(*tok->tokens));
+		if( tokens == NULL )
+		{
+			AUTOCODE_MSG_ERROR("realloc tokenizer token %i", tok->count);
+			exit(1);
+		}
+		tok->tokens = tokens;
+		tok->tokens[tok->count] = token;
 
-		if( tok->tokens[token_current][0] != 0 ) { token_current++; }
+		if( *cursor != 0 )
+		{
+			*cursor = 0;
+			cursor++;
+		}
+		tok->count++;
 	}
+}
 
-	tok->count = token_current;
+void tokenizerFree(tokenizer_t *tok)
+{
+	free(tok->tokens);
+	tok->tokens = NULL;
+	tok->count = 0;
 }

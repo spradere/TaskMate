@@ -127,7 +127,7 @@ void options(const char *file_name, options_list_t *opt)
 	fileOpen(&file, "r", FILE_READONLY, __FILE__, __LINE__);
 
 	int file_line_number = 0;
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
 	AUTOCODE_MSG_INFO("read file %s", file_name);
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file.stream) )
 	{
@@ -159,6 +159,7 @@ void options(const char *file_name, options_list_t *opt)
 			}
 		}
 	}
+	tokenizerFree(&tok);
 
 	// Test required options
 	for( int i = 0; i < HAVE_COUNT; i++ )
