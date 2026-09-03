@@ -21,7 +21,6 @@
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
 #include "mcu_define.h" // Get the I2C frequency
-#include "tm_libc/tm_syslog.h"
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)
@@ -30,10 +29,12 @@
 
 static hal_driver_status_t i2c_status;
 static err_codes_t i2c_last_error = ERR_NO_ERROR;
+static uint8_t i2c_scan_address;
 
 static void i2cCommStop(void);
 static uint8_t i2cWrite(uint8_t data);
 static hal_driver_state_t i2cSetError(err_codes_t error);
+static hal_driver_state_t hal_i2cScan(uint8_t *address);
 
 static hal_driver_state_t i2cSetError(err_codes_t error)
 {
@@ -95,24 +96,42 @@ static hal_driver_state_t hal_i2cStart(void)
 
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
 
-	// Address test
-	tm_syslog(TM_STR("[i2c] scan ...\n"));
-	for( uint8_t adr = 0x00; adr != 0x7F; adr++ )
+	TM_SETBIT(i2c_status, DRV_BIT_START);
+	i2c_last_error = ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
+}
+
+static hal_driver_state_t hal_i2cScan(uint8_t *address)
+{
+	hal_driver_state_t state = i2cRequireRunning();
+	if( state != DRV_STATE_RUNNING ) { return state; }
+	if( address == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+
+	while( i2c_scan_address <= TM_MOD_I2C_ADDRESS_MAX )
 	{
-		// Start communication
 		TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 		while( !(TM_GETBIT(TWCR, TWINT)) );
-
-		if( (i2cWrite((adr << 1))) == TW_MT_SLA_ACK )
+		if( (TW_STATUS != TW_START) && (TW_STATUS != TW_REP_START) )
 		{
-			tm_syslog(TM_STR("\tfound SLA+W 0x%02x\n"), (adr));
+			i2cCommStop();
+			return i2cSetError(ERR_HAL_I2C_START_FAILED);
 		}
 
+		const uint8_t current_address = i2c_scan_address;
+		i2c_scan_address++;
+		const uint8_t status = i2cWrite((uint8_t)(current_address << 1));
 		i2cCommStop();
+
+		if( status == TW_MT_SLA_ACK )
+		{
+			*address = current_address;
+			i2c_last_error = ERR_NO_ERROR;
+			return DRV_STATE_RUNNING;
+		}
 	}
 
-	TM_SETBIT(i2c_status, DRV_BIT_START);
-	return DRV_STATE_RUNNING;
+	i2c_scan_address = 0;
+	return i2cSetError(ERR_HAL_I2C_SCAN_COMPLETE);
 }
 
 static hal_driver_state_t hal_i2cStop(void)
@@ -258,6 +277,9 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
 			data->error = i2c_last_error;
 			return hal_i2cGetStatus();
+		case DRV_CTRL_SCAN:
+			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
+			return hal_i2cScan(&data->i2c_address);
 		default:
 
 			return i2cSetError(ERR_HAL_DRIVER_INVALID_CONTROL);

@@ -123,6 +123,7 @@ static void setupDatabase(modules_database_t *data_base)
 		{
 			data_base->modules_type[i].modules[j].cnt_set_runlevel = 0;
 			data_base->modules_type[i].modules[j].cnt_set_type = 0;
+			data_base->modules_type[i].modules[j].cnt_set_i2c_address = 0;
 		}
 	}
 }

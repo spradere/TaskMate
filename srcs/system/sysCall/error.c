@@ -29,21 +29,22 @@ TM_STR_ROM_NEW(err2, "HAL I2C start condition failed");
 TM_STR_ROM_NEW(err3, "HAL I2C address was not acknowledged");
 TM_STR_ROM_NEW(err4, "HAL I2C write failed");
 TM_STR_ROM_NEW(err5, "HAL I2C read failed");
-TM_STR_ROM_NEW(err6, "hal USART TX buffer empty");
-TM_STR_ROM_NEW(err7, "hal USART RX buffer empty");
-TM_STR_ROM_NEW(err8, "hal USART TX buffer full");
-TM_STR_ROM_NEW(err9, "hal USART RX buffer full");
-TM_STR_ROM_NEW(err10, "No error");
-TM_STR_ROM_NEW(err11, "Pointer is NULL");
-TM_STR_ROM_NEW(err12, "Most useless error in the world");
-TM_STR_ROM_NEW(err13, "Second most useless error");
-TM_STR_ROM_NEW(err14, "HAL driver control command is invalid");
-TM_STR_ROM_NEW(err15, "HAL driver control value is invalid");
-TM_STR_ROM_NEW(err16, "HAL driver state is inconsistent");
-TM_STR_ROM_NEW(err17, "HAL driver is not initialized");
-TM_STR_ROM_NEW(err18, "HAL driver is not running");
-TM_STR_ROM_NEW(err19, "HAL driver is dead");
-TM_STR_ROM_NEW(err20, "HAL driver dependency failed");
+TM_STR_ROM_NEW(err6, "HAL I2C scan complete");
+TM_STR_ROM_NEW(err7, "hal USART TX buffer empty");
+TM_STR_ROM_NEW(err8, "hal USART RX buffer empty");
+TM_STR_ROM_NEW(err9, "hal USART TX buffer full");
+TM_STR_ROM_NEW(err10, "hal USART RX buffer full");
+TM_STR_ROM_NEW(err11, "No error");
+TM_STR_ROM_NEW(err12, "Pointer is NULL");
+TM_STR_ROM_NEW(err13, "Most useless error in the world");
+TM_STR_ROM_NEW(err14, "Second most useless error");
+TM_STR_ROM_NEW(err15, "HAL driver control command is invalid");
+TM_STR_ROM_NEW(err16, "HAL driver control value is invalid");
+TM_STR_ROM_NEW(err17, "HAL driver state is inconsistent");
+TM_STR_ROM_NEW(err18, "HAL driver is not initialized");
+TM_STR_ROM_NEW(err19, "HAL driver is not running");
+TM_STR_ROM_NEW(err20, "HAL driver is dead");
+TM_STR_ROM_NEW(err21, "HAL driver dependency failed");
 
 const err_item_t error_catalog[] = 
 {
@@ -56,18 +57,19 @@ const err_item_t error_catalog[] =
 	{&err6, ERR_LEVEL_FLOW},
 	{&err7, ERR_LEVEL_FLOW},
 	{&err8, ERR_LEVEL_FLOW},
-	{&err9, ERR_LEVEL_WARN},
-	{&err10, ERR_LEVEL_FLOW},
-	{&err11, ERR_LEVEL_WARN},
-	{&err12, ERR_LEVEL_FAIL},
-	{&err13, ERR_LEVEL_PANIC},
-	{&err14, ERR_LEVEL_WARN},
+	{&err9, ERR_LEVEL_FLOW},
+	{&err10, ERR_LEVEL_WARN},
+	{&err11, ERR_LEVEL_FLOW},
+	{&err12, ERR_LEVEL_WARN},
+	{&err13, ERR_LEVEL_FAIL},
+	{&err14, ERR_LEVEL_PANIC},
 	{&err15, ERR_LEVEL_WARN},
-	{&err16, ERR_LEVEL_FAIL},
-	{&err17, ERR_LEVEL_WARN},
+	{&err16, ERR_LEVEL_WARN},
+	{&err17, ERR_LEVEL_FAIL},
 	{&err18, ERR_LEVEL_WARN},
-	{&err19, ERR_LEVEL_FAIL},
+	{&err19, ERR_LEVEL_WARN},
 	{&err20, ERR_LEVEL_FAIL},
+	{&err21, ERR_LEVEL_FAIL},
 };
 
 // clang-format on

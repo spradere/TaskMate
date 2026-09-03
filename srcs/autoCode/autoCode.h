@@ -44,8 +44,10 @@ typedef struct
 	unsigned char status;
 	unsigned char type;
 	unsigned char subtype;
+	unsigned char i2c_address;
 	int cnt_set_runlevel;
 	int cnt_set_type;
+	int cnt_set_i2c_address;
 
 } module_item_t;
 

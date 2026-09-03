@@ -48,6 +48,7 @@ typedef struct
 typedef struct
 {
 	const tm_string_t *name;
+	uint8_t i2c_address;
 
 	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *);
 

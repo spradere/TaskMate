@@ -149,6 +149,7 @@ void mod_driversAlloc(void)
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver0_name,
+		.i2c_address = 0x3C,
 		.control = hal_lcdControl
 	};
 
@@ -159,6 +160,7 @@ void mod_driversAlloc(void)
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver1_name,
+		.i2c_address = 0x68,
 		.control = hal_rtcControl
 	};
 
@@ -169,6 +171,7 @@ void mod_driversAlloc(void)
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver2_name,
+		.i2c_address = TM_MOD_I2C_ADDRESS_NONE,
 		.control = hal_timerSchedControl
 	};
 
@@ -179,6 +182,7 @@ void mod_driversAlloc(void)
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver3_name,
+		.i2c_address = TM_MOD_I2C_ADDRESS_NONE,
 		.control = hal_timerSTCControl
 	};
 
@@ -189,6 +193,7 @@ void mod_driversAlloc(void)
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver4_name,
+		.i2c_address = TM_MOD_I2C_ADDRESS_NONE,
 		.control = hal_i2cControl
 	};
 
@@ -199,6 +204,7 @@ void mod_driversAlloc(void)
 	*(mod) = (mod_driver_item_t)
 	{
 		.name = &driver5_name,
+		.i2c_address = TM_MOD_I2C_ADDRESS_NONE,
 		.control = hal_usartControl
 	};
 

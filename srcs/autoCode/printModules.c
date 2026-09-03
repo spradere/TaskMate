@@ -22,10 +22,15 @@ void printModules(const modules_database_t *data_base)
 	const module_type_t *driver = &data_base->modules_type[TM_MOD_DRIVER_ID];
 	for( int i = 0; i < driver->modules_count; i++ )
 	{
-		printf("\tdrivers[%i] \"%s\" runlevel=%i\n",
+		printf("\tdrivers[%i] \"%s\" runlevel=%i",
 			   i,
 			   driver->modules[i].name,
 			   driver->modules[i].status);
+		if( driver->modules[i].i2c_address != TM_MOD_I2C_ADDRESS_NONE )
+		{
+			printf(" i2c=0x%02X", driver->modules[i].i2c_address);
+		}
+		printf("\n");
 	}
 	printf("\n");
 
