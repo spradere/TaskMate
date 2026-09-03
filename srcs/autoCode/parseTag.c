@@ -126,21 +126,24 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	// Read from source
 	int tag_section = 0;
 	int file_line_number = 0;
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
+	char line[TOKEN_LINE_SIZE_MAX];
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_line_number++;
+		strcpy(line, tok.line);
 		tokenizer(&tok);
 
-		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[autoCode_tag]")) )
+		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
+			!(strcmp(tok.tokens[1], "[autoCode_tag]")) )
 		{
 			if( tok.count != 3 )
 			{
 				AUTOCODE_MSG_ERROR("token count != 3 tok.line [%s:%i] %s",
 								   file_src.name,
 								   file_line_number,
-								   tok.line);
+								   line);
 				break;
 			}
 
@@ -150,13 +153,13 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 					"Start new tag section without previous end tag [/tag] [%s:%i] %s",
 					file_src.name,
 					file_line_number,
-					tok.line);
+					line);
 				break;
 			}
 
 			AUTOCODE_MSG_INFO("found tag %s", tok.tokens[2]);
 
-			fprintf(file_tmp.stream, "%s", tok.line);
+			fprintf(file_tmp.stream, "%s", line);
 
 			fprintf(file_tmp.stream, "// clang-format off\n");
 
@@ -177,15 +180,17 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 			}
 		}
 
-		if( !(strcmp(tok.tokens[0], "//")) && !(strcmp(tok.tokens[1], "[/tag]")) )
+		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
+			!(strcmp(tok.tokens[1], "[/tag]")) )
 		{
 			fprintf(file_tmp.stream, "\n// clang-format on\n");
 			AUTOCODE_MSG_INFO("end tag");
 			tag_section = 0;
 		}
 
-		if( tag_section == 0 ) { fprintf(file_tmp.stream, "%s", tok.line); }
+		if( tag_section == 0 ) { fprintf(file_tmp.stream, "%s", line); }
 	}
+	tokenizerFree(&tok);
 
 	if( tag_section == 1 )
 	{
@@ -228,7 +233,7 @@ static void writeGpioSignals(const parse_tag_t *parse)
 	fprintf(parse->file, "typedef enum\n");
 	fprintf(parse->file, "{\n");
 
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
 	int line = 0;
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_signals.stream) )
 	{
@@ -248,6 +253,7 @@ static void writeGpioSignals(const parse_tag_t *parse)
 	fprintf(parse->file, "\tGPIO_SIGNAL_COUNT\n");
 	fprintf(parse->file, "} gpio_signal_t;\n");
 
+	tokenizerFree(&tok);
 	fileClose(&file_signals, __FILE__, __LINE__);
 	have_tag_count[HAVE_GPIO_SIGNALS]++;
 }
@@ -259,12 +265,13 @@ static void writeHalInit(const parse_tag_t *parse)
 	file_list.name = (char *)parse->auto_options->file_halinit_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
 
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
 	{
 		tokenizer(&tok);
-		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
+		if( tok.count != 0 ) { fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]); }
 	}
+	tokenizerFree(&tok);
 	fileClose(&file_list, __FILE__, __LINE__);
 
 	have_tag_count[HAVE_HAL_INIT]++;
@@ -277,12 +284,13 @@ static void writeHalDefine(const parse_tag_t *parse)
 	file_list.name = (char *)parse->auto_options->file_haldefine_list;
 	fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__);
 
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_list.stream) )
 	{
 		tokenizer(&tok);
-		fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]);
+		if( tok.count != 0 ) { fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]); }
 	}
+	tokenizerFree(&tok);
 	fileClose(&file_list, __FILE__, __LINE__);
 
 	have_tag_count[HAVE_HAL_DEFINE]++;

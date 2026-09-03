@@ -19,18 +19,17 @@
 
 // Tokenizer sizes
 #define TOKEN_LINE_SIZE_MAX 256
-#define TOKEN_COUNT_MAX 6 // Five expected tokens plus one to detect excess input.
-#define TOKEN_SIZE_MAX 64
 
 typedef struct
 {
 	char line[TOKEN_LINE_SIZE_MAX];
-	char tokens[TOKEN_COUNT_MAX][TOKEN_SIZE_MAX];
+	char **tokens;
 	int count;
 
 }tokenizer_t;
 
 
 void tokenizer(tokenizer_t *tok);
+void tokenizerFree(tokenizer_t *tok);
 
 #endif // AUTOCODE_TOKENIZER_H

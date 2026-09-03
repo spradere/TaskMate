@@ -41,7 +41,7 @@ static void setupDatabase(modules_database_t *data_base);
 
 int main(int argc, const char *argv[])
 {
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
 	
 	// Get options
 	if( argc != 2 )
@@ -70,9 +70,10 @@ int main(int argc, const char *argv[])
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, ferror.stream) )
 	{
 		tokenizer(&tok);
-		globalError(tok.tokens[0], &errors_catalog);	
+		if( tok.count != 0 ) { globalError(tok.tokens[0], &errors_catalog); }
 	}
 	fileClose(&ferror, __FILE__, __LINE__);	
+	tokenizerFree(&tok);
 	
 	// Read init.rc files and store entries in the database
 	file_t finitrc;
@@ -83,9 +84,10 @@ int main(int argc, const char *argv[])
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, finitrc.stream) )
 	{
 		tokenizer(&tok);
-		parseInitrc(&data_base, tok.tokens[0]);
+		if( tok.count != 0 ) { parseInitrc(&data_base, tok.tokens[0]); }
 	}
 	fileClose(&finitrc, __FILE__, __LINE__);
+	tokenizerFree(&tok);
 
 	// Parse tags and generate code
 	file_t ftag;
@@ -97,9 +99,13 @@ int main(int argc, const char *argv[])
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, ftag.stream) )
 	{
 		tokenizer(&tok);
-		parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);
+		if( tok.count != 0 )
+		{
+			parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);
+		}
 	}
 	fileClose(&ftag, __FILE__, __LINE__);
+	tokenizerFree(&tok);
 	parseTagHave();
 
 	// Print module information

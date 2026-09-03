@@ -30,21 +30,24 @@ void globalError(const char *src_name, error_catalog_t *errors)
 	// Read from source
 	int file_src_line_number = 0;
 	int error_index = errors->error_count;
-	tokenizer_t tok;
+	tokenizer_t tok = {0};
+	char line[TOKEN_LINE_SIZE_MAX];
 
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_src_line_number++;
+		strcpy(line, tok.line);
 		tokenizer(&tok);
 
-		if( (tok.tokens[0][0] != '\n') && (tok.tokens[0][0] != '#') && (tok.count != 0) )
+		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
 		{
 			if( tok.count != 3 )
 			{
 				AUTOCODE_MSG_ERROR("wrong token count != 3 tok.line [%s:%i] <%s>",
 								   file_src.name,
 								   file_src_line_number,
-								   tok.line);
+								   line);
+				exit(1);
 			}
 
 			for( int i = 0; i < error_index; i++ )
@@ -93,5 +96,6 @@ void globalError(const char *src_name, error_catalog_t *errors)
 		}
 	}
 
+	tokenizerFree(&tok);
 	fileClose(&file_src, __FILE__, __LINE__);
 }
