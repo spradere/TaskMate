@@ -405,6 +405,16 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 		fprintf(parse->file, "\t*(mod) = (mod_driver_item_t)\n");
 		fprintf(parse->file, "\t{\n");
 		fprintf(parse->file, "\t\t.name = &driver%i_name,\n", i);
+		if( mod->modules[i].i2c_address == TM_MOD_I2C_ADDRESS_NONE )
+		{
+			fprintf(parse->file, "\t\t.i2c_address = TM_MOD_I2C_ADDRESS_NONE,\n");
+		}
+		else
+		{
+			fprintf(parse->file,
+					"\t\t.i2c_address = 0x%02X,\n",
+					mod->modules[i].i2c_address);
+		}
 		fprintf(parse->file, "\t\t.control = hal_%sControl\n", mod->modules[i].name);
 		fprintf(parse->file, "\t};\n");
 	}

@@ -33,6 +33,8 @@ GPIO mapping, and starts generated drivers by their configured run level.
   implementations at compile time.
 - All six registered drivers expose one control entry point with run-level, life cycle, status, and
   bit queries; operational APIs reject calls while their driver is not running.
+- The I2C control entry exposes an incremental address scan. Each call returns the next acknowledged
+  address, and a dedicated completion error resets the scan cursor for the following pass.
 - Static generated driver registration and callback wiring keep firmware allocation deterministic.
 - The USART uses fixed-size power-of-two buffers, and thread stacks include canaries checked during
   scheduling.

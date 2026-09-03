@@ -34,13 +34,16 @@ dense and optimised without impacting maintainability.
 `autoCode` reads initialisation files describing which modules are active
 for the target architecture and how they should be initialised.
 
-Each module line contains two command/data pairs:
+Each module line contains two required command/data pairs:
 
 ```text
 <module> -type <driver|service|user> -run <none|core|driver|service|user>
 ```
 
 The `-type` and `-run` pairs may appear in either order, but each command is required exactly once.
+Drivers may also declare one optional scanned I2C address (`0x00` to `0x7E`) with
+`-i2c <address>`. The parser accepts decimal or `0x` hexadecimal notation and rejects this option for
+services and user tasks.
 
 | Type          | Typical Path                          | Description                              |
 |-------------- |----------------------------------------|------------------------------------------|

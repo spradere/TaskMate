@@ -42,6 +42,8 @@
 
 #define TM_MOD_TYPE_COUNT 2
 #define TM_MOD_NAME_SIZE_MAX 32
+#define TM_MOD_I2C_ADDRESS_MAX 0x7Eu
+#define TM_MOD_I2C_ADDRESS_NONE 0xFFu
 
 // System
 #define TM_MOD_THREAD_STACK_SIZE 256
@@ -58,7 +60,8 @@ typedef enum
 	DRV_CTRL_CLEARBIT,
 	DRV_CTRL_GETBIT,
 	DRV_CTRL_GETSTATUS,
-	DRV_CTRL_GETLASTERROR
+	DRV_CTRL_GETLASTERROR,
+	DRV_CTRL_SCAN
 } hal_driver_control_t;
 
 // Driver status bits
@@ -89,6 +92,7 @@ typedef union
 	hal_driver_status_bit_t status_bit;
 	bool bit_value;
 	err_codes_t error;
+	uint8_t i2c_address;
 } hal_driver_control_data_t;
 
 // Thread status bits

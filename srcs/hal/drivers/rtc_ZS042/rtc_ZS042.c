@@ -233,6 +233,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			if( data == 0 ) { return rtcSetError(ERR_NULL_POINTER); }
 			data->error = rtc_last_error;
 			return hal_rtcGetStatus();
+		case DRV_CTRL_SCAN:
 		default:
 
 			return rtcSetError(ERR_HAL_DRIVER_INVALID_CONTROL);

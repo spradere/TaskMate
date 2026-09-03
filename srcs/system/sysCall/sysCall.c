@@ -15,6 +15,7 @@
 #include "sysCall.h"
 
 #include "hal/public/atomic.h"
+#include "hal/public/i2c.h"
 #include "hal/public/timerSched.h"
 #include "hal/public/usart.h"
 #include "interfaces/macros.h"
@@ -27,6 +28,7 @@
 static mod_thread_item_t *sc_threadGetPointer(const char *name);
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
 static bool sc_driverControl(const char *name, hal_driver_control_t command);
+static void sc_i2cDriverSetOff(mod_driver_item_t *driver);
 
 void sc_threadSetSTC(uint16_t count)
 {
@@ -132,6 +134,37 @@ bool sc_driverStart(const char *name) { return sc_driverControl(name, DRV_CTRL_S
 
 bool sc_driverStop(const char *name) { return sc_driverControl(name, DRV_CTRL_STOP); }
 
+err_codes_t sc_i2cScan(void)
+{
+	hal_driver_control_data_t control_data;
+
+	control_data.status_bit = DRV_BIT_DEAD;
+	for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
+	{
+		mod_driver_item_t *driver = mod_driverGetPointer(i);
+		if( driver->i2c_address != TM_MOD_I2C_ADDRESS_NONE )
+		{
+			driver->control(DRV_CTRL_SETBIT, &control_data);
+		}
+	}
+
+	while( hal_i2cControl(DRV_CTRL_SCAN, &control_data) == DRV_STATE_RUNNING )
+	{
+		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
+		{
+			mod_driver_item_t *driver = mod_driverGetPointer(i);
+			if( driver->i2c_address == control_data.i2c_address )
+			{
+				sc_i2cDriverSetOff(driver);
+			}
+		}
+	}
+
+	hal_i2cControl(DRV_CTRL_GETLASTERROR, &control_data);
+	if( control_data.error == ERR_HAL_I2C_SCAN_COMPLETE ) { return ERR_NO_ERROR; }
+	return control_data.error;
+}
+
 err_codes_t sc_usartRead(uint8_t *data)
 {
 	if( data == 0 ) { return ERR_NULL_POINTER; }
@@ -200,4 +233,18 @@ static bool sc_driverControl(const char *name, hal_driver_control_t command)
 
 	hal_driver_state_t state = driver->control(command, 0);
 	return (state != DRV_STATE_ERROR) && (state != DRV_STATE_DEAD);
+}
+
+static void sc_i2cDriverSetOff(mod_driver_item_t *driver)
+{
+	hal_driver_control_data_t control_data;
+
+	control_data.status_bit = DRV_BIT_START;
+	driver->control(DRV_CTRL_CLEARBIT, &control_data);
+	control_data.status_bit = DRV_BIT_INIT;
+	driver->control(DRV_CTRL_CLEARBIT, &control_data);
+	control_data.status_bit = DRV_BIT_ERROR;
+	driver->control(DRV_CTRL_CLEARBIT, &control_data);
+	control_data.status_bit = DRV_BIT_DEAD;
+	driver->control(DRV_CTRL_CLEARBIT, &control_data);
 }

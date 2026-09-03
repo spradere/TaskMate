@@ -1,7 +1,7 @@
 # hardware target test1 init.rc
 
-lcd -type driver -run driver
-rtc -type driver -run driver
+lcd -type driver -run driver -i2c 0x3C
+rtc -type driver -run driver -i2c 0x68
 
 task1 -type user -run user
 task2 -type user -run user

@@ -36,6 +36,7 @@ bool sc_driverInit(const char *name);
 bool sc_driverStart(const char *name);
 bool sc_driverStop(const char *name);
 
+err_codes_t sc_i2cScan(void);
 err_codes_t sc_usartRead(uint8_t *data);
 
 void sc_coopYield(void);

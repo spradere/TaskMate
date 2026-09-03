@@ -15,7 +15,8 @@ configuration file containing the TaskMate version/build number and paths to inp
 then:
 
 - parses the selected `*.rc` files, whose module entries contain separate `-type <data>` and
-  `-run <data>` pairs, into fixed-size driver and thread databases;
+  `-run <data>` pairs plus an optional driver-only `-i2c <address>` pair, into fixed-size driver and
+  thread databases;
 - aggregates `*.err` declarations and their `LOW`, `MID`, or `HIGH` criticality;
 - reads the selected HAL/target header lists and `signals.gpio`;
 - rewrites the tagged regions in module, run-level, error, GPIO, HAL include, and system-information
@@ -24,7 +25,7 @@ then:
 Each destination is copied to a `.tmp` file, regenerated, compared with the existing file, and replaced
 only when its content changed. A target-scoped stamp makes generation a prerequisite of dependency
 collection, compilation, and linking. The generated data fixes module counts, stacks, function tables,
-run-level tables, error codes, and logical GPIO identifiers at build time.
+run-level tables, driver I2C addresses, error codes, and logical GPIO identifiers at build time.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

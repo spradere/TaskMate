@@ -42,9 +42,9 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 		// Process arguments
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
 		{
-			if( tok.count != 5 )
+			if( (tok.count != 5) && (tok.count != 7) )
 			{
-				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 5",
+				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 5 or 7",
 								   initrc_name,
 								   file_line_number,
 								   tok.count);
@@ -55,8 +55,10 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			mod_tmp.status = 0;
 			mod_tmp.type = 0;
 			mod_tmp.subtype = 0;
+			mod_tmp.i2c_address = TM_MOD_I2C_ADDRESS_NONE;
 			mod_tmp.cnt_set_runlevel = 0;
 			mod_tmp.cnt_set_type = 0;
+			mod_tmp.cnt_set_i2c_address = 0;
 
 			// Parse command/data pairs
 			for( int i = 1; i < tok.count; i += 2 )
@@ -128,6 +130,17 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 				AUTOCODE_MSG_ERROR("Module %s : -type option is multiple set", tok.tokens[0]);
 				exit(1);
 			}
+			if( mod_tmp.cnt_set_i2c_address > 1 )
+			{
+				AUTOCODE_MSG_ERROR("Module %s : -i2c option is multiple set", tok.tokens[0]);
+				exit(1);
+			}
+			if( (mod_tmp.cnt_set_i2c_address == 1) && (mod_tmp.type != TM_MOD_DRIVER_ID) )
+			{
+				AUTOCODE_MSG_ERROR("Module %s : -i2c option is only valid for drivers",
+								   tok.tokens[0]);
+				exit(1);
+			}
 
 			// Copy the temporary module to the destination module
 			int index = mod->modules_count;
@@ -141,6 +154,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			mod->modules[index].status = mod_tmp.status;
 			mod->modules_count = index + 1;
 			mod->modules[index].subtype = mod_tmp.subtype;
+			mod->modules[index].i2c_address = mod_tmp.i2c_address;
 		}
 	}
 	tokenizerFree(&tok);

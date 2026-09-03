@@ -13,7 +13,7 @@ last direct HAL access from the service sources.
 The syscall layer currently has three small API groups:
 
 - `sysCall.c` wraps the current thread's 16-bit software counter in an AVR atomic section, implements
-  cooperative yield, exposes thread and driver life cycle operations, and mediates USART RX;
+  cooperative yield, exposes thread and driver life cycle operations, and mediates USART RX/I2C scan;
 - `sc_gpio.c` delegates logical set/get/toggle operations to the sysCore GPIO table;
 - `error.c` owns the generated error catalogue and provides message lookup.
 
@@ -25,6 +25,10 @@ memory isolation; it is a C API and architectural boundary.
 `sc_usartRead()` validates its output pointer and translates a successful HAL read to `ERR_NO_ERROR`.
 When the driver rejects the read, the syscall returns its exact last error. The read and error snapshot
 share one short AVR atomic section so the RX ISR cannot replace the error between those operations.
+
+`sc_i2cScan()` marks every driver declaring an I2C address as dead, consumes the incremental HAL scan,
+and clears the life-cycle and dead bits of each matching driver so it ends in `DRV_STATE_OFF`. A normal
+end-of-scan indication is translated to `ERR_NO_ERROR`; other HAL errors are propagated unchanged.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
