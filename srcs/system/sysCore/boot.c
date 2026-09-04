@@ -21,6 +21,7 @@
 #include "system/sysCore/hal_init.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/modules_list.h"
+#include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_syslog.h"
 
 void boot(void)
@@ -60,6 +61,7 @@ void boot(void)
 				(*(mod->control))(DRV_CTRL_INIT, 0);
 				tm_syslog(TM_STR(" init ..."), mod->name);
 				(*(mod->control))(DRV_CTRL_START, 0);
+				if( mod->control == hal_i2cControl ) { sc_i2cScan(); }
 				tm_syslog(TM_STR(" start ... ok\n"), mod->name);
 			}
 		}
