@@ -57,12 +57,12 @@ void boot(void)
 			if( ((*(mod->control))(DRV_CTRL_RLGET, &control_data) != DRV_STATE_ERROR) &&
 				(control_data.run_level == runlevel) )
 			{
-				tm_syslog(TM_STR("[boot] driver <%s> ..."), mod->name);
+				tm_syslog(TM_STR("[boot] driver <%s> ... "), mod->name);
 				(*(mod->control))(DRV_CTRL_INIT, 0);
-				tm_syslog(TM_STR(" init ..."), mod->name);
+				tm_syslog(TM_STR("init ... "), mod->name);
 				(*(mod->control))(DRV_CTRL_START, 0);
+				tm_syslog(TM_STR("start ... ok\n"), mod->name);
 				if( mod->control == hal_i2cControl ) { sc_i2cScan(); }
-				tm_syslog(TM_STR(" start ... ok\n"), mod->name);
 			}
 		}
 	}

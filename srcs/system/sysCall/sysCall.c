@@ -24,6 +24,7 @@
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
 #include "tm_libc/tm_string.h"
+#include "tm_libc/tm_syslog.h"
 
 static mod_thread_item_t *sc_threadGetPointer(const char *name);
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
@@ -156,6 +157,7 @@ err_codes_t sc_i2cScan(void)
 			if( driver->i2c_address == control_data.i2c_address )
 			{
 				sc_i2cDriverSetOff(driver);
+				tm_syslog(TM_STR("[sysCall:i2cscan] found : 0x%02x\n"), control_data.i2c_address);
 			}
 		}
 	}
