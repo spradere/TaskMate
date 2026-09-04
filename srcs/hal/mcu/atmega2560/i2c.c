@@ -29,7 +29,7 @@
 
 static hal_driver_status_t i2c_status;
 static err_codes_t i2c_last_error = ERR_NO_ERROR;
-static uint8_t i2c_scan_address;
+static uint8_t i2c_scan_address = 0;
 
 static void i2cCommStop(void);
 static uint8_t i2cWrite(uint8_t data);
@@ -117,17 +117,16 @@ static hal_driver_state_t hal_i2cScan(uint8_t *address)
 			return i2cSetError(ERR_HAL_I2C_START_FAILED);
 		}
 
-		const uint8_t current_address = i2c_scan_address;
-		i2c_scan_address++;
-		const uint8_t status = i2cWrite((uint8_t)(current_address << 1));
+		const uint8_t status = i2cWrite((uint8_t)(i2c_scan_address << 1));
 		i2cCommStop();
 
 		if( status == TW_MT_SLA_ACK )
 		{
-			*address = current_address;
+			*address = i2c_scan_address++;
 			i2c_last_error = ERR_NO_ERROR;
 			return DRV_STATE_RUNNING;
 		}
+		i2c_scan_address++;
 	}
 
 	i2c_scan_address = 0;

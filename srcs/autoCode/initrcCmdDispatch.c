@@ -51,8 +51,7 @@ static initrc_dispatch_result_t funcType(const char *data, module_item_t *mod)
 static initrc_dispatch_result_t funcI2cAddress(const char *data, module_item_t *mod)
 {
 	char *end;
-	const int base = ((data[0] == '0') && ((data[1] == 'x') || (data[1] == 'X'))) ? 16 : 10;
-	const unsigned long address = strtoul(data, &end, base);
+	const unsigned long address = strtoul(data, &end, 16);
 
 	if( (data[0] == 0) || (*end != 0) || (address > TM_MOD_I2C_ADDRESS_MAX) )
 	{
