@@ -83,7 +83,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			}
 
 			// Process name
-			if( strlen(tok.tokens[0]) > TM_MOD_NAME_SIZE_MAX )
+			if( strlen(tok.tokens[0]) > TM_MOD_NAME_SIZE_MAX -1 )
 			{
 				AUTOCODE_MSG_ERROR(
 					"Name too long <%s> is over %i", tok.tokens[0], TM_MOD_NAME_SIZE_MAX);
@@ -144,7 +144,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 
 			// Copy the temporary module to the destination module
 			int index = mod->modules_count;
-			if( index > TM_MOD_COUNT_MAX )
+			if( index > TM_MOD_COUNT_MAX -1 )
 			{
 				AUTOCODE_MSG_ERROR("too much modules > %i type=%i\n", index, mod_tmp.type);
 				exit(1);
