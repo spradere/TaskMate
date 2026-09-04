@@ -18,6 +18,7 @@
 #include <stdint.h>
 
 #include "system/services/commands/driver.h"
+#include "system/services/commands/i2c.h"
 #include "system/services/commands/thread.h"
 #include "system/sysCall/error.h"
 #include "system/sysCall/sysCall.h"
@@ -45,6 +46,7 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[]);
 
 static const scli_cmd_t scli_commands[] = {
 	{"driver", driver},
+	{"i2c", i2c},
 	{"thread", thread},
 	{0, 0},
 };

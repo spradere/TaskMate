@@ -17,7 +17,7 @@ record and stack:
 - `system` currently provides the system-service loop and cooperatively waits through the software
   time-counter syscalls;
 - `scli` reads USART RX only through `sc_usartRead()`, assembles at most 63 bytes in a fixed local
-  buffer, tokenizes the chunk, and dispatches the `driver` and `thread` commands.
+  buffer, tokenizes the chunk, and dispatches the `driver`, `i2c`, and `thread` commands.
 
 The system and SCLI both call `sc_coopYield()` while
 waiting. Resources are fixed at compile time, with no heap allocation or service registry beyond the
