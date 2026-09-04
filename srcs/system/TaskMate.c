@@ -14,13 +14,13 @@
 
 #include <stdint.h>
 
-#include "interfaces/macros.h"
-#include "interfaces/TaskMate_info.h"
-#include "system/sysCore/tm_scheduler.h"
-#include "system/sysCore/boot.h"
-#include "tm_libc/tm_syslog.h"
-#include "system/sysCore/tm_softwareTimeCounter.h"
 #include "hal/public/panic.h"
+#include "interfaces/TaskMate_info.h"
+#include "interfaces/macros.h"
+#include "system/sysCore/boot.h"
+#include "system/sysCore/tm_scheduler.h"
+#include "system/sysCore/tm_softwareTimeCounter.h"
+#include "tm_libc/tm_syslog.h"
 
 TM_STORE_FILE_NAME(file_name);
 

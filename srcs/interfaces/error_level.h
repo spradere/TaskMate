@@ -16,10 +16,10 @@
 
 typedef enum
 {
-	ERR_LEVEL_FLOW,  // Normal flow interruption; handled by the thread.
-	ERR_LEVEL_WARN,  // Recoverable abnormal flow; handled by the thread and logged by the system.
-	ERR_LEVEL_FAIL,  // Component failure; handled by the system and logged persistently.
-	ERR_LEVEL_PANIC  // Critical problem; handled by the system through a controlled halt.
+	ERR_LEVEL_FLOW, // Normal flow interruption; handled by the thread.
+	ERR_LEVEL_WARN, // Recoverable abnormal flow; handled by the thread and logged by the system.
+	ERR_LEVEL_FAIL, // Component failure; handled by the system and logged persistently.
+	ERR_LEVEL_PANIC // Critical problem; handled by the system through a controlled halt.
 } err_level_t;
 
 #endif // INTERFACES_ERROR_LEVEL_H

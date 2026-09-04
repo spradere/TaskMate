@@ -89,7 +89,6 @@ static hal_driver_state_t hal_timerSTCStart(void)
 	if( TM_GETBIT(timer_stc_status, DRV_BIT_INIT) == 0 )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
-
 	}
 
 	// Start by enabling the interrupt
@@ -172,6 +171,5 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 		default:
 
 			return timerSTCSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
-
 	}
 }

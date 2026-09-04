@@ -140,10 +140,8 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 		{
 			if( tok.count != 3 )
 			{
-				AUTOCODE_MSG_ERROR("token count != 3 tok.line [%s:%i] %s",
-								   file_src.name,
-								   file_line_number,
-								   line);
+				AUTOCODE_MSG_ERROR(
+					"token count != 3 tok.line [%s:%i] %s", file_src.name, file_line_number, line);
 				break;
 			}
 
@@ -409,12 +407,7 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 		{
 			fprintf(parse->file, "\t\t.i2c_address = TM_MOD_I2C_ADDRESS_NONE,\n");
 		}
-		else
-		{
-			fprintf(parse->file,
-					"\t\t.i2c_address = 0x%02X,\n",
-					mod->modules[i].i2c_address);
-		}
+		else { fprintf(parse->file, "\t\t.i2c_address = 0x%02X,\n", mod->modules[i].i2c_address); }
 		fprintf(parse->file, "\t\t.control = hal_%sControl\n", mod->modules[i].name);
 		fprintf(parse->file, "\t};\n");
 	}
@@ -433,10 +426,8 @@ static void writeErrorCatalog(const parse_tag_t *parse)
 
 	for( int i = 0; i < parse->errors->error_count; i++ )
 	{
-		fprintf(parse->file,
-				"\t{&err%i, %s},\n",
-				i,
-				errorLevelName(parse->errors->catalog[i].level));
+		fprintf(
+			parse->file, "\t{&err%i, %s},\n", i, errorLevelName(parse->errors->catalog[i].level));
 	}
 	fprintf(parse->file, "};\n");
 

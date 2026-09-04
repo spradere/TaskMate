@@ -91,7 +91,6 @@ static hal_driver_state_t hal_i2cStart(void)
 	{
 
 		return i2cSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
-
 	}
 
 	TWCR = (uint8_t)(1u << TWEN); // Enable TWI
@@ -282,7 +281,6 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 		default:
 
 			return i2cSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
-
 	}
 }
 

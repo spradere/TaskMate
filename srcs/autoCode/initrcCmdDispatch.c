@@ -64,20 +64,13 @@ static initrc_dispatch_result_t funcI2cAddress(const char *data, module_item_t *
 }
 
 static const initrc_cmd_t initrc_cmds[] = {
-	{"-run", funcRun},
-	{"-type", funcType},
-	{"-i2c", funcI2cAddress},
-	{NULL, NULL}
-};
+	{"-run", funcRun}, {"-type", funcType}, {"-i2c", funcI2cAddress}, {NULL, NULL}};
 
 initrc_dispatch_result_t initrcCmdDispatch(const char *cmd, const char *data, module_item_t *mod)
 {
 	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
 	{
-		if( strcmp(cmd, initrc_cmds[i].name) == 0 )
-		{
-			return (*initrc_cmds[i].func)(data, mod);
-		}
+		if( strcmp(cmd, initrc_cmds[i].name) == 0 ) { return (*initrc_cmds[i].func)(data, mod); }
 	}
 	return INITRC_DISPATCH_UNKNOWN_COMMAND;
 }

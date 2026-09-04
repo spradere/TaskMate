@@ -90,7 +90,6 @@ static hal_driver_state_t hal_rtcStart(void)
 	if( TM_GETBIT(rtc_status, DRV_BIT_INIT) == 0 )
 	{
 		return rtcSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
-
 	}
 
 	TM_SETBIT(rtc_status, DRV_BIT_START);
@@ -237,7 +236,6 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 		default:
 
 			return rtcSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
-
 	}
 }
 

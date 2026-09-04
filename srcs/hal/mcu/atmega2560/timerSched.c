@@ -119,7 +119,6 @@ static hal_driver_state_t hal_timerSchedStart(void)
 	{
 
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
-
 	}
 
 	asm volatile(TIMER_SCHED_START);

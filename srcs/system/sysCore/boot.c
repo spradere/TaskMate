@@ -17,11 +17,11 @@
 #include "hal/public/usart.h"
 #include "interfaces/modules_define.h"
 #include "interfaces/runLevel_define.h"
+#include "system/sysCall/sysCall.h"
 #include "system/sysCore/gpio.h"
 #include "system/sysCore/hal_init.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/modules_list.h"
-#include "system/sysCall/sysCall.h"
 #include "tm_libc/tm_syslog.h"
 
 void boot(void)

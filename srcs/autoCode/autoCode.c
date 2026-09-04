@@ -42,7 +42,7 @@ static void setupDatabase(modules_database_t *data_base);
 int main(int argc, const char *argv[])
 {
 	tokenizer_t tok = {0};
-	
+
 	// Get options
 	if( argc != 2 )
 	{
@@ -57,11 +57,11 @@ int main(int argc, const char *argv[])
 	// Set up database
 	modules_database_t data_base;
 	setupDatabase(&data_base);
-		
+
 	// Read error files and store entries in the error catalog
 	error_catalog_t errors_catalog;
 	errors_catalog.error_count = 0;
-	
+
 	file_t ferror;
 	fileInit(&ferror);
 	ferror.name = auto_options.file_errors_list;
@@ -72,9 +72,9 @@ int main(int argc, const char *argv[])
 		tokenizer(&tok);
 		if( tok.count != 0 ) { globalError(tok.tokens[0], &errors_catalog); }
 	}
-	fileClose(&ferror, __FILE__, __LINE__);	
+	fileClose(&ferror, __FILE__, __LINE__);
 	tokenizerFree(&tok);
-	
+
 	// Read init.rc files and store entries in the database
 	file_t finitrc;
 	fileInit(&finitrc);

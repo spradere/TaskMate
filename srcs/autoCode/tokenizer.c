@@ -24,10 +24,7 @@ void tokenizer(tokenizer_t *tok)
 	while( (*cursor != '\n') && (*cursor != 0) )
 	{
 		// Skip leading spaces and tabs
-		while( (*cursor == ' ') || (*cursor == '\t') )
-		{
-			cursor++;
-		}
+		while( (*cursor == ' ') || (*cursor == '\t') ) { cursor++; }
 
 		if( (*cursor == '\n') || (*cursor == 0) ) { break; }
 
@@ -47,13 +44,9 @@ void tokenizer(tokenizer_t *tok)
 			cursor++;
 		}
 
-		if( *cursor == '"' )
-		{
-			cursor++;
-		}
+		if( *cursor == '"' ) { cursor++; }
 
-		char **tokens =
-			realloc(tok->tokens, (size_t)(tok->count + 1) * sizeof(*tok->tokens));
+		char **tokens = realloc(tok->tokens, (size_t)(tok->count + 1) * sizeof(*tok->tokens));
 		if( tokens == NULL )
 		{
 			AUTOCODE_MSG_ERROR("realloc tokenizer token %i", tok->count);
