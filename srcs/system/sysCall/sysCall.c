@@ -26,9 +26,15 @@
 #include "tm_libc/tm_string.h"
 #include "tm_libc/tm_syslog.h"
 
+#define I2C_SCAN_ADDRESS_COUNT_MAX 10u
+
+static uint8_t i2c_scan_addresses[I2C_SCAN_ADDRESS_COUNT_MAX];
+static uint8_t i2c_scan_address_count;
+
 static mod_thread_item_t *sc_threadGetPointer(const char *name);
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
 static bool sc_driverControl(const char *name, hal_driver_control_t command);
+static bool sc_i2cAddressFound(uint8_t address);
 static void sc_i2cDriverSetOff(mod_driver_item_t *driver);
 
 void sc_threadSetSTC(uint16_t count)
@@ -139,33 +145,47 @@ err_codes_t sc_i2cScan(void)
 {
 	uint8_t address;
 	hal_driver_control_data_t control_data;
+	bool address_buffer_full = false;
+
+	i2c_scan_address_count = 0;
+	while( hal_i2cScan(&address) == DRV_STATE_RUNNING )
+	{
+		if( i2c_scan_address_count < I2C_SCAN_ADDRESS_COUNT_MAX )
+		{
+			i2c_scan_addresses[i2c_scan_address_count] = address;
+			i2c_scan_address_count++;
+		}
+		else { address_buffer_full = true; }
+
+		tm_syslog(TM_STR("[sysCall:i2cscan] found : 0x%02x\n"), address);
+	}
+
+	hal_i2cControl(DRV_CTRL_GETLASTERROR, &control_data);
+	if( control_data.error != ERR_HAL_I2C_SCAN_COMPLETE ) { return control_data.error; }
+	if( address_buffer_full ) { return ERR_I2C_SCAN_ADDRESS_BUFFER_FULL; }
 
 	control_data.status_bit = DRV_BIT_DEAD;
 	for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
-		if( driver->address != TM_MOD_DRIVER_ADDRESS_NONE )
+		if( (driver->address != TM_MOD_DRIVER_ADDRESS_NONE) &&
+			!sc_i2cAddressFound(driver->address) )
 		{
 			driver->control(DRV_CTRL_SETBIT, &control_data);
 		}
 	}
 
-	while( hal_i2cScan(&address) == DRV_STATE_RUNNING )
+	for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 	{
-		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
+		mod_driver_item_t *driver = mod_driverGetPointer(i);
+		if( (driver->control(DRV_CTRL_GETSTATUS, 0) == DRV_STATE_DEAD) &&
+			sc_i2cAddressFound(driver->address) )
 		{
-			mod_driver_item_t *driver = mod_driverGetPointer(i);
-			if( driver->address == address )
-			{
-				sc_i2cDriverSetOff(driver);
-				tm_syslog(TM_STR("[sysCall:i2cscan] found : 0x%02x\n"), address);
-			}
+			sc_i2cDriverSetOff(driver);
 		}
 	}
 
-	hal_i2cControl(DRV_CTRL_GETLASTERROR, &control_data);
-	if( control_data.error == ERR_HAL_I2C_SCAN_COMPLETE ) { return ERR_NO_ERROR; }
-	return control_data.error;
+	return ERR_NO_ERROR;
 }
 
 err_codes_t sc_usartRead(uint8_t *data)
@@ -236,6 +256,15 @@ static bool sc_driverControl(const char *name, hal_driver_control_t command)
 
 	hal_driver_state_t state = driver->control(command, 0);
 	return (state != DRV_STATE_ERROR) && (state != DRV_STATE_DEAD);
+}
+
+static bool sc_i2cAddressFound(uint8_t address)
+{
+	for( uint8_t i = 0; i < i2c_scan_address_count; i++ )
+	{
+		if( i2c_scan_addresses[i] == address ) { return true; }
+	}
+	return false;
 }
 
 static void sc_i2cDriverSetOff(mod_driver_item_t *driver)
