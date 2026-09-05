@@ -36,15 +36,16 @@ TM_STR_ROM_NEW(err9, "hal USART TX buffer full");
 TM_STR_ROM_NEW(err10, "hal USART RX buffer full");
 TM_STR_ROM_NEW(err11, "No error");
 TM_STR_ROM_NEW(err12, "Pointer is NULL");
-TM_STR_ROM_NEW(err13, "Most useless error in the world");
-TM_STR_ROM_NEW(err14, "Second most useless error");
-TM_STR_ROM_NEW(err15, "HAL driver control command is invalid");
-TM_STR_ROM_NEW(err16, "HAL driver control value is invalid");
-TM_STR_ROM_NEW(err17, "HAL driver state is inconsistent");
-TM_STR_ROM_NEW(err18, "HAL driver is not initialized");
-TM_STR_ROM_NEW(err19, "HAL driver is not running");
-TM_STR_ROM_NEW(err20, "HAL driver is dead");
-TM_STR_ROM_NEW(err21, "HAL driver dependency failed");
+TM_STR_ROM_NEW(err13, "I2C scan address buffer is full");
+TM_STR_ROM_NEW(err14, "Most useless error in the world");
+TM_STR_ROM_NEW(err15, "Second most useless error");
+TM_STR_ROM_NEW(err16, "HAL driver control command is invalid");
+TM_STR_ROM_NEW(err17, "HAL driver control value is invalid");
+TM_STR_ROM_NEW(err18, "HAL driver state is inconsistent");
+TM_STR_ROM_NEW(err19, "HAL driver is not initialized");
+TM_STR_ROM_NEW(err20, "HAL driver is not running");
+TM_STR_ROM_NEW(err21, "HAL driver is dead");
+TM_STR_ROM_NEW(err22, "HAL driver dependency failed");
 
 const err_item_t error_catalog[] = 
 {
@@ -61,15 +62,16 @@ const err_item_t error_catalog[] =
 	{&err10, ERR_LEVEL_WARN},
 	{&err11, ERR_LEVEL_FLOW},
 	{&err12, ERR_LEVEL_WARN},
-	{&err13, ERR_LEVEL_FAIL},
-	{&err14, ERR_LEVEL_PANIC},
-	{&err15, ERR_LEVEL_WARN},
+	{&err13, ERR_LEVEL_WARN},
+	{&err14, ERR_LEVEL_FAIL},
+	{&err15, ERR_LEVEL_PANIC},
 	{&err16, ERR_LEVEL_WARN},
-	{&err17, ERR_LEVEL_FAIL},
-	{&err18, ERR_LEVEL_WARN},
+	{&err17, ERR_LEVEL_WARN},
+	{&err18, ERR_LEVEL_FAIL},
 	{&err19, ERR_LEVEL_WARN},
-	{&err20, ERR_LEVEL_FAIL},
+	{&err20, ERR_LEVEL_WARN},
 	{&err21, ERR_LEVEL_FAIL},
+	{&err22, ERR_LEVEL_FAIL},
 };
 
 // clang-format on
