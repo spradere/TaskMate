@@ -57,6 +57,20 @@ static const char *have_to_string[HAVE_COUNT] = {
 
 static int have_options_count[HAVE_COUNT];
 
+static void setFileName(char *destination, const size_t destination_size, const char *value)
+{
+	const size_t value_length = strlen(value);
+
+	if( value_length >= destination_size )
+	{
+		AUTOCODE_MSG_ERROR("option value is too long (maximum %zu characters)",
+						   destination_size - 1U);
+		exit(1);
+	}
+
+	memcpy(destination, value, value_length + 1U);
+}
+
 static const char *string_from_have(const int id)
 {
 #define X(e, s, f) \
@@ -68,37 +82,37 @@ static const char *string_from_have(const int id)
 
 static void setErrorsFile(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_errors_list, value, BYTE_INDEX);
+	setFileName(opt->file_errors_list, sizeof(opt->file_errors_list), value);
 	have_options_count[HAVE_ERRORS]++;
 }
 
 static void setInitrcFile(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_initrc_list, value, BYTE_INDEX);
+	setFileName(opt->file_initrc_list, sizeof(opt->file_initrc_list), value);
 	have_options_count[HAVE_INITRC]++;
 }
 
 static void setParseTagFile(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_parsetag_list, value, BYTE_INDEX);
+	setFileName(opt->file_parsetag_list, sizeof(opt->file_parsetag_list), value);
 	have_options_count[HAVE_PARSETAG]++;
 }
 
 static void setHalInitFile(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_halinit_list, value, BYTE_INDEX);
+	setFileName(opt->file_halinit_list, sizeof(opt->file_halinit_list), value);
 	have_options_count[HAVE_HALINIT]++;
 }
 
 static void setHalDefineFile(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_haldefine_list, value, BYTE_INDEX);
+	setFileName(opt->file_haldefine_list, sizeof(opt->file_haldefine_list), value);
 	have_options_count[HAVE_HALDEFINE]++;
 }
 
 static void setGpioSignalsFile(const char *value, options_list_t *opt)
 {
-	strncpy(opt->file_gpio_signals, value, BYTE_INDEX);
+	setFileName(opt->file_gpio_signals, sizeof(opt->file_gpio_signals), value);
 	have_options_count[HAVE_GPIO_SIGNALS]++;
 }
 

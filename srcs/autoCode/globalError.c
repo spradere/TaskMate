@@ -36,7 +36,7 @@ void globalError(const char *src_name, error_catalog_t *errors)
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_src_line_number++;
-		strcpy(line, tok.line);
+		snprintf(line, sizeof(line), "%s", tok.line);
 		tokenizer(&tok);
 
 		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
@@ -50,6 +50,12 @@ void globalError(const char *src_name, error_catalog_t *errors)
 				exit(1);
 			}
 
+			if( error_index >= ERROR_COUNT_MAX )
+			{
+				AUTOCODE_MSG_ERROR("Too many errors >= %i", ERROR_COUNT_MAX);
+				exit(1);
+			}
+
 			for( int i = 0; i < error_index; i++ )
 			{
 				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
@@ -58,8 +64,18 @@ void globalError(const char *src_name, error_catalog_t *errors)
 					exit(1);
 				}
 			}
-			strncpy(errors->catalog[error_index].name, tok.tokens[0], BYTE_INDEX);
-			strncpy(errors->catalog[error_index].message, tok.tokens[1], BYTE_INDEX);
+			const size_t name_length = strlen(tok.tokens[0]);
+			const size_t message_length = strlen(tok.tokens[1]);
+			if( (name_length >= sizeof(errors->catalog[error_index].name)) ||
+				(message_length >= sizeof(errors->catalog[error_index].message)) )
+			{
+				AUTOCODE_MSG_ERROR("Error name or message is too long [%s:%i]",
+								   file_src.name,
+								   file_src_line_number);
+				exit(1);
+			}
+			memcpy(errors->catalog[error_index].name, tok.tokens[0], name_length + 1U);
+			memcpy(errors->catalog[error_index].message, tok.tokens[1], message_length + 1U);
 
 			AUTOCODE_MSG_INFO("[%i] %s", error_index, tok.tokens[0]);
 
@@ -87,11 +103,6 @@ void globalError(const char *src_name, error_catalog_t *errors)
 
 			error_index++;
 
-			if( error_index == ERROR_COUNT_MAX )
-			{
-				AUTOCODE_MSG_ERROR("Too many errors > %i", ERROR_COUNT_MAX);
-				exit(1);
-			}
 			errors->error_count = error_index;
 		}
 	}
