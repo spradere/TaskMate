@@ -14,8 +14,8 @@ preemption.
 calls architecture/MCU/board startup hooks, wires GPIO signals, and starts every generated driver in
 ascending configured run level. It runs the I2C discovery syscall immediately after starting the I2C
 driver, before higher-run-level dependent drivers start. `modules.c` owns a static database
-containing driver callbacks, four thread control blocks, fixed stacks, saved stack pointers,
-status bytes, and stack canaries.
+containing generic driver address metadata and control callbacks, four thread control blocks, fixed
+stacks, saved stack pointers, status bytes, and stack canaries.
 
 The scheduler installs a callback into the 1 ms HAL timer, starts with thread zero, and performs strict
 round-robin selection across all generated threads. The naked AVR timer ISR saves context, gives the

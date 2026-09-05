@@ -256,7 +256,6 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
 			data->error = lcd_last_error;
 			return hal_lcdGetStatus();
-		case DRV_CTRL_SCAN:
 		default:
 
 			return lcdSetError(ERR_HAL_DRIVER_INVALID_CONTROL);

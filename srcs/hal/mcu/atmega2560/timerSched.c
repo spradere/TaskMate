@@ -223,7 +223,6 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			data->error = timer_sched_last_error;
 			return hal_timerSchedGetStatus();
-		case DRV_CTRL_SCAN:
 		default:
 			return timerSchedSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}

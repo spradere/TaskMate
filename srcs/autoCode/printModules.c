@@ -26,9 +26,9 @@ void printModules(const modules_database_t *data_base)
 			   i,
 			   driver->modules[i].name,
 			   driver->modules[i].status);
-		if( driver->modules[i].i2c_address != TM_MOD_I2C_ADDRESS_NONE )
+		if( driver->modules[i].address != TM_MOD_DRIVER_ADDRESS_NONE )
 		{
-			printf(" i2c=0x%02X", driver->modules[i].i2c_address);
+			printf(" i2c=0x%02X", driver->modules[i].address);
 		}
 		printf("\n");
 	}

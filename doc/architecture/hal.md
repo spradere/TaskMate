@@ -31,10 +31,13 @@ GPIO mapping, and starts generated drivers by their configured run level.
   target-specific files rather than scattered through tasks or services.
 - Public selection headers provide one include path per HAL capability and reject missing
   implementations at compile time.
-- All six registered drivers expose one control entry point with run-level, life cycle, status, and
-  bit queries; operational APIs reject calls while their driver is not running.
-- The I2C control entry exposes an incremental address scan. Each call returns the next acknowledged
-  address, and a dedicated completion error resets the scan cursor for the following pass.
+- All six registered drivers expose one control entry point limited to the common run-level, life
+  cycle, status, bit, and last-error contract; operational APIs reject calls while their driver is
+  not running.
+- Driver-specific operations are separate public HAL functions reached from upper layers through a
+  syscall. The public I2C API exposes an incremental address scan: each call returns the next
+  acknowledged address, and a dedicated completion error resets the scan cursor for the following
+  pass.
 - Static generated driver registration and callback wiring keep firmware allocation deterministic.
 - The USART uses fixed-size power-of-two buffers, and thread stacks include canaries checked during
   scheduling.

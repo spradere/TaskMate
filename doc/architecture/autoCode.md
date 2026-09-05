@@ -25,7 +25,8 @@ then:
 Each destination is copied to a `.tmp` file, regenerated, compared with the existing file, and replaced
 only when its content changed. A target-scoped stamp makes generation a prerequisite of dependency
 collection, compilation, and linking. The generated data fixes module counts, stacks, function tables,
-run-level tables, driver I2C addresses, error codes, and logical GPIO identifiers at build time.
+run-level tables, generic driver address metadata populated by the current `-i2c` option, error codes,
+and logical GPIO identifiers at build time.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
@@ -34,7 +35,7 @@ run-level tables, driver I2C addresses, error codes, and logical GPIO identifier
 - Module types, run levels, same-type duplicate names, error severities, and GPIO line token counts
   receive explicit validation before the firmware is compiled.
 - Generated records include fixed thread contexts, saved run levels, driver control callbacks, and
-  ROM-backed names, avoiding runtime discovery and dynamic allocation.
+  ROM-backed names, generic driver address metadata, avoiding runtime discovery and dynamic allocation.
 - Generation is integrated into the dependency graph, produces a reviewable log, and preserves an
   existing destination when its generated content is unchanged.
 

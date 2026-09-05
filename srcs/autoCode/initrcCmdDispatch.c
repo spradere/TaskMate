@@ -58,8 +58,8 @@ static initrc_dispatch_result_t funcI2cAddress(const char *data, module_item_t *
 		return INITRC_DISPATCH_UNKNOWN_DATA;
 	}
 
-	mod->i2c_address = (unsigned char)address;
-	mod->cnt_set_i2c_address++;
+	mod->address = (unsigned char)address;
+	mod->cnt_set_address++;
 	return INITRC_DISPATCH_OK;
 }
 

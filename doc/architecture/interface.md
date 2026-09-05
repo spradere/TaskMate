@@ -37,7 +37,7 @@ generated kernel configuration.
   stack sizing, and generated kernel counts, coupling separate consumers to one broad contract.
 - `macros.h` uses GNU `__typeof__` and register-oriented size dispatch, while `define.h` provides
   its own `NULL`; these choices reduce compiler neutrality and overlap standard C facilities.
-- Driver commands, states, status bits, module types, and run levels are raw integer macros. Values
-  are weakly typed and setters do not consistently mask or validate their range.
+- Driver states, module types, and run levels remain compact integer values. Driver control commands
+  and status bits are typed enums, but setters do not consistently mask or validate their range.
 - Contracts remain incomplete for timers, serial transport, scheduling context, ISR safety,
   optional HAL capabilities, and structured error handling.

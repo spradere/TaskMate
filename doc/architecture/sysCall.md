@@ -26,9 +26,10 @@ memory isolation; it is a C API and architectural boundary.
 When the driver rejects the read, the syscall returns its exact last error. The read and error snapshot
 share one short AVR atomic section so the RX ISR cannot replace the error between those operations.
 
-`sc_i2cScan()` marks every driver declaring an I2C address as dead, consumes the incremental HAL scan,
-and clears the life-cycle and dead bits of each matching driver so it ends in `DRV_STATE_OFF`. A normal
-end-of-scan indication is translated to `ERR_NO_ERROR`; other HAL errors are propagated unchanged.
+`sc_i2cScan()` marks every driver declaring an address as dead, calls the public driver-specific
+`hal_i2cScan()` API, and clears the life-cycle and dead bits of each matching driver so it ends in
+`DRV_STATE_OFF`. A normal end-of-scan indication is translated to `ERR_NO_ERROR`; other HAL errors are
+propagated unchanged.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
