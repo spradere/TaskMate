@@ -32,6 +32,7 @@ typedef enum
 } hal_i2c_ack_t;
 
 hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_control_data_t *data);
+hal_driver_state_t hal_i2cScan(uint8_t *address);
 hal_driver_state_t hal_i2cCommStart(uint8_t address, hal_i2c_direction_t direction);
 hal_driver_state_t hal_i2cCommStop(void);
 hal_driver_state_t hal_i2cWrite(uint8_t data);

@@ -167,7 +167,6 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			data->error = timer_stc_last_error;
 			return hal_timerSTCGetStatus();
-		case DRV_CTRL_SCAN:
 		default:
 
 			return timerSTCSetError(ERR_HAL_DRIVER_INVALID_CONTROL);

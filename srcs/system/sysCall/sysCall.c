@@ -137,27 +137,28 @@ bool sc_driverStop(const char *name) { return sc_driverControl(name, DRV_CTRL_ST
 
 err_codes_t sc_i2cScan(void)
 {
+	uint8_t address;
 	hal_driver_control_data_t control_data;
 
 	control_data.status_bit = DRV_BIT_DEAD;
 	for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
-		if( driver->i2c_address != TM_MOD_I2C_ADDRESS_NONE )
+		if( driver->address != TM_MOD_DRIVER_ADDRESS_NONE )
 		{
 			driver->control(DRV_CTRL_SETBIT, &control_data);
 		}
 	}
 
-	while( hal_i2cControl(DRV_CTRL_SCAN, &control_data) == DRV_STATE_RUNNING )
+	while( hal_i2cScan(&address) == DRV_STATE_RUNNING )
 	{
 		for( uint8_t i = 0; i < TM_MOD_DRIVER_COUNT; i++ )
 		{
 			mod_driver_item_t *driver = mod_driverGetPointer(i);
-			if( driver->i2c_address == control_data.i2c_address )
+			if( driver->address == address )
 			{
 				sc_i2cDriverSetOff(driver);
-				tm_syslog(TM_STR("[sysCall:i2cscan] found : 0x%02x\n"), control_data.i2c_address);
+				tm_syslog(TM_STR("[sysCall:i2cscan] found : 0x%02x\n"), address);
 			}
 		}
 	}

@@ -34,7 +34,6 @@ static uint8_t i2c_scan_address = 0;
 static void i2cCommStop(void);
 static uint8_t i2cWrite(uint8_t data);
 static hal_driver_state_t i2cSetError(err_codes_t error);
-static hal_driver_state_t hal_i2cScan(uint8_t *address);
 
 static hal_driver_state_t i2cSetError(err_codes_t error)
 {
@@ -100,7 +99,7 @@ static hal_driver_state_t hal_i2cStart(void)
 	return DRV_STATE_RUNNING;
 }
 
-static hal_driver_state_t hal_i2cScan(uint8_t *address)
+hal_driver_state_t hal_i2cScan(uint8_t *address)
 {
 	hal_driver_state_t state = i2cRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
@@ -275,9 +274,6 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
 			data->error = i2c_last_error;
 			return hal_i2cGetStatus();
-		case DRV_CTRL_SCAN:
-			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
-			return hal_i2cScan(&data->i2c_address);
 		default:
 
 			return i2cSetError(ERR_HAL_DRIVER_INVALID_CONTROL);

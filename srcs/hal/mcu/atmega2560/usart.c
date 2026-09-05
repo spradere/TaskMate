@@ -294,7 +294,6 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
 			data->error = usart_last_error;
 			return hal_usartGetStatus();
-		case DRV_CTRL_SCAN:
 		default:
 			return usartSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
