@@ -31,17 +31,25 @@ void tokenizer(tokenizer_t *tok)
 		// Point to one token stored directly in the line
 		char cut_character = ' ';
 		char *token = cursor;
+		bool quoted_string = false;
 
 		if( *cursor == '"' ) // switch to string mode for this token
 		{
 			cut_character = '"';
+			quoted_string = true;
 			cursor++;
 		}
 
-		while( (*cursor != cut_character) && (*cursor != '\t') && (*cursor != '\n') &&
-			   (*cursor != 0) )
+		while( (*cursor != cut_character) && (quoted_string || (*cursor != '\t')) &&
+			   (*cursor != '\n') && (*cursor != 0) )
 		{
 			cursor++;
+		}
+
+		if( quoted_string && (*cursor != '"') )
+		{
+			AUTOCODE_MSG_ERROR("unterminated string");
+			exit(1);
 		}
 
 		if( *cursor == '"' ) { cursor++; }
