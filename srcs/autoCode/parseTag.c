@@ -132,7 +132,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	while( fgets(tok.line, TOKEN_LINE_SIZE_MAX, file_src.stream) )
 	{
 		file_line_number++;
-		strcpy(line, tok.line);
+		snprintf(line, sizeof(line), "%s", tok.line);
 		tokenizer(&tok);
 
 		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&

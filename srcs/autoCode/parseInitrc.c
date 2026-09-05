@@ -150,7 +150,8 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 				exit(1);
 			}
 
-			strcpy(mod->modules[index].name, tok.tokens[0]);
+			snprintf(
+				mod->modules[index].name, sizeof(mod->modules[index].name), "%s", tok.tokens[0]);
 			mod->modules[index].status = mod_tmp.status;
 			mod->modules_count = index + 1;
 			mod->modules[index].subtype = mod_tmp.subtype;

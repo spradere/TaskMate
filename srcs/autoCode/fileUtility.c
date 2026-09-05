@@ -45,11 +45,21 @@ void fileCmpReplace(file_t *file_old, file_t *file_new)
 		exit(1);
 	}
 
-	while( (feof(file_old->stream) == 0) && (feof(file_new->stream) == 0) )
+	while( true )
 	{
-		fgets(old, sizeof(old), file_old->stream);
-		fgets(new, sizeof(new), file_new->stream);
-		if( strcmp(old, new) != 0 ) { same = false; }
+		char *old_result = fgets(old, sizeof(old), file_old->stream);
+		char *new_result = fgets(new, sizeof(new), file_new->stream);
+
+		if( (old_result == NULL) || (new_result == NULL) )
+		{
+			same = (old_result == new_result);
+			break;
+		}
+		if( strcmp(old, new) != 0 )
+		{
+			same = false;
+			break;
+		}
 	}
 
 	if( same == true )
@@ -128,14 +138,15 @@ void fileOpen(file_t *file, const char *mode, const int special_mode, const char
 
 void fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, const int line)
 {
-	file_tmp->name = malloc(strlen(file_src_name) + strlen(".tmp") + 1);
+	const size_t name_size = strlen(file_src_name) + sizeof(".tmp");
+	file_tmp->name = malloc(name_size);
 	if( file_tmp->name == NULL )
 	{
 		AUTOCODE_MSG_ERROR("from [%s:%i] malloc <%s>", caller, line, file_src_name);
 		exit(1);
 	}
 	file_tmp->name_allocated = true;
-	sprintf(file_tmp->name, "%s.tmp", file_src_name);
+	snprintf(file_tmp->name, name_size, "%s.tmp", file_src_name);
 
 	file_tmp->stream = fopen(file_tmp->name, "w+");
 	if( file_tmp->stream == NULL )
