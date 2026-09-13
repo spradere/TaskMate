@@ -12,6 +12,9 @@
  *
  */
 
+#ifndef TARGET_TEST_NOSCLI_INIT_H
+#define TARGET_TEST_NOSCLI_INIT_H
+
 /* ============================================================================
  * Includes
  * ========================================================================== */
@@ -25,3 +28,5 @@
 
 void test_noscliInit(void);
 void targetWireSignal(hal_signal_t *table, gpio_signal_t signal);
+
+#endif // TARGET_TEST_NOSCLI_INIT_H

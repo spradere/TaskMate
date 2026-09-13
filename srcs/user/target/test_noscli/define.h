@@ -11,3 +11,8 @@
  * @brief target define header declarations.
  *
  */
+
+#ifndef TARGET_TEST_NOSCLI_DEFINE_H
+#define TARGET_TEST_NOSCLI_DEFINE_H
+
+#endif // TARGET_TEST_NOSCLI_DEFINE_H
