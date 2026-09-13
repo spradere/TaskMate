@@ -18,7 +18,8 @@ clean:
 		"${PATH_BUILD_TARGET}" \
 		"${FILE_AUTOCODE_TARGET}" \
 		"${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" \
-		"${PATH_BUILD_AUTOCODE_TEST}"
+		"${PATH_BUILD_AUTOCODE_TEST}" \
+		"${PATH_BUILD_BUILD_TEST}"
 	@printf "\n%sRemove files :%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
@@ -29,6 +30,7 @@ clean:
 	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
 	@printf "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}\n"
 	@printf "${PATH_BUILD_AUTOCODE_TEST}\n"
+	@printf "${PATH_BUILD_BUILD_TEST}\n"
 	@printf "${COLOUR_RESET}"
 		
 	@if [ -n "${PATH_BUILD_TARGET}" ] && [ -d "${PATH_BUILD_TARGET}" ]; then \
@@ -56,6 +58,10 @@ clean:
 	
 	@if [ -n "${PATH_BUILD_AUTOCODE_TEST}" ] && [ -d "${PATH_BUILD_AUTOCODE_TEST}" ]; then \
 		find "${PATH_BUILD_AUTOCODE_TEST}" -mindepth 1 -depth -delete; \
+	fi
+
+	@if [ -n "${PATH_BUILD_BUILD_TEST}" ] && [ -d "${PATH_BUILD_BUILD_TEST}" ]; then \
+		find "${PATH_BUILD_BUILD_TEST}" -mindepth 1 -depth -delete; \
 	fi
 	
 .PHONY: clean
