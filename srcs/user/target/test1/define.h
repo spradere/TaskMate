@@ -8,7 +8,7 @@
 
 /**
  * @file target_define.h
- * @brief target define header declarations.
+ * @brief test1 define header declarations.
  *
  */
 

@@ -59,15 +59,19 @@ de fichiers et de répertoires mélangent cependant plusieurs conventions :
 
 | Domaine | Exemples actuels | Observation |
 | --- | --- | --- |
+<<<<<<< Updated upstream
 | Couches | `autoCode`, `sysCall`, `sysCore`, `tmLibc` | camelCase et snake_case mélangés |
+=======
+
+>>>>>>> Stashed changes
 | Matériel | `avr8`, `atmega2560`, `arduinoMega` | identifiants sans règle commune explicite |
 | Drivers externes | `lcd_AMC2004`, `rtc_ZS042` | type en minuscules, modèle en majuscules |
 | Timers | `timerSTC`, `timerSched` | acronymes et mots concaténés |
-| Initialisation HAL | `avr8_init.c`, `arduinoMega_init.c` | suffixe de fichier en snake_case |
-| Initialisation cible | `test1Init.c`, `test_noscliInit.c` | suffixe de fichier en camelCase |
+
 
 Les écarts concrets les plus nets sont les suivants :
 
+<<<<<<< Updated upstream
 - le répertoire `test_noscli`, le fichier `test-noscli_init.rc` et le symbole
   `test_noscliInit()` utilisent trois compositions différentes ;
 - le commentaire de `test-noscli_init.rc` désigne encore la cible `test1` ;
@@ -77,6 +81,11 @@ Les écarts concrets les plus nets sont les suivants :
   `interfaces` ;
 - `test1Init.h` et `test_noscliInit.h` n'ont pas de garde d'inclusion ;
 - les deux fichiers `target/*/define.h` déclarent `@file target_define.h`, qui n'est pas leur nom.
+=======
+- `tmlibc.h` et `tmlibc.c` ne reprennent pas la forme `tm_libc` du nom de couche ;
+
+
+>>>>>>> Stashed changes
 
 Il n'existe pas de règle générale documentée pour les noms de fichiers et de répertoires. Avant une
 campagne de renommage, il faut donc fixer une convention et ses exceptions : noms de composants,
