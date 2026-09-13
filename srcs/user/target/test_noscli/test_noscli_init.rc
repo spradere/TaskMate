@@ -1,6 +1,6 @@
 !set_version_major 1
 !set_version_minor 3
-# hardware target test1 init.rc
+# hardware target test_noscli init.rc
 
 i2c -type driver -run core
 
