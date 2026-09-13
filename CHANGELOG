@@ -3,7 +3,7 @@
 	add direct-include architecture checks
 	clarify system-critical header allow-list 
 	replace panic() with the dependency-neutral hal_halt() 
-	harden build cleanup with validated find -delete paths 
+	harden build clean up with validated find -delete paths 
 	add tests for build configuration
 	normalize init filenames
 	rename the tm_libc layer and related files
@@ -23,7 +23,7 @@ TaskMate 0.30
 	remove hal/public headers -> interfaces for build time file selection
 	autoCode tokenizer go dynamic
 	upgrade i2c scan address
-	spelling corections in documentation
+	spelling corrections in documentation
 	autoCode code upgrade in C and makefiles, error system related
 
 TaskMate 0.29
