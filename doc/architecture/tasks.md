@@ -15,6 +15,9 @@ The scheduler excludes them until the system service advances to the user run le
 marks itself initialized, toggles a target-defined logical LED, loads a 500 ms software delay, and
 busy-waits while periodic scheduler interrupts continue to preempt it.
 
+The v10 direction also permits tasks to use the horizontal `tmLibc` API directly. It does not permit
+them to reach `interfaces`, sysCore, or HAL.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Both tasks are deterministic examples with no direct HAL or register access.
@@ -26,4 +29,3 @@ busy-waits while periodic scheduler interrupts continue to preempt it.
 - Period, deadline, priority, stack need, and worst-case execution time are not declared or checked.
 - User level gates activation but gives no distinct scheduling policy afterward.
 - Busy-wait delays consume each scheduled slice instead of yielding cooperatively.
-

@@ -24,6 +24,10 @@ GPIO initialization.
 USART still starts earlier as the boot-log path. Once scheduled, the system service starts other
 drivers by run level through syscalls and checks their running state before advancing.
 
+The current MCU still exposes string reads and formatted-output transport through a public tmLibc
+backend. Under the v10 direction, libc sits above `sysCall`; future work must replace this direct
+library-to-HAL route while preserving AVR program-memory handling and bounded output.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
 - CPU context, interrupts, timers, and registers remain inside target-specific code.
@@ -33,6 +37,6 @@ drivers by run level through syscalls and checks their running state before adva
 
 ### Remaining weaknesses
 - Driver capability requirements remain implicit in selected sources and `init.rc` names.
+- The public tmLibc backend preserves a legacy `tmLibc` -> HAL dependency.
 - Startup hooks are empty; USART and scheduler timers still follow special initialization paths.
 - Start requests discard driver results, and startup cannot unwind a partial hardware state.
-- Polling, synchronous I/O, AVR frame assumptions, and ABI validation remain hardware risks.
