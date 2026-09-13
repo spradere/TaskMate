@@ -7,7 +7,7 @@
  */
 
 /**
- * @file arduinoMega_init.h
+ * @file init.h
  * @brief Arduino Mega board initialization declarations.
  *
  */

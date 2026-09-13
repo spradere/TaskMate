@@ -7,7 +7,7 @@
  */
 
 /**
- * @file test_noscliInit.c
+ * @file init.c
  * @brief test_noscli init implementation.
  *
  */
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "test_noscliInit.h"
+#include "init.h"
 
 #include <avr/io.h>
 #include <stdbool.h>

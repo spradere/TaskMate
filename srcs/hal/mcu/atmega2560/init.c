@@ -5,21 +5,19 @@
  * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
  * See the LICENSE file for full license terms.
  */
-
 /**
- * @file arduinoMega_init.c
- * @brief Arduino Mega board initialization implementation.
- *
+ * @file init.c
+ * @brief ATmega2560 MCU initialization implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "arduinoMega_init.h"
+#include "init.h"
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_arduinoMegaInit(void) {}
+void hal_atmega2560Init(void) {}

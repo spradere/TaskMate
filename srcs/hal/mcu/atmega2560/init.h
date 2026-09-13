@@ -7,7 +7,7 @@
  */
 
 /**
- * @file atmega2560_init.h
+ * @file init.h
  * @brief ATmega2560 MCU initialization declarations.
  *
  */
