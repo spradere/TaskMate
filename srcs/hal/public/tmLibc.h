@@ -7,8 +7,8 @@
  */
 
 /**
- * @file tmlibc.h
- * @brief tmlibc header declarations.
+ * @file tmLibc.h
+ * @brief tmLibc header declarations.
  *
  */
 
@@ -20,7 +20,7 @@
  * ========================================================================== */
 
 #if defined(MCU_atmega2560)
-	#include "hal/mcu/atmega2560/tmlibc.h"
+	#include "hal/mcu/atmega2560/tmLibc.h"
 	#define HAL_TMLIBC
 #endif
 

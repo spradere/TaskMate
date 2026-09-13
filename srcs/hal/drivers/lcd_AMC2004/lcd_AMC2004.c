@@ -18,7 +18,7 @@
 
 #include <util/delay.h>
 
-#include "hal/public/tmlibc.h"
+#include "hal/public/tmLibc.h"
 #include "interfaces/drv_i2c.h"
 #include "interfaces/drv_lcd.h"
 #include "interfaces/tm_macros.h"
