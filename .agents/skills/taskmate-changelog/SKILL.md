@@ -41,16 +41,16 @@ Apply only after explicit user approval of the current proposal.
 
 1. Verify `CHANGELOG` and `README.md` have not changed since the proposal. Stop and
    re-propose if either changed.
-2. Insert approved entries without changing any existing `CHANGELOG` byte. Put new
-   entries after the last unversioned entry and before the existing blank separator
-   for the first release heading. If there is no unversioned block, insert them at
-   the file start.
+2. Insert the approved entries at the beginning of `CHANGELOG`, in their presented
+   order. Do not add a blank separator: the previous first entry must follow the new
+   batch immediately. Do not change any byte from the previous file content.
 3. Add a `TaskMate <major>.<minor>` heading only when the user explicitly approves
    that release operation. Never rewrite an existing heading.
 4. Replace only the existing `Project Stats` heading and values in `README.md`,
    using the measurements shown in the approved proposal.
-5. Verify allowed categories, leading tabs, single-line entries, and the 80-character
-   limit. Run `git diff --check` and inspect the complete diff of both managed files.
+5. Verify allowed categories, leading tabs, single-line entries, the 80-character
+   limit, and that blank lines occur only around release headings. Run
+   `git diff --check` and inspect the complete diff of both managed files.
 6. Report the inserted entries, measured statistics, validation results, and any
    hardware-validation limit.
 

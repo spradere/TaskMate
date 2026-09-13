@@ -12,6 +12,9 @@
 - The corresponding Git tag is `v<major>.<minor>`.
 - Existing `CHANGELOG` lines are immutable: never edit, delete, reorder, or retag them.
 - Additions may insert new entries or an explicitly approved release heading only.
+- Insert every approved entry batch at the beginning of the file, in presented order.
+- Do not place blank lines between entries. Blank lines are allowed only immediately
+  before and after an unindented `TaskMate` version heading.
 
 ## Entry format
 

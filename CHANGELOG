@@ -1,3 +1,5 @@
+	[build] standardize Make script variable names
+	[build] add policy-driven changelog maintenance workflow
 	add direct-include architecture checks
 	clarify system-critical header allow-list 
 	replace panic() with the dependency-neutral hal_halt() 

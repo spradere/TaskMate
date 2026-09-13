@@ -17,10 +17,10 @@ The TaskMate operating system is designed for microcontroller. Its architecture 
 maintain a clear separation between build
 logic, system behaviour, and hardware dependencies, ensuring both portability and maintainability.
 
-> <span style="color:green"> **Project Stats (v0.28 [^1] )**</span>
+> <span style="color:green"> **Project Stats (v0.30 [^1] )**</span>
 >
->  <span style="color:green">808 commits • 152 source files • 11753 lines of code •
-> binary size: 16140 bytes (Flash) • RAM usage: 1818 bytes</span>
+>  <span style="color:green">860 commits • 158 source files • 12118 lines of code •
+> binary size: 15616 bytes (Flash) • RAM usage: 1817 bytes</span>
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
