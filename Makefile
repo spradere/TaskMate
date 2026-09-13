@@ -21,6 +21,7 @@ PATH_CONF = conf
 PATH_DOCS = doc
 PATH_SCRIPTS = scripts
 PATH_TEST = test
+PATH_AGENTS = .agents
 
 # Build data
 .include "${PATH_MAKEFILES}/options.mk"
