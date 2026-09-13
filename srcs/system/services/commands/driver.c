@@ -21,8 +21,8 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "system/sysCall/sc_hal.h"
-#include "tm_libc/tm_string.h"
-#include "tm_libc/tm_syslog.h"
+#include "tmLibc/tm_string.h"
+#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Private types

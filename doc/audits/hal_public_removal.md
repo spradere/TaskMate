@@ -72,7 +72,7 @@ test1|test_noscli -> arduinoMega -> atmega2560 -> avr8
 
 Cette base est utile, mais `mk/sources.mk` transforme ensuite tous les répertoires enregistrés en
 sources par un `find` récursif. En outre, `mk/path_files.mk` ajoute globalement `system`,
-`tm_libc`, `hal/public`, tous les pilotes externes et toutes les tâches.
+`tmLibc`, `hal/public`, tous les pilotes externes et toutes les tâches.
 
 Conséquences vérifiées avec `bmake -V FILES_SRC` :
 
@@ -237,7 +237,7 @@ suivent les décisions des étapes 2 et 3.
 3. Remplacer les autorisations fondées sur les anciens chemins par des gardes attachées aux nouveaux
    contrats critiques.
 4. Étendre le contrôle pour interdire tout include concret `hal/arch`, `hal/mcu` ou `hal/board`
-   depuis `system`, `tm_libc` et `interfaces`; les sources de cible et HAL restent les seuls
+   depuis `system`, `tmLibc` et `interfaces`; les sources de cible et HAL restent les seuls
    propriétaires de ces includes.
 5. Ajouter des recherches négatives explicites sur `hal/public`, `HAL_PUBLIC_`, `hal_define` et
    `--haldefine`.

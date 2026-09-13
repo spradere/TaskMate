@@ -23,7 +23,7 @@
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
-#include "tm_libc/tm_string.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Private function prototypes

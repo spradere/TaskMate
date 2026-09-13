@@ -26,8 +26,8 @@
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCore/modules.h"
-#include "tm_libc/tm_string.h"
-#include "tm_libc/tm_syslog.h"
+#include "tmLibc/tm_string.h"
+#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Constants

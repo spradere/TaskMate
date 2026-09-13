@@ -4,13 +4,13 @@
 
 Cet audit examine la dépendance du pilote `atmega2560/usart.c` à `tm_string_t` et évalue les
 architectures permettant de limiter ce pilote à des octets `uint8_t`. L'analyse correspond au
-commit `774e9df`. Elle couvre le pilote USART, le backend matériel de `tm_libc`, le formatage, les
+commit `774e9df`. Elle couvre le pilote USART, le backend matériel de `tmLibc`, le formatage, les
 syscalls associés, le démarrage et `panic()` ; elle ne modifie pas le firmware.
 
 ## Constat
 
 `tm_string_t` est défini dans la couche neutre `interfaces/`. Sa présence dans un contrat HAL ne
-constitue donc pas formellement une dépendance du HAL vers `tm_libc`. Elle reste toutefois une
+constitue donc pas formellement une dépendance du HAL vers `tmLibc`. Elle reste toutefois une
 abstraction trop riche pour un périphérique série : elle décrit une chaîne terminée par NUL, sa
 taille maximale et son emplacement en RAM ou en mémoire programme.
 
@@ -61,15 +61,15 @@ continue à extraire les octets RAM/ROM avant d'appeler USART. `panic.c`, seul a
 de l'écriture de chaîne, reçoit un petit helper privé qui parcourt `tm_string_t`, transmet chaque
 octet et force l'émission.
 
-Cette solution supprime immédiatement le cycle et ne change ni la place de `tm_libc`, ni le chemin
-normal des logs. Elle conserve cependant un backend `tm_libc` directement relié au HAL USART.
+Cette solution supprime immédiatement le cycle et ne change ni la place de `tmLibc`, ni le chemin
+normal des logs. Elle conserve cependant un backend `tmLibc` directement relié au HAL USART.
 
 ### 2. Rendre toute la sortie normale dépendante de `sysCall`
 
 Le chemin cible serait :
 
 ```text
-services -> tm_libc/console -> sysCall -> HAL USART -> matériel
+services -> tmLibc/console -> sysCall -> HAL USART -> matériel
 ```
 
 Une API telle que `sc_usartWrite(uint8_t)` et `sc_usartFlush()` préserverait la frontière déjà
@@ -83,7 +83,7 @@ Ce déplacement n'est pas applicable directement à l'état courant :
 - le formateur appelle `sc_coopYield()` lorsqu'il observe son verrou occupé ;
 - le boot et `panic()` utilisent la sortie hors du chemin normal des tâches.
 
-Déplacer `tm_libc` en bloc créerait donc un cycle `sysCall <-> tm_libc`. Il faudrait d'abord
+Déplacer `tmLibc` en bloc créerait donc un cycle `sysCall <-> tmLibc`. Il faudrait d'abord
 retirer la journalisation de `sc_i2cScan()`, rendre les primitives de chaînes utilisables sous
 `sysCall` sans dépendance remontante et isoler la politique de concurrence du formateur.
 
@@ -119,14 +119,14 @@ Les responsabilités finales seraient :
 
 ```text
 interfaces       : descripteur portable tm_string_t et contrats de données
-tm_libc core      : lecture RAM/ROM, copie, comparaison et formatage sans syscall
+tmLibc core      : lecture RAM/ROM, copie, comparaison et formatage sans syscall
 console normale  : politique de log et sortie par syscall
 sysCall          : validation, traduction d'erreur et accès à la capacité de console
 HAL USART        : réception, mise en file et émission de uint8_t
 console urgence  : chemin HAL borné réservé au boot critique et à panic()
 ```
 
-Le changement de statut de `tm_libc` est donc une direction pertinente pour la console, mais pas
+Le changement de statut de `tmLibc` est donc une direction pertinente pour la console, mais pas
 pour l'ensemble des primitives de chaînes. Le noyau RAM/ROM reste une préoccupation transversale de
 représentation ; la journalisation et le choix du périphérique de sortie appartiennent à une couche
 supérieure.
@@ -156,7 +156,7 @@ interruption.
 plus sûre consiste à supprimer l'API de chaîne du pilote et à déplacer son parcours dans les
 consommateurs qui comprennent `tm_string_t`.
 
-Le chemin `tm_libc -> sysCall -> USART` est recommandé pour la console normale après découpage, mais
-pas comme déplacement global immédiat de `tm_libc`. Sans cette préparation, il remplace le cycle
-actuel entre USART et le backend texte par un cycle plus large entre `sysCall` et `tm_libc`, tout en
+Le chemin `tmLibc -> sysCall -> USART` est recommandé pour la console normale après découpage, mais
+pas comme déplacement global immédiat de `tmLibc`. Sans cette préparation, il remplace le cycle
+actuel entre USART et le backend texte par un cycle plus large entre `sysCall` et `tmLibc`, tout en
 affaiblissant les chemins spéciaux de boot et de panique.

@@ -20,7 +20,7 @@
 #include "hal/public/context.h"
 #include "interfaces/tm_modules.h"
 #include "system/sysCore/modules_list.h"
-#include "tm_libc/tm_string.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Private variables

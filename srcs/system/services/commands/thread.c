@@ -19,8 +19,8 @@
 
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_modules.h"
-#include "tm_libc/tm_string.h"
-#include "tm_libc/tm_syslog.h"
+#include "tmLibc/tm_string.h"
+#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Private types

@@ -21,7 +21,7 @@
 #include <stddef.h>
 
 #include "interfaces/hal_halt.h"
-#include "tm_libc/tm_string.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Generated error catalogue

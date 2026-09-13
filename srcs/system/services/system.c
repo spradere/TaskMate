@@ -25,9 +25,9 @@
 #include "system/sysCall/error.h"
 #include "system/sysCall/sc_hal.h"
 #include "system/sysCall/sc_modules.h"
-#include "tm_libc/tm_stdio.h"
-#include "tm_libc/tm_string.h"
-#include "tm_libc/tm_syslog.h"
+#include "tmLibc/tm_stdio.h"
+#include "tmLibc/tm_string.h"
+#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Constants

@@ -25,7 +25,7 @@
 #endif
 
 #if !defined(HAL_TMLIBC)
-	#error "No hal implementation for tm_libc on selected hardware target."
+	#error "No hal implementation for tmLibc on selected hardware target."
 #endif
 
 #endif // HAL_PUBLIC_TMLIBC_H
