@@ -10,10 +10,10 @@ L'audit couvre l'arborescence suivie par Git, les fichiers ignorés présents da
 règles de nommage, les dépendances entre couches et la sélection des sources par BSD `bmake`.
 
 La structure générale est saine et correspond au découpage annoncé : `user`, `system`, `hal`,
-`interfaces`, `tm_libc` et `autoCode` ont des responsabilités identifiables. La chaîne matérielle
+`interfaces`, `tmLibc` et `autoCode` ont des responsabilités identifiables. La chaîne matérielle
 `target -> board -> MCU -> architecture` est également construite explicitement par le build.
 
-La cohérence reste partielle. Les écarts principaux concernent un cycle entre `tm_libc` et le
+La cohérence reste partielle. Les écarts principaux concernent un cycle entre `tmLibc` et le
 système, la présence de dépendances ascendantes générées dans `sysCore`, une sélection des sources
 trop globale et l'absence de convention uniforme pour les noms de fichiers et de répertoires.
 
@@ -59,7 +59,7 @@ de fichiers et de répertoires mélangent cependant plusieurs conventions :
 
 | Domaine | Exemples actuels | Observation |
 | --- | --- | --- |
-| Couches | `autoCode`, `sysCall`, `sysCore`, `tm_libc` | camelCase et snake_case mélangés |
+| Couches | `autoCode`, `sysCall`, `sysCore`, `tmLibc` | camelCase et snake_case mélangés |
 | Matériel | `avr8`, `atmega2560`, `arduinoMega` | identifiants sans règle commune explicite |
 | Drivers externes | `lcd_AMC2004`, `rtc_ZS042` | type en minuscules, modèle en majuscules |
 | Timers | `timerSTC`, `timerSched` | acronymes et mots concaténés |
@@ -71,7 +71,7 @@ Les écarts concrets les plus nets sont les suivants :
 - le répertoire `test_noscli`, le fichier `test-noscli_init.rc` et le symbole
   `test_noscliInit()` utilisent trois compositions différentes ;
 - le commentaire de `test-noscli_init.rc` désigne encore la cible `test1` ;
-- `tmlibc.h` et `tmlibc.c` ne reprennent pas la forme `tm_libc` du nom de couche ;
+- `tmlibc.h` et `tmlibc.c` ne reprennent pas la forme `tmLibc` du nom de couche ;
 - `TaskMate.c` est le seul fichier C principal en PascalCase ;
 - `doc/architecture/interface.md` est au singulier alors que la couche et la règle sont nommées
   `interfaces` ;
@@ -89,7 +89,7 @@ cible. Une normalisation mécanique sans cette décision déplacerait seulement 
 2. Documenter une convention unique pour les noms de fichiers, répertoires, acronymes et matériels.
 3. Corriger `test-noscli_init.rc`, les blocs `@file` et les gardes d'inclusion des cibles.
 4. Étendre le contrôle de frontières aux dépendances de couches complètes.
-5. Découpler l'attente coopérative et le backend matériel du noyau de `tm_libc`.
+5. Découpler l'attente coopérative et le backend matériel du noyau de `tmLibc`.
 6. Isoler la composition générée de `sysCore` et sélectionner réellement les sources par cible.
 7. Nettoyer les sauvegardes locales ignorées et corriger l'affichage de `bmake clean`.
 

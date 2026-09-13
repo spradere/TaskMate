@@ -28,7 +28,7 @@
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
 #include "system/sysCore/tm_softwareTimeCounter.h"
-#include "tm_libc/tm_syslog.h"
+#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * File metadata

@@ -26,7 +26,7 @@ Do not propose a generic amd64 desktop-oriented solution.
 
 `doc/TaskMate_layers_v10.png` is the conceptual map of the current architecture.
 Yellow denotes user code, blue the system, green the hardware side, and red
-the deliberately cross-cutting `interfaces` and `tm_libc` layers. Read the main
+the deliberately cross-cutting `interfaces` and `tmLibc` layers. Read the main
 stack from top to bottom as increasing hardware specificity:
 
 - `srcs/user/tasks/` contains the application threads. Tasks use service and
@@ -56,13 +56,13 @@ stack from top to bottom as increasing hardware specificity:
   of portable types, enums, constants, macros, and generated shared contracts.
   System and HAL code may consume it, but it is not a runtime stage and must not
   depend on HAL, `sysCall`, services, or tasks.
-- `srcs/tm_libc/` is a deliberately cross-cutting embedded-library layer. It
+- `srcs/tmLibc/` is a deliberately cross-cutting embedded-library layer. It
   provides bounded string, formatting, and logging support to the layers that
   need it while keeping MCU resource costs explicit.
 
 The normal application paths are therefore tasks -> services -> `sysCall` and
 tasks -> `sysCall`; syscalls then delegate to `sysCore` or `HAL Public` before
-reaching the target implementation and hardware. By contrast, `interfaces` and `tm_libc`
+reaching the target implementation and hardware. By contrast, `interfaces` and `tmLibc`
 are permanent transversal layers by architectural choice; their cross-cutting
 role does not relax their documented APIs or build-enforced access rules.
 

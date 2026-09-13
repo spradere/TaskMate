@@ -1,7 +1,7 @@
-# 📚 Architecture Note — tm_libc
+# 📚 Architecture Note — tmLibc
 
 ## Historical developments
-`tm_libc` was introduced to bound code size and behaviour on constrained targets. It gained compact
+`tmLibc` was introduced to bound code size and behaviour on constrained targets. It gained compact
 formatting, RAM/ROM-aware strings, and logging through target-specific output backends.
 
 After tag `v0.28`, it became a transversal layer in the separated tree. Commit `ec88d98` corrected

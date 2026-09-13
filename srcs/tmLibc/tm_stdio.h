@@ -30,7 +30,7 @@
 #endif
 
 #if TM_LIBC_TASKMATE
-	#include "tm_libc/tm_snprintf.h"
+	#include "tmLibc/tm_snprintf.h"
 #endif
 
 // clang-format on
