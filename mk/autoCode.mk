@@ -60,7 +60,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@./scripts/check_build_delete_path.sh "${PATH_LOGS}"
 	@if [ -n "${FILE_AUTOCODE_LOG}" ] && [ -d "${PATH_LOGS}" ]; then \
-		find "${PATH_LOGS}" -maxdepth 1 -type f -name "${PATH_LOGS}/autoCode_log*" -delete; \
+		find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete; \
 	fi
 .endif
 
