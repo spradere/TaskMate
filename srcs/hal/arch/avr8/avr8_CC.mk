@@ -8,11 +8,13 @@
 #
 ################################################################################
 
-# Output files
+# AVR files
 FILE_HEX = ${FILE_TARGET}.hex
 FILE_ELF = ${FILE_TARGET}.elf
 FILE_AVR8_PROGRAMS_LIST = ${PATH_AVR8}/programs.list
 FILE_AVR8_PROGRAMS_CHECK_STAMP = ${PATH_BUILD_TARGET}/.avr8_programs_check_stamp
+SCRIPT_AVR_MEMORY_DATA = ${PATH_AVR8}/avr_memory_data.awk
+SCRIPT_AVR_MEMORY_SHOW = ${PATH_AVR8}/avr_memory_show.awk
 
 .BEGIN: ${FILE_AVR8_PROGRAMS_CHECK_STAMP}
 	

@@ -42,7 +42,7 @@ When adding new variables:
 4. **Use `FILES_*` for generated lists** (sources, headers, deps) and for target prerequisites.
    - This keeps rules concise and avoids path duplication.
 5. **Use `SCRIPT_*` whenever Make invokes or loads a script.**
-   - Keep every script path in `mk/path_files.mk`, including target-specific and test scripts,
+   - Keep every script path in `mk/path_files.mk`,
      then reference the variable in recipes and prerequisites.
 6. **Use per-file `CFLAGS_*` only for exceptions** (e.g., specific privileged modules).
    - Keep global flags in common `CFLAGS` and local deviations in `CFLAGS_<source>`.
