@@ -15,12 +15,11 @@
 # Help system: targets beginning with '_' or '$' are internal only
 # and are not displayed by 'make help'.
 
-.MAIN: all
-
 .BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
 	
+.if make(upload) || make(all)
 	@printf "// #####################################\n" > "${FILE_TM_INFO}.tmp"
 	@printf "// # TaskMate informations informations \n" >> "${FILE_TM_INFO}.tmp"
 	@printf "// #####################################\n\n" >> "${FILE_TM_INFO}.tmp"
@@ -37,6 +36,7 @@
 			find "${FILE_TM_INFO}.tmp" -type f -delete; \
 		fi \
 	fi
+.endif
 	
 # Check required programs once
 ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
@@ -47,6 +47,7 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT
 	@touch "${FILE_PROGRAMS_CHECK_STAMP}"
 
 .END:
+.if make(upload) || make(all)
 	@printf "##########################\n" > "${FILE_BUILD_INFO}"
 	@printf "# Last build informations \n" >> "${FILE_BUILD_INFO}"
 	@printf "##########################\n\n" >> "${FILE_BUILD_INFO}"
@@ -62,7 +63,6 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT
 	@printf "${CC} : " >> "${FILE_BUILD_INFO}"
 	@printf "${VAL_CC_VERSION}\n" >> "${FILE_BUILD_INFO}"
 
-.if make(upload) || make(all)
 	@printf "%s\n" "${COLOUR_WHITE_BOLD}"
 	@printf "##########################\n"
 	@printf "# Build summary\n"
