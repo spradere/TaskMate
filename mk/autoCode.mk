@@ -58,7 +58,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%sautoCode, related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
-	@./scripts/check_build_delete_path.sh "${PATH_LOGS}"
+	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${PATH_LOGS}"
 	@if [ -n "${FILE_AUTOCODE_LOG}" ] && [ -d "${PATH_LOGS}" ]; then \
 		find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete; \
 	fi
@@ -81,7 +81,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 
 	# Process log
 	@awk ${COLOURS_AWK} -v log_file="${FILE_AUTOCODE_LOG_DATED}" \
-		-f ${PATH_SCRIPTS}/autocode_log.awk "${FILE_AUTOCODE_LOG_DATED}"
+		-f ${SCRIPT_AUTOCODE_LOG} "${FILE_AUTOCODE_LOG_DATED}"
 
 # Special rule for autoCode with Clang, not the architecture-specific compiler
 CFLAGS_AUTOCODE = -I${PATH_SRCS}/
@@ -96,19 +96,19 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ER
 
 # Dependency generation
 _autocode_dependency_check:
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_INITRC_DEPS}" "${FILES_INITRC}"
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_PARSE_TAG_DEPS}" "${FILES_PARSE_TAG}"
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_HALINIT_DEPS}" "${FILES_HALINIT_HEADER}"
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_FUNCINIT_DEPS}" "${VAL_FUNCINIT}"
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_HALDEFINE_DEPS}" "${FILES_HALDEFINE}"
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_ERROR_DEPS}" "${FILES_ERROR}"
-	@${PATH_SCRIPTS}/compare_replace.sh \
+	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_GPIO_SIGNALS_DEPS}" "${FILE_GPIO_SIGNALS}"
 .PHONY: _autocode_dependency_check
 
@@ -154,7 +154,7 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 #help [global] Run autoCode alone.
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@./scripts/check_build_delete_path.sh "${FILE_AUTOCODE_STAMP}"
+	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${FILE_AUTOCODE_STAMP}"
 	@if [ -n "${FILE_AUTOCODE_STAMP}" ] && [ -f "${FILE_AUTOCODE_STAMP}" ]; then \
 		find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
 	fi

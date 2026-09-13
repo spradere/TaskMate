@@ -20,19 +20,15 @@ FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
 FILE_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
-FILE_PROGRAMS_CHECK_SCRIPT = ${PATH_SCRIPTS}/check_programs.sh
 FILE_HARDWARE_TARGETS_CONF = ${PATH_CONF}/hardware-targets.conf
-FILE_HARDWARE_TARGET_CHECK_SCRIPT = ${PATH_SCRIPTS}/hardware_target.awk
 
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
 PATH_BUILD_AUTOCODE_TEST = ${PATH_BUILDS}/autoCode_test
-FILE_AUTOCODE_TEST_SCRIPT = ${PATH_AUTOCODE_TEST}/autoCode_test.sh
 FILE_AUTOCODE_TEST_SANITIZE_TARGET = ${PATH_BUILDS}/autoCode_sanitize
 
 PATH_BUILD_TEST = ${PATH_TEST}/build
 PATH_BUILD_BUILD_TEST = ${PATH_BUILDS}/build_test
-FILE_BUILD_TEST_SCRIPT = ${PATH_BUILD_TEST}/build_test.sh
 
 # USB
 PATH_USBKEY = /media/usbkey
@@ -64,7 +60,23 @@ FILE_ARCH_CHECK_LOG = ${PATH_LOGS}/architecture_check.log
 # Scripts
 FILE_SYSTEM_HEADER_ALLOW_CONF = ${PATH_CONF}/system_header_allow.conf
 FILE_ARCH_VALID_MATRIX = ${PATH_CONF}/arch_valid_matrix.md
-FILE_ARCH_CHECK_SCRIPT = ${PATH_SCRIPTS}/arch_include.awk
+SCRIPT_ARCH_INCLUDE = ${PATH_SCRIPTS}/arch_include.awk
+SCRIPT_AUTOCODE_LOG = ${PATH_SCRIPTS}/autocode_log.awk
+SCRIPT_AUTOCODE_TEST = ${PATH_AUTOCODE_TEST}/autoCode_test.sh
+SCRIPT_AVR_MEMORY_DATA = ${PATH_AVR8}/avr_memory_data.awk
+SCRIPT_AVR_MEMORY_SHOW = ${PATH_AVR8}/avr_memory_show.awk
+SCRIPT_BUILD_SUMMARY_CLOC = ${PATH_SCRIPTS}/build_summary_cloc.awk
+SCRIPT_BUILD_SUMMARY_MEMORY = ${PATH_SCRIPTS}/build_summary_memory.awk
+SCRIPT_BUILD_TEST = ${PATH_BUILD_TEST}/build_test.sh
+SCRIPT_CHECK_BUILD_DELETE_PATH = ${PATH_SCRIPTS}/check_build_delete_path.sh
+SCRIPT_CHECK_PROGRAMS = ${PATH_SCRIPTS}/check_programs.sh
+SCRIPT_CLOC_DATA = ${PATH_SCRIPTS}/cloc_data.awk
+SCRIPT_CLOC_SHOW = ${PATH_SCRIPTS}/cloc_show.awk
+SCRIPT_COMPARE_REPLACE = ${PATH_SCRIPTS}/compare_replace.sh
+SCRIPT_GIT_VERSION = ${PATH_SCRIPTS}/git_version.sh
+SCRIPT_HARDWARE_TARGET = ${PATH_SCRIPTS}/hardware_target.awk
+SCRIPT_HEADER_ALLOW = ${PATH_SCRIPTS}/header_allow.awk
+SCRIPT_MAKE_HELP = ${PATH_SCRIPTS}/make_help.awk
 
 # Git
 FILE_GIT_IGNORE = .gitignore
@@ -84,6 +96,3 @@ FILES_GIT_EXCLUDED = \
 # Tags
 FILE_TAGS = .tags
 FILE_TAGS_STAMP = ${PATH_BUILD_TARGET}/.tags_stamp
-
-# USB key directory backup
-VAL_TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${VAL_TM_VERSION}

@@ -19,22 +19,22 @@ test_build_system: test_build_configuration .WAIT test_build_scripts .WAIT \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .PHONY: test_build_system
 
-test_build_configuration: ${FILE_BUILD_TEST_SCRIPT}
+test_build_configuration: ${SCRIPT_BUILD_TEST}
 #help [test] Test Make configuration, target composition, and generated manifests.
-	@${FILE_BUILD_TEST_SCRIPT} configuration "." "${PATH_BUILD_BUILD_TEST}"
+	@${SCRIPT_BUILD_TEST} configuration "." "${PATH_BUILD_BUILD_TEST}"
 .PHONY: test_build_configuration
 
-test_build_scripts: ${FILE_BUILD_TEST_SCRIPT}
+test_build_scripts: ${SCRIPT_BUILD_TEST}
 #help [test] Test build-system shell utilities.
-	@${FILE_BUILD_TEST_SCRIPT} scripts "." "${PATH_BUILD_BUILD_TEST}"
+	@${SCRIPT_BUILD_TEST} scripts "." "${PATH_BUILD_BUILD_TEST}"
 .PHONY: test_build_scripts
 
-test_build_guards: ${FILE_BUILD_TEST_SCRIPT}
+test_build_guards: ${SCRIPT_BUILD_TEST}
 #help [test] Test hardware, header, and architecture guards.
-	@${FILE_BUILD_TEST_SCRIPT} guards "." "${PATH_BUILD_BUILD_TEST}"
+	@${SCRIPT_BUILD_TEST} guards "." "${PATH_BUILD_BUILD_TEST}"
 .PHONY: test_build_guards
 
-test_build_reports: ${FILE_BUILD_TEST_SCRIPT}
+test_build_reports: ${SCRIPT_BUILD_TEST}
 #help [test] Test build log, size, memory, line-count, and help reports.
-	@${FILE_BUILD_TEST_SCRIPT} reports "." "${PATH_BUILD_BUILD_TEST}"
+	@${SCRIPT_BUILD_TEST} reports "." "${PATH_BUILD_BUILD_TEST}"
 .PHONY: test_build_reports
