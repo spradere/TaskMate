@@ -33,7 +33,9 @@
 	@if ! cmp -s "${FILE_TM_INFO}.tmp" "${FILE_TM_INFO}"; then \
 		mv "${FILE_TM_INFO}.tmp" "${FILE_TM_INFO}"; \
 	else \
-		rm "${FILE_TM_INFO}.tmp"; \
+		if [ -n "${FILE_TM_INFO}" ] && [ -f "${FILE_TM_INFO}.tmp" ]; then \
+			find "${FILE_TM_INFO}.tmp" -type f -delete; \
+		fi \
 	fi
 	
 # Check required programs once

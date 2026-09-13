@@ -58,7 +58,9 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "\n%sautoCode, related files have changed -> run autoCode%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
-	@rm -f ${FILE_AUTOCODE_LOG}*
+	@if [ -n "${FILE_AUTOCODE_LOG}" ] && [ -d "${PATH_LOGS}" ]; then \
+		find "${PATH_LOGS}" -maxdepth 1 -type f -name "${FILE_AUTOCODE_LOG}*" -delete; \
+	fi
 .endif
 
 	# Write autoCode options
@@ -151,7 +153,9 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 #help [global] Run autoCode alone.
 	@printf "\n%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@rm -f "${FILE_AUTOCODE_STAMP}"
+	@if [ -n "${FILE_AUTOCODE_STAMP}" ] && [ -f "${FILE_AUTOCODE_STAMP}" ]; then \
+		find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
+	fi
 	@${MAKE} _autocode
 	@ls -t ${FILE_AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
 .PHONY: autoCode_alone

@@ -20,7 +20,6 @@
 
 #include "hal/public/tmlibc.h"
 #include "interfaces/tm_define.h"
-#include "system/sysCall/sc_modules.h"
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -34,8 +33,6 @@ static void tm_putChar(char ch);
  * ---------------------------------------------*/
 
 #define SNPRINTF_BUFF_TEMP_SIZE 32
-
-static uint8_t tm_snprintf_lock = 0;
 
 typedef struct
 {
@@ -117,8 +114,6 @@ static void tm_putChar(char ch)
 
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
-	if( tm_snprintf_lock == 1 ) { sc_coopYield(); }
-	tm_snprintf_lock = 1;
 
 	// Store variables
 	tm_snprintf_buffer.ptr = ptr;
@@ -209,6 +204,5 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 
 exit:
 
-	tm_snprintf_lock = 0;
 	return tm_snprintf_buffer.index;
 }

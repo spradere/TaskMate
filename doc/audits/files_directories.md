@@ -31,21 +31,6 @@ trop globale et l'absence de convention uniforme pour les noms de fichiers et de
 
 ## Écarts architecturaux
 
-### 1. Cycle entre `tm_libc`, `sysCall` et le HAL
-
-`srcs/tm_libc/tm_snprintf.c` inclut `system/sysCall/sc_modules.h` et appelle `sc_coopYield()`.
-Le même fichier dépend aussi de `hal/public/tmlibc.h`. En sens inverse,
-`srcs/system/sysCall/sc_modules.c` inclut `tm_libc/tm_string.h`.
-
-Le graphe contient donc notamment le cycle suivant :
-
-```text
-tm_libc -> sysCall -> sysCore -> tm_libc
-```
-
-Ce cycle ne bloque pas la construction actuelle, mais il affaiblit le statut transversal de
-`tm_libc`, complique l'initialisation et rend une future composition matérielle plus difficile.
-
 ### 2. Dépendances ascendantes générées dans `sysCore`
 
 La région générée de `srcs/system/sysCore/modules_list.h` inclut directement les en-têtes des
@@ -66,15 +51,6 @@ du firmware lié ; elle ne constitue toutefois pas une véritable sélection des
 
 Cette stratégie est acceptable avec la cible unique actuelle, mais elle ne garantit pas que les
 drivers et services non sélectionnés restent compilables avec une future chaîne matérielle.
-
-### 4. Contrôle de frontières incomplet
-
-`conf/system_header_allow.conf` protège cinq en-têtes critiques. Le contrôle passe et apporte une
-défense utile, mais il ne représente pas l'ensemble des règles de couches. Il ne détecterait pas,
-par exemple, toute nouvelle dépendance `HAL -> services` ou `interfaces -> HAL`.
-
-Le message « Checking forbidden system critical includes » doit donc être compris comme un contrôle
-ciblé, et non comme une validation exhaustive du graphe architectural.
 
 ## Cohérence des noms
 
@@ -120,21 +96,6 @@ cible. Une normalisation mécanique sans cette décision déplacerait seulement 
 Ces références sont plus problématiques que les variations purement esthétiques : elles peuvent
 faire exécuter une mauvaise commande ou rechercher une source de vérité inexistante.
 
-## Hygiène du checkout et build
-
-Le dépôt Git est propre, mais le checkout contient des fichiers ignorés hors de `build/` :
-
-- 23 fichiers `*.orig` et un fichier `*.rej.orig` ;
-- `i2c.d` à la racine ;
-- `branch.sh`, `current.geany` et le répertoire `prompt/`.
-
-Ils ne polluent pas l'historique Git et ne sont pas pris comme sources C par le build. Ils rendent
-néanmoins l'arborescence locale moins lisible et peuvent perturber certains inventaires génériques.
-
-La cible `clean` supprime effectivement les artefacts visés, mais son affichage contient les chaînes
-littérales `{FILE_AUTOCODE_TARGET}` et `{PATH_BUILD_TARGET}` à cause de substitutions sans `$` dans
-`mk/utils.mk`.
-
 ## Priorités recommandées
 
 1. Corriger les chemins et commandes obsolètes de la documentation active.
@@ -145,12 +106,3 @@ littérales `{FILE_AUTOCODE_TARGET}` et `{PATH_BUILD_TARGET}` à cause de substi
 6. Isoler la composition générée de `sysCore` et sélectionner réellement les sources par cible.
 7. Nettoyer les sauvegardes locales ignorées et corriger l'affichage de `bmake clean`.
 
-## Validation effectuée
-
-- `bmake clean && bmake` pour `test1` : `Build complete`.
-- `bmake VAL_TARGET=test_noscli clean && bmake VAL_TARGET=test_noscli` : `Build complete`.
-- restauration et reconstruction du profil par défaut : `Build complete`.
-- contrôle des en-têtes critiques : succès pour les cinq motifs configurés.
-- autoCode final sur `test1` : neuf fichiers générés inchangés.
-- état Git avant export du présent rapport : propre.
-- aucun essai sur matériel physique.
