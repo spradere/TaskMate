@@ -28,7 +28,7 @@ ${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${FILE_PROGRAMS_CH
 
 # Link
 ${FILE_TARGET}: ${FILES_OBJ}
-	@printf "\n%sLinking%s\n\n" \
+	@printf "%sLinking%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${CC} ${CFLAGS} ${LDFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
@@ -37,7 +37,7 @@ ${FILE_TARGET}: ${FILES_OBJ}
 FILE_COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 # Compile
 ${FILES_OBJ}: ${FILE_COMPILE_SRC}
-	@printf "\n%sCompilation ...%s\n\n" \
+	@printf "%sCompilation ...%s\n" \
 	    "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "source : <%s> -> <%s>\n" \
 	    "${FILE_COMPILE_SRC}" "${.TARGET}"
@@ -51,7 +51,7 @@ ${FILE_HEX}: ${FILE_ELF}
 	
 upload: all _mcu_memory_show ${FILE_HEX}
 #help [avr8] Upload firmware to the MCU via the Arduino board.
-	@printf "\n%sUpload binary to AVR flash, build %i %s\n\n" \
+	@printf "%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${VAL_BUILD_CNT} "${COLOUR_RESET}"
 	avrdude -c ${VAL_PROGRAMMER} -p ${VAL_MCU_SERIAL} -U flash:w:${FILE_HEX}:i -P ${VAL_PROGRAMMER_PORT} -D
 .PHONY: upload
@@ -66,7 +66,7 @@ _mcu_memory_data:
 .PHONY: _mcu_memory_data
 
 _mcu_memory_show: _mcu_memory_data
-	@printf "\nStatic memory usage : \n"
+	@printf "Static memory usage : \n"
 	@cat ${FILE_MEMRAW}
 
 	@printf "${COLOUR_WHITE_BOLD}Memory usage :\n"
@@ -77,7 +77,7 @@ _mcu_memory_show: _mcu_memory_data
 
 dump: all ${FILE_HEX}
 #help [avr8] Disassemble machine code in .hex and .elf
-	@printf "\n%sGenerate debugging informations%s\n\n" \
+	@printf "%sGenerate debugging informations%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-objdump -D -m ${VAL_MCU_ARCHTYPE} ${FILE_HEX} > "${PATH_BUILD_TARGET}/hex.txt"
 	avr-objdump -D -m ${VAL_MCU_ARCHTYPE} ${FILE_ELF} > "${PATH_BUILD_TARGET}/elf.txt"
@@ -85,7 +85,7 @@ dump: all ${FILE_HEX}
 
 modules_size: all
 #help [avr8] List module sizes from largest to smallest.
-	@printf "\n%sList module size%s\n\n" \
+	@printf "%sList module size%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf
 	avr-nm --format=bsd --size-sort -r ${PATH_BUILD_TARGET}/TaskMate.elf | head -20

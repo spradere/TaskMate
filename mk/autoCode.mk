@@ -55,7 +55,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 						${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} \
 						${FILES_DRIVER_INTERFACES}
 
-	@printf "\n%sautoCode, related files have changed -> run autoCode%s\n\n" \
+	@printf "%sautoCode, related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@./scripts/check_build_delete_path.sh "${PATH_LOGS}"
@@ -90,7 +90,7 @@ CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wno-gnu-zero-variadic-macro-arguments
 
 ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ERROR_LEVEL}
-	@printf "\n%sCompiling autoCode%s\n\n" \
+	@printf "%sCompiling autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
@@ -152,7 +152,7 @@ ${FILE_HALDEFINE_LIST}: ${FILES_HALDEFINE} ${FILE_HALDEFINE_DEPS}
 # Run autoCode alone
 autoCode_alone: ${FILE_AUTOCODE_TARGET}
 #help [global] Run autoCode alone.
-	@printf "\n%sForce running autoCode alone%s\n\n" \
+	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@./scripts/check_build_delete_path.sh "${FILE_AUTOCODE_STAMP}"
 	@if [ -n "${FILE_AUTOCODE_STAMP}" ] && [ -f "${FILE_AUTOCODE_STAMP}" ]; then \

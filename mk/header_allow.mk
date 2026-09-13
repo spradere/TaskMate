@@ -42,7 +42,7 @@ CFLAGS_${PATH_SRCS}/system/sysCore/gpio.c = \
 
 # Check includes for system-critical features
 _system_critical_check:
-	@printf "\n%sChecking forbidden system critical includes ...%s\n" \
+	@printf "%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
 	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS} -v h_check_log=${FILE_H_CHECK_LOG} \
@@ -50,7 +50,7 @@ _system_critical_check:
 
 # Check direct includes against the architecture matrix
 _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${FILE_ARCH_CHECK_SCRIPT}
-	@printf "\n%sChecking architecture direct includes ...%s\n" \
+	@printf "%sChecking architecture direct includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
 	@if awk -v matrix_file="${FILE_ARCH_VALID_MATRIX}" -v path_sources="${PATH_SRCS}" \

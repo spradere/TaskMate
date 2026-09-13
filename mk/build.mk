@@ -82,7 +82,7 @@ all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check _autocode 
 	_architecture_include_check .WAIT _dependency \
 	${FILE_TARGET} _mcu_memory_data _cloc_data
 #help [global] TaskMate build.
-	@printf "\n%sBuild complete%s\n\n" \
+	@printf "\n%sBuild complete%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
 # Dependency files used to compile sources when a related header or source file changes
