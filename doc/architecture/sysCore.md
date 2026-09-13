@@ -19,6 +19,9 @@ context and selects a thread with a non-zero level no greater than the active le
 service advances that level after readiness checks. A separate 10 ms callback decrements software
 counters; cooperative yield advances the next scheduling interrupt.
 
+The v10 direction keeps `tmLibc` above `sysCall`. The module allocator still uses libc string
+macros for generated names, so that dependency is migration debt rather than an allowed sysCore API.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Thread, stack, and driver records are static; firmware startup uses no heap.
@@ -28,6 +31,6 @@ counters; cooperative yield advances the next scheduling interrupt.
 
 ### Remaining weaknesses
 - Eligible threads are equal round-robin peers; dead and initialized bits do not affect selection.
+- Module allocation still has a forbidden `sysCore` -> `tmLibc` dependency.
 - There is no priority, blocking, deadline, idle-thread, watchdog, or overrun policy.
 - Module index access lacks bounds checks, and shared current-thread state has no explicit contract.
-- Startup remains split across top-level and service code and cannot unwind partial initialization.

@@ -37,13 +37,14 @@ logic, system behaviour, and hardware dependencies, ensuring both portability an
 ![System Layer Diagram](doc/TaskMate_layers_v10.png)
 
 
-The diagram shows the current layered architecture of TaskMate.
+The diagram shows the architectural direction of TaskMate.
 Each layer communicates primarily with its direct neighbours, following a strict top-down model to
 maintain clear boundaries and avoid hidden dependencies.
 
-Some components, such as interfaces and the lightweight libc, play a transversal role across multiple
-layers. Rather than breaking the architecture, they provide controlled and well-defined access points
-that help decouple the system while preserving its structure.
+Interfaces remain the single transversal contract layer. The lightweight libc is now a horizontal
+layer above sysCall: tasks and services may use it, while hardware-facing work must ultimately go
+through sysCall. The source tree still contains legacy dependencies that future refactors will align
+with this direction.
 
 System features such as messaging, timing, I/O, and services remain fully accessible to user
 tasks—but always through controlled and indirect interactions.

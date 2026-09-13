@@ -28,6 +28,10 @@ sources against `conf/system_header_allow.conf`, while compile-time guards prote
 Dedicated targets run autoCode by validation stage or as a complete black-box corpus, with an
 ASan/UBSan build available for host-side memory and undefined-behaviour checks.
 
+The direct-include matrix now records `tmLibc` as a horizontal layer and permits service access to
+neutral interfaces. The checker does not yet classify `srcs/tmLibc/`, so those libc relations are
+documented target rules but are not build-enforced until a future code change extends the checker.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Orchestration, discovery, hardware selection, checks, and utilities are separated by concern.
@@ -37,6 +41,6 @@ ASan/UBSan build available for host-side memory and undefined-behaviour checks.
 
 ### Remaining weaknesses
 - Invalid-target diagnostics still name the obsolete selector instead of the active target variable.
+- Direct `tmLibc` dependency rules are present in the matrix but not yet checked.
 - Unsorted source and `*.rc` discovery can make ordering depend on filesystem enumeration.
-- Build metadata varies with time and Git state, while tool versions are not pinned.
 - Only one hardware stack exercises portability; the build also assumes BSD and Unix tooling.

@@ -26,7 +26,8 @@ It may only include:
 
 Examples: `stdint.h`, `stdbool.h`, `tm_types.h`
 
-No dependency from `interfaces/` to `HAL`, `sysCall`, `services`, or `tasks` is allowed.
+No dependency from `interfaces/` to HAL, sysCore, `sysCall`, `tmLibc`, services, or tasks is
+allowed.
 
 ## Rule 2 — HAL dependency direction
 
@@ -42,25 +43,13 @@ how higher layers use those interfaces.
 
 ## Rule 3 — System layer usage
 
-Higher layers such as sysCall/ may depend on:
+HAL, sysCore, `sysCall`, `tmLibc`, and services may consume the neutral contracts permitted by
+`conf/arch_valid_matrix.md`. Tasks use service, `sysCall`, or `tmLibc` APIs rather than including
+`interfaces/` directly.
 
-- `interfaces/`
-- `HAL`
-
-However, the dependency must **never go in the opposite direction**.
-
-This ensures a clear architectural flow:
-
-services / tasks
-	↑
- sysCall
-	↑
-   HAL
-    ↑
-interfaces
-
-
-Each layer may depend only on layers below it.
+`interfaces/` remains the only transversal layer. `tmLibc` is a normal horizontal layer above
+`sysCall`: it may consume interfaces and syscalls, but it must not depend on HAL or sysCore. The
+dependency must never point from a lower layer back to `tmLibc`.
 
 ## Rule 4 — Hardware-specific interfaces
 

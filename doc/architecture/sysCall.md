@@ -24,6 +24,10 @@ scheduler uses the resulting active level to admit threads.
 RTC calls validate pointers, translate errors, and keep one startup-time snapshot. The bounded
 I2C scan reconciles declared devices only after a complete, non-overflowing discovery pass.
 
+The v10 direction places `tmLibc` above this boundary. Current syscall sources still use its string
+and logging helpers; future work must remove those upward dependencies without changing syscall
+ownership of hardware and kernel mediation.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
 - AVR-shared counters, run levels, and thread status updates use short atomic sections.
@@ -33,6 +37,6 @@ I2C scan reconciles declared devices only after a complete, non-overflowing disc
 
 ### Remaining weaknesses
 - Driver-stage start returns no result and discards individual initialization and start failures.
+- Current sources still contain forbidden `sysCall` -> `tmLibc` dependencies.
 - Thread readiness is caller-declared; start still accepts an unchecked initial run level.
 - The RTC startup snapshot has no validity state when its source read fails.
-- GPIO and cooperative-yield APIs lack bounds, context, timeout, and ISR contracts.

@@ -22,9 +22,12 @@ Thread status now has typed bits for category, initialization, death, and cooper
 status and control remain a separate neutral protocol. Selected generated headers also hold target
 counts and configured driver includes needed by system and HAL consumers.
 
+In the v10 diagram it is the only transversal layer. HAL, sysCore, `sysCall`, `tmLibc`, and services
+may consume its contracts; tasks remain behind service, syscall, or libc APIs.
+
 ## Well-built code and implementation weaknesses
 ### Strengths
-- The layer remains dependency-neutral and deliberately transversal.
+- The layer is the sole dependency-neutral and deliberately transversal component.
 - System and HAL share compact contracts without exposing concrete target headers.
 - Generated errors, signals, counts, and includes stay aligned with the selected target.
 - Contracts add no runtime allocation or independent dispatch cost.

@@ -20,6 +20,8 @@ the RTC, updates the LCD, and cooperatively waits on its software counter.
 
 SCLI reads USART through sysCall into a fixed buffer and dispatches `date`, `driver`, `i2c`, and
 `thread`. The date command reads or updates RTC fields and can display the captured startup date.
+Services consume neutral interfaces and the horizontal `tmLibc` layer. Both relations are explicit
+in the v10 dependency matrix.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
