@@ -39,10 +39,10 @@
 .endif
 	
 # Check required programs once
-${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
+${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@printf "%sChecking required programs ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${FILE_PROGRAMS_CHECK_SCRIPT} "${FILE_PROGRAMS_LIST}"
+	@${SCRIPT_CHECK_PROGRAMS} "${FILE_PROGRAMS_LIST}"
 	@mkdir -p "${PATH_BUILDS}"
 	@touch "${FILE_PROGRAMS_CHECK_STAMP}"
 
@@ -71,9 +71,9 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT
 	@printf "\t%-16s : %s\n" "Hardware target" "${VAL_HW_STACK}"
 	@printf "\t%-16s : %s\n" "build" "${VAL_BUILD_CNT}"
 
-	@awk -f ${PATH_SCRIPTS}/build_summary_cloc.awk "${FILE_CLOCDATA}"
+	@awk -f ${SCRIPT_BUILD_SUMMARY_CLOC} "${FILE_CLOCDATA}"
 
-	@awk ${COLOURS_AWK} -f ${PATH_SCRIPTS}/build_summary_memory.awk "${FILE_MEMDATA}"
+	@awk ${COLOURS_AWK} -f ${SCRIPT_BUILD_SUMMARY_MEMORY} "${FILE_MEMDATA}"
 
 	@printf "${COLOUR_RESET}"
 .endif

@@ -14,7 +14,7 @@
 
 clean:
 #help [global] Remove build files.
-	@./scripts/check_build_delete_path.sh \
+	@${SCRIPT_CHECK_BUILD_DELETE_PATH} \
 		"${PATH_BUILD_TARGET}" \
 		"${FILE_AUTOCODE_TARGET}" \
 		"${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" \
@@ -68,8 +68,8 @@ clean:
 
 clean_hard:
 #help [global] Remove all build files.
-	@./scripts/check_build_delete_path.sh "${PATH_BUILD_TARGET}"
-	@./scripts/check_build_delete_path.sh --allow-build-root "${PATH_BUILDS}"
+	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${PATH_BUILD_TARGET}"
+	@${SCRIPT_CHECK_BUILD_DELETE_PATH} --allow-build-root "${PATH_BUILDS}"
 	@printf "\n%sRemove all files : ${PATH_BUILD_TARGET}/* %s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 		
@@ -97,7 +97,7 @@ _cloc_data:
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
 	@printf "\n" >> ${FILE_CLOCRAW}
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${FILE_CLOCRAW}
-	@awk -v file="${FILE_CLOCDATA}" -f ${PATH_SCRIPTS}/cloc_data.awk ${FILE_CLOCRAW}
+	@awk -v file="${FILE_CLOCDATA}" -f ${SCRIPT_CLOC_DATA} ${FILE_CLOCRAW}
 .PHONY: _cloc_data
 
 cloc: _cloc_data
@@ -107,7 +107,7 @@ cloc: _cloc_data
 
 	@cat ${FILE_CLOCRAW}
 	@printf "${COLOUR_WHITE_BOLD}\nTotal loc and ratio :\n"
-	@awk -f ${PATH_SCRIPTS}/cloc_show.awk "${FILE_CLOCDATA}"
+	@awk -f ${SCRIPT_CLOC_SHOW} "${FILE_CLOCDATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: cloc
 
@@ -152,5 +152,5 @@ help:
 #help [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@awk ${COLOURS_AWK} -f ${PATH_SCRIPTS}/make_help.awk ${FILES_MK}
+	@awk ${COLOURS_AWK} -f ${SCRIPT_MAKE_HELP} ${FILES_MK}
 .PHONY: help

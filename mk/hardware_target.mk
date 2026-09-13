@@ -23,9 +23,9 @@ FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/target.mk
 .include "${FILE_TARGET_MK}"
 
 # Check build hardware stack
-_hardware_target_check: ${FILE_HARDWARE_TARGETS_CONF} ${FILE_HARDWARE_TARGET_CHECK_SCRIPT}
+_hardware_target_check: ${FILE_HARDWARE_TARGETS_CONF} ${SCRIPT_HARDWARE_TARGET}
 	@printf "%sChecking hardware target ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@awk -v hardware_target="${VAL_HW_STACK}" \
-		-f "${FILE_HARDWARE_TARGET_CHECK_SCRIPT}" "${FILE_HARDWARE_TARGETS_CONF}"
+		-f "${SCRIPT_HARDWARE_TARGET}" "${FILE_HARDWARE_TARGETS_CONF}"
 .PHONY: _hardware_target_check

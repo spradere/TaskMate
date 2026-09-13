@@ -24,14 +24,14 @@ PATH_TEST = test
 
 # Build data
 .include "${PATH_MAKEFILES}/options.mk"
-.include "${PATH_MAKEFILES}/data.mk"
 .include "${PATH_MAKEFILES}/colours.mk"
+.include "${PATH_MAKEFILES}/path_files.mk"
+.include "${PATH_MAKEFILES}/data.mk"
 
 # Hardware target choice
 .include "${PATH_MAKEFILES}/hardware_target.mk"
 
 # File processing
-.include "${PATH_MAKEFILES}/path_files.mk"
 .include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
 

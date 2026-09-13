@@ -13,16 +13,14 @@ FILE_HEX = ${FILE_TARGET}.hex
 FILE_ELF = ${FILE_TARGET}.elf
 FILE_AVR8_PROGRAMS_LIST = ${PATH_AVR8}/programs.list
 FILE_AVR8_PROGRAMS_CHECK_STAMP = ${PATH_BUILD_TARGET}/.avr8_programs_check_stamp
-FILE_AVR8_MEMORY_DATA_SCRIPT = ${PATH_AVR8}/avr_memory_data.awk
-FILE_AVR8_MEMORY_SHOW_SCRIPT = ${PATH_AVR8}/avr_memory_show.awk
 
 .BEGIN: ${FILE_AVR8_PROGRAMS_CHECK_STAMP}
 	
 # Check AVR8 required programs once
-${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${FILE_PROGRAMS_CHECK_SCRIPT}
+${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@printf "%sChecking AVR8 programs ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${FILE_PROGRAMS_CHECK_SCRIPT} "${FILE_AVR8_PROGRAMS_LIST}"
+	@${SCRIPT_CHECK_PROGRAMS} "${FILE_AVR8_PROGRAMS_LIST}"
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@touch "${FILE_AVR8_PROGRAMS_CHECK_STAMP}"
 
@@ -61,7 +59,7 @@ _mcu_memory_data:
 		@avr-size -G -d ${FILE_ELF} > ${FILE_MEMRAW}
 
 		@awk -v flash_total_k="${VAL_FLASH_SIZE_K}" -v ram_total_k="${VAL_RAM_SIZE_K}" \
-			-v output_file="${FILE_MEMDATA}" -f ${FILE_AVR8_MEMORY_DATA_SCRIPT} \
+			-v output_file="${FILE_MEMDATA}" -f ${SCRIPT_AVR_MEMORY_DATA} \
 			"${FILE_MEMRAW}"
 .PHONY: _mcu_memory_data
 
@@ -70,7 +68,7 @@ _mcu_memory_show: _mcu_memory_data
 	@cat ${FILE_MEMRAW}
 
 	@printf "${COLOUR_WHITE_BOLD}Memory usage :\n"
-	@awk -f ${FILE_AVR8_MEMORY_SHOW_SCRIPT} "${FILE_MEMDATA}"
+	@awk -f ${SCRIPT_AVR_MEMORY_SHOW} "${FILE_MEMDATA}"
 	@printf "${COLOUR_RESET}"
 .PHONY: _mcu_memory_show
 
