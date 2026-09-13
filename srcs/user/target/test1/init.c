@@ -7,7 +7,7 @@
  */
 
 /**
- * @file test1Init.c
+ * @file init.c
  * @brief test1 init implementation.
  *
  */
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "test1Init.h"
+#include "init.h"
 
 #include <avr/io.h>
 #include <stdbool.h>

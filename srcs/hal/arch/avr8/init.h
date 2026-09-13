@@ -7,7 +7,7 @@
  */
 
 /**
- * @file avr8_init.h
+ * @file init.h
  * @brief AVR8 architecture initialization declarations.
  *
  */
