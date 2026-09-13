@@ -12,6 +12,10 @@
 # Build options
 ################################################################################
 
+# General options
+.MAIN: all
+.NOTPARALLEL:
+
 # autoCode
 OPT_CLEAN_AUTOCODE_LOGS = yes
 VAL_VALID_OPTS = yes no

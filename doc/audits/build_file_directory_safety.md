@@ -253,21 +253,6 @@ effet de bord de `help`, `clean`, `doc` ou des tests hôte.
 Il faut déplacer ces recettes vers des cibles internes prérequises uniquement par les cibles qui en ont
 besoin, et publier `last_build_info.txt` atomiquement seulement après le succès du build concerné.
 
-### 9. Faible — le nettoyage des logs ne correspond jamais au nom de base
-
-La recette appelle :
-
-```make
-find "${PATH_LOGS}" -maxdepth 1 -type f -name "${PATH_LOGS}/autoCode_log*" -delete
-```
-
-Or `find -name` compare uniquement le nom de base. Le motif contient `build/log/` et ne peut donc pas
-correspondre (`mk/autoCode.mk:60-64`). Les logs datés, qui contiennent par ailleurs `:` — valide et naturel
-sous FreeBSD — s'accumulent malgré `OPT_CLEAN_AUTOCODE_LOGS=yes`.
-
-Utiliser `${FILE_AUTOCODE_LOG:T}*` ou le littéral `autoCode_log*` suffit. La garde canonique existante sur
-`${PATH_LOGS}` doit être conservée.
-
 ### 10. Faible — le contrôle d'en-têtes construit une commande shell
 
 `header_allow.awk` concatène `source_file` et `PATH_SOURCES` dans une chaîne passée à un pipe shell vers
@@ -281,11 +266,6 @@ la liste des sources, comme le vérificateur d'architecture, sans construire de 
 
 ## Observations secondaires
 
-- La garde de suppression est une très bonne amélioration, mais son chemin racine est figé à
-  `<racine du script>/build`. C'est cohérent avec le projet actuel ; toute future option de build hors
-  arbre devra introduire une racine explicitement validée, pas contourner la garde.
-- `clean_hard` vide la cible courante et les fichiers directement sous `build/`, mais conserve les
-  répertoires des autres cibles. Son aide « Remove all target build files » est donc ambiguë.
 - Le stamp de contrôle des programmes évite un coût répété, mais ne détecte pas un changement de `PATH`
   ou de version d'outil. Ce n'est pas un risque de suppression ; il faut seulement supprimer/invalider le
   stamp lorsqu'un diagnostic d'environnement est nécessaire.

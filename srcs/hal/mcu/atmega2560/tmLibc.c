@@ -7,8 +7,8 @@
  */
 
 /**
- * @file tmlibc.c
- * @brief tmlibc implementation.
+ * @file tmLibc.c
+ * @brief tmLibc implementation.
  *
  */
 
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "tmlibc.h"
+#include "tmLibc.h"
 
 #include "interfaces/drv_usart.h"
 
