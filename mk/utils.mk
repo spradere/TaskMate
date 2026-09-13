@@ -14,6 +14,11 @@
 
 clean:
 #help [global] Remove build files.
+	@./scripts/check_build_delete_path.sh \
+		"${PATH_BUILD_TARGET}" \
+		"${FILE_AUTOCODE_TARGET}" \
+		"${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" \
+		"${PATH_BUILD_AUTOCODE_TEST}"
 	@printf "\n%sRemove files :%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
@@ -53,6 +58,8 @@ clean:
 
 clean_hard:
 #help [global] Remove all target build files.
+	@./scripts/check_build_delete_path.sh "${PATH_BUILD_TARGET}"
+	@./scripts/check_build_delete_path.sh --allow-build-root "${PATH_BUILDS}"
 	@printf "\n%sRemove all files : build/* %s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 		
