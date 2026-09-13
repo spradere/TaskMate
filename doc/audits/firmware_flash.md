@@ -81,7 +81,7 @@ firmware qui ne les utilise pas. Deux profils sont recommandés :
 - `production` : SCLI absente, logs ordinaires supprimés à la compilation, codes numériques et
   chemin `panic()` conservés.
 
-SCLI est enregistrée dans `srcs/system/services/services_init.rc`. Le profil doit sélectionner
+SCLI est enregistrée dans `target*_init.rc`. Le profil doit sélectionner
 l'entrée autoCode appropriée afin que la base des threads, les includes générés et le graphe
 d'appel restent cohérents. Exclure seulement `scli.c` du Makefile laisserait une référence générée
 invalide et contournerait la source de vérité.

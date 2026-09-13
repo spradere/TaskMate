@@ -39,8 +39,7 @@ mod_thread_item_t *thread;
 
 ## File Structure
 
-- Start C, header, AWK, and Makefile fragments with the TaskMate BSD-2-Clause
-  license banner used in `doc/licence_header.txt`.
+- Start C, header, AWK, and Makefile fragments with the TaskMate BSD-2-Clause.
 - Add a Doxygen file block after the license banner in C and header files:
 
 ```c
@@ -101,7 +100,7 @@ static const hal_port_t mcu_ports[PORT_COUNT];
 ```
 
 - Makefile variables use semantic uppercase prefixes. Follow
-  `doc/rules/make_variable_prefixes.md`: `PATH_`, `PATHS_`, `FILE_`, `FILES_`,
+  `doc/rules/make_prefixes.md`: `PATH_`, `PATHS_`, `FILE_`, `FILES_`,
   `VAL_`, `OPT_`, `COLOUR_`, and `CFLAGS_...`.
 
 ## C Design Rules

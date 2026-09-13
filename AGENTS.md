@@ -6,8 +6,7 @@ behaviour, readability, and explicit architectural boundaries.
 
 Before a substantial change, read the relevant documents in `doc/architecture/`
 and the applicable rules in `doc/rules/`, especially `style.md`, `interfaces.md`,
-and `TaskMate_prefixes.md`. Build-time boundary enforcement is documented in
-`doc/arch_boundary_enforcement.md`; portability and autoCode design are documented
+and `TaskMate_prefixes.md`. Portability and autoCode design are documented
 in `doc/architecture/`.
 
 ## Embedded constraints
@@ -83,7 +82,7 @@ role does not relax their documented APIs or build-enforced access rules.
 - `.clang-format` and `doc/rules/style.md` are authoritative: tabs (width 4),
   Allman braces, 100-column lines, `if( condition )`, and right-aligned pointers.
 - `.c` files include their matching local header first. New C/header/Make/AWK
-  files use the BSD-2-Clause banner from `doc/licence_header.txt`; C headers and
+  files use the BSD-2-Clause banner; C headers and
   sources also include a Doxygen `@file` / `@brief` block.
 - Types are `snake_case_t`; constants/enums are `UPPER_SNAKE_CASE`; static data
   is descriptive `snake_case`; functions are descriptive camelCase. Use prefixes
@@ -104,7 +103,7 @@ Use BSD `bmake`, not GNU Make:
 
 ```sh
 bmake                       # build default HWT target (test1)
-bmake HWT=<target>          # select a target
+bmake VAL_TARGET=<target>   # select a target
 bmake autoCode_alone        # regenerate and show autoCode log
 bmake clang_format          # format build sources
 bmake cppcheck              # static analysis

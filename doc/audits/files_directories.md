@@ -83,19 +83,6 @@ campagne de renommage, il faut donc fixer une convention et ses exceptions : nom
 identifiants matériels issus des constructeurs, acronymes, fichiers d'initialisation et profils de
 cible. Une normalisation mécanique sans cette décision déplacerait seulement les incohérences.
 
-## Documentation et noms obsolètes
-
-- `AGENTS.md` référence `doc/arch_boundary_enforcement.md`, fichier absent.
-- `AGENTS.md` et `doc/rules/style.md` référence `doc/licence_header.txt`, fichier absent.
-- `doc/rules/style.md` référence `make_variable_prefixes.md`; le fichier réel est
-  `make_prefixes.md`.
-- `AGENTS.md` documente `bmake HWT=<target>`; le sélecteur réel est `VAL_TARGET`.
-- `doc/audits/firmware_flash.md` référence encore `srcs/system/services/services_init.rc`, remplacé
-  par la composition actuelle entre `system_init.rc` et les fichiers de cible.
-
-Ces références sont plus problématiques que les variations purement esthétiques : elles peuvent
-faire exécuter une mauvaise commande ou rechercher une source de vérité inexistante.
-
 ## Priorités recommandées
 
 1. Corriger les chemins et commandes obsolètes de la documentation active.
