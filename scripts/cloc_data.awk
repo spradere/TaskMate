@@ -18,7 +18,7 @@ $1 == "C" {
 	c_code += $5
 	}
 
-$1 == "C/C++" && $2 == "Header" {
+($1 == "C/C++") && ($2 == "Header") {
 	c_blank += $4
 	c_comment += $5
 	c_code += $6
@@ -28,6 +28,12 @@ $1 == "C/C++" && $2 == "Header" {
 	make_blank += $3
 	make_comment += $4
 	make_code += $5
+	}
+	
+($1 == "Bourne") && ($2 == "Shell") {
+	make_blank += $4
+	make_comment += $5
+	make_code += $6
 	}
 
 ($1 == "Markdown") || ($1 == "Text") {

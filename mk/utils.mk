@@ -96,7 +96,7 @@ _cloc_data:
 	# Use :T because cloc does not handle a full path with the --exclude-dir option
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
 	@printf "\n" >> ${FILE_CLOCRAW}
-	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk >> ${FILE_CLOCRAW}
+	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk,sh >> ${FILE_CLOCRAW}
 	@awk -v file="${FILE_CLOCDATA}" -f ${SCRIPT_CLOC_DATA} ${FILE_CLOCRAW}
 .PHONY: _cloc_data
 
