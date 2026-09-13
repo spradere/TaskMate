@@ -22,8 +22,8 @@ alimente le buffer TX. Le contrat générique `interfaces/drv_usart.h` importe d
 Une dépendance circulaire existe entre les deux unités HAL :
 
 ```text
-atmega2560/usart.c  -> hal_string_getChar()  -> atmega2560/tmlibc.c
-atmega2560/tmlibc.c -> hal_usartWriteChar()  -> atmega2560/usart.c
+atmega2560/usart.c  -> hal_string_getChar()  -> atmega2560/tmLibc.c
+atmega2560/tmLibc.c -> hal_usartWriteChar()  -> atmega2560/usart.c
 ```
 
 Le sens des responsabilités est également inversé : le transport série connaît la représentation

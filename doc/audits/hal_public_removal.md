@@ -54,7 +54,7 @@ de l'architecture.
 | `gpio.h` | `mcu/atmega2560/gpio.h` | sysCore et câblage des deux cibles | descripteur physique propre au MCU |
 | `interrupt.h` | `arch/avr8/interrupt.h` | démarrage de l'ordonnanceur | `sei`, `cli` et `reti` inline |
 | `stack.h` | `arch/avr8/stack.h` | démarrage de l'ordonnanceur | changement de `SP` non appelable seul |
-| `tmlibc.h` | `mcu/atmega2560/tmlibc.h` | formatage, chaînes et LCD | macros `PROGMEM` et cycle avec USART |
+| `tmLibc.h` | `mcu/atmega2560/tmLibc.h` | formatage, chaînes et LCD | macros `PROGMEM` et cycle avec USART |
 
 La façade ne contient aucune implémentation `.c`. Son retrait ne sélectionnera donc rien à lui
 seul : il faut simultanément rendre le build responsable du choix de l'unique implémentation de
@@ -144,7 +144,7 @@ de descripteur matériel et `targetWireSignal()` n'est plus exposé par un en-t�
 
 ### 4. Backend des chaînes
 
-`hal/public/tmlibc.h` ne contient pas seulement deux prototypes : il définit `TM_STR*` avec
+`hal/public/tmLibc.h` ne contient pas seulement deux prototypes : il définit `TM_STR*` avec
 `PSTR` et `PROGMEM`. Cette représentation économise la RAM AVR et ne peut pas être remplacée par des
 littéraux C ordinaires sans mesure. Le backend contient encore le cycle déjà identifié entre lecture
 de chaîne et USART. Le remplacement de `panic()` par `hal_halt()` a déjà retiré de ce chemin les
@@ -208,7 +208,7 @@ observable et empêche qu'un deuxième backend soit compilé par accident.
 3. Déplacer le câblage GPIO physique dans le fichier de cible sélectionné et limiter le contrat
    partagé aux signaux logiques.
 4. Découpler le cœur de chaînes, l'accès RAM/ROM et USART avant de retirer le dernier relais
-   `tmlibc.h`; une future panique enrichie reste hors de cette migration.
+   `tmLibc.h`; une future panique enrichie reste hors de cette migration.
 5. Garder le contexte d'ISR et les registres volatils dans les sources privées AVR8/ATmega2560.
 
 Cette étape est le principal point de décision. Elle doit être découpée en changements indépendants

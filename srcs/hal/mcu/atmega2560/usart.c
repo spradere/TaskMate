@@ -23,7 +23,7 @@
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 #include "define.h" // Get the USART baud rate
-#include "tmlibc.h"
+#include "tmLibc.h"
 
 /* -----------------------------------------------
  * Circular buffers

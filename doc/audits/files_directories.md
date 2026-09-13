@@ -75,14 +75,14 @@ Les écarts concrets les plus nets sont les suivants :
 - le répertoire `test_noscli`, le fichier `test-noscli_init.rc` et le symbole
   `test_noscliInit()` utilisent trois compositions différentes ;
 - le commentaire de `test-noscli_init.rc` désigne encore la cible `test1` ;
-- `tmlibc.h` et `tmlibc.c` ne reprennent pas la forme `tmLibc` du nom de couche ;
+- `tmLibc.h` et `tmLibc.c` reprennent désormais la forme `tmLibc` du nom de couche ;
 - `TaskMate.c` est le seul fichier C principal en PascalCase ;
 - `doc/architecture/interface.md` est au singulier alors que la couche et la règle sont nommées
   `interfaces` ;
 - `test1Init.h` et `test_noscliInit.h` n'ont pas de garde d'inclusion ;
 - les deux fichiers `target/*/define.h` déclarent `@file target_define.h`, qui n'est pas leur nom.
 =======
-- `tmlibc.h` et `tmlibc.c` ne reprennent pas la forme `tm_libc` du nom de couche ;
+- `tmLibc.h` et `tmLibc.c` privilégient la forme historique `tmLibc` à `tm_libc` ;
 
 
 >>>>>>> Stashed changes
@@ -101,4 +101,3 @@ cible. Une normalisation mécanique sans cette décision déplacerait seulement 
 5. Découpler l'attente coopérative et le backend matériel du noyau de `tmLibc`.
 6. Isoler la composition générée de `sysCore` et sélectionner réellement les sources par cible.
 7. Nettoyer les sauvegardes locales ignorées et corriger l'affichage de `bmake clean`.
-
