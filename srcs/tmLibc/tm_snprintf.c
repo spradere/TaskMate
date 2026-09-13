@@ -18,7 +18,7 @@
 
 #include "tm_snprintf.h"
 
-#include "hal/public/tmlibc.h"
+#include "hal/public/tmLibc.h"
 #include "interfaces/tm_define.h"
 
 /* -----------------------------------------------

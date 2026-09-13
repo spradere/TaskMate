@@ -7,8 +7,8 @@
  */
 
 /**
- * @file tmlibc.h
- * @brief tmlibc header declarations.
+ * @file tmLibc.h
+ * @brief tmLibc header declarations.
  *
  */
 
