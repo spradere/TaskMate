@@ -33,10 +33,6 @@ exécute les expressions `find` dans une arborescence isolée sous `/tmp`. Elle 
 vides, les chemins nominaux, les motifs, la profondeur, les liens symboliques et les surcharges de
 variables en ligne de commande. Une construction AVR réelle a aussi été lancée après `bmake clean`.
 
-Le commit contient également la suppression de passages dans
-`doc/audits/files_directories.md` et une modification de `srcs/tm_libc/tm_snprintf.c`. Ces changements
-ne relèvent pas du remplacement de `rm` et compliquent la traçabilité de la révision auditée.
-
 ## Constats détaillés
 
 ### 1. Critique — absence de confinement à la racine de construction
@@ -66,83 +62,6 @@ du dépôt et toute cible extérieure, puis vérifier que `${PATH_BUILD_TARGET}`
 la racine de construction approuvée. Une garde refusée doit terminer la cible avec une erreur, pas être
 un succès silencieux. Si une racine de build personnalisable est nécessaire, elle doit passer par une
 validation explicite distincte d'une simple surcharge accidentelle.
-
-### 2. Haute — le motif de suppression des logs ne peut pas correspondre
-
-Dans `mk/path_files.mk`, `${FILE_AUTOCODE_LOG}` vaut `build/log/autoCode_log`. La recette de
-`mk/autoCode.mk` parcourt déjà `${PATH_LOGS}`, mais donne le chemin complet au prédicat `-name` :
-
-```make
-find "${PATH_LOGS}" -maxdepth 1 -type f -name "${FILE_AUTOCODE_LOG}*" -delete
-```
-
-Sur le `find` FreeBSD utilisé, `-name` compare uniquement le dernier composant du chemin. Aucun nom de
-fichier ne peut donc correspondre au motif `build/log/autoCode_log*`. Le test isolé conserve le fichier,
-et la construction réelle a laissé côte à côte les logs de `10:58:18` et `14:26:18`.
-
-Le motif doit être limité au nom de base, par exemple `${FILE_AUTOCODE_LOG:T}*`, tout en conservant
-`${PATH_LOGS}` comme racine de recherche.
-
-### 3. Haute — perte du nettoyage de `.autoCode_stamp*`
-
-Avant `b4806f0`, `clean` supprimait explicitement
-`${PATH_BUILD_TARGET}/.autoCode_stamp*`. La nouvelle recette affiche encore
-`${PATH_BUILD_TARGET}/.autoCode_*`, mais ne recherche que `autoCode_*`, sans point initial :
-
-```make
-find "${PATH_BUILD_TARGET}" -type f -name "autoCode_*" -delete
-```
-
-Après un `bmake clean` réel, `build/test1_arduinoMega_atmega2560_avr8/.autoCode_stamp` était toujours
-présent. Le build suivant a tout de même régénéré autoCode parce que l'exécutable hôte avait été
-recompilé et était plus récent ; ce succès ne restaure pas le contrat de `clean`.
-
-Il faut réintroduire une suppression explicite du stamp exact ou, si les variantes suffixées sont
-intentionnelles, un `-maxdepth 1 -name ".autoCode_stamp*"` documenté.
-
-### 4. Moyenne — extension involontaire de la profondeur
-
-L'ancienne commande `${PATH_BUILD_TARGET}/autoCode_*` ne visait que les entrées directement sous le
-répertoire de cible. Le nouveau `find` n'a pas de `-maxdepth 1` et supprime tout fichier `autoCode_*`
-dans les sous-répertoires. Le test isolé a ainsi supprimé à la fois `autoCode_root` et
-`nested/autoCode_nested`.
-
-Cette extension n'est pas requise par un remplacement équivalent de `rm`. Il faut ajouter
-`-maxdepth 1`, sauf si le nouveau périmètre récursif est une décision documentée et couverte par des
-tests.
-
-### 5. Moyenne — liens symboliques et états incohérents masqués
-
-Les tests `-f` et `-d` suivent les liens symboliques, tandis que le `find` courant ne les suit pas et
-filtre ensuite sur `-type f` ou utilise `-mindepth 1`. Dans les essais isolés :
-
-- un lien vers un fichier satisfait `[ -f ... ]`, mais `find ... -type f -delete` laisse le lien ;
-- un lien vers un répertoire satisfait `[ -d ... ]`, mais le nettoyage récursif laisse également le
-  lien.
-
-La recette termine alors avec succès sans atteindre son objectif. Les gardes ignorent aussi
-silencieusement un chemin existant du mauvais type. Il faut définir une politique explicite pour les
-liens symboliques et distinguer « absent, donc rien à faire » de « présent mais incohérent, donc erreur ».
-Pour une cible fichier, un `find` borné à `-maxdepth 0` peut inclure explicitement `-type l` si la
-suppression du lien est souhaitée.
-
-### 6. Faible — shell POSIX, extensions `find`
-
-Les conditions `[ -n ... ]`, `[ -f ... ]` et `[ -d ... ]` ne sont pas des tests spécifiques à Bash.
-Les recettes sont exécutées par `/bin/sh` et leur syntaxe est valide avec ce shell. Parler de
-« sécurisation Bash » serait donc imprécis ; il s'agit de gardes shell POSIX.
-
-En revanche, `-delete`, `-mindepth` et `-maxdepth` sont des extensions non POSIX de `find`. Elles sont
-présentes sur le FreeBSD courant et couramment disponibles avec GNU find. Le projet déclare déjà
-`find` dans `conf/programs-list.conf`, mais le simple contrôle de présence ne vérifie pas ces options.
-La dépendance à une variante BSD/GNU compatible doit être documentée ou testée au démarrage.
-
-### 7. Faible — sortie opérateur inexacte
-
-L'affichage de `clean` contient `/**/*.d` au lieu de répéter `${PATH_BUILD_TARGET}` et n'ajoute pas de
-retour à la ligne après `${FILE_AUTOCODE_TARGET}`. Deux lignes sont donc concaténées. Il affiche aussi
-`.autoCode_*` alors que la commande recherche `autoCode_*`. Pour une opération destructive, le résumé
-doit refléter exactement la racine, la profondeur et les motifs utilisés.
 
 ## Points corrects du changement
 
@@ -174,15 +93,3 @@ fonctionnelle avec les commandes remplacées.
 8. Séparer les modifications Makefile des changements C et documentation non liés afin de permettre
    une revue et un retour arrière ciblés.
 
-## Validation effectuée
-
-- comparaison de `b4806f0` avec son parent ;
-- inventaire des commandes `rm` avant modification et des `find -delete` actuels ;
-- inspection de `bmake -V` pour les chemins concernés ;
-- inspection de `bmake -n clean clean_hard` et `bmake -n autoCode_alone` ;
-- développement de `bmake -n PATH_BUILD_TARGET=/ clean_hard`, sans exécution destructive ;
-- essais isolés des motifs, profondeurs et liens symboliques sous `/tmp` ;
-- `bmake clean`, suivi d'un inventaire des stamps et logs restants ;
-- `bmake` réel terminé avec `Build complete` ;
-- `git diff --check` sans erreur avant création du présent rapport ;
-- aucun essai sur matériel Arduino Mega physique.

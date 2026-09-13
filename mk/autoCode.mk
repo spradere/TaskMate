@@ -59,7 +59,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@if [ -n "${FILE_AUTOCODE_LOG}" ] && [ -d "${PATH_LOGS}" ]; then \
-		find "${PATH_LOGS}" -maxdepth 1 -type f -name "${FILE_AUTOCODE_LOG}*" -delete; \
+		find "${PATH_LOGS}" -maxdepth 1 -type f -name "${PATH_LOGS}/autoCode_log*" -delete; \
 	fi
 .endif
 

@@ -17,10 +17,11 @@ clean:
 	@printf "\n%sRemove files :%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
-	@printf "${PATH_BUILD_TARGET}/**/*.o /**/*.d\n"
+	@printf "${PATH_BUILD_TARGET}/**/*.o\n"
+	@printf "${PATH_BUILD_TARGET}/**/*.d\n"
 	@printf "${PATH_BUILD_TARGET}/TaskMate*\n"
-	@printf "${FILE_AUTOCODE_TARGET}"
-	@printf "${PATH_BUILD_TARGET}/.autoCode_*\n"
+	@printf "${FILE_AUTOCODE_TARGET}\n"
+	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
 	@printf "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}\n"
 	@printf "${PATH_BUILD_AUTOCODE_TEST}\n"
 	@printf "${COLOUR_RESET}"
@@ -38,9 +39,12 @@ clean:
 	fi
 	
 	@if [ -n "${PATH_BUILD_TARGET}" ] && [ -d "${PATH_BUILD_TARGET}" ]; then \
-		find "${PATH_BUILD_TARGET}" -type f -name "autoCode_*" -delete; \
+		find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete; \
 	fi
-
+	@if [ -n "${PATH_BUILDS}" ] && [ -d "${PATH_BUILDS}" ]; then \
+		find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete; \
+	fi
+	
 	@if [ -n "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" ] && [ -f "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" ]; then \
 		find "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" -type f -delete; \
 	fi
