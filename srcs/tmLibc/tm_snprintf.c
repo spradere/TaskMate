@@ -122,20 +122,20 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	tm_snprintf_buffer.padding = 0;
 
 	uint8_t format_index = 0;
-	char format_c = sc_stringGetChar(&format, format_index++);
+	char format_c = (char)sc_stringGetByte(&format, format_index++);
 
 	while( format_c )
 	{
 		if( format_c == '%' )
 		{
-			format_c = sc_stringGetChar(&format, format_index++);
+			format_c = (char)sc_stringGetByte(&format, format_index++);
 
 			if( (format_c) == '0' )
 			{
-				format_c = sc_stringGetChar(&format, format_index++);
+				format_c = (char)sc_stringGetByte(&format, format_index++);
 				tm_snprintf_buffer.padding = (uint8_t)(format_c - 48); // atoi
 				if( tm_snprintf_buffer.padding > 9 ) { goto exit; }
-				format_c = sc_stringGetChar(&format, format_index++);
+				format_c = (char)sc_stringGetByte(&format, format_index++);
 			}
 
 			switch( format_c )
@@ -152,11 +152,11 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 				{
 					const tm_string_t *str = va_arg(args, const tm_string_t *);
 					uint8_t str_index = 0;
-					char str_c = sc_stringGetChar(str, str_index++);
+					char str_c = (char)sc_stringGetByte(str, str_index++);
 					while( str_c != 0 )
 					{
 						tm_putChar(str_c);
-						str_c = sc_stringGetChar(str, str_index++);
+						str_c = (char)sc_stringGetByte(str, str_index++);
 					}
 					break;
 				}
@@ -197,7 +197,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 			}
 		}
 		else { tm_putChar(format_c); }
-		format_c = sc_stringGetChar(&format, format_index++);
+		format_c = (char)sc_stringGetByte(&format, format_index++);
 	}
 
 	tm_putChar(0); // close string

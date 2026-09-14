@@ -23,7 +23,7 @@
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCore/tm_scheduler.h"
-#include "tmLibc/tm_string.h"
+#include "system/sysCall/sc_string.h"
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -186,7 +186,7 @@ static mod_thread_item_t *sc_threadGetPointer(const char *name)
 	{
 		mod_thread_item_t *thread = mod_threadGetPointer(i);
 		if( (thread->name != 0) &&
-			tm_strncmp(*thread->name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
+			sc_stringCompare(*thread->name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return thread;
 		}
