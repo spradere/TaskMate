@@ -46,7 +46,9 @@
  * ========================================================================== */
 
 void sc_stdioPutChar(char ch);
-char sc_stringGetChar(const tm_string_t *str, uint8_t index);
+uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
+int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size);
+void sc_stringCopy(char *dest, tm_string_t src, uint8_t size);
 
 // clang-format on
 

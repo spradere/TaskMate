@@ -27,8 +27,6 @@
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCore/modules.h"
 #include "system/sysCall/sc_string.h"
-#include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Constants
@@ -162,9 +160,9 @@ err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 
 	for( uint8_t index = 0; index < TM_STRING_SIZE_MAX; index++ )
 	{
-		char str_char = sc_stringGetChar(&str, index);
-		if( str_char == 0 ) { break; }
-		error = sc_driverOperationError(hal_lcdWriteChar((uint8_t)str_char), hal_lcdControl);
+		uint8_t str_byte = sc_stringGetByte(&str, index);
+		if( str_byte == 0 ) { break; }
+		error = sc_driverOperationError(hal_lcdWriteChar(str_byte), hal_lcdControl);
 		if( error != ERR_NO_ERROR ) { return error; }
 	}
 
@@ -221,8 +219,6 @@ err_codes_t sc_i2cScan(void)
 			i2c_scan_address_count++;
 		}
 		else { address_buffer_full = true; }
-
-		tm_syslog(TM_STR("[sysCall:i2cscan] found : 0x%02x\n"), address);
 	}
 
 	hal_i2cControl(DRV_CTRL_GETLASTERROR, &control_data);
@@ -296,7 +292,7 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		if( (driver->name != 0) && (driver->control != 0) &&
-			tm_strncmp(*driver->name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
+			sc_stringCompare(*driver->name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return driver;
 		}

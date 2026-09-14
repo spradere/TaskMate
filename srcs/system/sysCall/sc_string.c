@@ -40,9 +40,49 @@ void sc_stdioPutChar(char ch)
 	if( ch == '\n' ) { hal_usartSendTXBuffer(); }
 }
 
-char sc_stringGetChar(const tm_string_t *str, uint8_t index)
+uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 {
-	if( str->storage == TM_MEM_RAM ) { return str->text[index]; }
-	if( str->storage == TM_MEM_ROM ) { return (char)pgm_read_byte(&(str->text[index])); }
+	if( (string == 0) || (string->text == 0) ) { return 0; }
+	if( string->storage == TM_MEM_RAM ) { return (uint8_t)string->text[index]; }
+	if( string->storage == TM_MEM_ROM )
+	{
+		return (uint8_t)pgm_read_byte(&(string->text[index]));
+	}
 	return 0;
+}
+
+int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size)
+{
+	for( uint8_t i = 0; i < size; i++ )
+	{
+		uint8_t left_byte = sc_stringGetByte(&left, i);
+		uint8_t right_byte = sc_stringGetByte(&right, i);
+
+		if( left_byte < right_byte ) { return -1; }
+		if( left_byte > right_byte ) { return 1; }
+		if( left_byte == 0 ) { return 0; }
+	}
+
+	return 0;
+}
+
+void sc_stringCopy(char *dest, tm_string_t src, uint8_t size)
+{
+	uint8_t i = 0;
+
+	if( (dest == 0) || (size == 0) ) { return; }
+	if( src.text == 0 )
+	{
+		dest[0] = 0;
+		return;
+	}
+
+	while( (i < (uint8_t)(size - 1)) && (i < (TM_STRING_SIZE_MAX - 1)) )
+	{
+		uint8_t src_byte = sc_stringGetByte(&src, i);
+		if( src_byte == 0 ) { break; }
+		dest[i] = (char)src_byte;
+		i++;
+	}
+	dest[i] = 0;
 }
