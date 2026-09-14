@@ -23,7 +23,6 @@
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 #include "define.h" // Get the USART baud rate
-#include "tmLibc.h"
 
 /* -----------------------------------------------
  * Circular buffers
@@ -208,27 +207,6 @@ hal_driver_state_t hal_usartSendTXBuffer(void)
 		UDR1 = buffer_tx[buffer_tx_tail]; // Put data into buffer, sends the data
 
 		buffer_tx_tail = CB_NEXT(buffer_tx_tail);
-	}
-	return DRV_STATE_RUNNING;
-}
-
-hal_driver_state_t hal_usartWriteString(tm_string_t str)
-{
-	uint8_t index = 0;
-
-	hal_driver_state_t state = usartRequireRunning();
-	if( state != DRV_STATE_RUNNING ) { return state; }
-	if( str.text == 0 ) { return usartSetError(ERR_NULL_POINTER); }
-
-	while( index < TM_STRING_SIZE_MAX )
-	{
-		char str_char = hal_string_getChar(&str, index);
-		if( str_char == 0 ) { break; }
-		if( usartWriteChar((uint8_t)str_char) == ERR_HAL_USART_TX_BUFFER_FULL )
-		{
-			return usartSetError(ERR_HAL_USART_TX_BUFFER_FULL);
-		};
-		index++;
 	}
 	return DRV_STATE_RUNNING;
 }

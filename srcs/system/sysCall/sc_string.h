@@ -7,13 +7,13 @@
  */
 
 /**
- * @file tmLibc.h
- * @brief tmLibc header declarations.
+ * @file sc_string.h
+ * @brief String syscall declarations.
  *
  */
 
-#ifndef ATMEGA2560_TMLIBC_H
-#define ATMEGA2560_TMLIBC_H
+#ifndef SYSCALL_SC_STRING_H
+#define SYSCALL_SC_STRING_H
 
 // clang-format off
 
@@ -45,9 +45,9 @@
  * Public API
  * ========================================================================== */
 
-void hal_stdio_putChar(char ch);
-char hal_string_getChar(const tm_string_t *str, uint8_t index);
+void sc_stdioPutChar(char ch);
+char sc_stringGetChar(const tm_string_t *str, uint8_t index);
 
 // clang-format on
 
-#endif // ATMEGA2560_TMLIBC_H
+#endif // SYSCALL_SC_STRING_H

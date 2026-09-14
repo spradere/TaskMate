@@ -21,7 +21,6 @@
 #include <stdint.h>
 
 #include "interfaces/tm_modules.h"
-#include "interfaces/tm_string.h"
 
 /* ============================================================================
  * Public API
@@ -30,6 +29,8 @@
 hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_control_data_t *data);
 hal_driver_state_t hal_lcdClear(void);
 hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col);
-hal_driver_state_t hal_lcdWriteString(tm_string_t str);
+hal_driver_state_t hal_lcdWriteStart(void);
+hal_driver_state_t hal_lcdWriteChar(uint8_t data);
+hal_driver_state_t hal_lcdWriteEnd(void);
 
 #endif // INTERFACES_DRV_LCD_H

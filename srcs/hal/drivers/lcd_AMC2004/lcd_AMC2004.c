@@ -18,7 +18,6 @@
 
 #include <util/delay.h>
 
-#include "hal/public/tmLibc.h"
 #include "interfaces/drv_i2c.h"
 #include "interfaces/drv_lcd.h"
 #include "interfaces/tm_macros.h"
@@ -199,13 +198,10 @@ hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 	return lcdAMC2004SendCommand((uint8_t)(0x80u | (col + row_offsets[row])));
 }
 
-hal_driver_state_t hal_lcdWriteString(tm_string_t str)
+hal_driver_state_t hal_lcdWriteStart(void)
 {
-	uint8_t index = 0;
-
 	hal_driver_state_t state = lcdRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
-	if( str.text == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
 
 	if( hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
 	{
@@ -215,17 +211,20 @@ hal_driver_state_t hal_lcdWriteString(tm_string_t str)
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
+	return DRV_STATE_RUNNING;
+}
 
-	while( index < TM_STRING_SIZE_MAX )
+hal_driver_state_t hal_lcdWriteChar(uint8_t data)
+{
+	if( hal_i2cWrite(data) == DRV_STATE_ERROR )
 	{
-		char str_char = hal_string_getChar(&str, index);
-		if( str_char == 0 ) { break; }
-		if( hal_i2cWrite((uint8_t)str_char) == DRV_STATE_ERROR )
-		{
-			return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
-		}
-		index++;
+		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
+	return DRV_STATE_RUNNING;
+}
+
+hal_driver_state_t hal_lcdWriteEnd(void)
+{
 	if( hal_i2cCommStop() == DRV_STATE_ERROR ) { return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY); }
 	return DRV_STATE_RUNNING;
 }

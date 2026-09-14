@@ -7,8 +7,8 @@
  */
 
 /**
- * @file tmLibc.c
- * @brief tmLibc implementation.
+ * @file sc_string.c
+ * @brief String syscall implementation.
  *
  */
 
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "tmLibc.h"
+#include "sc_string.h"
 
 #include "interfaces/drv_usart.h"
 
@@ -24,7 +24,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_stdio_putChar(char ch)
+void sc_stdioPutChar(char ch)
 {
 	if( hal_usartWriteChar((uint8_t)ch) == DRV_STATE_ERROR )
 	{
@@ -40,7 +40,7 @@ void hal_stdio_putChar(char ch)
 	if( ch == '\n' ) { hal_usartSendTXBuffer(); }
 }
 
-char hal_string_getChar(const tm_string_t *str, uint8_t index)
+char sc_stringGetChar(const tm_string_t *str, uint8_t index)
 {
 	if( str->storage == TM_MEM_RAM ) { return str->text[index]; }
 	if( str->storage == TM_MEM_ROM ) { return (char)pgm_read_byte(&(str->text[index])); }
