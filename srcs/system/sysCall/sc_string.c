@@ -18,8 +18,6 @@
 
 #include "sc_string.h"
 
-#include <avr/pgmspace.h>
-
 #include "interfaces/drv_usart.h"
 
 /* =============================================================================

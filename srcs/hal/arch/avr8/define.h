@@ -20,10 +20,24 @@
  * ========================================================================== */
 
 #include <stdint.h>
+#include <avr/pgmspace.h>
+
+#include "interfaces/tm_macros.h"
+#include "interfaces/tm_string.h"
 
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
+
+#define TM_STR_NEW(name, txt) \
+	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
+	static const tm_string_t (name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
+
+#define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
+#define TM_STR_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
+
+// Default storage for AVR8
+#define TM_STR(string) TM_STR_ROM(string)
 
 /* -----------------------------------------------
  * Architecture constants

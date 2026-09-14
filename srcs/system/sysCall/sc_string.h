@@ -15,15 +15,13 @@
 #ifndef SYSCALL_SC_STRING_H
 #define SYSCALL_SC_STRING_H
 
-// clang-format off
-
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
 #include <stdint.h>
 
-#include "hal/arch/avr8/stringMacros.h"
+#include "hal/public/define.h" // get string macros from arch
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
@@ -35,7 +33,5 @@ tm_string_t sc_stringFromBuffer(const char *text);
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
 int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size);
 void sc_stringCopy(char *dest, tm_string_t src, uint8_t size);
-
-// clang-format on
 
 #endif // SYSCALL_SC_STRING_H
