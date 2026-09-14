@@ -70,7 +70,10 @@ bool i2c(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; i2c_cmd[i].name != 0; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(
+				sc_stringFromBuffer(argv[1]),
+				sc_stringFromBuffer(i2c_cmd[i].name),
+				TM_STRING_SIZE_MAX) == 0 )
 		{
 			return i2c_cmd[i].func(argc, argv);
 		}

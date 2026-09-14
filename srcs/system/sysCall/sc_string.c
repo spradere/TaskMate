@@ -18,6 +18,8 @@
 
 #include "sc_string.h"
 
+#include <avr/pgmspace.h>
+
 #include "interfaces/drv_usart.h"
 
 /* =============================================================================
@@ -38,6 +40,11 @@ void sc_stdioPutChar(char ch)
 	}
 
 	if( ch == '\n' ) { hal_usartSendTXBuffer(); }
+}
+
+tm_string_t sc_stringFromBuffer(const char *text)
+{
+	return (tm_string_t){.text = text, .storage = TM_MEM_RAM};
 }
 
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)

@@ -29,7 +29,10 @@ FILENAME == matrix_file {
 
 FNR == 1 { source_files++ }
 
-{ checkInclude($0) }
+{
+	checkInclude($0)
+	checkStringStorage($0)
+}
 
 END {
 	if (fatal_error) exit 2
@@ -143,6 +146,21 @@ function checkInclude(line, include_path, caller_path, caller_layer, callee_laye
 			caller_layer, callee_layer, include_path)
 		violations++
 	}
+}
+
+function checkStringStorage(line, caller_path, code)
+{
+	caller_path = stripSourceRoot(FILENAME)
+	if (caller_path !~ /^(tmLibc|system\/services|user\/tasks)\//) return
+
+	code = line
+	sub(/\/\/.*/, "", code)
+	if ((code !~ /(^|[^A-Za-z0-9_])TM_MEM_[A-Za-z0-9_]+/) &&
+		(code !~ /\.[ \t]*storage([^A-Za-z0-9_]|$)/)) return
+
+	printf("%s:%d: forbidden string storage detail in upper layer: %s\n", FILENAME, FNR,
+		trim(line))
+	violations++
 }
 
 function resolveInclude(caller_path, include_path, directory)
