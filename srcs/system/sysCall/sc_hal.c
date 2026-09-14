@@ -26,6 +26,7 @@
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCore/modules.h"
+#include "system/sysCall/sc_string.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 
@@ -154,8 +155,20 @@ err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 {
 	err_codes_t error = sc_driverOperationError(hal_lcdSetCursor(row, col), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
+	if( str.text == 0 ) { return ERR_NULL_POINTER; }
 
-	return sc_driverOperationError(hal_lcdWriteString(str), hal_lcdControl);
+	error = sc_driverOperationError(hal_lcdWriteStart(), hal_lcdControl);
+	if( error != ERR_NO_ERROR ) { return error; }
+
+	for( uint8_t index = 0; index < TM_STRING_SIZE_MAX; index++ )
+	{
+		char str_char = sc_stringGetChar(&str, index);
+		if( str_char == 0 ) { break; }
+		error = sc_driverOperationError(hal_lcdWriteChar((uint8_t)str_char), hal_lcdControl);
+		if( error != ERR_NO_ERROR ) { return error; }
+	}
+
+	return sc_driverOperationError(hal_lcdWriteEnd(), hal_lcdControl);
 }
 
 /* -----------------------------------------------

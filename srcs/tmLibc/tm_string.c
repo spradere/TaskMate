@@ -29,8 +29,8 @@ int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n)
 		uint8_t left_char = 0;
 		uint8_t right_char = 0;
 
-		if( left.text != 0 ) { left_char = (uint8_t)hal_string_getChar(&left, i); }
-		if( right.text != 0 ) { right_char = (uint8_t)hal_string_getChar(&right, i); }
+		if( left.text != 0 ) { left_char = (uint8_t)sc_stringGetChar(&left, i); }
+		if( right.text != 0 ) { right_char = (uint8_t)sc_stringGetChar(&right, i); }
 
 		if( left_char < right_char ) { return -1; }
 		if( left_char > right_char ) { return 1; }
@@ -53,7 +53,7 @@ void tm_strncpy(char *dest, tm_string_t src, uint8_t n)
 
 	while( (i < (uint8_t)(n - 1)) && (i < (TM_STRING_SIZE_MAX - 1)) )
 	{
-		char src_char = hal_string_getChar(&src, i);
+		char src_char = sc_stringGetChar(&src, i);
 		if( src_char == 0 ) { break; }
 		dest[i] = src_char;
 		i++;
