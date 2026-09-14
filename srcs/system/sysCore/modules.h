@@ -22,7 +22,6 @@
 
 #include "hal/public/define.h" // Get hal_stack_word_t from the selected architecture
 #include "interfaces/tm_modules.h"
-#include "interfaces/tm_string.h"
 
 /* ============================================================================
  * Public definitions
@@ -32,7 +31,6 @@
 
 typedef struct
 {
-	const tm_string_t *name;
 	volatile uint8_t status;
 	uint8_t saved_run_level;
 
@@ -51,7 +49,6 @@ typedef struct
 // Driver
 typedef struct
 {
-	const tm_string_t *name;
 	uint8_t address;
 
 	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *);
