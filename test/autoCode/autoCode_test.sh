@@ -42,8 +42,8 @@ writeTags()
 {
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
-	for VAL_TAG in threads_alloc drivers_alloc error_enum error_catalog hal_define hal_init \
-		hal_fxinit modules_count modules_list gpio_signals
+	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
+		error_enum error_catalog hal_define hal_init hal_fxinit modules_count modules_list gpio_signals
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -412,8 +412,8 @@ runParseTagTests()
 
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
-	for VAL_TAG in threads_alloc drivers_alloc error_enum error_catalog hal_define hal_init \
-		hal_fxinit modules_count modules_list gpio_signals
+	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
+		error_enum error_catalog hal_define hal_init hal_fxinit modules_count modules_list gpio_signals
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
@@ -458,8 +458,8 @@ runCompareReplaceTests()
 	printf '%s\n' '// [autoCode_tag] threads_alloc' 'ORIGINAL_SENTINEL' '// [/tag]' \
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
-	for VAL_TAG in drivers_alloc error_enum error_catalog hal_define hal_init hal_fxinit \
-		modules_count modules_list
+	for VAL_TAG in drivers_alloc thread_name_catalog driver_name_catalog error_enum error_catalog \
+		hal_define hal_init hal_fxinit modules_count modules_list
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"

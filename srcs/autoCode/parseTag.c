@@ -43,6 +43,8 @@ typedef struct
 static void writeModulesCount(const parse_tag_t *parse);
 static void writeDriversAlloc(const parse_tag_t *parse);
 static void writeThreadsAlloc(const parse_tag_t *parse);
+static void writeDriverNameCatalog(const parse_tag_t *parse);
+static void writeThreadNameCatalog(const parse_tag_t *parse);
 static const char *errorLevelName(err_level_t level);
 static void writeErrorCatalog(const parse_tag_t *parse);
 static void writeErrorEnum(const parse_tag_t *parse);
@@ -56,16 +58,18 @@ static void writeGpioSignals(const parse_tag_t *parse);
  * Tag dispatch table
  * ---------------------------------------------*/
 
-#define HAVE_TAG(X)                                           \
-	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc) \
-	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc) \
-	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)          \
-	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog) \
-	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)          \
-	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                \
-	X(HAVE_HAL_FXINIT, "hal_fxinit", writeHalFxInit)          \
-	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)     \
-	X(HAVE_MOD_LIST, "modules_list", writeModulesList)        \
+#define HAVE_TAG(X)                                                           \
+	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc)                 \
+	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc)                 \
+	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", writeThreadNameCatalog) \
+	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", writeDriverNameCatalog) \
+	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)                          \
+	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog)                 \
+	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)                          \
+	X(HAVE_HAL_INIT, "hal_init", writeHalInit)                                \
+	X(HAVE_HAL_FXINIT, "hal_fxinit", writeHalFxInit)                          \
+	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)                     \
+	X(HAVE_MOD_LIST, "modules_list", writeModulesList)                        \
 	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)
 
 static const struct
@@ -478,11 +482,6 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 				mod->modules[i].name);
 
 		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
-		fprintf(parse->file,
-				"\tTM_STR_NEW(thread%i_name, \"%s\");\n",
-				thread_index,
-				mod->modules[i].name);
-		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", thread_index);
 		fprintf(parse->file, "\tmod->status = %i;\n", mod->modules[i].status);
 		fprintf(
 			parse->file, "\tmod->saved_run_level = %i;\n", mod->modules[i].status & RL_LEVEL_MASK);
@@ -496,6 +495,38 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 	if( system_thread_found == false ) { AUTOCODE_MSG_ERROR("thread system was not found."); }
 }
 
+static void writeThreadNameCatalog(const parse_tag_t *parse)
+{
+	int threads_count = 1;
+	const module_type_t *mod = &parse->data_base->modules_type[MOD_THREAD_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		int thread_index = threads_count;
+		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
+		else { threads_count++; }
+
+		fprintf(parse->file,
+				"TM_STR_NEW(thread%i_name, \"%s\");\n",
+				thread_index,
+				mod->modules[i].name);
+	}
+
+	fprintf(parse->file,
+			"\nstatic const tm_string_t *const thread_name_catalog[MOD_THREAD_COUNT] =\n{\n");
+	threads_count = 1;
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		int thread_index = threads_count;
+		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
+		else { threads_count++; }
+		fprintf(parse->file, "\t[%i] = &thread%i_name,\n", thread_index, thread_index);
+	}
+	fprintf(parse->file, "};\n");
+
+	have_tag_count[HAVE_THREAD_NAME_CATALOG]++;
+}
+
 static void writeDriversAlloc(const parse_tag_t *parse)
 {
 	const module_type_t *mod = &parse->data_base->modules_type[MOD_DRIVER_ID];
@@ -506,13 +537,11 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
 		fprintf(parse->file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
-		fprintf(parse->file, "\tTM_STR_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
 		fprintf(parse->file, "\tcontrol_data.run_level = %i;\n", mod->modules[i].status);
 		fprintf(
 			parse->file, "\thal_%sControl(DRV_CTRL_RLSET, &control_data);\n", mod->modules[i].name);
 		fprintf(parse->file, "\t*(mod) = (mod_driver_item_t)\n");
 		fprintf(parse->file, "\t{\n");
-		fprintf(parse->file, "\t\t.name = &driver%i_name,\n", i);
 		if( mod->modules[i].address == MOD_DRIVER_ADDRESS_NONE )
 		{
 			fprintf(parse->file, "\t\t.address = MOD_DRIVER_ADDRESS_NONE,\n");
@@ -522,6 +551,26 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 		fprintf(parse->file, "\t};\n");
 	}
 	have_tag_count[HAVE_DRIVERS_ALLOC]++;
+}
+
+static void writeDriverNameCatalog(const parse_tag_t *parse)
+{
+	const module_type_t *mod = &parse->data_base->modules_type[MOD_DRIVER_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		fprintf(parse->file, "TM_STR_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
+	}
+
+	fprintf(parse->file,
+			"\nstatic const tm_string_t *const driver_name_catalog[MOD_DRIVER_COUNT] =\n{\n");
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		fprintf(parse->file, "\t&driver%i_name,\n", i);
+	}
+	fprintf(parse->file, "};\n");
+
+	have_tag_count[HAVE_DRIVER_NAME_CATALOG]++;
 }
 
 static void writeErrorCatalog(const parse_tag_t *parse)
