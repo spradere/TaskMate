@@ -7,35 +7,30 @@
  */
 
 /**
- * @file sc_string.h
- * @brief String syscall declarations.
- *
+ * @file stringMacros.h
+ * @brief AVR8 string placement macros.
  */
 
-#ifndef SYSCALL_SC_STRING_H
-#define SYSCALL_SC_STRING_H
-
-// clang-format off
+#ifndef HAL_ARCH_AVR8_STRING_MACROS_H
+#define HAL_ARCH_AVR8_STRING_MACROS_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
-#include <stdint.h>
+#include <avr/pgmspace.h>
 
-#include "hal/arch/avr8/stringMacros.h"
+#include "interfaces/tm_macros.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
- * Public API
+ * Public definitions
  * ========================================================================== */
 
-void sc_stdioPutChar(char ch);
-tm_string_t sc_stringFromBuffer(const char *text);
-uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
-int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size);
-void sc_stringCopy(char *dest, tm_string_t src, uint8_t size);
+#define TM_STR_NEW(name, txt) \
+	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
+	static const tm_string_t (name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
-// clang-format on
+#define TM_STR(string) ((tm_string_t){.text = PSTR(string), .storage = TM_MEM_ROM})
 
-#endif // SYSCALL_SC_STRING_H
+#endif // HAL_ARCH_AVR8_STRING_MACROS_H

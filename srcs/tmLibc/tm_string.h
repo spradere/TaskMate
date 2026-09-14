@@ -30,10 +30,9 @@
 	#define tm_strncmp strncmp
 	#define tm_strncpy strncpy
 
-	#define TM_STR_RAM(string) (string)
-	#define TM_STR_ROM(string) (string)
+	#define sc_stringFromBuffer(string) (string)
 	#define TM_STR(string) (string)
-	#define TM_STR_ROM_NEW(name, txt) \
+	#define TM_STR_NEW(name, txt) \
 		const char name[] = (txt);
 #endif
 

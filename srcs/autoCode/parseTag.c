@@ -479,7 +479,7 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 
 		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
 		fprintf(parse->file,
-				"\tTM_STR_ROM_NEW(thread%i_name, \"%s\");\n",
+				"\tTM_STR_NEW(thread%i_name, \"%s\");\n",
 				thread_index,
 				mod->modules[i].name);
 		fprintf(parse->file, "\tmod->name = &thread%i_name;\n", thread_index);
@@ -506,7 +506,7 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
 		fprintf(parse->file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
-		fprintf(parse->file, "\tTM_STR_ROM_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
+		fprintf(parse->file, "\tTM_STR_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
 		fprintf(parse->file, "\tcontrol_data.run_level = %i;\n", mod->modules[i].status);
 		fprintf(
 			parse->file, "\thal_%sControl(DRV_CTRL_RLSET, &control_data);\n", mod->modules[i].name);
@@ -532,7 +532,7 @@ static void writeErrorCatalog(const parse_tag_t *parse)
 		if( parse->errors->catalog[i].level != ERR_LEVEL_FLOW )
 		{
 			fprintf(
-				parse->file, "TM_STR_ROM_NEW(err%i, %s);\n", i, parse->errors->catalog[i].message);
+				parse->file, "TM_STR_NEW(err%i, %s);\n", i, parse->errors->catalog[i].message);
 		}
 	}
 

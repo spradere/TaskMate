@@ -77,8 +77,10 @@ bool driver(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; driver_cmd[i].name != 0; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(driver_cmd[i].name), TM_STRING_SIZE_MAX) ==
-			0 )
+		if( tm_strncmp(
+				sc_stringFromBuffer(argv[1]),
+				sc_stringFromBuffer(driver_cmd[i].name),
+				TM_STRING_SIZE_MAX) == 0 )
 		{
 			return driver_cmd[i].func(argc, argv);
 		}
@@ -140,7 +142,7 @@ static bool driverInit(uint8_t argc, char *argv[])
 		return false;
 	}
 
-	tm_string_t driver_name = TM_STR_RAM(argv[2]);
+	tm_string_t driver_name = sc_stringFromBuffer(argv[2]);
 	if( sc_driverInit(argv[2]) )
 	{
 		tm_syslog(TM_STR("[driver] %s initialized\n"), &driver_name);
@@ -159,7 +161,7 @@ static bool driverStart(uint8_t argc, char *argv[])
 		return false;
 	}
 
-	tm_string_t driver_name = TM_STR_RAM(argv[2]);
+	tm_string_t driver_name = sc_stringFromBuffer(argv[2]);
 	if( sc_driverStart(argv[2]) )
 	{
 		tm_syslog(TM_STR("[driver] %s started\n"), &driver_name);
@@ -178,7 +180,7 @@ static bool driverStop(uint8_t argc, char *argv[])
 		return false;
 	}
 
-	tm_string_t driver_name = TM_STR_RAM(argv[2]);
+	tm_string_t driver_name = sc_stringFromBuffer(argv[2]);
 	if( sc_driverStop(argv[2]) )
 	{
 		tm_syslog(TM_STR("[driver] %s stopped\n"), &driver_name);

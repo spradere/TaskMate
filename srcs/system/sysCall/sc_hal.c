@@ -292,7 +292,7 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		if( (driver->name != 0) && (driver->control != 0) &&
-			sc_stringCompare(*driver->name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
+			sc_stringCompare(*driver->name, sc_stringFromBuffer(name), MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return driver;
 		}

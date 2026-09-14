@@ -80,7 +80,10 @@ bool dateCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; date_cmd[i].name != 0; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(
+				sc_stringFromBuffer(argv[1]),
+				sc_stringFromBuffer(date_cmd[i].name),
+				TM_STRING_SIZE_MAX) == 0 )
 		{
 			return date_cmd[i].func(argc, argv);
 		}
