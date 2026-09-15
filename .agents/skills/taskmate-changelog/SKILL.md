@@ -1,58 +1,50 @@
 ---
 name: taskmate-changelog
 description: >-
-  Analyze TaskMate history and propose or apply important CHANGELOG entries with
-  verified README project statistics. Use for changelog maintenance or release
-  preparation, not for CHANGELOG_AUTOCODE_SYNTAX.
+  Quickly review recent TaskMate changes and propose or apply concise CHANGELOG
+  entries. Use for changelog maintenance or release preparation, not for
+  CHANGELOG_AUTOCODE_SYNTAX.
 ---
 
 # TaskMate changelog
 
-Read `conf/changelog.md` completely and treat it as the source of truth. If it is
-missing or ambiguous, stop before editing.
+Read `conf/changelog.md` for the entry format and selection policy. The changelog
+is informative and best-effort: missing a change is acceptable because a later
+invocation can catch it.
 
-## Proposal
+## Fast proposal
 
-Proposal-only is the default. Do not edit files during this phase.
+Proposal-only is the default. Do not edit files before explicit approval.
 
-1. Record the initial Git status and preserve unrelated work.
-2. Read `CHANGELOG` and locate its first `TaskMate <major>.<minor>` heading.
-3. Map that heading to `v<major>.<minor>` and verify the Git tag exists.
-4. Inspect the range from that tag to `HEAD`, excluding merge commits. Use commit
-   subjects, name-status data, diff statistics, representative diffs, and final
-   definitions or call paths when needed.
-5. Compare candidate milestones semantically with every existing unversioned entry.
-   Do not propose a duplicate merely because its wording differs.
-6. Apply the policy importance and exclusion rules. Classify each surviving
-   milestone with one primary category.
-7. Run the default `bmake` build and extract every `Project Stats` value from the
-   sources named by policy. Treat a completed `Build complete` message as required
-   evidence. Do not treat a dry run as a measurement.
-8. Present the analyzed range, excluded-change summary, exact candidate lines, exact
-   `Project Stats` replacement, and files that would change. Then wait.
+1. Read only the unversioned entries at the beginning of `CHANGELOG`.
+2. Inspect only the subjects of the latest 30 non-merge commits. This rolling
+   window lets a later invocation reconsider an omitted recent milestone.
+3. Inspect changed paths, diffs, or final definitions only for plausible or
+   ambiguous candidates.
+4. Exclude minor changes and milestones already represented by an unversioned
+   entry. Group related commits into a few important milestones.
+5. Present the scan range and exact candidate lines, then wait for approval.
 
-Every candidate line must contain one leading tab and be at most 80 characters,
-including indentation and category. Keep the text in English and on one physical
-line.
+Do not run builds, tests, static analysis, full-history scans, or repository-wide
+diff statistics for the normal workflow. Do not verify that the checkout is fully
+up to date.
+
+Each candidate must be English, one physical line, at most 80 characters, and
+start with exactly one tab followed by `[build]`, `[arch]`, `[sys]`, `[doc]`, or
+`[test]` and one space.
 
 ## Application
 
-Apply only after explicit user approval of the current proposal.
+After explicit approval:
 
-1. Verify `CHANGELOG` and `README.md` have not changed since the proposal. Stop and
-   re-propose if either changed.
-2. Insert the approved entries at the beginning of `CHANGELOG`, in their presented
-   order. Do not add a blank separator: the previous first entry must follow the new
-   batch immediately. Do not change any byte from the previous file content.
-3. Add a `TaskMate <major>.<minor>` heading only when the user explicitly approves
-   that release operation. Never rewrite an existing heading.
-4. Replace only the existing `Project Stats` heading and values in `README.md`,
-   using the measurements shown in the approved proposal.
-5. Verify allowed categories, leading tabs, single-line entries, the 80-character
-   limit, and that blank lines occur only around release headings. Run
-   `git diff --check` and inspect the complete diff of both managed files.
-6. Report the inserted entries, measured statistics, validation results, and any
-   hardware-validation limit.
+1. Insert the approved lines at byte zero in their presented order, without a
+   blank separator or changes to existing content.
+2. Add a release heading only when explicitly requested.
+3. Inspect the small `CHANGELOG` diff and report the inserted lines.
 
-Never edit `CHANGELOG_AUTOCODE_SYNTAX`. Never commit, push, or create a Git tag unless
-the user requests that separate action explicitly.
+README `Project Stats` are optional. Update them only when explicitly requested;
+prefer existing build artefacts and do not run `bmake` unless the user asks for a
+fresh measurement.
+
+Never edit `CHANGELOG_AUTOCODE_SYNTAX`. Never commit, push, or create a Git tag
+unless the user explicitly requests that separate action.

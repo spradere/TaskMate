@@ -1,74 +1,51 @@
 # TaskMate changelog policy
 
-## Managed files
-
-- The release history is `CHANGELOG`.
-- The project measurements are in the `Project Stats` section of `README.md`.
-- `CHANGELOG_AUTOCODE_SYNTAX` is manual and must never be edited by this workflow.
-
-## Version boundary
-
-- A released section starts with `TaskMate <major>.<minor>` on an unindented line.
-- The corresponding Git tag is `v<major>.<minor>`.
-- Existing `CHANGELOG` lines are immutable: never edit, delete, reorder, or retag them.
-- Additions may insert new entries or an explicitly approved release heading only.
-- Insert every approved entry batch at the beginning of the file, in presented order.
-- Do not place blank lines between entries. Blank lines are allowed only immediately
-  before and after an unindented `TaskMate` version heading.
+`CHANGELOG` is a concise, informative history, not a source of truth. Completeness
+is best-effort; later invocations may recover omitted milestones.
 
 ## Entry format
 
+- Keep existing lines unchanged.
+- Insert new entries at the beginning of the file, in presented order and without
+  blank lines between entries.
 - Write each entry in English on one physical line of at most 80 characters.
-- Start each entry with exactly one tab, one category, and one space.
+- Start with exactly one tab, one category, and one space.
 - Use one primary category: `[build]`, `[arch]`, `[sys]`, `[doc]`, or `[test]`.
-- Use concise lowercase imperative text after the category.
-- Combine related commits into one important project milestone.
+- Use concise lowercase imperative text and combine related commits.
 
-Categories have these meanings:
+Categories:
 
-- `[build]`: build orchestration, target selection, tooling, or generation pipeline.
-- `[arch]`: architectural boundaries, layer contracts, or structural changes.
+- `[build]`: build orchestration, target selection, tooling, or generation.
+- `[arch]`: architectural boundaries, contracts, or structural changes.
 - `[sys]`: runtime, kernel, syscall, HAL, driver, service, or autoCode behaviour.
 - `[doc]`: important maintained documentation, excluding audits.
 - `[test]`: important test infrastructure or materially broader coverage.
 
-## Selection
+## Fast incremental selection
 
-Include only important changes that affect behaviour, architecture, maintained
-documentation, the build pipeline, or meaningful verification coverage.
+Inspect only the subjects of the latest 30 non-merge commits. This bounded rolling
+window lets later invocations reconsider an omitted recent milestone. Inspect
+changed paths or detailed diffs only for plausible or ambiguous candidates.
 
-Exclude:
+Exclude merges, minor fixes, formatting, spelling, audits, transient changes, and
+milestones already represented by an unversioned entry.
 
-- merge commits;
-- minor bug fixes;
-- formatting-only changes;
-- spelling-only changes;
-- audit generation, modification, renaming, or deletion;
-- transient work absent from the final tree;
-- changes already represented by an existing entry.
+Do not run builds, tests, static analysis, tag validation, full-history scans, or
+repository-wide diff statistics for normal changelog maintenance. Assume the
+checkout is sufficiently current.
 
-Commit subjects are evidence, not summaries. Inspect changed files, representative
-diffs, final code, and the existing changelog whenever classification is unclear.
+## Release headings and optional statistics
 
-## Project Stats
+A released section uses an unindented `TaskMate <major>.<minor>` heading, with
+blank lines allowed only immediately around it. Add a heading only when explicitly
+approved and never rewrite an existing heading.
 
-An approved `CHANGELOG` update must update the existing `Project Stats` section of
-`README.md` in the same patch. Preserve its Markdown and HTML structure.
+README `Project Stats` are outside the default changelog update. Change them only
+when explicitly requested. Existing build artefacts may be used as best-effort
+measurements; run `bmake` only when fresh measurements are explicitly requested.
 
-Measure the default target with `bmake` before proposing exact values. Use:
+## Approval and boundaries
 
-- the latest reachable Git release tag for the displayed version;
-- `git rev-list --count HEAD` for commits;
-- the first `SUM:` file count in `build/cloc_raw` for source files;
-- `code_total` in `build/cloc_data` for lines of code;
-- `Flash` and `RAM` used values in the default target mem_data file.
-
-Never guess or reuse stale measurements. If the build or extraction fails, do not
-modify either managed file.
-
-## Approval
-
-The default operation is proposal-only. Show the exact proposed insertions and
-`Project Stats` replacement, then wait for explicit user approval. Approval permits
-editing only `CHANGELOG` and the `Project Stats` section of `README.md`; it never
-permits a commit, push, tag, or edit of `CHANGELOG_AUTOCODE_SYNTAX`.
+Proposal-only is the default. Apply entries only after explicit approval. Never
+edit `CHANGELOG_AUTOCODE_SYNTAX`, commit, push, or create a Git tag unless the user
+requests that separate action.
