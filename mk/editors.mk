@@ -20,22 +20,22 @@ ${FILE_TAGS_STAMP}: ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC} ${FILES_AU
 	@ctags -f ${FILE_TAGS} -a ${FILES_AUTOCODE_SRC_H}
 	@touch ${FILE_TAGS_STAMP}
 
-vim_mk: ${FILE_TAGS_STAMP}
 .PHONY: vim_mk
+vim_mk: ${FILE_TAGS_STAMP}
 #help [global] Open Vim with all .mk Makefiles.
 	vim ${FILES_MK}
 
-geany_autoCode:
 .PHONY: geany_autoCode
+geany_autoCode:
 #help [global] Open Geany with all .c and .h source files.
 	geany ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 
-geany_mk:
 .PHONY: geany_mk
+geany_mk:
 #help [global] Open Geany with all .mk Makefiles.
 	geany ${FILES_MK}
 
-geany_tm:
 .PHONY: geany_tm
+geany_tm:
 #help [global] Open Geany with all TaskMate .c and .h source files (excluding autoCode).
 	geany ${FILES_SRC} ${FILES_SRC_H}

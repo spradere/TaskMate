@@ -12,8 +12,8 @@
 # Utility
 ################################################################################
 
-clean:
 .PHONY: clean
+clean:
 #help [global] Remove build files.
 	@${SCRIPT_CHECK_BUILD_DELETE_PATH} \
 		"${PATH_BUILD_TARGET}" \
@@ -65,8 +65,8 @@ clean:
 		find "${PATH_BUILD_BUILD_TEST}" -mindepth 1 -depth -delete; \
 	fi
 	
-clean_hard:
 .PHONY: clean_hard
+clean_hard:
 #help [global] Remove all build files.
 	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${PATH_BUILD_TARGET}"
 	@${SCRIPT_CHECK_BUILD_DELETE_PATH} --allow-build-root "${PATH_BUILDS}"
@@ -82,23 +82,23 @@ clean_hard:
 		find "${PATH_BUILDS}" -maxdepth 1 -type f -delete; \
 	fi
 	@printf "${COLOUR_RESET}"
-doc:
 .PHONY: doc
+doc:
 #help [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	doxygen ${PATH_DOCS}/Doxyfile
 
-_cloc_data:
 .PHONY: _cloc_data
+_cloc_data:
 	# Use :T because cloc does not handle a full path with the --exclude-dir option
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D --exclude-ext=rc,md,txt > ${FILE_CLOCRAW}
 	@printf "\n" >> ${FILE_CLOCRAW}
 	@cloc * --exclude-dir=${PATH_BUILDS:T} --exclude-lang=D,make --exclude-ext=rc,c,h,awk,sh >> ${FILE_CLOCRAW}
 	@awk -v file="${FILE_CLOCDATA}" -f ${SCRIPT_CLOC_DATA} ${FILE_CLOCRAW}
 
-cloc: _cloc_data
 .PHONY: cloc
+cloc: _cloc_data
 #help [global] Count lines of code.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -108,15 +108,15 @@ cloc: _cloc_data
 	@awk -f ${SCRIPT_CLOC_SHOW} "${FILE_CLOCDATA}"
 	@printf "${COLOUR_RESET}"
 
-note:
 .PHONY: note
+note:
 #help [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 
-cppcheck:
 .PHONY: cppcheck
+cppcheck:
 #help [global] cppcheck static code analysis for autoCode and TaskMate.
 	@printf "\n%scppcheck static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -128,15 +128,15 @@ cppcheck:
 		${FILES_SRC} \
 		${FILES_AUTOCODE_SRC}
 
-format:
 .PHONY: format
+format:
 #help [global] Format code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format19 -i ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC}
 
-tidy_autoCode:
 .PHONY: tidy_autoCode
+tidy_autoCode:
 #help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -144,8 +144,8 @@ tidy_autoCode:
 	-I/root/code/TaskMate/TaskMate_current/ \
 	-I/root/code/TaskMate/TaskMate_current/${PATH_SRCS}/
 
-help:
 .PHONY: help
+help:
 #help [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

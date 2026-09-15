@@ -63,8 +63,8 @@ FILE_GPIO_SIGNALS_DEPS = ${PATH_BUILD_TARGET}/gpio_signals.deps
 FILE_ERROR_LEVEL = ${PATH_SRCS}/interfaces/error_level.h
 
 # Check dynamic dependencies before evaluating the autoCode stamp.
-_autocode: _autocode_dependency_check .WAIT ${FILE_AUTOCODE_STAMP}
 .PHONY: _autocode
+_autocode: _autocode_dependency_check .WAIT ${FILE_AUTOCODE_STAMP}
 
 # autoCode launch and required files
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
@@ -118,8 +118,8 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ER
 	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
 # Dependency generation
-_autocode_dependency_check:
 .PHONY: _autocode_dependency_check
+_autocode_dependency_check:
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_INITRC_DEPS}" "${FILES_INITRC}"
 	@${SCRIPT_COMPARE_REPLACE} \
@@ -173,8 +173,8 @@ ${FILE_HALDEFINE_LIST}: ${FILES_HALDEFINE} ${FILE_HALDEFINE_DEPS}
 .endfor
 
 # Run autoCode alone
-autoCode_alone: ${FILE_AUTOCODE_TARGET}
 .PHONY: autoCode_alone
+autoCode_alone: ${FILE_AUTOCODE_TARGET}
 #help [global] Run autoCode alone.
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"

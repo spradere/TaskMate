@@ -36,8 +36,8 @@ ${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 
-backup:
 .PHONY: backup
+backup:
 #help [global] USB key backup with current git tag in directory.
 	@printf "\n%sBackup to <${PATH_USBKEY}${VAL_TM_BACKUP_DIR}>%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
