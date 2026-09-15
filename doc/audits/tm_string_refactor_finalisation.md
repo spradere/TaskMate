@@ -76,7 +76,7 @@ mais contredit la matrice d'architecture et empêche `sysCall` d'être la couche
 
 ### P0 — Supprimer le cycle `sysCall <-> tmLibc`
 
-`sc_hal.c` inclut `tm_string.h` et `tm_syslog.h`, `sc_modules.c` inclut `tm_string.h`, et `error.c`
+`sc_driver.c` inclut `tm_string.h` et `tm_syslog.h`, `sc_threads.c` inclut `tm_string.h`, et `sc_errors.c`
 inclut aussi ce dernier uniquement pour créer ses textes. Dans l'autre sens, `tm_string.c` et
 `tm_snprintf.c` appellent `sc_stringGetChar()` ou `sc_stdioPutChar()`.
 

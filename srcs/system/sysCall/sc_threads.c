@@ -7,15 +7,15 @@
  */
 
 /**
- * @file sc_modules.c
- * @brief Module and system syscall implementation.
+ * @file sc_threads.c
+ * @brief Thread and system syscall implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "sc_modules.h"
+#include "sc_threads.h"
 
 #include "hal/public/atomic.h"
 #include "interfaces/tm_macros.h"

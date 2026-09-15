@@ -7,12 +7,12 @@
  */
 
 /**
- * @file sc_hal.h
+ * @file sc_driver.h
  * @brief Driver and HAL syscall declarations.
  */
 
-#ifndef SYSCALL_SC_HAL_H
-#define SYSCALL_SC_HAL_H
+#ifndef SYSCALL_SC_DRIVER_H
+#define SYSCALL_SC_DRIVER_H
 
 /* ============================================================================
  * Includes
@@ -70,4 +70,4 @@ err_codes_t sc_i2cScan(void);
 
 err_codes_t sc_usartRead(uint8_t *data);
 
-#endif // SYSCALL_SC_HAL_H
+#endif // SYSCALL_SC_DRIVER_H

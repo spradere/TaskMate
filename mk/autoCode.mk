@@ -18,11 +18,11 @@ FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
 FILES_PARSE_TAG =  \
-	${PATH_SRCS}/system/sysCall/error.c \
+	${PATH_SRCS}/system/sysCall/sc_errors.c \
 	${PATH_SRCS}/interfaces/error_catalog.h \
 	${PATH_SRCS}/interfaces/tm_modules.h \
-	${PATH_SRCS}/system/sysCall/sc_modules.c \
-	${PATH_SRCS}/system/sysCall/sc_hal.c \
+	${PATH_SRCS}/system/sysCall/sc_threads.c \
+	${PATH_SRCS}/system/sysCall/sc_driver.c \
 	${PATH_SRCS}/system/sysCore/modules.c \
 	${PATH_SRCS}/system/sysCore/modules_list.h \
 	${PATH_SRCS}/system/sysCore/hal_init.h \

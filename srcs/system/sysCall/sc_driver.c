@@ -7,7 +7,7 @@
  */
 
 /**
- * @file sc_hal.c
+ * @file sc_driver.c
  * @brief Driver and HAL syscall implementation.
  */
 
@@ -15,7 +15,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "sc_hal.h"
+#include "sc_driver.h"
 
 #include "hal/public/atomic.h"
 #include "interfaces/drv_i2c.h"

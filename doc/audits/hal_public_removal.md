@@ -48,7 +48,7 @@ de l'architecture.
 
 | En-tête public | Contenu sélectionné | Consommateurs ou rôle | Difficulté principale |
 | --- | --- | --- | --- |
-| `atomic.h` | `arch/avr8/atomic.h` | `sc_hal.c`, `sc_modules.c` | état d'interruption et coût d'appel |
+| `atomic.h` | `arch/avr8/atomic.h` | `sc_driver.c`, `sc_threads.c` | état d'interruption et coût d'appel |
 | `context.h` | `arch/avr8/context.h` | allocation et démarrage des threads | ABI de pile et assembleur inline |
 | `define.h` | quatre `define.h` générés | type de pile dans `modules.h` | mélange de types arch, MCU et réglages |
 | `gpio.h` | `mcu/atmega2560/gpio.h` | sysCore et câblage des deux cibles | descripteur physique propre au MCU |

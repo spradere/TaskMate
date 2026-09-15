@@ -7,8 +7,8 @@
  */
 
 /**
- * @file error.c
- * @brief error implementation.
+ * @file sc_errors.c
+ * @brief Error syscall implementation.
  *
  */
 
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "error.h"
+#include "sc_errors.h"
 
 #include <stddef.h>
 

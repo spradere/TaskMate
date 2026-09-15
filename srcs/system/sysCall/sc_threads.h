@@ -7,12 +7,12 @@
  */
 
 /**
- * @file sc_modules.h
- * @brief Module and system syscall declarations.
+ * @file sc_threads.h
+ * @brief Thread and system syscall declarations.
  */
 
-#ifndef SYSCALL_SC_MODULES_H
-#define SYSCALL_SC_MODULES_H
+#ifndef SYSCALL_SC_THREADS_H
+#define SYSCALL_SC_THREADS_H
 
 /* ============================================================================
  * Includes
@@ -58,4 +58,4 @@ bool sc_threadRunLevelIsReady(uint8_t run_level);
 
 void sc_coopYield(void);
 
-#endif // SYSCALL_SC_MODULES_H
+#endif // SYSCALL_SC_THREADS_H
