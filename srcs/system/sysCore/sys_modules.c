@@ -60,9 +60,6 @@ mod_thread_item_t *mod_threadGetPointer(uint8_t id) { return &mod_data_base.thre
  * Static module allocation
  * ---------------------------------------------*/
 
-// NOLINTBEGIN
-// NOLINT(readability-magic-numbers)
-
 void mod_threadsAlloc(void)
 {
 	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
@@ -76,12 +73,9 @@ void mod_threadsAlloc(void)
 #include "threads_alloc.inc"
 	// [/tag]
 }
-
 void mod_driversAlloc(void)
 {
 	// [autoCode_tag] drivers_alloc
 #include "drivers_alloc.inc"
 	// [/tag]
 }
-
-// NOLINTEND
