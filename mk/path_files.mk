@@ -20,8 +20,11 @@ PATH_BUILD_GENERATED = ${PATH_BUILD_TARGET}/generated
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
-FILE_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
-FILE_HARDWARE_TARGETS_CONF = ${PATH_CONF}/hardware-targets.conf
+
+# Configuration
+CONF_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
+CONF_HARDWARE_TARGETS = ${PATH_CONF}/hardware-targets.conf
+CONF_SYSTEM_HEADER_ALLOW = ${PATH_CONF}/system_header_allow.conf
 
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
@@ -59,7 +62,6 @@ FILE_H_CHECK_LOG = ${PATH_LOGS}/headers_check.log
 FILE_ARCH_CHECK_LOG = ${PATH_LOGS}/architecture_check.log
 
 # Scripts
-FILE_SYSTEM_HEADER_ALLOW_CONF = ${PATH_CONF}/system_header_allow.conf
 FILE_ARCH_VALID_MATRIX = ${PATH_CONF}/arch_valid_matrix.md
 SCRIPT_ARCH_INCLUDE = ${PATH_SCRIPTS}/arch_include.awk
 SCRIPT_AUTOCODE_LOG = ${PATH_SCRIPTS}/autocode_log.awk

@@ -40,10 +40,10 @@
 .endif
 	
 # Check required programs once
-${FILE_PROGRAMS_CHECK_STAMP}: ${FILE_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
+${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@printf "%sChecking required programs ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${SCRIPT_CHECK_PROGRAMS} "${FILE_PROGRAMS_LIST}"
+	@${SCRIPT_CHECK_PROGRAMS} "${CONF_PROGRAMS_LIST}"
 	@mkdir -p "${PATH_BUILDS}"
 	@touch "${FILE_PROGRAMS_CHECK_STAMP}"
 
@@ -89,4 +89,3 @@ all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check _autocode 
 # Dependency files used to compile sources when a related header or source file changes
 _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
-

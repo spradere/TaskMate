@@ -47,7 +47,7 @@ _system_critical_check:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
 	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS} -v h_check_log=${FILE_H_CHECK_LOG} \
-		-f ${SCRIPT_HEADER_ALLOW} "${FILE_SYSTEM_HEADER_ALLOW_CONF}"
+		-f ${SCRIPT_HEADER_ALLOW} "${CONF_SYSTEM_HEADER_ALLOW}"
 
 # Check direct includes against the architecture matrix
 .PHONY: _architecture_include_check

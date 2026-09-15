@@ -103,7 +103,7 @@ static const hal_port_t mcu_ports[PORT_COUNT];
 ```
 
 - Makefile variables use semantic uppercase prefixes. Follow
-  `doc/rules/make_prefixes.md`: `PATH_`, `PATHS_`, `FILE_`, `FILES_`,
+  `doc/rules/make_prefixes.md`: `PATH_`, `PATHS_`, `FILE_`, `FILES_`, `CONF_`,
   `SCRIPT_`, `VAL_`, `OPT_`, `COLOUR_`, and `CFLAGS_...`.
 
 ## C Design Rules
