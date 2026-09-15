@@ -109,7 +109,11 @@ static void tm_putChar(char ch)
 		else { tm_snprintf_buffer.ptr[tm_snprintf_buffer.index - 1] = 0; }
 	}
 
-	if( tm_snprintf_buffer.ptr == NULL ) { sc_stdioPutChar(ch); }
+	if( tm_snprintf_buffer.ptr == NULL )
+	{
+		(void)sc_consoleWriteByte((uint8_t)ch);
+		if( ch == '\n' ) { (void)sc_consoleFlush(); }
+	}
 }
 
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
@@ -200,7 +204,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 		format_c = (char)sc_stringGetByte(&format, format_index++);
 	}
 
-	tm_putChar(0); // close string
+	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0); } // close string
 
 exit:
 

@@ -22,13 +22,26 @@
 #include <stdint.h>
 
 #include "hal/public/hal_define.h" // get string macros from arch
+#include "interfaces/error_catalog.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-void sc_stdioPutChar(char ch);
+/**
+ * Write one byte to the system console without requiring scheduler services.
+ *
+ * This call is valid during early boot and must not be called from an ISR.
+ */
+err_codes_t sc_consoleWriteByte(uint8_t data);
+
+/**
+ * Flush the system console without requiring scheduler services.
+ *
+ * This call is valid during early boot and must not be called from an ISR.
+ */
+err_codes_t sc_consoleFlush(void);
 tm_string_t sc_stringFromBuffer(const char *text);
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
 int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size);
