@@ -25,9 +25,6 @@
 #include "interfaces/tm_runLevel.h"
 #include "at2560_define.h" // Get the I2C frequency
 
-// NOLINTBEGIN
-// NOLINT(readability-magic-numbers)
-
 /* -----------------------------------------------
  * Constants
  * ---------------------------------------------*/
@@ -63,7 +60,6 @@ static hal_driver_state_t i2cSetError(err_codes_t error)
 	i2c_last_error = error;
 	return DRV_STATE_ERROR;
 }
-
 static hal_driver_state_t hal_i2cGetStatus(void)
 {
 	if( TM_GETBIT(i2c_status, DRV_BIT_DEAD) != 0 )
@@ -314,5 +310,3 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			return i2cSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
 }
-
-// NOLINTEND

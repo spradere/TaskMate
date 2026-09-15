@@ -24,9 +24,6 @@
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 
-// NOLINTBEGIN
-// NOLINT(readability-magic-numbers)
-
 /* -----------------------------------------------
  * Private function prototypes
  * ---------------------------------------------*/
@@ -65,7 +62,6 @@ static hal_driver_state_t lcdSetError(err_codes_t error)
 	lcd_last_error = error;
 	return DRV_STATE_ERROR;
 }
-
 static hal_driver_state_t hal_lcdGetStatus(void)
 {
 	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 )
@@ -291,5 +287,3 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			return lcdSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
 	}
 }
-
-// NOLINTEND
