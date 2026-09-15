@@ -19,6 +19,7 @@ clean:
 		"${PATH_BUILD_TARGET}" \
 		"${FILE_AUTOCODE_TARGET}" \
 		"${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" \
+		"${FILE_TM_STRING_TEST_TARGET}" \
 		"${PATH_BUILD_AUTOCODE_TEST}" \
 		"${PATH_BUILD_BUILD_TEST}"
 	@printf "\n%sRemove files :%s\n\n" \
@@ -30,6 +31,7 @@ clean:
 	@printf "${FILE_AUTOCODE_TARGET}\n"
 	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
 	@printf "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}\n"
+	@printf "${FILE_TM_STRING_TEST_TARGET}\n"
 	@printf "${PATH_BUILD_AUTOCODE_TEST}\n"
 	@printf "${PATH_BUILD_BUILD_TEST}\n"
 	@printf "${COLOUR_RESET}"
@@ -55,6 +57,10 @@ clean:
 	
 	@if [ -n "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" ] && [ -f "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" ]; then \
 		find "${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" -type f -delete; \
+	fi
+
+	@if [ -n "${FILE_TM_STRING_TEST_TARGET}" ] && [ -f "${FILE_TM_STRING_TEST_TARGET}" ]; then \
+		find "${FILE_TM_STRING_TEST_TARGET}" -type f -delete; \
 	fi
 	
 	@if [ -n "${PATH_BUILD_AUTOCODE_TEST}" ] && [ -d "${PATH_BUILD_AUTOCODE_TEST}" ]; then \

@@ -193,7 +193,9 @@ static mod_thread_item_t *sc_threadGetPointer(const char *name)
 	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
 	{
 		mod_thread_item_t *thread = mod_threadGetPointer(i);
-		if( sc_stringCompare(*thread_name_catalog[i],
+		const tm_string_t *thread_name = thread_name_catalog[i];
+		if( (thread_name != 0) &&
+			sc_stringCompare(*thread_name,
 						 sc_stringFromBuffer(name),
 						 MOD_NAME_SIZE_MAX) == 0 )
 		{

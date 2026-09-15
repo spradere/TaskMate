@@ -44,6 +44,7 @@ PATH_AGENTS = .agents
 .include "${PATH_MAKEFILES}/editors.mk"
 .include "${PATH_TEST}/autoCode_test.mk"
 .include "${PATH_TEST}/build_test.mk"
+.include "${PATH_TEST}/tm_string_test.mk"
 
 # Architecture-specific Make logic
 .include "${FILE_ARCH_CC}"

@@ -56,13 +56,17 @@ tm_string_t sc_stringFromBuffer(const char *text)
 
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 {
-	if( (string == 0) || (string->text == 0) ) { return 0; }
-	if( string->storage == TM_MEM_RAM ) { return (uint8_t)string->text[index]; }
-	if( string->storage == TM_MEM_ROM )
+	if( (string == 0) || (string->text == 0) || (index >= TM_STRING_SIZE_MAX) ) { return 0; }
+
+	switch( string->storage )
 	{
-		return (uint8_t)pgm_read_byte(&(string->text[index]));
+		case TM_MEM_RAM:
+			return (uint8_t)string->text[index];
+		case TM_MEM_ROM:
+			return (uint8_t)pgm_read_byte(&(string->text[index]));
+		default:
+			return 0;
 	}
-	return 0;
 }
 
 int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size)
