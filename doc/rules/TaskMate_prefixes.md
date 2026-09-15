@@ -5,6 +5,12 @@
 - Each prefix corresponds to a **clear conceptual responsibility**
 - No prefix overlaps with another
 - No prefix is decorative or redundant
+- Source filenames use the prefix of the layer or target that owns their implementation
+
+Symbol and filename prefixes are related, but they are not interchangeable. Public symbols
+identify the API boundary they implement, whereas target-specific filenames identify where an
+implementation is selected. For example, `avr8_context.c` implements the architecture-specific
+part of the `hal_` API; its exported symbols therefore keep the `hal_` prefix.
 
 ---
 
@@ -55,10 +61,58 @@ hardware-specific implementation details.
 - Exposes a restricted API to user tasks
 - Clearly identifies calls that cross from tasks into system code
 - Does not imply privilege separation or memory isolation
+- Prefixes every C source and header owned by `srcs/system/sysCall/`
 
 At a glance, it reads as:
 
 > “This code is not the kernel, but it is talking to it.”
+
+---
+
+### ● `sys_` — sysCore implementation
+
+**Kernel state, policy, boot support, and scheduling owned by sysCore**
+
+- Prefixes every C source and header owned by `srcs/system/sysCore/`
+- Distinguishes kernel implementation files from the task-visible `sc_` boundary
+- Replaces the former `tm_` filename prefix for scheduler and software-time-counter units
+- Does not create a new public API namespace: symbols retain their established domain prefixes
+  when appropriate
+
+👉 `sys_` identifies **sysCore file ownership**, not generic project-wide code.
+
+---
+
+### ● `hal_` — Hardware abstraction boundary
+
+**Target-independent HAL contracts and hardware-facing API symbols**
+
+- Prefixes the public, target-selecting headers in `srcs/hal/public/`
+- Prefixes HAL functions and types even when their implementation lives in an architecture, MCU,
+  board, or driver directory
+- Keeps the portable hardware boundary distinct from a selected target implementation
+
+👉 A `hal_*.h` filename exposes a **HAL capability**; target-specific implementation filenames use
+the target prefixes below.
+
+---
+
+### ● `avr8_` / `at2560_` / `mega_` — Selected HAL implementation
+
+**Files whose implementation belongs to a specific architecture, MCU, or board**
+
+- `avr8_` prefixes files in `srcs/hal/arch/avr8/`
+- `at2560_` prefixes files in `srcs/hal/mcu/atmega2560/`
+- `mega_` prefixes files in `srcs/hal/board/arduinoMega/`
+- Applies to implementation-support files as well as C and headers, including `.mk`, `.awk`,
+  `.list`, and `.err` files
+- Makes target selection explicit without scattering target conditionals through portable code
+
+These filename prefixes use the project's concise target identifiers; they do not rename the
+`hal_` symbols implemented by those files.
+
+👉 Target prefixes identify **where an implementation belongs**, while `hal_` identifies the
+hardware abstraction boundary it serves.
 
 ---
 

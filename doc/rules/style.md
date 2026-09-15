@@ -68,7 +68,10 @@ mod_thread_item_t *thread;
 - Use the established TaskMate prefixes only when they describe a real boundary
   or subsystem. Follow `doc/rules/TaskMate_prefixes.md`.
 - Current important prefixes:
-  `tm_`, `DRV_`, `sc_`, `gpio_`, `err_`, `mod_` / `MOD_`, and `rl_`.
+  `tm_`, `DRV_`, `AC_`, `sc_`, `sys_`, `hal_`, `gpio_`, `err_`, `mod_` / `MOD_`, and `rl_`.
+- Target-owned HAL filenames use the concise target prefix: `avr8_` for the architecture,
+  `at2560_` for the MCU, and `mega_` for the board. These filename prefixes do not replace the
+  `hal_` prefix of the symbols implemented by those files.
 - Public subsystem APIs use lower camel case after the prefix:
 
 ```c
