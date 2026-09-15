@@ -102,14 +102,18 @@ static void tm_putChar(char ch)
 {
 	if( tm_snprintf_buffer.ptr != NULL )
 	{
-		if( (tm_snprintf_buffer.index + 1) < (tm_snprintf_buffer.size - 1) )
+		if( tm_snprintf_buffer.size == 0 ) { return; }
+		if( ch == 0 )
 		{
-			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index++] = ch;
+			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0;
+			return;
 		}
-		else { tm_snprintf_buffer.ptr[tm_snprintf_buffer.index - 1] = 0; }
-	}
+		if( tm_snprintf_buffer.index >= (uint8_t)(tm_snprintf_buffer.size - 1) ) { return; }
 
-	if( tm_snprintf_buffer.ptr == NULL )
+		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index++] = ch;
+		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0;
+	}
+	else
 	{
 		(void)sc_consoleWriteByte((uint8_t)ch);
 		if( ch == '\n' ) { (void)sc_consoleFlush(); }
@@ -204,9 +208,8 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 		format_c = (char)sc_stringGetByte(&format, format_index++);
 	}
 
-	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0); } // close string
-
 exit:
 
+	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0); } // close string
 	return tm_snprintf_buffer.index;
 }

@@ -34,6 +34,10 @@ FILE_AUTOCODE_TEST_SANITIZE_TARGET = ${PATH_BUILDS}/autoCode_sanitize
 PATH_BUILD_TEST = ${PATH_TEST}/build
 PATH_BUILD_BUILD_TEST = ${PATH_BUILDS}/build_test
 
+PATH_TM_STRING_TEST = ${PATH_TEST}/tm_string
+FILE_TM_STRING_TEST = ${PATH_TM_STRING_TEST}/tm_string_test.c
+FILE_TM_STRING_TEST_TARGET = ${PATH_BUILDS}/tm_string_test
+
 # USB
 PATH_USBKEY = /media/usbkey
 FILE_USBDEV = /dev/da0s1
@@ -90,7 +94,7 @@ FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
 FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *
 FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list *.awk
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
-FILES_GIT_ALLOWED.${PATH_TEST} = *.mk *.sh
+FILES_GIT_ALLOWED.${PATH_TEST} = *.c *.mk *.sh
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG CHANGELOG_AUTOCODE_SYNTAX LICENSE Makefile README.md
 FILES_GIT_EXCLUDED = \

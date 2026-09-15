@@ -106,7 +106,7 @@ bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 	}
 
 	*name = driver_name_catalog[id];
-	return true;
+	return *name != 0;
 }
 
 bool sc_driverInit(const char *name) { return sc_driverControl(name, DRV_CTRL_INIT); }
@@ -305,8 +305,9 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
-		if( (driver->control != 0) &&
-			sc_stringCompare(*driver_name_catalog[i],
+		const tm_string_t *driver_name = driver_name_catalog[i];
+		if( (driver->control != 0) && (driver_name != 0) &&
+			sc_stringCompare(*driver_name,
 						 sc_stringFromBuffer(name),
 						 MOD_NAME_SIZE_MAX) == 0 )
 		{
