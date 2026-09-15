@@ -155,7 +155,7 @@ inutiles éliminées. Les codes `err_codes_t` doivent rester stables ; seule leu
 humaine doit devenir optionnelle.
 
 Cette évolution appartient aux fichiers `*.err` et à autoCode. Les régions générées de
-`srcs/system/sysCall/error.c` et `srcs/interfaces/error_catalog.h` ne doivent pas être modifiées
+`srcs/system/sysCall/sc_errors.c` et `srcs/interfaces/error_catalog.h` ne doivent pas être modifiées
 manuellement. Les messages provisoires `ERR_UNKNOWN` et `ERR_RUNTIME` sont les premiers candidats à
 supprimer indépendamment du profil.
 

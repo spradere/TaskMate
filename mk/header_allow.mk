@@ -27,10 +27,10 @@ CFLAGS_${PATH_SRCS}/system/TaskMate.c = \
 CFLAGS_${PATH_SRCS}/system/sysCore/tm_softwareTimeCounter.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_hal.c = \
+CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_modules.c = \
+CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SRCS}/system/services/commands/driver.c = \

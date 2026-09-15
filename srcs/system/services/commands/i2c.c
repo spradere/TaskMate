@@ -18,8 +18,8 @@
 #include "i2c.h"
 
 #include "interfaces/tm_define.h"
-#include "system/sysCall/error.h"
-#include "system/sysCall/sc_hal.h"
+#include "system/sysCall/sc_errors.h"
+#include "system/sysCall/sc_driver.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 

@@ -7,13 +7,13 @@
  */
 
 /**
- * @file error.h
- * @brief error header declarations.
+ * @file sc_errors.h
+ * @brief Error syscall declarations.
  *
  */
 
-#ifndef SYSCALL_ERROR_H
-#define SYSCALL_ERROR_H
+#ifndef SYSCALL_SC_ERRORS_H
+#define SYSCALL_SC_ERRORS_H
 
 /* ============================================================================
  * Includes
@@ -42,4 +42,4 @@ typedef struct
 const tm_string_t *err_getMessage(uint8_t num);
 void sc_halt(void);
 
-#endif // SYSCALL_ERROR_H
+#endif // SYSCALL_SC_ERRORS_H

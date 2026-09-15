@@ -25,9 +25,9 @@
 #include "system/services/commands/driver.h"
 #include "system/services/commands/i2c.h"
 #include "system/services/commands/thread.h"
-#include "system/sysCall/error.h"
-#include "system/sysCall/sc_hal.h"
-#include "system/sysCall/sc_modules.h"
+#include "system/sysCall/sc_errors.h"
+#include "system/sysCall/sc_driver.h"
+#include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 

@@ -19,7 +19,7 @@
 #include "task1.h"
 
 #include "system/sysCall/sc_gpio.h"
-#include "system/sysCall/sc_modules.h"
+#include "system/sysCall/sc_threads.h"
 
 /* -----------------------------------------------
  * Task state
