@@ -112,7 +112,7 @@ pas nécessaire à ce stade et augmenterait fortement la propagation en C embarq
 
 ### P1 — Sortir les noms de modules de `sysCore`
 
-autoCode émet dix `TM_STR_ROM_NEW` dans `sysCore/modules.c`. Les champs `name` des records thread et
+autoCode émet dix `TM_STR_ROM_NEW` dans `sysCore/sys_modules.c`. Les champs `name` des records thread et
 driver ne sont lus que par `sysCall`. Cette propriété permet une séparation nette :
 
 - `sysCore` conserve les états, piles, callbacks, adresses et identifiants numériques ;

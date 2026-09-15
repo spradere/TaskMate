@@ -23,9 +23,9 @@ FILES_PARSE_TAG =  \
 	${PATH_SRCS}/interfaces/tm_modules.h \
 	${PATH_SRCS}/system/sysCall/sc_threads.c \
 	${PATH_SRCS}/system/sysCall/sc_driver.c \
-	${PATH_SRCS}/system/sysCore/modules.c \
-	${PATH_SRCS}/system/sysCore/modules_list.h \
-	${PATH_SRCS}/system/sysCore/hal_init.h \
+	${PATH_SRCS}/system/sysCore/sys_modules.c \
+	${PATH_SRCS}/system/sysCore/sys_modules_list.h \
+	${PATH_SRCS}/system/sysCore/sys_hal_init.h \
 	${PATH_SRCS}/system/TaskMate.c \
 	${PATH_SRCS}/hal/public/define.h \
 	${PATH_SRCS}/interfaces/gpio_signals.h 	

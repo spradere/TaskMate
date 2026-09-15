@@ -29,7 +29,7 @@ When adding new variables:
 - `COLOUR_` / `COLOURS_`: terminal formatting constants and grouped AWK colour args.
   - Examples: `COLOUR_TARGET_INFO`, `COLOURS_AWK`.
 - `CFLAGS_...`: per-file compile flag overrides.
-  - Example: `CFLAGS_src/sysCore/modules.c` (expanded from `${PATH_SOURCES}`-based names).
+  - Example: `CFLAGS_src/sysCore/sys_modules.c` (expanded from `${PATH_SOURCES}`-based names).
 
 ## How to use them
 

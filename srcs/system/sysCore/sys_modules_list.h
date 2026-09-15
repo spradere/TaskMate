@@ -7,7 +7,7 @@
  */
 
 /**
- * @file modules_list.h
+ * @file sys_modules_list.h
  * @brief modules list header declarations.
  */
 
@@ -15,7 +15,7 @@
 #define SYSCORE_MODULES_LIST_H
 
 #if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : modules_list.h"
+	#error "NOT ALLOWED INCLUDE : sys_modules_list.h"
 #endif
 
 /* ============================================================================

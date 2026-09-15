@@ -7,7 +7,7 @@
  */
 
 /**
- * @file modules.h
+ * @file sys_modules.h
  * @brief modules header declarations.
  */
 

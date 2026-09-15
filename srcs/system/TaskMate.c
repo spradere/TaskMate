@@ -23,11 +23,11 @@
 #include "interfaces/tm_info.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
-#include "system/sysCore/gpio.h"
-#include "system/sysCore/hal_init.h"
-#include "system/sysCore/modules.h"
-#include "system/sysCore/tm_scheduler.h"
-#include "system/sysCore/tm_softwareTimeCounter.h"
+#include "system/sysCore/sys_gpio.h"
+#include "system/sysCore/sys_hal_init.h"
+#include "system/sysCore/sys_modules.h"
+#include "system/sysCore/sys_scheduler.h"
+#include "system/sysCore/sys_softwareTimeCounter.h"
 #include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------

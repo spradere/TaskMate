@@ -7,40 +7,38 @@
  */
 
 /**
- * @file gpio.c
- * @brief gpio implementation.
+ * @file sys_softwareTimeCounter.c
+ * @brief tm software time counter implementation.
+ *
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "gpio.h"
+#include "sys_softwareTimeCounter.h"
 
-#include "hal/public/gpio.h"
-#include "system/sysCore/hal_init.h"
+#include "interfaces/drv_timerSTC.h"
+#include "system/sysCore/sys_modules.h"
 
 /* -----------------------------------------------
- * Private variables
+ * Private function prototypes
  * ---------------------------------------------*/
 
-static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
+static void tm_softwareTimeCounter(void);
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void gpio_signalsInit(void)
+void tm_softwareTimeCounterInit(void) { hal_timerSTCSetCallback(tm_softwareTimeCounter); }
+
+void tm_softwareTimeCounter(void)
 {
-	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
+	// Decrement the RTC
+	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
 	{
-		targetWireSignal(signal_table, i);
-		hal_gpioPinInit(&signal_table[i].pin);
+		mod_thread_item_t *mod = mod_threadGetPointer(i);
+		if( mod->software_time_counter > 0 ) { mod->software_time_counter--; }
 	}
 }
-
-void gpio_signalSet(gpio_signal_t signal, bool val)
-{
-	hal_gpioPinWrite(signal_table[signal].pin, val);
-}
-bool gpio_signalGet(gpio_signal_t signal) { return hal_gpioPinRead(signal_table[signal].pin); }

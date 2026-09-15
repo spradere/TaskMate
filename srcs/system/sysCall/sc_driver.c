@@ -25,7 +25,7 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "system/sysCore/modules.h"
+#include "system/sysCore/sys_modules.h"
 #include "system/sysCall/sc_string.h"
 
 /* -----------------------------------------------
