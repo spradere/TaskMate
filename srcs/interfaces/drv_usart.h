@@ -28,7 +28,7 @@
 
 hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_control_data_t *data);
 hal_driver_state_t hal_usartRead(uint8_t *data);
-hal_driver_state_t hal_usartWriteChar(uint8_t data);
+hal_driver_state_t hal_usartWriteByte(uint8_t data);
 hal_driver_state_t hal_usartSendTXBuffer(void);
 
 #endif // INTERFACES_DRV_USART_H

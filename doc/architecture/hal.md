@@ -24,6 +24,12 @@ GPIO initialization.
 USART still starts earlier as the boot-log path. Once scheduled, the system service starts other
 drivers by run level through syscalls and checks their running state before advancing.
 
+LCD and USART output contracts transport `uint8_t` bytes. Their display paths are reserved for boot
+or normal thread context and must never be called from an ISR. In particular, an LCD byte sequence
+holds one I2C transaction from write start through write end; the syscall layer owns that sequencing
+and finalizes a started transaction after either success or failure. Reentrancy is intentionally not
+part of the contract until locking is added.
+
 The current MCU still exposes string reads and formatted-output transport through a public tmLibc
 backend. Under the v10 direction, libc sits above `sysCall`; future work must replace this direct
 library-to-HAL route while preserving AVR program-memory handling and bounded output.

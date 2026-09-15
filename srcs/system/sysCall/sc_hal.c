@@ -193,8 +193,14 @@ err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 	{
 		uint8_t str_byte = sc_stringGetByte(&str, index);
 		if( str_byte == 0 ) { break; }
-		error = sc_driverOperationError(hal_lcdWriteChar(str_byte), hal_lcdControl);
-		if( error != ERR_NO_ERROR ) { return error; }
+		error = sc_driverOperationError(hal_lcdWriteByte(str_byte), hal_lcdControl);
+		if( error != ERR_NO_ERROR )
+		{
+			volatile uint8_t write_error = (uint8_t)error;
+			/* Preserve the write error across finalization and AVR LTO. */
+			(void)sc_driverOperationError(hal_lcdWriteEnd(), hal_lcdControl);
+			return (err_codes_t)write_error;
+		}
 	}
 
 	return sc_driverOperationError(hal_lcdWriteEnd(), hal_lcdControl);

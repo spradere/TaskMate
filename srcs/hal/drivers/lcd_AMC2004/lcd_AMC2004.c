@@ -214,7 +214,7 @@ hal_driver_state_t hal_lcdWriteStart(void)
 	return DRV_STATE_RUNNING;
 }
 
-hal_driver_state_t hal_lcdWriteChar(uint8_t data)
+hal_driver_state_t hal_lcdWriteByte(uint8_t data)
 {
 	if( hal_i2cWrite(data) == DRV_STATE_ERROR )
 	{
