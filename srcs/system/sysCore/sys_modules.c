@@ -7,7 +7,7 @@
  */
 
 /**
- * @file modules.c
+ * @file sys_modules.c
  * @brief modules implementation.
  */
 
@@ -15,11 +15,11 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "modules.h"
+#include "sys_modules.h"
 
 #include "hal/public/context.h"
 #include "interfaces/tm_modules.h"
-#include "system/sysCore/modules_list.h"
+#include "system/sysCore/sys_modules_list.h"
 
 /* -----------------------------------------------
  * Private variables

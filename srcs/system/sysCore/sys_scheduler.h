@@ -7,7 +7,7 @@
  */
 
 /**
- * @file tm_scheduler.h
+ * @file sys_scheduler.h
  * @brief tm scheduler header declarations.
  *
  */

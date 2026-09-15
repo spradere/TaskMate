@@ -7,7 +7,7 @@
  */
 
 /**
- * @file tm_softwareTimeCounter.h
+ * @file sys_softwareTimeCounter.h
  * @brief tm software time counter header declarations.
  *
  */

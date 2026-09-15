@@ -7,7 +7,7 @@
  */
 
 /**
- * @file tm_scheduler.c
+ * @file sys_scheduler.c
  * @brief tm scheduler implementation.
  *
  */
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "tm_scheduler.h"
+#include "sys_scheduler.h"
 
 #include <stdint.h>
 
@@ -28,7 +28,7 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "system/sysCore/modules.h"
+#include "system/sysCore/sys_modules.h"
 
 /* -----------------------------------------------
  * Private variables

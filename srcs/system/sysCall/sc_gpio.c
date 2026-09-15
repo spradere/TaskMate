@@ -17,7 +17,7 @@
 
 #include "sc_gpio.h"
 
-#include "system/sysCore/gpio.h"
+#include "system/sysCore/sys_gpio.h"
 
 /* =============================================================================
  * Implementation - Functions

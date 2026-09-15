@@ -7,7 +7,7 @@
  */
 
 /**
- * @file hal_init.h
+ * @file sys_hal_init.h
  * @brief hal init header declarations.
  */
 
@@ -15,7 +15,7 @@
 #define SYSCORE_HAL_INIT_H
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : hal_init.h"
+	#error "NOT ALLOWED INCLUDE : sys_hal_init.h"
 #endif
 
 /* ============================================================================

@@ -7,7 +7,7 @@
  */
 
 /**
- * @file gpio.h
+ * @file sys_gpio.h
  * @brief gpio header declarations.
  */
 
