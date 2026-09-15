@@ -18,6 +18,7 @@
 .BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
+	@mkdir -p "${PATH_BUILD_GENERATED}"
 	
 .if make(upload) || make(all)
 	@printf "// #####################################\n" > "${FILE_TM_INFO}.tmp"
