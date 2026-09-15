@@ -17,6 +17,22 @@ FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
+FILES_AUTOCODE_INC = \
+	${PATH_BUILD_GENERATED}/threads_alloc.inc \
+	${PATH_BUILD_GENERATED}/drivers_alloc.inc \
+	${PATH_BUILD_GENERATED}/thread_name_catalog.inc \
+	${PATH_BUILD_GENERATED}/driver_name_catalog.inc \
+	${PATH_BUILD_GENERATED}/error_enum.inc \
+	${PATH_BUILD_GENERATED}/error_catalog.inc \
+	${PATH_BUILD_GENERATED}/hal_define.inc \
+	${PATH_BUILD_GENERATED}/hal_init.inc \
+	${PATH_BUILD_GENERATED}/hal_fxinit.inc \
+	${PATH_BUILD_GENERATED}/modules_count.inc \
+	${PATH_BUILD_GENERATED}/modules_list.inc \
+	${PATH_BUILD_GENERATED}/gpio_signals.inc
+
+CFLAGS += -I${PATH_BUILD_GENERATED}
+
 FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCall/sc_errors.c \
 	${PATH_SRCS}/interfaces/error_catalog.h \
@@ -55,7 +71,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 						${FILE_PARSE_TAG_LIST} ${FILE_HALINIT_LIST} ${FILE_FUNCINIT_LIST} \
 						${FILE_HALDEFINE_LIST} \
 						${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} \
-						${FILES_DRIVER_INTERFACES}
+						${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
 
 	@printf "%sautoCode, related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -76,8 +92,10 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--funcinit ${FILE_FUNCINIT_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--haldefine ${FILE_HALDEFINE_LIST}" >> "${FILE_AUTOCODE_CONFIG}"	
 	@printf "%s\n" "--gpio_signals ${FILE_GPIO_SIGNALS}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--generated_path ${PATH_BUILD_GENERATED}" >> "${FILE_AUTOCODE_CONFIG}"
 		
 	# Launch autoCode
+	@mkdir -p "${PATH_BUILD_GENERATED}"
 	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
 	@touch ${FILE_AUTOCODE_STAMP}
 
@@ -85,8 +103,11 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@awk ${COLOURS_AWK} -v log_file="${FILE_AUTOCODE_LOG_DATED}" \
 		-f ${SCRIPT_AUTOCODE_LOG} "${FILE_AUTOCODE_LOG_DATED}"
 
+# Missing or externally modified generated artefacts force autoCode to run.
+${FILES_AUTOCODE_INC}:
+
 # Special rule for autoCode with Clang, not the architecture-specific compiler
-CFLAGS_AUTOCODE = -I${PATH_SRCS}/
+CFLAGS_AUTOCODE = -DAUTOCODE_BUILD -I${PATH_SRCS}/
 CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments

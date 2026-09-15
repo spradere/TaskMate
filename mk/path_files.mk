@@ -14,6 +14,7 @@
 
 # Final full HW path
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
+PATH_BUILD_GENERATED = ${PATH_BUILD_TARGET}/generated
 
 # Targets
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate

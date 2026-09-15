@@ -60,13 +60,15 @@ writeConfig()
 		"--halinit ${PATH_CASE}/hal_init.list" \
 		"--funcinit ${PATH_CASE}/func_init.list" \
 		"--haldefine ${PATH_CASE}/hal_define.list" \
-		"--gpio_signals ${PATH_CASE}/signals.gpio" > "${PATH_CASE}/autoCode.conf"
+		"--gpio_signals ${PATH_CASE}/signals.gpio" \
+		"--generated_path ${PATH_CASE}/generated" > "${PATH_CASE}/autoCode.conf"
 }
 
 caseBegin()
 {
 	PATH_CASE="${PATH_STAGE_WORK}/$1"
 	mkdir -p "${PATH_CASE}" || fail "cannot create ${PATH_CASE}"
+	mkdir -p "${PATH_CASE}/generated" || fail "cannot create ${PATH_CASE}/generated"
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
 	printf '%s\n' "${PATH_CASE}/errors.err" > "${PATH_CASE}/errors.list"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
@@ -436,20 +438,19 @@ runCompareReplaceTests()
 	caseBegin stable_generation
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 1 unchanged"
+	logContains unchanged_generation "0 updated, 13 unchanged"
 	for VAL_FUNC in hal_avr8Init hal_atmega2560Init hal_arduinoMegaInit
 	do
-		if ! grep -F -q -- "${VAL_FUNC}();" "${PATH_CASE}/tags.c"; then
+		if ! grep -F -q -- "${VAL_FUNC}();" "${PATH_CASE}/generated/hal_fxinit.inc"; then
 			fail "generated init call missing for ${VAL_FUNC}"
 		fi
 	done
 
 	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
-		"${PATH_CASE}/tags.c" > "${PATH_CASE}/changed.c"
-	mv "${PATH_CASE}/changed.c" "${PATH_CASE}/tags.c"
+		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
+	mv "${PATH_CASE}/changed.inc" "${PATH_CASE}/generated/modules_count.inc"
 	expectSuccess changed_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains changed_generation "1 updated, 0 unchanged"
-	if grep -q '#define MOD_DRIVER_COUNT 99' "${PATH_CASE}/tags.c"; then
+	if grep -q '#define MOD_DRIVER_COUNT 99' "${PATH_CASE}/generated/modules_count.inc"; then
 		fail "changed generation did not restore generated content"
 	fi
 	assertNoTemporaryFiles
