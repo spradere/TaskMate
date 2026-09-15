@@ -11,7 +11,7 @@
  * @brief auto code implementation.
  *
  * - Simple and reliable; reads plain-text init.rc files
- * - Writes includes, static allocations, and initialisation directly into code
+ * - Writes generated fragments included from tagged source regions
  *
  * @note
  * Tag format is a one-line C comment: // [autoCode_tag] <object> <action>

@@ -71,7 +71,7 @@ int fileCmpReplaceAll(void)
 		file_t file_src;
 		fileInit(&file_src);
 		file_src.name = file_tmp_list[i].source_name;
-		if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
+		if( fileOpen(&file_src, "r", FILE_CREATE, __FILE__, __LINE__) != 0 )
 		{
 			result = -1;
 			break;

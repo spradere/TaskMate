@@ -35,6 +35,7 @@ static void setHalInitFile(const char *value, options_list_t *opt);
 static void setFuncInitFile(const char *value, options_list_t *opt);
 static void setHalDefineFile(const char *value, options_list_t *opt);
 static void setGpioSignalsFile(const char *value, options_list_t *opt);
+static void setGeneratedPath(const char *value, options_list_t *opt);
 static void setErrorCount(const char *value, options_list_t *opt);
 
 /* -----------------------------------------------
@@ -49,7 +50,8 @@ static void setErrorCount(const char *value, options_list_t *opt);
 	X(HAVE_HALINIT, "--halinit", setHalInitFile)        \
 	X(HAVE_FUNCINIT, "--funcinit", setFuncInitFile)     \
 	X(HAVE_HALDEFINE, "--haldefine", setHalDefineFile)  \
-	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile)
+	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile) \
+	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath)
 
 static const struct
 {
@@ -157,6 +159,12 @@ static void setHalDefineFile(const char *value, options_list_t *opt)
 {
 	setFileName(opt->file_haldefine_list, sizeof(opt->file_haldefine_list), value);
 	have_options_count[HAVE_HALDEFINE]++;
+}
+
+static void setGeneratedPath(const char *value, options_list_t *opt)
+{
+	setFileName(opt->generated_path, sizeof(opt->generated_path), value);
+	have_options_count[HAVE_GENERATED_PATH]++;
 }
 
 static void setGpioSignalsFile(const char *value, options_list_t *opt)
