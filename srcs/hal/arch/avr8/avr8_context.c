@@ -7,7 +7,7 @@
  */
 
 /**
- * @file context.c
+ * @file avr8_context.c
  * @brief context implementation.
  *
  */
@@ -16,7 +16,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "context.h"
+#include "avr8_context.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

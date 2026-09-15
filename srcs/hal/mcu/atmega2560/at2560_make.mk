@@ -8,8 +8,8 @@
 #
 ################################################################################
 
-.ifndef HAL_MCU_ATMEGA2560_MAKE_MK
-HAL_MCU_ATMEGA2560_MAKE_MK = 1
+.ifndef HAL_MCU_ATMEGA2560_AT2560_MAKE_MK
+HAL_MCU_ATMEGA2560_AT2560_MAKE_MK = 1
 
 ################################################################################
 # ATMega 2560 makefile
@@ -20,13 +20,13 @@ VAL_HW_STACK += atmega2560
 
 PATH_ATMEGA2560 = ${PATH_SRCS}/hal/mcu/atmega2560
 PATHS_SOURCES += ${PATH_ATMEGA2560}
-FILES_HALINIT_HEADER += ${PATH_ATMEGA2560}/init.h
-FILES_HALDEFINE += ${PATH_ATMEGA2560}/define.h
+FILES_HALINIT_HEADER += ${PATH_ATMEGA2560}/at2560_init.h
+FILES_HALDEFINE += ${PATH_ATMEGA2560}/at2560_define.h
 VAL_FUNCINIT := hal_atmega2560Init ${VAL_FUNCINIT}
 
 CFLAGS += -DMCU_atmega2560
 
-.include "${PATH_SRCS}/hal/arch/avr8/make.mk"
+.include "${PATH_SRCS}/hal/arch/avr8/avr8_make.mk"
 
 # MCU settings
 VAL_MCU_SERIAL = atmega2560

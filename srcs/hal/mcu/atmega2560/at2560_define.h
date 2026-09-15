@@ -7,13 +7,13 @@
  */
 
 /**
- * @file define.h
+ * @file at2560_define.h
  * @brief mcu define header declarations.
  *
  */
 
-#ifndef HAL_MCU_ATMEGA2560_DEFINE_H
-#define HAL_MCU_ATMEGA2560_DEFINE_H
+#ifndef HAL_MCU_ATMEGA2560_AT2560_DEFINE_H
+#define HAL_MCU_ATMEGA2560_AT2560_DEFINE_H
 
 /* ============================================================================
  * Includes
@@ -64,4 +64,4 @@ typedef struct
 	gpio_pin_pull_t pull;
 } hal_pin_t;
 
-#endif // HAL_MCU_ATMEGA2560_DEFINE_H
+#endif // HAL_MCU_ATMEGA2560_AT2560_DEFINE_H

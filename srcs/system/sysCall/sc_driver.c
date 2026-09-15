@@ -17,7 +17,7 @@
 
 #include "sc_driver.h"
 
-#include "hal/public/atomic.h"
+#include "hal/public/hal_atomic.h"
 #include "interfaces/drv_i2c.h"
 #include "interfaces/drv_lcd.h"
 #include "interfaces/drv_rtc.h"

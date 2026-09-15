@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-#include "hal/public/define.h" // get string macros from arch
+#include "hal/public/hal_define.h" // get string macros from arch
 #include "interfaces/tm_string.h"
 
 /* ============================================================================

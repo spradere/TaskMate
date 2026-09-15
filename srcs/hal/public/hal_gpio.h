@@ -7,18 +7,25 @@
  */
 
 /**
- * @file init.h
- * @brief ATmega2560 MCU initialization declarations.
+ * @file hal_gpio.h
+ * @brief gpio header declarations.
  *
  */
 
-#ifndef ATMEGA2560_ATMEGA2560_INIT_H
-#define ATMEGA2560_ATMEGA2560_INIT_H
+#ifndef HAL_PUBLIC_HAL_GPIO_H
+#define HAL_PUBLIC_HAL_GPIO_H
 
 /* ============================================================================
- * Public API
+ * Target selection
  * ========================================================================== */
 
-void hal_atmega2560Init(void);
+#if defined(MCU_atmega2560)
+	#include "hal/mcu/atmega2560/at2560_gpio.h"
+	#define HAL_GPIO
+#endif
 
-#endif // ATMEGA2560_ATMEGA2560_INIT_H
+#if !defined(HAL_GPIO)
+	#error "No hal implementation for gpio on selected hardware target."
+#endif
+
+#endif // HAL_PUBLIC_HAL_GPIO_H

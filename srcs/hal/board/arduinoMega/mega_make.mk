@@ -8,8 +8,8 @@
 #
 ################################################################################
 
-.ifndef HAL_BOARD_ARDUINOMEGA_MAKE_MK
-HAL_BOARD_ARDUINOMEGA_MAKE_MK = 1
+.ifndef HAL_BOARD_ARDUINOMEGA_MEGA_MAKE_MK
+HAL_BOARD_ARDUINOMEGA_MEGA_MAKE_MK = 1
 
 ################################################################################
 # Arduino Mega board makefile
@@ -19,12 +19,12 @@ HAL_BOARD_ARDUINOMEGA_MAKE_MK = 1
 VAL_HW_STACK += arduinoMega
 PATH_ARDUINOMEGA = ${PATH_SRCS}/hal/board/arduinoMega
 PATHS_SOURCES += ${PATH_ARDUINOMEGA}
-FILES_HALINIT_HEADER += ${PATH_ARDUINOMEGA}/init.h
-FILES_HALDEFINE += ${PATH_ARDUINOMEGA}/define.h
+FILES_HALINIT_HEADER += ${PATH_ARDUINOMEGA}/mega_init.h
+FILES_HALDEFINE += ${PATH_ARDUINOMEGA}/mega_define.h
 VAL_FUNCINIT := hal_arduinoMegaInit ${VAL_FUNCINIT}
 CFLAGS += -DBOARD_arduinoMega
 
-.include "${PATH_SRCS}/hal/mcu/atmega2560/make.mk"
+.include "${PATH_SRCS}/hal/mcu/atmega2560/at2560_make.mk"
 
 # Board settings
 VAL_CPU_FREQ = 16000000UL

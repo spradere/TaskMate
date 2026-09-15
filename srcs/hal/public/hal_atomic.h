@@ -7,29 +7,25 @@
  */
 
 /**
- * @file interrupt.h
- * @brief interrupt header declarations.
+ * @file hal_atomic.h
+ * @brief atomic header declarations.
  *
  */
 
-#ifndef HAL_PUBLIC_INTERRUPT_H
-#define HAL_PUBLIC_INTERRUPT_H
+#ifndef HAL_PUBLIC_HAL_ATOMIC_H
+#define HAL_PUBLIC_HAL_ATOMIC_H
 
 /* ============================================================================
  * Target selection
  * ========================================================================== */
 
-#if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : interrupt.h"
-#endif
-
 #if defined(ARCH_avr8)
-	#include "hal/arch/avr8/interrupt.h"
-	#define HAL_INT
+	#include "hal/arch/avr8/avr8_atomic.h"
+	#define HAL_ATOMIC
 #endif
 
-#if !defined(HAL_INT)
-	#error "No hal implementation for interrupt on selected hardware target."
+#if !defined(HAL_ATOMIC)
+	#error "No hal implementation for atomic block on selected hardware target."
 #endif
 
-#endif // HAL_PUBLIC_INTERRUPT_H
+#endif // HAL_PUBLIC_HAL_ATOMIC_H

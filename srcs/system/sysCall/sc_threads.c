@@ -17,7 +17,7 @@
 
 #include "sc_threads.h"
 
-#include "hal/public/atomic.h"
+#include "hal/public/hal_atomic.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"

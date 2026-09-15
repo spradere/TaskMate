@@ -7,13 +7,13 @@
  */
 
 /**
- * @file context.h
+ * @file avr8_context.h
  * @brief context header declarations.
  *
  */
 
-#ifndef AVR8_CONTEXT_H
-#define AVR8_CONTEXT_H
+#ifndef AVR8_AVR8_CONTEXT_H
+#define AVR8_AVR8_CONTEXT_H
 
 /* ============================================================================
  * Includes
@@ -21,7 +21,7 @@
 
 #include <avr/io.h>
 
-#include "hal/arch/avr8/define.h" // Get stack_word_t
+#include "hal/arch/avr8/avr8_define.h" // Get stack_word_t
 
 /* ============================================================================
  * Public definitions
@@ -112,4 +112,4 @@ static inline __attribute__((always_inline)) void hal_contextRestore(void)
 void hal_threadContextInit(void (*func)(void), hal_stack_word_t **stack_pointer,
 						   hal_stack_word_t *stack_top);
 
-#endif // AVR8_CONTEXT_H
+#endif // AVR8_AVR8_CONTEXT_H

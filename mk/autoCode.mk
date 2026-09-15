@@ -27,7 +27,7 @@ FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCore/sys_modules_list.h \
 	${PATH_SRCS}/system/sysCore/sys_hal_init.h \
 	${PATH_SRCS}/system/TaskMate.c \
-	${PATH_SRCS}/hal/public/define.h \
+	${PATH_SRCS}/hal/public/hal_define.h \
 	${PATH_SRCS}/interfaces/gpio_signals.h 	
 		
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc

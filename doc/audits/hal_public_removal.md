@@ -124,7 +124,7 @@ l'architecture et au pilote de timer d'ordonnancement ; elles ne doivent pas mig
 Le premier dimensionne chaque pile statique dans `mod_thread_item_t`, et le second mémorise `SREG`
 pour restaurer exactement l'état antérieur des interruptions.
 
-Une définition neutre doit être choisie avant de supprimer `hal/public/define.h`. Utiliser
+Une définition neutre doit être choisie avant de supprimer `hal/public/hal_define.h`. Utiliser
 aveuglément `uintptr_t` doublerait la RAM occupée par les piles sur AVR8. Utiliser toujours
 `uint8_t` imposerait une unité et un alignement qui ne sont pas encore validés pour les CPU 16/32
 bits. Cette décision exige un prototype avec contrôle de `sizeof`, alignement, `.data`, `.bss`,
@@ -218,7 +218,7 @@ et mesurés, pas livrée comme une suppression globale de répertoire.
 
 Quand `modules.h` ne dépend plus de `hal_stack_word_t` issu du header concret :
 
-1. supprimer `srcs/hal/public/define.h` de `FILES_PARSE_TAG` ;
+1. supprimer `srcs/hal/public/hal_define.h` de `FILES_PARSE_TAG` ;
 2. retirer le tag `hal_define`, l'option `--haldefine` et leur traitement dans autoCode ;
 3. supprimer `FILES_HALDEFINE`, ses listes, stamps et dépendances dans les fragments Make ;
 4. adapter le corpus `test_autoCode` qui vérifie aujourd'hui ce tag et cette option ;

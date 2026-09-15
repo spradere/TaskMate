@@ -106,15 +106,15 @@ runConfigurationTests()
 		"hal_avr8Init hal_atmega2560Init hal_arduinoMegaInit test_noscliInit" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V VAL_FUNCINIT
 	VAL_STARTUP_HEADERS="srcs/user/target/test1/init.h"
-	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/board/arduinoMega/init.h"
-	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/mcu/atmega2560/init.h"
-	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/arch/avr8/init.h"
+	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/board/arduinoMega/mega_init.h"
+	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/mcu/atmega2560/at2560_init.h"
+	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/arch/avr8/avr8_init.h"
 	expectOutput startup_headers "${VAL_STARTUP_HEADERS}" \
 		bmake -C "${PATH_PROJECT}" -V FILES_HALINIT_HEADER
 	VAL_STARTUP_DEFINES="srcs/user/target/test1/define.h"
-	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/board/arduinoMega/define.h"
-	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/mcu/atmega2560/define.h"
-	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/arch/avr8/define.h"
+	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/board/arduinoMega/mega_define.h"
+	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/mcu/atmega2560/at2560_define.h"
+	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/arch/avr8/avr8_define.h"
 	expectOutput startup_defines "${VAL_STARTUP_DEFINES}" \
 		bmake -C "${PATH_PROJECT}" -V FILES_HALDEFINE
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
@@ -342,12 +342,12 @@ runReportTests()
 		> "${PATH_STAGE_WORK}/memory.raw"
 	expectSuccess memory_data awk -v flash_total_k=64 -v ram_total_k=8 \
 		-v output_file="${PATH_STAGE_WORK}/memory.data" \
-		-f "${PATH_PROJECT}/srcs/hal/arch/avr8/avr_memory_data.awk" \
+		-f "${PATH_PROJECT}/srcs/hal/arch/avr8/avr8_memory_data.awk" \
 		"${PATH_STAGE_WORK}/memory.raw"
 	assertFileContains "${PATH_STAGE_WORK}/memory.data" "Flash 1024 65536"
 	assertFileContains "${PATH_STAGE_WORK}/memory.data" "RAM 224 8192"
 	expectSuccess memory_show awk \
-		-f "${PATH_PROJECT}/srcs/hal/arch/avr8/avr_memory_show.awk" \
+		-f "${PATH_PROJECT}/srcs/hal/arch/avr8/avr8_memory_show.awk" \
 		"${PATH_STAGE_WORK}/memory.data"
 	logContains memory_show "1024 / 65536 bytes"
 

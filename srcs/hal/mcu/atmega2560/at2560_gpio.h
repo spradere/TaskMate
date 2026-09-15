@@ -7,13 +7,13 @@
  */
 
 /**
- * @file gpio.h
+ * @file at2560_gpio.h
  * @brief gpio header declarations.
  *
  */
 
-#ifndef ATMEGA2560_GPIO_H
-#define ATMEGA2560_GPIO_H
+#ifndef ATMEGA2560_AT2560_GPIO_H
+#define ATMEGA2560_AT2560_GPIO_H
 
 /* ============================================================================
  * Includes
@@ -21,7 +21,7 @@
 
 #include <stdbool.h>
 
-#include "define.h"
+#include "at2560_define.h"
 
 /* ============================================================================
  * Public definitions
@@ -41,4 +41,4 @@ void hal_gpioPinInit(const hal_pin_t *pin);
 void hal_gpioPinWrite(const hal_pin_t pin, bool value);
 bool hal_gpioPinRead(const hal_pin_t pin);
 
-#endif // ATMEGA2560_GPIO_H
+#endif // ATMEGA2560_AT2560_GPIO_H

@@ -7,7 +7,7 @@
  */
 
 /**
- * @file i2c.c
+ * @file at2560_i2c.c
  * @brief i2c implementation.
  *
  */
@@ -23,7 +23,7 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "define.h" // Get the I2C frequency
+#include "at2560_define.h" // Get the I2C frequency
 
 // NOLINTBEGIN
 // NOLINT(readability-magic-numbers)

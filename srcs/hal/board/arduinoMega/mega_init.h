@@ -7,25 +7,18 @@
  */
 
 /**
- * @file gpio.h
- * @brief gpio header declarations.
+ * @file mega_init.h
+ * @brief Arduino Mega board initialization declarations.
  *
  */
 
-#ifndef HAL_PUBLIC_GPIO_H
-#define HAL_PUBLIC_GPIO_H
+#ifndef ARDUINOMEGA_ARDUINOMEGA_MEGA_INIT_H
+#define ARDUINOMEGA_ARDUINOMEGA_MEGA_INIT_H
 
 /* ============================================================================
- * Target selection
+ * Public API
  * ========================================================================== */
 
-#if defined(MCU_atmega2560)
-	#include "hal/mcu/atmega2560/gpio.h"
-	#define HAL_GPIO
-#endif
+void hal_arduinoMegaInit(void);
 
-#if !defined(HAL_GPIO)
-	#error "No hal implementation for gpio on selected hardware target."
-#endif
-
-#endif // HAL_PUBLIC_GPIO_H
+#endif // ARDUINOMEGA_ARDUINOMEGA_MEGA_INIT_H

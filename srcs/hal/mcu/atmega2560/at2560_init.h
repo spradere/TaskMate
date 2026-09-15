@@ -7,18 +7,18 @@
  */
 
 /**
- * @file init.h
- * @brief Arduino Mega board initialization declarations.
+ * @file at2560_init.h
+ * @brief ATmega2560 MCU initialization declarations.
  *
  */
 
-#ifndef ARDUINOMEGA_ARDUINOMEGA_INIT_H
-#define ARDUINOMEGA_ARDUINOMEGA_INIT_H
+#ifndef ATMEGA2560_ATMEGA2560_AT2560_INIT_H
+#define ATMEGA2560_ATMEGA2560_AT2560_INIT_H
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-void hal_arduinoMegaInit(void);
+void hal_atmega2560Init(void);
 
-#endif // ARDUINOMEGA_ARDUINOMEGA_INIT_H
+#endif // ATMEGA2560_ATMEGA2560_AT2560_INIT_H

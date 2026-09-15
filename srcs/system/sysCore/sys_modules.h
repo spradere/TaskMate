@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 
-#include "hal/public/define.h" // Get hal_stack_word_t from the selected architecture
+#include "hal/public/hal_define.h" // Get hal_stack_word_t from the selected architecture
 #include "interfaces/tm_modules.h"
 
 /* ============================================================================
