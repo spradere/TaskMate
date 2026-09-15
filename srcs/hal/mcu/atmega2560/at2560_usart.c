@@ -7,7 +7,7 @@
  */
 
 /**
- * @file usart.c
+ * @file at2560_usart.c
  * @brief usart implementation.
  *
  */
@@ -22,7 +22,7 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "define.h" // Get the USART baud rate
+#include "at2560_define.h" // Get the USART baud rate
 
 /* -----------------------------------------------
  * Circular buffers

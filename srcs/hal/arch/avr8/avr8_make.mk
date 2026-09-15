@@ -8,8 +8,8 @@
 #
 ################################################################################
 
-.ifndef HAL_ARCH_AVR8_MAKE_MK
-HAL_ARCH_AVR8_MAKE_MK = 1
+.ifndef HAL_ARCH_AVR8_AVR8_MAKE_MK
+HAL_ARCH_AVR8_AVR8_MAKE_MK = 1
 
 ################################################################################
 # AVR architecture makefile
@@ -20,8 +20,8 @@ VAL_HW_STACK += avr8
 
 PATH_AVR8 = ${PATH_SRCS}/hal/arch/avr8
 PATHS_SOURCES += ${PATH_AVR8}
-FILES_HALINIT_HEADER += ${PATH_AVR8}/init.h
-FILES_HALDEFINE += ${PATH_AVR8}/define.h
+FILES_HALINIT_HEADER += ${PATH_AVR8}/avr8_init.h
+FILES_HALDEFINE += ${PATH_AVR8}/avr8_define.h
 VAL_FUNCINIT := hal_avr8Init ${VAL_FUNCINIT}
 
 CFLAGS += -DARCH_avr8

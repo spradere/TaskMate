@@ -7,37 +7,37 @@
  */
 
 /**
- * @file atomic.h
- * @brief atomic header declarations.
+ * @file avr8_interrupt.h
+ * @brief interrupt header declarations.
  *
  */
 
-#ifndef AVR8_ATOMIC_H
-#define AVR8_ATOMIC_H
+#ifndef AVR8_AVR8_INTERRUPT_H
+#define AVR8_AVR8_INTERRUPT_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
-#include <avr/interrupt.h>
 #include <avr/io.h>
-
-#include "hal/arch/avr8/define.h" // Get hal_atomic_state_t
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-static inline __attribute__((always_inline)) hal_atomic_state_t hal_atomicStart(void)
+static inline __attribute__((always_inline)) void hal_returnFromInterrupt(void)
 {
-	hal_atomic_state_t state = SREG;
-	cli();
-	return state;
+	asm volatile("reti \n\t");
 }
 
-static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_state_t state)
+static inline __attribute__((always_inline)) void hal_setGlobalInterrupt(void)
 {
-	SREG = state;
+	asm volatile("sei \n\t");
 }
 
-#endif // AVR8_ATOMIC_H
+static inline __attribute__((always_inline)) void hal_clearGlobalInterrupt(void)
+{
+	asm volatile("cli \n\t");
+}
+
+#endif // AVR8_AVR8_INTERRUPT_H

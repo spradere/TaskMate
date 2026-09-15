@@ -7,7 +7,7 @@
  */
 
 /**
- * @file timerSTC.c
+ * @file at2560_timerSTC.c
  * @brief timer stc implementation.
  *
  */

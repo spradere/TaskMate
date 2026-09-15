@@ -7,24 +7,19 @@
  */
 
 /**
- * @file halt.c
- * @brief AVR8 halt implementation.
+ * @file mega_init.c
+ * @brief Arduino Mega board initialization implementation.
+ *
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "interfaces/hal_halt.h"
-
-#include <avr/interrupt.h>
+#include "mega_init.h"
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-_Noreturn void hal_halt(void)
-{
-	cli();
-	while( 1 ) {}
-}
+void hal_arduinoMegaInit(void) {}

@@ -6,18 +6,18 @@
  * See the LICENSE file for full license terms.
  */
 /**
- * @file init.c
- * @brief AVR8 architecture initialization implementation.
+ * @file at2560_init.c
+ * @brief ATmega2560 MCU initialization implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "init.h"
+#include "at2560_init.h"
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_avr8Init(void) {}
+void hal_atmega2560Init(void) {}

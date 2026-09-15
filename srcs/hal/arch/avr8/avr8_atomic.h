@@ -7,29 +7,37 @@
  */
 
 /**
- * @file stack.h
- * @brief stack header declarations.
+ * @file avr8_atomic.h
+ * @brief atomic header declarations.
  *
  */
 
-#ifndef AVR8_STACK_H
-#define AVR8_STACK_H
+#ifndef AVR8_AVR8_ATOMIC_H
+#define AVR8_AVR8_ATOMIC_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
-#include <avr/io.h> // Get SP
-#include <stdint.h>
+#include <avr/interrupt.h>
+#include <avr/io.h>
 
-#include "hal/arch/avr8/define.h"
+#include "hal/arch/avr8/avr8_define.h" // Get hal_atomic_state_t
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-static inline __attribute__((always_inline)) void hal_setStackPointer(const hal_stack_word_t *sp)
+static inline __attribute__((always_inline)) hal_atomic_state_t hal_atomicStart(void)
 {
-	SP = (uintptr_t)sp;
+	hal_atomic_state_t state = SREG;
+	cli();
+	return state;
 }
-#endif // AVR8_STACK_H
+
+static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_state_t state)
+{
+	SREG = state;
+}
+
+#endif // AVR8_AVR8_ATOMIC_H

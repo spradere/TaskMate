@@ -7,37 +7,29 @@
  */
 
 /**
- * @file interrupt.h
- * @brief interrupt header declarations.
+ * @file avr8_stack.h
+ * @brief stack header declarations.
  *
  */
 
-#ifndef AVR8_INTERRUPT_H
-#define AVR8_INTERRUPT_H
+#ifndef AVR8_AVR8_STACK_H
+#define AVR8_AVR8_STACK_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
-#include <avr/io.h>
+#include <avr/io.h> // Get SP
+#include <stdint.h>
+
+#include "hal/arch/avr8/avr8_define.h"
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-static inline __attribute__((always_inline)) void hal_returnFromInterrupt(void)
+static inline __attribute__((always_inline)) void hal_setStackPointer(const hal_stack_word_t *sp)
 {
-	asm volatile("reti \n\t");
+	SP = (uintptr_t)sp;
 }
-
-static inline __attribute__((always_inline)) void hal_setGlobalInterrupt(void)
-{
-	asm volatile("sei \n\t");
-}
-
-static inline __attribute__((always_inline)) void hal_clearGlobalInterrupt(void)
-{
-	asm volatile("cli \n\t");
-}
-
-#endif // AVR8_INTERRUPT_H
+#endif // AVR8_AVR8_STACK_H

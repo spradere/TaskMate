@@ -30,9 +30,9 @@
  */
 
 #include "srcs/user/target/test1/init.h"
-#include "srcs/hal/board/arduinoMega/init.h"
-#include "srcs/hal/mcu/atmega2560/init.h"
-#include "srcs/hal/arch/avr8/init.h"
+#include "srcs/hal/board/arduinoMega/mega_init.h"
+#include "srcs/hal/mcu/atmega2560/at2560_init.h"
+#include "srcs/hal/arch/avr8/avr8_init.h"
 
 // clang-format on
 // [/tag]

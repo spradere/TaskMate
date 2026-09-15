@@ -7,7 +7,7 @@
  */
 
 /**
- * @file gpio.c
+ * @file at2560_gpio.c
  * @brief gpio implementation.
  *
  */
@@ -16,12 +16,12 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "gpio.h"
+#include "at2560_gpio.h"
 
 #include <avr/io.h>
 #include <stdbool.h>
 
-#include "hal/arch/avr8/define.h"
+#include "hal/arch/avr8/avr8_define.h"
 #include "interfaces/tm_macros.h"
 
 /* -----------------------------------------------

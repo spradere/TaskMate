@@ -20,9 +20,9 @@
 
 #include <stdint.h>
 
-#include "hal/public/context.h"
-#include "hal/public/interrupt.h"
-#include "hal/public/stack.h"
+#include "hal/public/hal_context.h"
+#include "hal/public/hal_interrupt.h"
+#include "hal/public/hal_stack.h"
 #include "interfaces/drv_timerSched.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"

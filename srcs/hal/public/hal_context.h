@@ -7,29 +7,29 @@
  */
 
 /**
- * @file stack.h
- * @brief stack header declarations.
+ * @file hal_context.h
+ * @brief context header declarations.
  *
  */
 
-#ifndef HAL_PUBLIC_STACK_H
-#define HAL_PUBLIC_STACK_H
+#ifndef HAL_PUBLIC_HAL_CONTEXT_H
+#define HAL_PUBLIC_HAL_CONTEXT_H
 
 /* ============================================================================
  * Target selection
  * ========================================================================== */
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : stack.h"
+	#error "NOT ALLOWED INCLUDE : context.h"
 #endif
 
 #if defined(ARCH_avr8)
-	#include "hal/arch/avr8/stack.h"
-	#define HAL_STACK
+	#include "hal/arch/avr8/avr8_context.h"
+	#define HAL_CONTEXT
 #endif
 
-#if !defined(HAL_STACK)
-	#error "No hal implementation for stack pointer on selected hardware target."
+#if !defined(HAL_CONTEXT)
+	#error "No hal implementation for context switch on selected hardware target."
 #endif
 
-#endif // HAL_PUBLIC_STACK_H
+#endif // HAL_PUBLIC_HAL_CONTEXT_H

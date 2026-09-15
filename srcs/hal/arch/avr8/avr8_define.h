@@ -7,13 +7,13 @@
  */
 
 /**
- * @file define.h
+ * @file avr8_define.h
  * @brief arch define header declarations.
  *
  */
 
-#ifndef HAL_ARCH_AVR8_DEFINE_H
-#define HAL_ARCH_AVR8_DEFINE_H
+#ifndef HAL_ARCH_AVR8_AVR8_DEFINE_H
+#define HAL_ARCH_AVR8_AVR8_DEFINE_H
 
 /* ============================================================================
  * Includes
@@ -59,4 +59,4 @@ typedef struct
 	volatile uint8_t *pin;
 } hal_port_t;
 
-#endif // HAL_ARCH_AVR8_DEFINE_H
+#endif // HAL_ARCH_AVR8_AVR8_DEFINE_H

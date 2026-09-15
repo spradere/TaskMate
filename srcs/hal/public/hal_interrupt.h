@@ -7,29 +7,29 @@
  */
 
 /**
- * @file context.h
- * @brief context header declarations.
+ * @file hal_interrupt.h
+ * @brief interrupt header declarations.
  *
  */
 
-#ifndef HAL_PUBLIC_CONTEXT_H
-#define HAL_PUBLIC_CONTEXT_H
+#ifndef HAL_PUBLIC_HAL_INTERRUPT_H
+#define HAL_PUBLIC_HAL_INTERRUPT_H
 
 /* ============================================================================
  * Target selection
  * ========================================================================== */
 
 #if !defined(HAL_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : context.h"
+	#error "NOT ALLOWED INCLUDE : interrupt.h"
 #endif
 
 #if defined(ARCH_avr8)
-	#include "hal/arch/avr8/context.h"
-	#define HAL_CONTEXT
+	#include "hal/arch/avr8/avr8_interrupt.h"
+	#define HAL_INT
 #endif
 
-#if !defined(HAL_CONTEXT)
-	#error "No hal implementation for context switch on selected hardware target."
+#if !defined(HAL_INT)
+	#error "No hal implementation for interrupt on selected hardware target."
 #endif
 
-#endif // HAL_PUBLIC_CONTEXT_H
+#endif // HAL_PUBLIC_HAL_INTERRUPT_H

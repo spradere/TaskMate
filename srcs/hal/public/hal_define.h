@@ -7,12 +7,12 @@
  */
 
 /**
- * @file define.h
+ * @file hal_define.h
  * @brief define header declarations.
  */
 
-#ifndef HAL_PUBLIC_DEFINE_H
-#define HAL_PUBLIC_DEFINE_H
+#ifndef HAL_PUBLIC_HAL_DEFINE_H
+#define HAL_PUBLIC_HAL_DEFINE_H
 
 /* ============================================================================
  * Generated includes
@@ -26,11 +26,11 @@
  */
 
 #include "srcs/user/target/test1/define.h"
-#include "srcs/hal/board/arduinoMega/define.h"
-#include "srcs/hal/mcu/atmega2560/define.h"
-#include "srcs/hal/arch/avr8/define.h"
+#include "srcs/hal/board/arduinoMega/mega_define.h"
+#include "srcs/hal/mcu/atmega2560/at2560_define.h"
+#include "srcs/hal/arch/avr8/avr8_define.h"
 
 // clang-format on
 // [/tag]
 
-#endif // HAL_PUBLIC_DEFINE_H
+#endif // HAL_PUBLIC_HAL_DEFINE_H

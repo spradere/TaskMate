@@ -7,12 +7,12 @@
  */
 
 /**
- * @file define.h
+ * @file mega_define.h
  * @brief board define header declarations.
  *
  */
 
-#ifndef HAL_BOARD_ARDUINOMEGA_DEFINE_H
-#define HAL_BOARD_ARDUINOMEGA_DEFINE_H
+#ifndef HAL_BOARD_ARDUINOMEGA_MEGA_DEFINE_H
+#define HAL_BOARD_ARDUINOMEGA_MEGA_DEFINE_H
 
-#endif // HAL_BOARD_ARDUINOMEGA_DEFINE_H
+#endif // HAL_BOARD_ARDUINOMEGA_MEGA_DEFINE_H

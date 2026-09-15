@@ -31,7 +31,7 @@ FILE_GPIO_SIGNALS = ${PATH_TEST_NOSCLI}/signals.gpio
 
 CFLAGS += -DHWT_test_noscli
 
-.include "${PATH_SRCS}/hal/board/arduinoMega/make.mk"
+.include "${PATH_SRCS}/hal/board/arduinoMega/mega_make.mk"
 
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}

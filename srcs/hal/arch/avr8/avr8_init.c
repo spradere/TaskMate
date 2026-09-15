@@ -5,21 +5,19 @@
  * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
  * See the LICENSE file for full license terms.
  */
-
 /**
- * @file init.c
- * @brief Arduino Mega board initialization implementation.
- *
+ * @file avr8_init.c
+ * @brief AVR8 architecture initialization implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "init.h"
+#include "avr8_init.h"
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_arduinoMegaInit(void) {}
+void hal_avr8Init(void) {}

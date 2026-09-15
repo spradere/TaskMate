@@ -5,19 +5,26 @@
  * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
  * See the LICENSE file for full license terms.
  */
+
 /**
- * @file init.c
- * @brief ATmega2560 MCU initialization implementation.
+ * @file avr8_halt.c
+ * @brief AVR8 halt implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "init.h"
+#include "interfaces/hal_halt.h"
+
+#include <avr/interrupt.h>
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_atmega2560Init(void) {}
+_Noreturn void hal_halt(void)
+{
+	cli();
+	while( 1 ) {}
+}
