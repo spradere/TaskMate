@@ -98,6 +98,7 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ER
 
 # Dependency generation
 _autocode_dependency_check:
+.PHONY: _autocode_dependency_check
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_INITRC_DEPS}" "${FILES_INITRC}"
 	@${SCRIPT_COMPARE_REPLACE} \
@@ -112,7 +113,6 @@ _autocode_dependency_check:
 		"${FILE_ERROR_DEPS}" "${FILES_ERROR}"
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_GPIO_SIGNALS_DEPS}" "${FILE_GPIO_SIGNALS}"
-.PHONY: _autocode_dependency_check
 
 # Files list for autoCode
 ${FILE_ERROR_LIST}: ${FILES_ERROR} ${FILE_ERROR_DEPS}
@@ -153,6 +153,7 @@ ${FILE_HALDEFINE_LIST}: ${FILES_HALDEFINE} ${FILE_HALDEFINE_DEPS}
 
 # Run autoCode alone
 autoCode_alone: ${FILE_AUTOCODE_TARGET}
+.PHONY: autoCode_alone
 #help [global] Run autoCode alone.
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -162,4 +163,3 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 	fi
 	@${MAKE} _autocode
 	@ls -t ${FILE_AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
-.PHONY: autoCode_alone

@@ -18,46 +18,46 @@ CFLAGS_AUTOCODE_TEST_SANITIZE += -fsanitize=address,undefined -fno-omit-frame-po
 test_autoCode: test_autoCode_command_line .WAIT test_autoCode_options .WAIT \
 	test_autoCode_errors .WAIT test_autoCode_initrc .WAIT test_autoCode_parse_tag .WAIT \
 	test_autoCode_compare_replace
+.PHONY: test_autoCode
 #help [test] Run the complete autoCode black-box test corpus.
 	@printf "\n%sAll autoCode tests passed%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-.PHONY: test_autoCode
 
 test_autoCode_command_line: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_command_line
 #help [test] Test autoCode command-line validation.
 	@${SCRIPT_AUTOCODE_TEST} command_line \
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
-.PHONY: test_autoCode_command_line
 
 test_autoCode_options: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_options
 #help [test] Test autoCode configuration options.
 	@${SCRIPT_AUTOCODE_TEST} options \
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
-.PHONY: test_autoCode_options
 
 test_autoCode_errors: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_errors
 #help [test] Test autoCode error files.
 	@${SCRIPT_AUTOCODE_TEST} errors \
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
-.PHONY: test_autoCode_errors
 
 test_autoCode_initrc: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_initrc
 #help [test] Test autoCode init.rc files.
 	@${SCRIPT_AUTOCODE_TEST} initrc \
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
-.PHONY: test_autoCode_initrc
 
 test_autoCode_parse_tag: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_parse_tag
 #help [test] Test autoCode tag parsing and tag inputs.
 	@${SCRIPT_AUTOCODE_TEST} parse_tag \
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
-.PHONY: test_autoCode_parse_tag
 
 test_autoCode_compare_replace: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_compare_replace
 #help [test] Test deferred autoCode comparison and replacement.
 	@${SCRIPT_AUTOCODE_TEST} compare_replace \
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
-.PHONY: test_autoCode_compare_replace
 
 ${FILE_AUTOCODE_TEST_SANITIZE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} \
 										 ${FILE_ERROR_LEVEL}
@@ -67,7 +67,7 @@ ${FILE_AUTOCODE_TEST_SANITIZE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SR
 		-o ${FILE_AUTOCODE_TEST_SANITIZE_TARGET}
 
 test_autoCode_sanitize: ${FILE_AUTOCODE_TEST_SANITIZE_TARGET} ${SCRIPT_AUTOCODE_TEST}
+.PHONY: test_autoCode_sanitize
 #help [test] Run the complete autoCode corpus with ASan and UBSan.
 	@ASAN_OPTIONS=detect_leaks=0 ${SCRIPT_AUTOCODE_TEST} all \
 		"./${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}/sanitize"
-.PHONY: test_autoCode_sanitize

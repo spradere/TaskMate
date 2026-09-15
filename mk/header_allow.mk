@@ -42,6 +42,7 @@ CFLAGS_${PATH_SRCS}/system/sysCore/sys_gpio.c = \
 
 # Check includes for system-critical features
 _system_critical_check:
+.PHONY: _system_critical_check
 	@printf "%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -50,6 +51,7 @@ _system_critical_check:
 
 # Check direct includes against the architecture matrix
 _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
+.PHONY: _architecture_include_check
 	@printf "%sChecking architecture direct includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -60,5 +62,3 @@ _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
 	else \
 		status=$$?; cat "${FILE_ARCH_CHECK_LOG}"; echo ">>> satus : " $$status; \
 	fi
-
-.PHONY: _system_critical_check _architecture_include_check
