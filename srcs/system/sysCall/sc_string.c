@@ -26,14 +26,14 @@
 
 void sc_stdioPutChar(char ch)
 {
-	if( hal_usartWriteChar((uint8_t)ch) == DRV_STATE_ERROR )
+	if( hal_usartWriteByte((uint8_t)ch) == DRV_STATE_ERROR )
 	{
 		hal_driver_control_data_t control_data;
 		hal_usartControl(DRV_CTRL_GETLASTERROR, &control_data);
 		if( control_data.error == ERR_HAL_USART_TX_BUFFER_FULL )
 		{
 			hal_usartSendTXBuffer();
-			hal_usartWriteChar((uint8_t)ch);
+			hal_usartWriteByte((uint8_t)ch);
 		}
 	}
 

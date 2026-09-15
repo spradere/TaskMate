@@ -24,6 +24,11 @@ scheduler uses the resulting active level to admit threads.
 RTC calls validate pointers, translate errors, and keep one startup-time snapshot. The bounded
 I2C scan reconciles declared devices only after a complete, non-overflowing discovery pass.
 
+LCD and console output calls are restricted to boot or normal thread context. They must never be
+called from an ISR: their HAL paths can buffer, wait for a peripheral, or hold a sequenced I2C
+transaction. A successful LCD write start is always paired with finalization, including when a byte
+write fails. Reentrancy remains outside this contract until explicit locking is introduced.
+
 The v10 direction places `tmLibc` above this boundary. Current syscall sources still use its string
 and logging helpers; future work must remove those upward dependencies without changing syscall
 ownership of hardware and kernel mediation.

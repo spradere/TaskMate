@@ -57,7 +57,7 @@ static volatile err_codes_t usart_last_error = ERR_NO_ERROR;
  * Private function prototypes
  * ---------------------------------------------*/
 
-static err_codes_t usartWriteChar(uint8_t data);
+static err_codes_t usartWriteByte(uint8_t data);
 static hal_driver_state_t usartSetError(err_codes_t error);
 
 /* =============================================================================
@@ -158,7 +158,7 @@ ISR(USART1_RX_vect)
 	else { usart_last_error = ERR_HAL_USART_RX_BUFFER_FULL; }
 }
 
-// Read a character from Rx buffer (non-blocking)
+// Read a byte from the RX buffer (non-blocking)
 hal_driver_state_t hal_usartRead(uint8_t *data)
 {
 	hal_driver_state_t state = usartRequireRunning();
@@ -178,7 +178,7 @@ hal_driver_state_t hal_usartRead(uint8_t *data)
  * Transmit path
  * ---------------------------------------------*/
 
-static err_codes_t usartWriteChar(uint8_t data)
+static err_codes_t usartWriteByte(uint8_t data)
 {
 	uint8_t next_head = CB_NEXT(buffer_tx_head);
 	if( CB_FULL(buffer_tx_head, buffer_tx_tail) ) { return ERR_HAL_USART_TX_BUFFER_FULL; }
@@ -188,11 +188,11 @@ static err_codes_t usartWriteChar(uint8_t data)
 	return ERR_NO_ERROR;
 }
 
-hal_driver_state_t hal_usartWriteChar(uint8_t data)
+hal_driver_state_t hal_usartWriteByte(uint8_t data)
 {
 	hal_driver_state_t state = usartRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
-	err_codes_t error = usartWriteChar(data);
+	err_codes_t error = usartWriteByte(data);
 	if( error != ERR_NO_ERROR ) { return usartSetError(error); }
 	return DRV_STATE_RUNNING;
 }
