@@ -82,7 +82,7 @@ static const tm_string_t *const driver_name_catalog[MOD_DRIVER_COUNT] =
 
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
 static bool sc_driverControl(const char *name, hal_driver_control_t command);
-static err_codes_t sc_driverOperationError(
+static err_codes_t sc_driverError(
 	hal_driver_state_t state,
 	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *));
 
@@ -178,32 +178,32 @@ bool sc_driverRunLevelIsReady(uint8_t run_level)
  * LCD operations
  * ---------------------------------------------*/
 
-err_codes_t sc_lcdClear(void) { return sc_driverOperationError(hal_lcdClear(), hal_lcdControl); }
+err_codes_t sc_lcdClear(void) { return sc_driverError(hal_lcdClear(), hal_lcdControl); }
 
 err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 {
-	err_codes_t error = sc_driverOperationError(hal_lcdSetCursor(row, col), hal_lcdControl);
+	err_codes_t error = sc_driverError(hal_lcdSetCursor(row, col), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
 	if( str.text == 0 ) { return ERR_NULL_POINTER; }
 
-	error = sc_driverOperationError(hal_lcdWriteStart(), hal_lcdControl);
+	error = sc_driverError(hal_lcdWriteStart(), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
 
 	for( uint8_t index = 0; index < TM_STRING_SIZE_MAX; index++ )
 	{
 		uint8_t str_byte = sc_stringGetByte(&str, index);
 		if( str_byte == 0 ) { break; }
-		error = sc_driverOperationError(hal_lcdWriteByte(str_byte), hal_lcdControl);
+		error = sc_driverError(hal_lcdWriteByte(str_byte), hal_lcdControl);
 		if( error != ERR_NO_ERROR )
 		{
 			volatile uint8_t write_error = (uint8_t)error;
 			/* Preserve the write error across finalization and AVR LTO. */
-			(void)sc_driverOperationError(hal_lcdWriteEnd(), hal_lcdControl);
+			(void)sc_driverError(hal_lcdWriteEnd(), hal_lcdControl);
 			return (err_codes_t)write_error;
 		}
 	}
 
-	return sc_driverOperationError(hal_lcdWriteEnd(), hal_lcdControl);
+	return sc_driverError(hal_lcdWriteEnd(), hal_lcdControl);
 }
 
 /* -----------------------------------------------
@@ -213,13 +213,13 @@ err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 err_codes_t sc_rtcRead(hal_rtc_time_t *time)
 {
 	if( time == 0 ) { return ERR_NULL_POINTER; }
-	return sc_driverOperationError(hal_rtcRead(time), hal_rtcControl);
+	return sc_driverError(hal_rtcRead(time), hal_rtcControl);
 }
 
 err_codes_t sc_rtcWrite(const hal_rtc_time_t *time)
 {
 	if( time == 0 ) { return ERR_NULL_POINTER; }
-	return sc_driverOperationError(hal_rtcWrite(time), hal_rtcControl);
+	return sc_driverError(hal_rtcWrite(time), hal_rtcControl);
 }
 
 err_codes_t sc_rtcSaveStartupTime(void)
@@ -310,7 +310,7 @@ err_codes_t sc_usartRead(uint8_t *data)
  * Private helpers
  * ---------------------------------------------*/
 
-static err_codes_t sc_driverOperationError(
+static err_codes_t sc_driverError(
 	hal_driver_state_t state,
 	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *))
 {

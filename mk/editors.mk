@@ -25,7 +25,7 @@ vim_mk: ${FILE_TAGS_STAMP}
 	vim ${FILES_MK}
 .PHONY: vim_mk
 
-geany_all:
+geany_autoCode:
 #help [global] Open Geany with all .c and .h source files.
 	geany ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 .PHONY: geany_all
