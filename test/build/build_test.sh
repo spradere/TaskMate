@@ -153,7 +153,7 @@ runConfigurationTests()
 		PATH_BUILD_TARGET="${PATH_MANIFESTS}" \
 		FILE_TM_INFO="${PATH_STAGE_WORK}/tm_info.h" \
 		FILE_BUILD_INFO="${PATH_STAGE_WORK}/build_info.txt" \
-		FILE_PROGRAMS_LIST="${PATH_STAGE_WORK}/programs.conf" \
+		CONF_PROGRAMS_LIST="${PATH_STAGE_WORK}/programs.conf" \
 		FILE_PROGRAMS_CHECK_STAMP="${PATH_STAGE_WORK}/programs.stamp" \
 		FILE_AVR8_PROGRAMS_LIST="${PATH_STAGE_WORK}/programs.conf" \
 		FILE_AVR8_PROGRAMS_CHECK_STAMP="${PATH_STAGE_WORK}/avr8_programs.stamp" \
