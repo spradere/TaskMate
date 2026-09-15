@@ -24,20 +24,29 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void sc_stdioPutChar(char ch)
+err_codes_t sc_consoleWriteByte(uint8_t data)
 {
-	if( hal_usartWriteByte((uint8_t)ch) == DRV_STATE_ERROR )
-	{
-		hal_driver_control_data_t control_data;
-		hal_usartControl(DRV_CTRL_GETLASTERROR, &control_data);
-		if( control_data.error == ERR_HAL_USART_TX_BUFFER_FULL )
-		{
-			hal_usartSendTXBuffer();
-			hal_usartWriteByte((uint8_t)ch);
-		}
-	}
+	if( hal_usartWriteByte(data) == DRV_STATE_RUNNING ) { return ERR_NO_ERROR; }
 
-	if( ch == '\n' ) { hal_usartSendTXBuffer(); }
+	hal_driver_control_data_t control_data;
+	hal_usartControl(DRV_CTRL_GETLASTERROR, &control_data);
+	if( control_data.error != ERR_HAL_USART_TX_BUFFER_FULL ) { return control_data.error; }
+
+	err_codes_t error = sc_consoleFlush();
+	if( error != ERR_NO_ERROR ) { return error; }
+	if( hal_usartWriteByte(data) == DRV_STATE_RUNNING ) { return ERR_NO_ERROR; }
+
+	hal_usartControl(DRV_CTRL_GETLASTERROR, &control_data);
+	return control_data.error;
+}
+
+err_codes_t sc_consoleFlush(void)
+{
+	if( hal_usartSendTXBuffer() == DRV_STATE_RUNNING ) { return ERR_NO_ERROR; }
+
+	hal_driver_control_data_t control_data;
+	hal_usartControl(DRV_CTRL_GETLASTERROR, &control_data);
+	return control_data.error;
 }
 
 tm_string_t sc_stringFromBuffer(const char *text)
