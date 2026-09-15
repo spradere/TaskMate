@@ -41,8 +41,8 @@ CFLAGS_${PATH_SRCS}/system/sysCore/sys_gpio.c = \
 
 
 # Check includes for system-critical features
-_system_critical_check:
 .PHONY: _system_critical_check
+_system_critical_check:
 	@printf "%sChecking forbidden system critical includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -50,8 +50,8 @@ _system_critical_check:
 		-f ${SCRIPT_HEADER_ALLOW} "${FILE_SYSTEM_HEADER_ALLOW_CONF}"
 
 # Check direct includes against the architecture matrix
-_architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
 .PHONY: _architecture_include_check
+_architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
 	@printf "%sChecking architecture direct includes ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 

@@ -49,24 +49,24 @@ ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 ${FILE_HEX}: ${FILE_ELF}
 	@avr-objcopy -O ihex -R .eeprom ${FILE_ELF} ${FILE_HEX}
 	
-upload: all _mcu_memory_show ${FILE_HEX}
 .PHONY: upload
+upload: all _mcu_memory_show ${FILE_HEX}
 #help [avr8] Upload firmware to the MCU via the Arduino board.
 	@printf "%sUpload binary to AVR flash, build %i %s\n\n" \
 		"${COLOUR_TARGET_INFO}" ${VAL_BUILD_CNT} "${COLOUR_RESET}"
 	avrdude -c ${VAL_PROGRAMMER} -p ${VAL_MCU_SERIAL} -U flash:w:${FILE_HEX}:i -P ${VAL_PROGRAMMER_PORT} -D
 
 # Memory usage
-_mcu_memory_data:
 .PHONY: _mcu_memory_data
+_mcu_memory_data:
 		@avr-size -G -d ${FILE_ELF} > ${FILE_MEMRAW}
 
 		@awk -v flash_total_k="${VAL_FLASH_SIZE_K}" -v ram_total_k="${VAL_RAM_SIZE_K}" \
 			-v output_file="${FILE_MEMDATA}" -f ${SCRIPT_AVR_MEMORY_DATA} \
 			"${FILE_MEMRAW}"
 
-_mcu_memory_show: _mcu_memory_data
 .PHONY: _mcu_memory_show
+_mcu_memory_show: _mcu_memory_data
 	@printf "Static memory usage : \n"
 	@cat ${FILE_MEMRAW}
 
@@ -75,16 +75,16 @@ _mcu_memory_show: _mcu_memory_data
 	@printf "${COLOUR_RESET}"
 
 
-dump: all ${FILE_HEX}
 .PHONY: dump
+dump: all ${FILE_HEX}
 #help [avr8] Disassemble machine code in .hex and .elf
 	@printf "%sGenerate debugging informations%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-objdump -D -m ${VAL_MCU_ARCHTYPE} ${FILE_HEX} > "${PATH_BUILD_TARGET}/hex.txt"
 	avr-objdump -D -m ${VAL_MCU_ARCHTYPE} ${FILE_ELF} > "${PATH_BUILD_TARGET}/elf.txt"
 
-modules_size: all
 .PHONY: modules_size
+modules_size: all
 #help [avr8] List module sizes from largest to smallest.
 	@printf "%sList module size%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
