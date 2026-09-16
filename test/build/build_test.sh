@@ -122,25 +122,41 @@ runConfigurationTests()
 	expectOutput cpu_frequency "16000000UL" bmake -C "${PATH_PROJECT}" -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
 
-	expectSuccess default_sources bmake -C "${PATH_PROJECT}" -V FILES_SRC
-	logContains default_sources "srcs/user/target/test1/init.c"
-	logExcludes default_sources "srcs/user/target/test_noscli/init.c"
-	expectSuccess alternate_sources \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V FILES_SRC
-	logContains alternate_sources "srcs/user/target/test_noscli/init.c"
-	logExcludes alternate_sources "srcs/user/target/test1/init.c"
+	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
+	logContains default_compile_sources "srcs/user/target/test1/init.c"
+	logContains default_compile_sources "srcs/system/services/commands/date.c"
+	logExcludes default_compile_sources "srcs/user/target/test_noscli/init.c"
+	expectSuccess alternate_compile_sources \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V FILES_COMPILE_SRC
+	logContains alternate_compile_sources "srcs/user/target/test_noscli/init.c"
+	logExcludes alternate_compile_sources "srcs/system/services/scli.c"
+	logExcludes alternate_compile_sources "srcs/user/target/test1/init.c"
 
-	expectSuccess default_refactor_files bmake -C "${PATH_PROJECT}" -V REFACTOR_FILES_SRC
-	logContains default_refactor_files "srcs/system/services/scli.c"
-	logContains default_refactor_files "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
-	expectOutput default_refactor_dirs "srcs/system/services/commands" \
-		bmake -C "${PATH_PROJECT}" -V REFACTOR_PATHS_SOURCES
-	expectSuccess alternate_refactor_files bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
-		-V REFACTOR_FILES_SRC
-	logContains alternate_refactor_files "srcs/system/services/system.c"
-	logExcludes alternate_refactor_files "srcs/system/services/scli.c"
-	expectOutput alternate_refactor_dirs "" bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
-		-V REFACTOR_PATHS_SOURCES
+	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
+	logContains default_initrc_sources "srcs/system/services/scli.c"
+	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
+	expectOutput default_initrc_dirs "srcs/hal/arch/avr8" \
+		bmake -C "${PATH_PROJECT}" -V PATHS_INITRC_SOURCES
+	expectSuccess alternate_initrc_sources bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
+		-V FILES_INITRC_SRC
+	logContains alternate_initrc_sources "srcs/system/services/system.c"
+	logExcludes alternate_initrc_sources "srcs/system/services/scli.c"
+	expectOutput alternate_initrc_dirs "srcs/hal/arch/avr8" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V PATHS_INITRC_SOURCES
+
+	expectSuccess default_extra_sources bmake -C "${PATH_PROJECT}" -V FILES_EXTRA_SRC
+	logContains default_extra_sources "srcs/hal/arch/avr8/avr8_init.c"
+	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
+	logContains default_extra_sources "srcs/user/target/test1/init.c"
+	logExcludes default_extra_sources "srcs/user/target/test_noscli/init.c"
+	expectSuccess alternate_extra_sources bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
+		-V FILES_EXTRA_SRC
+	logContains alternate_extra_sources "srcs/user/target/test_noscli/init.c"
+	logExcludes alternate_extra_sources "srcs/user/target/test1/init.c"
+
+	expectSuccess initrc_directory_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_DIR_SRC
+	logContains initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
+	logContains initrc_directory_sources "srcs/hal/arch/avr8/avr8_halt.c"
 
 	expectSuccess object_mapping bmake -C "${PATH_PROJECT}" -V FILES_OBJ
 	logContains object_mapping \

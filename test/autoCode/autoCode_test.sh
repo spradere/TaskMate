@@ -282,6 +282,21 @@ runInitrcTests()
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_source_dir "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
+	caseBegin valid_multiple_source_files
+	printf '%s\n' 'void commandFixture(void) {}' > "${PATH_CASE}/sources/commands/date.c"
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf "%s\n" \
+		"system -type service -run core -source_file system.c -source_file commands/date.c" \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess valid_multiple_source_files "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin valid_mixed_sources
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf "%s\n" \
+		"system -type service -run core -source_file system.c -source_dir commands" \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess valid_mixed_sources "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin missing_initrc_version
 	printf '%s\n' 'system -type service -run core' > "${PATH_CASE}/init.rc"
 	expectFailure missing_initrc_version "first init.rc line" \

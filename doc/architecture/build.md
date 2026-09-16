@@ -16,6 +16,21 @@ Configuration declares the default `test1` target and a `test_noscli` compositio
 Arduino Mega, ATmega2560, and AVR8 stack. The latter is intended to omit SCLI. System-wide and
 target-owned module declarations are discovered separately and combined by autoCode.
 
+Source selection separates discovery from compilation. `PATHS_SOURCE_SEARCH` remains the broad
+directory list used to find headers, `init.rc`, error catalogues, and other build inputs. The
+compilation list is assembled explicitly from four sources:
+
+- the fixed base in `system/sysCore/`, `system/sysCall/`, `system/TaskMate.c`, and `tmLibc/`;
+- module-owned files named by `-source_file` in the selected `*_init.rc` files;
+- every C file below the directories named by `-source_dir` in those files;
+- target-selected non-module sources contributed through `FILES_EXTRA_SRC` by target, board, MCU,
+  and architecture Make fragments.
+
+The resulting `FILES_COMPILE_SRC` list is sorted and deduplicated before object paths are derived.
+Startup translation units and the ATmega2560 GPIO implementation use `FILES_EXTRA_SRC`; module
+implementations stay attached to their `init.rc` declaration. The AVR8 directory remains attached
+to `timerSched` as the current special case.
+
 The normal build checks tools and the hardware stack, regenerates autoCode, and verifies guarded
 headers. It then collects dependencies, builds AVR firmware, and reports memory use and line counts.
 Target artefacts, generated lists, logs, and stamps remain under `build/`.
@@ -42,5 +57,5 @@ documented target rules but are not build-enforced until a future code change ex
 ### Remaining weaknesses
 - Invalid-target diagnostics still name the obsolete selector instead of the active target variable.
 - Direct `tmLibc` dependency rules are present in the matrix but not yet checked.
-- Unsorted source and `*.rc` discovery can make ordering depend on filesystem enumeration.
+- Unsorted `*.rc` discovery can still make autoCode input ordering depend on filesystem enumeration.
 - Only one hardware stack exercises portability; the build also assumes BSD and Unix tooling.
