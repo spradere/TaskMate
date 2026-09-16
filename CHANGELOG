@@ -1,3 +1,4 @@
+	[build] select and validate compilation sources through init.rc declarations
 	[test] add host coverage for string and formatting boundaries
 	[build] generate autoCode fragments as build-only includes
 	[arch] standardize file prefixes across system and HAL layers

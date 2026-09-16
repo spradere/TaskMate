@@ -19,12 +19,16 @@ Commit `e1d320a` generated the selected startup calls; `8951952` versioned the `
 lists. It:
 
 - parses typed module entries, run levels, and optional driver I2C addresses;
+- requires each module to declare at least one valid `-source_file` or `-source_dir` path;
 - aggregates error declarations and their `FLOW`, `WARN`, `FAIL`, or `PANIC` level;
 - reads selected startup headers and functions plus logical GPIO declarations;
 - rewrites tagged module, error, GPIO, HAL include, and ordered startup-call regions.
 
 Every `init.rc` starts with the supported major and minor syntax versions on its first two physical
 lines. Missing, misplaced, malformed, or unsupported headers reject generation before publication.
+Source options may be repeated and mixed on one module. The build extracts the same declarations
+to form its explicit compilation list, while autoCode validates that each referenced file or
+directory exists below the configured source root.
 
 Malformed records accumulate diagnostics up to a configured bound, then fail at phase boundaries.
 Destinations are generated as registered temporary files, cleaned on failure, and compared and
@@ -32,8 +36,9 @@ replaced only after every input and required tag has passed validation.
 
 Generated data fixes module records, stacks, contexts, run levels, driver callbacks, errors, GPIO
 identifiers, selected includes, and startup order. Black-box targets exercise command options,
-syntax versions, catalogues, module inputs, tags, line bounds, stable replacement, and failure
-isolation; a separate target runs the corpus with address and undefined-behaviour sanitizers.
+syntax versions, single and repeated source declarations, catalogues, module inputs, tags, line
+bounds, stable replacement, and failure isolation; a separate target runs the corpus with address
+and undefined-behaviour sanitizers.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
