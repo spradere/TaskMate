@@ -18,6 +18,8 @@
 
 #include "initrcCmdDispatch.h"
 
+#include <sys/stat.h>
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -75,6 +77,28 @@ static initrc_dispatch_result_t funcI2cAddress(const char *data, module_item_t *
 	return INITRC_DISPATCH_OK;
 }
 
+static initrc_dispatch_result_t funcSource(const char *data,
+											const char *source_path,
+											const bool directory,
+											module_item_t *mod)
+{
+	char path[AC_BUFFER_SIZE];
+	const int length = snprintf(path, sizeof(path), "%s/%s", source_path, data);
+
+	if( (length < 0) || ((size_t)length >= sizeof(path)) )
+	{
+		return INITRC_DISPATCH_UNKNOWN_DATA;
+	}
+
+	struct stat status;
+	if( stat(path, &status) != 0 ) { return INITRC_DISPATCH_UNKNOWN_DATA; }
+	if( directory && !S_ISDIR(status.st_mode) ) { return INITRC_DISPATCH_UNKNOWN_DATA; }
+	if( !directory && !S_ISREG(status.st_mode) ) { return INITRC_DISPATCH_UNKNOWN_DATA; }
+
+	mod->cnt_set_source++;
+	return INITRC_DISPATCH_OK;
+}
+
 static const initrc_cmd_t initrc_cmds[] = {
 	{"-run", funcRun}, {"-type", funcType}, {"-i2c", funcI2cAddress}, {NULL, NULL}};
 
@@ -82,8 +106,20 @@ static const initrc_cmd_t initrc_cmds[] = {
  * Command dispatch
  * ---------------------------------------------*/
 
-initrc_dispatch_result_t initrcCmdDispatch(const char *cmd, const char *data, module_item_t *mod)
+initrc_dispatch_result_t initrcCmdDispatch(const char *cmd,
+										   const char *data,
+										   const char *source_path,
+										   module_item_t *mod)
 {
+	if( strcmp(cmd, "-source_file") == 0 )
+	{
+		return funcSource(data, source_path, false, mod);
+	}
+	if( strcmp(cmd, "-source_dir") == 0 )
+	{
+		return funcSource(data, source_path, true, mod);
+	}
+
 	for( int i = 0; initrc_cmds[i].name != NULL; i++ )
 	{
 		if( strcmp(cmd, initrc_cmds[i].name) == 0 ) { return (*initrc_cmds[i].func)(data, mod); }

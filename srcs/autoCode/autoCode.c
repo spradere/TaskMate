@@ -122,7 +122,10 @@ int main(int argc, const char *argv[])
 		   FILE_GET_LINE_SUCCESS )
 	{
 		if( tokenizer(&tok) != 0 ) { continue; }
-		if( tok.count != 0 ) { parseInitrc(&data_base, tok.tokens[0]); }
+		if( tok.count != 0 )
+		{
+			parseInitrc(&data_base, tok.tokens[0], auto_options.source_path);
+		}
 	}
 	if( line_result == FILE_GET_LINE_ERROR )
 	{
@@ -188,6 +191,7 @@ static void setupDatabase(modules_database_t *data_base)
 			data_base->modules_type[i].modules[j].cnt_set_runlevel = 0;
 			data_base->modules_type[i].modules[j].cnt_set_type = 0;
 			data_base->modules_type[i].modules[j].cnt_set_address = 0;
+			data_base->modules_type[i].modules[j].cnt_set_source = 0;
 		}
 	}
 }

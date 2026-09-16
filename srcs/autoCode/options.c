@@ -20,6 +20,7 @@
 
 #include <errno.h>
 #include <limits.h>
+#include <sys/stat.h>
 
 #include "fileUtility.h"
 #include "tokenizer.h"
@@ -36,6 +37,7 @@ static void setFuncInitFile(const char *value, options_list_t *opt);
 static void setHalDefineFile(const char *value, options_list_t *opt);
 static void setGpioSignalsFile(const char *value, options_list_t *opt);
 static void setGeneratedPath(const char *value, options_list_t *opt);
+static void setSourcePath(const char *value, options_list_t *opt);
 static void setErrorCount(const char *value, options_list_t *opt);
 
 /* -----------------------------------------------
@@ -51,7 +53,8 @@ static void setErrorCount(const char *value, options_list_t *opt);
 	X(HAVE_FUNCINIT, "--funcinit", setFuncInitFile)     \
 	X(HAVE_HALDEFINE, "--haldefine", setHalDefineFile)  \
 	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile) \
-	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath)
+	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath) \
+	X(HAVE_SOURCE_PATH, "--source_path", setSourcePath)
 
 static const struct
 {
@@ -171,6 +174,19 @@ static void setGpioSignalsFile(const char *value, options_list_t *opt)
 {
 	setFileName(opt->file_gpio_signals, sizeof(opt->file_gpio_signals), value);
 	have_options_count[HAVE_GPIO_SIGNALS]++;
+}
+
+static void setSourcePath(const char *value, options_list_t *opt)
+{
+	struct stat status;
+	if( (stat(value, &status) != 0) || !S_ISDIR(status.st_mode) )
+	{
+		AUTOCODE_MSG_ERROR("invalid --source_path directory <%s>", value);
+		return;
+	}
+
+	setFileName(opt->source_path, sizeof(opt->source_path), value);
+	have_options_count[HAVE_SOURCE_PATH]++;
 }
 
 static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)

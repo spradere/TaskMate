@@ -122,7 +122,9 @@ static bool initrcVersionHeaderParse(const tokenizer_t *tok,
 	return true;
 }
 
-void parseInitrc(modules_database_t *data_base, const char *initrc_name)
+void parseInitrc(modules_database_t *data_base,
+				 const char *initrc_name,
+				 const char *source_path)
 {
 	// Open list files
 	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
@@ -158,9 +160,9 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 		{
 			bool module_is_valid = true;
 
-			if( (tok.count != 5) && (tok.count != 7) )
+			if( (tok.count < 5) || ((tok.count % 2) == 0) )
 			{
-				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 5 or 7",
+				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least 5",
 								   initrc_name,
 								   file_line_number,
 								   tok.count);
@@ -176,12 +178,13 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			mod_tmp.cnt_set_runlevel = 0;
 			mod_tmp.cnt_set_type = 0;
 			mod_tmp.cnt_set_address = 0;
+			mod_tmp.cnt_set_source = 0;
 
 			// Parse command/data pairs
 			for( int i = 1; i < tok.count; i += 2 )
 			{
 				initrc_dispatch_result_t result =
-					initrcCmdDispatch(tok.tokens[i], tok.tokens[i + 1], &mod_tmp);
+					initrcCmdDispatch(tok.tokens[i], tok.tokens[i + 1], source_path, &mod_tmp);
 				if( result == INITRC_DISPATCH_UNKNOWN_COMMAND )
 				{
 					AUTOCODE_MSG_ERROR(
@@ -267,6 +270,13 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name)
 			{
 				AUTOCODE_MSG_ERROR("Module %s : -i2c option is only valid for drivers",
 								   tok.tokens[0]);
+
+				module_is_valid = false;
+			}
+			if( mod_tmp.cnt_set_source < 1 )
+			{
+				AUTOCODE_MSG_ERROR(
+					"Module %s : -source_file or -source_dir option is not set", tok.tokens[0]);
 
 				module_is_valid = false;
 			}

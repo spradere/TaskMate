@@ -19,7 +19,7 @@ VAL_TEST_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' '!set_version_major 1' '!set_version_minor 3'
+	printf '%s\n' '!set_version_major 1' '!set_version_minor 4'
 }
 
 fail()
@@ -61,7 +61,8 @@ writeConfig()
 		"--funcinit ${PATH_CASE}/func_init.list" \
 		"--haldefine ${PATH_CASE}/hal_define.list" \
 		"--gpio_signals ${PATH_CASE}/signals.gpio" \
-		"--generated_path ${PATH_CASE}/generated" > "${PATH_CASE}/autoCode.conf"
+		"--generated_path ${PATH_CASE}/generated" \
+		"--source_path ${PATH_CASE}/sources" > "${PATH_CASE}/autoCode.conf"
 }
 
 caseBegin()
@@ -69,10 +70,12 @@ caseBegin()
 	PATH_CASE="${PATH_STAGE_WORK}/$1"
 	mkdir -p "${PATH_CASE}" || fail "cannot create ${PATH_CASE}"
 	mkdir -p "${PATH_CASE}/generated" || fail "cannot create ${PATH_CASE}/generated"
+	mkdir -p "${PATH_CASE}/sources/commands" || fail "cannot create source fixtures"
+	printf "%s\n" "void fixture(void) {}" > "${PATH_CASE}/sources/system.c"
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
 	printf '%s\n' "${PATH_CASE}/errors.err" > "${PATH_CASE}/errors.list"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'system -type service -run core' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' 'system -type service -run core -source_file system.c' >> "${PATH_CASE}/init.rc"
 	printf '%s\n' "${PATH_CASE}/init.rc" > "${PATH_CASE}/initrc.list"
 	writeTags "${PATH_CASE}/tags.c"
 	printf '%s\n' "${PATH_CASE}/tags.c" > "${PATH_CASE}/tags.list"
@@ -151,6 +154,7 @@ runOptionTests()
 	runOptionFailure all_required_missing \
 		"required autoCode option --error_count is not set"
 	logContains all_required_missing "required autoCode option --gpio_signals is not set"
+	logContains all_required_missing "required autoCode option --source_path is not set"
 
 	caseBegin all_required_duplicate
 	cp "${PATH_CASE}/autoCode.conf" "${PATH_CASE}/duplicate.conf"
@@ -158,6 +162,7 @@ runOptionTests()
 	runOptionFailure all_required_duplicate \
 		"required autoCode option --error_count is multiple set"
 	logContains all_required_duplicate "required autoCode option --gpio_signals is multiple set"
+	logContains all_required_duplicate "required autoCode option --source_path is multiple set"
 
 	for VAL_VALUE in -1 invalid 1x 4294967296
 	do
@@ -168,6 +173,12 @@ runOptionTests()
 		mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
 		runOptionFailure "invalid_error_count_${VAL_NAME}" "invalid --error_count value"
 	done
+
+	caseBegin invalid_source_path
+	sed "s|--source_path .*|--source_path ${PATH_CASE}/sources/system.c|" \
+		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
+	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
+	runOptionFailure invalid_source_path "invalid --source_path directory"
 
 	caseBegin unterminated_option
 	printf '%s\n' '--error_count "1000' > "${PATH_CASE}/autoCode.conf"
@@ -245,6 +256,32 @@ runInitrcTests()
 	expectFailure missing_initrc_file "opening file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
+	caseBegin missing_source_option
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf "%s\n" "system -type service -run core" >> "${PATH_CASE}/init.rc"
+	expectFailure missing_source_option "-source_file or -source_dir option is not set" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin invalid_source_file
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf "%s\n" "system -type service -run core -source_file missing.c" \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure invalid_source_file "unknown data" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin invalid_source_dir
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf "%s\n" "system -type service -run core -source_dir system.c" \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure invalid_source_dir "unknown data" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin valid_source_dir
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf "%s\n" "system -type service -run core -source_dir commands" \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess valid_source_dir "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin missing_initrc_version
 	printf '%s\n' 'system -type service -run core' > "${PATH_CASE}/init.rc"
 	expectFailure missing_initrc_version "first init.rc line" \
@@ -263,7 +300,7 @@ runInitrcTests()
 
 	caseBegin missing_minor_initrc_version
 	printf '%s\n' '!set_version_major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing !set_version_minor 3" \
+	expectFailure missing_minor_initrc_version "missing !set_version_minor 4" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_before_minor_initrc_version
@@ -273,7 +310,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' '!set_version_major 0' '!set_version_minor 3' \
+	printf '%s\n' '!set_version_major 0' '!set_version_minor 4' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -285,14 +322,14 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' '!set_version_minor 3' '!set_version_major 1' \
+	printf '%s\n' '!set_version_minor 4' '!set_version_major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'system -type service -run core' '!set_version_minor 3' \
+	printf '%s\n' 'system -type service -run core' '!set_version_minor 4' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure late_initrc_version "init.rc version command outside header" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -300,24 +337,24 @@ runInitrcTests()
 	caseBegin malformed_initrc
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
-		'system -type service -run core' \
+		'system -type service -run core -source_file system.c' \
 		'few -type user' \
-		'badcmd -bad value -run user' \
-		'badrun -type user -run invalid' \
-		'badtype -type invalid -run user' \
-		'badi2c -type driver -run core -i2c invalid' \
-		'abcdefghijklmnopqrstuvwxyzabcdef -type user -run user' \
-		'duplicate -type user -run user' \
-		'duplicate -type user -run user' \
-		'no_run -type user -type user' \
-		'no_type -run user -run user' \
-		'i2c_multi -type driver -i2c 1 -i2c 2' \
-		'i2c_thread -type user -run user -i2c 1' \
+		'badcmd -bad value -run user -source_file system.c' \
+		'badrun -type user -run invalid -source_file system.c' \
+		'badtype -type invalid -run user -source_file system.c' \
+		'badi2c -type driver -run core -i2c invalid -source_file system.c' \
+		'abcdefghijklmnopqrstuvwxyzabcdef -type user -run user -source_file system.c' \
+		'duplicate -type user -run user -source_file system.c' \
+		'duplicate -type user -run user -source_file system.c' \
+		'no_run -type user -type user -source_file system.c' \
+		'no_type -run user -run user -source_file system.c' \
+		'i2c_multi -type driver -i2c 1 -i2c 2 -source_file system.c' \
+		'i2c_thread -type user -run user -i2c 1 -source_file system.c' \
 		'unterminated -type "user -run user' >> "${PATH_CASE}/init.rc"
 	VAL_INDEX=0
 	while [ "${VAL_INDEX}" -le 256 ]
 	do
-		printf 'driver_%03d -type driver -run core\n' "${VAL_INDEX}" \
+		printf 'driver_%03d -type driver -run core -source_file system.c\n' "${VAL_INDEX}" \
 			>> "${PATH_CASE}/init.rc"
 		VAL_INDEX=$((VAL_INDEX + 1))
 	done
@@ -409,7 +446,7 @@ runParseTagTests()
 
 	caseBegin missing_system_thread
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'task -type user -run user' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' 'task -type user -run user -source_file system.c' >> "${PATH_CASE}/init.rc"
 	runTagCase missing_system_thread "thread system was not found"
 
 	caseBegin unterminated_tag_line
