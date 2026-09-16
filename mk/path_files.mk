@@ -15,6 +15,7 @@
 # Final full HW path
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 PATH_BUILD_GENERATED = ${PATH_BUILD_TARGET}/generated
+PATH_LEGACY = legacy
 
 # Targets
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
@@ -87,7 +88,7 @@ SCRIPT_MAKE_HELP = ${PATH_SCRIPTS}/make_help.awk
 FILE_GIT_IGNORE = .gitignore
 PATHS_GIT_ALLOWED = \
 	${PATH_AGENTS} ${PATH_CONF} ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} \
-	${PATH_SRCS} ${PATH_TEST}
+	${PATH_SRCS} ${PATH_TEST} ${PATH_LEGACY}
 FILES_GIT_ALLOWED.${PATH_AGENTS} = *.md *.yaml
 FILES_GIT_ALLOWED.${PATH_CONF} = *.conf *.md
 FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
@@ -95,6 +96,7 @@ FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *
 FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list *.awk
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
 FILES_GIT_ALLOWED.${PATH_TEST} = *.c *.mk *.sh
+FILES_GIT_ALLOWED.${PATH_LEGACY} = *.c *.h Makefile
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG CHANGELOG_AUTOCODE_SYNTAX LICENSE Makefile README.md
 FILES_GIT_EXCLUDED = \

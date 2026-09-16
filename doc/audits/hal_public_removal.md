@@ -142,19 +142,6 @@ l'initialisation, la lecture ou l'écriture d'un signal logique ; le fichier cib
 build possède la table logique-vers-physique et les types MCU privés. Ainsi sysCore ne stocke plus
 de descripteur matériel et `targetWireSignal()` n'est plus exposé par un en-tête généré.
 
-### 4. Backend des chaînes
-
-`hal/public/tmlibc.h` ne contient pas seulement deux prototypes : il définit `TM_STR*` avec
-`PSTR` et `PROGMEM`. Cette représentation économise la RAM AVR et ne peut pas être remplacée par des
-littéraux C ordinaires sans mesure. Le backend contient encore le cycle déjà identifié entre lecture
-de chaîne et USART. Le remplacement de `panic()` par `hal_halt()` a déjà retiré de ce chemin les
-chaînes, le formatage et la sortie USART.
-
-Il faut séparer la représentation portable de `tm_string_t` de l'accès sélectionné à la mémoire
-programme. Déplacer les macros AVR dans `interfaces/` serait une fausse suppression de la dépendance
-matérielle. La solution retenue devra conserver les chaînes en flash, éviter l'allocation et
-supprimer le cycle USART/backend.
-
 ## Feuille de route proposée
 
 ### Étape 0 — Établir la référence mesurable
@@ -196,8 +183,6 @@ observable et empêche qu'un deuxième backend soit compilé par accident.
 3. Faire compiler exactement une implémentation par contrat via les listes de l'étape 1.
 4. Mesurer les fonctions atomiques hors ligne et avec LTO : elles ne doivent ni rouvrir une fenêtre
    d'interruption ni augmenter la pile de façon non maîtrisée.
-
-`hal_halt()` remplace désormais `panic()` sans chaîne, journalisation ni dépendance USART.
 
 ### Étape 3 — Fermer les trois contrats structurants
 
