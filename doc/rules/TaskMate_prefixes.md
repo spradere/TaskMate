@@ -1,10 +1,9 @@
-# 🧭 Code and file prefixes — One-page guidelines
+# 🧭 Code and file prefixes guidelines
 
 ## 🏷️ In TaskMate, prefixes are used deliberately and sparingly.
 
 - Each prefix corresponds to a **clear conceptual responsibility**
 - No prefix overlaps with another
-- No prefix is decorative or redundant
 - Source filenames use the prefix of the layer or target that owns their implementation
 
 Symbol and filename prefixes are related, but they are not interchangeable. Public symbols
@@ -14,7 +13,7 @@ part of the `hal_` API; its exported symbols therefore keep the `hal_` prefix.
 
 ---
 
-## 📋 Below is a concise overview of the existing prefixes and their intent.
+## 📋 Overview of the existing prefixes and their intent.
 
 ### ● `tm_` — Project identity
 
@@ -28,7 +27,7 @@ part of the `hal_` API; its exported symbols therefore keep the `hal_` prefix.
 
 ---
 
-### ● `DRV_` — Driver interface constants
+### ● `drv_` — Driver interface
 
 **Portable control operations and state definitions shared by drivers**
 
@@ -42,7 +41,7 @@ hardware-specific implementation details.
 
 ---
 
-### ● `AC_` — autoCode constants and enumerations
+### ● `ac_` — autoCode constants and enumerations
 
 **Build-time code-generation definitions owned by autoCode**
 
@@ -60,7 +59,6 @@ hardware-specific implementation details.
 
 - Exposes a restricted API to user tasks
 - Clearly identifies calls that cross from tasks into system code
-- Does not imply privilege separation or memory isolation
 - Prefixes every C source and header owned by `srcs/system/sysCall/`
 
 At a glance, it reads as:
@@ -75,7 +73,6 @@ At a glance, it reads as:
 
 - Prefixes every C source and header owned by `srcs/system/sysCore/`
 - Distinguishes kernel implementation files from the task-visible `sc_` boundary
-- Replaces the former `tm_` filename prefix for scheduler and software-time-counter units
 - Does not create a new public API namespace: symbols retain their established domain prefixes
   when appropriate
 
@@ -88,8 +85,6 @@ At a glance, it reads as:
 **Target-independent HAL contracts and hardware-facing API symbols**
 
 - Prefixes the public, target-selecting headers in `srcs/hal/public/`
-- Prefixes HAL functions and types even when their implementation lives in an architecture, MCU,
-  board, or driver directory
 - Keeps the portable hardware boundary distinct from a selected target implementation
 
 👉 A `hal_*.h` filename exposes a **HAL capability**; target-specific implementation filenames use
@@ -107,9 +102,6 @@ the target prefixes below.
 - Applies to implementation-support files as well as C and headers, including `.mk`, `.awk`,
   `.list`, and `.err` files
 - Makes target selection explicit without scattering target conditionals through portable code
-
-These filename prefixes use the project's concise target identifiers; they do not rename the
-`hal_` symbols implemented by those files.
 
 👉 Target prefixes identify **where an implementation belongs**, while `hal_` identifies the
 hardware abstraction boundary it serves.
@@ -134,7 +126,6 @@ hardware abstraction boundary it serves.
 **Cross-cutting error handling infrastructure**
 
 - Transversal by nature
-- Easy to grep
 - Ideal for auditing, logging, and diagnostics
 
 Most importantly:
@@ -143,14 +134,13 @@ Most importantly:
 
 ---
 
-### ● `mod_` / `MOD_` — Module database
+### ● `mod_` — Module database
 
 **System-wide description of threads and drivers**
 
 - Provides a global view of the system
 - Acts as a single source of truth
 - Implements a quasi *“kernel metadata”* logic
-- Uses `MOD_` for constants and `mod_` for functions and types
 
 Using a dedicated prefix avoids ambiguity:
 
@@ -181,7 +171,6 @@ TaskMate prefixes provide:
 - A clear taxonomy
 - A short and controlled list
 - Strong semantic meaning
-- Zero over-engineering
 - Real room for future evolution
 
 ▶️ **Prefixes name conceptual boundaries**
