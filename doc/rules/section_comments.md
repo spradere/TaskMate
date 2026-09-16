@@ -3,7 +3,7 @@
 ## Purpose
 
 This document defines the standard formatting and usage rules for section comments
-in TaskMate C source (`.c`) and header (`.h`) files.
+in TaskMate C source and header files.
 
 The goal is to improve file readability and navigation without adding redundant
 comments or changing code behavior.
@@ -15,13 +15,8 @@ comments or changing code behavior.
 Section comments describe the structure of a file, not the behavior of individual
 functions or variables.
 
-Do not add comments that merely repeat information already made clear by explicit
-function, variable, type, or macro names.
-
 Use section comments to make the organization of a file immediately visible when
 scrolling through the source.
-
-Do not modify program behavior while applying these formatting rules.
 
 Do not rename symbols, reorder code with semantic impact, or perform unrelated
 refactoring unless explicitly requested.
@@ -260,25 +255,6 @@ Use a simple minor comment instead:
  * Scan operations 
  */
 ```
-
----
-
-## Do not change semantics during formatting
-
-When applying these rules, do not:
-
-- alter control flow;
-- change declarations;
-- rename functions or variables;
-- change qualifiers;
-- reorder code when ordering may matter;
-- change includes unless required by a separate task;
-- modify generated code unless explicitly requested;
-- perform unrelated cleanup.
-
-Section formatting should normally produce comment-only changes.
-
-Whitespace changes directly required by the section formatting are acceptable.
 
 ---
 
