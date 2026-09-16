@@ -3,11 +3,11 @@
 # Hardware target test_noscli init.rc
 
 # System core
-timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
-timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
+timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c -source_dir hal/arch/avr8
+timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c -source_dir hal/mcu/atmega2560
 usart -type driver -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
-system -type service -run core -source_file system/services/system.c
+system -type service -run core -source_file system/services/system.c -source_dir hal/board/arduinoMega -source_dir user/target/test_noscli
 
 # Drivers
 i2c -type driver -run core -source_file hal/mcu/atmega2560/at2560_i2c.c

@@ -13,8 +13,9 @@
 ################################################################################
 
 # Generate tags
-${FILE_TAGS_STAMP}: ${FILES_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
-	@ctags -f ${FILE_TAGS} ${FILES_SRC}
+${FILE_TAGS_STAMP}: ${FILES_COMPILE_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC} \
+					${FILES_AUTOCODE_SRC_H}
+	@ctags -f ${FILE_TAGS} ${FILES_COMPILE_SRC}
 	@ctags -f ${FILE_TAGS} -a ${FILES_SRC_H}
 	@ctags -f ${FILE_TAGS} -a ${FILES_AUTOCODE_SRC}
 	@ctags -f ${FILE_TAGS} -a ${FILES_AUTOCODE_SRC_H}
@@ -38,4 +39,4 @@ geany_mk:
 .PHONY: geany_tm
 geany_tm:
 #help [global] Open Geany with all TaskMate .c and .h source files (excluding autoCode).
-	geany ${FILES_SRC} ${FILES_SRC_H}
+	geany ${FILES_COMPILE_SRC} ${FILES_SRC_H}
