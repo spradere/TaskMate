@@ -1,4 +1,4 @@
 interface:
   display_name: "TaskMate Changelog"
-  short_description: "Propose and apply important TaskMate changelog entries"
-  default_prompt: "Review TaskMate changes and propose important CHANGELOG entries."
+  short_description: "Quickly propose and apply TaskMate changelog entries"
+  default_prompt: "Use $taskmate-changelog to review recent commits and propose concise entries."
