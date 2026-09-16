@@ -1,0 +1,90 @@
+Building TaskMate
+=================
+
+How it works
+------------
+
+The project uses BSD bmake, not GNU make. The main Makefile loads the fragments
+from mk/, then the selected target successively loads its board, MCU, and
+architecture. By default, VAL_TARGET=test1 selects the following chain:
+
+    test1 -> arduinoMega -> atmega2560 -> avr8
+
+A build checks the required programs, hardware target, and include boundaries.
+Clang then compiles autoCode as a host tool; autoCode generates the fragments
+derived from .rc, .err, and .gpio files under build/. Finally, avr-gcc compiles
+and links the firmware, after which the build reports Flash/RAM usage and the
+line count. Objects, logs, generated files, and firmware remain under build/.
+
+Common prerequisites
+--------------------
+
+- A POSIX shell and BSD bmake.
+- The tools listed in conf/programs-list.conf, including awk, clang, cloc,
+  ctags, find, git, rsync, and sed.
+- An AVR toolchain containing avr-gcc, avr-binutils, and avr-libc.
+- avrdude for the upload target.
+
+The build checks these commands at startup and reports any that are missing.
+
+FreeBSD
+-------
+
+Use pkg to install the tools that are not provided by the base system, typically
+bmake, clang, cloc, universal-ctags, git, rsync, avr-binutils, avr-gcc, avr-libc,
+and avrdude. Exact package names may depend on the FreeBSD version; check them
+with pkg search. From the repository root:
+
+    bmake                         # build the test1 target
+    bmake VAL_TARGET=test_noscli # build another target
+    bmake clean && bmake         # clean rebuild
+
+Windows 10 with Cygwin64
+------------------------
+
+Install Cygwin64, then use setup-x86_64.exe to install the bmake, clang, cloc,
+ctags, coreutils, findutils, gawk, git, rsync, sed, and util-linux packages.
+Install a complete native Windows AVR toolchain and avrdude separately, then add
+its bin directory to the Cygwin PATH. /usr/local/bin and /usr/bin must remain
+before the Windows directories to avoid selecting Windows programs such as
+find.exe or sort.exe. Example for the Cygwin profile:
+
+    export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/avr-gcc/bin:$PATH"
+
+Adjust the path to match the local installation. Then check the environment:
+
+    command -v bmake find awk clang avr-gcc avrdude
+    cloc --version
+    ./scripts/check_programs.sh conf/programs-list.conf
+    ./scripts/check_programs.sh srcs/hal/arch/avr8/avr8_programs.list
+
+If the Cygwin cloc package reports `Can't open perl script "perl"`, create the
+following /usr/local/bin/cloc launcher and make it executable:
+
+    #!/bin/sh
+    exec /usr/bin/perl /usr/bin/cloc "$@"
+
+Run the build from the Cygwin terminal, not directly from PowerShell:
+
+    cd "/cygdrive/c/path/to/TaskMate_current"
+    bmake
+
+Useful commands
+---------------
+
+    bmake help            # list public targets
+    bmake autoCode_alone  # regenerate only the autoCode output
+    bmake test_autoCode   # test the generator
+    bmake test_build_system
+    bmake test_tm_string
+    bmake cppcheck
+    bmake format
+    bmake clean
+
+Uploading is an explicit operation:
+
+    bmake upload VAL_PROGRAMMER_PORT=<port>
+
+For example, use /dev/ttyU0 on FreeBSD. On Windows, adjust the port to the
+notation understood by the installed avrdude version. The backup target depends
+on FreeBSD device mounting and must not be used unchanged on Windows.

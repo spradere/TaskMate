@@ -52,7 +52,7 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 	-Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common -Wpointer-arith
 
 # Command line #include and #define
-CFLAGS += -I${PATH_SRCS} -I./
+CFLAGS += -I${PATH_SRCS} -I.
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
