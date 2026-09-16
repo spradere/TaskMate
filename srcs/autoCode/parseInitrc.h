@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-void parseInitrc(modules_database_t *data_base, const char *initrc_name);
+void parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path);
 
 #endif // AUTOCODE_PARSEINITRC_H

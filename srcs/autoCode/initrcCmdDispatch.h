@@ -43,6 +43,9 @@ typedef struct
  * Public API
  * ========================================================================== */
 
-initrc_dispatch_result_t initrcCmdDispatch(const char *cmd, const char *data, module_item_t *mod);
+initrc_dispatch_result_t initrcCmdDispatch(const char *cmd,
+										   const char *data,
+										   const char *source_path,
+										   module_item_t *mod);
 
 #endif // AUTOCODE_INITRCCMDDISPATCH_H

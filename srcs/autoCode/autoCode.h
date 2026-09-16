@@ -22,7 +22,7 @@
 #define AC_BUFFER_SIZE 256
 #define AC_GENERATED_LINE_START 1000
 #define AC_SYNTAX_VERSION_MAJOR 1
-#define AC_SYNTAX_VERSION_MINOR 3
+#define AC_SYNTAX_VERSION_MINOR 4
 
 /* ============================================================================
  * Includes
@@ -98,6 +98,7 @@ typedef struct
 	int cnt_set_runlevel;
 	int cnt_set_type;
 	int cnt_set_address;
+	int cnt_set_source;
 
 } module_item_t;
 

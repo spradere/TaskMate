@@ -36,6 +36,12 @@ VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
 
 FILES_INITRC != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.rc"
 
+# Temporary source selection variables for the staged source-list refactor.
+REFACTOR_FILES_SRC != awk -v source_option="-source_file" -v source_root="${PATH_SRCS}" \
+	-f "${SCRIPT_INITRC_SOURCES}" ${FILES_INITRC:M*_init.rc}
+REFACTOR_PATHS_SOURCES != awk -v source_option="-source_dir" -v source_root="${PATH_SRCS}" \
+	-f "${SCRIPT_INITRC_SOURCES}" ${FILES_INITRC:M*_init.rc}
+
 # Global error
 FILES_ERROR != find ${PATHS_SOURCES} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort
 FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err

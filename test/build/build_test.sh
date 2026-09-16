@@ -130,6 +130,18 @@ runConfigurationTests()
 	logContains alternate_sources "srcs/user/target/test_noscli/init.c"
 	logExcludes alternate_sources "srcs/user/target/test1/init.c"
 
+	expectSuccess default_refactor_files bmake -C "${PATH_PROJECT}" -V REFACTOR_FILES_SRC
+	logContains default_refactor_files "srcs/system/services/scli.c"
+	logContains default_refactor_files "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
+	expectOutput default_refactor_dirs "srcs/system/services/commands" \
+		bmake -C "${PATH_PROJECT}" -V REFACTOR_PATHS_SOURCES
+	expectSuccess alternate_refactor_files bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
+		-V REFACTOR_FILES_SRC
+	logContains alternate_refactor_files "srcs/system/services/system.c"
+	logExcludes alternate_refactor_files "srcs/system/services/scli.c"
+	expectOutput alternate_refactor_dirs "" bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
+		-V REFACTOR_PATHS_SOURCES
+
 	expectSuccess object_mapping bmake -C "${PATH_PROJECT}" -V FILES_OBJ
 	logContains object_mapping \
 		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/TaskMate.o"

@@ -1,9 +1,9 @@
 !set_version_major 1
-!set_version_minor 3
+!set_version_minor 4
 # Hardware target test1 init.rc
 
 # System core
-timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerShed.c
+timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
 timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
 usart -type driver -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 

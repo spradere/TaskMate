@@ -93,6 +93,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--haldefine ${FILE_HALDEFINE_LIST}" >> "${FILE_AUTOCODE_CONFIG}"	
 	@printf "%s\n" "--gpio_signals ${FILE_GPIO_SIGNALS}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--generated_path ${PATH_BUILD_GENERATED}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--source_path ${PATH_SRCS}" >> "${FILE_AUTOCODE_CONFIG}"
 		
 	# Launch autoCode
 	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
