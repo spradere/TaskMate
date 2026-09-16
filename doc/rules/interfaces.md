@@ -4,7 +4,7 @@
 
 TaskMate separates **portable system contracts** from **hardware-specific implementations**.
 To achieve this, the project defines a dedicated `interfaces/` directory containing **neutral interface
-definitions** that are shared across all architectures, MCUs, and boards.
+definitions** that are shared across all architectures.
 
 These interfaces describe **what the system expects**, while the Hardware Abstraction Layer (HAL)
 implements **how the hardware fulfils those expectations**.
@@ -47,9 +47,7 @@ HAL, sysCore, `sysCall`, `tmLibc`, and services may consume the neutral contract
 `conf/arch_valid_matrix.md`. Tasks use service, `sysCall`, or `tmLibc` APIs rather than including
 `interfaces/` directly.
 
-`interfaces/` remains the only transversal layer. `tmLibc` is a normal horizontal layer above
-`sysCall`: it may consume interfaces and syscalls, but it must not depend on HAL or sysCore. The
-dependency must never point from a lower layer back to `tmLibc`.
+`interfaces/` remains the only transversal layer.
 
 ## Rule 4 — Hardware-specific interfaces
 
