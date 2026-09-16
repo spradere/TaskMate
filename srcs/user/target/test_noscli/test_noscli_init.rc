@@ -1,11 +1,22 @@
 !set_version_major 1
 !set_version_minor 3
-# hardware target test_noscli init.rc
+# Hardware target test_noscli init.rc
 
-i2c -type driver -run core
+# System core
+timerSched -type driver -run none -source hal/mcu/atmega2560/at2560_timerShed.c
+timerSTC -type driver -run core -source hal/mcu/atmega2560/at2560_timerSTC.c
+usart -type driver -run none -source hal/mcu/atmega2560/at2560_usart.c
 
-lcd -type driver -run driver -i2c 0x3C
-rtc -type driver -run driver -i2c 0x68
+system -type service -run core -source system/services/system.c
 
-task1 -type user -run user
-task2 -type user -run user
+# Drivers
+i2c -type driver -run core -source hal/mcu/atmega2560/at2560_i2c.c
+
+lcd -type driver -run driver -i2c 0x3C -source hal/drivers/lcd_AMC2004/lcd_AMC2004.c
+rtc -type driver -run driver -i2c 0x68 -source hal/drivers/rtc_ZS042/rtc_ZS042.c
+
+# Services
+
+# Tasks
+task1 -type user -run user -source user/tasks/task1.c
+task2 -type user -run user -source user/tasks/task2.c
