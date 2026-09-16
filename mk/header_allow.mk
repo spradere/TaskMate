@@ -57,7 +57,7 @@ _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
 
 	@if awk -v matrix_file="${FILE_ARCH_VALID_MATRIX}" -v path_sources="${PATH_SRCS}" \
 		-f "${SCRIPT_ARCH_INCLUDE}" "${FILE_ARCH_VALID_MATRIX}" \
-		${FILES_SRC} ${FILES_SRC_H} > "${FILE_ARCH_CHECK_LOG}"; then \
+		${FILES_COMPILE_SRC} ${FILES_SRC_H} > "${FILE_ARCH_CHECK_LOG}"; then \
 		cat "${FILE_ARCH_CHECK_LOG}"; \
 	else \
 		status=$$?; cat "${FILE_ARCH_CHECK_LOG}"; echo ">>> satus : " $$status; \

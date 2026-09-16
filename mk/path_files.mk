@@ -52,13 +52,13 @@ FILE_MEMRAW = ${PATH_BUILD_TARGET}/mem_raw
 FILE_MEMDATA = ${PATH_BUILD_TARGET}/mem_data
 FILE_TM_INFO = ${PATH_SRCS}/interfaces/tm_info.h
 
-# Source directories
-PATHS_SOURCES += ${PATH_SRCS}/system
-PATHS_SOURCES += ${PATH_SRCS}/tmLibc
-PATHS_SOURCES += ${PATH_SRCS}/interfaces
-PATHS_SOURCES += ${PATH_SRCS}/hal/public
-PATHS_SOURCES += ${PATH_SRCS}/hal/drivers
-PATHS_SOURCES += ${PATH_SRCS}/user/tasks
+# Source search directories
+PATHS_SOURCE_SEARCH += ${PATH_SRCS}/system
+PATHS_SOURCE_SEARCH += ${PATH_SRCS}/tmLibc
+PATHS_SOURCE_SEARCH += ${PATH_SRCS}/interfaces
+PATHS_SOURCE_SEARCH += ${PATH_SRCS}/hal/public
+PATHS_SOURCE_SEARCH += ${PATH_SRCS}/hal/drivers
+PATHS_SOURCE_SEARCH += ${PATH_SRCS}/user/tasks
 
 # Log files
 FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
