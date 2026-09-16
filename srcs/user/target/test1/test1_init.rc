@@ -4,10 +4,10 @@
 
 # System core
 timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c -source_dir hal/arch/avr8
-timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c -source_dir hal/mcu/atmega2560
+timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
 usart -type driver -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
-system -type service -run core -source_file system/services/system.c -source_dir hal/board/arduinoMega -source_dir user/target/test1
+system -type service -run core -source_file system/services/system.c
 
 # Drivers
 i2c -type driver -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
@@ -16,7 +16,7 @@ lcd -type driver -run driver -i2c 0x3C -source_file hal/drivers/lcd_AMC2004/lcd_
 rtc -type driver -run driver -i2c 0x68 -source_file hal/drivers/rtc_ZS042/rtc_ZS042.c
 
 # Services
-scli -type service -run service -source_file system/services/scli.c -source_dir system/services/commands
+scli -type service -run service -source_file system/services/scli.c -source_file system/services/commands/date.c -source_file system/services/commands/driver.c -source_file system/services/commands/i2c.c -source_file system/services/commands/thread.c
 
 # Tasks
 task1 -type user -run user -source_file user/tasks/task1.c

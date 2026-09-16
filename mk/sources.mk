@@ -42,6 +42,7 @@ FILES_BASE_SYSTEM_SRC += ${PATH_SRCS}/system/TaskMate.c
 # Complete, target-specific compilation list
 FILES_COMPILE_SRC = \
 	${FILES_BASE_SYSTEM_SRC} \
+	${FILES_EXTRA_SRC} \
 	${FILES_INITRC_SRC} \
 	${FILES_INITRC_DIR_SRC}
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
@@ -49,7 +50,7 @@ FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
 # Compatibility aliases preserve unchanged test contracts; build rules use the variables above.
 FILES_SRC = ${FILES_COMPILE_SRC}
 REFACTOR_FILES_SRC = ${FILES_INITRC_SRC}
-REFACTOR_PATHS_SOURCES = ${PATHS_INITRC_SOURCES:M*services/commands}
+REFACTOR_PATHS_SOURCES = ${FILES_INITRC_SRC:M*system/services/scli.c:S/scli.c/commands/}
 
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
