@@ -23,7 +23,7 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "at2560_define.h" // Get the I2C frequency
+#include "hal/public/hal_peripheral_constants.h"
 
 /* -----------------------------------------------
  * Constants

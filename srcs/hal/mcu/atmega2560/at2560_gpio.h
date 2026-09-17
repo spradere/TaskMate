@@ -21,7 +21,7 @@
 
 #include <stdbool.h>
 
-#include "at2560_define.h"
+#include "hal/public/hal_ports_pins.h"
 
 /* ============================================================================
  * Public definitions
