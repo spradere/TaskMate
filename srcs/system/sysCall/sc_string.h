@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_define.h" // get string macros from arch
+#include "hal/public/hal_string.h"
 #include "interfaces/error_catalog.h"
 #include "interfaces/tm_string.h"
 
