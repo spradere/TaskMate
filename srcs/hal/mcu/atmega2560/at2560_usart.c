@@ -22,7 +22,7 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "at2560_define.h" // Get the USART baud rate
+#include "hal/public/hal_peripheral_constants.h"
 
 /* -----------------------------------------------
  * Circular buffers
