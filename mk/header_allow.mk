@@ -21,7 +21,6 @@ CFLAGS_${PATH_SRCS}/system/sysCore/sys_scheduler.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SRCS}/system/TaskMate.c = \
-	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_softwareTimeCounter.c = \
@@ -35,9 +34,6 @@ CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
 
 CFLAGS_${PATH_SRCS}/system/services/commands/driver.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
-
-CFLAGS_${PATH_SRCS}/system/sysCore/sys_gpio.c = \
-	-DHAL_SYSTEM_CRITICAL_ALLOWED
 
 
 # Check includes for system-critical features

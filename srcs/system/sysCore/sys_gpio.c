@@ -18,7 +18,6 @@
 #include "sys_gpio.h"
 
 #include "hal/public/hal_gpio.h"
-#include "system/sysCore/sys_hal_init.h"
 #include "interfaces/hal_targetWireSignal.h"
 
 /* -----------------------------------------------

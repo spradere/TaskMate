@@ -97,20 +97,6 @@ runConfigurationTests()
 		bmake -C "${PATH_PROJECT}" -V VAL_HW_STACK
 	expectOutput default_path "build/test1_arduinoMega_atmega2560_avr8" \
 		bmake -C "${PATH_PROJECT}" -V PATH_BUILD_TARGET
-	expectOutput default_init_order \
-		"hal_avr8Init hal_atmega2560Init hal_arduinoMegaInit test1Init" \
-		bmake -C "${PATH_PROJECT}" -V VAL_FUNCINIT
-	expectOutput alternate_stack "test_noscli arduinoMega atmega2560 avr8" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V VAL_HW_STACK
-	expectOutput alternate_init_order \
-		"hal_avr8Init hal_atmega2560Init hal_arduinoMegaInit test_noscliInit" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V VAL_FUNCINIT
-	VAL_STARTUP_HEADERS="srcs/user/target/test1/init.h"
-	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/board/arduinoMega/mega_init.h"
-	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/mcu/atmega2560/at2560_init.h"
-	VAL_STARTUP_HEADERS="${VAL_STARTUP_HEADERS} srcs/hal/arch/avr8/avr8_init.h"
-	expectOutput startup_headers "${VAL_STARTUP_HEADERS}" \
-		bmake -C "${PATH_PROJECT}" -V FILES_HALINIT_HEADER
 	VAL_STARTUP_DEFINES="srcs/user/target/test1/define.h"
 	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/board/arduinoMega/mega_define.h"
 	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/mcu/atmega2560/at2560_define.h"
@@ -123,36 +109,25 @@ runConfigurationTests()
 	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
 
 	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
-	logContains default_compile_sources "srcs/user/target/test1/init.c"
+	logExcludes default_compile_sources "srcs/hal/arch/avr8/avr8_init.c"
+	logExcludes default_compile_sources "srcs/hal/mcu/atmega2560/at2560_init.c"
+	logExcludes default_compile_sources "srcs/hal/board/arduinoMega/mega_init.c"
+	logExcludes default_compile_sources "srcs/user/target/test1/init.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
-	logExcludes default_compile_sources "srcs/user/target/test_noscli/init.c"
-	expectSuccess alternate_compile_sources \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V FILES_COMPILE_SRC
-	logContains alternate_compile_sources "srcs/user/target/test_noscli/init.c"
-	logExcludes alternate_compile_sources "srcs/system/services/scli.c"
-	logExcludes alternate_compile_sources "srcs/user/target/test1/init.c"
 
 	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
 	expectOutput default_initrc_dirs "srcs/hal/arch/avr8" \
 		bmake -C "${PATH_PROJECT}" -V PATHS_INITRC_SOURCES
-	expectSuccess alternate_initrc_sources bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
-		-V FILES_INITRC_SRC
-	logContains alternate_initrc_sources "srcs/system/services/system.c"
-	logExcludes alternate_initrc_sources "srcs/system/services/scli.c"
-	expectOutput alternate_initrc_dirs "srcs/hal/arch/avr8" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli -V PATHS_INITRC_SOURCES
 
 	expectSuccess default_extra_sources bmake -C "${PATH_PROJECT}" -V FILES_EXTRA_SRC
-	logContains default_extra_sources "srcs/hal/arch/avr8/avr8_init.c"
 	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
-	logContains default_extra_sources "srcs/user/target/test1/init.c"
-	logExcludes default_extra_sources "srcs/user/target/test_noscli/init.c"
-	expectSuccess alternate_extra_sources bmake -C "${PATH_PROJECT}" VAL_TARGET=test_noscli \
-		-V FILES_EXTRA_SRC
-	logContains alternate_extra_sources "srcs/user/target/test_noscli/init.c"
-	logExcludes alternate_extra_sources "srcs/user/target/test1/init.c"
+	logContains default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
+	logExcludes default_extra_sources "srcs/hal/arch/avr8/avr8_init.c"
+	logExcludes default_extra_sources "srcs/hal/mcu/atmega2560/at2560_init.c"
+	logExcludes default_extra_sources "srcs/hal/board/arduinoMega/mega_init.c"
+	logExcludes default_extra_sources "srcs/user/target/test1/init.c"
 
 	expectSuccess initrc_directory_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_DIR_SRC
 	logContains initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
@@ -186,8 +161,6 @@ runConfigurationTests()
 		FILE_AVR8_PROGRAMS_LIST="${PATH_STAGE_WORK}/programs.conf" \
 		FILE_AVR8_PROGRAMS_CHECK_STAMP="${PATH_STAGE_WORK}/avr8_programs.stamp" \
 		_autocode_dependency_check
-	assertFileContains "${PATH_MANIFESTS}/values_funcinit.deps" \
-		"hal_avr8Init hal_atmega2560Init hal_arduinoMegaInit test1Init"
 	assertFileContains "${PATH_MANIFESTS}/gpio_signals.deps" \
 		"srcs/user/target/test1/signals.gpio"
 
