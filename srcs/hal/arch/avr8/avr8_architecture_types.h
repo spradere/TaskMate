@@ -7,29 +7,32 @@
  */
 
 /**
- * @file avr8_stack.h
- * @brief stack header declarations.
+ * @file avr8_architecture_types.h
+ * @brief AVR8 architecture type declarations.
  *
  */
 
-#ifndef AVR8_AVR8_STACK_H
-#define AVR8_AVR8_STACK_H
+#ifndef HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
+#define HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
-#include <avr/io.h> // Get SP
 #include <stdint.h>
 
-#include "hal/public/hal_architecture_types.h"
-
 /* ============================================================================
- * Public API
+ * Public definitions
  * ========================================================================== */
 
-static inline __attribute__((always_inline)) void hal_setStackPointer(const hal_stack_word_t *sp)
+typedef uint8_t hal_stack_word_t;
+typedef uint8_t hal_atomic_state_t;
+
+typedef struct
 {
-	SP = (uintptr_t)sp;
-}
-#endif // AVR8_AVR8_STACK_H
+	volatile uint8_t *ddr;
+	volatile uint8_t *port;
+	volatile uint8_t *pin;
+} hal_port_t;
+
+#endif // HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
