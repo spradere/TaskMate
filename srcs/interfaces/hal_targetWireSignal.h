@@ -7,17 +7,19 @@
  */
 
 /**
- * @file init.h
- * @brief test_noscli init header declarations.
- *
+ * @file hal_tagetWireSignal.h
+ * @brief Generic target wire signal.
  */
 
-#ifndef TARGET_TEST_NOSCLI_INIT_H
-#define TARGET_TEST_NOSCLI_INIT_H
+#ifndef INTERFACES_TAGET_WIRE_SIGNAL_H
+#define INTERFACES_TAGET_WIRE_SIGNAL_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
+
+#include <stdint.h>
+#include <avr/io.h>
 
 #include "hal/public/hal_gpio.h"
 #include "interfaces/gpio_signals.h"
@@ -26,7 +28,6 @@
  * Public API
  * ========================================================================== */
 
-void test_noscliInit(void);
-void targetWireSignal(hal_signal_t *table, gpio_signal_t signal);
+void hal_targetWireSignal(hal_signal_t *table, gpio_signal_t signal);
 
-#endif // TARGET_TEST_NOSCLI_INIT_H
+#endif // INTERFACES_TAGET_WIRE_SIGNAL_H

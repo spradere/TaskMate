@@ -7,27 +7,23 @@
  */
 
 /**
- * @file init.c
- * @brief test_noscli init implementation.
- *
+ * @file tagetWireSignal.c
+ * @brief target wire signal implementation.
  */
 
-/* =============================================================================
- * Declarations - Include
- * ===========================================================================*/
+/* ============================================================================
+ * Includes
+ * ========================================================================== */
 
-#include "init.h"
-
-#include <avr/io.h>
-#include <stdbool.h>
+#include "interfaces/hal_targetWireSignal.h"
+#include "hal/public/hal_gpio.h"
+#include "interfaces/gpio_signals.h"
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void test_noscliInit(void) {}
-
-void targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
+void hal_targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
 {
 	// Set default values for outputs
 	table[signal].pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
@@ -54,6 +50,4 @@ void targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
 		table[signal].pin.number = PA1;
 		return;
 	}
-
-	// Set default values for inputs
 }

@@ -20,9 +20,13 @@ VAL_HW_STACK += arduinoMega
 PATH_ARDUINOMEGA = ${PATH_SRCS}/hal/board/arduinoMega
 PATHS_SOURCE_SEARCH += ${PATH_ARDUINOMEGA}
 FILES_EXTRA_SRC += ${PATH_ARDUINOMEGA}/mega_init.c
+
+# To be remouved
 FILES_HALINIT_HEADER += ${PATH_ARDUINOMEGA}/mega_init.h
 FILES_HALDEFINE += ${PATH_ARDUINOMEGA}/mega_define.h
 VAL_FUNCINIT := hal_arduinoMegaInit ${VAL_FUNCINIT}
+#
+
 CFLAGS += -DBOARD_arduinoMega
 
 .include "${PATH_SRCS}/hal/mcu/atmega2560/at2560_make.mk"

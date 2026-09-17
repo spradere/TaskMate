@@ -19,6 +19,7 @@
 
 #include "hal/public/hal_gpio.h"
 #include "system/sysCore/sys_hal_init.h"
+#include "interfaces/hal_targetWireSignal.h"
 
 /* -----------------------------------------------
  * Private variables
@@ -34,7 +35,7 @@ void gpio_signalsInit(void)
 {
 	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
 	{
-		targetWireSignal(signal_table, i);
+		hal_targetWireSignal(signal_table, i);
 		hal_gpioPinInit(&signal_table[i].pin);
 	}
 }

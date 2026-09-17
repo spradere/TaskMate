@@ -19,14 +19,12 @@
  * Includes
  * ========================================================================== */
 
-#include "hal/public/hal_gpio.h"
-#include "interfaces/gpio_signals.h"
+
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
 void test1Init(void);
-void targetWireSignal(hal_signal_t *table, gpio_signal_t signal);
 
 #endif // TARGET_TEST1_INIT_H
