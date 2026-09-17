@@ -32,7 +32,6 @@
 static void setErrorsFile(const char *value, options_list_t *opt);
 static void setInitrcFile(const char *value, options_list_t *opt);
 static void setParseTagFile(const char *value, options_list_t *opt);
-static void setHalDefineFile(const char *value, options_list_t *opt);
 static void setGpioSignalsFile(const char *value, options_list_t *opt);
 static void setGeneratedPath(const char *value, options_list_t *opt);
 static void setSourcePath(const char *value, options_list_t *opt);
@@ -47,7 +46,6 @@ static void setErrorCount(const char *value, options_list_t *opt);
 	X(HAVE_ERRORS, "--errors", setErrorsFile)           \
 	X(HAVE_INITRC, "--initrc", setInitrcFile)           \
 	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)     \
-	X(HAVE_HALDEFINE, "--haldefine", setHalDefineFile)  \
 	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile) \
 	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath) \
 	X(HAVE_SOURCE_PATH, "--source_path", setSourcePath)
@@ -140,12 +138,6 @@ static void setParseTagFile(const char *value, options_list_t *opt)
 {
 	setFileName(opt->file_parsetag_list, sizeof(opt->file_parsetag_list), value);
 	have_options_count[HAVE_PARSETAG]++;
-}
-
-static void setHalDefineFile(const char *value, options_list_t *opt)
-{
-	setFileName(opt->file_haldefine_list, sizeof(opt->file_haldefine_list), value);
-	have_options_count[HAVE_HALDEFINE]++;
 }
 
 static void setGeneratedPath(const char *value, options_list_t *opt)

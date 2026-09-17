@@ -49,7 +49,6 @@ static const char *errorLevelName(err_level_t level);
 static void writeErrorCatalog(const parse_tag_t *parse);
 static void writeErrorEnum(const parse_tag_t *parse);
 static void writeModulesList(const parse_tag_t *parse);
-static void writeHalDefine(const parse_tag_t *parse);
 static void writeGpioSignals(const parse_tag_t *parse);
 static int generatedFileName(char *file_name, size_t file_name_size, const char *generated_path,
 							 const char *tag);
@@ -65,7 +64,6 @@ static int generatedFileName(char *file_name, size_t file_name_size, const char 
 	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", writeDriverNameCatalog) \
 	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)                          \
 	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog)                 \
-	X(HAVE_HAL_DEFINE, "hal_define", writeHalDefine)                          \
 	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)                     \
 	X(HAVE_MOD_LIST, "modules_list", writeModulesList)                        \
 	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)
@@ -343,37 +341,6 @@ static void writeGpioSignals(const parse_tag_t *parse)
 	if( fileClose(&file_signals, __FILE__, __LINE__) != 0 ) { *parse->file_error = true; }
 	if( *parse->file_error ) { return; }
 	have_tag_count[HAVE_GPIO_SIGNALS]++;
-}
-
-static void writeHalDefine(const parse_tag_t *parse)
-{
-	file_t file_list;
-	fileInit(&file_list);
-	file_list.name = (char *)parse->auto_options->file_haldefine_list;
-	if( fileOpen(&file_list, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
-	{
-		*parse->file_error = true;
-		return;
-	}
-
-	tokenizer_t tok = {0};
-	file_get_line_result_t line_result;
-	while( (line_result = fileGetLine(&file_list, tok.line, sizeof(tok.line))) ==
-		   FILE_GET_LINE_SUCCESS )
-	{
-		if( tokenizer(&tok) != 0 ) { continue; }
-		if( tok.count != 0 ) { fprintf(parse->file, "#include \"%s\"\n", tok.tokens[0]); }
-	}
-	if( line_result == FILE_GET_LINE_ERROR )
-	{
-		AUTOCODE_MSG_ERROR("reading file <%s>", file_list.name);
-		*parse->file_error = true;
-	}
-	tokenizerFree(&tok);
-	if( fileClose(&file_list, __FILE__, __LINE__) != 0 ) { *parse->file_error = true; }
-	if( *parse->file_error ) { return; }
-
-	have_tag_count[HAVE_HAL_DEFINE]++;
 }
 
 static void writeModulesList(const parse_tag_t *parse)

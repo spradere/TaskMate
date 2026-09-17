@@ -24,10 +24,6 @@ FILES_EXTRA_SRC += ${PATH_TEST1}/targetWireSignal.c
 PATHS_EXTRA_SRC += ${PATH_SRCS}/hal/arch/avr8
 PATHS_EXTRA_SRC += 	${PATH_SRCS}/tmLibc
 
-# to be removed
-FILES_HALDEFINE = ${PATH_TEST1}/define.h
-#
-
 FILE_GPIO_SIGNALS = ${PATH_TEST1}/signals.gpio
 .if !exists(${FILE_GPIO_SIGNALS})
 .error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
