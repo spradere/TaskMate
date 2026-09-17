@@ -31,8 +31,6 @@ typedef struct
 	char file_errors_list[AC_BUFFER_SIZE];
 	char file_initrc_list[AC_BUFFER_SIZE];
 	char file_parsetag_list[AC_BUFFER_SIZE];
-	char file_halinit_list[AC_BUFFER_SIZE];
-	char file_funcinit_list[AC_BUFFER_SIZE];
 	char file_haldefine_list[AC_BUFFER_SIZE];
 	char file_gpio_signals[AC_BUFFER_SIZE];
 	char generated_path[AC_BUFFER_SIZE];

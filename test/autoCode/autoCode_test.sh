@@ -43,7 +43,7 @@ writeTags()
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
 	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog hal_define hal_init hal_fxinit modules_count modules_list gpio_signals
+		error_enum error_catalog hal_define modules_count modules_list gpio_signals
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -57,8 +57,6 @@ writeConfig()
 		"--errors ${PATH_CASE}/errors.list" \
 		"--initrc ${PATH_CASE}/initrc.list" \
 		"--parsetag ${PATH_CASE}/tags.list" \
-		"--halinit ${PATH_CASE}/hal_init.list" \
-		"--funcinit ${PATH_CASE}/func_init.list" \
 		"--haldefine ${PATH_CASE}/hal_define.list" \
 		"--gpio_signals ${PATH_CASE}/signals.gpio" \
 		"--generated_path ${PATH_CASE}/generated" \
@@ -79,8 +77,6 @@ caseBegin()
 	printf '%s\n' "${PATH_CASE}/init.rc" > "${PATH_CASE}/initrc.list"
 	writeTags "${PATH_CASE}/tags.c"
 	printf '%s\n' "${PATH_CASE}/tags.c" > "${PATH_CASE}/tags.list"
-	: > "${PATH_CASE}/hal_init.list"
-	printf '%s\n' 'hal_avr8Init' 'hal_atmega2560Init' 'hal_arduinoMegaInit' > "${PATH_CASE}/func_init.list"
 	: > "${PATH_CASE}/hal_define.list"
 	printf '%s\n' 'GPIO_SIGNAL_TEST' > "${PATH_CASE}/signals.gpio"
 	writeConfig
@@ -148,6 +144,13 @@ runOptionTests()
 	caseBegin unknown_option
 	printf '%s\n' '--unknown value' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure unknown_option "unknown option"
+
+	for VAL_OPTION in halinit funcinit
+	do
+		caseBegin "obsolete_${VAL_OPTION}_option"
+		printf '%s\n' "--${VAL_OPTION} obsolete.list" > "${PATH_CASE}/autoCode.conf"
+		runOptionFailure "obsolete_${VAL_OPTION}_option" "unknown option"
+	done
 
 	caseBegin all_required_missing
 	: > "${PATH_CASE}/autoCode.conf"
@@ -434,6 +437,15 @@ runParseTagTests()
 	printf '%s\n' '// [autoCode_tag] unknown' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase unknown_tag "unknown tag"
 
+	for VAL_OBSOLETE_TAG in hal_init hal_fxinit
+	do
+		caseBegin "obsolete_${VAL_OBSOLETE_TAG}_tag"
+		writeTags "${PATH_CASE}/tags.c"
+		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_OBSOLETE_TAG}" "// [/tag]" \
+			>> "${PATH_CASE}/tags.c"
+		runTagCase "obsolete_${VAL_OBSOLETE_TAG}_tag" "unknown tag"
+	done
+
 	caseBegin missing_required_tags
 	printf '%s\n' 'no autoCode tags' > "${PATH_CASE}/tags.c"
 	runTagCase missing_required_tags "required autoCode tag threads_alloc is not set"
@@ -443,7 +455,7 @@ runParseTagTests()
 	printf '%s\n' '// [autoCode_tag] error_enum' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase duplicate_tag "required autoCode tag error_enum is multiple set"
 
-	for VAL_INPUT in hal_define.list hal_init.list func_init.list signals.gpio
+	for VAL_INPUT in hal_define.list signals.gpio
 	do
 		VAL_NAME=$(printf '%s' "${VAL_INPUT}" | tr '.' '_')
 		caseBegin "missing_${VAL_NAME}"
@@ -455,10 +467,6 @@ runParseTagTests()
 	printf '%s\n' 'GPIO_SIGNAL_TEST extra' > "${PATH_CASE}/signals.gpio"
 	runTagCase invalid_gpio "wrong token count"
 
-	caseBegin invalid_func_init
-	printf '%s\n' 'hal_avr8Init extra' > "${PATH_CASE}/func_init.list"
-	runTagCase invalid_func_init "wrong token count"
-
 	caseBegin missing_system_thread
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' 'task -type user -run user -source_file system.c' >> "${PATH_CASE}/init.rc"
@@ -467,14 +475,14 @@ runParseTagTests()
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
 	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog hal_define hal_init hal_fxinit modules_count modules_list gpio_signals
+		error_enum error_catalog hal_define modules_count modules_list gpio_signals
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
 	done
 	runTagCase unterminated_tag_line "unterminated string"
 
-	for VAL_INPUT in tags.c hal_define.list hal_init.list func_init.list signals.gpio
+	for VAL_INPUT in tags.c hal_define.list signals.gpio
 	do
 		VAL_NAME=$(printf '%s' "${VAL_INPUT}" | tr '.' '_')
 		caseBegin "long_${VAL_NAME}"
@@ -490,13 +498,7 @@ runCompareReplaceTests()
 	caseBegin stable_generation
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 13 unchanged"
-	for VAL_FUNC in hal_avr8Init hal_atmega2560Init hal_arduinoMegaInit
-	do
-		if ! grep -F -q -- "${VAL_FUNC}();" "${PATH_CASE}/generated/hal_fxinit.inc"; then
-			fail "generated init call missing for ${VAL_FUNC}"
-		fi
-	done
+	logContains unchanged_generation "0 updated, 11 unchanged"
 
 	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
 		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
@@ -512,7 +514,7 @@ runCompareReplaceTests()
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
 	for VAL_TAG in drivers_alloc thread_name_catalog driver_name_catalog error_enum error_catalog \
-		hal_define hal_init hal_fxinit modules_count modules_list
+		hal_define modules_count modules_list
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"

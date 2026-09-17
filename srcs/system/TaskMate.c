@@ -24,7 +24,6 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "system/sysCore/sys_gpio.h"
-#include "system/sysCore/sys_hal_init.h"
 #include "system/sysCore/sys_modules.h"
 #include "system/sysCore/sys_scheduler.h"
 #include "system/sysCore/sys_softwareTimeCounter.h"
@@ -57,9 +56,6 @@ int main(void)
 	// Initialise HAL hardware
 	tm_syslog(TM_STR("[boot] hal hardware init\n"));
 
-	// [autoCode_tag] hal_fxinit
-#include "hal_fxinit.inc"
-	// [/tag]
 	gpio_signalsInit();
 
 	tm_syslog(
