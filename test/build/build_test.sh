@@ -97,12 +97,6 @@ runConfigurationTests()
 		bmake -C "${PATH_PROJECT}" -V VAL_HW_STACK
 	expectOutput default_path "build/test1_arduinoMega_atmega2560_avr8" \
 		bmake -C "${PATH_PROJECT}" -V PATH_BUILD_TARGET
-	VAL_STARTUP_DEFINES="srcs/user/target/test1/define.h"
-	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/board/arduinoMega/mega_define.h"
-	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/mcu/atmega2560/at2560_define.h"
-	VAL_STARTUP_DEFINES="${VAL_STARTUP_DEFINES} srcs/hal/arch/avr8/avr8_define.h"
-	expectOutput startup_defines "${VAL_STARTUP_DEFINES}" \
-		bmake -C "${PATH_PROJECT}" -V FILES_HALDEFINE
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		bmake -C "${PATH_PROJECT}" -V FILE_ARCH_CC
 	expectOutput cpu_frequency "16000000UL" bmake -C "${PATH_PROJECT}" -V VAL_CPU_FREQ

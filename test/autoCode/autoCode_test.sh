@@ -43,7 +43,7 @@ writeTags()
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
 	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog hal_define modules_count modules_list gpio_signals
+		error_enum error_catalog modules_count modules_list gpio_signals
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -57,7 +57,6 @@ writeConfig()
 		"--errors ${PATH_CASE}/errors.list" \
 		"--initrc ${PATH_CASE}/initrc.list" \
 		"--parsetag ${PATH_CASE}/tags.list" \
-		"--haldefine ${PATH_CASE}/hal_define.list" \
 		"--gpio_signals ${PATH_CASE}/signals.gpio" \
 		"--generated_path ${PATH_CASE}/generated" \
 		"--source_path ${PATH_CASE}/sources" > "${PATH_CASE}/autoCode.conf"
@@ -77,7 +76,6 @@ caseBegin()
 	printf '%s\n' "${PATH_CASE}/init.rc" > "${PATH_CASE}/initrc.list"
 	writeTags "${PATH_CASE}/tags.c"
 	printf '%s\n' "${PATH_CASE}/tags.c" > "${PATH_CASE}/tags.list"
-	: > "${PATH_CASE}/hal_define.list"
 	printf '%s\n' 'GPIO_SIGNAL_TEST' > "${PATH_CASE}/signals.gpio"
 	writeConfig
 }
@@ -145,7 +143,7 @@ runOptionTests()
 	printf '%s\n' '--unknown value' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure unknown_option "unknown option"
 
-	for VAL_OPTION in halinit funcinit
+	for VAL_OPTION in halinit funcinit haldefine
 	do
 		caseBegin "obsolete_${VAL_OPTION}_option"
 		printf '%s\n' "--${VAL_OPTION} obsolete.list" > "${PATH_CASE}/autoCode.conf"
@@ -437,7 +435,7 @@ runParseTagTests()
 	printf '%s\n' '// [autoCode_tag] unknown' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase unknown_tag "unknown tag"
 
-	for VAL_OBSOLETE_TAG in hal_init hal_fxinit
+	for VAL_OBSOLETE_TAG in hal_init hal_fxinit hal_define
 	do
 		caseBegin "obsolete_${VAL_OBSOLETE_TAG}_tag"
 		writeTags "${PATH_CASE}/tags.c"
@@ -455,7 +453,7 @@ runParseTagTests()
 	printf '%s\n' '// [autoCode_tag] error_enum' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase duplicate_tag "required autoCode tag error_enum is multiple set"
 
-	for VAL_INPUT in hal_define.list signals.gpio
+	for VAL_INPUT in signals.gpio
 	do
 		VAL_NAME=$(printf '%s' "${VAL_INPUT}" | tr '.' '_')
 		caseBegin "missing_${VAL_NAME}"
@@ -475,14 +473,14 @@ runParseTagTests()
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
 	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog hal_define modules_count modules_list gpio_signals
+		error_enum error_catalog modules_count modules_list gpio_signals
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
 	done
 	runTagCase unterminated_tag_line "unterminated string"
 
-	for VAL_INPUT in tags.c hal_define.list signals.gpio
+	for VAL_INPUT in tags.c signals.gpio
 	do
 		VAL_NAME=$(printf '%s' "${VAL_INPUT}" | tr '.' '_')
 		caseBegin "long_${VAL_NAME}"
@@ -498,7 +496,7 @@ runCompareReplaceTests()
 	caseBegin stable_generation
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 11 unchanged"
+	logContains unchanged_generation "0 updated, 10 unchanged"
 
 	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
 		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
@@ -514,7 +512,7 @@ runCompareReplaceTests()
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
 	for VAL_TAG in drivers_alloc thread_name_catalog driver_name_catalog error_enum error_catalog \
-		hal_define modules_count modules_list
+		modules_count modules_list
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"
