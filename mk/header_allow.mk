@@ -33,31 +33,16 @@ CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
 CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-
-
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_string.c = \
-	-include ${PATH_TM_STRING_MACRO}
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
-	-include ${PATH_TM_STRING_MACRO}
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_errors.c = \
-	-include ${PATH_TM_STRING_MACRO}	
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
-	-include ${PATH_TM_STRING_MACRO}
-		
-CFLAGS_${PATH_SRCS}/system/services/commands/date.c = \
-	-include ${PATH_TM_STRING_MACRO}	
-CFLAGS_${PATH_SRCS}/system/services/commands/driver.c = \
-	-include ${PATH_TM_STRING_MACRO}	
-CFLAGS_${PATH_SRCS}/system/services/commands/i2c.c = \
-	-include ${PATH_TM_STRING_MACRO}
-CFLAGS_${PATH_SRCS}/system/services/commands/thread.c = \
-	-include ${PATH_TM_STRING_MACRO}
-		
-CFLAGS_${PATH_SRCS}/system/services/scli.c = \
-	-include ${PATH_TM_STRING_MACRO}	
-CFLAGS_${PATH_SRCS}/system/services/system.c = \
-	-include ${PATH_TM_STRING_MACRO}	
+# Add string macro acces
+PATHS_TM_STRING_ALLOWED= \
+	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCall/*.c} \
+	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/*.c} \
+	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/commands/*.c} \
 	
+.for src in ${PATHS_TM_STRING_ALLOWED}
+CFLAGS_${src} += -include ${PATH_TM_STRING_MACRO}
+.endfor
+
 # Check includes for system-critical features
 .PHONY: _system_critical_check
 _system_critical_check:
