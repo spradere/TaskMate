@@ -52,7 +52,15 @@ FILE_ERROR_LEVEL = ${PATH_SRCS}/interfaces/error_level.h
 
 # Check dynamic dependencies before evaluating the autoCode stamp.
 .PHONY: _autocode
-_autocode: _autocode_dependency_check .WAIT ${FILE_AUTOCODE_STAMP}
+_autocode: _autocode_version_check .WAIT _autocode_dependency_check .WAIT \
+	${FILE_AUTOCODE_STAMP}
+
+# Refuse to build with an autoCode executable API version not supported by this build.
+.PHONY: _autocode_version_check
+_autocode_version_check: ${FILE_AUTOCODE_HEADER} ${SCRIPT_AUTOCODE_VERSION}
+	@awk -v expected_major="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR}" \
+		-v expected_minor="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR}" \
+		-f "${SCRIPT_AUTOCODE_VERSION}" "${FILE_AUTOCODE_HEADER}"
 
 # autoCode launch and required files
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
