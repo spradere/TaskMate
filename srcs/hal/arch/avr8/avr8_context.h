@@ -21,7 +21,7 @@
 
 #include <avr/io.h>
 
-#include "hal/public/hal_architecture_constants.h"
+#include "avr8_architecture_constants.h"
 #include "hal/public/hal_architecture_types.h"
 
 /* ============================================================================
