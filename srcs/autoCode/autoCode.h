@@ -21,8 +21,10 @@
 
 #define AC_BUFFER_SIZE 256
 #define AC_GENERATED_LINE_START 1000
-#define AC_INITRC_VER_MAJOR 1
-#define AC_INITRC_VER_MINOR 4
+#define AC_INITRC_EXPECTED_VER_MAJOR 1
+#define AC_INITRC_EXPECTED_VER_MINOR 4
+#define AC_AUTOCODE_VER_MAJOR 1
+#define AC_AUOTCODE_VER_MINOR 1
 
 /* ============================================================================
  * Includes
