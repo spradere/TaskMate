@@ -31,7 +31,7 @@ FILES_INITRC_DIR_SRC =
 FILES_INITRC_DIR_SRC != find ${PATHS_INITRC_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.c"
 .endif
 
-# Base system sources compiled for every target
+# Base system sources + target-specific compilation list
 FILES_BASE_SYSTEM_SRC != find \
 	${PATH_SRCS}/system/sysCore \
 	${PATH_SRCS}/system/sysCall \
@@ -40,15 +40,14 @@ FILES_BASE_SYSTEM_SRC != find \
 	${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_BASE_SYSTEM_SRC += ${PATH_SRCS}/system/TaskMate.c
 
-# Complete, target-specific compilation list
 FILES_COMPILE_SRC = \
 	${FILES_BASE_SYSTEM_SRC} \
 	${FILES_EXTRA_SRC} \
 	${FILES_INITRC_SRC} \
 
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
-
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
+
 
 # Dependency files
 FILES_DEP = ${FILES_OBJ:.o=.d}

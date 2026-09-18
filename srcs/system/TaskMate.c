@@ -29,12 +29,6 @@
 #include "system/sysCore/sys_softwareTimeCounter.h"
 #include "tmLibc/tm_syslog.h"
 
-/* -----------------------------------------------
- * File metadata
- * ---------------------------------------------*/
-
-TM_STORE_FILE_NAME(file_name);
-
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -59,7 +53,7 @@ int main(void)
 	gpio_signalsInit();
 
 	tm_syslog(
-		TM_STR("[boot] %s v%i.%i build : %i\n"), &file_name, TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+		TM_STR("[boot] %s v%i.%i build : %i\n"), __FILE__, TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
 	// Start scheduler
 	tm_syslog(TM_STR("[boot] start round-robin scheduler\n"));

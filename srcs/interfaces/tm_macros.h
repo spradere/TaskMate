@@ -75,9 +75,6 @@
 #define TM_STRINGIFY_INNER(x) #x
 #define TM_STRINGIFY(x) TM_STRINGIFY_INNER(x)
 
-// Store the source file name
-#define TM_STORE_FILE_NAME(name) TM_STR_NEW(name, __FILE_NAME__)
-
 // Generate a unique name
 #define TM_UNIQUE_NAME(prefix) TM_CONCAT(prefix, __LINE__)
 

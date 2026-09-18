@@ -21,8 +21,9 @@ CFLAGS_${PATH_SRCS}/system/sysCore/sys_scheduler.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SRCS}/system/TaskMate.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
+	-DTM_SYSTEM_CRITICAL_ALLOWED \
+	-include ${PATH_TM_STRING_MACRO}
+	
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_softwareTimeCounter.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
@@ -32,10 +33,31 @@ CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
 CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
+
+
+CFLAGS_${PATH_SRCS}/system/sysCall/sc_string.c = \
+	-include ${PATH_TM_STRING_MACRO}
+CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
+	-include ${PATH_TM_STRING_MACRO}
+CFLAGS_${PATH_SRCS}/system/sysCall/sc_errors.c = \
+	-include ${PATH_TM_STRING_MACRO}	
+CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
+	-include ${PATH_TM_STRING_MACRO}
+		
+CFLAGS_${PATH_SRCS}/system/services/commands/date.c = \
+	-include ${PATH_TM_STRING_MACRO}	
 CFLAGS_${PATH_SRCS}/system/services/commands/driver.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
-
+	-include ${PATH_TM_STRING_MACRO}	
+CFLAGS_${PATH_SRCS}/system/services/commands/i2c.c = \
+	-include ${PATH_TM_STRING_MACRO}
+CFLAGS_${PATH_SRCS}/system/services/commands/thread.c = \
+	-include ${PATH_TM_STRING_MACRO}
+		
+CFLAGS_${PATH_SRCS}/system/services/scli.c = \
+	-include ${PATH_TM_STRING_MACRO}	
+CFLAGS_${PATH_SRCS}/system/services/system.c = \
+	-include ${PATH_TM_STRING_MACRO}	
+	
 # Check includes for system-critical features
 .PHONY: _system_critical_check
 _system_critical_check:
