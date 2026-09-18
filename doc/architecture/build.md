@@ -31,8 +31,11 @@ Startup translation units and the ATmega2560 GPIO implementation use `FILES_EXTR
 implementations stay attached to their `init.rc` declaration. The AVR8 directory remains attached
 to `timerSched` as the current special case.
 
-The normal build checks tools and the hardware stack, regenerates autoCode, and verifies guarded
-headers. It then collects dependencies, builds AVR firmware, and reports memory use and line counts.
+The normal build checks tools and the hardware stack, then strictly compares the autoCode major and
+minor version declared in `autoCode.h` with the versions expected by the build. A missing, malformed,
+duplicate, or incompatible version stops the build before autoCode generation. The build then
+regenerates autoCode and verifies guarded headers before collecting dependencies, building AVR
+firmware, and reporting memory use and line counts.
 Target artefacts, generated lists, logs, and stamps remain under `build/`.
 
 Each selected target, board, MCU, and architecture fragment contributes its startup header and

@@ -20,6 +20,7 @@ PATH_LEGACY = legacy
 # Targets
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
+FILE_AUTOCODE_HEADER = ${PATH_SRCS}/autoCode/autoCode.h
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
 
 # Configuration
@@ -70,6 +71,7 @@ FILE_ARCH_CHECK_LOG = ${PATH_LOGS}/architecture_check.log
 FILE_ARCH_VALID_MATRIX = ${PATH_CONF}/arch_valid_matrix.md
 SCRIPT_ARCH_INCLUDE = ${PATH_SCRIPTS}/arch_include.awk
 SCRIPT_AUTOCODE_LOG = ${PATH_SCRIPTS}/autocode_log.awk
+SCRIPT_AUTOCODE_VERSION = ${PATH_SCRIPTS}/autocode_version.awk
 SCRIPT_AUTOCODE_TEST = ${PATH_AUTOCODE_TEST}/autoCode_test.sh
 SCRIPT_BUILD_SUMMARY_CLOC = ${PATH_SCRIPTS}/build_summary_cloc.awk
 SCRIPT_BUILD_SUMMARY_MEMORY = ${PATH_SCRIPTS}/build_summary_memory.awk

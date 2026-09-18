@@ -168,6 +168,27 @@ runScriptTests()
 	FILE_COMPARE="${PATH_PROJECT}/scripts/compare_replace.sh"
 	FILE_DELETE="${PATH_PROJECT}/scripts/check_build_delete_path.sh"
 	FILE_VERSION="${PATH_PROJECT}/scripts/git_version.sh"
+	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
+
+	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR 1' \
+		'#define AC_AUTOCODE_VER_MINOR 1' > "${PATH_STAGE_WORK}/autoCode.h"
+	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=1 \
+		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
+	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
+		-v expected_major=2 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
+		"${PATH_STAGE_WORK}/autoCode.h"
+	expectFailure autocode_version_minor_mismatch "expected 2, found 1" awk \
+		-v expected_major=1 -v expected_minor=2 -f "${FILE_AUTOCODE_VERSION}" \
+		"${PATH_STAGE_WORK}/autoCode.h"
+	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR 1' > "${PATH_STAGE_WORK}/missing.h"
+	expectFailure autocode_version_missing "Missing autoCode version definition" awk \
+		-v expected_major=1 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
+		"${PATH_STAGE_WORK}/missing.h"
+	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR one' \
+		'#define AC_AUTOCODE_VER_MINOR 1' > "${PATH_STAGE_WORK}/malformed.h"
+	expectFailure autocode_version_malformed "Invalid autoCode version definition" awk \
+		-v expected_major=1 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
+		"${PATH_STAGE_WORK}/malformed.h"
 
 	expectFailure programs_usage "Usage:" "${FILE_PROGRAMS}"
 	expectFailure programs_missing_file "Programs list is not readable" \
