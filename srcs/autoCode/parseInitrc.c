@@ -63,17 +63,17 @@ static bool initrcVersionHeaderParse(const tokenizer_t *tok,
 			AUTOCODE_MSG_ERROR("first init.rc line [%s:%i] must be !set_initrc_ver_major %i",
 							   initrc_name,
 							   file_line_number,
-							   AC_SYNTAX_VERSION_MAJOR);
+							   AC_INITRC_VER_MAJOR);
 			*state = AC_INITRC_VERSION_INVALID;
 			return false;
 		}
-		if( initrcVersionValueMatches(tok->tokens[1], AC_SYNTAX_VERSION_MAJOR) == false )
+		if( initrcVersionValueMatches(tok->tokens[1], AC_INITRC_VER_MAJOR) == false )
 		{
 			AUTOCODE_MSG_ERROR("unsupported init.rc major syntax version [%s:%i] %s, expected %i",
 							   initrc_name,
 							   file_line_number,
 							   tok->tokens[1],
-							   AC_SYNTAX_VERSION_MAJOR);
+							   AC_INITRC_VER_MAJOR);
 			*state = AC_INITRC_VERSION_INVALID;
 			return false;
 		}
@@ -90,17 +90,17 @@ static bool initrcVersionHeaderParse(const tokenizer_t *tok,
 			AUTOCODE_MSG_ERROR("second init.rc line [%s:%i] must be !set_initrc_ver_minor %i",
 							   initrc_name,
 							   file_line_number,
-							   AC_SYNTAX_VERSION_MINOR);
+							   AC_INITRC_VER_MINOR);
 			*state = AC_INITRC_VERSION_INVALID;
 			return false;
 		}
-		if( initrcVersionValueMatches(tok->tokens[1], AC_SYNTAX_VERSION_MINOR) == false )
+		if( initrcVersionValueMatches(tok->tokens[1], AC_INITRC_VER_MINOR) == false )
 		{
 			AUTOCODE_MSG_ERROR("unsupported init.rc minor syntax version [%s:%i] %s, expected %i",
 							   initrc_name,
 							   file_line_number,
 							   tok->tokens[1],
-							   AC_SYNTAX_VERSION_MINOR);
+							   AC_INITRC_VER_MINOR);
 			*state = AC_INITRC_VERSION_INVALID;
 			return false;
 		}
@@ -306,13 +306,13 @@ void parseInitrc(modules_database_t *data_base,
 	if( version_state == AC_INITRC_VERSION_EXPECT_MAJOR )
 	{
 		AUTOCODE_MSG_ERROR("missing !set_initrc_ver_major %i on first line of init.rc file <%s>",
-						   AC_SYNTAX_VERSION_MAJOR,
+						   AC_INITRC_VER_MAJOR,
 						   initrc_name);
 	}
 	if( version_state == AC_INITRC_VERSION_EXPECT_MINOR )
 	{
 		AUTOCODE_MSG_ERROR("missing !set_initrc_ver_minor %i after init.rc major version <%s>",
-						   AC_SYNTAX_VERSION_MINOR,
+						   AC_INITRC_VER_MINOR,
 						   initrc_name);
 	}
 	tokenizerFree(&tok);
