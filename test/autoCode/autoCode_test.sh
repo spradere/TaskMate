@@ -19,7 +19,7 @@ VAL_TEST_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' '!set_version_major 1' '!set_version_minor 4'
+	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 4'
 }
 
 fail()
@@ -305,7 +305,7 @@ runInitrcTests()
 
 	caseBegin empty_initrc
 	: > "${PATH_CASE}/init.rc"
-	expectFailure empty_initrc "missing !set_version_major 1" \
+	expectFailure empty_initrc "missing !set_initrc_ver_major 1" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin comment_before_initrc_version
@@ -315,37 +315,37 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_minor_initrc_version
-	printf '%s\n' '!set_version_major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing !set_version_minor 4" \
+	printf '%s\n' '!set_initrc_ver_major 1' > "${PATH_CASE}/init.rc"
+	expectFailure missing_minor_initrc_version "missing !set_initrc_ver_minor 4" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_before_minor_initrc_version
-	printf '%s\n' '!set_version_major 1' 'system -type service -run core' \
+	printf '%s\n' '!set_initrc_ver_major 1' 'system -type service -run core' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure module_before_minor_initrc_version "second init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' '!set_version_major 0' '!set_version_minor 4' \
+	printf '%s\n' '!set_initrc_ver_major 0' '!set_initrc_ver_minor 4' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_minor_initrc_version
-	printf '%s\n' '!set_version_major 1' '!set_version_minor 2' \
+	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 2' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_minor_initrc_version "unsupported init.rc minor syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' '!set_version_minor 4' '!set_version_major 1' \
+	printf '%s\n' '!set_initrc_ver_minor 4' '!set_initrc_ver_major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'system -type service -run core' '!set_version_minor 4' \
+	printf '%s\n' 'system -type service -run core' '!set_initrc_ver_minor 4' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure late_initrc_version "init.rc version command outside header" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
