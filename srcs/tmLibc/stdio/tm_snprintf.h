@@ -22,7 +22,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "tm_string.h"
+#include "tmLibc/tm_string.h"
 
 /* ============================================================================
  * Public API
