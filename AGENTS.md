@@ -9,6 +9,20 @@ and the applicable rules in `doc/rules/`, especially `style.md`, `interfaces.md`
 and `TaskMate_prefixes.md`. Portability and autoCode design are documented
 in `doc/architecture/`.
 
+## Working scope and validation
+
+- Keep corrections and refactors limited to the scope named in the request. Do
+  not absorb adjacent audit findings, hardening, locking, reentrancy, or broader
+  cleanup without a separately scoped request.
+- Do not run code formatters or reformat code unless the prompt explicitly asks
+  for formatting. Preserve the existing formatting during implementation and
+  validation.
+- Do not update documentation unless the prompt explicitly asks for a
+  documentation change.
+- Update the relevant tests for every code change unless the prompt explicitly
+  says not to update tests. Run the affected tests and report hardware-validation
+  limits.
+
 ## Embedded constraints
 
 Take MCU constraints into account:
@@ -102,6 +116,37 @@ source of truth, run generation/build, and review both the log and generated
 diff. Treat autoCode, interrupts, atomics, context switching, and scheduler
 changes as system-critical.
 
+autoCode is a TaskMate build component and architecture validator, not a
+portable or general-purpose program. Do not make portability to other projects
+a design objective unless explicitly requested.
+
+When removing a contract across code, Makefiles, and autoCode, remove it end to
+end: source files, Make variables, options, tags, generated consumers, and tests.
+Search for residual references after regeneration while excluding stale
+artifacts under `build/`.
+
+## HAL driver controls
+
+Keep `hal_<driver>Control()` limited to the common driver contract: life cycle,
+run level, status bits, state, and last-error access. Expose driver-specific
+operations as public HAL functions reached from upper layers through a syscall;
+do not add them as shared driver-control commands.
+
+## Documentation
+
+Treat files under `doc/audits/` as dated historical snapshots. Do not update
+them during code refactors, even when a correction makes their findings stale;
+change or remove them only when the prompt explicitly targets those audits.
+
+Architecture notes are concise working documents rather than exhaustive
+technical reports. When their update is explicitly requested:
+
+- keep each note within 50 lines and each line within 100 characters;
+- avoid low-level details such as variable names;
+- limit `Strengths` and `Remaining weaknesses` to four points each;
+- allow `Historical developments` up to eight concise lines and retain useful
+  version, tag, and commit references.
+
 ## Build
 
 Use BSD `bmake`, not GNU Make:
@@ -123,6 +168,22 @@ belong under `build/`.
 rules under `# git ignore` in `mk/path_files.mk`, then regenerate it through the
 build.
 
+The build-generated `tm_build` value in `srcs/hal/public/sysInfo.c` is not a task
+change. Do not restore, stage, commit, or report a build-only change to that
+value unless the user explicitly requests it.
+
 Use the documented Make prefixes (`PATH_`, `FILE_`, `VAL_`, `OPT_`, `COLOUR_`,
 `CFLAGS_`) and BSD `${VAR}` expansion. Verify affected targets after C/header
 changes, and report any hardware-validation limits.
+
+## Git publication
+
+Publish only when explicitly requested. Preserve unrelated and untracked work,
+perform read-only checks first, and stage only the confirmed paths. When
+approval is required, request one approval for the complete `git add`,
+`git commit`, and `git push` chain; request another only if that chain fails or
+its scope changes.
+
+A report-only audit may be added under `doc/audits/` and published directly
+without a feature branch. In that case, stage and commit only the requested
+audit file.
