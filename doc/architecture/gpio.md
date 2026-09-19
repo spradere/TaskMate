@@ -13,17 +13,16 @@ The selected target's `signals.gpio` generates the logical signal enum. autoCode
 selected target wiring in the MCU GPIO implementation. Before scheduling starts, system startup
 asks the HAL to populate its static signal table and initialize each pin.
 
-Tasks use set, get, and toggle syscalls. These delegate signal resolution to sysCore,
-which calls public HAL GPIO; the selected MCU owns the logical-to-physical table. The current MCU
-supports input, push-pull output,
-pull-up, read, and write operations for the configured ports.
+Tasks use set, get, and toggle syscalls. These delegate signal resolution to sysCore, which calls
+the neutral GPIO contract implemented by the selected MCU. That MCU owns the logical-to-physical
+table and supports input, push-pull output, pull-up, read, and write for configured ports.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Tasks use generated logical signals and never manipulate AVR registers directly.
 - Target wiring, logical state, HAL selection, and register access remain separate.
 - Static tables give deterministic memory use and fixed normal-path execution cost.
-- Unsupported target or MCU selections fail through public HAL header selection.
+- Unsupported target or MCU selections fail through build-time target and source selection.
 
 ### Remaining weaknesses
 - Configured polarity is stored but not applied, so logical operations expose physical polarity.

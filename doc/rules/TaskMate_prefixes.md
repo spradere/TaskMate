@@ -82,13 +82,13 @@ At a glance, it reads as:
 
 ### ● `hal_` — Hardware abstraction boundary
 
-**Target-independent HAL contracts and hardware-facing API symbols**
+**Target-independent hardware-facing API symbols**
 
-- Prefixes the public, target-selecting headers in `srcs/hal/public/`
-- Keeps the portable hardware boundary distinct from a selected target implementation
+- Prefixes HAL functions declared by neutral contracts in `srcs/interfaces/`
+- Keeps the hardware boundary distinct from the selected target implementation
 
-👉 A `hal_*.h` filename exposes a **HAL capability**; target-specific implementation filenames use
-the target prefixes below.
+👉 `hal_` identifies a **HAL operation**; target-specific implementation filenames use the target
+prefixes below.
 
 ---
 

@@ -42,6 +42,11 @@ PATHS_TM_STRING_ALLOWED= \
 CFLAGS_${src} += -include ${FILE_HAL_STRING_MACRO}
 .endfor
 
+# Check removed HAL public boundary
+.PHONY: _hal_public_removal_check
+_hal_public_removal_check: ${SCRIPT_HAL_FACADE_CHECK}
+	@${SCRIPT_HAL_FACADE_CHECK} "."
+
 # Check includes for system-critical features
 .PHONY: _system_critical_check
 _system_critical_check:
@@ -62,5 +67,6 @@ _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
 		${FILES_COMPILE_SRC} ${FILES_SRC_H} > "${FILE_ARCH_CHECK_LOG}"; then \
 		cat "${FILE_ARCH_CHECK_LOG}"; \
 	else \
-		status=$$?; cat "${FILE_ARCH_CHECK_LOG}"; echo ">>> satus : " $$status; \
+		status=$$?; cat "${FILE_ARCH_CHECK_LOG}"; \
+		printf ">>> status : %s\n" "$$status"; exit "$$status"; \
 	fi
