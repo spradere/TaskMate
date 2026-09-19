@@ -18,14 +18,14 @@
  * Includes
  * ========================================================================== */
 
+#include "interfaces/hal_context.h"
 #include "interfaces/tm_modules.h"
 
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
 
-/* The scheduler context is opaque outside the architecture-specific implementation. */
-typedef void *hal_timerSchedCallback_func_t(void *context);
+typedef hal_context_t *hal_timerSchedCallback_func_t(hal_context_t *context);
 typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
 
 /* ============================================================================

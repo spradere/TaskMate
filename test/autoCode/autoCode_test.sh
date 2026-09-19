@@ -494,6 +494,14 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/wire_gpio.inc"; then
 		fail "wire_gpio generated include is missing"
 	fi
+	if ! grep -F -q 'hal_threadContextInit(system, &(mod->context),' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc generated context initialization is missing"
+	fi
+	if grep -F -q 'mod->stack_pointer' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc still initializes a stack pointer directly"
+	fi
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	logContains unchanged_generation "0 updated, 11 unchanged"
 

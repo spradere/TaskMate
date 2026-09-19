@@ -28,8 +28,8 @@
  * Public API
  * ========================================================================== */
 
-static inline __attribute__((always_inline)) void hal_setStackPointer(const hal_stack_word_t *sp)
+static inline __attribute__((always_inline)) void hal_setStackPointer(const hal_context_t *context)
 {
-	SP = (uintptr_t)sp;
+	SP = (uintptr_t)context->stack_pointer;
 }
 #endif // AVR8_AVR8_STACK_H

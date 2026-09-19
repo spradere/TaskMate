@@ -64,7 +64,7 @@ void tm_schedulerStart(void)
 
 	mod_thread_item_t *mod = mod_threadGetPointer(0);
 
-	hal_setStackPointer(mod->stack_pointer);
+	hal_setStackPointer(&mod->context);
 	hal_contextRestore();
 	hal_setGlobalInterrupt();
 	hal_returnFromInterrupt();
@@ -98,13 +98,13 @@ void tm_schedulerCoop(void) { hal_timerSchedLoad(); }
  * Round-robin policy
  * ---------------------------------------------*/
 
-static void *tm_schedulerRR(void *stack_pointer)
+static hal_context_t *tm_schedulerRR(hal_context_t *context)
 {
 	mod_thread_item_t *thread;
 
 	// Save the current thread context
 	thread = mod_threadGetPointer(mod_threadGetCurrent());
-	thread->stack_pointer = stack_pointer;
+	thread->context = *context;
 
 	// Canary check
 	if( thread->canary_low != MOD_CANARY ) { hal_halt(); }
@@ -118,7 +118,7 @@ static void *tm_schedulerRR(void *stack_pointer)
 	if( thread->canary_high != MOD_CANARY ) { hal_halt(); }
 
 	TM_CLEARBIT(thread->status, THREAD_BIT_YIELDED);
-	return thread->stack_pointer;
+	return &thread->context;
 }
 
 static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current)
