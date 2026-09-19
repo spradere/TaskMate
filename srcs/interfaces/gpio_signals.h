@@ -29,7 +29,7 @@
 #include "gpio_signals.inc"
 // [/tag]
 
-void hal_gpioSignalsInit(void);
+void hal_gpioSignalInit(void);
 void hal_gpioSignalWrite(gpio_signal_t signal, bool value);
 bool hal_gpioSignalRead(gpio_signal_t signal);
 
