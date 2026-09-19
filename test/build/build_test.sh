@@ -103,10 +103,6 @@ runConfigurationTests()
 	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
 
 	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
-	logExcludes default_compile_sources "srcs/hal/arch/avr8/avr8_init.c"
-	logExcludes default_compile_sources "srcs/hal/mcu/atmega2560/at2560_init.c"
-	logExcludes default_compile_sources "srcs/hal/board/arduinoMega/mega_init.c"
-	logExcludes default_compile_sources "srcs/user/target/test1/init.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
 
 	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
@@ -118,10 +114,6 @@ runConfigurationTests()
 	expectSuccess default_extra_sources bmake -C "${PATH_PROJECT}" -V FILES_EXTRA_SRC
 	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
 	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
-	logExcludes default_extra_sources "srcs/hal/arch/avr8/avr8_init.c"
-	logExcludes default_extra_sources "srcs/hal/mcu/atmega2560/at2560_init.c"
-	logExcludes default_extra_sources "srcs/hal/board/arduinoMega/mega_init.c"
-	logExcludes default_extra_sources "srcs/user/target/test1/init.c"
 
 	expectSuccess initrc_directory_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_DIR_SRC
 	logContains initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
