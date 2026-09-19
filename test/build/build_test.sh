@@ -89,12 +89,20 @@ assertFileContains()
 	fi
 }
 
+assertFileExcludes()
+{
+	if grep -F -q -- "$2" "$1"; then
+		fail "$1: unexpected content <$2>"
+	fi
+}
+
 runConfigurationTests()
 {
 	stageBegin configuration
 
 	expectOutput default_stack "test1 arduinoMega atmega2560 avr8" \
 		bmake -C "${PATH_PROJECT}" -V VAL_HW_STACK
+	assertFileExcludes "${PATH_PROJECT}/conf/hardware-targets.conf" "test_noscli"
 	expectOutput default_path "build/test1_arduinoMega_atmega2560_avr8" \
 		bmake -C "${PATH_PROJECT}" -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
@@ -108,7 +116,7 @@ runConfigurationTests()
 	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
-	expectOutput default_initrc_dirs "srcs/hal/arch/avr8" \
+	expectOutput default_initrc_dirs "srcs/system/services/commands" \
 		bmake -C "${PATH_PROJECT}" -V PATHS_INITRC_SOURCES
 
 	expectSuccess default_extra_sources bmake -C "${PATH_PROJECT}" -V FILES_EXTRA_SRC
@@ -116,8 +124,8 @@ runConfigurationTests()
 	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
 
 	expectSuccess initrc_directory_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_DIR_SRC
-	logContains initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
-	logContains initrc_directory_sources "srcs/hal/arch/avr8/avr8_halt.c"
+	logContains initrc_directory_sources "srcs/system/services/commands/date.c"
+	logExcludes initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
 
 	expectSuccess object_mapping bmake -C "${PATH_PROJECT}" -V FILES_OBJ
 	logContains object_mapping \
@@ -149,6 +157,21 @@ runConfigurationTests()
 		_autocode_dependency_check
 	assertFileContains "${PATH_MANIFESTS}/gpio_signals.deps" \
 		"srcs/user/target/test1/signals.gpio"
+
+	PATH_DEPENDENCIES="${PATH_STAGE_WORK}/dependencies"
+	mkdir -p "${PATH_DEPENDENCIES}"
+	printf 'fixture.o: fixture.c \\\r\n fixture.h\r\n' > "${PATH_DEPENDENCIES}/fixture.d"
+	expectSuccess dependencies_crlf_first bmake -C "${PATH_PROJECT}" \
+		PATH_BUILD_TARGET="${PATH_DEPENDENCIES}" \
+		FILES_DEP="${PATH_DEPENDENCIES}/fixture.d" \
+		FILE_DEPS_ALL="${PATH_DEPENDENCIES}/.deps.d" _dependency
+	expectSuccess dependencies_crlf_second bmake -C "${PATH_PROJECT}" \
+		PATH_BUILD_TARGET="${PATH_DEPENDENCIES}" \
+		FILES_DEP="${PATH_DEPENDENCIES}/fixture.d" \
+		FILE_DEPS_ALL="${PATH_DEPENDENCIES}/.deps.d" _dependency
+	if LC_ALL=C grep -q "$(printf '\r')" "${PATH_DEPENDENCIES}/.deps.d"; then
+		fail "dependency aggregation retained CR characters"
+	fi
 
 	printf 'build-system configuration tests passed: %d cases\n' "${VAL_TEST_COUNT}"
 }

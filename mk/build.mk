@@ -88,4 +88,6 @@ all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check _autocode 
 
 # Dependency files used to compile sources when a related header or source file changes
 _dependency:
-	@if ls ${FILES_DEP} >/dev/null 2>&1; then cat ${FILES_DEP}; fi > "${FILE_DEPS_ALL}"
+	@if ls ${FILES_DEP} >/dev/null 2>&1; then \
+		for file in ${FILES_DEP}; do tr -d '\r' < "$$file"; done; \
+	fi > "${FILE_DEPS_ALL}"
