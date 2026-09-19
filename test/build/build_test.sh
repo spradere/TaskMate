@@ -325,6 +325,15 @@ runGuardTests()
 		-v path_sources="${PATH_ARCH_SRCS}" -f "${FILE_ARCH}" \
 		"${PATH_STAGE_WORK}/bad_matrix.md" "${PATH_ARCH_SRCS}/user/tasks/ok.c"
 
+	PATH_GPIO_GENERATED="${PATH_STAGE_WORK}/gpio_generated"
+	mkdir -p "${PATH_GPIO_GENERATED}"
+	printf 'typedef enum { GPIO_SIGNAL_TEST, GPIO_SIGNAL_COUNT } gpio_signal_t;\n' \
+		> "${PATH_GPIO_GENERATED}/gpio_signals.inc"
+	printf '#include "interfaces/gpio_signals.h"\n' > "${PATH_STAGE_WORK}/gpio_header.c"
+	expectSuccess gpio_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -I "${PATH_GPIO_GENERATED}" -fsyntax-only \
+		"${PATH_STAGE_WORK}/gpio_header.c"
+
 	PATH_HEADER_SRCS="${PATH_STAGE_WORK}/header_srcs"
 	mkdir -p "${PATH_HEADER_SRCS}/allowed" "${PATH_HEADER_SRCS}/forbidden"
 	printf '%s\n' '#include "critical.h"' > "${PATH_HEADER_SRCS}/allowed/use.c"

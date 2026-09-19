@@ -21,7 +21,6 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-#include "hal/public/hal_architecture_types.h"
 #include "interfaces/gpio_signals.h"
 #include "interfaces/tm_macros.h"
 

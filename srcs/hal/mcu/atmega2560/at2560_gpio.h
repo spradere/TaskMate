@@ -21,7 +21,7 @@
 
 #include <stdbool.h>
 
-#include "hal/public/hal_ports_pins.h"
+#include "hal/mcu/atmega2560/at2560_ports_pins.h"
 #include "interfaces/gpio_signals.h"
 
 /* ============================================================================
