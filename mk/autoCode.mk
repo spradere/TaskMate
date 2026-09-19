@@ -26,7 +26,8 @@ FILES_AUTOCODE_INC = \
 	${PATH_BUILD_GENERATED}/error_catalog.inc \
 	${PATH_BUILD_GENERATED}/modules_count.inc \
 	${PATH_BUILD_GENERATED}/modules_list.inc \
-	${PATH_BUILD_GENERATED}/gpio_signals.inc
+	${PATH_BUILD_GENERATED}/gpio_signals.inc \
+	${PATH_BUILD_GENERATED}/wire_gpio.inc
 
 CFLAGS += -I${PATH_BUILD_GENERATED}
 
@@ -38,7 +39,8 @@ FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCall/sc_driver.c \
 	${PATH_SRCS}/system/sysCore/sys_modules.c \
 	${PATH_SRCS}/system/sysCore/sys_modules_list.h \
-	${PATH_SRCS}/interfaces/gpio_signals.h 	
+	${PATH_SRCS}/interfaces/gpio_signals.h \
+	${PATH_SRCS}/hal/mcu/atmega2560/at2560_gpio.c
 		
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
@@ -66,6 +68,7 @@ _autocode_version_check: ${FILE_AUTOCODE_HEADER} ${SCRIPT_AUTOCODE_VERSION}
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
 						${FILE_PARSE_TAG_LIST} \
 						${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} \
+						${FILE_WIREGPIO} \
 						${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
 
 	@printf "%sautoCode, related files have changed -> run autoCode%s\n" \
@@ -84,6 +87,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--gpio_signals ${FILE_GPIO_SIGNALS}" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--wire_gpio ${FILE_WIREGPIO}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--generated_path ${PATH_BUILD_GENERATED}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--source_path ${PATH_SRCS}" >> "${FILE_AUTOCODE_CONFIG}"
 		
