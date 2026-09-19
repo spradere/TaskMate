@@ -20,10 +20,8 @@
 
 #include <stdint.h>
 
-#include "hal/public/hal_context.h"
-#include "hal/public/hal_interrupt.h"
-#include "hal/public/hal_stack.h"
 #include "interfaces/drv_timerSched.h"
+#include "interfaces/hal_context.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
@@ -64,10 +62,7 @@ void tm_schedulerStart(void)
 
 	mod_thread_item_t *mod = mod_threadGetPointer(0);
 
-	hal_setStackPointer(&mod->context);
-	hal_contextRestore();
-	hal_setGlobalInterrupt();
-	hal_returnFromInterrupt();
+	hal_contextStart(&mod->context);
 }
 
 /* -----------------------------------------------

@@ -21,8 +21,6 @@
 #include <util/atomic.h>
 
 #include "hal/arch/avr8/avr8_context.h"
-#include "hal/arch/avr8/avr8_interrupt.h"
-#include "hal/arch/avr8/avr8_stack.h"
 #include "interfaces/drv_timerSched.h"
 #include "interfaces/tm_define.h"
 #include "interfaces/tm_macros.h"

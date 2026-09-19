@@ -53,7 +53,6 @@ FILE_TM_INFO = ${PATH_SRCS}/interfaces/tm_info.h
 PATHS_SOURCE_SEARCH += ${PATH_SRCS}/system
 PATHS_SOURCE_SEARCH += ${PATH_SRCS}/tmLibc
 PATHS_SOURCE_SEARCH += ${PATH_SRCS}/interfaces
-PATHS_SOURCE_SEARCH += ${PATH_SRCS}/hal/public
 PATHS_SOURCE_SEARCH += ${PATH_SRCS}/hal/drivers
 PATHS_SOURCE_SEARCH += ${PATH_SRCS}/user/tasks
 

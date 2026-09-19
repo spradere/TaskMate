@@ -107,6 +107,14 @@ runConfigurationTests()
 		bmake -C "${PATH_PROJECT}" -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		bmake -C "${PATH_PROJECT}" -V FILE_ARCH_CC
+	expectOutput architecture_types_header \
+		"srcs/hal/arch/avr8/avr8_architecture_types.h" \
+		bmake -C "${PATH_PROJECT}" -V FILE_HAL_ARCHITECTURE_TYPES
+	expectSuccess architecture_types_compile_flag bmake -C "${PATH_PROJECT}" -V CFLAGS
+	logContains architecture_types_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_architecture_types.h"
+	expectSuccess source_search_paths bmake -C "${PATH_PROJECT}" -V PATHS_SOURCE_SEARCH
+	logExcludes source_search_paths "srcs/hal/public"
 	expectOutput cpu_frequency "16000000UL" bmake -C "${PATH_PROJECT}" -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
 

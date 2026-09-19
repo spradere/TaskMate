@@ -27,8 +27,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   hal_stack_word_t *stack_top)
+void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top)
 {
 	// Stack initialisation
 	hal_stack_word_t *sp = stack_top;
@@ -43,4 +42,17 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context,
 	for( uint8_t i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
 
 	context->stack_pointer = sp;
+}
+
+_Noreturn __attribute__((naked)) void hal_contextStart(const hal_context_t *)
+{
+	asm volatile("movw r30, r24 \n\t"
+				 "ld r26, Z+ \n\t"
+				 "ld r27, Z \n\t"
+				 "out __SP_H__, r27 \n\t"
+				 "out __SP_L__, r26 \n\t"
+				 AVR8_CONTEXT_RESTORE
+				 "sei \n\t"
+				 "reti \n\t");
+	__builtin_unreachable();
 }

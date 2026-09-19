@@ -13,11 +13,9 @@
 ################################################################################
 
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_modules.c = \
-	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_scheduler.c = \
-	-DHAL_SYSTEM_CRITICAL_ALLOWED \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 CFLAGS_${PATH_SRCS}/system/TaskMate.c = \
