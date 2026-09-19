@@ -26,7 +26,6 @@
  * ========================================================================== */
 
 typedef uint8_t hal_stack_word_t;
-typedef uint8_t hal_atomic_state_t;
 
 
 
