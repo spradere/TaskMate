@@ -22,21 +22,28 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-#include "hal/public/hal_architecture_types.h" // Get hal_atomic_state_t
+#include <stdint.h>
 
 /* ============================================================================
- * Public API
+ * Private definitions
  * ========================================================================== */
 
-static inline __attribute__((always_inline)) hal_atomic_state_t hal_atomicStart(void)
+typedef uint8_t avr8_atomic_state_t;
+
+/* ============================================================================
+ * Private inline implementation
+ * ========================================================================== */
+
+static inline __attribute__((always_inline)) avr8_atomic_state_t avr8_atomicStart(void)
 {
-	hal_atomic_state_t state = SREG;
+	avr8_atomic_state_t state = SREG;
 	cli();
 	return state;
 }
 
-static inline __attribute__((always_inline)) void hal_atomicEnd(hal_atomic_state_t state)
+static inline __attribute__((always_inline)) void avr8_atomicEnd(avr8_atomic_state_t state)
 {
+	asm volatile("" ::: "memory");
 	SREG = state;
 }
 

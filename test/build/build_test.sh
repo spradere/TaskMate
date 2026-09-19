@@ -111,6 +111,7 @@ runConfigurationTests()
 	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
 
 	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
+	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
 
 	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
@@ -333,6 +334,10 @@ runGuardTests()
 	expectSuccess gpio_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -I "${PATH_GPIO_GENERATED}" -fsyntax-only \
 		"${PATH_STAGE_WORK}/gpio_header.c"
+
+	printf '#include "interfaces/hal_atomic.h"\n' > "${PATH_STAGE_WORK}/atomic_header.c"
+	expectSuccess atomic_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/atomic_header.c"
 
 	PATH_HEADER_SRCS="${PATH_STAGE_WORK}/header_srcs"
 	mkdir -p "${PATH_HEADER_SRCS}/allowed" "${PATH_HEADER_SRCS}/forbidden"
