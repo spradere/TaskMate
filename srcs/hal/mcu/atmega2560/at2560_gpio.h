@@ -34,6 +34,13 @@ typedef struct
 	bool active_high;
 } hal_signal_t;
 
+typedef struct
+{
+	volatile uint8_t *ddr;
+	volatile uint8_t *port;
+	volatile uint8_t *pin;
+} hal_port_t;
+
 /* ============================================================================
  * Public API
  * ========================================================================== */

@@ -40,7 +40,7 @@ FILES_PARSE_TAG =  \
 	${PATH_SRCS}/system/sysCore/sys_modules.c \
 	${PATH_SRCS}/system/sysCore/sys_modules_list.h \
 	${PATH_SRCS}/interfaces/gpio_signals.h \
-	${PATH_SRCS}/hal/mcu/atmega2560/at2560_gpio.c
+	${FILE_WIREGPIO_TAG}
 		
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse

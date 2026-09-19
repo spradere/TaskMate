@@ -29,6 +29,7 @@ FILE_GPIO_SIGNALS = ${PATH_TEST1}/signals.gpio
 .endif
 
 FILE_WIREGPIO = ${PATH_TEST1}/targetWireSignal.c
+FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/mcu/atmega2560/at2560_gpio.c
 .if !exists(${FILE_WIREGPIO})
 .error GPIO target wiring not found >>>${FILE_WIREGPIO}<<<
 .endif
