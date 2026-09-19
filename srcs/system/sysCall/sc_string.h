@@ -25,11 +25,32 @@
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
+ * String macro redirection
+ * ========================================================================== */
+
+#if defined(HAL_STRING) && defined(HAL_STRING_INROM) && defined(HAL_STRING_RAM) && defined(HAL_STRING_ROM)
+	#warning ">>> Using HAL string implementation"
+	#define TM_STR(string) HAL_STRING(string)
+
+	#define TM_STR_RAM(string) HAL_STRING_RAM(string)
+	#define TM_STR_RON(string) HAL_STRING_ROM(string)
+
+	#define TM_STR_NEW(name, txt) HAL_STRING_INROM(name, txt)
+#else
+	#warning ">>> Using default string implementation"
+	#define TM_STR(string) (string)
+
+	#define TM_STR_RAM(string) (string)
+	#define TM_STR_RON(string) (string)
+
+	#define TM_STR_NEW(name, txt) char name[] = (txt);
+#endif
+
+/* ============================================================================
  * Public API
  * ========================================================================== */
 
 err_codes_t sc_consoleWriteByte(uint8_t data);
-
 err_codes_t sc_consoleFlush(void);
 
 // Create a RAM string descriptor. A null text pointer represents an empty string.

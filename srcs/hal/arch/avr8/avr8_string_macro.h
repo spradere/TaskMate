@@ -28,14 +28,14 @@
  * Public definitions
  * ========================================================================== */
 
-#define TM_STR_NEW(name, txt) \
+#define HAL_STRING_INROM(name, txt) \
 	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
 	static const tm_string_t (name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
-#define TM_STR_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
-#define TM_STR_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
+#define HAL_STRING_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
+#define HAL_STRING_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
 
 // Default storage for AVR8
-#define TM_STR(string) TM_STR_ROM(string)
+#define HAL_STRING(string) HAL_STRING_ROM(string)
 
 #endif // HAL_ARCH_AVR8_AVR8_STRING_MACRO_H

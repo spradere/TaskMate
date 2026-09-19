@@ -32,8 +32,7 @@
 
 	#define sc_stringFromBuffer(string) (string)
 	#define TM_STR(string) (string)
-	#define TM_STR_NEW(name, txt) \
-		const char name[] = (txt);
+	#define TM_STR_NEW(name, txt) const char name[] = (txt);
 #endif
 
 #if TM_LIBC_TASKMATE

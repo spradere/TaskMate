@@ -22,7 +22,7 @@ CFLAGS_${PATH_SRCS}/system/sysCore/sys_scheduler.c = \
 
 CFLAGS_${PATH_SRCS}/system/TaskMate.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED \
-	-include ${PATH_TM_STRING_MACRO}
+	-include ${FILE_HAL_STRING_MACRO}
 	
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_softwareTimeCounter.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
@@ -38,9 +38,10 @@ PATHS_TM_STRING_ALLOWED= \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCall/*.c} \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/*.c} \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/commands/*.c} \
+	${FILES_COMPILE_SRC:M${PATH_SRCS}/tmLibc/*.c}
 	
 .for src in ${PATHS_TM_STRING_ALLOWED}
-CFLAGS_${src} += -include ${PATH_TM_STRING_MACRO}
+CFLAGS_${src} += -include ${FILE_HAL_STRING_MACRO}
 .endfor
 
 # Check includes for system-critical features

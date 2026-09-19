@@ -28,6 +28,7 @@
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_threads.h"
+#include "system/sysCall/sc_string.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 

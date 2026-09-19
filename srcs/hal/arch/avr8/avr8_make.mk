@@ -22,7 +22,7 @@ PATH_AVR8 = ${PATH_SRCS}/hal/arch/avr8
 PATHS_SOURCE_SEARCH += ${PATH_AVR8}
 
 CFLAGS += -DARCH_avr8
-PATH_TM_STRING_MACRO = ${PATH_SRCS}/hal/arch/avr8/avr8_string_macro.h
+FILE_HAL_STRING_MACRO = ${PATH_SRCS}/hal/arch/avr8/avr8_string_macro.h
 	
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SRCS}/hal/arch/avr8/avr8_CC.mk
