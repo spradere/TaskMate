@@ -17,7 +17,6 @@
 
 #include "sys_modules.h"
 
-#include "hal/public/hal_context.h"
 #include "interfaces/tm_modules.h"
 #include "system/sysCore/sys_modules_list.h"
 

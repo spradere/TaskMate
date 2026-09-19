@@ -22,10 +22,10 @@
 #include <avr/io.h>
 
 #include "avr8_architecture_constants.h"
-#include "hal/public/hal_architecture_types.h"
+#include "hal/arch/avr8/avr8_architecture_types.h"
 
 /* ============================================================================
- * Public definitions
+ * Private definitions
  * ========================================================================== */
 
 #define AVR8_CONTEXT_SAVE  \
@@ -100,17 +100,5 @@
 	"pop r0 \n\t"            \
 	"out __SREG__, r0 \n\t"  \
 	"pop r0	\n\t"
-
-/* ============================================================================
- * Public API
- * ========================================================================== */
-
-static inline __attribute__((always_inline)) void hal_contextRestore(void)
-{
-	asm volatile(AVR8_CONTEXT_RESTORE);
-}
-
-void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   hal_stack_word_t *stack_top);
 
 #endif // AVR8_AVR8_CONTEXT_H

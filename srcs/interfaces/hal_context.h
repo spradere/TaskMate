@@ -20,4 +20,14 @@
 
 typedef struct hal_context hal_context_t;
 
+/* ============================================================================
+ * Public API
+ * ========================================================================== */
+
+/** Initialize a context on the final word of architecture-defined stack storage. */
+void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top);
+
+/** Restore and start a context as one indivisible architecture operation. */
+_Noreturn void hal_contextStart(const hal_context_t *context);
+
 #endif // INTERFACES_HAL_CONTEXT_H
