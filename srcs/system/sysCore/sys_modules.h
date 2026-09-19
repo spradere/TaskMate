@@ -38,7 +38,7 @@ typedef struct
 
 	volatile uint16_t software_time_counter;
 
-	hal_stack_word_t *stack_pointer;
+	hal_context_t context;
 
 	uint16_t canary_low;
 	hal_stack_word_t stack[MOD_THREAD_STACK_SIZE];

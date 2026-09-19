@@ -21,12 +21,17 @@
 
 #include <stdint.h>
 
+#include "interfaces/hal_context.h"
+
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
 
 typedef uint8_t hal_stack_word_t;
 
-
+struct hal_context
+{
+	hal_stack_word_t *stack_pointer;
+};
 
 #endif // HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H

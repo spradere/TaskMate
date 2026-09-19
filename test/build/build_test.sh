@@ -339,6 +339,11 @@ runGuardTests()
 	expectSuccess atomic_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/atomic_header.c"
 
+	printf '#include "interfaces/hal_context.h"\nhal_context_t *context;\n' \
+		> "${PATH_STAGE_WORK}/context_header.c"
+	expectSuccess context_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/context_header.c"
+
 	PATH_HEADER_SRCS="${PATH_STAGE_WORK}/header_srcs"
 	mkdir -p "${PATH_HEADER_SRCS}/allowed" "${PATH_HEADER_SRCS}/forbidden"
 	printf '%s\n' '#include "critical.h"' > "${PATH_HEADER_SRCS}/allowed/use.c"
