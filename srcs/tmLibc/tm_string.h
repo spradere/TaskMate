@@ -24,15 +24,10 @@
 #include "interfaces/tm_options.h" // get libc selection
 #include "interfaces/tm_string.h"
 
-
 #if TM_LIBC_CSTD
 	#include <string.h>
 	#define tm_strncmp strncmp
 	#define tm_strncpy strncpy
-
-	#define sc_stringFromBuffer(string) (string)
-	#define TM_STR(string) (string)
-	#define TM_STR_NEW(name, txt) const char name[] = (txt);
 #endif
 
 #if TM_LIBC_TASKMATE
@@ -41,8 +36,6 @@
 
 	int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n);
 	void tm_strncpy(char *dest, tm_string_t src, uint8_t n);
-
-
 #endif
 
 // clang-format on

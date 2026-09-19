@@ -35,6 +35,8 @@
 #define HAL_STRING_ROM(string) ((tm_string_t){ .text = PSTR(string), .storage = TM_MEM_ROM })
 #define HAL_STRING_RAM(string) ((tm_string_t){ .text = (string), .storage = TM_MEM_RAM })
 
+#define HAL_STRING_ROMGETBYTE(ptr) pgm_read_byte(ptr)
+
 // Default storage for AVR8
 #define HAL_STRING(string) HAL_STRING_ROM(string)
 

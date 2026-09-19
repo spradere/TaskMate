@@ -53,13 +53,9 @@
 err_codes_t sc_consoleWriteByte(uint8_t data);
 err_codes_t sc_consoleFlush(void);
 
-// Create a RAM string descriptor. A null text pointer represents an empty string.
-//tm_string_t sc_stringFromBuffer(const char *text);
-
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
 
 int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size);
-
 void sc_stringCopy(char *dest, tm_string_t src, uint8_t size);
 
 #endif // SYSCALL_SC_STRING_H

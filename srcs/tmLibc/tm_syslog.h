@@ -26,6 +26,7 @@
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
+	#define tm_syslog syslog
 #endif
 
 #if TM_LIBC_TASKMATE

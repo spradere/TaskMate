@@ -49,11 +49,6 @@ err_codes_t sc_consoleFlush(void)
 	return control_data.error;
 }
 
-tm_string_t sc_stringFromBuffer(const char *text)
-{
-	return (tm_string_t){.text = text, .storage = TM_MEM_RAM};
-}
-
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 {
 	if( (string == 0) || (string->text == 0) || (index >= TM_STRING_SIZE_MAX) ) { return 0; }
@@ -63,7 +58,8 @@ uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 		case TM_MEM_RAM:
 			return (uint8_t)string->text[index];
 		case TM_MEM_ROM:
-			return (uint8_t)pgm_read_byte(&(string->text[index]));
+			//return (uint8_t)pgm_read_byte(&(string->text[index]));
+			return (uint8_t)HAL_STRING_ROMGETBYTE(&(string->text[index]));
 		default:
 			return 0;
 	}
