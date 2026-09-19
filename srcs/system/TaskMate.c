@@ -23,7 +23,6 @@
 #include "interfaces/tm_info.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
-#include "system/sysCore/sys_gpio.h"
 #include "system/sysCore/sys_modules.h"
 #include "system/sysCore/sys_scheduler.h"
 #include "system/sysCore/sys_softwareTimeCounter.h"
@@ -46,11 +45,6 @@ int main(void)
 
 	mod_driversAlloc();
 	mod_threadsAlloc();
-
-	// Initialise HAL hardware
-	tm_syslog(TM_STR("[boot] hal hardware init\n"));
-
-	gpio_signalsInit();
 
 	tm_syslog(
 		TM_STR("[boot] %s v%i.%i build : %i\n"), __FILE__, TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);

@@ -24,6 +24,7 @@
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_driver.h"
+#include "system/sysCall/sc_gpio_system.h"
 #include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_stdio.h"
 #include "tmLibc/tm_string.h"
@@ -49,6 +50,7 @@ static bool systemRunLevelIsReady(uint8_t run_level);
 
 void system(void)
 {
+	sc_gpio_signalsInit();
 	sc_threadSetInitialized();
 	systemStart();
 

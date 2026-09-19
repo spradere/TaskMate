@@ -28,11 +28,6 @@
 typedef uint8_t hal_stack_word_t;
 typedef uint8_t hal_atomic_state_t;
 
-typedef struct
-{
-	volatile uint8_t *ddr;
-	volatile uint8_t *port;
-	volatile uint8_t *pin;
-} hal_port_t;
+
 
 #endif // HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
