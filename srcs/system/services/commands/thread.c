@@ -75,8 +75,8 @@ bool thread(uint8_t argc, char *argv[])
 	for( uint8_t i = 0; thread_cmd[i].name != 0; i++ )
 	{
 		if( tm_strncmp(
-				sc_stringFromBuffer(argv[1]),
-				sc_stringFromBuffer(thread_cmd[i].name),
+				TM_STR_RAM(argv[1]),
+				TM_STR_RAM(thread_cmd[i].name),
 				TM_STRING_SIZE_MAX) == 0 )
 		{
 			return thread_cmd[i].func(argc, argv);
@@ -141,12 +141,12 @@ static bool threadStart(uint8_t argc, char *argv[])
 
 	if( sc_threadStart(argv[2], run_level) )
 	{
-		tm_string_t thread_name = sc_stringFromBuffer(argv[2]);
+		tm_string_t thread_name = TM_STR_RAM(argv[2]);
 		tm_syslog(TM_STR("[thread] %s started\n"), &thread_name);
 		return true;
 	}
 
-	tm_string_t thread_name = sc_stringFromBuffer(argv[2]);
+	tm_string_t thread_name = TM_STR_RAM(argv[2]);
 	tm_syslog(TM_STR("[thread] %s not started: bad name or runlevel\n"), &thread_name);
 	return false;
 }
@@ -161,12 +161,12 @@ static bool threadStop(uint8_t argc, char *argv[])
 
 	if( sc_threadStop(argv[2]) )
 	{
-		tm_string_t thread_name = sc_stringFromBuffer(argv[2]);
+		tm_string_t thread_name = TM_STR_RAM(argv[2]);
 		tm_syslog(TM_STR("[thread] %s stop\n"), &thread_name);
 		return true;
 	}
 
-	tm_string_t thread_name = sc_stringFromBuffer(argv[2]);
+	tm_string_t thread_name = TM_STR_RAM(argv[2]);
 	tm_syslog(TM_STR("[thread] name not found %s\n"), &thread_name);
 	return false;
 }

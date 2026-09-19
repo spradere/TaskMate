@@ -138,11 +138,11 @@ static void scliLineProcess(void)
 	uint8_t argc = scliTokenize(scli_line, argv);
 	if( (argc > 0) && !scliCommandDispatch(argc, argv) )
 	{
-		tm_string_t command = sc_stringFromBuffer(argv[0]);
+		tm_string_t command = TM_STR_RAM(argv[0]);
 		tm_syslog(TM_STR("[scli] error: unknown command %s\n"), &command);
 		for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
 		{
-			tm_string_t command_name = sc_stringFromBuffer(scli_commands[i].name);
+			tm_string_t command_name = TM_STR_RAM(scli_commands[i].name);
 			tm_syslog(TM_STR("\tcmd %s\n"), &command_name);
 		}
 	}
@@ -177,8 +177,8 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[])
 	for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
 	{
 		if( tm_strncmp(
-				sc_stringFromBuffer(argv[0]),
-				sc_stringFromBuffer(scli_commands[i].name),
+				TM_STR_RAM(argv[0]),
+				TM_STR_RAM(scli_commands[i].name),
 				TM_STRING_SIZE_MAX) == 0 )
 		{
 			scli_commands[i].func(argc, argv);

@@ -54,7 +54,7 @@ err_codes_t sc_consoleWriteByte(uint8_t data);
 err_codes_t sc_consoleFlush(void);
 
 // Create a RAM string descriptor. A null text pointer represents an empty string.
-tm_string_t sc_stringFromBuffer(const char *text);
+//tm_string_t sc_stringFromBuffer(const char *text);
 
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
 

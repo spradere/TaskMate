@@ -196,7 +196,7 @@ static mod_thread_item_t *sc_threadGetPointer(const char *name)
 		const tm_string_t *thread_name = thread_name_catalog[i];
 		if( (thread_name != 0) &&
 			sc_stringCompare(*thread_name,
-						 sc_stringFromBuffer(name),
+						 TM_STR_RAM(name),
 						 MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return thread;

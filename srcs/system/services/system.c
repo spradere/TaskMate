@@ -68,7 +68,7 @@ void system(void)
 	tm_snprintf(
 		msg, sizeof(msg), TM_STR("TaskMate %i.%i %i"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
-	sc_lcdWriteString(sc_stringFromBuffer(msg), 0, 0);
+	sc_lcdWriteString(TM_STR_RAM(msg), 0, 0);
 
 	while( 1 )
 	{
@@ -84,7 +84,7 @@ void system(void)
 					t.hours,
 					t.minutes,
 					t.seconds);
-		sc_lcdWriteString(sc_stringFromBuffer(msg), 1, 0);
+		sc_lcdWriteString(TM_STR_RAM(msg), 1, 0);
 
 		sc_threadSetSTC(50);
 		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };

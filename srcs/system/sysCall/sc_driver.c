@@ -308,7 +308,7 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 		const tm_string_t *driver_name = driver_name_catalog[i];
 		if( (driver->control != 0) && (driver_name != 0) &&
 			sc_stringCompare(*driver_name,
-						 sc_stringFromBuffer(name),
+						 TM_STR_RAM(name),
 						 MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return driver;
