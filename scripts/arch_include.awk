@@ -117,10 +117,10 @@ function checkInclude(line, include_path, caller_path, caller_layer, callee_laye
 	caller_path = stripSourceRoot(FILENAME)
 	caller_layer = pathLayer(caller_path)
 	direct_includes++
-	if (caller_layer == "") return
 
 	if (line !~ /^[ \t]*#[ \t]*include[ \t]*[<"][^>"]+[>"]/)
 	{
+		if (caller_layer == "") return
 		printf("%s:%d: unverifiable direct include in %s: %s\n", FILENAME, FNR,
 			caller_layer, trim(line))
 		violations++
@@ -131,6 +131,13 @@ function checkInclude(line, include_path, caller_path, caller_layer, callee_laye
 	sub(/^[ \t]*#[ \t]*include[ \t]*[<"]/, "", include_path)
 	sub(/[>"].*$/, "", include_path)
 	include_path = resolveInclude(caller_path, include_path)
+	if( isConcreteHal(include_path) && isConcreteHalCaller(caller_path) )
+	{
+		printf("%s:%d: forbidden concrete HAL include: %s\n", FILENAME, FNR, include_path)
+		violations++
+		return
+	}
+	if (caller_layer == "") return
 	callee_layer = pathLayer(include_path)
 	if (callee_layer == "") return
 
@@ -184,12 +191,21 @@ function normalizePath(path, parts, stack, count, top, i, part, result)
 	return result
 }
 
+function isConcreteHal(path) { return path ~ /^hal\/(arch|mcu|board)\// }
+
+function isConcreteHalCaller(path)
+{
+	return (path ~ /^system\//) || (path ~ /^tmLibc\//) ||
+		(path ~ /^interfaces\//) || (path ~ /^user\/tasks\//)
+}
+
 function pathLayer(path)
 {
 	if (path ~ /^hal\//) return "hal"
 	if (path ~ /^system\/sysCore\//) return "sysCore"
 	if (path ~ /^system\/sysCall\//) return "sysCall"
 	if (path ~ /^interfaces\//) return "interfaces"
+	if (path ~ /^tmLibc\//) return "tmLibc"
 	if (path ~ /^system\/services\//) return "services"
 	if (path ~ /^user\/tasks\//) return "tasks"
 	return ""

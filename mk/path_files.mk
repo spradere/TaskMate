@@ -78,6 +78,7 @@ SCRIPT_CLOC_SHOW = ${PATH_SCRIPTS}/cloc_show.awk
 SCRIPT_COMPARE_REPLACE = ${PATH_SCRIPTS}/compare_replace.sh
 SCRIPT_GIT_VERSION = ${PATH_SCRIPTS}/git_version.sh
 SCRIPT_HARDWARE_TARGET = ${PATH_SCRIPTS}/hardware_target.awk
+SCRIPT_HAL_FACADE_CHECK = ${PATH_SCRIPTS}/check_removed_hal_facade.sh
 SCRIPT_INITRC_SOURCES = ${PATH_SCRIPTS}/initrc_sources.awk
 SCRIPT_HEADER_ALLOW = ${PATH_SCRIPTS}/header_allow.awk
 SCRIPT_MAKE_HELP = ${PATH_SCRIPTS}/make_help.awk

@@ -16,15 +16,11 @@ mode provides bounded copy and comparison plus compact print functions supportin
 strings, integers, hexadecimal, binary, percent, and one-digit zero padding.
 
 Text descriptors distinguish RAM from AVR program memory. Formatting and logging share fixed static
-state. The public HAL backend reads stored text and buffers USART output until full or newline.
+state. `sysCall` reads stored bytes and transports USART output in bounded chunks.
 
-The diagram and dependency matrix now make `tmLibc` available to tasks and services, with only
-`sysCall` and `interfaces` below it. It is no longer transversal: HAL, sysCore, and `sysCall` must
-not depend on it, and it must not call HAL or sysCore.
-
-The source has not migrated yet. `tmLibc` still includes public HAL support, while sysCore,
-`sysCall`, and top-level startup still consume its string or logging facilities. These are recorded
-migration edges, not the target architecture.
+The dependency matrix makes `tmLibc` available to tasks and services, with only `sysCall` and
+`interfaces` below it. It is no longer transversal: HAL, sysCore, and `sysCall` do not depend on it,
+and it does not call HAL or sysCore. Top-level startup still uses logging before scheduling.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
@@ -34,7 +30,7 @@ migration edges, not the target architecture.
 - Invalid padding leaves through the common formatter cleanup path.
 
 ### Remaining weaknesses
-- Direct libc-to-HAL and lower-layer-to-libc dependencies still violate the target direction.
+- Early startup logging still couples top-level boot sequencing to the library.
 - Formatting uses shared state and a non-atomic lock; one yield does not guarantee ownership.
 - Small buffer capacities can be mishandled, and return length differs from standard `snprintf`.
 - The standard-libc branch is incomplete, while logging lacks level, sink, and timing policy.
