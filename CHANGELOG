@@ -1,3 +1,5 @@
+TaskMate 0.31
+
 	[arch] + [code] remove hal/public
 	[code] upgrade schedler to handle context instead of stack
 	[arch] + [build] portable macro for string storage

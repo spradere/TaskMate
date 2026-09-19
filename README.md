@@ -34,7 +34,7 @@ logic, system behaviour, and hardware dependencies, ensuring both portability an
 
 ## ⬆️ TaskMate Layers - Run Time
 
-![System Layer Diagram](doc/TaskMate_layers_v10.png)
+![System Layer Diagram](doc/TaskMate_layers.png)
 
 
 The diagram shows the architectural direction of TaskMate.
