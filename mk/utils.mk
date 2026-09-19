@@ -31,12 +31,12 @@ clean:
 	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
 	@printf "${COLOUR_RESET}"
 		
-	find "${PATH_BUILD_TARGET}" -type f \( -name "*.o" -o -name "*.d" \) -delete
-	find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "TaskMate*" -delete
-	find "${FILE_AUTOCODE_TARGET}" -type f -delete
-	find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete; \
-	find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete; \
-
+	@-find "${PATH_BUILD_TARGET}" -type f \( -name "*.o" -o -name "*.d" \) -delete
+	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "TaskMate*" -delete
+	@-find "${FILE_AUTOCODE_TARGET}" -type f -delete
+	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete
+	@-find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete
+	
 .PHONY: clean_hard
 clean_hard:
 #help [global] Remove all build files.
