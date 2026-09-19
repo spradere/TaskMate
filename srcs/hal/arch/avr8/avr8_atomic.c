@@ -28,7 +28,4 @@ _Static_assert(sizeof(hal_atomic_state_t) >= sizeof(avr8_atomic_state_t),
 
 hal_atomic_state_t hal_atomicStart(void) { return (hal_atomic_state_t)avr8_atomicStart(); }
 
-void hal_atomicEnd(hal_atomic_state_t state)
-{
-	avr8_atomicEnd((avr8_atomic_state_t)state);
-}
+void hal_atomicEnd(hal_atomic_state_t state) { avr8_atomicEnd((avr8_atomic_state_t)state); }

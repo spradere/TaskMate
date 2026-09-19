@@ -82,17 +82,16 @@ void hal_gpioSignalInit(void)
 }
 
 void hal_gpioSignalWrite(gpio_signal_t signal, bool value)
-{ hal_gpioPinWrite(signal_table[signal].pin, value); }
+{
+	hal_gpioPinWrite(signal_table[signal].pin, value);
+}
 
 bool hal_gpioSignalRead(gpio_signal_t signal) { return hal_gpioPinRead(signal_table[signal].pin); }
 
 void hal_gpioPinWrite(const hal_pin_t pin, bool value)
 {
 	if( value ) { TM_SETBIT(*(mcu_ports[pin.port].port), pin.number); }
-	else
-	{
-		TM_CLEARBIT(*(mcu_ports[pin.port].port), pin.number);
-	}
+	else { TM_CLEARBIT(*(mcu_ports[pin.port].port), pin.number); }
 }
 
 bool hal_gpioPinRead(const hal_pin_t pin)

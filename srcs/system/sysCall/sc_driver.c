@@ -25,8 +25,8 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "system/sysCore/sys_modules.h"
 #include "system/sysCall/sc_string.h"
+#include "system/sysCore/sys_modules.h"
 
 /* -----------------------------------------------
  * Constants
@@ -59,9 +59,9 @@ static hal_rtc_time_t rtc_startup_time;
 
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
 static bool sc_driverControl(const char *name, hal_driver_control_t command);
-static err_codes_t sc_driverError(
-	hal_driver_state_t state,
-	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *));
+static err_codes_t sc_driverError(hal_driver_state_t state,
+								  hal_driver_state_t (*control)(hal_driver_control_t,
+																hal_driver_control_data_t *));
 
 static bool sc_i2cAddressFound(uint8_t address);
 static void sc_i2cDriverSetOff(mod_driver_item_t *driver);
@@ -287,9 +287,9 @@ err_codes_t sc_usartRead(uint8_t *data)
  * Private helpers
  * ---------------------------------------------*/
 
-static err_codes_t sc_driverError(
-	hal_driver_state_t state,
-	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *))
+static err_codes_t sc_driverError(hal_driver_state_t state,
+								  hal_driver_state_t (*control)(hal_driver_control_t,
+																hal_driver_control_data_t *))
 {
 	if( state == DRV_STATE_RUNNING ) { return ERR_NO_ERROR; }
 
@@ -307,9 +307,7 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		const tm_string_t *driver_name = driver_name_catalog[i];
 		if( (driver->control != 0) && (driver_name != 0) &&
-			sc_stringCompare(*driver_name,
-						 TM_STR_RAM(name),
-						 MOD_NAME_SIZE_MAX) == 0 )
+			sc_stringCompare(*driver_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return driver;
 		}

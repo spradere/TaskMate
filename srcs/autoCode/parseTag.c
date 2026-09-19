@@ -347,20 +347,9 @@ static void writeGpioSignals(const parse_tag_t *parse)
 
 static void writeWireGpio(const parse_tag_t *parse)
 {
-	const char *source_path = parse->auto_options->source_path;
 	const char *wire_gpio = parse->auto_options->file_wire_gpio;
-	const size_t source_path_length = strlen(source_path);
 
-	if( (strncmp(wire_gpio, source_path, source_path_length) != 0) ||
-		(wire_gpio[source_path_length] != '/') )
-	{
-		AUTOCODE_MSG_ERROR(
-			"wire gpio file <%s> is outside source path <%s>", wire_gpio, source_path);
-		*parse->file_error = true;
-		return;
-	}
-
-	fprintf(parse->file, "#include \"%s\"\n", wire_gpio + source_path_length + 1U);
+	fprintf(parse->file, "#include \"%s\"\n", wire_gpio);
 	have_tag_count[HAVE_WIRE_GPIO]++;
 }
 
@@ -424,10 +413,7 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 			in_system = true;
 			system_thread_found = true;
 		}
-		else
-		{
-			thread_index = threads_count;
-		}
+		else { thread_index = threads_count; }
 
 		fprintf(parse->file, "\n\tmod = mod_threadGetPointer(%i);\n", thread_index);
 
@@ -459,10 +445,7 @@ static void writeThreadNameCatalog(const parse_tag_t *parse)
 	{
 		int thread_index = threads_count;
 		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
-		else
-		{
-			threads_count++;
-		}
+		else { threads_count++; }
 
 		fprintf(parse->file,
 				"TM_STR_NEW(thread%i_name, \"%s\");\n",
@@ -477,10 +460,7 @@ static void writeThreadNameCatalog(const parse_tag_t *parse)
 	{
 		int thread_index = threads_count;
 		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
-		else
-		{
-			threads_count++;
-		}
+		else { threads_count++; }
 		fprintf(parse->file, "\t[%i] = &thread%i_name,\n", thread_index, thread_index);
 	}
 	fprintf(parse->file, "};\n");
@@ -507,10 +487,7 @@ static void writeDriversAlloc(const parse_tag_t *parse)
 		{
 			fprintf(parse->file, "\t\t.address = MOD_DRIVER_ADDRESS_NONE,\n");
 		}
-		else
-		{
-			fprintf(parse->file, "\t\t.address = 0x%02X,\n", mod->modules[i].address);
-		}
+		else { fprintf(parse->file, "\t\t.address = 0x%02X,\n", mod->modules[i].address); }
 		fprintf(parse->file, "\t\t.control = hal_%sControl\n", mod->modules[i].name);
 		fprintf(parse->file, "\t};\n");
 	}

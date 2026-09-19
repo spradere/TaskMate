@@ -28,7 +28,8 @@
  * String macro redirection
  * ========================================================================== */
 
-#if defined(HAL_STRING) && defined(HAL_STRING_INROM) && defined(HAL_STRING_RAM) && defined(HAL_STRING_ROM)
+#if defined(HAL_STRING) && defined(HAL_STRING_INROM) && defined(HAL_STRING_RAM) && \
+	defined(HAL_STRING_ROM)
 	#warning ">>> Using HAL string implementation"
 	#define TM_STR(string) HAL_STRING(string)
 

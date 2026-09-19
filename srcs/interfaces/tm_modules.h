@@ -32,7 +32,7 @@
  * ---------------------------------------------*/
 
 #ifndef AUTOCODE_BUILD
-// [autoCode_tag] modules_count
+	// [autoCode_tag] modules_count
 #include "modules_count.inc"
 // [/tag]
 #endif

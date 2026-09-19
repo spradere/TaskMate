@@ -21,9 +21,9 @@
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
+#include "system/sysCall/sc_string.h"
 #include "system/sysCore/sys_modules.h"
 #include "system/sysCore/sys_scheduler.h"
-#include "system/sysCall/sc_string.h"
 
 /* -----------------------------------------------
  * Thread name catalog
@@ -195,9 +195,7 @@ static mod_thread_item_t *sc_threadGetPointer(const char *name)
 		mod_thread_item_t *thread = mod_threadGetPointer(i);
 		const tm_string_t *thread_name = thread_name_catalog[i];
 		if( (thread_name != 0) &&
-			sc_stringCompare(*thread_name,
-						 TM_STR_RAM(name),
-						 MOD_NAME_SIZE_MAX) == 0 )
+			sc_stringCompare(*thread_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
 		{
 			return thread;
 		}

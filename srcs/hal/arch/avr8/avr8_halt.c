@@ -15,9 +15,9 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "interfaces/hal_halt.h"
-
 #include <avr/interrupt.h>
+
+#include "interfaces/hal_halt.h"
 
 /* =============================================================================
  * Implementation - Functions

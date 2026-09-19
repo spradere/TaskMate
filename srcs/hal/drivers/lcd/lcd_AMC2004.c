@@ -212,10 +212,7 @@ hal_driver_state_t hal_lcdWriteStart(void)
 
 hal_driver_state_t hal_lcdWriteByte(uint8_t data)
 {
-	if( hal_i2cWrite(data) == DRV_STATE_ERROR )
-	{
-		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
-	}
+	if( hal_i2cWrite(data) == DRV_STATE_ERROR ) { return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY); }
 	return DRV_STATE_RUNNING;
 }
 

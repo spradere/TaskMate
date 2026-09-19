@@ -27,7 +27,4 @@ int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n)
 	return sc_stringCompare(left, right, n);
 }
 
-void tm_strncpy(char *dest, tm_string_t src, uint8_t n)
-{
-	sc_stringCopy(dest, src, n);
-}
+void tm_strncpy(char *dest, tm_string_t src, uint8_t n) { sc_stringCopy(dest, src, n); }

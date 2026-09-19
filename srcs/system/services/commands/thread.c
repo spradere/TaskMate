@@ -74,10 +74,8 @@ bool thread(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; thread_cmd[i].name != 0; i++ )
 	{
-		if( tm_strncmp(
-				TM_STR_RAM(argv[1]),
-				TM_STR_RAM(thread_cmd[i].name),
-				TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(thread_cmd[i].name), TM_STRING_SIZE_MAX) ==
+			0 )
 		{
 			return thread_cmd[i].func(argc, argv);
 		}

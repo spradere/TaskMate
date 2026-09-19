@@ -19,8 +19,8 @@
 
 #include "interfaces/drv_rtc.h"
 #include "interfaces/tm_define.h"
-#include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_driver.h"
+#include "system/sysCall/sc_errors.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 
@@ -80,10 +80,7 @@ bool dateCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; date_cmd[i].name != 0; i++ )
 	{
-		if( tm_strncmp(
-				TM_STR_RAM(argv[1]),
-				TM_STR_RAM(date_cmd[i].name),
-				TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) == 0 )
 		{
 			return date_cmd[i].func(argc, argv);
 		}

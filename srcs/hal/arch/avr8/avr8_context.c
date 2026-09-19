@@ -50,9 +50,7 @@ _Noreturn __attribute__((naked)) void hal_contextStart(const hal_context_t *)
 				 "ld r26, Z+ \n\t"
 				 "ld r27, Z \n\t"
 				 "out __SP_H__, r27 \n\t"
-				 "out __SP_L__, r26 \n\t"
-				 AVR8_CONTEXT_RESTORE
-				 "sei \n\t"
+				 "out __SP_L__, r26 \n\t" AVR8_CONTEXT_RESTORE "sei \n\t"
 				 "reti \n\t");
 	__builtin_unreachable();
 }

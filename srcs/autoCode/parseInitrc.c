@@ -50,10 +50,8 @@ static bool initrcVersionValueMatches(const char *value, const unsigned long exp
 	return parsed == expected;
 }
 
-static bool initrcVersionHeaderParse(const tokenizer_t *tok,
-									 initrc_version_state_t *state,
-									 const char *initrc_name,
-									 const int file_line_number)
+static bool initrcVersionHeaderParse(const tokenizer_t *tok, initrc_version_state_t *state,
+									 const char *initrc_name, const int file_line_number)
 {
 	if( *state == AC_INITRC_VERSION_EXPECT_MAJOR )
 	{
@@ -122,9 +120,7 @@ static bool initrcVersionHeaderParse(const tokenizer_t *tok,
 	return true;
 }
 
-void parseInitrc(modules_database_t *data_base,
-				 const char *initrc_name,
-				 const char *source_path)
+void parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path)
 {
 	// Open list files
 	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
@@ -150,10 +146,7 @@ void parseInitrc(modules_database_t *data_base,
 		const bool line_is_module =
 			initrcVersionHeaderParse(&tok, &version_state, initrc_name, file_line_number);
 		if( version_state == AC_INITRC_VERSION_INVALID ) { break; }
-		if( line_is_module == false )
-		{
-			continue;
-		}
+		if( line_is_module == false ) { continue; }
 
 		// Process arguments
 		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) ) // skip empty line or comment
@@ -275,8 +268,8 @@ void parseInitrc(modules_database_t *data_base,
 			}
 			if( mod_tmp.cnt_set_source < 1 )
 			{
-				AUTOCODE_MSG_ERROR(
-					"Module %s : -source_file or -source_dir option is not set", tok.tokens[0]);
+				AUTOCODE_MSG_ERROR("Module %s : -source_file or -source_dir option is not set",
+								   tok.tokens[0]);
 
 				module_is_valid = false;
 			}

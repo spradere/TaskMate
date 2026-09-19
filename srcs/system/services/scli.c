@@ -25,10 +25,10 @@
 #include "system/services/commands/driver.h"
 #include "system/services/commands/i2c.h"
 #include "system/services/commands/thread.h"
-#include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_driver.h"
-#include "system/sysCall/sc_threads.h"
+#include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"
+#include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 
@@ -177,9 +177,7 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[])
 	for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
 	{
 		if( tm_strncmp(
-				TM_STR_RAM(argv[0]),
-				TM_STR_RAM(scli_commands[i].name),
-				TM_STRING_SIZE_MAX) == 0 )
+				TM_STR_RAM(argv[0]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) == 0 )
 		{
 			scli_commands[i].func(argc, argv);
 			return true;

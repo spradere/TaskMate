@@ -122,10 +122,7 @@ int main(int argc, const char *argv[])
 		   FILE_GET_LINE_SUCCESS )
 	{
 		if( tokenizer(&tok) != 0 ) { continue; }
-		if( tok.count != 0 )
-		{
-			parseInitrc(&data_base, tok.tokens[0], auto_options.source_path);
-		}
+		if( tok.count != 0 ) { parseInitrc(&data_base, tok.tokens[0], auto_options.source_path); }
 	}
 	if( line_result == FILE_GET_LINE_ERROR )
 	{

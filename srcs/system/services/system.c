@@ -22,8 +22,8 @@
 
 #include "interfaces/tm_info.h"
 #include "interfaces/tm_runLevel.h"
-#include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_driver.h"
+#include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_gpio.h"
 #include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_stdio.h"
@@ -122,10 +122,7 @@ static void systemStart(void)
 		else
 		{
 			incomplete_round_count++;
-			if( incomplete_round_count >= SYSTEM_RUN_LEVEL_RR_ROUND_COUNT )
-			{
-				sc_halt();
-			}
+			if( incomplete_round_count >= SYSTEM_RUN_LEVEL_RR_ROUND_COUNT ) { sc_halt(); }
 		}
 	}
 }

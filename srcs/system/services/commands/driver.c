@@ -77,10 +77,8 @@ bool driver(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0; driver_cmd[i].name != 0; i++ )
 	{
-		if( tm_strncmp(
-				TM_STR_RAM(argv[1]),
-				TM_STR_RAM(driver_cmd[i].name),
-				TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(driver_cmd[i].name), TM_STRING_SIZE_MAX) ==
+			0 )
 		{
 			return driver_cmd[i].func(argc, argv);
 		}

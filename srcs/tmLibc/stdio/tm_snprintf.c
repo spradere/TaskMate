@@ -18,8 +18,8 @@
 
 #include "tm_snprintf.h"
 
-#include "system/sysCall/sc_string.h"
 #include "interfaces/tm_define.h"
+#include "system/sysCall/sc_string.h"
 
 /* -----------------------------------------------
  * Private function prototypes

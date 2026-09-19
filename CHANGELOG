@@ -1,3 +1,5 @@
+	[arch] + [code] remove hal/public
+	[code] upgrade schedler to handle context instead of stack
 	[arch] + [build] portable macro for string storage
  	[arch] remove useless init.* in code, makefiles and autoCode
 	[build] select and validate compilation sources through init.rc
@@ -7,7 +9,6 @@
 	[arch] make HAL transports byte-oriented and centralize console policy
 	[arch] enforce string and module metadata ownership across layers
 	[build] standardize Make script variable names
-	[build] add policy-driven changelog maintenance workflow
 	add direct-include architecture checks
 	clarify system-critical header allow-list 
 	replace panic() with the dependency-neutral hal_halt() 

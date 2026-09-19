@@ -19,11 +19,11 @@
 #include <avr/io.h>
 #include <util/twi.h>
 
+#include "at2560_peripheral_constants.h"
 #include "interfaces/drv_i2c.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "at2560_peripheral_constants.h"
 
 /* -----------------------------------------------
  * Constants
