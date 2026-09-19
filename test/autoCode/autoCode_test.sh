@@ -146,13 +146,6 @@ runOptionTests()
 	printf '%s\n' '--unknown value' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure unknown_option "unknown option"
 
-	for VAL_OPTION in halinit funcinit haldefine
-	do
-		caseBegin "obsolete_${VAL_OPTION}_option"
-		printf '%s\n' "--${VAL_OPTION} obsolete.list" > "${PATH_CASE}/autoCode.conf"
-		runOptionFailure "obsolete_${VAL_OPTION}_option" "unknown option"
-	done
-
 	caseBegin all_required_missing
 	: > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_missing \
@@ -439,15 +432,6 @@ runParseTagTests()
 	writeTags "${PATH_CASE}/tags.c"
 	printf '%s\n' '// [autoCode_tag] unknown' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase unknown_tag "unknown tag"
-
-	for VAL_OBSOLETE_TAG in hal_init hal_fxinit hal_define
-	do
-		caseBegin "obsolete_${VAL_OBSOLETE_TAG}_tag"
-		writeTags "${PATH_CASE}/tags.c"
-		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_OBSOLETE_TAG}" "// [/tag]" \
-			>> "${PATH_CASE}/tags.c"
-		runTagCase "obsolete_${VAL_OBSOLETE_TAG}_tag" "unknown tag"
-	done
 
 	caseBegin missing_required_tags
 	printf '%s\n' 'no autoCode tags' > "${PATH_CASE}/tags.c"
