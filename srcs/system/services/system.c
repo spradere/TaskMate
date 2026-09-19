@@ -50,7 +50,7 @@ static bool systemRunLevelIsReady(uint8_t run_level);
 
 void system(void)
 {
-	sc_gpio_signalsInit();
+	sc_gpio_signalInit();
 	sc_threadSetInitialized();
 	systemStart();
 

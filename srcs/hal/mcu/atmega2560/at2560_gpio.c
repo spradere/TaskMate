@@ -73,7 +73,7 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 	if( pin->pull == GPIO_PIN_PULL_UP ) { TM_SETBIT(*(mcu_ports[pin->port].port), pin->number); }
 }
 
-void hal_gpioSignalsInit(void)
+void hal_gpioSignalInit(void)
 {
 	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
 	{
