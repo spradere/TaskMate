@@ -1,4 +1,0 @@
-interface:
-  display_name: "TaskMate Changelog"
-  short_description: "Quickly propose and apply TaskMate changelog entries"
-  default_prompt: "Use $taskmate-changelog to review recent commits and propose concise entries."
