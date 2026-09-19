@@ -347,9 +347,20 @@ static void writeGpioSignals(const parse_tag_t *parse)
 
 static void writeWireGpio(const parse_tag_t *parse)
 {
+	const char *source_path = parse->auto_options->source_path;
 	const char *wire_gpio = parse->auto_options->file_wire_gpio;
-	
-	fprintf(parse->file, "#include \"%s\"\n", wire_gpio);
+	const size_t source_path_length = strlen(source_path);
+
+	if( (strncmp(wire_gpio, source_path, source_path_length) != 0) ||
+		(wire_gpio[source_path_length] != '/') )
+	{
+		AUTOCODE_MSG_ERROR(
+			"wire gpio file <%s> is outside source path <%s>", wire_gpio, source_path);
+		*parse->file_error = true;
+		return;
+	}
+
+	fprintf(parse->file, "#include \"%s\"\n", wire_gpio + source_path_length + 1U);
 	have_tag_count[HAVE_WIRE_GPIO]++;
 }
 

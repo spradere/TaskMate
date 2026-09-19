@@ -150,6 +150,8 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${SCRIPT_CHECK_PATH_FILE} -f "${FILE_AUTOCODE_STAMP}"
-	find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
+	@if [ -f "${FILE_AUTOCODE_STAMP}" ]; then \
+		find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
+	fi
 	@${MAKE} _autocode
 	@ls -t ${FILE_AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat

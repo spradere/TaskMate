@@ -30,7 +30,11 @@ CONF_SYSTEM_HEADER_ALLOW = ${PATH_CONF}/system_header_allow.conf
 
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
+PATH_BUILD_AUTOCODE_TEST = ${PATH_BUILDS}/autoCode_test
+FILE_AUTOCODE_TEST_SANITIZE_TARGET = ${PATH_BUILDS}/autoCode_sanitize
+
 PATH_BUILD_TEST = ${PATH_TEST}/build
+PATH_BUILD_BUILD_TEST = ${PATH_BUILDS}/build_test
 
 # USB
 PATH_USBKEY = /media/usbkey
