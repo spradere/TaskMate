@@ -74,7 +74,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%sautoCode, related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
-	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${PATH_LOGS}"
+	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_LOGS}"
 	@if [ -n "${FILE_AUTOCODE_LOG}" ] && [ -d "${PATH_LOGS}" ]; then \
 		find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete; \
 	fi
@@ -150,7 +150,7 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 #help [global] Run autoCode alone.
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${FILE_AUTOCODE_STAMP}"
+	@${SCRIPT_CHECK_PATH_FILE} -f "${FILE_AUTOCODE_STAMP}"
 	@if [ -n "${FILE_AUTOCODE_STAMP}" ] && [ -f "${FILE_AUTOCODE_STAMP}" ]; then \
 		find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
 	fi

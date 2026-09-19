@@ -158,7 +158,7 @@ runScriptTests()
 	stageBegin scripts
 	FILE_PROGRAMS="${PATH_PROJECT}/scripts/check_programs.sh"
 	FILE_COMPARE="${PATH_PROJECT}/scripts/compare_replace.sh"
-	FILE_DELETE="${PATH_PROJECT}/scripts/check_build_delete_path.sh"
+	FILE_PATH_CHECK="${PATH_PROJECT}/scripts/check_path_file.sh"
 	FILE_VERSION="${PATH_PROJECT}/scripts/git_version.sh"
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
 
@@ -205,15 +205,15 @@ runScriptTests()
 	assertFileContains "${PATH_STAGE_WORK}/manifest" "gamma"
 	[ ! -e "${PATH_STAGE_WORK}/manifest.tmp" ] || fail "compare_replace left a temporary file"
 
-	expectFailure delete_usage "Usage:" "${FILE_DELETE}"
-	expectFailure delete_empty "Unsafe empty build deletion path rejected" "${FILE_DELETE}" ""
-	expectFailure delete_outside "Unsafe build deletion path rejected" \
-		"${FILE_DELETE}" "${PATH_PROJECT}/Makefile"
-	expectFailure delete_build_root "Unsafe build deletion path rejected" \
-		"${FILE_DELETE}" "${PATH_PROJECT}/build"
-	expectSuccess delete_build_root_allowed "${FILE_DELETE}" --allow-build-root \
-		"${PATH_PROJECT}/build"
-	expectSuccess delete_nested "${FILE_DELETE}" "${PATH_STAGE_WORK}/safe"
+	expectFailure path_usage "Usage:" "${FILE_PATH_CHECK}"
+	expectFailure path_empty "Empty Make path variable rejected" \
+		"${FILE_PATH_CHECK}" -d ""
+	expectFailure path_outside "Path outside current directory rejected" \
+		"${FILE_PATH_CHECK}" -f "${PATH_PROJECT}/../outside"
+	expectFailure path_wrong_type "Invalid -f path rejected" \
+		"${FILE_PATH_CHECK}" -f "${PATH_PROJECT}/build"
+	expectSuccess path_directory "${FILE_PATH_CHECK}" -d "${PATH_PROJECT}/build"
+	expectSuccess path_file "${FILE_PATH_CHECK}" -f "${PATH_PROJECT}/Makefile"
 
 	PATH_GIT_CASE="${PATH_STAGE_WORK}/git_version"
 	mkdir -p "${PATH_GIT_CASE}/not_a_repo" "${PATH_GIT_CASE}/repository"

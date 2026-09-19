@@ -15,12 +15,13 @@
 .PHONY: clean
 clean:
 #help [global] Remove build files.
-	@${SCRIPT_CHECK_BUILD_DELETE_PATH} \
+	@${SCRIPT_CHECK_PATH_FILE} -d \
 		"${PATH_BUILD_TARGET}" \
-		"${FILE_AUTOCODE_TARGET}" \
-		"${FILE_TM_STRING_TEST_TARGET}" \
 		"${PATH_BUILD_AUTOCODE_TEST}" \
 		"${PATH_BUILD_BUILD_TEST}"
+	@${SCRIPT_CHECK_PATH_FILE} -f \
+		"${FILE_AUTOCODE_TARGET}" \
+		"${FILE_TM_STRING_TEST_TARGET}"
 	@printf "\n%sRemove files :%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
@@ -68,8 +69,7 @@ clean:
 .PHONY: clean_hard
 clean_hard:
 #help [global] Remove all build files.
-	@${SCRIPT_CHECK_BUILD_DELETE_PATH} "${PATH_BUILD_TARGET}"
-	@${SCRIPT_CHECK_BUILD_DELETE_PATH} --allow-build-root "${PATH_BUILDS}"
+	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_BUILD_TARGET}" "${PATH_BUILDS}"
 	@printf "\n%sRemove all files : ${PATH_BUILD_TARGET}/* %s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 		
