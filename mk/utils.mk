@@ -17,11 +17,10 @@ clean:
 #help [global] Remove build files.
 	@${SCRIPT_CHECK_PATH_FILE} -d \
 		"${PATH_BUILD_TARGET}" \
-		"${PATH_BUILD_AUTOCODE_TEST}" \
-		"${PATH_BUILD_BUILD_TEST}"
+		"${PATH_BUILDS}"
 	@${SCRIPT_CHECK_PATH_FILE} -f \
-		"${FILE_AUTOCODE_TARGET}" \
-		"${FILE_TM_STRING_TEST_TARGET}"
+		"${FILE_AUTOCODE_TARGET}"
+		
 	@printf "\n%sRemove files :%s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 	@printf "${COLOUR_CLEAN_SOFT}"
@@ -30,58 +29,26 @@ clean:
 	@printf "${PATH_BUILD_TARGET}/TaskMate*\n"
 	@printf "${FILE_AUTOCODE_TARGET}\n"
 	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
-	@printf "${FILE_TM_STRING_TEST_TARGET}\n"
-	@printf "${PATH_BUILD_AUTOCODE_TEST}\n"
-	@printf "${PATH_BUILD_BUILD_TEST}\n"
 	@printf "${COLOUR_RESET}"
 		
-	@if [ -n "${PATH_BUILD_TARGET}" ] && [ -d "${PATH_BUILD_TARGET}" ]; then \
-		find "${PATH_BUILD_TARGET}" -type f \( -name "*.o" -o -name "*.d" \) -delete; \
-	fi
-	
-	@if [ -n "${PATH_BUILD_TARGET}" ] && [ -d "${PATH_BUILD_TARGET}" ]; then \
-		find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "TaskMate*" -delete; \
-	fi
-	
-	@if [ -n "${FILE_AUTOCODE_TARGET}" ] && [ -f "${FILE_AUTOCODE_TARGET}" ]; then \
-		find "${FILE_AUTOCODE_TARGET}" -type f -delete; \
-	fi
-	
-	@if [ -n "${PATH_BUILD_TARGET}" ] && [ -d "${PATH_BUILD_TARGET}" ]; then \
-		find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete; \
-	fi
-	@if [ -n "${PATH_BUILDS}" ] && [ -d "${PATH_BUILDS}" ]; then \
-		find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete; \
-	fi
+	find "${PATH_BUILD_TARGET}" -type f \( -name "*.o" -o -name "*.d" \) -delete
+	find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "TaskMate*" -delete
+	find "${FILE_AUTOCODE_TARGET}" -type f -delete
+	find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete; \
+	find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete; \
 
-	@if [ -n "${FILE_TM_STRING_TEST_TARGET}" ] && [ -f "${FILE_TM_STRING_TEST_TARGET}" ]; then \
-		find "${FILE_TM_STRING_TEST_TARGET}" -type f -delete; \
-	fi
-	
-	@if [ -n "${PATH_BUILD_AUTOCODE_TEST}" ] && [ -d "${PATH_BUILD_AUTOCODE_TEST}" ]; then \
-		find "${PATH_BUILD_AUTOCODE_TEST}" -mindepth 1 -depth -delete; \
-	fi
-
-	@if [ -n "${PATH_BUILD_BUILD_TEST}" ] && [ -d "${PATH_BUILD_BUILD_TEST}" ]; then \
-		find "${PATH_BUILD_BUILD_TEST}" -mindepth 1 -depth -delete; \
-	fi
-	
 .PHONY: clean_hard
 clean_hard:
 #help [global] Remove all build files.
 	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_BUILD_TARGET}" "${PATH_BUILDS}"
-	@printf "\n%sRemove all files : ${PATH_BUILD_TARGET}/* %s\n\n" \
+	@printf "\n%sRemove all files: ${PATH_BUILDS}/*\nRemove all files and subdir: ${PATH_BUILD_TARGET}/* %s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
 		
 	@printf "${COLOUR_CLEAN_SOFT}"
-	@if [ -n "${PATH_BUILD_TARGET}" ] && [ -d "${PATH_BUILD_TARGET}" ]; then \
-		find "${PATH_BUILD_TARGET}" -mindepth 1 -depth -delete; \
-	fi
-		
-	@if [ -n "${PATH_BUILDS}" ] && [ -d "${PATH_BUILDS}" ]; then \
-		find "${PATH_BUILDS}" -maxdepth 1 -type f -delete; \
-	fi
+	find "${PATH_BUILDS}" -maxdepth 1 -type f -delete
+	find "${PATH_BUILD_TARGET}" -mindepth 1 -depth -delete
 	@printf "${COLOUR_RESET}"
+	
 .PHONY: doc
 doc:
 #help [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile

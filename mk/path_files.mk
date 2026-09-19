@@ -30,15 +30,7 @@ CONF_SYSTEM_HEADER_ALLOW = ${PATH_CONF}/system_header_allow.conf
 
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
-PATH_BUILD_AUTOCODE_TEST = ${PATH_BUILDS}/autoCode_test
-
-
 PATH_BUILD_TEST = ${PATH_TEST}/build
-PATH_BUILD_BUILD_TEST = ${PATH_BUILDS}/build_test
-
-PATH_TM_STRING_TEST = ${PATH_TEST}/tm_string
-FILE_TM_STRING_TEST = ${PATH_TM_STRING_TEST}/tm_string_test.c
-FILE_TM_STRING_TEST_TARGET = ${PATH_BUILDS}/tm_string_test
 
 # USB
 PATH_USBKEY = /media/usbkey

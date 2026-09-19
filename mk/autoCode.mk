@@ -75,9 +75,8 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_LOGS}"
-	@if [ -n "${FILE_AUTOCODE_LOG}" ] && [ -d "${PATH_LOGS}" ]; then \
-		find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete; \
-	fi
+	find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete
+
 .endif
 
 	# Write autoCode options
@@ -151,8 +150,6 @@ autoCode_alone: ${FILE_AUTOCODE_TARGET}
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${SCRIPT_CHECK_PATH_FILE} -f "${FILE_AUTOCODE_STAMP}"
-	@if [ -n "${FILE_AUTOCODE_STAMP}" ] && [ -f "${FILE_AUTOCODE_STAMP}" ]; then \
-		find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
-	fi
+	find "${FILE_AUTOCODE_STAMP}" -type f -delete; \
 	@${MAKE} _autocode
 	@ls -t ${FILE_AUTOCODE_LOG}* 2>/dev/null | head -1 | xargs cat
