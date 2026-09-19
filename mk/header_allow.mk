@@ -33,12 +33,6 @@ CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
 CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_gpio.c = \
-	-DSC_GPIO_SYSTEM_ALLOWED
-
-CFLAGS_${PATH_SRCS}/system/services/system.c = \
-	-DSC_GPIO_SYSTEM_ALLOWED
-
 # Add string macro acces
 PATHS_TM_STRING_ALLOWED= \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCall/*.c} \

@@ -27,6 +27,7 @@
  * Public API
  * ========================================================================== */
 
+void sc_gpio_signalsInit(void);
 void sc_gpio_signalSet(gpio_signal_t signal, bool val);
 bool sc_gpio_signalGet(gpio_signal_t signal);
 void sc_gpio_signalToggle(gpio_signal_t signal);
