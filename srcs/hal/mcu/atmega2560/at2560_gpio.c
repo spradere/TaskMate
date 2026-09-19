@@ -22,6 +22,7 @@
 #include <stdbool.h>
 
 #include "hal/public/hal_architecture_types.h"
+#include "interfaces/gpio_signals.h"
 #include "interfaces/tm_macros.h"
 
 /* -----------------------------------------------
@@ -48,6 +49,12 @@ static const hal_port_t mcu_ports[PORT_COUNT] = {
 
 };
 
+static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
+
+// [autoCode_tag] wire_gpio
+#include "wire_gpio.inc"
+// [/tag]
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -66,10 +73,27 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 	if( pin->pull == GPIO_PIN_PULL_UP ) { TM_SETBIT(*(mcu_ports[pin->port].port), pin->number); }
 }
 
+void hal_gpioSignalsInit(void)
+{
+	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
+	{
+		targetWireSignal((gpio_signal_t)i);
+		hal_gpioPinInit(&signal_table[i].pin);
+	}
+}
+
+void hal_gpioSignalWrite(gpio_signal_t signal, bool value)
+{ hal_gpioPinWrite(signal_table[signal].pin, value); }
+
+bool hal_gpioSignalRead(gpio_signal_t signal) { return hal_gpioPinRead(signal_table[signal].pin); }
+
 void hal_gpioPinWrite(const hal_pin_t pin, bool value)
 {
 	if( value ) { TM_SETBIT(*(mcu_ports[pin.port].port), pin.number); }
-	else { TM_CLEARBIT(*(mcu_ports[pin.port].port), pin.number); }
+	else
+	{
+		TM_CLEARBIT(*(mcu_ports[pin.port].port), pin.number);
+	}
 }
 
 bool hal_gpioPinRead(const hal_pin_t pin)

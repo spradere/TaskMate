@@ -9,11 +9,13 @@ Commit `b201809` completed the HAL/GPIO refactor; ATmega2560 bit operations then
 helpers.
 
 ## Current implementation
-The selected target's `signals.gpio` generates the logical signal enum. Before scheduling starts,
-system startup asks target configuration to populate a static signal table and initializes each pin.
+The selected target's `signals.gpio` generates the logical signal enum. autoCode also includes the
+selected target wiring in the MCU GPIO implementation. Before scheduling starts, system startup
+asks the HAL to populate its static signal table and initialize each pin.
 
 Tasks use set, get, and toggle syscalls. These delegate signal resolution to sysCore,
-which calls public HAL GPIO. The current MCU supports input, push-pull output,
+which calls public HAL GPIO; the selected MCU owns the logical-to-physical table. The current MCU
+supports input, push-pull output,
 pull-up, read, and write operations for the configured ports.
 
 ## Well-built code and implementation weaknesses

@@ -18,29 +18,12 @@
 #include "sys_gpio.h"
 
 #include "hal/public/hal_gpio.h"
-#include "interfaces/hal_targetWireSignal.h"
-
-/* -----------------------------------------------
- * Private variables
- * ---------------------------------------------*/
-
-static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void gpio_signalsInit(void)
-{
-	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
-	{
-		hal_targetWireSignal(signal_table, i);
-		hal_gpioPinInit(&signal_table[i].pin);
-	}
-}
+void gpio_signalsInit(void) { hal_gpioSignalsInit(); }
 
-void gpio_signalSet(gpio_signal_t signal, bool val)
-{
-	hal_gpioPinWrite(signal_table[signal].pin, val);
-}
-bool gpio_signalGet(gpio_signal_t signal) { return hal_gpioPinRead(signal_table[signal].pin); }
+void gpio_signalSet(gpio_signal_t signal, bool val) { hal_gpioSignalWrite(signal, val); }
+bool gpio_signalGet(gpio_signal_t signal) { return hal_gpioSignalRead(signal); }

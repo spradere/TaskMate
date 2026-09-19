@@ -15,39 +15,37 @@
  * Includes
  * ========================================================================== */
 
-#include "interfaces/hal_targetWireSignal.h"
-#include "hal/public/hal_gpio.h"
 #include "interfaces/gpio_signals.h"
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_targetWireSignal(hal_signal_t *table, gpio_signal_t signal)
+static void targetWireSignal(gpio_signal_t signal)
 {
 	// Set default values for outputs
-	table[signal].pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
-	table[signal].pin.pull = GPIO_PIN_PULL_NONE;
-	table[signal].active_high = true;
+	signal_table[signal].pin.mode = GPIO_PIN_MODE_OUTPUT_PP;
+	signal_table[signal].pin.pull = GPIO_PIN_PULL_NONE;
+	signal_table[signal].active_high = true;
 
 	if( signal == GPIO_SIGNAL_INBOARD_LED )
 	{
-		table[signal].pin.port = PORT_B;
-		table[signal].pin.number = PB7;
+		signal_table[signal].pin.port = PORT_B;
+		signal_table[signal].pin.number = PB7;
 		return;
 	}
 
 	if( signal == GPIO_SIGNAL_TASK1_LED )
 	{
-		table[signal].pin.port = PORT_A;
-		table[signal].pin.number = PA0;
+		signal_table[signal].pin.port = PORT_A;
+		signal_table[signal].pin.number = PA0;
 		return;
 	}
 
 	if( signal == GPIO_SIGNAL_TASK2_LED )
 	{
-		table[signal].pin.port = PORT_A;
-		table[signal].pin.number = PA1;
+		signal_table[signal].pin.port = PORT_A;
+		signal_table[signal].pin.number = PA1;
 		return;
 	}
 }

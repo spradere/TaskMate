@@ -117,7 +117,7 @@ runConfigurationTests()
 
 	expectSuccess default_extra_sources bmake -C "${PATH_PROJECT}" -V FILES_EXTRA_SRC
 	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
-	logContains default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
+	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
 	logExcludes default_extra_sources "srcs/hal/arch/avr8/avr8_init.c"
 	logExcludes default_extra_sources "srcs/hal/mcu/atmega2560/at2560_init.c"
 	logExcludes default_extra_sources "srcs/hal/board/arduinoMega/mega_init.c"

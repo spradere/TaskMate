@@ -22,6 +22,7 @@
 #include <stdbool.h>
 
 #include "hal/public/hal_ports_pins.h"
+#include "interfaces/gpio_signals.h"
 
 /* ============================================================================
  * Public definitions
@@ -40,5 +41,8 @@ typedef struct
 void hal_gpioPinInit(const hal_pin_t *pin);
 void hal_gpioPinWrite(const hal_pin_t pin, bool value);
 bool hal_gpioPinRead(const hal_pin_t pin);
+void hal_gpioSignalsInit(void);
+void hal_gpioSignalWrite(gpio_signal_t signal, bool value);
+bool hal_gpioSignalRead(gpio_signal_t signal);
 
 #endif // ATMEGA2560_AT2560_GPIO_H

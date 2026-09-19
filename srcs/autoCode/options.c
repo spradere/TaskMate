@@ -33,6 +33,7 @@ static void setErrorsFile(const char *value, options_list_t *opt);
 static void setInitrcFile(const char *value, options_list_t *opt);
 static void setParseTagFile(const char *value, options_list_t *opt);
 static void setGpioSignalsFile(const char *value, options_list_t *opt);
+static void setWireGpioFile(const char *value, options_list_t *opt);
 static void setGeneratedPath(const char *value, options_list_t *opt);
 static void setSourcePath(const char *value, options_list_t *opt);
 static void setErrorCount(const char *value, options_list_t *opt);
@@ -41,12 +42,13 @@ static void setErrorCount(const char *value, options_list_t *opt);
  * Option dispatch table
  * ---------------------------------------------*/
 
-#define HAVE_OPTIONS(X)                                 \
-	X(HAVE_ERROR_COUNT, "--error_count", setErrorCount) \
-	X(HAVE_ERRORS, "--errors", setErrorsFile)           \
-	X(HAVE_INITRC, "--initrc", setInitrcFile)           \
-	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)     \
-	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile) \
+#define HAVE_OPTIONS(X)                                          \
+	X(HAVE_ERROR_COUNT, "--error_count", setErrorCount)          \
+	X(HAVE_ERRORS, "--errors", setErrorsFile)                    \
+	X(HAVE_INITRC, "--initrc", setInitrcFile)                    \
+	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)              \
+	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile)   \
+	X(HAVE_WIRE_GPIO, "--wire_gpio", setWireGpioFile)            \
 	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath) \
 	X(HAVE_SOURCE_PATH, "--source_path", setSourcePath)
 
@@ -150,6 +152,12 @@ static void setGpioSignalsFile(const char *value, options_list_t *opt)
 {
 	setFileName(opt->file_gpio_signals, sizeof(opt->file_gpio_signals), value);
 	have_options_count[HAVE_GPIO_SIGNALS]++;
+}
+
+static void setWireGpioFile(const char *value, options_list_t *opt)
+{
+	setFileName(opt->file_wire_gpio, sizeof(opt->file_wire_gpio), value);
+	have_options_count[HAVE_WIRE_GPIO]++;
 }
 
 static void setSourcePath(const char *value, options_list_t *opt)

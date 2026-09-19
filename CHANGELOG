@@ -1,4 +1,5 @@
-	[arch] remove useless init.* in code, makefiles and autoCode
+	[arch] + [build] portable macro for string storage
+ 	[arch] remove useless init.* in code, makefiles and autoCode
 	[build] select and validate compilation sources through init.rc
 	[test] add host coverage for string and formatting boundaries
 	[build] generate autoCode fragments as build-only includes

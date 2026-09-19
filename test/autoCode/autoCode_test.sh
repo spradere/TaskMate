@@ -43,7 +43,7 @@ writeTags()
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
 	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog modules_count modules_list gpio_signals
+		error_enum error_catalog modules_count modules_list gpio_signals wire_gpio
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -58,6 +58,7 @@ writeConfig()
 		"--initrc ${PATH_CASE}/initrc.list" \
 		"--parsetag ${PATH_CASE}/tags.list" \
 		"--gpio_signals ${PATH_CASE}/signals.gpio" \
+		"--wire_gpio ${PATH_CASE}/sources/targetWireSignal.c" \
 		"--generated_path ${PATH_CASE}/generated" \
 		"--source_path ${PATH_CASE}/sources" > "${PATH_CASE}/autoCode.conf"
 }
@@ -69,6 +70,8 @@ caseBegin()
 	mkdir -p "${PATH_CASE}/generated" || fail "cannot create ${PATH_CASE}/generated"
 	mkdir -p "${PATH_CASE}/sources/commands" || fail "cannot create source fixtures"
 	printf "%s\n" "void fixture(void) {}" > "${PATH_CASE}/sources/system.c"
+	printf "%s\n" "static void targetWireSignal(void) {}" \
+		> "${PATH_CASE}/sources/targetWireSignal.c"
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
 	printf '%s\n' "${PATH_CASE}/errors.err" > "${PATH_CASE}/errors.list"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
@@ -155,6 +158,7 @@ runOptionTests()
 	runOptionFailure all_required_missing \
 		"required autoCode option --error_count is not set"
 	logContains all_required_missing "required autoCode option --gpio_signals is not set"
+	logContains all_required_missing "required autoCode option --wire_gpio is not set"
 	logContains all_required_missing "required autoCode option --source_path is not set"
 
 	caseBegin all_required_duplicate
@@ -163,6 +167,7 @@ runOptionTests()
 	runOptionFailure all_required_duplicate \
 		"required autoCode option --error_count is multiple set"
 	logContains all_required_duplicate "required autoCode option --gpio_signals is multiple set"
+	logContains all_required_duplicate "required autoCode option --wire_gpio is multiple set"
 	logContains all_required_duplicate "required autoCode option --source_path is multiple set"
 
 	for VAL_VALUE in -1 invalid 1x 4294967296
@@ -453,6 +458,12 @@ runParseTagTests()
 	printf '%s\n' '// [autoCode_tag] error_enum' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase duplicate_tag "required autoCode tag error_enum is multiple set"
 
+	caseBegin wire_gpio_outside_source
+	sed "s|--wire_gpio .*|--wire_gpio ${PATH_CASE}/targetWireSignal.c|" \
+		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
+	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
+	runTagCase wire_gpio_outside_source "is outside source path"
+
 	for VAL_INPUT in signals.gpio
 	do
 		VAL_NAME=$(printf '%s' "${VAL_INPUT}" | tr '.' '_')
@@ -473,7 +484,7 @@ runParseTagTests()
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
 	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog modules_count modules_list gpio_signals
+		error_enum error_catalog modules_count modules_list gpio_signals wire_gpio
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
@@ -495,8 +506,12 @@ runCompareReplaceTests()
 	stageBegin compare_replace
 	caseBegin stable_generation
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	if ! grep -F -q '#include "targetWireSignal.c"' \
+		"${PATH_CASE}/generated/wire_gpio.inc"; then
+		fail "wire_gpio generated include is missing"
+	fi
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 10 unchanged"
+	logContains unchanged_generation "0 updated, 11 unchanged"
 
 	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
 		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
@@ -512,7 +527,7 @@ runCompareReplaceTests()
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
 	for VAL_TAG in drivers_alloc thread_name_catalog driver_name_catalog error_enum error_catalog \
-		modules_count modules_list
+		modules_count modules_list wire_gpio
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"

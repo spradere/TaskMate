@@ -11,8 +11,9 @@ Commit `db59169` made the scheduler admit only threads at or below the active ru
 
 ## Current implementation
 The module database contains generated driver records and four fixed thread control blocks, stacks,
-saved contexts, run levels, status bits, and canaries. GPIO and software counters also remain
-owned by sysCore.
+saved contexts, run levels, status bits, and canaries. sysCore retains the logical GPIO entry points,
+while the selected MCU owns the logical-to-physical table. Software counters remain owned by
+sysCore.
 
 The scheduler starts at the core run level with the system thread. Its 1 ms callback saves the AVR
 context and selects a thread with a non-zero level no greater than the active level. The system

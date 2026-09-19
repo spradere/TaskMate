@@ -32,6 +32,7 @@ typedef struct
 	char file_initrc_list[AC_BUFFER_SIZE];
 	char file_parsetag_list[AC_BUFFER_SIZE];
 	char file_gpio_signals[AC_BUFFER_SIZE];
+	char file_wire_gpio[AC_BUFFER_SIZE];
 	char generated_path[AC_BUFFER_SIZE];
 	char source_path[AC_BUFFER_SIZE];
 
