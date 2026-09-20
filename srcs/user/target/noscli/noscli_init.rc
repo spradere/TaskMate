@@ -7,7 +7,7 @@ timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerSc
 timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
 usart -type driver -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
-system -type service -run core -stack 256 -source_file system/services/system.c
+system -type service -run core -stack 234 -source_file system/services/system.c
 
 # Drivers
 i2c -type driver -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
@@ -18,5 +18,5 @@ rtc -type driver -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS042.c
 # Services
 
 # Tasks
-task1 -type user -run user -stack 256 -source_file user/tasks/task1.c
-task2 -type user -run user -stack 256 -source_file user/tasks/task2.c
+task1 -type user -run user -stack 50 -source_file user/tasks/task1.c
+task2 -type user -run user -stack 50 -source_file user/tasks/task2.c
