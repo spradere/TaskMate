@@ -166,6 +166,13 @@ runConfigurationTests()
 		_autocode_dependency_check
 	assertFileContains "${PATH_MANIFESTS}/gpio_signals.deps" \
 		"srcs/user/target/test1/signals.gpio"
+	expectFailure wire_gpio_outside "Path outside current directory rejected" \
+		bmake -C "${PATH_PROJECT}" \
+		FILE_WIREGPIO="/etc/passwd" \
+		_autocode_dependency_check
+	expectFailure wire_gpio_wrong_type "Invalid -f path rejected" \
+		bmake -C "${PATH_PROJECT}" FILE_WIREGPIO="${PATH_PROJECT}/build" \
+		_autocode_dependency_check
 
 	PATH_DEPENDENCIES="${PATH_STAGE_WORK}/dependencies"
 	mkdir -p "${PATH_DEPENDENCIES}"

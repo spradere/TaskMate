@@ -115,6 +115,7 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ER
 # Dependency generation
 .PHONY: _autocode_dependency_check
 _autocode_dependency_check:
+	@${SCRIPT_CHECK_PATH_FILE} -f "${FILE_WIREGPIO}"
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_INITRC_DEPS}" "${FILES_INITRC}"
 	@${SCRIPT_COMPARE_REPLACE} \

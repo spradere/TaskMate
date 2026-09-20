@@ -278,24 +278,24 @@ Cette étape est locale au MCU et ne doit pas attendre la décision sur les pile
 
 ## Critères d'acceptation
 
-La migration est terminée uniquement si toutes les conditions suivantes sont satisfaites :
+Vérification effectuée le 20 septembre 2026 à la révision `25747c4` : la migration n'est pas encore
+acceptée.
 
-- `srcs/hal/public/` n'existe plus et aucun include actif ne le référence ;
-- le système ne voit que des contrats neutres pour les atomiques, le contexte et le GPIO ;
-- `interfaces/` n'inclut aucun fichier HAL et ne contient ni registre, ni nom AVR, ni sélection
-  `ARCH_*`/`MCU_*` ;
-- les types de ports, broches et registres restent dans le backend MCU et la configuration cible ;
-- `FILES_COMPILE_SRC` est composé à partir de fichiers explicitement demandés ;
-- chaque cible annoncée dans `hardware-targets.conf` possède un `target.mk` et passe le contrôle ;
-- une capacité absente ou fournie deux fois échoue avant l'édition de liens ;
-- `bmake test_build_system`, `bmake test_autoCode` et `bmake test_autoCode_sanitize` passent ;
-- deux builds successifs réutilisent les dépendances sans erreur de fin de ligne ;
-- un build propre et un build incrémental produisent le même graphe de sources ;
-- flash, RAM statique et piles restent dans les seuils fixés avant migration ;
-- le désassemblage confirme l'absence de prologue, d'épilogue ou de fenêtre d'interruption dans
-  le démarrage de contexte ;
-- les essais Arduino Mega confirment boot, préemption, yield, atomiques imbriquées, GPIO, USART,
-  timers, LCD/RTC et halt terminal.
+| Critère | État | Preuve ou écart constaté |
+| --- | --- | --- |
+| Suppression de `srcs/hal/public/` et de ses includes actifs | Satisfait | Le répertoire est absent et la garde `check_removed_hal_facade.sh` passe. |
+| Contrats système neutres pour atomiques, contexte et GPIO | Satisfait | Les consommateurs système utilisent uniquement les trois contrats sous `interfaces/`. |
+| Absence de dépendance HAL, registre, nom AVR et sélection matérielle dans `interfaces/` | Satisfait | Les recherches sur les includes HAL, les symboles AVR et `ARCH_*`/`MCU_*` ne trouvent aucune dépendance active. |
+| Confinement des ports, broches et registres | Satisfait | Les types physiques sont dans le backend ATmega2560 et le câblage dans la cible `test1`. |
+| Composition explicite de `FILES_COMPILE_SRC` | Non satisfait | `sources.mk` parcourt encore `sysCore`, `sysCall`, `PATHS_EXTRA_SRC` et les répertoires de `-source_dir`; `target.mk` ajoute toujours AVR8 et `tmLibc` par répertoire. |
+| Cohérence de `hardware-targets.conf` et des `target.mk` | Satisfait | L'unique cible annoncée, `test1`, possède son `target.mk` et passe le contrôle. |
+| Rejet précoce d'une capacité absente ou fournie deux fois | Non satisfait | Aucun manifeste de capacités ni test de zéro/deux implémentations n'est présent avant l'édition de liens. |
+| Trois corpus de tests demandés | Non satisfait | `test_build_system` passe 73 cas; les deux corpus autoCode échouent sur `wire_gpio_outside_source`, accepté à tort. |
+| Réutilisation des dépendances avec fins de ligne CRLF | Satisfait | Les deux invocations du cas `dependencies_crlf` passent et deux builds réels successifs relisent `.deps.d`. |
+| Graphe de sources identique en build propre et incrémental | Satisfait | Les deux évaluations donnent l'empreinte SHA-256 `f07cbccb3122a863530d61d906caf626696e4dcfc7044d447d05397972908855`. |
+| Seuils flash, RAM statique et piles | Non satisfait | Le build produit 15 590 octets de flash et 1 827 octets de RAM statique : la RAM dépasse de 2 octets la référence de 1 825, et la profondeur de pile n'est pas mesurée. |
+| Démarrage de contexte vérifié au désassemblage | Satisfait | `hal_contextStart` n'a ni prologue ni épilogue; la restauration se termine par `sei` puis `reti`, sans instruction intermédiaire. |
+| Essais sur Arduino Mega | Non vérifié | Aucun essai matériel n'a été exécuté pendant cette vérification. |
 
 ## Risques et ordre de livraison
 

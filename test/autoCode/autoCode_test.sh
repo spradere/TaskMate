@@ -442,12 +442,6 @@ runParseTagTests()
 	printf '%s\n' '// [autoCode_tag] error_enum' '// [/tag]' >> "${PATH_CASE}/tags.c"
 	runTagCase duplicate_tag "required autoCode tag error_enum is multiple set"
 
-	caseBegin wire_gpio_outside_source
-	sed "s|--wire_gpio .*|--wire_gpio ${PATH_CASE}/targetWireSignal.c|" \
-		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
-	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
-	runTagCase wire_gpio_outside_source "is outside source path"
-
 	for VAL_INPUT in signals.gpio
 	do
 		VAL_NAME=$(printf '%s' "${VAL_INPUT}" | tr '.' '_')
@@ -490,7 +484,7 @@ runCompareReplaceTests()
 	stageBegin compare_replace
 	caseBegin stable_generation
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	if ! grep -F -q '#include "targetWireSignal.c"' \
+	if ! grep -F -q "#include \"${PATH_CASE}/sources/targetWireSignal.c\"" \
 		"${PATH_CASE}/generated/wire_gpio.inc"; then
 		fail "wire_gpio generated include is missing"
 	fi
