@@ -187,7 +187,7 @@ dans PendSV et l'ordre de traitement simultané doit être documenté.
 
 Ordre conseillé :
 
-1. ajouter des tests hôte du formatage variadique et corriger l'hypothèse `int == uint16_t` ;
+1. ~~ajouter des tests hôte du formatage variadique et corriger l'hypothèse `int == uint16_t` ;~~
 2. faire évoluer pile/contexte/autoCode, puis prouver la non-régression AVR ;
 3. livrer un target FreeBSD coopératif à horloge virtuelle ;
 4. ajouter signaux et préemption FreeBSD dans une suite de stress distincte ;

@@ -4,30 +4,13 @@ translation unit specifications
 - check type for strings / data ->  char for text, uint8_t for data
 - hal/mcu/atmega2560/hal_gpio.c port table is 16 bit pointer, we lost AVR direct 8 bit access to SFR 
 registers
-- #define <-> typedef enum, list in enum. use avrgcc -fshort-enums option for uint8_t size
 - Doxigen documentation : only in .h for API and general operations
-
+- AVR timer 1 and 3 start/init diff
 
 TODO :
 - autocode and TaskMate : check if string pointer is not null before process data
 - drivers : test at init (and start ?)
-- new grammar check for forbidden #include
 - drivers returns status, setup error code and emit event.
-- add system task to handle runlevels
 - glogal status/error/event system
 - IPC / message server
 - memory slab allocator uint64_t bitmap
-
-CODEX AUDIT : architectures notes, priority P3 delay - P2 technical debt - P1 fail
-autocode.md P2
-build.md P2
-error.md P2
-GPIO.md P2
-HAL.md P2
-interfaces.md P2
-services.md P3
-sysCall.md P3
-sysCore.md P2
-tmLibc.md P3
-
-

@@ -169,16 +169,16 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					break;
 				}
 
-				case 'i':
+				case 'u':
 				case 'x':
 				case 'b':
 				{
-					uint16_t value = va_arg(args, uint16_t);
+					unsigned int value = va_arg(args, unsigned int);
 					uint8_t base;
 
 					switch( format_c )
 					{
-						case 'i':
+						case 'u':
 							base = 10;
 							break;
 						case 'x':

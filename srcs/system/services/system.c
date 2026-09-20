@@ -55,21 +55,21 @@ void system(void)
 	systemStart();
 
 	// Print system info
-	tm_syslog(TM_STR("[system] TaskMate v%i.%i build : %i\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	tm_syslog(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 		
 	// External RTC module test
 	hal_rtc_time_t t;
 	char msg[30];
 
 	sc_rtcRead(&t);
-	tm_syslog(TM_STR("[system] date & time : %02i/%02i/20%02i %02i:%02i\n"),
+	tm_syslog(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
 			  t.day,
 			  t.month,
 			  t.year,
 			  t.hours,
 			  t.minutes);
 
-	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %i.%i %i"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
 	sc_lcdWriteString(TM_STR_RAM(msg), 0, 0);
 
@@ -80,7 +80,7 @@ void system(void)
 		sc_rtcRead(&t);
 		tm_snprintf(msg,
 					sizeof(msg),
-					TM_STR("%02i/%02i/20%02i %02i:%02i:%02i"),
+					TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
 					t.day,
 					t.month,
 					t.year,
@@ -130,7 +130,7 @@ static void systemStart(void)
 
 static void systemRunLevelStart(uint8_t run_level)
 {
-	tm_syslog(TM_STR("[system] switch to run level %i\n"), run_level);
+	tm_syslog(TM_STR("[system] switch to run level %u\n"), run_level);
 	sc_driverRunLevelStart(run_level);
 
 	if( run_level == RL_RUN_CORE ) { (void)sc_i2cScan(); }
