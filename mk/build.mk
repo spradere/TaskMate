@@ -63,6 +63,10 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@git describe --tags >> "${FILE_BUILD_INFO}"
 	@printf "${CC} : " >> "${FILE_BUILD_INFO}"
 	@printf "${VAL_CC_VERSION}\n" >> "${FILE_BUILD_INFO}"
+	@awk -v expected_major="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR}" \
+		-v expected_minor="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR}" \
+		-v report_versions=1 -f "${SCRIPT_AUTOCODE_VERSION}" \
+		"${FILE_AUTOCODE_HEADER}" >> "${FILE_BUILD_INFO}"
 
 	@printf "%s\n" "${COLOUR_WHITE_BOLD}"
 	@printf "##########################\n"
