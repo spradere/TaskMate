@@ -118,6 +118,23 @@ runConfigurationTests()
 	expectOutput cpu_frequency "16000000UL" bmake -C "${PATH_PROJECT}" -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
 
+	expectOutput ucontext_stack "ucontext pc freebsd" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V VAL_HW_STACK
+	expectOutput ucontext_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V FILE_ARCH_CC
+	expectOutput ucontext_types_header \
+		"srcs/hal/target/ucontext/ucontext_types.h" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V FILE_HAL_ARCHITECTURE_TYPES
+	expectSuccess ucontext_compile_sources bmake -C "${PATH_PROJECT}" \
+		VAL_TARGET=ucontext -V FILES_COMPILE_SRC
+	logContains ucontext_compile_sources "srcs/hal/target/ucontext/ucontext_context.c"
+	logContains ucontext_compile_sources "srcs/hal/board/pc/pc_gpio.c"
+	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
+	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
+	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
+	logExcludes ucontext_compile_sources "srcs/hal/arch/"
+	logExcludes ucontext_compile_sources "srcs/hal/mcu/"
+
 	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
