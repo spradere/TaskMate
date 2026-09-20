@@ -10,6 +10,9 @@ usart -type driver -run none -source_file hal/host/freebsd/freebsd_usart.c
 # The current HAL context contract requires one uniform target stack size.
 system -type service -run core -stack 32768 -source_file user/target/ucontext/ucontext_system.c
 
+# SCLI commands supported by the minimal virtual HAL.
+scli -type service -run service -stack 32768 -source_file system/services/scli.c -source_file user/target/ucontext/ucontext_scli_commands.c
+
 # Demonstration tasks
 task1 -type user -run user -stack 32768 -source_file user/tasks/task1.c
 task2 -type user -run user -stack 32768 -source_file user/tasks/task2.c

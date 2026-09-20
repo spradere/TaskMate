@@ -20,7 +20,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "interfaces/error_catalog.h"
 #include "interfaces/tm_info.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_driver.h"
@@ -35,7 +34,6 @@
  * ---------------------------------------------*/
 
 #define UCONTEXT_SYSTEM_RUN_LEVEL_RR_ROUND_COUNT 10u
-#define UCONTEXT_SYSTEM_INPUT_SIZE 64u
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -44,7 +42,6 @@
 static void systemStart(void);
 static void systemRunLevelStart(uint8_t run_level);
 static bool systemRunLevelIsReady(uint8_t run_level);
-static void systemConsoleRead(void);
 
 /* =============================================================================
  * Implementation - Functions
@@ -63,7 +60,6 @@ void system(void)
 
 	while( 1 )
 	{
-		systemConsoleRead();
 		sc_threadSetSTC(1);
 		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); }
 	}
@@ -116,21 +112,4 @@ static bool systemRunLevelIsReady(uint8_t run_level)
 		if( !sc_threadRunLevelIsReady(level) ) { return false; }
 	}
 	return true;
-}
-
-static void systemConsoleRead(void)
-{
-	char input[UCONTEXT_SYSTEM_INPUT_SIZE];
-	uint8_t length = 0;
-	uint8_t data;
-
-	while( (length < (sizeof(input) - 1u)) && (sc_usartRead(&data) == ERR_NO_ERROR) )
-	{
-		input[length++] = (char)data;
-	}
-	if( length == 0 ) { return; }
-
-	input[length] = 0;
-	tm_string_t text = TM_STR_RAM(input);
-	tm_syslog(TM_STR("[input] %s\n"), &text);
 }

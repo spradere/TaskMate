@@ -20,6 +20,10 @@ VAL_HW_STACK = ucontext
 PATH_TARGET_UCONTEXT = ${PATH_SRCS}/user/target/ucontext
 PATHS_SOURCE_SEARCH += ${PATH_TARGET_UCONTEXT}
 PATHS_EXTRA_SRC += ${PATH_SRCS}/tmLibc
+FILES_EXTRA_SRC += \
+	${PATH_SRCS}/system/services/commands/driver.c \
+	${PATH_SRCS}/system/services/commands/stack.c \
+	${PATH_SRCS}/system/services/commands/thread.c
 
 FILE_GPIO_SIGNALS = ${PATH_TARGET_UCONTEXT}/signals.gpio
 FILE_WIREGPIO = ${PATH_TARGET_UCONTEXT}/targetWireSignal.c
