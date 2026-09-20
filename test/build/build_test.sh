@@ -202,9 +202,14 @@ runScriptTests()
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
 	FILE_HAL_FACADE="${PATH_PROJECT}/scripts/check_removed_hal_facade.sh"
 
-	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR 1' \
+	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
+		'#define AC_INITRC_EXPECTED_VER_MINOR 4' \
+		'#define AC_AUTOCODE_VER_MAJOR 1' \
 		'#define AC_AUTOCODE_VER_MINOR 1' > "${PATH_STAGE_WORK}/autoCode.h"
 	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=1 \
+		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
+	expectOutput autocode_version_report "autoCode 1.1
+initrc 1.4" awk -v expected_major=1 -v expected_minor=1 -v report_versions=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
 		-v expected_major=2 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \

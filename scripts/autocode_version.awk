@@ -9,22 +9,26 @@
 ################################################################################
 
 ################################################################################
-# Check that the autoCode executable API version matches the build expectation
+# Check and report autoCode and initrc versions
 ################################################################################
 
 BEGIN {
 	major_name = "AC_AUTOCODE_VER_MAJOR"
 	minor_name = "AC_AUTOCODE_VER_MINOR"
+	initrc_major_name = "AC_INITRC_EXPECTED_VER_MAJOR"
+	initrc_minor_name = "AC_INITRC_EXPECTED_VER_MINOR"
 	failure = 0
 
 	validateExpectedVersion("major", expected_major)
 	validateExpectedVersion("minor", expected_minor)
 }
 
-($1 == "#define") && (($2 == major_name) || ($2 == minor_name)) {
+($1 == "#define") && (($2 == major_name) || ($2 == minor_name) || \
+	(report_versions && (($2 == initrc_major_name) || ($2 == initrc_minor_name)))) {
 	if (($2 in version_value) || (NF != 3) || ($3 !~ /^[0-9]+$/))
 	{
-		printf("Invalid autoCode version definition for %s\n", $2) > "/dev/stderr"
+		version_type = (($2 == major_name) || ($2 == minor_name)) ? "autoCode" : "initrc"
+		printf("Invalid %s version definition for %s\n", version_type, $2) > "/dev/stderr"
 		failure = 1
 		next
 	}
@@ -35,6 +39,12 @@ BEGIN {
 END {
 	checkVersion(major_name, expected_major)
 	checkVersion(minor_name, expected_minor)
+	if (report_versions && !failure)
+	{
+		printf("autoCode %s.%s\n", version_value[major_name], version_value[minor_name])
+		printf("initrc %s.%s\n", version_value[initrc_major_name], \
+			version_value[initrc_minor_name])
+	}
 	exit failure
 }
 
