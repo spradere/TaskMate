@@ -18,14 +18,11 @@
 
 #include "scli.h"
 
+#include "scli_commands.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "system/services/commands/date.h"
-#include "system/services/commands/driver.h"
-#include "system/services/commands/i2c.h"
-#include "system/services/commands/stack.h"
-#include "system/services/commands/thread.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"
@@ -39,18 +36,6 @@
 
 #define SCLI_LINE_SIZE 64
 #define SCLI_ARGUMENT_COUNT_MAX 4
-
-/* -----------------------------------------------
- * Private types
- * ---------------------------------------------*/
-
-typedef bool (*scli_cmd_func_t)(uint8_t argc, char *argv[]);
-
-typedef struct
-{
-	const char *name;
-	scli_cmd_func_t func;
-} scli_cmd_t;
 
 /* -----------------------------------------------
  * Private variables
@@ -67,19 +52,6 @@ static err_codes_t scliRead(void);
 static void scliLineProcess(void);
 static uint8_t scliTokenize(char *line, char *argv[]);
 static bool scliCommandDispatch(uint8_t argc, char *argv[]);
-
-/* -----------------------------------------------
- * Command table
- * ---------------------------------------------*/
-
-static const scli_cmd_t scli_commands[] = {
-	{"date", dateCommand},
-	{"driver", driver},
-	{"i2c", i2c},
-	{"stack", stack},
-	{"thread", thread},
-	{0, 0},
-};
 
 /* =============================================================================
  * Implementation - Functions

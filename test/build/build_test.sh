@@ -132,6 +132,14 @@ runConfigurationTests()
 	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
 	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
 	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
+	logContains ucontext_compile_sources "srcs/system/services/scli.c"
+	logContains ucontext_compile_sources "srcs/system/services/commands/driver.c"
+	logContains ucontext_compile_sources "srcs/system/services/commands/stack.c"
+	logContains ucontext_compile_sources "srcs/system/services/commands/thread.c"
+	logContains ucontext_compile_sources \
+		"srcs/user/target/ucontext/ucontext_scli_commands.c"
+	logExcludes ucontext_compile_sources "srcs/system/services/commands/date.c"
+	logExcludes ucontext_compile_sources "srcs/system/services/commands/i2c.c"
 	logExcludes ucontext_compile_sources "srcs/hal/arch/"
 	logExcludes ucontext_compile_sources "srcs/hal/mcu/"
 
@@ -139,9 +147,11 @@ runConfigurationTests()
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
 	logContains default_compile_sources "srcs/system/services/commands/stack.c"
+	logContains default_compile_sources "srcs/user/target/test1/test1_scli_commands.c"
 
 	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"
+	logContains default_initrc_sources "srcs/user/target/test1/test1_scli_commands.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
 	expectOutput default_initrc_dirs "srcs/system/services/commands" \
 		bmake -C "${PATH_PROJECT}" -V PATHS_INITRC_SOURCES
