@@ -46,4 +46,6 @@ PATH_TEST = test
 .include "${PATH_TEST}/tm_string_test.mk"
 
 # Architecture-specific Make logic
+.if !empty(VAL_TARGET)
 .include "${FILE_ARCH_CC}"
+.endif

@@ -13,7 +13,11 @@
 ################################################################################
 
 # Default target
-VAL_TARGET ?= test1
+#VAL_TARGET ?= test1
+.if empty(VAL_TARGET)
+.error No target selected, use make VAL_TARGET=<target name>
+.endif
+
 FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/target.mk
 
 .if !exists(${FILE_TARGET_MK})
