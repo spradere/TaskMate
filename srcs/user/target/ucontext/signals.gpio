@@ -1,0 +1,4 @@
+# GPIO signals displayed by the FreeBSD ucontext simulation
+
+GPIO_SIGNAL_TASK1_LED
+GPIO_SIGNAL_TASK2_LED

@@ -1,0 +1,3 @@
+# Error contracts referenced by sysCall when the simulation has no I2C driver
+ERR_HAL_I2C_SCAN_COMPLETE "" FLOW
+ERR_I2C_SCAN_ADDRESS_BUFFER_FULL "I2C scan buffer is full" WARN
