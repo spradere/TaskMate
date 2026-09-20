@@ -28,8 +28,12 @@
  * Public definitions
  * ========================================================================== */
 
-#define MOD_CANARY 0xa5a5
+#define MOD_CANARY 0x5au
 #define MOD_STACK_PATTERN 0xa5u
+/* The configured stack size includes both boundary canary words. */
+#define MOD_STACK_CANARY_WORD_COUNT 2u
+#define MOD_STACK_FIRST_USABLE_INDEX 1u
+#define MOD_STACK_LOW_CANARY_INDEX 0u
 
 typedef struct
 {
@@ -42,9 +46,8 @@ typedef struct
 
 	hal_context_t context;
 
-	uint16_t canary_low;
-	hal_stack_word_t stack[MOD_THREAD_STACK_SIZE];
-	uint16_t canary_high;
+	hal_stack_word_t *stack;
+	uint16_t stack_size;
 
 } mod_thread_item_t;
 

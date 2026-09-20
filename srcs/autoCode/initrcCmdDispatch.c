@@ -77,6 +77,22 @@ static initrc_dispatch_result_t funcI2cAddress(const char *data, module_item_t *
 	return INITRC_DISPATCH_OK;
 }
 
+static initrc_dispatch_result_t funcStack(const char *data, module_item_t *mod)
+{
+	char *end;
+	const unsigned long stack_size = strtoul(data, &end, 10);
+
+	if( (data[0] == 0) || (*end != 0) || (stack_size < AC_THREAD_STACK_SIZE_MIN) ||
+		(stack_size > UINT16_MAX) )
+	{
+		return INITRC_DISPATCH_UNKNOWN_DATA;
+	}
+
+	mod->stack_size = (uint16_t)stack_size;
+	mod->cnt_set_stack_size++;
+	return INITRC_DISPATCH_OK;
+}
+
 static initrc_dispatch_result_t funcSource(const char *data, const char *source_path,
 										   const bool directory, module_item_t *mod)
 {
@@ -95,7 +111,11 @@ static initrc_dispatch_result_t funcSource(const char *data, const char *source_
 }
 
 static const initrc_cmd_t initrc_cmds[] = {
-	{"-run", funcRun}, {"-type", funcType}, {"-i2c", funcI2cAddress}, {NULL, NULL}};
+	{"-run", funcRun},
+	{"-type", funcType},
+	{"-i2c", funcI2cAddress},
+	{"-stack", funcStack},
+	{NULL, NULL}};
 
 /* -----------------------------------------------
  * Command dispatch

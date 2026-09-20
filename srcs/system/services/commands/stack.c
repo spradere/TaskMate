@@ -42,15 +42,16 @@ bool stack(uint8_t argc, char *argv[])
 	{
 		const tm_string_t *name;
 		uint8_t run_level;
+		uint16_t stack_size_bytes;
 		uint16_t depth_bytes;
-		if( !sc_threadGetInfo(id, &name, &run_level) ||
+		if( !sc_threadGetInfo(id, &name, &run_level, &stack_size_bytes) ||
 			!sc_threadGetStackDepth(id, &depth_bytes) )
 		{
 			return false;
 		}
 
 		(void)run_level;
-		tm_syslog(TM_STR("\t%s depth=%u bytes\n"), name, depth_bytes);
+		tm_syslog(TM_STR("\t%s depth=%u/%u bytes\n"), name, depth_bytes, stack_size_bytes);
 	}
 
 	return true;

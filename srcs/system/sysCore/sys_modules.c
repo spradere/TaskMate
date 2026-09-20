@@ -31,6 +31,10 @@ static struct
 	uint8_t thread_current;
 } mod_data_base;
 
+// [autoCode_tag] thread_stacks
+#include "thread_stacks.inc"
+// [/tag]
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -55,25 +59,22 @@ uint16_t mod_threadGetSTC(void)
 mod_driver_item_t *mod_driverGetPointer(uint8_t id) { return &mod_data_base.drivers[id]; }
 mod_thread_item_t *mod_threadGetPointer(uint8_t id) { return &mod_data_base.threads[id]; }
 
+static void mod_threadStackInit(mod_thread_item_t *thread)
+{
+	for( uint16_t stack_index = 0; stack_index < thread->stack_size; stack_index++ )
+	{
+		thread->stack[stack_index] = MOD_STACK_PATTERN;
+	}
+	thread->stack[MOD_STACK_LOW_CANARY_INDEX] = MOD_CANARY;
+	thread->stack[thread->stack_size - MOD_STACK_FIRST_USABLE_INDEX] = MOD_CANARY;
+}
+
 /* -----------------------------------------------
  * Static module allocation
  * ---------------------------------------------*/
 
 void mod_threadsAlloc(void)
 {
-	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
-	{
-		mod_thread_item_t *thread = mod_threadGetPointer(i);
-		uint8_t *stack = (uint8_t *)thread->stack;
-		const uint16_t stack_size = (uint16_t)sizeof(thread->stack);
-		for( uint16_t stack_index = 0; stack_index < stack_size; stack_index++ )
-		{
-			stack[stack_index] = MOD_STACK_PATTERN;
-		}
-		thread->canary_low = MOD_CANARY;
-		thread->canary_high = MOD_CANARY;
-	}
-
 	// [autoCode_tag] threads_alloc
 #include "threads_alloc.inc"
 	// [/tag]

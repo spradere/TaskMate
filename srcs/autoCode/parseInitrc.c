@@ -168,9 +168,11 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name, const c
 			mod_tmp.type = 0;
 			mod_tmp.subtype = 0;
 			mod_tmp.address = MOD_DRIVER_ADDRESS_NONE;
+			mod_tmp.stack_size = 0;
 			mod_tmp.cnt_set_runlevel = 0;
 			mod_tmp.cnt_set_type = 0;
 			mod_tmp.cnt_set_address = 0;
+			mod_tmp.cnt_set_stack_size = 0;
 			mod_tmp.cnt_set_source = 0;
 
 			// Parse command/data pairs
@@ -266,6 +268,25 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name, const c
 
 				module_is_valid = false;
 			}
+			if( (mod_tmp.type == MOD_THREAD_ID) && (mod_tmp.cnt_set_stack_size < 1) )
+			{
+				AUTOCODE_MSG_ERROR("Module %s : -stack option is not set", tok.tokens[0]);
+
+				module_is_valid = false;
+			}
+			if( mod_tmp.cnt_set_stack_size > 1 )
+			{
+				AUTOCODE_MSG_ERROR("Module %s : -stack option is multiple set", tok.tokens[0]);
+
+				module_is_valid = false;
+			}
+			if( (mod_tmp.cnt_set_stack_size == 1) && (mod_tmp.type != MOD_THREAD_ID) )
+			{
+				AUTOCODE_MSG_ERROR("Module %s : -stack option is only valid for threads",
+								   tok.tokens[0]);
+
+				module_is_valid = false;
+			}
 			if( mod_tmp.cnt_set_source < 1 )
 			{
 				AUTOCODE_MSG_ERROR("Module %s : -source_file or -source_dir option is not set",
@@ -290,6 +311,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name, const c
 			mod->modules_count = index + 1;
 			mod->modules[index].subtype = mod_tmp.subtype;
 			mod->modules[index].address = mod_tmp.address;
+			mod->modules[index].stack_size = mod_tmp.stack_size;
 		}
 	}
 	if( line_result == FILE_GET_LINE_ERROR )

@@ -204,28 +204,28 @@ runScriptTests()
 	FILE_HAL_FACADE="${PATH_PROJECT}/scripts/check_removed_hal_facade.sh"
 
 	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
-		'#define AC_INITRC_EXPECTED_VER_MINOR 4' \
+		'#define AC_INITRC_EXPECTED_VER_MINOR 5' \
 		'#define AC_AUTOCODE_VER_MAJOR 1' \
-		'#define AC_AUTOCODE_VER_MINOR 1' > "${PATH_STAGE_WORK}/autoCode.h"
-	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=1 \
+		'#define AC_AUTOCODE_VER_MINOR 2' > "${PATH_STAGE_WORK}/autoCode.h"
+	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=2 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
-	expectOutput autocode_version_report "autoCode : 1.1
-initrc : 1.4" awk -v expected_major=1 -v expected_minor=1 -v report_versions=1 \
+	expectOutput autocode_version_report "autoCode : 1.2
+initrc : 1.5" awk -v expected_major=1 -v expected_minor=2 -v report_versions=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
-		-v expected_major=2 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=2 -v expected_minor=2 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
-	expectFailure autocode_version_minor_mismatch "expected 2, found 1" awk \
-		-v expected_major=1 -v expected_minor=2 -f "${FILE_AUTOCODE_VERSION}" \
+	expectFailure autocode_version_minor_mismatch "expected 3, found 2" awk \
+		-v expected_major=1 -v expected_minor=3 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
 	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR 1' > "${PATH_STAGE_WORK}/missing.h"
 	expectFailure autocode_version_missing "Missing autoCode version definition" awk \
-		-v expected_major=1 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=1 -v expected_minor=2 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/missing.h"
 	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR one' \
-		'#define AC_AUTOCODE_VER_MINOR 1' > "${PATH_STAGE_WORK}/malformed.h"
+		'#define AC_AUTOCODE_VER_MINOR 2' > "${PATH_STAGE_WORK}/malformed.h"
 	expectFailure autocode_version_malformed "Invalid autoCode version definition" awk \
-		-v expected_major=1 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=1 -v expected_minor=2 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/malformed.h"
 
 	expectFailure programs_usage "Usage:" "${FILE_PROGRAMS}"

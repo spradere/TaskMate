@@ -114,8 +114,10 @@ static bool threadList(uint8_t argc, char *argv[])
 	{
 		const tm_string_t *name;
 		uint8_t run_level;
-		if( !sc_threadGetInfo(id, &name, &run_level) ) { return false; }
+		uint16_t stack_size_bytes;
+		if( !sc_threadGetInfo(id, &name, &run_level, &stack_size_bytes) ) { return false; }
 
+		(void)stack_size_bytes;
 		tm_syslog(TM_STR("\t%s runlevel=%i\n"), name, run_level);
 	}
 

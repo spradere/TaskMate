@@ -42,6 +42,7 @@ typedef struct
 
 static void writeModulesCount(const parse_tag_t *parse);
 static void writeDriversAlloc(const parse_tag_t *parse);
+static void writeThreadStacks(const parse_tag_t *parse);
 static void writeThreadsAlloc(const parse_tag_t *parse);
 static void writeDriverNameCatalog(const parse_tag_t *parse);
 static void writeThreadNameCatalog(const parse_tag_t *parse);
@@ -59,6 +60,7 @@ static int generatedFileName(char *file_name, size_t file_name_size, const char 
  * ---------------------------------------------*/
 
 #define HAVE_TAG(X)                                                            \
+	X(HAVE_THREAD_STACKS, "thread_stacks", writeThreadStacks)                  \
 	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc)                  \
 	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc)                  \
 	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", writeThreadNameCatalog) \
@@ -391,6 +393,26 @@ static void writeModulesCount(const parse_tag_t *parse)
 	have_tag_count[HAVE_MOD_COUNT]++;
 }
 
+static void writeThreadStacks(const parse_tag_t *parse)
+{
+	int threads_count = 1;
+	const module_type_t *mod = &parse->data_base->modules_type[MOD_THREAD_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		int thread_index = threads_count;
+		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
+		else { threads_count++; }
+
+		fprintf(parse->file,
+				"static hal_stack_word_t thread%i_stack[%u];\n",
+				thread_index,
+				mod->modules[i].stack_size);
+	}
+
+	have_tag_count[HAVE_THREAD_STACKS]++;
+}
+
 static void writeThreadsAlloc(const parse_tag_t *parse)
 {
 	int threads_count = 1;
@@ -416,10 +438,13 @@ static void writeThreadsAlloc(const parse_tag_t *parse)
 		else { thread_index = threads_count; }
 
 		fprintf(parse->file, "\n\tmod = mod_threadGetPointer(%i);\n", thread_index);
+		fprintf(parse->file, "\tmod->stack = thread%i_stack;\n", thread_index);
+		fprintf(parse->file, "\tmod->stack_size = %u;\n", mod->modules[i].stack_size);
+		fprintf(parse->file, "\tmod_threadStackInit(mod);\n");
 
 		fprintf(parse->file,
 				"\n\thal_threadContextInit(%s, &(mod->context), "
-				"&(mod->stack[MOD_THREAD_STACK_SIZE - 1]));\n",
+				"&(mod->stack[mod->stack_size - MOD_STACK_CANARY_WORD_COUNT]));\n",
 				mod->modules[i].name);
 
 		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
