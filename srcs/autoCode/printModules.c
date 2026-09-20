@@ -46,11 +46,12 @@ void printModules(const modules_database_t *data_base)
 	const module_type_t *threads = &data_base->modules_type[MOD_THREAD_ID];
 	for( int i = 0; i < threads->modules_count; i++ )
 	{
-		printf("\tthread[%i] \"%s\" runlevel=%i type=%i\n",
+		printf("\tthread[%i] \"%s\" runlevel=%i type=%i stack=%u words\n",
 			   i,
 			   threads->modules[i].name,
 			   RL_GET_RUN_LEVEL(threads->modules[i].status),
-			   threads->modules[i].status & (~RL_LEVEL_MASK));
+			   threads->modules[i].status & (~RL_LEVEL_MASK),
+			   threads->modules[i].stack_size);
 	}
 	printf("\n");
 }

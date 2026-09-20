@@ -89,14 +89,20 @@ uint16_t sc_threadGetSTC(void)
 
 uint16_t sc_threadGetCount(void) { return MOD_THREAD_COUNT; }
 
-bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level)
+bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
+					  uint16_t *stack_size_bytes)
 {
-	if( (id >= MOD_THREAD_COUNT) || (name == 0) || (run_level == 0) ) { return false; }
+	if( (id >= MOD_THREAD_COUNT) || (name == 0) || (run_level == 0) ||
+		(stack_size_bytes == 0) )
+	{
+		return false;
+	}
 
 	hal_atomic_state_t state = hal_atomicStart();
 	mod_thread_item_t *thread = mod_threadGetPointer((uint8_t)id);
 	*name = thread_name_catalog[id];
 	*run_level = RL_GET_RUN_LEVEL(thread->status);
+	*stack_size_bytes = (uint16_t)(thread->stack_size * sizeof(hal_stack_word_t));
 	hal_atomicEnd(state);
 
 	return *name != 0;
@@ -108,16 +114,17 @@ bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes)
 
 	hal_atomic_state_t state = hal_atomicStart();
 	const mod_thread_item_t *thread = mod_threadGetPointer((uint8_t)id);
-	const volatile uint8_t *stack = (const volatile uint8_t *)thread->stack;
-	const uint16_t stack_size = (uint16_t)sizeof(thread->stack);
-	uint16_t unused_bytes = 0;
+	const volatile hal_stack_word_t *stack = thread->stack;
+	const uint16_t usable_words = thread->stack_size - MOD_STACK_CANARY_WORD_COUNT;
+	uint16_t unused_words = 0;
 
-	while( (unused_bytes < stack_size) && (stack[unused_bytes] == MOD_STACK_PATTERN) )
+	while( (unused_words < usable_words) &&
+		   (stack[unused_words + MOD_STACK_FIRST_USABLE_INDEX] == MOD_STACK_PATTERN) )
 	{
-		unused_bytes++;
+		unused_words++;
 	}
 
-	*depth_bytes = stack_size - unused_bytes;
+	*depth_bytes = (uint16_t)((usable_words - unused_words) * sizeof(hal_stack_word_t));
 	hal_atomicEnd(state);
 	return true;
 }

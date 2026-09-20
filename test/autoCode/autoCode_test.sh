@@ -19,7 +19,7 @@ VAL_TEST_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 4'
+	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 5'
 }
 
 fail()
@@ -42,8 +42,8 @@ writeTags()
 {
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
-	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog modules_count modules_list gpio_signals wire_gpio
+	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
+		driver_name_catalog error_enum error_catalog modules_count modules_list gpio_signals wire_gpio
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -75,7 +75,8 @@ caseBegin()
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
 	printf '%s\n' "${PATH_CASE}/errors.err" > "${PATH_CASE}/errors.list"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'system -type service -run core -source_file system.c' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' 'system -type service -run core -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
 	printf '%s\n' "${PATH_CASE}/init.rc" > "${PATH_CASE}/initrc.list"
 	writeTags "${PATH_CASE}/tags.c"
 	printf '%s\n' "${PATH_CASE}/tags.c" > "${PATH_CASE}/tags.list"
@@ -257,27 +258,27 @@ runInitrcTests()
 
 	caseBegin missing_source_option
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "system -type service -run core" >> "${PATH_CASE}/init.rc"
+	printf "%s\n" "system -type service -run core -stack 256" >> "${PATH_CASE}/init.rc"
 	expectFailure missing_source_option "-source_file or -source_dir option is not set" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin invalid_source_file
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "system -type service -run core -source_file missing.c" \
+	printf "%s\n" "system -type service -run core -stack 256 -source_file missing.c" \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure invalid_source_file "unknown data" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin invalid_source_dir
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "system -type service -run core -source_dir system.c" \
+	printf "%s\n" "system -type service -run core -stack 256 -source_dir system.c" \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure invalid_source_dir "unknown data" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_source_dir
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "system -type service -run core -source_dir commands" \
+	printf "%s\n" "system -type service -run core -stack 256 -source_dir commands" \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_source_dir "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
@@ -285,19 +286,53 @@ runInitrcTests()
 	printf '%s\n' 'void commandFixture(void) {}' > "${PATH_CASE}/sources/commands/date.c"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf "%s\n" \
-		"system -type service -run core -source_file system.c -source_file commands/date.c" \
+		"system -type service -run core -stack 256 -source_file system.c -source_file commands/date.c" \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_multiple_source_files "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_mixed_sources
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf "%s\n" \
-		"system -type service -run core -source_file system.c -source_dir commands" \
+		"system -type service -run core -stack 256 -source_file system.c -source_dir commands" \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_mixed_sources "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
+	caseBegin missing_stack
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'system -type service -run core -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure missing_stack "-stack option is not set" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	for VAL_STACK in 0 2 invalid 65536
+	do
+		VAL_NAME=$(printf '%s' "${VAL_STACK}" | tr -c '[:alnum:]' '_')
+		caseBegin "invalid_stack_${VAL_NAME}"
+		writeInitrcVersion > "${PATH_CASE}/init.rc"
+		printf '%s\n' \
+			"system -type service -run core -stack ${VAL_STACK} -source_file system.c" \
+			>> "${PATH_CASE}/init.rc"
+		expectFailure "invalid_stack_${VAL_NAME}" "unknown data" \
+			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	done
+
+	caseBegin multiple_stack
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'system -type service -run core -stack 256 -stack 512 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure multiple_stack "-stack option is multiple set" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin driver_stack
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'driver -type driver -run core -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure driver_stack "-stack option is only valid for threads" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin missing_initrc_version
-	printf '%s\n' 'system -type service -run core' > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'system -type service -run core -stack 256' > "${PATH_CASE}/init.rc"
 	expectFailure missing_initrc_version "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
@@ -314,7 +349,7 @@ runInitrcTests()
 
 	caseBegin missing_minor_initrc_version
 	printf '%s\n' '!set_initrc_ver_major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing !set_initrc_ver_minor 4" \
+	expectFailure missing_minor_initrc_version "missing !set_initrc_ver_minor 5" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_before_minor_initrc_version
@@ -324,7 +359,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' '!set_initrc_ver_major 0' '!set_initrc_ver_minor 4' \
+	printf '%s\n' '!set_initrc_ver_major 0' '!set_initrc_ver_minor 5' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -336,14 +371,14 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' '!set_initrc_ver_minor 4' '!set_initrc_ver_major 1' \
+	printf '%s\n' '!set_initrc_ver_minor 5' '!set_initrc_ver_major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'system -type service -run core' '!set_initrc_ver_minor 4' \
+	printf '%s\n' 'system -type service -run core -stack 256' '!set_initrc_ver_minor 5' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure late_initrc_version "init.rc version command outside header" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -351,19 +386,19 @@ runInitrcTests()
 	caseBegin malformed_initrc
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
-		'system -type service -run core -source_file system.c' \
+		'system -type service -run core -stack 256 -source_file system.c' \
 		'few -type user' \
-		'badcmd -bad value -run user -source_file system.c' \
-		'badrun -type user -run invalid -source_file system.c' \
+		'badcmd -bad value -run user -stack 256 -source_file system.c' \
+		'badrun -type user -run invalid -stack 256 -source_file system.c' \
 		'badtype -type invalid -run user -source_file system.c' \
 		'badi2c -type driver -run core -i2c invalid -source_file system.c' \
-		'abcdefghijklmnopqrstuvwxyzabcdef -type user -run user -source_file system.c' \
-		'duplicate -type user -run user -source_file system.c' \
-		'duplicate -type user -run user -source_file system.c' \
-		'no_run -type user -type user -source_file system.c' \
+		'abcdefghijklmnopqrstuvwxyzabcdef -type user -run user -stack 256 -source_file system.c' \
+		'duplicate -type user -run user -stack 256 -source_file system.c' \
+		'duplicate -type user -run user -stack 256 -source_file system.c' \
+		'no_run -type user -type user -stack 256 -source_file system.c' \
 		'no_type -run user -run user -source_file system.c' \
 		'i2c_multi -type driver -i2c 1 -i2c 2 -source_file system.c' \
-		'i2c_thread -type user -run user -i2c 1 -source_file system.c' \
+		'i2c_thread -type user -run user -stack 256 -i2c 1 -source_file system.c' \
 		'unterminated -type "user -run user' >> "${PATH_CASE}/init.rc"
 	VAL_INDEX=0
 	while [ "${VAL_INDEX}" -le 256 ]
@@ -456,13 +491,14 @@ runParseTagTests()
 
 	caseBegin missing_system_thread
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'task -type user -run user -source_file system.c' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' 'task -type user -run user -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
 	runTagCase missing_system_thread "thread system was not found"
 
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
-	for VAL_TAG in threads_alloc drivers_alloc thread_name_catalog driver_name_catalog \
-		error_enum error_catalog modules_count modules_list gpio_signals wire_gpio
+	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
+		driver_name_catalog error_enum error_catalog modules_count modules_list gpio_signals wire_gpio
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
@@ -484,6 +520,7 @@ runCompareReplaceTests()
 	stageBegin compare_replace
 	caseBegin stable_generation
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logContains initial_generation 'stack=256 words'
 	if ! grep -F -q "#include \"${PATH_CASE}/sources/targetWireSignal.c\"" \
 		"${PATH_CASE}/generated/wire_gpio.inc"; then
 		fail "wire_gpio generated include is missing"
@@ -492,12 +529,25 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc generated context initialization is missing"
 	fi
+	if ! grep -F -q 'static hal_stack_word_t thread0_stack[256];' \
+		"${PATH_CASE}/generated/thread_stacks.inc"; then
+		fail "thread_stacks generated static storage is missing"
+	fi
+	if ! grep -F -q 'mod->stack_size = 256;' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc generated stack size is missing"
+	fi
+	if ! grep -F -q \
+		'&(mod->stack[mod->stack_size - MOD_STACK_CANARY_WORD_COUNT])' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc context does not exclude the high canary"
+	fi
 	if grep -F -q 'mod->stack_pointer' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc still initializes a stack pointer directly"
 	fi
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 11 unchanged"
+	logContains unchanged_generation "0 updated, 12 unchanged"
 
 	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
 		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
@@ -512,8 +562,8 @@ runCompareReplaceTests()
 	printf '%s\n' '// [autoCode_tag] threads_alloc' 'ORIGINAL_SENTINEL' '// [/tag]' \
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
-	for VAL_TAG in drivers_alloc thread_name_catalog driver_name_catalog error_enum error_catalog \
-		modules_count modules_list wire_gpio
+	for VAL_TAG in thread_stacks drivers_alloc thread_name_catalog driver_name_catalog error_enum \
+		error_catalog modules_count modules_list wire_gpio
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"

@@ -103,15 +103,21 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 	thread->context = *context;
 
 	// Canary check
-	if( thread->canary_low != MOD_CANARY ) { hal_halt(); }
-	if( thread->canary_high != MOD_CANARY ) { hal_halt(); }
+	if( thread->stack[MOD_STACK_LOW_CANARY_INDEX] != MOD_CANARY ) { hal_halt(); }
+	if( thread->stack[thread->stack_size - MOD_STACK_FIRST_USABLE_INDEX] != MOD_CANARY )
+	{
+		hal_halt();
+	}
 
 	// Switch threads
 	thread = tm_schedulerSelectNext(mod_threadGetCurrent());
 
 	// Canary check
-	if( thread->canary_low != MOD_CANARY ) { hal_halt(); }
-	if( thread->canary_high != MOD_CANARY ) { hal_halt(); }
+	if( thread->stack[MOD_STACK_LOW_CANARY_INDEX] != MOD_CANARY ) { hal_halt(); }
+	if( thread->stack[thread->stack_size - MOD_STACK_FIRST_USABLE_INDEX] != MOD_CANARY )
+	{
+		hal_halt();
+	}
 
 	TM_CLEARBIT(thread->status, THREAD_BIT_YIELDED);
 	return &thread->context;

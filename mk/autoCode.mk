@@ -18,6 +18,7 @@ FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
 FILES_AUTOCODE_INC = \
+	${PATH_BUILD_GENERATED}/thread_stacks.inc \
 	${PATH_BUILD_GENERATED}/threads_alloc.inc \
 	${PATH_BUILD_GENERATED}/drivers_alloc.inc \
 	${PATH_BUILD_GENERATED}/thread_name_catalog.inc \
