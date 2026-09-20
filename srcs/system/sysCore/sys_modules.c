@@ -64,6 +64,12 @@ void mod_threadsAlloc(void)
 	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
 	{
 		mod_thread_item_t *thread = mod_threadGetPointer(i);
+		uint8_t *stack = (uint8_t *)thread->stack;
+		const uint16_t stack_size = (uint16_t)sizeof(thread->stack);
+		for( uint16_t stack_index = 0; stack_index < stack_size; stack_index++ )
+		{
+			stack[stack_index] = MOD_STACK_PATTERN;
+		}
 		thread->canary_low = MOD_CANARY;
 		thread->canary_high = MOD_CANARY;
 	}

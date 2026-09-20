@@ -121,6 +121,7 @@ runConfigurationTests()
 	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
+	logContains default_compile_sources "srcs/system/services/commands/stack.c"
 
 	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"

@@ -29,6 +29,7 @@
  * ========================================================================== */
 
 #define MOD_CANARY 0xa5a5
+#define MOD_STACK_PATTERN 0xa5u
 
 typedef struct
 {
