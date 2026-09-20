@@ -17,9 +17,9 @@
 
 #include "driver.h"
 
+#include "interfaces/hal_drivers.h"
 #include "interfaces/tm_define.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_modules.h"
 #include "system/sysCall/sc_driver.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"

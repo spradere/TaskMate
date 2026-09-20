@@ -19,7 +19,7 @@
  * ========================================================================== */
 
 #include "interfaces/hal_context.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/hal_drivers.h"
 
 /* ============================================================================
  * Public definitions

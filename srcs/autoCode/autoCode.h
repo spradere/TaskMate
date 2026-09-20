@@ -39,6 +39,7 @@
 #define TM_SYSTEM_CRITICAL_ALLOWED
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
+#include "interfaces/tm_threads.h"
 
 /* ============================================================================
  * Public definitions
