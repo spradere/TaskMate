@@ -138,7 +138,7 @@ runConfigurationTests()
 
 	expectSuccess object_mapping bmake -C "${PATH_PROJECT}" -V FILES_OBJ
 	logContains object_mapping \
-		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/TaskMate.o"
+		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/boot.o"
 	logExcludes object_mapping ".c.o"
 	VAL_DRIVER_INTERFACES="srcs/interfaces/drv_i2c.h srcs/interfaces/drv_lcd.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_rtc.h"
@@ -208,8 +208,8 @@ runScriptTests()
 		'#define AC_AUTOCODE_VER_MINOR 1' > "${PATH_STAGE_WORK}/autoCode.h"
 	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
-	expectOutput autocode_version_report "autoCode 1.1
-initrc 1.4" awk -v expected_major=1 -v expected_minor=1 -v report_versions=1 \
+	expectOutput autocode_version_report "autoCode : 1.1
+initrc : 1.4" awk -v expected_major=1 -v expected_minor=1 -v report_versions=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
 		-v expected_major=2 -v expected_minor=1 -f "${FILE_AUTOCODE_VERSION}" \
