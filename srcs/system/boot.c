@@ -21,7 +21,6 @@
 #include "interfaces/drv_usart.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_info.h"
-#include "interfaces/tm_modules.h"
 #include "system/sysCore/sys_modules.h"
 #include "system/sysCore/sys_scheduler.h"
 #include "system/sysCore/sys_softwareTimeCounter.h"

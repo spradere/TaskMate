@@ -23,7 +23,6 @@
 #include "interfaces/drv_timerSTC.h"
 #include "interfaces/tm_define.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 
 /* -----------------------------------------------

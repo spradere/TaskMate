@@ -22,6 +22,7 @@
 #include "interfaces/drv_rtc.h"
 #include "interfaces/drv_usart.h"
 #include "interfaces/hal_atomic.h"
+#include "interfaces/hal_drivers.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"

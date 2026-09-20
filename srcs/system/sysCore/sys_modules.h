@@ -21,6 +21,7 @@
 #include <stdint.h>
 
 #include "interfaces/hal_context.h"
+#include "interfaces/hal_drivers.h"
 #include "interfaces/tm_modules.h"
 
 /* ============================================================================

@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 
-#include "interfaces/tm_modules.h"
+#include "interfaces/hal_drivers.h"
 
 /* ============================================================================
  * Public API
