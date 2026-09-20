@@ -48,6 +48,14 @@ FILES_COMPILE_SRC = \
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
+# Test needed file from target makefile
+.if !exists(${FILE_GPIO_SIGNALS})
+.error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
+.endif
+
+.if !exists(${FILE_WIREGPIO})
+.error GPIO target wiring not found >>>${FILE_WIREGPIO}<<<
+.endif
 
 # Dependency files
 FILES_DEP = ${FILES_OBJ:.o=.d}

@@ -20,6 +20,7 @@ VAL_HW_STACK += avr8
 
 PATH_AVR8 = ${PATH_SRCS}/hal/arch/avr8
 PATHS_SOURCE_SEARCH += ${PATH_AVR8}
+PATHS_EXTRA_SRC += ${PATH_SRCS}/hal/arch/avr8
 
 CFLAGS += -DARCH_avr8
 FILE_HAL_STRING_MACRO = ${PATH_SRCS}/hal/arch/avr8/avr8_string_macro.h
