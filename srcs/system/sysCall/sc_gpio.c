@@ -18,6 +18,7 @@
 #include "sc_gpio.h"
 
 #include "interfaces/gpio_signals.h"
+#include "interfaces/hal_atomic.h"
 #include "system/sysCore/sys_modules.h"
 
 /* -----------------------------------------------
@@ -41,5 +42,7 @@ void sc_gpio_signalSet(gpio_signal_t signal, bool val) { hal_gpioSignalWrite(sig
 bool sc_gpio_signalGet(gpio_signal_t signal) { return hal_gpioSignalRead(signal); }
 void sc_gpio_signalToggle(gpio_signal_t signal)
 {
+	hal_atomic_state_t state = hal_atomicStart();
 	hal_gpioSignalWrite(signal, !hal_gpioSignalRead(signal));
+	hal_atomicEnd(state);
 }

@@ -30,7 +30,7 @@
  * Constants
  * ---------------------------------------------*/
 
-const uint16_t TIMER1_OVERFLOW_COUNT = 2000; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
+const uint16_t TIMER1_OVERFLOW_COUNT = 1999; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
 
 /* -----------------------------------------------
  * Private variables
@@ -127,6 +127,7 @@ static hal_driver_state_t hal_timerSchedInit(void)
 	return DRV_STATE_INITIALIZED;
 }
 
+// Start timer1 by enabling prescaler=8
 #define TIMER_SCHED_START                              \
 	"lds r24, %0\n\t"                                  \
 	"ori r24, %1\n\t"                                  \
