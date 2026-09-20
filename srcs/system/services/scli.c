@@ -24,6 +24,7 @@
 #include "system/services/commands/date.h"
 #include "system/services/commands/driver.h"
 #include "system/services/commands/i2c.h"
+#include "system/services/commands/stack.h"
 #include "system/services/commands/thread.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
@@ -75,6 +76,7 @@ static const scli_cmd_t scli_commands[] = {
 	{"date", dateCommand},
 	{"driver", driver},
 	{"i2c", i2c},
+	{"stack", stack},
 	{"thread", thread},
 	{0, 0},
 };

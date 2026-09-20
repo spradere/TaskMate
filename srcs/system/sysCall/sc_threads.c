@@ -102,6 +102,26 @@ bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level)
 	return *name != 0;
 }
 
+bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes)
+{
+	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == 0) ) { return false; }
+
+	hal_atomic_state_t state = hal_atomicStart();
+	const mod_thread_item_t *thread = mod_threadGetPointer((uint8_t)id);
+	const volatile uint8_t *stack = (const volatile uint8_t *)thread->stack;
+	const uint16_t stack_size = (uint16_t)sizeof(thread->stack);
+	uint16_t unused_bytes = 0;
+
+	while( (unused_bytes < stack_size) && (stack[unused_bytes] == MOD_STACK_PATTERN) )
+	{
+		unused_bytes++;
+	}
+
+	*depth_bytes = stack_size - unused_bytes;
+	hal_atomicEnd(state);
+	return true;
+}
+
 /* -----------------------------------------------
  * Thread life cycle
  * ---------------------------------------------*/
