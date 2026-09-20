@@ -41,8 +41,8 @@ END {
 	checkVersion(minor_name, expected_minor)
 	if (report_versions && !failure)
 	{
-		printf("autoCode %s.%s\n", version_value[major_name], version_value[minor_name])
-		printf("initrc %s.%s\n", version_value[initrc_major_name], \
+		printf("autoCode : %s.%s\n", version_value[major_name], version_value[minor_name])
+		printf("initrc : %s.%s\n", version_value[initrc_major_name], \
 			version_value[initrc_minor_name])
 	}
 	exit failure

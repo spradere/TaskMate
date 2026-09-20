@@ -18,9 +18,8 @@ CFLAGS_${PATH_SRCS}/system/sysCore/sys_modules.c = \
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_scheduler.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
 
-CFLAGS_${PATH_SRCS}/system/TaskMate.c = \
+CFLAGS_${PATH_SRCS}/system/boot.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED \
-	-include ${FILE_HAL_STRING_MACRO}
 	
 CFLAGS_${PATH_SRCS}/system/sysCore/sys_softwareTimeCounter.c = \
 	-DTM_SYSTEM_CRITICAL_ALLOWED
