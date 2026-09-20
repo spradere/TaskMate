@@ -1,3 +1,7 @@
+	[code] variable size for stacks
+	[code] move stack out of modules data base
+	[code] add stack depth measurement
+
 TaskMate 0.31
 
 	[arch] + [code] remove hal/public
