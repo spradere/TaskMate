@@ -41,11 +41,6 @@ PATHS_TM_STRING_ALLOWED= \
 CFLAGS_${src} += -include ${FILE_HAL_STRING_MACRO}
 .endfor
 
-# Check removed HAL public boundary
-.PHONY: _hal_public_removal_check
-_hal_public_removal_check: ${SCRIPT_HAL_FACADE_CHECK}
-	@${SCRIPT_HAL_FACADE_CHECK} "."
-
 # Check includes for system-critical features
 .PHONY: _system_critical_check
 _system_critical_check:

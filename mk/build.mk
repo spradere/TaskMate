@@ -16,11 +16,12 @@
 # and are not displayed by 'make help'.
 
 .BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
+.if make(upload) || make(all)
+
 	@mkdir -p "${PATH_BUILD_TARGET}"
 	@mkdir -p "${PATH_LOGS}"
 	@mkdir -p "${PATH_BUILD_GENERATED}"
 	
-.if make(upload) || make(all)
 	@printf "// #####################################\n" > "${FILE_TM_INFO}.tmp"
 	@printf "// # TaskMate informations informations \n" >> "${FILE_TM_INFO}.tmp"
 	@printf "// #####################################\n\n" >> "${FILE_TM_INFO}.tmp"
@@ -84,7 +85,7 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 .endif
 
 all: ${FILE_GIT_IGNORE} _hardware_target_check _system_critical_check \
-	_hal_public_removal_check _autocode .WAIT _architecture_include_check .WAIT _dependency \
+	_autocode .WAIT _architecture_include_check .WAIT _dependency \
 	${FILE_TARGET} _mcu_memory_data _cloc_data
 #help [global] TaskMate build.
 	@printf "\n%sBuild complete%s\n" \

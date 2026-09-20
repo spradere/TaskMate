@@ -67,7 +67,7 @@ FILE_DEPS_ALL = ${PATH_BUILD_TARGET}/.deps.d
 FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 
-VAL_DATE_TIME != date +"%Y_%m_%d_%H:%M:%S"
+VAL_DATE_TIME != date +"%Y_%m_%d_%Hh%Mm%Ss"
 
 # Global error
 FILES_ERROR != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort

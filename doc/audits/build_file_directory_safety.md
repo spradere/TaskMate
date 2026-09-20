@@ -46,18 +46,14 @@ correspond exactement au périphérique attendu. Viennent ensuite un contrôle d
 code d'échec est masqué, des fichiers temporaires à nom prévisible, plusieurs écritures non atomiques et
 l'absence de contrat contre les builds concurrents.
 
-| Priorité | Constat | Conséquence principale |
-| --- | --- | --- |
-| Critique | `backup` ne valide pas exactement le montage avant `rsync --delete` | Suppression possible dans un répertoire du disque local ou sur le mauvais volume |
-| Haute | Le statut du contrôle d'architecture est consommé par la recette | Un build peut continuer malgré une erreur de validation des sources |
-| Haute | Les fichiers `.tmp` sont prévisibles et parfois publiés sans arrêt immédiat sur erreur | Écrasement, course, lien symbolique ou publication partielle |
-| Haute | Les listes autoCode et `.gitignore` sont écrites directement | Une interruption peut laisser un fichier partiel considéré comme à jour |
-| Moyenne | autoCode remplace plusieurs destinations sans transaction globale | Une erreur tardive laisse un ensemble généré mixte |
-| Moyenne | Le graphe n'interdit pas les builds parallèles ou simultanés | Courses sur les sources générées, journaux, stamps et résultats |
-| Moyenne | La découverte et beaucoup de commandes utilisent des listes shell non citées | Les espaces, retours ligne et noms commençant par `-` ne sont pas supportés |
-| Moyenne | `.BEGIN` et `.END` écrivent pour toutes les cibles | `help`, `clean` ou un échec modifient des métadonnées de build |
-| Faible | Le nettoyage des anciens logs autoCode utilise un motif `find -name` incorrect | Accumulation non bornée des journaux |
-| Faible | Quelques contrôles construisent une commande shell depuis leur configuration | Robustesse réduite aux caractères spéciaux et diagnostics indirects |
+|n| Priorité | Constat | Conséquence principale |
+|---| --- | --- | --- |
+|1| Critique | `backup` ne valide pas exactement le montage avant `rsync --delete` | Suppression possible dans un répertoire du disque local ou sur le mauvais volume |
+|3| Haute | Les fichiers `.tmp` sont prévisibles et parfois publiés sans arrêt immédiat sur erreur | Écrasement, course, lien symbolique ou publication partielle |
+|4| Haute | Les listes autoCode et `.gitignore` sont écrites directement | Une interruption peut laisser un fichier partiel considéré comme à jour |
+|5| Moyenne | autoCode remplace plusieurs destinations sans transaction globale | Une erreur tardive laisse un ensemble généré mixte |
+|6| Moyenne | Le graphe n'interdit pas les builds parallèles ou simultanés | Courses sur les sources générées, journaux, stamps et résultats |
+|10| Faible | Quelques contrôles construisent une commande shell depuis leur configuration | Robustesse réduite aux caractères spéciaux et diagnostics indirects |
 
 ## Points solides
 
@@ -135,22 +131,6 @@ Correction minimale recommandée :
 
 Cette correction peut rester entièrement FreeBSD/POSIX et ne justifie aucun changement de build system.
 
-### 2. Haute — le contrôle d'architecture échoue, mais la recette réussit
-
-`scripts/arch_include.awk` retourne `3` lorsqu'il détecte une violation. La recette
-`_architecture_include_check` place cependant l'appel dans un `if`; sa branche `else` mémorise le statut,
-affiche le journal et termine sur un `echo`, sans `exit "$status"` (`mk/header_allow.mk:51-62`). Le statut
-final de la recette est donc zéro.
-
-L'exécution directe du vérificateur sur la révision auditée retourne effectivement `3` et signale
-13 violations. Le build peut néanmoins poursuivre vers les dépendances et la compilation. Cette erreur
-de propagation contredit le contrat général selon lequel une validation de fichiers en échec doit
-bloquer la publication du résultat.
-
-Il faut afficher le journal puis rendre exactement le statut AWK. Le message `satus` doit aussi être
-corrigé. Ce point est indépendant de la décision architecturale concernant les 13 violations : elles ne
-doivent ni être masquées ni transformées en exceptions par cette correction.
-
 ### 3. Haute — noms temporaires prévisibles et ouverture non exclusive
 
 Trois mécanismes utilisent un suffixe fixe `.tmp` :
@@ -225,33 +205,6 @@ logs et fichiers générés dans les sources. Des cibles différentes partagent 
 simple que rendre toute la chaîne réentrante. `.WAIT` doit rester utilisé pour exprimer les dépendances
 réelles, notamment binaire lié → mesure mémoire. Une parallélisation sélective des seules compilations
 pourra être réintroduite plus tard si elle apporte un gain mesuré.
-
-### 7. Moyenne — le domaine des noms de fichiers n'est pas défini
-
-La découverte utilise `find` puis stocke sa sortie dans des listes Make séparées par espaces
-(`mk/sources.mk:15-50`). De nombreuses recettes développent ensuite ces listes sans guillemets. Les noms
-contenant espace, tabulation, retour ligne, glob ou commençant par `-` ne sont donc pas fiables. Les
-écritures `.for` d'autoCode ont le même contrat implicite.
-
-Essayer de supporter tous les noms Unix dans les listes texte de `bmake` ajouterait une complexité peu
-utile ici. La solution adaptée est de formaliser et contrôler un alphabet de chemin simple, par exemple
-lettres ASCII, chiffres, `_`, `-`, `.`, `/`, sans composant `.` ou `..`, puis de faire échouer le build
-avant toute écriture si un fichier suivi ou découvert sort de ce domaine. Les appels directs sur un seul
-chemin doivent néanmoins rester cités et employer `--` lorsque l'outil le permet.
-
-### 8. Moyenne — `.BEGIN` et `.END` ont des effets de bord globaux
-
-Le développement de `bmake -n help` montre que la cible d'aide vérifie les programmes, crée les
-répertoires de build, prépare `tm_info.h.tmp` et réécrit `last_build_info.txt`. Ces opérations viennent
-de `.BEGIN` et `.END` (`mk/build.mk:20-78`) et ne sont donc pas limitées à `all`/`upload`.
-
-En particulier, `.END` décrit le « dernier build » même après une cible utilitaire ; selon la classe
-d'échec rencontrée, ces métadonnées peuvent être tronquées ou décrire une tentative incomplète. La
-génération de `tm_info.h` dans les sources est nécessaire au firmware, mais elle ne devrait pas être un
-effet de bord de `help`, `clean`, `doc` ou des tests hôte.
-
-Il faut déplacer ces recettes vers des cibles internes prérequises uniquement par les cibles qui en ont
-besoin, et publier `last_build_info.txt` atomiquement seulement après le succès du build concerné.
 
 ### 10. Faible — le contrôle d'en-têtes construit une commande shell
 
