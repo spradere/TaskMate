@@ -1,54 +1,39 @@
 # 👨‍💻 Architecture Note — autoCode
 
 ## Historical developments
-`autoCode` replaced manual allocation and include glue around `v0.10`. It gained `init.rc` parsing
-in `v0.20`, then learned the architecture/MCU/board split in `v0.21`.
-
-Revisions `v0.24` to `v0.26` added options, tagged replacement, temporary files, and diagnostics.
-After tag `v0.28`, the system/user/HAL reorganisation changed inputs without changing its role.
-
-Commit `bd42774` deferred destination replacement until parsing succeeds; `22c6781` then made
-bounded line truncation explicit. Commit `79ac629` removed `FLOW` messages from firmware ROM.
-
-Commits `bd9272d` and `70ef58e` added bounded diagnostic accumulation and file-error propagation.
-Commit `a2a7c65` integrated black-box and sanitizer test targets for the host generator.
-Commit `e1d320a` generated the selected startup calls; `8951952` versioned the `init.rc` grammar.
+`autoCode` replaced manual allocation around `v0.10` and gained `init.rc` in `v0.20`.
+Revisions `v0.24` to `v0.26` added options, tagged generation, and diagnostics.
+Tag `v0.30` marks the tested host generator, bounded parsing, and versioned `init.rc` grammar.
+Commit `ed4674b` moved generated bodies into target-local `.inc` files under `build/`.
+Commit `b6a5129` made module source declarations drive the firmware compilation list.
+Commits `721aa4b` and `a0d0943` versioned the generator API and enforced build compatibility.
+Before `v0.31`, obsolete HAL startup and definition generation chains were removed end to end.
 
 ## Current implementation
-`bmake` compiles `srcs/autoCode/` as a host tool and gives it selected system, HAL, and target input
-lists. It:
+`bmake` compiles autoCode 1.1 as a host tool. It accepts only `init.rc` syntax 1.4 and reads
+selected module declarations, error catalogues, logical GPIO signals, and tagged destinations.
 
-- parses typed module entries, run levels, and optional driver I2C addresses;
-- requires each module to declare at least one valid `-source_file` or `-source_dir` path;
-- aggregates error declarations and their `FLOW`, `WARN`, `FAIL`, or `PANIC` level;
-- reads selected startup headers and functions plus logical GPIO declarations;
-- rewrites tagged module, error, GPIO, HAL include, and ordered startup-call regions.
+Each module declares its type, run level, and at least one existing source file or directory.
+Drivers may also declare an I2C address. The same declarations feed generation and Make source
+selection, so module registration and compilation share one source of truth.
 
-Every `init.rc` starts with the supported major and minor syntax versions on its first two physical
-lines. Missing, misplaced, malformed, or unsupported headers reject generation before publication.
-Source options may be repeated and mixed on one module. The build extracts the same declarations
-to form its explicit compilation list, while autoCode validates that each referenced file or
-directory exists below the configured source root.
+The generator validates bounded tokens, names, versions, duplicate modules, errors, required
+options, and exactly one instance of each required tag. It emits ten guarded `.inc` fragments in
+the selected target's generated directory; tracked sources retain only stable include anchors.
 
-Malformed records accumulate diagnostics up to a configured bound, then fail at phase boundaries.
-Destinations are generated as registered temporary files, cleaned on failure, and compared and
-replaced only after every input and required tag has passed validation.
-
-Generated data fixes module records, stacks, contexts, run levels, driver callbacks, errors, GPIO
-identifiers, selected includes, and startup order. Black-box targets exercise command options,
-syntax versions, single and repeated source declarations, catalogues, module inputs, tags, line
-bounds, stable replacement, and failure isolation; a separate target runs the corpus with address
-and undefined-behaviour sanitizers.
+Temporary files protect each destination from parse failures. Make tracks input lists and every
+fragment, so missing or changed generated output triggers regeneration. Normal and sanitizer
+black-box targets exercise valid inputs, malformed data, version checks, and stable replacement.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Required options and output tags are checked; invalid data prevents destination replacement.
-- Syntax versions, modules, errors, startup lists, and GPIO data are validated before compilation.
-- Fixed generated records avoid runtime registration and dynamic allocation in the firmware.
-- Generation and its host-side tests are build-integrated and deterministic on stable inputs.
+- Registration, source selection, errors, GPIO, and generated catalogues are checked together.
+- Firmware records, stacks, names, and limits remain static and allocation-free at runtime.
+- Generated files are target-isolated, untracked, and reproducible for stable ordered inputs.
+- The build rejects incompatible generator and `init.rc` versions before firmware compilation.
 
 ### Remaining weaknesses
-- Replacement has no rollback if a filesystem operation fails after an earlier rename.
-- Tests do not inject real open, close, remove, or rename failures and provide no fuzz coverage.
-- Syntax compatibility is exact; no migration path exists between supported `init.rc` versions.
-- Input discovery order and host tool versions are not captured in a generation manifest.
+- Publication is per fragment, with no transaction or rollback across the complete generated set.
+- Failure tests do not inject real open, close, remove, rename, or storage-exhaustion faults.
+- Compatibility is exact; no grammar migration or multi-version reader is available.
+- The build manifest records versions, but not input digests or the host toolchain identity.

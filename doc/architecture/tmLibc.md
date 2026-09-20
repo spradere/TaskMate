@@ -1,36 +1,34 @@
 # 📚 Architecture Note — tmLibc
 
 ## Historical developments
-`tmLibc` was introduced to bound code size and behaviour on constrained targets. It gained compact
-formatting, RAM/ROM-aware strings, and logging through target-specific output backends.
-
-After tag `v0.28`, it was treated as transversal in the separated tree. Commit `ec88d98` corrected
-formatter behaviour; later revisions added a cooperative-yield attempt for contention.
-
-Tag `v0.29` marks the baseline before the current syscall and startup refactors.
-Commit `a0b1a51` then redefined it as a horizontal layer above `sysCall`.
+`tmLibc` was introduced for bounded, small-footprint strings, formatting, and logging.
+After `v0.28`, AVR RAM/ROM descriptors supported constant text without dynamic allocation.
+Commit `a0b1a51` defined tmLibc as a horizontal layer above sysCall rather than transversal code.
+Commits `9c64446` and `58958b8` moved storage access and console transport behind sysCall.
+Commit `94ff337` grouped formatting below `tmLibc/stdio/`.
+Before `v0.31`, string macros became target-selected without a `hal/public` relay.
 
 ## Current implementation
-Build options select either TaskMate implementations or partial standard-library aliases. TaskMate
-mode provides bounded copy and comparison plus compact print functions supporting characters,
-strings, integers, hexadecimal, binary, percent, and one-digit zero padding.
+Build options select TaskMate implementations or partial standard-library aliases. TaskMate mode
+provides bounded copy and comparison plus compact formatting for characters, strings, integers,
+hexadecimal, binary, percent, and one-digit zero padding.
 
-Text descriptors distinguish RAM from AVR program memory. Formatting and logging share fixed static
-state. `sysCall` reads stored bytes and transports USART output in bounded chunks.
+tmLibc consumes storage-aware descriptors and calls sysCall to read bytes and transport console
+output. On AVR8, build-selected macros place constant text in program memory while RAM buffers are
+wrapped explicitly. Tasks and services may use the layer; HAL, sysCore, and sysCall may not.
 
-The dependency matrix makes `tmLibc` available to tasks and services, with only `sysCall` and
-`interfaces` below it. It is no longer transversal: HAL, sysCore, and `sysCall` do not depend on it,
-and it does not call HAL or sysCore. Top-level startup still uses logging before scheduling.
+Formatting uses fixed static state and no heap. Boot no longer depends on tmLibc: early USART status
+bytes are emitted through the neutral driver contract before scheduling and normal service logging.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Program-memory strings reduce scarce AVR RAM use.
-- Bounded string operations handle null text, capacity, and termination explicitly.
-- Formatting uses a fixed feature set and temporary storage with no heap.
-- Invalid padding leaves through the common formatter cleanup path.
+- Constant strings reduce AVR RAM use while callers retain a storage-neutral descriptor API.
+- Copy, comparison, and formatting bound accesses and handle null text defensively.
+- The formatter has a fixed feature set, static storage, and no allocation.
+- Architecture checks enforce the downward tmLibc to sysCall and interfaces dependency direction.
 
 ### Remaining weaknesses
-- Early startup logging still couples top-level boot sequencing to the library.
-- Formatting uses shared state and a non-atomic lock; one yield does not guarantee ownership.
-- Small buffer capacities can be mishandled, and return length differs from standard `snprintf`.
-- The standard-libc branch is incomplete, while logging lacks level, sink, and timing policy.
+- Shared formatter state makes formatting and logging non-reentrant and unsafe across preemption.
+- Return length and truncation behaviour differ from standard `snprintf` expectations.
+- The standard-library branch is incomplete and does not match descriptor-based signatures.
+- Backend macros are compiler-injected, and RAM/ROM details remain visible in public call sites.

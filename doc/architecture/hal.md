@@ -1,47 +1,36 @@
 # 🔧 Architecture Note — hal
 
 ## Historical developments
-TaskMate began as AVR-centric code, then `v0.21` separated architecture, MCU, and board ownership.
-This progressively removed hardware detail from sysCore and clarified target-specific boundaries.
-
-After tag `v0.28`, the repository introduced reusable external drivers and moved target GPIO wiring.
-Commit `b201809` completed the HAL/GPIO refactor; tag `v0.29` recorded the Make and HAL baseline.
-
-Generic driver and mechanism contracts later moved to `interfaces/`; HAL retained implementation.
+TaskMate began as AVR-centric code; `v0.21` separated architecture, MCU, and board ownership.
+After `v0.28`, reusable drivers and target-owned GPIO wiring clarified hardware responsibilities.
+From `v0.30`, neutral mechanism and driver contracts progressively moved to `interfaces/`.
+Commits `f78057f`, `0ea843f`, and `9eb3b78` introduced neutral halt, atomic, and context contracts.
+Commit `46c7521` made initial context restoration one indivisible AVR8 operation.
+Commit `776edf5` physically removed `hal/public`; tag `v0.31` records that boundary.
 
 ## Current implementation
-The only implemented stack is `avr8 / atmega2560 / arduinoMega`, selected by `test1`:
+The implemented stack is `avr8 / atmega2560 / arduinoMega`, selected by `test1`. Architecture code
+owns context, atomics, halt, string storage, compiler support, and memory reporting. MCU code
+owns GPIO, I2C, USART, and the scheduling timers. Board code contributes hardware configuration.
+Reusable drivers implement the AMC2004 LCD and ZS042 RTC contracts.
 
-- architecture code owns context, stack, interrupt, atomic, startup, and halt mechanisms;
-- MCU code owns GPIO, I2C, USART, timers, startup, and AVR text/output support;
-- board code provides the Arduino Mega startup hook;
-- reusable drivers implement the AMC2004 LCD and ZS042 RTC contracts.
+HAL operations are declared by neutral interfaces and implemented by selected target sources; no
+public relay directory remains. A build guard rejects the old facade and an include checker prevents
+system, tmLibc, interfaces, and tasks from reaching concrete architecture, MCU, or board headers.
 
-Neutral interfaces expose hardware-facing contracts, while the build selects the architecture,
-MCU, board, and driver implementations. Source files include concrete HAL headers only within HAL
-and target configuration. Before scheduling, generated calls initialize architecture, MCU,
-board, then target hooks before logical GPIO initialization.
-USART still starts earlier as the boot-log path. Once scheduled, the system service starts other
-drivers by run level through syscalls and checks their running state before advancing.
-
-LCD and USART output contracts transport `uint8_t` bytes. Their display paths are reserved for boot
-or normal thread context and must never be called from an ISR. In particular, an LCD byte sequence
-holds one I2C transaction from write start through write end; the syscall layer owns that sequencing
-and finalizes a started transaction after either success or failure. Reentrancy is intentionally not
-part of the contract until locking is added.
-
-`tmLibc` reaches byte-oriented text and USART operations through `sysCall`. Build-selected AVR
-string macros preserve program-memory access without exposing a public HAL facade.
+The boot path initializes USART before allocating modules and starting the scheduler. Run-level
+drivers are then initialized and started through syscalls. Context start restores the AVR stack,
+registers, status, and interrupt return as one naked non-returning backend operation.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- CPU context, interrupts, timers, and registers remain inside target-specific code.
-- The build and neutral contracts reject incomplete target selections before compilation.
-- The build-selected startup order is explicit, generated, and covered by host tests.
-- Registered drivers share one bounded life-cycle and status contract.
+- Neutral contracts are separated from selected architecture, MCU, board, and driver code.
+- Concrete register, context, interrupt, and timer details remain inside HAL implementation paths.
+- Build guards reject facade regression and forbidden concrete HAL includes.
+- Static selection and driver control keep hardware dispatch bounded and allocation-free.
 
 ### Remaining weaknesses
-- Driver capability requirements remain implicit in selected sources and `init.rc` names.
-- Build-injected AVR string macros still expose target storage policy to portable call sites.
-- Startup hooks are empty; USART and scheduler timers still follow special initialization paths.
-- Start requests discard driver results, and startup cannot unwind a partial hardware state.
+- Only one hardware stack validates the contracts and target-selection model.
+- Target string macros are compiler-injected into portable consumers and expose storage semantics.
+- USART and scheduling timers still follow special boot paths outside run-level startup.
+- Driver-stage start discards individual results and cannot unwind partial hardware initialization.

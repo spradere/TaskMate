@@ -1,37 +1,34 @@
 # 🧩 Architecture Note — services
 
 ## Historical developments
-Services introduced reusable system threads above the kernel, initially including a message service
-and serial CLI. The message service was later removed as the system service took its role.
-
-After tag `v0.28`, services moved under `srcs/system/services`. Commit `5109e98` put SCLI USART RX
-behind sysCall, and later cooperative yield shortened deliberate polling waits.
-
-Commits `c843372` and `35f329d` moved boot work to `TaskMate.c`, then staged startup to `system`.
+Services introduced reusable system threads above the kernel, including the serial CLI.
+After `v0.28`, they moved under `srcs/system/services/` and dropped their direct HAL access.
+Commit `5109e98` routed SCLI USART input through sysCall.
+Commits `c843372` and `35f329d` established staged startup in the system service.
+Run-level admission and cooperative yield then made startup ordering explicit.
+At `v0.31`, `test1` remains the sole composition and always includes system and SCLI services.
 
 ## Current implementation
-autoCode always registers the core-level `system` thread. The default `test1` composition also
-registers the service-level `scli` thread; `test_noscli` selects the same hardware without it. Every
-selected service has a fixed stack and declares itself initialized through sysCall at entry.
+autoCode registers `system` at the core level and `scli` at the service level, each with a fixed
+stack. Both declare initialization through sysCall and use sysCall for thread or hardware mediation.
 
-The system service starts drivers one run level at a time, triggers I2C discovery, stores the RTC
-startup date, then waits for driver and thread readiness before enabling the next level. It reads
-the RTC, updates the LCD, and cooperatively waits on its software counter.
+The system service initializes logical GPIO, advances run levels, starts matching drivers, performs
+I2C discovery, captures RTC startup time, and waits for driver and thread readiness. It then logs
+system data and periodically displays RTC time on the LCD.
 
-SCLI reads USART through sysCall into a fixed buffer and dispatches `date`, `driver`, `i2c`, and
-`thread`. The date command reads or updates RTC fields and can display the captured startup date.
-Services consume neutral interfaces and the horizontal `tmLibc` layer. Both relations are explicit
-in the v10 dependency matrix.
+SCLI reads USART into a fixed buffer and dispatches `date`, `driver`, `i2c`, and `thread` commands.
+Services use tmLibc for strings, formatting, and logging and may consume neutral data contracts;
+they do not include concrete HAL headers or call HAL functions directly.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Selected service records, stacks, command tables, and buffers have fixed memory costs.
+- Service records, stacks, command tables, and input buffers have fixed memory costs.
 - Startup follows explicit core, driver, service, and user stages with bounded readiness rounds.
-- Both services and all command handlers preserve the service -> sysCall boundary.
-- RTC command errors are translated through the generated error catalogue.
+- Hardware operations and thread control remain behind focused syscalls.
+- Generated registration keeps service composition aligned with selected source declarations.
 
 ### Remaining weaknesses
-- Startup discards I2C-scan, RTC-snapshot, and individual driver start results.
-- Thread readiness is self-declared, with no richer health or dependency state.
-- The display loop still ignores RTC/LCD errors and provides no recovery policy.
-- SCLI processes RX chunks rather than complete lines and silently truncates excess arguments.
+- Startup discards scan, RTC snapshot, and individual driver-start results.
+- Readiness is self-declared and has no richer dependency, health, or recovery state.
+- The display loop ignores RTC and LCD failures after startup.
+- SCLI processes available chunks, has no persistent line assembly, and truncates excess arguments.

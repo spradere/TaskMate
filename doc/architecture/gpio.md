@@ -1,31 +1,32 @@
 # 💡 Architecture Note — gpio
 
 ## Historical developments
-GPIO began as direct MCU pin handling, then `v0.22` and `v0.26` separated logical signals from pins.
-This moved application code from port/pin choices to named signal semantics.
-
-After tag `v0.28`, target configuration took ownership of wiring and autoCode generated signal IDs.
-Commit `b201809` completed the HAL/GPIO refactor; ATmega2560 bit operations then converged on shared
-helpers.
+GPIO began as direct MCU pin access; `v0.22` and `v0.26` separated logical signals from pins.
+After `v0.28`, target configuration owned wiring and autoCode generated signal identifiers.
+The pre-`v0.31` refactor removed GPIO state and dispatch from sysCore.
+Commit `2c3b727` moved logical operations to sysCall and the neutral hardware contract.
+Commits `93fc092` to `0eefe86` completed generated wiring and system-only initialization.
 
 ## Current implementation
-The selected target's `signals.gpio` generates the logical signal enum. autoCode also includes the
-selected target wiring in the MCU GPIO implementation. Before scheduling starts, system startup
-asks the HAL to populate its static signal table and initialize each pin.
+`test1/signals.gpio` defines the logical signal set. autoCode generates its enum and inserts target
+wiring into the selected ATmega2560 GPIO translation unit, where the static signal table lives.
 
-Tasks use set, get, and toggle syscalls. These delegate signal resolution to sysCore, which calls
-the neutral GPIO contract implemented by the selected MCU. That MCU owns the logical-to-physical
-table and supports input, push-pull output, pull-up, read, and write for configured ports.
+The system service alone may initialize signals, enforced by the current-thread check in sysCall.
+Initialization asks target configuration to map each signal, then configures the selected MCU pin.
+
+Tasks call set, get, or toggle syscalls. These call the neutral GPIO contract directly; the selected
+MCU resolves the table and accesses registers for input, push-pull output, pull-up, read, and write.
+sysCore no longer owns logical GPIO state or participates in the normal operation path.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Tasks use generated logical signals and never manipulate AVR registers directly.
-- Target wiring, logical state, HAL selection, and register access remain separate.
-- Static tables give deterministic memory use and fixed normal-path execution cost.
-- Unsupported target or MCU selections fail through build-time target and source selection.
+- Tasks depend on generated logical names, never AVR ports, pins, or registers.
+- Target wiring, neutral operations, MCU pin mechanics, and task APIs have distinct ownership.
+- Static generated tables keep memory and normal-path timing deterministic.
+- Build selection and generation require both a signal list and a target wiring source.
 
 ### Remaining weaknesses
-- Configured polarity is stored but not applied, so logical operations expose physical polarity.
-- Signal, table, port, and pin inputs lack validation; missing wiring can appear valid.
-- Interface modes exceed those implemented by ATmega2560, and only a subset of ports is described.
-- Toggle is not atomic, and wiring lacks completeness, duplicate-pin, and ISR contract checks.
+- Stored active polarity is not applied, so logical operations still expose physical polarity.
+- Signal, port, pin, and table accesses have no runtime bounds validation.
+- The portable mode set is wider than the implemented ATmega2560 subset.
+- Toggle is a non-atomic read-modify-write and wiring has no duplicate-pin completeness check.

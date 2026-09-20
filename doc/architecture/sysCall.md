@@ -1,47 +1,34 @@
 # 📞 Architecture Note — sysCall
 
 ## Historical developments
-`sysCall` became the task-visible boundary for kernel state, logical GPIO, and hardware operations.
-After tag `v0.28`, dedicated GPIO calls followed the sysCore/HAL tree split.
-
-Commit `a04cf1c` tightened the early boundary, while cooperative yield and `5109e98` removed direct
-SCLI HAL access. Commit `26359ac` split the API by HAL, modules, GPIO, and error responsibilities.
-
-Commits `830116e` and `9ad9cf2` added initialization and RTC-startup APIs used by staged startup.
+`sysCall` became the task-visible boundary for kernel state and logical hardware operations.
+After `v0.28`, GPIO and driver calls followed the sysCore/HAL split.
+Commit `26359ac` separated driver, error, GPIO, string, and thread responsibilities.
+Commits `830116e` and `9ad9cf2` added initialization and RTC startup services.
+Commits `9c64446` and `58958b8` moved storage-aware strings here and removed the tmLibc cycle.
+The pre-`v0.31` GPIO and HAL-facade work made all hardware calls target-neutral.
 
 ## Current implementation
-Four focused groups provide the boundary:
+Five focused groups mediate driver and peripheral operations, errors and halt, logical GPIO,
+storage-aware strings and console output, and thread/run-level/time-counter operations.
 
-- HAL calls mediate driver life cycle, LCD, RTC, I2C discovery, and USART RX;
-- module calls mediate run levels, threads, counters, readiness, and cooperative yield;
-- GPIO calls delegate logical signal operations to sysCore;
-- error calls expose generated messages and a controlled halt.
+Driver syscalls use generated module metadata and neutral HAL contracts for lifecycle, LCD, RTC,
+I2C discovery, and USART. Thread syscalls protect shared AVR state with short atomic sections and
+delegate database and scheduling policy to sysCore. GPIO calls reach the neutral HAL signal API.
 
-Run-level changes are atomic, monotonic, and bounded. Driver stages use generated callbacks.
-Readiness requires matching drivers to run and matching threads to declare initialization. The
-scheduler uses the resulting active level to admit threads.
-
-RTC calls validate pointers, translate errors, and keep one startup-time snapshot. The bounded
-I2C scan reconciles declared devices only after a complete, non-overflowing discovery pass.
-
-LCD and console output calls are restricted to boot or normal thread context. They must never be
-called from an ISR: their HAL paths can buffer, wait for a peripheral, or hold a sequenced I2C
-transaction. A successful LCD write start is always paired with finalization, including when a byte
-write fails. Reentrancy remains outside this contract until explicit locking is introduced.
-
-The v10 direction places `tmLibc` above this boundary. Current syscall sources still use its string
-and logging helpers; future work must remove those upward dependencies without changing syscall
-ownership of hardware and kernel mediation.
+String syscalls read RAM or program-memory descriptors, compare and copy bounded text, and transport
+console bytes. Build-selected macros create target-appropriate descriptors at call sites. tmLibc is
+strictly above this boundary; syscall sources no longer include or call it.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- AVR-shared counters, run levels, and thread status updates use short atomic sections.
-- Module lookup and metadata calls validate public inputs and use RAM/ROM-aware names.
-- Services reach drivers through typed syscalls with explicit error translation.
-- I2C discovery uses fixed storage and preserves state when the scan result is incomplete.
+- Task-visible APIs separate kernel policy from selected hardware implementations.
+- Shared counters, run levels, metadata, and RX error snapshots use explicit atomic sections.
+- Driver, thread, pointer, and bounded-string entry points validate key public inputs.
+- I2C discovery preserves declared state when scanning fails or overflows its fixed buffer.
 
 ### Remaining weaknesses
-- Driver-stage start returns no result and discards individual initialization and start failures.
-- Current sources still contain forbidden `sysCall` -> `tmLibc` dependencies.
-- Thread readiness is caller-declared; start still accepts an unchecked initial run level.
-- The RTC startup snapshot has no validity state when its source read fails.
+- Run-level driver start returns no aggregate result and discards individual failures.
+- Thread start accepts an unchecked initial run level and has fragile saved-level semantics.
+- GPIO operations expose no invalid-signal result and toggle is not atomic.
+- RTC startup data has no validity flag when capture fails or has not run.

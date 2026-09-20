@@ -1,64 +1,39 @@
 # 🏗️ Architecture Note — build
 
 ## Historical developments
-TaskMate evolved from one Makefile into BSD `bmake` orchestration, focused `mk/*.mk` fragments, and
-target-owned HAL fragments. autoCode and target validation became first-class build phases.
-
-After tag `v0.28`, the source split made `HWT -> BOARD -> MCU -> ARCH` explicit. Commit `7ae12ca`
-moved configuration and validated targets; `v0.29` (`9fc9513`) consolidated build rules.
-
-Header allow-list parsing, warnings, and role-based variable names were then tightened around the
-current AVR build pipeline. Commit `a2a7c65` added the integrated autoCode regression targets;
-`e1d320a` made startup-header and startup-function lists separate generated inputs.
+TaskMate evolved from one Makefile into BSD `bmake` orchestration and focused `mk/*.mk` files.
+After `v0.28`, hardware selection became the explicit target, board, MCU, and architecture stack.
+Tag `v0.30` marks integrated autoCode tests, syntax versioning, and architecture include checks.
+Commit `b6a5129` replaced broad firmware discovery with declarations from selected `init.rc` files.
+Commit `ed4674b` isolated generated fragments below each target build directory.
+Commit `776edf5` removed the `hal/public` facade and made boundary checks build-fatal.
+After `v0.31`, the build manifest gained both autoCode and `init.rc` version reporting.
 
 ## Current implementation
-Configuration declares the default `test1` target and a `test_noscli` composition for the same
-Arduino Mega, ATmega2560, and AVR8 stack. The latter is intended to omit SCLI. System-wide and
-target-owned module declarations are discovered separately and combined by autoCode.
+The sole configured target is `test1`, selecting Arduino Mega, ATmega2560, and AVR8. Its Make
+fragments contribute target configuration, hardware settings, compiler flags, and selected sources.
 
-Source selection separates discovery from compilation. `PATHS_SOURCE_SEARCH` remains the broad
-directory list used to find headers, `init.rc`, error catalogues, and other build inputs. The
-compilation list is assembled explicitly from four sources:
+Firmware sources combine the sysCore/sysCall base and boot entry point with module files and
+directories declared in `test1_init.rc`. Target fragments add tmLibc, architecture support, and the
+MCU GPIO implementation. The final list is sorted and deduplicated before object mapping.
 
-- the fixed base in `system/sysCore/`, `system/sysCall/`, `system/TaskMate.c`, and `tmLibc/`;
-- module-owned files named by `-source_file` in the selected `*_init.rc` files;
-- every C file below the directories named by `-source_dir` in those files;
-- target-selected non-module sources contributed through `FILES_EXTRA_SRC` by target, board, MCU,
-  and architecture Make fragments.
+The normal pipeline validates tools and the hardware stack, rejects retired HAL facade tokens,
+checks the autoCode API version, regenerates target-local fragments, and enforces direct-include
+and critical-header rules. It then builds dependencies and AVR firmware and reports size data.
 
-The resulting `FILES_COMPILE_SRC` list is sorted and deduplicated before object paths are derived.
-Startup translation units and the ATmega2560 GPIO implementation use `FILES_EXTRA_SRC`; module
-implementations stay attached to their `init.rc` declaration. The AVR8 directory remains attached
-to `timerSched` as the current special case.
-
-The normal build checks tools and the hardware stack, then strictly compares the autoCode major and
-minor version declared in `autoCode.h` with the versions expected by the build. A missing, malformed,
-duplicate, or incompatible version stops the build before autoCode generation. The build then
-regenerates autoCode and verifies guarded headers before collecting dependencies, building AVR
-firmware, and reporting memory use and line counts.
-Target artefacts, generated lists, logs, and stamps remain under `build/`.
-
-Each selected target, board, MCU, and architecture fragment contributes its startup header and
-function. autoCode emits their includes and calls in architecture-to-target initialization order.
-
-Generic driver headers in `interfaces/` are explicit autoCode dependencies. The header checker scans
-sources against `conf/system_header_allow.conf`, while compile-time guards protect critical headers.
-Dedicated targets run autoCode by validation stage or as a complete black-box corpus, with an
-ASan/UBSan build available for host-side memory and undefined-behaviour checks.
-
-The direct-include matrix now records `tmLibc` as a horizontal layer and permits service access to
-neutral interfaces. The checker does not yet classify `srcs/tmLibc/`, so those libc relations are
-documented target rules but are not build-enforced until a future code change extends the checker.
+Build artifacts, generated code, logs, manifests, and stamps live below `build/`. Destructive Make
+utilities pass paths through a type-aware repository-confinement guard. The final manifest records
+TaskMate, hardware, Git, compiler, autoCode, and `init.rc` versions.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Orchestration, discovery, hardware selection, checks, and utilities are separated by concern.
-- Architecture, MCU, board, and target fragments contribute only their selected responsibilities.
-- Missing target data, generated inputs, HAL selection, or guarded access fails before execution.
-- AVR builds and host autoCode tests use broad warnings and explicit diagnostic reporting.
+- Hardware selection, source ownership, generation, checking, compilation, and reporting are split.
+- Module source declarations drive both autoCode validation and firmware compilation.
+- Removed facades, forbidden includes, incompatible versions, and unsafe utility paths fail early.
+- Host tests, sanitizer tests, AVR warnings, and deterministic target-local outputs are integrated.
 
 ### Remaining weaknesses
-- Invalid-target diagnostics still name the obsolete selector instead of the active target variable.
-- Direct `tmLibc` dependency rules are present in the matrix but not yet checked.
-- Unsorted `*.rc` discovery can still make autoCode input ordering depend on filesystem enumeration.
-- Only one hardware stack exercises portability; the build also assumes BSD and Unix tooling.
+- Only AVR8/ATmega2560/Arduino Mega exercises the build and portability contracts.
+- The pipeline assumes BSD `bmake` and several Unix or BSD host utilities.
+- Recursive `-source_dir` expansion can silently widen a module's compilation boundary.
+- Some discovery lists depend on filesystem enumeration before later sorting or generation.

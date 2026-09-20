@@ -1,38 +1,34 @@
 # 🚨 Architecture Note — error
 
 ## Historical developments
-TaskMate replaced local ad-hoc error strings with module-owned `*.err` declarations between `v0.23`
-and `v0.26`. autoCode then aggregated them into one symbolic catalogue for HAL and system code.
-
-After tag `v0.28`, declarations moved with their owners while their generated contract stayed in
-`interfaces/`. Commits `7ee2725` and `08771cb` established the current four-level definition.
-
-Commit `c8d3d21` repaired the error-catalogue tag. Commit `79ac629` then made `FLOW` declarations
-message-free and removed their unused strings from firmware ROM.
+TaskMate replaced local strings with module-owned `*.err` catalogues between `v0.23` and `v0.26`.
+After `v0.28`, generated error codes and metadata moved into neutral interfaces.
+Commits `7ee2725` and `08771cb` established the four current severity levels.
+Commit `79ac629` removed `FLOW` text from firmware ROM while preserving its symbolic codes.
+Commit `f78057f` replaced formatted panic handling with a minimal neutral halt contract.
+After `v0.31`, generic system errors were consolidated in `system/general.err`.
 
 ## Current implementation
-Each declaration contains a symbolic name, quoted message, and one of four levels:
+Selected catalogues declare a symbolic code, quoted message, and one of four levels: `FLOW` for
+normal control interruption, `WARN` for recoverable anomalies, `FAIL` for component failure, and
+`PANIC` for a critical condition requiring a controlled halt.
 
-- `FLOW`: normal control-flow interruption handled by the thread;
-- `WARN`: recoverable abnormal condition handled and logged by the thread;
-- `FAIL`: component failure handled by the system and intended for persistent logging;
-- `PANIC`: critical system condition requiring a controlled halt.
+The build sorts declarations before autoCode generates the enum and fixed catalogue. `FLOW` entries
+have no stored message; other entries use target-appropriate constant text. Syscalls translate HAL
+driver state into error codes and provide bounded message lookup to services.
 
-The build sorts selected catalogues before generation. `FLOW` entries retain codes and levels but
-generate null message pointers; other entries retain program-memory text. Firmware code can resolve
-a message through sysCall, and system code can request a halt there without including a concrete HAL
-header.
+Fatal paths call the neutral `_Noreturn` halt contract. The AVR8 implementation disables interrupts
+and loops permanently, without formatting, USART output, allocation, or scheduler dependence.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Codes, messages, and levels originate from checked source catalogues.
-- Duplicate names, malformed declarations, and invalid levels fail generation.
-- The fixed-size firmware catalogue keeps only non-`FLOW` messages in AVR program memory.
-- Message lookup validates its index, and driver operations expose explicit error codes.
+- Codes, messages, and levels come from checked, owner-local source catalogues.
+- Duplicate names, malformed records, and invalid levels stop generation.
+- Message-free `FLOW` entries preserve normal control semantics without consuming text storage.
+- Terminal handling has a small deterministic contract independent of higher layers.
 
 ### Remaining weaknesses
-- The public lookup exposes text but not severity, owner, or recovery policy.
-- Driver dependencies collapse underlying causes, so callers cannot inspect an error chain.
-- Catalogue size and several 8-bit consumers do not share a documented extension policy.
-- Halt is a direct terminal path; no structured runtime record or tested safe-state escalation
-  exists.
+- Public lookup exposes message text but not severity, owner, or recovery policy.
+- Driver wrappers flatten dependency failures and do not preserve a causal error chain.
+- Error indices and several consumers remain 8-bit without an explicit growth policy.
+- Halt records no persistent diagnostic context and has no verified hardware safe-state sequence.
