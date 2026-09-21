@@ -41,27 +41,6 @@ static initrc_dispatch_result_t funcRun(const char *data, module_item_t *mod)
 	return INITRC_DISPATCH_OK;
 }
 
-static initrc_dispatch_result_t funcType(const char *data, module_item_t *mod)
-{
-	if( strcmp(data, "driver") == 0 ) { mod->type = MOD_DRIVER_ID; }
-	else if( strcmp(data, "service") == 0 )
-	{
-		mod->type = MOD_THREAD_ID;
-		mod->subtype = THREAD_BIT_TYPE_SYS;
-		mod->status |= (1 << THREAD_BIT_TYPE_SYS);
-	}
-	else if( strcmp(data, "user") == 0 )
-	{
-		mod->type = MOD_THREAD_ID;
-		mod->subtype = THREAD_BIT_TYPE_USER;
-		mod->status |= (1 << THREAD_BIT_TYPE_USER);
-	}
-	else { return INITRC_DISPATCH_UNKNOWN_DATA; }
-
-	mod->cnt_set_type++;
-	return INITRC_DISPATCH_OK;
-}
-
 static initrc_dispatch_result_t funcI2cAddress(const char *data, module_item_t *mod)
 {
 	char *end;
@@ -112,7 +91,6 @@ static initrc_dispatch_result_t funcSource(const char *data, const char *source_
 
 static const initrc_cmd_t initrc_cmds[] = {
 	{"-run", funcRun},
-	{"-type", funcType},
 	{"-i2c", funcI2cAddress},
 	{"-stack", funcStack},
 	{NULL, NULL}};

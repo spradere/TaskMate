@@ -1,22 +1,22 @@
 !set_initrc_ver_major 1
-!set_initrc_ver_minor 5
+!set_initrc_ver_minor 6
 # Hardware target noscli init.rc
 
 # System core, 
-timerSched -type driver -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
-timerSTC -type driver -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
-usart -type driver -run none -source_file hal/mcu/atmega2560/at2560_usart.c
+addDriver timerSched -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
+addDriver timerSTC -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
+addDriver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
-system -type service -run core -stack 234 -source_file system/services/system.c
+addService system -run core -stack 234 -source_file system/services/system.c
 
 # Drivers
-i2c -type driver -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
+addDriver i2c -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
 
-lcd -type driver -run driver -i2c 0x3C -source_file hal/drivers/lcd/lcd_AMC2004.c
-rtc -type driver -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS042.c
+addDriver lcd -run driver -i2c 0x3C -source_file hal/drivers/lcd/lcd_AMC2004.c
+addDriver rtc -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS042.c
 
 # Services
 
 # Tasks
-task1 -type user -run user -stack 50 -source_file user/tasks/task1.c
-task2 -type user -run user -stack 50 -source_file user/tasks/task2.c
+addTask task1 -run user -stack 50 -source_file user/tasks/task1.c
+addTask task2 -run user -stack 50 -source_file user/tasks/task2.c
