@@ -1,5 +1,5 @@
-!set_initrc_ver_major 1
-!set_initrc_ver_minor 6
+setVersion major 1
+setVersion minor 7
 # FreeBSD ucontext simulation init.rc
 
 # Virtual HAL drivers

@@ -19,7 +19,7 @@ VAL_TEST_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 6'
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 7'
 }
 
 fail()
@@ -88,6 +88,13 @@ logContains()
 {
 	if ! grep -F -q -- "$2" "${PATH_STAGE_WORK}/$1.log"; then
 		fail "$1: missing diagnostic <$2>"
+	fi
+}
+
+logDoesNotContain()
+{
+	if grep -F -q -- "$2" "${PATH_STAGE_WORK}/$1.log"; then
+		fail "$1: unexpected diagnostic <$2>"
 	fi
 }
 
@@ -344,9 +351,15 @@ runInitrcTests()
 	expectFailure missing_initrc_version "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
+	caseBegin legacy_initrc_version
+	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 6' \
+		> "${PATH_CASE}/init.rc"
+	expectFailure legacy_initrc_version "first init.rc line" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin empty_initrc
 	: > "${PATH_CASE}/init.rc"
-	expectFailure empty_initrc "missing !set_initrc_ver_major 1" \
+	expectFailure empty_initrc "missing setVersion major 1" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin comment_before_initrc_version
@@ -356,39 +369,46 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_minor_initrc_version
-	printf '%s\n' '!set_initrc_ver_major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing !set_initrc_ver_minor 6" \
+	printf '%s\n' 'setVersion major 1' > "${PATH_CASE}/init.rc"
+	expectFailure missing_minor_initrc_version "missing setVersion minor 7" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin malformed_initrc_version
+	printf '%s\n' 'setVersion major' > "${PATH_CASE}/init.rc"
+	expectFailure malformed_initrc_version "setVersion token count" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_before_minor_initrc_version
-	printf '%s\n' '!set_initrc_ver_major 1' 'addService system -run core' \
+	printf '%s\n' 'setVersion major 1' 'addService system -run core' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure module_before_minor_initrc_version "second init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' '!set_initrc_ver_major 0' '!set_initrc_ver_minor 6' \
+	printf '%s\n' 'setVersion major 0' 'setVersion minor 7' \
+		'addService must_not_be_parsed -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logDoesNotContain wrong_major_initrc_version "found module : must_not_be_parsed"
 
 	caseBegin wrong_minor_initrc_version
-	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 2' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 2' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_minor_initrc_version "unsupported init.rc minor syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' '!set_initrc_ver_minor 6' '!set_initrc_ver_major 1' \
+	printf '%s\n' 'setVersion minor 7' 'setVersion major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addService system -run core -stack 256' '!set_initrc_ver_minor 6' \
+	printf '%s\n' 'addService system -run core -stack 256' 'setVersion minor 7' \
 		>> "${PATH_CASE}/init.rc"
-	expectFailure late_initrc_version "init.rc version command outside header" \
+	expectFailure late_initrc_version "setVersion command outside header" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin malformed_initrc
