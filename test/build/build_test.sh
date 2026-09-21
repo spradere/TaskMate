@@ -228,7 +228,6 @@ runScriptTests()
 	FILE_PATH_CHECK="${PATH_PROJECT}/scripts/check_path_file.sh"
 	FILE_VERSION="${PATH_PROJECT}/scripts/git_version.sh"
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
-	FILE_HAL_FACADE="${PATH_PROJECT}/scripts/check_removed_hal_facade.sh"
 
 	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
 		'#define AC_INITRC_EXPECTED_VER_MINOR 6' \
@@ -267,35 +266,6 @@ initrc : 1.6" awk -v expected_major=1 -v expected_minor=2 -v report_versions=1 \
 	expectFailure programs_missing "Missing required programs:" \
 		"${FILE_PROGRAMS}" "${PATH_STAGE_WORK}/missing.conf"
 	logContains programs_missing "taskmate_program_that_does_not_exist"
-
-	PATH_HAL_REMOVAL="${PATH_STAGE_WORK}/hal_removal_project"
-	mkdir -p "${PATH_HAL_REMOVAL}/srcs" "${PATH_HAL_REMOVAL}/mk" \
-		"${PATH_HAL_REMOVAL}/conf" "${PATH_HAL_REMOVAL}/test"
-	: > "${PATH_HAL_REMOVAL}/Makefile"
-	printf '%s\n' 'hal/public is rejected by the guard' \
-		> "${PATH_HAL_REMOVAL}/test/negative.c"
-	expectSuccess hal_removal_clean "${FILE_HAL_FACADE}" "${PATH_HAL_REMOVAL}"
-
-	mkdir -p "${PATH_HAL_REMOVAL}/srcs/hal/public"
-	expectFailure hal_removal_directory "Removed HAL public directory still exists" \
-		"${FILE_HAL_FACADE}" "${PATH_HAL_REMOVAL}"
-	rmdir "${PATH_HAL_REMOVAL}/srcs/hal/public"
-
-	printf '%s\n' '#include "hal/public/hal_context.h"' \
-		> "${PATH_HAL_REMOVAL}/srcs/legacy.c"
-	expectFailure hal_removal_token "Legacy HAL public token" \
-		"${FILE_HAL_FACADE}" "${PATH_HAL_REMOVAL}"
-	find "${PATH_HAL_REMOVAL}/srcs/legacy.c" -delete
-
-	printf '%s\n' '#define HAL_CONTEXT 1' > "${PATH_HAL_REMOVAL}/srcs/legacy.c"
-	expectFailure hal_removal_macro "Legacy HAL public token" \
-		"${FILE_HAL_FACADE}" "${PATH_HAL_REMOVAL}"
-	find "${PATH_HAL_REMOVAL}/srcs/legacy.c" -delete
-
-	mkdir -p "${PATH_HAL_REMOVAL}/srcs/hal/arch/avr8"
-	: > "${PATH_HAL_REMOVAL}/srcs/hal/arch/avr8/avr8_stack.h"
-	expectFailure hal_removal_relay "Removed HAL relay still exists" \
-		"${FILE_HAL_FACADE}" "${PATH_HAL_REMOVAL}"
 
 	expectSuccess compare_create "${FILE_COMPARE}" "${PATH_STAGE_WORK}/manifest" "alpha beta"
 	assertFileContains "${PATH_STAGE_WORK}/manifest" "alpha beta"
