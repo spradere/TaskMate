@@ -1,3 +1,5 @@
+v1.7	add `set_ver_*` commands
+v1.6	add commands `add*` and commands parser
 v1.5	add stack size for threads
 v1.3	add initrc version control
 v1.2 	add optional I2C address

@@ -1,3 +1,4 @@
+	[code] upgrade autoCode init.rc parser
 	[code] variable size for stacks
 	[code] move stack out of modules data base
 	[code] add stack depth measurement
