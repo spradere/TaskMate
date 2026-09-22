@@ -22,6 +22,8 @@ in `doc/architecture/`.
 - Update the relevant tests for every code change unless the prompt explicitly
   says not to update tests. Run the affected tests and report hardware-validation
   limits.
+- Use `test1` as the reference target for build validation. Do not systematically
+  build other targets; build them only when the prompt explicitly requests it.
 - On the FreeBSD host, run `apply_patch` interactively through the terminal from
   the repository root and use repository-relative paths. The integrated patch
   wrapper cannot enforce its inner filesystem sandbox on FreeBSD; do not retry
