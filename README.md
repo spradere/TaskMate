@@ -7,20 +7,19 @@
 ## ▶️ Introduction
 
 **TaskMate is a personal project focused on learning C programming and real-time operating system
-design through hands-on practice, experimentation, and iterative development.**
+design through hands-on practice, experimentation, and iterative development. 
+TaskMate operating system is designed for microcontroller.**
 
 At a much smaller scale and within my own limits, this project is also a way to retrace—step by
 step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
-The TaskMate operating system is designed for microcontroller. Its architecture is structured to
-maintain a clear separation between build
-logic, system behaviour, and hardware dependencies, ensuring both portability and maintainability.
-
-> <span style="color:green"> **Project Stats (v0.30 [^1] )**</span>
+> <span style="color:green"> **Project Stats (v0.31 [^1] )**</span>
 >
->  <span style="color:green">1009 commits • 145 source files • 12717 lines of code •
-> binary size: 155992 bytes (Flash) • RAM usage: 1327 bytes</span>
+> <span style="color:green">1034 commits • 173 source files • 14686 lines of code •
+> AVR target binary size: 155992 bytes • RAM usage: 1327 bytes</span>
+
+![Project stats](doc/stats.png)
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -32,7 +31,7 @@ logic, system behaviour, and hardware dependencies, ensuring both portability an
 
 ---
 
-## ⬆️ TaskMate Layers - Run Time
+## ⬇️ TaskMate Layers - Run Time
 
 ![System Layer Diagram](doc/TaskMate_layers.png)
 
@@ -41,11 +40,6 @@ The diagram shows the architectural direction of TaskMate.
 Each layer communicates primarily with its direct neighbours, following a strict top-down model to
 maintain clear boundaries and avoid hidden dependencies.
 
-Interfaces remain the single transversal contract layer. The lightweight libc is now a horizontal
-layer above sysCall: tasks and services may use it, while hardware-facing work must ultimately go
-through sysCall. The source tree still contains legacy dependencies that future refactors will align
-with this direction.
-
 System features such as messaging, timing, I/O, and services remain fully accessible to user
 tasks—but always through controlled and indirect interactions.
 
@@ -53,10 +47,10 @@ tasks—but always through controlled and indirect interactions.
 
 ## ⚙️ Build system
 
-TaskMate uses a custom **build system** that fully manages dependencies and workflow.
+TaskMate uses a custom build system that fully manages dependencies and workflow.
 
 - Automatic recompilation based on file changes, including headers and configuration files.
-- CLI commands like `make upload`, `make push` and `make backup`.
+- CLI commands like `make upload` and `make backup`.
 
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
@@ -117,9 +111,9 @@ the assistance of AI. ChatGPT has been a great tool for structuring ideas,
 learning new concepts, and refining both code and architectural design. It
 provides technical guidance.
 
-Codex is now also used, mainly for audits and complex refactors. It runs in a
+Codex is now (v0.27) also used, mainly for audits and complex refactors. It runs in a
 sandboxed environment on a separate machine and under a dedicated account.
-Its changes go through a double merge before reaching the main project branch;
+Its changes go through merge and test before reaching the main project branch;
 this review process does not make AI output automatically correct.
 
 ---
