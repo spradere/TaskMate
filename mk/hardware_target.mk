@@ -14,9 +14,11 @@
 
 # Hardware target
 .if empty(VAL_TARGET)
-.if make(all)
-.error No target selected, use make VAL_TARGET=<target name>
-.endif
+VAL_DEFAULT_TARGET = all
+.PHONY: ${VAL_DEFAULT_TARGET}
+${VAL_DEFAULT_TARGET}:
+	@printf "%s\n" "No target selected, use make VAL_TARGET=<target name>" >&2
+	@false
 .else
 FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/target.mk
 

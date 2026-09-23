@@ -106,6 +106,12 @@ runConfigurationTests()
 	stageBegin configuration
 
 	expectFailure no_target_build "No target selected" bmake -C "${PATH_PROJECT}" all
+	expectSuccess no_target_help bmake -C "${PATH_PROJECT}" \
+		PATHS_SOURCE_SEARCH=path_that_must_not_be_searched help
+	expectSuccess no_target_tm_sources bmake -C "${PATH_PROJECT}" -V FILES_TM_SRC
+	logContains no_target_tm_sources "srcs/system/boot.c"
+	logContains no_target_tm_sources "srcs/hal/arch/avr8/avr8_atomic.c"
+	logExcludes no_target_tm_sources "srcs/autoCode/"
 	expectSuccess no_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
 		FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode
 	logContains no_target_autocode_test "clang -DAUTOCODE_BUILD"

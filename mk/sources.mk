@@ -14,6 +14,7 @@
 
 OPT_FIND_EXCLUDE = ! -path '*/.*'
 
+.if !empty(VAL_TARGET)
 # Header files found across every selected source directory
 FILES_SRC_H != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 FILES_DRIVER_INTERFACES != find ${PATH_SRCS}/interfaces ${OPT_FIND_EXCLUDE} -type f \
@@ -49,14 +50,12 @@ FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Test files provided by the selected target
-.if !empty(VAL_TARGET)
 .if !exists(${FILE_GPIO_SIGNALS})
 .error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
 .endif
 
 .if !exists(${FILE_WIREGPIO})
 .error GPIO target wiring not found >>>${FILE_WIREGPIO}<<<
-.endif
 .endif
 
 # Dependency files
@@ -65,15 +64,22 @@ FILE_DEPS_ALL = ${PATH_BUILD_TARGET}/.deps.d
 
 .sinclude "${FILE_DEPS_ALL}"
 
-# autoCode
-FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
-FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
-
 VAL_DATE_TIME != date +"%Y_%m_%d_%Hh%Mm%Ss"
 
 # Global error
 FILES_ERROR != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort
 FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
+.endif
+
+# autoCode
+FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
+FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
+
+# Target-independent TaskMate sources used by global utilities
+FILES_TM_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
+	! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.c" | sort
+FILES_TM_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
+	! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.h" | sort
 
 # Documentation files
 FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \
