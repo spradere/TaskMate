@@ -17,7 +17,7 @@ the fundamental primitives of an operating system should be and how they can be 
 > <span style="color:green"> **Project Stats (v0.31 [^1] )**</span>
 >
 > <span style="color:green">1034 commits • 173 source files • 14686 lines of code •
-> AVR target binary size: 155992 bytes • RAM usage: 1327 bytes</span>
+> AVR target binary size: 15592 bytes • RAM usage: 1327 bytes</span>
 
 ![Project stats](doc/stats.png)
 
@@ -31,7 +31,7 @@ the fundamental primitives of an operating system should be and how they can be 
 
 ---
 
-## ⬇️ TaskMate Layers - Run Time
+## 🗺️ TaskMate Layers - Run Time
 
 ![System Layer Diagram](doc/TaskMate_layers.png)
 
@@ -58,6 +58,15 @@ TaskMate uses a custom build system that fully manages dependencies and workflow
 
 ---
 
+## 🔀 Portability
+
+The primary development target is an AVR ATmega2560 microcontroller; a successful initial port was achieved following the latest changes (v0.31) 
+designed to increase the system's abstraction level: a simulation target running on FreeBSD-ucontext, using virtual drivers and an ncurses I/O console.
+A success, because not a single line of the system code had to be modified to carry out this port.
+
+This simulation port validates the portability of the core system and its independence from the AVR toolchain; a future port to STM32 will validate the capabilities of the HAL layer.
+
+---
 ## ⏱️ Real-Time Behaviour
 
 Although TaskMate includes pre-emptive scheduling and a software real-time clock,
@@ -80,7 +89,7 @@ driver contention, or prolonged critical sections.
 **HAL (Hardware Abstraction Layer)**
 
 The HAL isolates all hardware-specific details behind a consistent interface.
-It allows the system to remain portable and predictable, regardless of the underlying architecture, MCU, or board.
+It allows the system to remain portable and predictable, regardless of the underlying architecture.
 
 **SysCall (System Call Layer)**
 
