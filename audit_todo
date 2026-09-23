@@ -7,8 +7,12 @@ AUDIT :
 
 TODO, short-term :
 - fix make utility commands without taget
-- autoCode parseInitrc refactor, move options in parseinitrc.
-- sevice scli commands selection in initrc file. Remove C code in target files.
+- autoCode parseInitrc refactor, move options in parseinitrc
+- sevice scli commands selection in initrc file. Remove C code in target files
+- makefiles general review, remove system includes check ?
+- autoCode general review, code is clean ? refactor code duplication
+- review ucontext and ncurses
+- upgrade ncurses perfs
 
 TODO, long-term :
 - autocode and TaskMate : check if string pointer is not null before process data
