@@ -51,7 +51,6 @@ FILE_INITRC_DEPS = ${PATH_BUILD_TARGET}/files_initrc.deps
 FILE_PARSE_TAG_DEPS = ${PATH_BUILD_TARGET}/files_to_parse.deps
 FILE_ERROR_DEPS = ${PATH_BUILD_TARGET}/files_error.deps
 FILE_GPIO_SIGNALS_DEPS = ${PATH_BUILD_TARGET}/gpio_signals.deps
-FILE_ERROR_LEVEL = ${PATH_SRCS}/interfaces/error_level.h
 
 # Check dynamic dependencies before evaluating the autoCode stamp.
 .PHONY: _autocode
@@ -101,17 +100,6 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 
 # Missing or externally modified generated artefacts force autoCode to run.
 ${FILES_AUTOCODE_INC}:
-
-# Special rule for autoCode with Clang, not the architecture-specific compiler
-CFLAGS_AUTOCODE = -DAUTOCODE_BUILD -I${PATH_SRCS}/
-CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
-	-Wswitch -Wenum-conversion \
-	-Wno-gnu-zero-variadic-macro-arguments
-
-${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ERROR_LEVEL}
-	@printf "%sCompiling autoCode%s\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
 
 # Dependency generation
 .PHONY: _autocode_dependency_check

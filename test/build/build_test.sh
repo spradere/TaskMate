@@ -96,27 +96,36 @@ assertFileExcludes()
 	fi
 }
 
+targetMake()
+{
+	bmake -C "${PATH_PROJECT}" VAL_TARGET=test1 "$@"
+}
+
 runConfigurationTests()
 {
 	stageBegin configuration
 
+	expectFailure no_target_build "No target selected" bmake -C "${PATH_PROJECT}" all
+	expectSuccess no_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
+		FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode
+	logContains no_target_autocode_test "clang -DAUTOCODE_BUILD"
 	expectOutput default_stack "test1 arduinoMega atmega2560 avr8" \
-		bmake -C "${PATH_PROJECT}" -V VAL_HW_STACK
+		targetMake -V VAL_HW_STACK
 	assertFileExcludes "${PATH_PROJECT}/conf/hardware-targets.conf" "test_noscli"
 	expectOutput default_path "build/test1_arduinoMega_atmega2560_avr8" \
-		bmake -C "${PATH_PROJECT}" -V PATH_BUILD_TARGET
+		targetMake -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
-		bmake -C "${PATH_PROJECT}" -V FILE_ARCH_CC
+		targetMake -V FILE_ARCH_CC
 	expectOutput architecture_types_header \
 		"srcs/hal/arch/avr8/avr8_architecture_types.h" \
-		bmake -C "${PATH_PROJECT}" -V FILE_HAL_ARCHITECTURE_TYPES
-	expectSuccess architecture_types_compile_flag bmake -C "${PATH_PROJECT}" -V CFLAGS
+		targetMake -V FILE_HAL_ARCHITECTURE_TYPES
+	expectSuccess architecture_types_compile_flag targetMake -V CFLAGS
 	logContains architecture_types_compile_flag \
 		"-include srcs/hal/arch/avr8/avr8_architecture_types.h"
-	expectSuccess source_search_paths bmake -C "${PATH_PROJECT}" -V PATHS_SOURCE_SEARCH
+	expectSuccess source_search_paths targetMake -V PATHS_SOURCE_SEARCH
 	logExcludes source_search_paths "srcs/hal/public"
-	expectOutput cpu_frequency "16000000UL" bmake -C "${PATH_PROJECT}" -V VAL_CPU_FREQ
-	expectOutput mcu_serial "atmega2560" bmake -C "${PATH_PROJECT}" -V VAL_MCU_SERIAL
+	expectOutput cpu_frequency "16000000UL" targetMake -V VAL_CPU_FREQ
+	expectOutput mcu_serial "atmega2560" targetMake -V VAL_MCU_SERIAL
 
 	expectOutput ucontext_stack "ucontext pc freebsd" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V VAL_HW_STACK
@@ -143,28 +152,28 @@ runConfigurationTests()
 	logExcludes ucontext_compile_sources "srcs/hal/arch/"
 	logExcludes ucontext_compile_sources "srcs/hal/mcu/"
 
-	expectSuccess default_compile_sources bmake -C "${PATH_PROJECT}" -V FILES_COMPILE_SRC
+	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
 	logContains default_compile_sources "srcs/system/services/commands/date.c"
 	logContains default_compile_sources "srcs/system/services/commands/stack.c"
 	logContains default_compile_sources "srcs/user/target/test1/test1_scli_commands.c"
 
-	expectSuccess default_initrc_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_SRC
+	expectSuccess default_initrc_sources targetMake -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"
 	logContains default_initrc_sources "srcs/user/target/test1/test1_scli_commands.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
 	expectOutput default_initrc_dirs "srcs/system/services/commands" \
-		bmake -C "${PATH_PROJECT}" -V PATHS_INITRC_SOURCES
+		targetMake -V PATHS_INITRC_SOURCES
 
-	expectSuccess default_extra_sources bmake -C "${PATH_PROJECT}" -V FILES_EXTRA_SRC
+	expectSuccess default_extra_sources targetMake -V FILES_EXTRA_SRC
 	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
 	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
 
-	expectSuccess initrc_directory_sources bmake -C "${PATH_PROJECT}" -V FILES_INITRC_DIR_SRC
+	expectSuccess initrc_directory_sources targetMake -V FILES_INITRC_DIR_SRC
 	logContains initrc_directory_sources "srcs/system/services/commands/date.c"
 	logExcludes initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
 
-	expectSuccess object_mapping bmake -C "${PATH_PROJECT}" -V FILES_OBJ
+	expectSuccess object_mapping targetMake -V FILES_OBJ
 	logContains object_mapping \
 		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/boot.o"
 	logExcludes object_mapping ".c.o"
@@ -174,16 +183,16 @@ runConfigurationTests()
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerSched.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_usart.h"
 	expectOutput driver_interface_order "${VAL_DRIVER_INTERFACES}" \
-		bmake -C "${PATH_PROJECT}" -V FILES_DRIVER_INTERFACES
+		targetMake -V FILES_DRIVER_INTERFACES
 
-	expectFailure invalid_target "Target not found >>>missing/target.mk<<<" \
+	expectFailure invalid_target "Target makefile not found >>>missing/target.mk<<<" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=missing -V VAL_HW_STACK
 	expectFailure invalid_option 'Invalid option "invalid"' \
-		bmake -C "${PATH_PROJECT}" OPT_CLEAN_AUTOCODE_LOGS=invalid -V VAL_HW_STACK
+		targetMake OPT_CLEAN_AUTOCODE_LOGS=invalid -V VAL_HW_STACK
 
 	PATH_MANIFESTS="${PATH_STAGE_WORK}/manifests"
 	: > "${PATH_STAGE_WORK}/programs.conf"
-	expectSuccess dependency_manifests bmake -C "${PATH_PROJECT}" \
+	expectSuccess dependency_manifests targetMake \
 		PATH_BUILD_TARGET="${PATH_MANIFESTS}" \
 		FILE_TM_INFO="${PATH_STAGE_WORK}/tm_info.h" \
 		FILE_BUILD_INFO="${PATH_STAGE_WORK}/build_info.txt" \
@@ -195,21 +204,21 @@ runConfigurationTests()
 	assertFileContains "${PATH_MANIFESTS}/gpio_signals.deps" \
 		"srcs/user/target/test1/signals.gpio"
 	expectFailure wire_gpio_outside "Path outside current directory rejected" \
-		bmake -C "${PATH_PROJECT}" \
+		targetMake \
 		FILE_WIREGPIO="/etc/passwd" \
 		_autocode_dependency_check
 	expectFailure wire_gpio_wrong_type "Invalid -f path rejected" \
-		bmake -C "${PATH_PROJECT}" FILE_WIREGPIO="${PATH_PROJECT}/build" \
+		targetMake FILE_WIREGPIO="${PATH_PROJECT}/build" \
 		_autocode_dependency_check
 
 	PATH_DEPENDENCIES="${PATH_STAGE_WORK}/dependencies"
 	mkdir -p "${PATH_DEPENDENCIES}"
 	printf 'fixture.o: fixture.c \\\r\n fixture.h\r\n' > "${PATH_DEPENDENCIES}/fixture.d"
-	expectSuccess dependencies_crlf_first bmake -C "${PATH_PROJECT}" \
+	expectSuccess dependencies_crlf_first targetMake \
 		PATH_BUILD_TARGET="${PATH_DEPENDENCIES}" \
 		FILES_DEP="${PATH_DEPENDENCIES}/fixture.d" \
 		FILE_DEPS_ALL="${PATH_DEPENDENCIES}/.deps.d" _dependency
-	expectSuccess dependencies_crlf_second bmake -C "${PATH_PROJECT}" \
+	expectSuccess dependencies_crlf_second targetMake \
 		PATH_BUILD_TARGET="${PATH_DEPENDENCIES}" \
 		FILES_DEP="${PATH_DEPENDENCIES}/fixture.d" \
 		FILE_DEPS_ALL="${PATH_DEPENDENCIES}/.deps.d" _dependency
