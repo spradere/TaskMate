@@ -43,7 +43,7 @@ note:
 #help [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_COMPILE_SRC} ${FILES_SRC_H} \
+	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_TM_SRC} ${FILES_TM_SRC_H} \
 		${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 
 .PHONY: cppcheck
@@ -51,12 +51,12 @@ cppcheck:
 #help [global] cppcheck static code analysis for autoCode and TaskMate.
 	@printf "\n%scppcheck static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cppcheck -I/root/code/TaskMate/TaskMate_current/ \
+	@cppcheck -I${PATH_SRCS} \
 		--enable=all --inconclusive --force \
 		--suppress=missingIncludeSystem \
 		--suppress=missingInclude \
 		--check-level=exhaustive \
-		${FILES_COMPILE_SRC} \
+		${FILES_TM_SRC} \
 		${FILES_AUTOCODE_SRC}
 
 .PHONY: format
@@ -64,16 +64,15 @@ format:
 #help [global] Format code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang-format19 -i ${FILES_COMPILE_SRC} ${FILES_SRC_H} ${FILES_AUTOCODE_SRC}
+	clang-format19 -i ${FILES_TM_SRC} ${FILES_TM_SRC_H} ${FILES_AUTOCODE_SRC}
 
 .PHONY: tidy_autoCode
 tidy_autoCode:
 #help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@clang-tidy19 $(FILES_AUTOCODE_SRC) ${FILES_AUTOCODE_SRC_H} --\
-	-I/root/code/TaskMate/TaskMate_current/ \
-	-I/root/code/TaskMate/TaskMate_current/${PATH_SRCS}/
+	@clang-tidy19 ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} -- \
+		${CFLAGS_AUTOCODE}
 
 .PHONY: help
 help:
