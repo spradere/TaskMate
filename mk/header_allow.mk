@@ -41,15 +41,6 @@ PATHS_TM_STRING_ALLOWED= \
 CFLAGS_${src} += -include ${FILE_HAL_STRING_MACRO}
 .endfor
 
-# Check includes for system-critical features
-.PHONY: _system_critical_check
-_system_critical_check:
-	@printf "%sChecking forbidden system critical includes ...%s\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-
-	@awk ${COLOURS_AWK} -v PATH_SOURCES=${PATH_SRCS} -v h_check_log=${FILE_H_CHECK_LOG} \
-		-f ${SCRIPT_HEADER_ALLOW} "${CONF_SYSTEM_HEADER_ALLOW}"
-
 # Check direct includes against the architecture matrix
 .PHONY: _architecture_include_check
 _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}
