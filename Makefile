@@ -36,16 +36,20 @@ PATH_TEST = test
 .include "${PATH_MAKEFILES}/header_allow.mk"
 
 # Make global process
-.include "${PATH_MAKEFILES}/autoCode.mk"
-.include "${PATH_MAKEFILES}/build.mk"
 .include "${PATH_MAKEFILES}/utils.mk"
 .include "${PATH_MAKEFILES}/backup.mk"
 .include "${PATH_MAKEFILES}/editors.mk"
+
+.if !empty(VAL_TARGET)
+.include "${PATH_MAKEFILES}/autoCode.mk"
+.include "${PATH_MAKEFILES}/build.mk"
+.endif
+
 .include "${PATH_TEST}/autoCode_test.mk"
 .include "${PATH_TEST}/build_test.mk"
 .include "${PATH_TEST}/tm_string_test.mk"
 
 # Architecture-specific Make logic
-.if !empty(VAL_TARGET)
+.if !empty(FILE_ARCH_CC)
 .include "${FILE_ARCH_CC}"
 .endif

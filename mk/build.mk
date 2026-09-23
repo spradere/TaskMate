@@ -96,3 +96,40 @@ _dependency:
 	@if ls ${FILES_DEP} >/dev/null 2>&1; then \
 		for file in ${FILES_DEP}; do tr -d '\r' < "$$file"; done; \
 	fi > "${FILE_DEPS_ALL}"
+
+.PHONY: clean_hard
+clean_hard:
+#help [global] Remove all build files for current target.
+	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_BUILD_TARGET}" "${PATH_BUILDS}"
+	@printf "\n%sRemove all files: ${PATH_BUILDS}/*\nRemove all files and subdir: ${PATH_BUILD_TARGET}/* %s\n\n" \
+		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
+		
+	@printf "${COLOUR_CLEAN_SOFT}"
+	find "${PATH_BUILDS}" -maxdepth 1 -type f -delete
+	find "${PATH_BUILD_TARGET}" -mindepth 1 -depth -delete
+	@printf "${COLOUR_RESET}"
+
+.PHONY: clean
+clean:
+#help [global] Remove base build files for current target.
+	@${SCRIPT_CHECK_PATH_FILE} -d \
+		"${PATH_BUILD_TARGET}" \
+		"${PATH_BUILDS}"
+	@${SCRIPT_CHECK_PATH_FILE} -f \
+		"${FILE_AUTOCODE_TARGET}"
+		
+	@printf "\n%sRemove files :%s\n\n" \
+		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
+	@printf "${COLOUR_CLEAN_SOFT}"
+	@printf "${PATH_BUILD_TARGET}/**/*.o\n"
+	@printf "${PATH_BUILD_TARGET}/**/*.d\n"
+	@printf "${PATH_BUILD_TARGET}/TaskMate*\n"
+	@printf "${FILE_AUTOCODE_TARGET}\n"
+	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
+	@printf "${COLOUR_RESET}"
+		
+	@-find "${PATH_BUILD_TARGET}" -type f \( -name "*.o" -o -name "*.d" \) -delete
+	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "TaskMate*" -delete
+	@-find "${FILE_AUTOCODE_TARGET}" -type f -delete
+	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete
+	@-find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete

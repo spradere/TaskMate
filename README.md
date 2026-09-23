@@ -16,8 +16,8 @@ the fundamental primitives of an operating system should be and how they can be 
 
 > <span style="color:green"> **Project Stats (v0.31 [^1] )**</span>
 >
-> <span style="color:green">1034 commits • 173 source files • 14686 lines of code •
-> AVR target binary size: 15592 bytes • RAM usage: 1327 bytes</span>
+> <span style="color:green">983 commits • 141 source files • 12501 lines of code •
+> AVR target binary size: 15588 bytes • RAM usage: 1820 bytes</span>
 
 ![Project stats](doc/stats.png)
 

@@ -88,7 +88,7 @@ PATHS_GIT_ALLOWED = \
 	${PATH_CONF} ${PATH_DOCS} ${PATH_MAKEFILES} ${PATH_SCRIPTS} \
 	${PATH_SRCS} ${PATH_TEST} ${PATH_LEGACY}
 FILES_GIT_ALLOWED.${PATH_CONF} = *.conf *.md
-FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile
+FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile *.ods
 FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *
 FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list *.awk
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
