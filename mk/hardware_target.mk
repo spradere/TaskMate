@@ -12,16 +12,17 @@
 # Hardware target selection and test
 ################################################################################
 
-# Default target
-#VAL_TARGET ?= test1
-#.if empty(VAL_TARGET)
-#.error No target selected, use make VAL_TARGET=<target name>
-#.endif
-
+# Hardware target
+.if empty(VAL_TARGET)
+.if make(all)
+.error No target selected, use make VAL_TARGET=<target name>
+.endif
+.else
 FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/target.mk
 
-.if (!empty(VAL_TARGET)) && (!exists(${FILE_TARGET_MK}))
+.if !exists(${FILE_TARGET_MK})
 .error Target makefile not found >>>${VAL_TARGET}/target.mk<<<
+.endif
 .include "${FILE_TARGET_MK}"
 
 # Check build hardware stack

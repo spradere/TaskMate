@@ -21,6 +21,7 @@ PATH_LEGACY = legacy
 FILE_TARGET = ${PATH_BUILD_TARGET}/TaskMate
 FILE_AUTOCODE_TARGET = ${PATH_BUILDS}/autoCode
 FILE_AUTOCODE_HEADER = ${PATH_SRCS}/autoCode/autoCode.h
+FILE_ERROR_LEVEL = ${PATH_SRCS}/interfaces/error_level.h
 FILE_PROGRAMS_CHECK_STAMP = ${PATH_BUILDS}/.programs_check_stamp
 
 # Configuration
