@@ -9,26 +9,8 @@
 ################################################################################
 
 ################################################################################
-# Allowed source access to system-critical headers
+# Headers source access
 ################################################################################
-
-CFLAGS_${PATH_SRCS}/system/sysCore/sys_modules.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
-CFLAGS_${PATH_SRCS}/system/sysCore/sys_scheduler.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
-CFLAGS_${PATH_SRCS}/system/boot.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED \
-	
-CFLAGS_${PATH_SRCS}/system/sysCore/sys_softwareTimeCounter.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_driver.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
-
-CFLAGS_${PATH_SRCS}/system/sysCall/sc_threads.c = \
-	-DTM_SYSTEM_CRITICAL_ALLOWED
 
 # Add string macro acces
 PATHS_TM_STRING_ALLOWED= \

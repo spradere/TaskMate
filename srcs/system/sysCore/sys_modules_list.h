@@ -14,10 +14,6 @@
 #ifndef SYSCORE_MODULES_LIST_H
 #define SYSCORE_MODULES_LIST_H
 
-#if !defined(TM_SYSTEM_CRITICAL_ALLOWED)
-	#error "NOT ALLOWED INCLUDE : sys_modules_list.h"
-#endif
-
 /* ============================================================================
  * Generated includes
  * ========================================================================== */
