@@ -6,10 +6,9 @@ AUDIT :
 - AVR timer 1 and 3 start/init diff
 
 TODO, short-term :
-- fix make utility commands without taget
 - autoCode parseInitrc refactor, move options in parseinitrc
 - sevice scli commands selection in initrc file. Remove C code in target files
-- makefiles general review, remove system includes check ?
+- makefiles general review
 - autoCode general review, code is clean ? refactor code duplication
 - review ucontext and ncurses
 - upgrade ncurses perfs
