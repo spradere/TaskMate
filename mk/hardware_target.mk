@@ -13,13 +13,11 @@
 ################################################################################
 
 # Hardware target
-.if empty(VAL_TARGET)
-VAL_DEFAULT_TARGET = all
-.PHONY: ${VAL_DEFAULT_TARGET}
-${VAL_DEFAULT_TARGET}:
-	@printf "%s\n" "No target selected, use make VAL_TARGET=<target name>" >&2
-	@false
-.else
+VAL_TARGET_NONE = no_target
+VAL_TARGET ?= ${VAL_TARGET_NONE}
+
+.if ${VAL_TARGET} != ${VAL_TARGET_NONE}
+
 FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/target.mk
 
 .if !exists(${FILE_TARGET_MK})

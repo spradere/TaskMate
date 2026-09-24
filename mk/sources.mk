@@ -14,7 +14,7 @@
 
 OPT_FIND_EXCLUDE = ! -path '*/.*'
 
-.if !empty(VAL_TARGET)
+.if ${VAL_TARGET} != ${VAL_TARGET_NONE}
 # Header files found across every selected source directory
 FILES_SRC_H != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 FILES_DRIVER_INTERFACES != find ${PATH_SRCS}/interfaces ${OPT_FIND_EXCLUDE} -type f \

@@ -40,7 +40,7 @@ PATH_TEST = test
 .include "${PATH_MAKEFILES}/backup.mk"
 .include "${PATH_MAKEFILES}/editors.mk"
 
-.if !empty(VAL_TARGET)
+.if ${VAL_TARGET} != ${VAL_TARGET_NONE}
 .include "${PATH_MAKEFILES}/autoCode.mk"
 .include "${PATH_MAKEFILES}/build.mk"
 .endif
