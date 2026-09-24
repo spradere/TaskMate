@@ -21,11 +21,23 @@ VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR=1
 VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR=2
 
 OPT_CLEAN_AUTOCODE_LOGS = yes
-VAL_VALID_OPTS = yes no
 
-.if empty(VAL_VALID_OPTS:M${OPT_CLEAN_AUTOCODE_LOGS})
-.error Invalid option "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [${VAL_VALID_OPTS}]
+.if ${OPT_CLEAN_AUTOCODE_LOGS} != "yes" && ${OPT_CLEAN_AUTOCODE_LOGS} != "no"
+.error Invalid option OPT_CLEAN_AUTOCODE_LOGS : "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [ yes | no ]
 .endif
+
+# Verbose level
+OPT_VERBOSE_LEVEL ?= 0
+
+.if !empty(VARIABLE:M[0-9]*)
+.error Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be a number.
+.endif
+
+.if (${OPT_VERBOSE_LEVEL} < 0) || (${OPT_VERBOSE_LEVEL} > 2)
+.error Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be [ 0 | 1 ].
+.endif
+
+_QUIET = ${${OPT_VERBOSE_LEVEL} == 1 :? : @}
 
 # bmake option for -V (Win10/Cygwin)
 .MAKE.EXPAND_VARIABLES = true

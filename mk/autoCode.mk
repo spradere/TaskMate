@@ -71,11 +71,11 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 						${FILE_WIREGPIO} \
 						${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
 
-	@printf "%sautoCode, related files have changed -> run autoCode%s\n" \
+	@printf "%sautoCode or related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 .if ${OPT_CLEAN_AUTOCODE_LOGS} == "yes"
 	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_LOGS}"
-	find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete
+	@find "${PATH_LOGS}" -maxdepth 1 -type f -name "autoCode_log*" -delete
 
 .endif
 
@@ -91,12 +91,8 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--source_path ${PATH_SRCS}" >> "${FILE_AUTOCODE_CONFIG}"
 		
 	# Launch autoCode
-	./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
+	${_QUIET}./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
 	@touch ${FILE_AUTOCODE_STAMP}
-
-	# Process log
-	@awk ${COLOURS_AWK} -v log_file="${FILE_AUTOCODE_LOG_DATED}" \
-		-f ${SCRIPT_AUTOCODE_LOG} "${FILE_AUTOCODE_LOG_DATED}"
 
 # Missing or externally modified generated artefacts force autoCode to run.
 ${FILES_AUTOCODE_INC}:
@@ -142,8 +138,9 @@ CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ERROR_LEVEL}
 	@printf "%sCompiling autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
-	
+
+	${_QUIET}clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
+
 # Run autoCode alone
 .PHONY: autoCode_alone
 autoCode_alone: ${FILE_AUTOCODE_TARGET}

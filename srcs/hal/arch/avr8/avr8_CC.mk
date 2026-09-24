@@ -28,19 +28,20 @@ ${FILE_AVR8_PROGRAMS_CHECK_STAMP}: ${FILE_AVR8_PROGRAMS_LIST} ${SCRIPT_CHECK_PRO
 
 # Link
 ${FILE_TARGET}: ${FILES_OBJ}
-	@printf "%sLinking%s\n\n" \
+	@printf "%sLinking ...%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${CC} ${CFLAGS} ${LDFLAGS} -o ${FILE_ELF} ${FILES_OBJ}
 	@printf "\t *.o -> ${FILE_ELF}\n"
-
+	
 # Compiler wrapper
 FILE_COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 # Compile
 ${FILES_OBJ}: ${FILE_COMPILE_SRC}
-	@printf "%sCompilation ...%s\n" \
-	    "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" \
-	    "${FILE_COMPILE_SRC}" "${.TARGET}"
+
+	@printf "%sCompilation ...%s\n" "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "source : <%s>\n" "${FILE_COMPILE_SRC}"
+.if ${_QUIET} == 1
+.endif
 	@mkdir -p "${.TARGET:H}"
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
 	    -c "${FILE_COMPILE_SRC}" -o "${.TARGET}"

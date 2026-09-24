@@ -30,7 +30,6 @@
 
 #if defined(HAL_STRING) && defined(HAL_STRING_INROM) && defined(HAL_STRING_RAM) && \
 	defined(HAL_STRING_ROM)
-	#warning ">>> Using HAL string implementation"
 	#define TM_STR(string) HAL_STRING(string)
 
 	#define TM_STR_RAM(string) HAL_STRING_RAM(string)
@@ -38,7 +37,6 @@
 
 	#define TM_STR_NEW(name, txt) HAL_STRING_INROM(name, txt)
 #else
-	#warning ">>> Using default string implementation"
 	#define TM_STR(string) (string)
 
 	#define TM_STR_RAM(string) (string)
