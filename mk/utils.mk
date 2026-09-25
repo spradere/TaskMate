@@ -79,4 +79,4 @@ help:
 #help [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@awk ${COLOURS_AWK} -f ${SCRIPT_MAKE_HELP} ${FILES_MK}
+	@awk -f ${SCRIPT_MAKE_HELP} ${FILES_MK}
