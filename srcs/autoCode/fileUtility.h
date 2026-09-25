@@ -26,7 +26,7 @@
  * ========================================================================== */
 
 #define FILE_READONLY 1
-#define FILE_CREATE 2
+#define FILE_MISSING_ALLOWED 2
 
 typedef struct
 {

@@ -45,6 +45,6 @@ typedef struct
  * Public API
  * ========================================================================== */
 
-void globalError(const char *src_name, error_catalog_t *errors);
+int globalError(const char *src_name, error_catalog_t *errors);
 
 #endif // AUTOCODE_GLOBALERROR_H

@@ -44,7 +44,7 @@ static bool file_tmp_cleanup_registered = false;
  * Private function prototypes
  * ---------------------------------------------*/
 
-static int fileCmpReplace(file_t *file_old, file_t *file_new);
+static int fileCompare(file_t *file_old, file_t *file_new);
 static void fileTmpCleanup(void);
 static int fileTmpCleanupAll(void);
 static char *fileTmpRegister(const char *file_src_name, const char *caller, int line);
@@ -71,7 +71,7 @@ int fileCmpReplaceAll(void)
 		file_t file_src;
 		fileInit(&file_src);
 		file_src.name = file_tmp_list[i].source_name;
-		if( fileOpen(&file_src, "r", FILE_CREATE, __FILE__, __LINE__) != 0 )
+		if( fileOpen(&file_src, "r", FILE_MISSING_ALLOWED, __FILE__, __LINE__) != 0 )
 		{
 			result = -1;
 			break;
@@ -87,10 +87,38 @@ int fileCmpReplaceAll(void)
 			break;
 		}
 
-		if( fileCmpReplace(&file_src, &file_tmp) != 0 ) { result = -1; }
+		const int comparison = fileCompare(&file_src, &file_tmp);
+		if( comparison < 0 ) { result = -1; }
 		if( fileClose(&file_src, __FILE__, __LINE__) != 0 ) { result = -1; }
 		if( fileClose(&file_tmp, __FILE__, __LINE__) != 0 ) { result = -1; }
 		if( result != 0 ) { break; }
+
+		if( comparison == 0 )
+		{
+			AUTOCODE_MSG_INFO("keep the old one <%s>", file_tmp_list[i].source_name);
+			if( remove(file_tmp_list[i].temporary_name) != 0 )
+			{
+				AUTOCODE_MSG_ERROR(
+					"removing temporary file <%s>", file_tmp_list[i].temporary_name);
+				result = -1;
+				break;
+			}
+			file_unchanged++;
+		}
+		else
+		{
+			AUTOCODE_MSG_INFO(
+				"change for the new one, tmp -> <%s>", file_tmp_list[i].source_name);
+			if( rename(file_tmp_list[i].temporary_name, file_tmp_list[i].source_name) != 0 )
+			{
+				AUTOCODE_MSG_ERROR("renaming file <%s> to <%s>",
+								   file_tmp_list[i].temporary_name,
+								   file_tmp_list[i].source_name);
+				result = -1;
+				break;
+			}
+			file_updated++;
+		}
 	}
 
 	if( fileTmpCleanupAll() != 0 )
@@ -101,13 +129,13 @@ int fileCmpReplaceAll(void)
 	return result;
 }
 
-static int fileCmpReplace(file_t *file_old, file_t *file_new)
+static int fileCompare(file_t *file_old, file_t *file_new)
 {
 	char old[AC_BUFFER_SIZE];
 	char new[AC_BUFFER_SIZE];
 	bool same = true;
 
-	if( fseek(file_old->stream, 0L, SEEK_SET) != 0 )
+	if( (file_old->stream != NULL) && (fseek(file_old->stream, 0L, SEEK_SET) != 0) )
 	{
 		AUTOCODE_MSG_ERROR("fseek file <%s>", file_old->name);
 		return -1;
@@ -118,6 +146,7 @@ static int fileCmpReplace(file_t *file_old, file_t *file_new)
 		AUTOCODE_MSG_ERROR("fseek file <%s>", file_new->name);
 		return -1;
 	}
+	if( file_old->stream == NULL ) { return 1; }
 
 	while( true )
 	{
@@ -141,27 +170,7 @@ static int fileCmpReplace(file_t *file_old, file_t *file_new)
 		}
 	}
 
-	if( same == true )
-	{
-		AUTOCODE_MSG_INFO("keep the old one <%s>", file_old->name);
-		if( remove(file_new->name) != 0 )
-		{
-			AUTOCODE_MSG_ERROR("removing temporary file <%s>", file_new->name);
-			return -1;
-		}
-		file_unchanged++;
-	}
-	else
-	{
-		AUTOCODE_MSG_INFO("change for the new one, tmp -> <%s>", file_old->name);
-		if( rename(file_new->name, file_old->name) != 0 )
-		{
-			AUTOCODE_MSG_ERROR("renaming file <%s> to <%s>", file_new->name, file_old->name);
-			return -1;
-		}
-		file_updated++;
-	}
-	return 0;
+	return same ? 0 : 1;
 }
 
 file_get_line_result_t fileGetLine(file_t *file, char *line, const size_t line_size)
@@ -253,27 +262,10 @@ int fileOpen(file_t *file, const char *mode, const int special_mode, const char 
 		return -1;
 	}
 
-	if( (file->stream == NULL) && (special_mode == FILE_CREATE) && (strcmp(mode, "r") == 0) )
+	if( (file->stream == NULL) && (special_mode == FILE_MISSING_ALLOWED) &&
+		(strcmp(mode, "r") == 0) && (errno == ENOENT) )
 	{
-		AUTOCODE_MSG_INFO("file don't exist -> creating <%s>", file->name);
-		file->stream = fopen(file->name, "w");
-		if( file->stream == NULL )
-		{
-			AUTOCODE_MSG_ERROR("from [%s:%i]creating file <%s>", caller, line, file->name);
-			return -1;
-		}
-		if( fclose(file->stream) != 0 )
-		{
-			file->stream = NULL;
-			AUTOCODE_MSG_ERROR("from [%s:%i] closing created file <%s>", caller, line, file->name);
-			return -1;
-		}
-		file->stream = fopen(file->name, mode);
-		if( file->stream == NULL )
-		{
-			AUTOCODE_MSG_ERROR("from [%s:%i]reopening file <%s>", caller, line, file->name);
-			return -1;
-		}
+		return 0;
 	}
 	if( file->stream == NULL )
 	{
