@@ -526,13 +526,18 @@ runReportTests()
 		-f "${PATH_PROJECT}/scripts/build_summary_memory.awk" \
 		"${PATH_STAGE_WORK}/memory_error.data"
 
-	printf '%s\n' 'public_target:' '#help [group] Public target.' '_private_target:' \
+	printf '%s\n' 'zebra_target:' '#help [group] Last target.' \
+		'public_target:' '#help [group] Public target.' '_private_target:' \
+		'alpha_target:' '#help [group] First target.' \
 		> "${PATH_STAGE_WORK}/help.mk"
-	expectSuccess help_report awk -f "${PATH_PROJECT}/scripts/make_help.awk" \
+	expectOutput help_report "alpha_target:  [group] First target.
+public_target:  [group] Public target.
+zebra_target:  [group] Last target." awk \
+		-v COLOUR_HELP_TARGET='<target-colour>' -v COLOUR_HELP_TAG='<tag-colour>' \
+		-v COLOUR_RESET='<reset-colour>' -f "${PATH_PROJECT}/scripts/make_help.awk" \
 		"${PATH_STAGE_WORK}/help.mk"
-	logContains help_report "public_target:"
-	logContains help_report "[group] Public target."
 	logExcludes help_report "_private_target:"
+	logExcludes help_report "<target-colour>"
 
 	printf '%s\n' \
 		'[fileUtility.c] info : keep old.c' \

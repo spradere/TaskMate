@@ -13,12 +13,25 @@
 ################################################################################
 
 /^([A-Za-z0-9][A-Za-z0-9_-]*):/ {
-	print COLOUR_HELP_TARGET $1 COLOUR_RESET
+	target = $1
 }
 
 $1 == "#help" {
-	printf("  %s%s%s", COLOUR_HELP_TAG, $2, COLOUR_RESET)
-	temp = $0
-	sub(/.*\]/, "", temp)
-	print temp
+	description = $0
+	sub(/^#help /, "", description)
+	help_list[++help_count] = target "  " description
+}
+
+END {
+	for( item = 2; item <= help_count; item++ ) {
+		temp = help_list[item]
+		for( list_index = item;
+			list_index > 1 && temp < help_list[list_index - 1]; list_index-- ) {
+			help_list[list_index] = help_list[list_index - 1]
+		}
+		help_list[list_index] = temp
+	}
+	for( list_index = 1; list_index <= help_count; list_index++ ) {
+		print help_list[list_index]
+	}
 }
