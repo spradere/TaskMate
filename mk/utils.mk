@@ -14,7 +14,7 @@
 
 .PHONY: doc
 doc:
-#help [global] Generate Doxygen documentation. Configuration file /doc/Doxyfile
+#help [global] Generate Doxygen documentation.
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	doxygen ${PATH_DOCS}/Doxyfile
@@ -48,7 +48,7 @@ note:
 
 .PHONY: cppcheck
 cppcheck:
-#help [global] cppcheck static code analysis for autoCode and TaskMate.
+#help [global] cppcheck static code analysis.
 	@printf "\n%scppcheck static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cppcheck -I${PATH_SRCS} \
@@ -61,14 +61,14 @@ cppcheck:
 
 .PHONY: format
 format:
-#help [global] Format code with clang-format, configuration /.clang-format.
+#help [global] Format code with clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format19 -i ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} ${FILES_AUTOCODE_SRC}
 
 .PHONY: tidy_autoCode
 tidy_autoCode:
-#help [global] tidy static code analysis for autoCode, configuration /.clang-tidy.
+#help [global] tidy static code analysis for autoCode.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy19 ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} -- \

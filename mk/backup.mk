@@ -38,7 +38,7 @@ ${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 
 .PHONY: backup
 backup:
-#help [global] USB key backup with current git tag in directory.
+#help [global] USB key backup with version in directory name.
 	@printf "\n%sBackup to <${PATH_USBKEY}${VAL_TM_BACKUP_DIR}>%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "%sInsert USB key and press ENTER to continue ... %s\n" \

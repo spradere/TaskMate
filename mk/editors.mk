@@ -28,7 +28,7 @@ vim_mk: ${FILE_TAGS_STAMP}
 
 .PHONY: geany_autoCode
 geany_autoCode:
-#help [global] Open Geany with all autoCode .c and .h source files.
+#help [global] Open Geany with all autoCode .c and .h files.
 	geany ${FILES_AUTOCODE_SRC_ALL}
 
 .PHONY: geany_mk
@@ -38,5 +38,5 @@ geany_mk:
 
 .PHONY: geany_tm
 geany_tm:
-#help [global] Open Geany with all TaskMate .c and .h source files (excluding autoCode).
+#help [global] Open Geany with all TaskMate .c and .h files.
 	geany ${FILES_NOTARGET_SRC_ALL}

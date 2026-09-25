@@ -35,5 +35,5 @@ _mcu_memory_data: ${FILE_TARGET}
 
 .PHONY: run
 run: all
-#help [freebsd] Run the ucontext simulation in the current terminal.
+#help [freebsd] Run the ucontext simulation.
 	@"./${FILE_TARGET}"

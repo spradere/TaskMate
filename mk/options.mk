@@ -16,6 +16,15 @@
 .MAIN: all
 .NOTPARALLEL:
 
+# Environment 
+HOST ?= freebsd
+OPT_ENVIRONMENT := ${HOST}
+
+.if ${OPT_ENVIRONMENT} != "freebsd" && ${OPT_ENVIRONMENT} != "linux" && ${OPT_ENVIRONMENT} != "w10-cygwin"
+.error Invalid option OPT_ENVIRONMENT : "${OPT_ENVIRONMENT}". Valid values: [ freebsd | linux | w10-cygwin ]
+.endif
+
+
 # Global find option
 OPT_FIND_EXCLUDE = ! -path '*/.*'
 
@@ -44,7 +53,8 @@ OPT_VERBOSE_LEVEL = ${VERBOSE}
 
 _QUIET = ${${OPT_VERBOSE_LEVEL} == 1 :? : @}
 
-# bmake option for -V (Win10/Cygwin)
+.if ${OPT_ENVIRONMENT} == "w10-cygwin"
+# bmake option for -V 
 .MAKE.EXPAND_VARIABLES = true
-
+.endif
 

@@ -19,7 +19,7 @@
 $1 == "#help" {
 	description = $0
 	sub(/^#help /, "", description)
-	help_list[++help_count] = sprintf("%-22s %s", target, description)
+	help_list[++help_count] = sprintf("%-21.21s %.57s", target, description)
 }
 
 END {

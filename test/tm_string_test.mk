@@ -23,7 +23,7 @@ ${FILE_TM_STRING_TEST_TARGET}: ${FILE_TM_STRING_TEST} \
 
 .PHONY: test_tm_string
 test_tm_string: ${FILE_TM_STRING_TEST_TARGET}
-#help [test] Test TaskMate string primitives and formatter boundaries.
+#help [test] Test TaskMate string primitives and formatter.
 	@${FILE_TM_STRING_TEST_TARGET}
 	@printf "%sAll tm_string tests passed%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
