@@ -36,6 +36,13 @@ ${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 
+# USB paths
+.if ${OPT_ENVIRONMENT} == "freebsd"
+PATH_USBKEY = /media/usbkey
+FILE_USBDEV = /dev/da0s1
+.endif
+VAL_USB_LABEL_EXPECTED = TASKMATE
+
 .PHONY: backup
 backup:
 #help [global] USB key backup with version in directory name.
@@ -45,6 +52,19 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@read DUMMY_VAR
 
+.if ${OPT_ENVIRONMENT} == "freebsd"
+.if !empty(PATH_USBKEY) && !empty(FILE_USBDEV) && !empty(VAL_TM_BACKUP_DIR)
+	@printf "%sFreeBSD backup%s\n" \
+			"${COLOUR_BACKUP}" "${COLOUR_RESET}"
+			
+	# Test key volume name
+	@label=$$(fstyp -l ${FILE_USBDEV} 2>/dev/null | awk '{print $$2}'); \
+	if [ "$$label" != "${VAL_USB_LABEL_EXPECTED}" ]; then \
+		printf "Wrong USB volume: <%s>\n" "$$label"; \
+		exit 1; \
+	fi
+	@printf "USB volume OK: %s\n" "${VAL_USB_LABEL_EXPECTED}"
+	
 	# Mount the USB key if necessary
 	@if mount | grep -q "${PATH_USBKEY}"; then \
 		printf "%sUSB key already mounted ${PATH_USBKEY}%s\n" \
@@ -54,7 +74,12 @@ backup:
 			"${COLOUR_BACKUP}" "${COLOUR_RESET}"; \
 		mount -v -t msdosfs ${FILE_USBDEV} ${PATH_USBKEY}; \
 	fi
-
+	
+	# Test mount point
+	@mount | grep -q " on ${PATH_USBKEY} " || { \
+		printf "ERROR: %s is not mounted\n" "${PATH_USBKEY}"; \
+		exit 1; \
+	}
 	# Run rsync
 	@printf "%sRun rsync, output logged in ${FILE_RSYNC_LOG}%s\n" \
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
@@ -70,3 +95,5 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@umount ${PATH_USBKEY}
 	@printf "\n"
+.endif
+.endif

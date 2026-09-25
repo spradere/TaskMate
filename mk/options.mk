@@ -43,7 +43,7 @@ OPT_CLEAN_AUTOCODE_LOGS = yes
 VERBOSE ?=0
 OPT_VERBOSE_LEVEL = ${VERBOSE}
 
-.if !empty(VARIABLE:M[0-9]*)
+.if empty(OPT_VERBOSE_LEVEL:M[0-9]*)
 .error Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be a number.
 .endif
 

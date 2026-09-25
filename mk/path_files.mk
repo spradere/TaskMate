@@ -37,10 +37,6 @@ FILE_AUTOCODE_TEST_SANITIZE_TARGET = ${PATH_BUILDS}/autoCode_sanitize
 PATH_BUILD_TEST = ${PATH_TEST}/build
 PATH_BUILD_BUILD_TEST = ${PATH_BUILDS}/build_test
 
-# USB
-PATH_USBKEY = /media/usbkey
-FILE_USBDEV = /dev/da0s1
-
 # Build information
 FILE_BUILD_INFO = ${PATH_BUILDS}/last_build_info.txt
 
