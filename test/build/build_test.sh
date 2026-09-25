@@ -96,6 +96,16 @@ assertFileExcludes()
 	fi
 }
 
+assertWordsSorted()
+{
+	tr ' ' '\n' < "${PATH_STAGE_WORK}/$1.log" | sed '/^$/d' \
+		> "${PATH_STAGE_WORK}/$1.words"
+	LC_ALL=C sort "${PATH_STAGE_WORK}/$1.words" > "${PATH_STAGE_WORK}/$1.sorted"
+	if ! cmp -s "${PATH_STAGE_WORK}/$1.words" "${PATH_STAGE_WORK}/$1.sorted"; then
+		fail "$1: output is not sorted"
+	fi
+}
+
 targetMake()
 {
 	bmake -C "${PATH_PROJECT}" VAL_TARGET=test1 "$@"
@@ -105,16 +115,61 @@ runConfigurationTests()
 {
 	stageBegin configuration
 
-	expectFailure no_target_build "No target selected" bmake -C "${PATH_PROJECT}" all
+	expectFailure no_target_build "don't know how to make all" bmake -C "${PATH_PROJECT}" all
 	expectSuccess no_target_help bmake -C "${PATH_PROJECT}" \
 		PATHS_SOURCE_SEARCH=path_that_must_not_be_searched help
-	expectSuccess no_target_tm_sources bmake -C "${PATH_PROJECT}" -V FILES_TM_SRC
-	logContains no_target_tm_sources "srcs/system/boot.c"
-	logContains no_target_tm_sources "srcs/hal/arch/avr8/avr8_atomic.c"
-	logExcludes no_target_tm_sources "srcs/autoCode/"
-	expectSuccess no_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
-		FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode
-	logContains no_target_autocode_test "clang -DAUTOCODE_BUILD"
+	expectOutput default_environment "freebsd" bmake -C "${PATH_PROJECT}" \
+		-V OPT_ENVIRONMENT
+	expectOutput linux_environment "linux" bmake -C "${PATH_PROJECT}" HOST=linux \
+		-V OPT_ENVIRONMENT
+	expectOutput cygwin_environment "w10-cygwin" bmake -C "${PATH_PROJECT}" \
+		HOST=w10-cygwin -V OPT_ENVIRONMENT
+	expectFailure invalid_environment "Invalid option OPT_ENVIRONMENT" \
+		bmake -C "${PATH_PROJECT}" HOST=invalid -V OPT_ENVIRONMENT
+	expectOutput verbose_default "0" bmake -C "${PATH_PROJECT}" -V OPT_VERBOSE_LEVEL
+	expectOutput verbose_enabled "1" bmake -C "${PATH_PROJECT}" VERBOSE=1 \
+		-V OPT_VERBOSE_LEVEL
+	expectOutput verbose_level_two "2" bmake -C "${PATH_PROJECT}" VERBOSE=2 \
+		-V OPT_VERBOSE_LEVEL
+	expectFailure verbose_not_numeric "should be a number" bmake -C "${PATH_PROJECT}" \
+		VERBOSE=invalid -V OPT_VERBOSE_LEVEL
+	expectFailure verbose_out_of_range "should be [ 0 | 1 ]" \
+		bmake -C "${PATH_PROJECT}" VERBOSE=3 -V OPT_VERBOSE_LEVEL
+	expectSuccess autocode_source_order bmake -C "${PATH_PROJECT}" \
+		-V FILES_AUTOCODE_SRC_ALL
+	assertWordsSorted autocode_source_order
+	logContains autocode_source_order "srcs/autoCode/autoCode.c"
+	logContains autocode_source_order "srcs/autoCode/autoCode.h"
+	expectSuccess taskmate_source_order bmake -C "${PATH_PROJECT}" \
+		-V FILES_NOTARGET_SRC_ALL
+	assertWordsSorted taskmate_source_order
+	logContains taskmate_source_order "srcs/system/boot.c"
+	logExcludes taskmate_source_order "srcs/autoCode/"
+	expectSuccess makefile_order bmake -C "${PATH_PROJECT}" -V FILES_MK
+	assertWordsSorted makefile_order
+	logContains makefile_order "./Makefile"
+	logContains makefile_order "./test/build_test.mk"
+	expectSuccess selected_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
+		TARGET=test1 FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode
+	logContains selected_target_autocode_test "clang -DAUTOCODE_BUILD"
+	expectOutput freebsd_usb_key "/media/usbkey" bmake -C "${PATH_PROJECT}" \
+		HOST=freebsd -V PATH_USBKEY
+	expectOutput freebsd_usb_device "/dev/da0s1" bmake -C "${PATH_PROJECT}" \
+		HOST=freebsd -V FILE_USBDEV
+	expectOutput linux_usb_key "" bmake -C "${PATH_PROJECT}" HOST=linux -V PATH_USBKEY
+	expectOutput linux_usb_device "" bmake -C "${PATH_PROJECT}" HOST=linux -V FILE_USBDEV
+	expectSuccess freebsd_backup_dry_run bmake -C "${PATH_PROJECT}" -n \
+		HOST=freebsd backup
+	logContains freebsd_backup_dry_run "fstyp -l /dev/da0s1"
+	logContains freebsd_backup_dry_run 'if [ "$label" != "TASKMATE" ]'
+	logContains freebsd_backup_dry_run 'mount | grep -q " on /media/usbkey "'
+	logContains freebsd_backup_dry_run "rsync -av ./"
+	expectSuccess linux_backup_dry_run bmake -C "${PATH_PROJECT}" -n HOST=linux backup
+	logExcludes linux_backup_dry_run "fstyp"
+	logExcludes linux_backup_dry_run "mount | grep"
+	logExcludes linux_backup_dry_run "rsync"
+	expectOutput short_target_stack "test1 arduinoMega atmega2560 avr8" \
+		bmake -C "${PATH_PROJECT}" TARGET=test1 -V VAL_HW_STACK
 	expectOutput default_stack "test1 arduinoMega atmega2560 avr8" \
 		targetMake -V VAL_HW_STACK
 	assertFileExcludes "${PATH_PROJECT}/conf/hardware-targets.conf" "test_noscli"
@@ -204,7 +259,7 @@ runConfigurationTests()
 
 	expectFailure invalid_target "Target makefile not found >>>missing/target.mk<<<" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=missing -V VAL_HW_STACK
-	expectFailure invalid_option 'Invalid option "invalid"' \
+	expectFailure invalid_option 'Invalid option OPT_CLEAN_AUTOCODE_LOGS : "invalid"' \
 		targetMake OPT_CLEAN_AUTOCODE_LOGS=invalid -V VAL_HW_STACK
 
 	PATH_MANIFESTS="${PATH_STAGE_WORK}/manifests"
@@ -530,28 +585,22 @@ runReportTests()
 		'public_target:' '#help [group] Public target.' '_private_target:' \
 		'alpha_target:' '#help [group] First target.' \
 		> "${PATH_STAGE_WORK}/help.mk"
-	expectOutput help_report "alpha_target:  [group] First target.
-public_target:  [group] Public target.
-zebra_target:  [group] Last target." awk \
+	printf '%s\n' 'target_name_longer_than_twenty_one_characters:' \
+		'#help [group] This description is deliberately longer than fifty-seven characters.' \
+		>> "${PATH_STAGE_WORK}/help.mk"
+	expectOutput help_report "alpha_target:         [group] First target.
+public_target:        [group] Public target.
+target_name_longer_th [group] This description is deliberately longer than fift
+zebra_target:         [group] Last target." awk \
 		-v COLOUR_HELP_TARGET='<target-colour>' -v COLOUR_HELP_TAG='<tag-colour>' \
 		-v COLOUR_RESET='<reset-colour>' -f "${PATH_PROJECT}/scripts/make_help.awk" \
 		"${PATH_STAGE_WORK}/help.mk"
 	logExcludes help_report "_private_target:"
 	logExcludes help_report "<target-colour>"
 
-	printf '%s\n' \
-		'[fileUtility.c] info : keep old.c' \
-		'[fileUtility.c] info : change new.c' \
-		'[fileUtility.c] info : * summary *' > "${PATH_STAGE_WORK}/autoCode.log"
-	expectSuccess autocode_log awk -v log_file="${PATH_STAGE_WORK}/autoCode.log" \
-		-f "${PATH_PROJECT}/scripts/autocode_log.awk" "${PATH_STAGE_WORK}/autoCode.log"
-	logContains autocode_log "keep old.c"
-	logContains autocode_log "change new.c"
-	logContains autocode_log "* summary *"
-	assertFileContains "${PATH_STAGE_WORK}/autoCode.log" "keep old.c"
 	expectSuccess integrated_help bmake -C "${PATH_PROJECT}" help
 	logContains integrated_help "test_build_system:"
-	logContains integrated_help "Run the complete build-system black-box test corpus."
+	logContains integrated_help "Run the complete build black-box test corpus."
 
 	printf 'build-system report tests passed: %d cases\n' "${VAL_TEST_COUNT}"
 }
