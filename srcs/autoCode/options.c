@@ -186,7 +186,7 @@ static int optionCmdDispatch(const char *cmd, const char *value, options_list_t 
 	return -1;
 }
 
-void options(const char *file_name, options_list_t *opt)
+int options(const char *file_name, options_list_t *opt)
 {
 	// Initialise required options
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
@@ -195,7 +195,7 @@ void options(const char *file_name, options_list_t *opt)
 	file_t file;
 	fileInit(&file);
 	file.name = (char *)file_name;
-	if( fileOpen(&file, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return; }
+	if( fileOpen(&file, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
 
 	int file_line_number = 0;
 	tokenizer_t tok = {0};
@@ -234,6 +234,9 @@ void options(const char *file_name, options_list_t *opt)
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", file.name, file_line_number);
 	}
 	tokenizerFree(&tok);
+	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
+	if( fileClose(&file, __FILE__, __LINE__) != 0 ) { result = -1; }
+	if( result != 0 ) { return result; }
 
 	// Test required options
 	for( int i = 0; i < HAVE_COUNT; i++ )
@@ -248,4 +251,5 @@ void options(const char *file_name, options_list_t *opt)
 			AUTOCODE_MSG_ERROR("required autoCode option %s is multiple set", string_from_have(i));
 		}
 	}
+	return 0;
 }

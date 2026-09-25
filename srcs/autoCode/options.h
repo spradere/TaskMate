@@ -42,6 +42,6 @@ typedef struct
  * Public API
  * ========================================================================== */
 
-void options(const char *file_name, options_list_t *opt);
+int options(const char *file_name, options_list_t *opt);
 
 #endif // AUTOCODE_OPTIONS_H

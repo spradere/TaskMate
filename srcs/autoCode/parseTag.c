@@ -148,8 +148,8 @@ void parseTagInit(void)
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_tag_count[i] = 0; }
 }
 
-void parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
-			  const options_list_t *auto_options)
+int parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
+			 const options_list_t *auto_options)
 {
 	// Open source and temporary files
 	AUTOCODE_MSG_INFO("open <%s>", file_name);
@@ -157,14 +157,14 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)file_name;
-	if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return; }
+	if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
 	if( fileMakeTmp(file_src.name, &file_tmp, __FILE__, __LINE__) != 0 )
 	{
 		(void)fileClose(&file_src, __FILE__, __LINE__);
-		return;
+		return -1;
 	}
 
 	bool file_error = false;
@@ -269,6 +269,7 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	if( line_result == FILE_GET_LINE_ERROR )
 	{
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", file_src.name, file_line_number);
+		file_error = true;
 	}
 	tokenizerFree(&tok);
 
@@ -276,8 +277,9 @@ void parseTag(modules_database_t *data_base, const char *file_name, const error_
 	{
 		AUTOCODE_MSG_ERROR("missing end tag [/tag] [%s:%i]", file_src.name, file_line_number);
 	}
-	fileClose(&file_src, __FILE__, __LINE__);
-	fileClose(&file_tmp, __FILE__, __LINE__);
+	if( fileClose(&file_src, __FILE__, __LINE__) != 0 ) { file_error = true; }
+	if( fileClose(&file_tmp, __FILE__, __LINE__) != 0 ) { file_error = true; }
+	return file_error ? -1 : 0;
 }
 
 void parseTagHave(void)

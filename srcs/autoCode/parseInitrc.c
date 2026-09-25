@@ -365,7 +365,7 @@ static int initrcCommandDispatch(const char *name, const initrc_command_t *comma
 	return -1;
 }
 
-void parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path)
+int parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path)
 {
 	// Open list files
 	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
@@ -373,7 +373,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name, const c
 	file_t initrc_list;
 	fileInit(&initrc_list);
 	initrc_list.name = (char *)initrc_name;
-	if( fileOpen(&initrc_list, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return; }
+	if( fileOpen(&initrc_list, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
 
 	// Variables
 	int file_line_number = 0;
@@ -451,5 +451,7 @@ void parseInitrc(modules_database_t *data_base, const char *initrc_name, const c
 						   initrc_name);
 	}
 	tokenizerFree(&tok);
-	fileClose(&initrc_list, __FILE__, __LINE__);
+	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
+	if( fileClose(&initrc_list, __FILE__, __LINE__) != 0 ) { result = -1; }
+	return result;
 }

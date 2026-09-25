@@ -74,7 +74,7 @@ int main(int argc, const char *argv[])
 	}
 
 	options_list_t auto_options = {0};
-	options(argv[1], &auto_options);
+	if( options(argv[1], &auto_options) != 0 ) { autoCodeExit(AC_FORCE_EXIT); }
 	errorCountMaximumSet(auto_options.error_count);
 	autoCodeExit(AC_FORCE_EXIT);
 
@@ -99,7 +99,7 @@ int main(int argc, const char *argv[])
 		   FILE_GET_LINE_SUCCESS )
 	{
 		if( tokenizer(&tok) != 0 ) { continue; }
-		if( tok.count != 0 ) { globalError(tok.tokens[0], &errors_catalog); }
+		if( (tok.count != 0) && (globalError(tok.tokens[0], &errors_catalog) != 0) ) { break; }
 	}
 	if( line_result == FILE_GET_LINE_ERROR )
 	{
@@ -122,7 +122,11 @@ int main(int argc, const char *argv[])
 		   FILE_GET_LINE_SUCCESS )
 	{
 		if( tokenizer(&tok) != 0 ) { continue; }
-		if( tok.count != 0 ) { parseInitrc(&data_base, tok.tokens[0], auto_options.source_path); }
+		if( (tok.count != 0) &&
+			(parseInitrc(&data_base, tok.tokens[0], auto_options.source_path) != 0) )
+		{
+			break;
+		}
 	}
 	if( line_result == FILE_GET_LINE_ERROR )
 	{
@@ -142,17 +146,25 @@ int main(int argc, const char *argv[])
 	}
 
 	parseTagInit();
+	bool tag_file_error = false;
 	while( (line_result = fileGetLine(&ftag, tok.line, sizeof(tok.line))) == FILE_GET_LINE_SUCCESS )
 	{
 		if( tokenizer(&tok) != 0 ) { continue; }
-		if( tok.count != 0 )
+		if( (tok.count != 0) &&
+			(parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options) != 0) )
 		{
-			parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options);
+			tag_file_error = true;
+			break;
 		}
 	}
-	if( line_result == FILE_GET_LINE_ERROR ) { AUTOCODE_MSG_ERROR("reading file <%s>", ftag.name); }
-	fileClose(&ftag, __FILE__, __LINE__);
+	if( line_result == FILE_GET_LINE_ERROR )
+	{
+		AUTOCODE_MSG_ERROR("reading file <%s>", ftag.name);
+		tag_file_error = true;
+	}
+	if( fileClose(&ftag, __FILE__, __LINE__) != 0 ) { tag_file_error = true; }
 	tokenizerFree(&tok);
+	if( tag_file_error ) { autoCodeExit(AC_FORCE_EXIT); }
 	parseTagHave();
 	autoCodeExit(AC_FORCE_EXIT);
 

@@ -122,7 +122,7 @@ expectSuccess()
 
 assertNoTemporaryFiles()
 {
-	if find "${PATH_STAGE_WORK}" -type f -name '*.tmp' -print | grep -q .; then
+	if find "${PATH_STAGE_WORK}" -name '*.tmp' -print | grep -q .; then
 		fail "temporary autoCode files remain in ${PATH_STAGE_WORK}"
 	fi
 }
@@ -212,6 +212,15 @@ runErrorTests()
 	expectFailure missing_error_file "opening file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
+	caseBegin stop_after_error_file_failure
+	printf '%s\n' "${PATH_CASE}/missing.err" "${PATH_CASE}/must_not_be_opened.err" \
+		> "${PATH_CASE}/errors.list"
+	printf '%s\n' 'ERR_NOT_REACHED "not reached" WARN' \
+		> "${PATH_CASE}/must_not_be_opened.err"
+	expectFailure stop_after_error_file_failure "opening file" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logDoesNotContain stop_after_error_file_failure "must_not_be_opened.err"
+
 	caseBegin malformed_errors
 	printf '%s\n' \
 		'ERR_FIELDS "message"' \
@@ -262,6 +271,14 @@ runInitrcTests()
 	printf '%s\n' "${PATH_CASE}/missing.rc" > "${PATH_CASE}/initrc.list"
 	expectFailure missing_initrc_file "opening file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin stop_after_initrc_file_failure
+	printf '%s\n' "${PATH_CASE}/missing.rc" "${PATH_CASE}/must_not_be_opened.rc" \
+		> "${PATH_CASE}/initrc.list"
+	writeInitrcVersion > "${PATH_CASE}/must_not_be_opened.rc"
+	expectFailure stop_after_initrc_file_failure "opening file" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logDoesNotContain stop_after_initrc_file_failure "must_not_be_opened.rc"
 
 	caseBegin valid_commands
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
@@ -479,6 +496,13 @@ runParseTagTests()
 	printf '%s\n' "${PATH_CASE}/missing.c" > "${PATH_CASE}/tags.list"
 	runTagCase missing_tag_file "opening file"
 
+	caseBegin stop_after_tag_file_failure
+	printf '%s\n' "${PATH_CASE}/missing.c" "${PATH_CASE}/must_not_be_opened.c" \
+		> "${PATH_CASE}/tags.list"
+	writeTags "${PATH_CASE}/must_not_be_opened.c"
+	runTagCase stop_after_tag_file_failure "opening file"
+	logDoesNotContain stop_after_tag_file_failure "must_not_be_opened.c"
+
 	caseBegin malformed_tag
 	printf '%s\n' '// [autoCode_tag]' > "${PATH_CASE}/tags.c"
 	runTagCase malformed_tag "token count != 3"
@@ -605,6 +629,76 @@ runCompareReplaceTests()
 	if ! cmp -s "${PATH_CASE}/first.expected" "${PATH_CASE}/first.c"; then
 		fail "a failed generation modified an earlier destination"
 	fi
+
+	caseBegin output_open_failure
+	chmod 0555 "${PATH_CASE}/generated"
+	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+		> "${PATH_STAGE_WORK}/output_open_failure.log" 2>&1; then
+		VAL_RESULT=0
+	else
+		VAL_RESULT=$?
+	fi
+	chmod 0755 "${PATH_CASE}/generated"
+	if [ "${VAL_RESULT}" -eq 0 ]; then
+		fail "output_open_failure: command unexpectedly succeeded"
+	fi
+	logContains output_open_failure "creating file"
+	if find "${PATH_CASE}/generated" -type f -print | grep -q .; then
+		fail "output_open_failure: an empty destination was created"
+	fi
+	assertNoTemporaryFiles
+	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
+
+	caseBegin buffered_write_failure
+	ln -s /dev/full "${PATH_CASE}/tags.c.tmp" || fail "cannot create /dev/full fixture"
+	expectFailure buffered_write_failure "close file" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	assertNoTemporaryFiles
+
+	caseBegin remove_failure
+	expectSuccess remove_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.c.tmp"
+	chmod 0555 "${PATH_CASE}"
+	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+		> "${PATH_STAGE_WORK}/remove_failure.log" 2>&1; then
+		VAL_RESULT=0
+	else
+		VAL_RESULT=$?
+	fi
+	chmod 0755 "${PATH_CASE}"
+	find "${PATH_CASE}/tags.c.tmp" -type f -delete
+	if [ "${VAL_RESULT}" -eq 0 ]; then
+		fail "remove_failure: command unexpectedly succeeded"
+	fi
+	logContains remove_failure "removing temporary file"
+	assertNoTemporaryFiles
+	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
+
+	caseBegin rename_failure
+	expectSuccess rename_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	sed 's/#include "thread_stacks.inc"/#include "stale.inc"/' \
+		"${PATH_CASE}/tags.c" > "${PATH_CASE}/changed.c"
+	mv "${PATH_CASE}/changed.c" "${PATH_CASE}/tags.c"
+	cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.expected"
+	: > "${PATH_CASE}/tags.c.tmp"
+	chmod 0555 "${PATH_CASE}"
+	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+		> "${PATH_STAGE_WORK}/rename_failure.log" 2>&1; then
+		VAL_RESULT=0
+	else
+		VAL_RESULT=$?
+	fi
+	chmod 0755 "${PATH_CASE}"
+	find "${PATH_CASE}/tags.c.tmp" -type f -delete
+	if [ "${VAL_RESULT}" -eq 0 ]; then
+		fail "rename_failure: command unexpectedly succeeded"
+	fi
+	logContains rename_failure "renaming file"
+	if ! cmp -s "${PATH_CASE}/tags.expected" "${PATH_CASE}/tags.c"; then
+		fail "rename failure modified the original destination"
+	fi
+	assertNoTemporaryFiles
+	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 }
 
 runStage()

@@ -25,7 +25,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void globalError(const char *src_name, error_catalog_t *errors)
+int globalError(const char *src_name, error_catalog_t *errors)
 {
 	AUTOCODE_MSG_INFO("open file.err <%s>", src_name);
 
@@ -33,7 +33,7 @@ void globalError(const char *src_name, error_catalog_t *errors)
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
-	if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return; }
+	if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
 
 	// Read from source
 	int file_src_line_number = 0;
@@ -141,5 +141,7 @@ void globalError(const char *src_name, error_catalog_t *errors)
 	}
 
 	tokenizerFree(&tok);
-	fileClose(&file_src, __FILE__, __LINE__);
+	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
+	if( fileClose(&file_src, __FILE__, __LINE__) != 0 ) { result = -1; }
+	return result;
 }
