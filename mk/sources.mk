@@ -74,10 +74,8 @@ FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -na
 FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 
 # Target-independent TaskMate sources used by global utilities
-FILES_NOTARGET_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
-	! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.c" | sort
-FILES_NOTARGET_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
-	! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.h" | sort
+FILES_NOTARGET_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.c"
+FILES_NOTARGET_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.h"
 
 # Documentation files
 FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \

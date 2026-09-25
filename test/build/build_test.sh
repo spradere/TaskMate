@@ -130,6 +130,17 @@ runConfigurationTests()
 		"-include srcs/hal/arch/avr8/avr8_architecture_types.h"
 	expectSuccess source_search_paths targetMake -V PATHS_SOURCE_SEARCH
 	logExcludes source_search_paths "srcs/hal/public"
+	expectSuccess autocode_generated_inputs targetMake -V FILES_AUTOCODE_INC
+	logExcludes autocode_generated_inputs "find "
+	logExcludes autocode_generated_inputs "-path"
+	expectOutput missing_autocode_generated_inputs "" targetMake \
+		PATH_BUILD_TARGET="${PATH_STAGE_WORK}/missing_target" -V FILES_AUTOCODE_INC
+	expectSuccess autocode_tag_inputs targetMake -V FILES_PARSE_TAG
+	logContains autocode_tag_inputs "srcs/system/sysCall/sc_errors.c"
+	logContains autocode_tag_inputs "srcs/interfaces/error_catalog.h"
+	logContains autocode_tag_inputs "srcs/hal/mcu/atmega2560/at2560_gpio.c"
+	logExcludes autocode_tag_inputs "srcs/autoCode/"
+	logExcludes autocode_tag_inputs "srcs/hal/board/pc/pc_gpio.c"
 	expectOutput cpu_frequency "16000000UL" targetMake -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" targetMake -V VAL_MCU_SERIAL
 

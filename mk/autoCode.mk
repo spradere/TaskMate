@@ -17,19 +17,13 @@ FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
-FILES_AUTOCODE_INC = find ${PATH_BUILD_GENERATED} ${OPT_FIND_EXCLUDE} -type f -name "*.inc"
+FILES_AUTOCODE_INC != if [ -d "${PATH_BUILD_GENERATED}" ]; then \
+	find ${PATH_BUILD_GENERATED} ${OPT_FIND_EXCLUDE} -type f -name "*.inc" | sort; \
+	fi
 CFLAGS += -I${PATH_BUILD_GENERATED}
 
-FILES_PARSE_TAG != find ${PATH_SRCS} -type f -exec grep -qFl '[autCode_tag]' {} \; -print
-
-	#${PATH_SRCS}/system/sysCall/sc_errors.c \
-	#${PATH_SRCS}/interfaces/error_catalog.h \
-	#${PATH_SRCS}/interfaces/tm_modules.h \
-	#${PATH_SRCS}/system/sysCall/sc_threads.c \
-	#${PATH_SRCS}/system/sysCall/sc_driver.c \
-	#${PATH_SRCS}/system/sysCore/sys_modules.c \
-	#${PATH_SRCS}/system/sysCore/sys_modules_list.h \
-	#${PATH_SRCS}/interfaces/gpio_signals.h \
+FILES_PARSE_TAG != find ${PATH_SRCS}/system ${PATH_SRCS}/interfaces ${OPT_FIND_EXCLUDE} \
+	-type f -exec grep -qFl '[autoCode_tag]' {} \; -print | sort
 FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
 
 		
