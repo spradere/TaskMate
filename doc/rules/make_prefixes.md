@@ -30,8 +30,8 @@ When adding new variables:
   - Examples: `VAL_TM_VERSION`, `VAL_BUILD_CNT`, `VAL_HW_STACK`.
 - `OPT_`: user/build options (often validated).
   - Example: `OPT_CLEAN_AUTOCODE_LOGS`.
-- `COLOUR_` / `COLOURS_`: terminal formatting constants and grouped AWK colour args.
-  - Examples: `COLOUR_TARGET_INFO`, `COLOURS_AWK`.
+- `COLOUR_`: terminal formatting constants.
+  - Example: `COLOUR_TARGET_INFO`.
 - `CFLAGS_...`: per-file compile flag overrides.
   - Example: `CFLAGS_src/sysCore/sys_modules.c` (expanded from `${PATH_SOURCES}`-based names).
 
