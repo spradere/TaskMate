@@ -19,13 +19,12 @@ NR > 1 {
 
 	if ($4 > 98)
 	{
-		printf("%s\t>>> ERROR: usage high > 98%% <<< %s\n", COLOUR_RED_BOLD, COLOUR_RESET)
+		printf("\t>>> ERROR: usage high > 98%% <<<\n")
 		exit 1
 	}
 
 	if ($4 > 85)
 	{
-		printf("%s\t>>> WARNING: usage high > 85%% <<< %s\n", COLOUR_YELLOW_BOLD,
-			COLOUR_CYAN_BOLD)
+		printf("\t>>> WARNING: usage high > 85%% <<<\n")
 	}
 }
