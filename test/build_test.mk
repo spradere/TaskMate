@@ -13,7 +13,7 @@
 ################################################################################
 
 .PHONY: test_build_system
-test_build_system: test_build_configuration .WAIT test_build_scripts .WAIT \
+test_build_system: test_build_config .WAIT test_build_scripts .WAIT \
 	test_build_guards .WAIT test_build_reports
 #help [test] Run the complete build black-box test corpus.
 	@printf "\n%sAll build-system tests passed%s\n\n" \

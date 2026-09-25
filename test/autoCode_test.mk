@@ -18,7 +18,7 @@ CFLAGS_AUTOCODE_TEST_SANITIZE += -fsanitize=address,undefined -fno-omit-frame-po
 .PHONY: test_autoCode
 test_autoCode: test_ac_command_line .WAIT test_ac_options .WAIT \
 	test_ac_errors .WAIT test_ac_initrc .WAIT test_ac_parse_tag .WAIT \
-	test_ac_compare_replace
+	test_ac_cmp_replace
 #help [test] Run the complete autoCode black-box test corpus.
 	@printf "\n%sAll autoCode tests passed%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
