@@ -72,10 +72,14 @@ FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
 # autoCode
 FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
+FILES_AUTOCODE_SRC_ALL = ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
+FILES_AUTOCODE_SRC_ALL := ${FILES_AUTOCODE_SRC_ALL:O}
 
 # Target-independent TaskMate sources used by global utilities
 FILES_NOTARGET_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.c"
 FILES_NOTARGET_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.h"
+FILES_NOTARGET_SRC_ALL = ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H}
+FILES_NOTARGET_SRC_ALL := ${FILES_NOTARGET_SRC_ALL:O}
 
 # Documentation files
 FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \
@@ -87,3 +91,4 @@ FILES_MK_HAL != find ./${PATH_SRCS}/hal ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 FILES_MK_TEST != find ./${PATH_TEST} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 
 FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL} ${FILES_MK_TEST}
+FILES_MK := ${FILES_MK:O}
