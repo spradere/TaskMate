@@ -16,6 +16,9 @@
 .MAIN: all
 .NOTPARALLEL:
 
+# Global find option
+OPT_FIND_EXCLUDE = ! -path '*/.*'
+
 # autoCode
 VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR=1
 VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR=2
@@ -27,7 +30,9 @@ OPT_CLEAN_AUTOCODE_LOGS = yes
 .endif
 
 # Verbose level
-OPT_VERBOSE_LEVEL ?= 0
+# Short name for command line
+VERBOSE ?=0
+OPT_VERBOSE_LEVEL = ${VERBOSE}
 
 .if !empty(VARIABLE:M[0-9]*)
 .error Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be a number.

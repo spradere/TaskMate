@@ -12,8 +12,6 @@
 # Sources
 ################################################################################
 
-OPT_FIND_EXCLUDE = ! -path '*/.*'
-
 .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
 # Header files found across every selected source directory
 FILES_SRC_H != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
@@ -76,9 +74,9 @@ FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -na
 FILES_AUTOCODE_SRC_H != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 
 # Target-independent TaskMate sources used by global utilities
-FILES_TM_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
+FILES_NOTARGET_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
 	! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.c" | sort
-FILES_TM_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
+FILES_NOTARGET_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} \
 	! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.h" | sort
 
 # Documentation files

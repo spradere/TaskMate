@@ -43,7 +43,7 @@ note:
 #help [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_TM_SRC} ${FILES_TM_SRC_H} \
+	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} \
 		${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 
 .PHONY: cppcheck
@@ -56,7 +56,7 @@ cppcheck:
 		--suppress=missingIncludeSystem \
 		--suppress=missingInclude \
 		--check-level=exhaustive \
-		${FILES_TM_SRC} \
+		${FILES_NOTARGET_SRC} \
 		${FILES_AUTOCODE_SRC}
 
 .PHONY: format
@@ -64,7 +64,7 @@ format:
 #help [global] Format code with clang-format, configuration /.clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang-format19 -i ${FILES_TM_SRC} ${FILES_TM_SRC_H} ${FILES_AUTOCODE_SRC}
+	clang-format19 -i ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} ${FILES_AUTOCODE_SRC}
 
 .PHONY: tidy_autoCode
 tidy_autoCode:

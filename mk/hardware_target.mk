@@ -12,9 +12,12 @@
 # Hardware target selection and test
 ################################################################################
 
-# Hardware target
 VAL_TARGET_NONE = no_target
-VAL_TARGET ?= ${VAL_TARGET_NONE}
+# Short name for command line
+TARGET ?= ${VAL_TARGET_NONE}
+
+# Hardware target
+VAL_TARGET = ${TARGET}
 
 .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
 

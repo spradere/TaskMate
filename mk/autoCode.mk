@@ -17,31 +17,21 @@ FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
 FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
-FILES_AUTOCODE_INC = \
-	${PATH_BUILD_GENERATED}/thread_stacks.inc \
-	${PATH_BUILD_GENERATED}/threads_alloc.inc \
-	${PATH_BUILD_GENERATED}/drivers_alloc.inc \
-	${PATH_BUILD_GENERATED}/thread_name_catalog.inc \
-	${PATH_BUILD_GENERATED}/driver_name_catalog.inc \
-	${PATH_BUILD_GENERATED}/error_enum.inc \
-	${PATH_BUILD_GENERATED}/error_catalog.inc \
-	${PATH_BUILD_GENERATED}/modules_count.inc \
-	${PATH_BUILD_GENERATED}/modules_list.inc \
-	${PATH_BUILD_GENERATED}/gpio_signals.inc \
-	${PATH_BUILD_GENERATED}/wire_gpio.inc
-
+FILES_AUTOCODE_INC = find ${PATH_BUILD_GENERATED} ${OPT_FIND_EXCLUDE} -type f -name "*.inc"
 CFLAGS += -I${PATH_BUILD_GENERATED}
 
-FILES_PARSE_TAG =  \
-	${PATH_SRCS}/system/sysCall/sc_errors.c \
-	${PATH_SRCS}/interfaces/error_catalog.h \
-	${PATH_SRCS}/interfaces/tm_modules.h \
-	${PATH_SRCS}/system/sysCall/sc_threads.c \
-	${PATH_SRCS}/system/sysCall/sc_driver.c \
-	${PATH_SRCS}/system/sysCore/sys_modules.c \
-	${PATH_SRCS}/system/sysCore/sys_modules_list.h \
-	${PATH_SRCS}/interfaces/gpio_signals.h \
-	${FILE_WIREGPIO_TAG}
+FILES_PARSE_TAG != find ${PATH_SRCS} -type f -exec grep -qFl '[autCode_tag]' {} \; -print
+
+	#${PATH_SRCS}/system/sysCall/sc_errors.c \
+	#${PATH_SRCS}/interfaces/error_catalog.h \
+	#${PATH_SRCS}/interfaces/tm_modules.h \
+	#${PATH_SRCS}/system/sysCall/sc_threads.c \
+	#${PATH_SRCS}/system/sysCall/sc_driver.c \
+	#${PATH_SRCS}/system/sysCore/sys_modules.c \
+	#${PATH_SRCS}/system/sysCore/sys_modules_list.h \
+	#${PATH_SRCS}/interfaces/gpio_signals.h \
+FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
+
 		
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
