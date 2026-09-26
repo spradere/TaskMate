@@ -24,6 +24,6 @@
  * Public API
  * ===========================================================================*/
 
-void initrcSetVersion(const initrc_command_t *command);
+bool initrcSetVersion(const initrc_command_t *command);
 
 #endif // AUTOCODE_INITRCCOMMANDS_SETVERSION_H
