@@ -12,7 +12,11 @@
 # Sources
 ################################################################################
 
+
+# This file is partially parsed without a valid target
 .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
+# ------------------------------------------------------------------------------
+
 # Header files found across every selected source directory
 FILES_SRC_H != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE} -type f -name "*.h"
 FILES_DRIVER_INTERFACES != find ${PATH_SRCS}/interfaces ${OPT_FIND_EXCLUDE} -type f \
@@ -47,7 +51,7 @@ FILES_COMPILE_SRC = \
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
-# Test files provided by the selected target
+# Test files provided by the target
 .if !exists(${FILE_GPIO_SIGNALS})
 .error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
 .endif
@@ -67,7 +71,10 @@ VAL_DATE_TIME != date +"%Y_%m_%d_%Hh%Mm%Ss"
 # Global error
 FILES_ERROR != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort
 FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
-.endif
+
+# ------------------------------------------------------------------------------
+# End .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
+.endif 
 
 # autoCode
 FILES_AUTOCODE_SRC != find ${PATH_SRCS}/autoCode ${OPT_FIND_EXCLUDE} -type f -name "*.c"

@@ -12,7 +12,7 @@
 # Headers source access
 ################################################################################
 
-# Add string macro acces
+# Add string macro access to high level code
 PATHS_TM_STRING_ALLOWED= \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCall/*.c} \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/*.c} \

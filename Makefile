@@ -40,11 +40,13 @@ PATH_TEST = test
 .include "${PATH_MAKEFILES}/backup.mk"
 .include "${PATH_MAKEFILES}/editors.mk"
 
+# Build for selected target
 .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
 .include "${PATH_MAKEFILES}/autoCode.mk"
 .include "${PATH_MAKEFILES}/build.mk"
 .endif
 
+# Tests targets
 .include "${PATH_TEST}/autoCode_test.mk"
 .include "${PATH_TEST}/build_test.mk"
 .include "${PATH_TEST}/tm_string_test.mk"

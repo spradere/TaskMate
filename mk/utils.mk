@@ -74,6 +74,7 @@ tidy_autoCode:
 	@clang-tidy19 ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} -- \
 		${CFLAGS_AUTOCODE}
 
+# Help system: targets beginning with '_' or '$' are internal only and are not displayed by 'make help'.
 .PHONY: help
 help:
 #help [global] List all utility targets, not the system ones.

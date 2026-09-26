@@ -12,9 +12,6 @@
 # Build rules
 ################################################################################
 
-# Help system: targets beginning with '_' or '$' are internal only
-# and are not displayed by 'make help'.
-
 .BEGIN: ${FILE_PROGRAMS_CHECK_STAMP}
 .if make(upload) || make(all)
 

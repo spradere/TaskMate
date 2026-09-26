@@ -12,11 +12,13 @@
 # autoCode files and rules
 ################################################################################
 
-# autoCode files
+# autoCode base files
 FILE_AUTOCODE_CONFIG = ${PATH_BUILD_TARGET}/autoCode_config
 FILE_AUTOCODE_STAMP = ${PATH_BUILD_TARGET}/.autoCode_stamp
+FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
 FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 
+# Automatic gathering files
 FILES_AUTOCODE_INC != if [ -d "${PATH_BUILD_GENERATED}" ]; then \
 	find ${PATH_BUILD_GENERATED} ${OPT_FIND_EXCLUDE} -type f -name "*.inc" | sort; \
 	fi
@@ -26,22 +28,23 @@ FILES_PARSE_TAG != find ${PATH_SRCS}/system ${PATH_SRCS}/interfaces ${OPT_FIND_E
 	-type f -exec grep -qFl '[autoCode_tag]' {} \; -print | sort
 FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
 
-		
+# autoCode list of files
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
 FILE_ERROR_LIST = ${PATH_BUILD_TARGET}/files_error
 
+# autoCode dependency files
 FILE_INITRC_DEPS = ${PATH_BUILD_TARGET}/files_initrc.deps
 FILE_PARSE_TAG_DEPS = ${PATH_BUILD_TARGET}/files_to_parse.deps
 FILE_ERROR_DEPS = ${PATH_BUILD_TARGET}/files_error.deps
 FILE_GPIO_SIGNALS_DEPS = ${PATH_BUILD_TARGET}/gpio_signals.deps
 
-# Check dynamic dependencies before evaluating the autoCode stamp.
+# Check dependencies before evaluating autoCode stamp.
 .PHONY: _autocode
 _autocode: _autocode_version_check .WAIT _autocode_dependency_check .WAIT \
 	${FILE_AUTOCODE_STAMP}
 
-# Refuse to build with an autoCode executable API version not supported by this build.
+# Refuse to build with an autoCode version not supported by this build.
 .PHONY: _autocode_version_check
 _autocode_version_check: ${FILE_AUTOCODE_HEADER} ${SCRIPT_AUTOCODE_VERSION}
 	@awk -v expected_major="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR}" \
@@ -50,10 +53,8 @@ _autocode_version_check: ${FILE_AUTOCODE_HEADER} ${SCRIPT_AUTOCODE_VERSION}
 
 # autoCode launch and required files
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
-						${FILE_PARSE_TAG_LIST} \
-						${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} \
-						${FILE_WIREGPIO} \
-						${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
+						${FILE_PARSE_TAG_LIST} ${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} \
+						${FILE_WIREGPIO} ${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
 
 	@printf "%sautoCode or related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -94,7 +95,7 @@ _autocode_dependency_check:
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_GPIO_SIGNALS_DEPS}" "${FILE_GPIO_SIGNALS}"
 
-# Files list for autoCode
+# Generate files list for autoCode
 ${FILE_ERROR_LIST}: ${FILES_ERROR} ${FILE_ERROR_DEPS}
 	@printf "" > ${FILE_ERROR_LIST}
 .for file in ${FILES_ERROR}

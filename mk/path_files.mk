@@ -12,7 +12,7 @@
 # Directories, paths, and files
 ################################################################################
 
-# Final full HW path
+# Final full hardware path
 PATH_BUILD_TARGET = ${PATH_BUILDS}/${VAL_HW_STACK:ts_}
 PATH_BUILD_GENERATED = ${PATH_BUILD_TARGET}/generated
 PATH_LEGACY = legacy
@@ -32,8 +32,6 @@ CONF_SYSTEM_HEADER_ALLOW = ${PATH_CONF}/system_header_allow.conf
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
 PATH_BUILD_AUTOCODE_TEST = ${PATH_BUILDS}/autoCode_test
-FILE_AUTOCODE_TEST_SANITIZE_TARGET = ${PATH_BUILDS}/autoCode_sanitize
-
 PATH_BUILD_TEST = ${PATH_TEST}/build
 PATH_BUILD_BUILD_TEST = ${PATH_BUILDS}/build_test
 
@@ -54,9 +52,7 @@ PATHS_SOURCE_SEARCH += ${PATH_SRCS}/hal/drivers
 PATHS_SOURCE_SEARCH += ${PATH_SRCS}/user/tasks
 
 # Log files
-FILE_AUTOCODE_LOG = ${PATH_LOGS}/autoCode_log
 FILE_RSYNC_LOG = ${PATH_LOGS}/rsync.log
-FILE_H_CHECK_LOG = ${PATH_LOGS}/headers_check.log
 FILE_ARCH_CHECK_LOG = ${PATH_LOGS}/architecture_check.log
 
 # Scripts
