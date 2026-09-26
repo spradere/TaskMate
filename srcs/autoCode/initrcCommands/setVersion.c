@@ -23,8 +23,8 @@
  * Version option dispatch table
  * ---------------------------------------------*/
 
-static void setVersionMajor(const initrc_command_t *command);
-static void setVersionMinor(const initrc_command_t *command);
+static bool setVersionMajor(const initrc_command_t *command);
+static bool setVersionMinor(const initrc_command_t *command);
 
 #define SET_VERSION_OPTION(X)              \
 	X("major", setVersionMajor)           \
@@ -33,7 +33,7 @@ static void setVersionMinor(const initrc_command_t *command);
 static const struct
 {
 	const char *name;
-	void (*func)(const initrc_command_t *command);
+	bool (*func)(const initrc_command_t *command);
 } set_version_options[] = {
 #define X(name, func) {(name), (func)},
 	SET_VERSION_OPTION(X)
@@ -54,7 +54,7 @@ static bool versionValueMatches(const char *value, const unsigned long expected)
 	return parsed == expected;
 }
 
-static void setVersionMajor(const initrc_command_t *command)
+static bool setVersionMajor(const initrc_command_t *command)
 {
 	if( versionValueMatches(command->tok->tokens[2], AC_INITRC_EXPECTED_VER_MAJOR) == false )
 	{
@@ -63,13 +63,12 @@ static void setVersionMajor(const initrc_command_t *command)
 						   command->file_line_number,
 						   command->tok->tokens[2],
 						   AC_INITRC_EXPECTED_VER_MAJOR);
-		*command->version_state = AC_INITRC_VERSION_INVALID;
-		return;
+		return false;
 	}
-	*command->version_state = AC_INITRC_VERSION_EXPECT_MINOR;
+	return true;
 }
 
-static void setVersionMinor(const initrc_command_t *command)
+static bool setVersionMinor(const initrc_command_t *command)
 {
 	if( versionValueMatches(command->tok->tokens[2], AC_INITRC_EXPECTED_VER_MINOR) == false )
 	{
@@ -78,13 +77,12 @@ static void setVersionMinor(const initrc_command_t *command)
 						   command->file_line_number,
 						   command->tok->tokens[2],
 						   AC_INITRC_EXPECTED_VER_MINOR);
-		*command->version_state = AC_INITRC_VERSION_INVALID;
-		return;
+		return false;
 	}
-	*command->version_state = AC_INITRC_VERSION_VALID;
+	return true;
 }
 
-void initrcSetVersion(const initrc_command_t *command)
+bool initrcSetVersion(const initrc_command_t *command)
 {
 	if( command->tok->count != 3 )
 	{
@@ -92,44 +90,14 @@ void initrcSetVersion(const initrc_command_t *command)
 						   command->initrc_name,
 						   command->file_line_number,
 						   command->tok->count);
-		*command->version_state = AC_INITRC_VERSION_INVALID;
-		return;
-	}
-	if( (*command->version_state == AC_INITRC_VERSION_EXPECT_MAJOR) &&
-		(strcmp(command->tok->tokens[1], "major") != 0) )
-	{
-		AUTOCODE_MSG_ERROR("first init.rc line [%s:%i] must be setVersion major %i",
-						   command->initrc_name,
-						   command->file_line_number,
-						   AC_INITRC_EXPECTED_VER_MAJOR);
-		*command->version_state = AC_INITRC_VERSION_INVALID;
-		return;
-	}
-	if( (*command->version_state == AC_INITRC_VERSION_EXPECT_MINOR) &&
-		(strcmp(command->tok->tokens[1], "minor") != 0) )
-	{
-		AUTOCODE_MSG_ERROR("second init.rc line [%s:%i] must be setVersion minor %i",
-						   command->initrc_name,
-						   command->file_line_number,
-						   AC_INITRC_EXPECTED_VER_MINOR);
-		*command->version_state = AC_INITRC_VERSION_INVALID;
-		return;
-	}
-	if( *command->version_state == AC_INITRC_VERSION_VALID )
-	{
-		AUTOCODE_MSG_ERROR("setVersion command outside header [%s:%i]",
-						   command->initrc_name,
-						   command->file_line_number);
-		*command->version_state = AC_INITRC_VERSION_INVALID;
-		return;
+		return false;
 	}
 
 	for( size_t i = 0; i < (sizeof(set_version_options) / sizeof(set_version_options[0])); i++ )
 	{
 		if( strcmp(command->tok->tokens[1], set_version_options[i].name) == 0 )
 		{
-			(*set_version_options[i].func)(command);
-			return;
+			return (*set_version_options[i].func)(command);
 		}
 	}
 
@@ -137,5 +105,5 @@ void initrcSetVersion(const initrc_command_t *command)
 					   command->initrc_name,
 					   command->file_line_number,
 					   command->tok->tokens[1]);
-	*command->version_state = AC_INITRC_VERSION_INVALID;
+	return false;
 }

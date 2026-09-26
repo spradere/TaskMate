@@ -369,13 +369,13 @@ runInitrcTests()
 
 	caseBegin missing_initrc_version
 	printf '%s\n' 'addModule service system -run core -stack 256' > "${PATH_CASE}/init.rc"
-	expectFailure missing_initrc_version "first init.rc line" \
+	expectFailure missing_initrc_version "first init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin legacy_initrc_version
 	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 6' \
 		> "${PATH_CASE}/init.rc"
-	expectFailure legacy_initrc_version "first init.rc line" \
+	expectFailure legacy_initrc_version "first init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin empty_initrc
@@ -383,10 +383,12 @@ runInitrcTests()
 	expectFailure empty_initrc "missing setVersion major 1" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	caseBegin comment_before_initrc_version
-	printf '%s\n' '# version must be the physical file header' > "${PATH_CASE}/init.rc"
+	caseBegin comments_before_initrc_version
+	printf '%s\n\n' '# init.rc file description' > "${PATH_CASE}/init.rc"
 	writeInitrcVersion >> "${PATH_CASE}/init.rc"
-	expectFailure comment_before_initrc_version "first init.rc line" \
+	printf '%s\n' 'addModule service system -run core -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess comments_before_initrc_version \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_minor_initrc_version
@@ -402,7 +404,7 @@ runInitrcTests()
 	caseBegin module_before_minor_initrc_version
 	printf '%s\n' 'setVersion major 1' 'addModule service system -run core' \
 		> "${PATH_CASE}/init.rc"
-	expectFailure module_before_minor_initrc_version "second init.rc line" \
+	expectFailure module_before_minor_initrc_version "second init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
@@ -422,14 +424,14 @@ runInitrcTests()
 	caseBegin wrong_initrc_version_order
 	printf '%s\n' 'setVersion minor 8' 'setVersion major 1' \
 		> "${PATH_CASE}/init.rc"
-	expectFailure wrong_initrc_version_order "first init.rc line" \
+	expectFailure wrong_initrc_version_order "first init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' 'addModule service system -run core -stack 256' 'setVersion minor 8' \
 		>> "${PATH_CASE}/init.rc"
-	expectFailure late_initrc_version "setVersion command outside header" \
+	expectFailure late_initrc_version "setVersion command after init.rc version declaration" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin malformed_initrc

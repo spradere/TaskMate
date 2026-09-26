@@ -27,8 +27,7 @@
  * init.rc command dispatch table
  * ---------------------------------------------*/
 
-#define INITRC_COMMAND(X)                     \
-	X("setVersion", initrcSetVersion)        \
+#define INITRC_COMMAND(X) \
 	X("addModule", initrcAddModule)
 
 static const struct
@@ -58,6 +57,26 @@ static bool initrcCommandDispatch(const initrc_command_t *command)
 	return false;
 }
 
+static bool initrcVersionCommand(const initrc_command_t *command,
+								 const char *position,
+								 const char *option,
+								 const int expected_version)
+{
+	if( (strcmp(command->tok->tokens[0], "setVersion") != 0) ||
+		(command->tok->count < 2) || (strcmp(command->tok->tokens[1], option) != 0) )
+	{
+		AUTOCODE_MSG_ERROR("%s init.rc command [%s:%i] must be setVersion %s %i",
+						   position,
+						   command->initrc_name,
+						   command->file_line_number,
+						   option,
+						   expected_version);
+		return false;
+	}
+
+	return initrcSetVersion(command);
+}
+
 int parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path)
 {
 	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
@@ -70,7 +89,9 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 	int file_line_number = 0;
 	tokenizer_t tok = {0};
 	file_get_line_result_t line_result;
-	initrc_version_state_t version_state = AC_INITRC_VERSION_EXPECT_MAJOR;
+	bool version_major_set = false;
+	bool version_minor_set = false;
+	bool version_invalid = false;
 
 	while( (line_result = fileGetLine(&initrc_list, tok.line, sizeof(tok.line))) ==
 		   FILE_GET_LINE_SUCCESS )
@@ -78,64 +99,71 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		file_line_number++;
 		if( tokenizer(&tok) != 0 )
 		{
-			if( version_state != AC_INITRC_VERSION_VALID )
+			if( (version_major_set == false) || (version_minor_set == false) )
 			{
-				version_state = AC_INITRC_VERSION_INVALID;
+				version_invalid = true;
 				break;
 			}
 			continue;
 		}
+		if( (tok.count == 0) || (strcmp(tok.tokens[0], "#") == 0) ) { continue; }
 
 		const initrc_command_t command = {.data_base = data_base,
 									 .tok = &tok,
 									 .initrc_name = initrc_name,
 									 .source_path = source_path,
-									 .file_line_number = file_line_number,
-									 .version_state = &version_state};
+									 .file_line_number = file_line_number};
 
-		if( (version_state != AC_INITRC_VERSION_VALID) &&
-			((tok.count == 0) || (strcmp(tok.tokens[0], "setVersion") != 0)) )
+		if( version_major_set == false )
 		{
-			if( version_state == AC_INITRC_VERSION_EXPECT_MAJOR )
+			version_major_set = initrcVersionCommand(
+				&command, "first", "major", AC_INITRC_EXPECTED_VER_MAJOR);
+			if( version_major_set == false )
 			{
-				AUTOCODE_MSG_ERROR("first init.rc line [%s:%i] must be setVersion major %i",
-								   initrc_name,
-								   file_line_number,
-								   AC_INITRC_EXPECTED_VER_MAJOR);
+				version_invalid = true;
+				break;
 			}
-			if( version_state == AC_INITRC_VERSION_EXPECT_MINOR )
+			continue;
+		}
+		if( version_minor_set == false )
+		{
+			version_minor_set = initrcVersionCommand(
+				&command, "second", "minor", AC_INITRC_EXPECTED_VER_MINOR);
+			if( version_minor_set == false )
 			{
-				AUTOCODE_MSG_ERROR("second init.rc line [%s:%i] must be setVersion minor %i",
-								   initrc_name,
-								   file_line_number,
-								   AC_INITRC_EXPECTED_VER_MINOR);
+				version_invalid = true;
+				break;
 			}
-			version_state = AC_INITRC_VERSION_INVALID;
+			continue;
+		}
+		if( strcmp(tok.tokens[0], "setVersion") == 0 )
+		{
+			AUTOCODE_MSG_ERROR("setVersion command after init.rc version declaration [%s:%i]",
+							   initrc_name,
+							   file_line_number);
+			version_invalid = true;
 			break;
 		}
-
-		if( (tok.count > 0) && (strcmp(tok.tokens[0], "#") != 0) &&
-			(initrcCommandDispatch(&command) == false) )
+		if( initrcCommandDispatch(&command) == false )
 		{
 			AUTOCODE_MSG_ERROR(
 				"unknown command [%s:%i] %s", initrc_name, file_line_number, tok.tokens[0]);
 		}
-		if( version_state == AC_INITRC_VERSION_INVALID ) { break; }
 	}
 
 	if( line_result == FILE_GET_LINE_ERROR )
 	{
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", initrc_list.name, file_line_number);
 	}
-	if( version_state == AC_INITRC_VERSION_EXPECT_MAJOR )
+	if( (version_invalid == false) && (version_major_set == false) )
 	{
-		AUTOCODE_MSG_ERROR("missing setVersion major %i on first line of init.rc file <%s>",
+		AUTOCODE_MSG_ERROR("missing setVersion major %i as first command of init.rc file <%s>",
 						   AC_INITRC_EXPECTED_VER_MAJOR,
 						   initrc_name);
 	}
-	if( version_state == AC_INITRC_VERSION_EXPECT_MINOR )
+	if( (version_invalid == false) && version_major_set && (version_minor_set == false) )
 	{
-		AUTOCODE_MSG_ERROR("missing setVersion minor %i after init.rc major version <%s>",
+		AUTOCODE_MSG_ERROR("missing setVersion minor %i as second command of init.rc file <%s>",
 						   AC_INITRC_EXPECTED_VER_MINOR,
 						   initrc_name);
 	}
