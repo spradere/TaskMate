@@ -6,8 +6,6 @@ AUDIT :
 - AVR timer 1 and 3 start/init diff
 
 TODO, short-term :
-- autoCode parseInitrc refactor, move options in parseinitrc
-- sevice scli commands selection in initrc file. Remove C code in target files
 - autoCode general review, code is clean ? refactor code duplication
 - review ucontext and ncurses
 - upgrade ncurses perfs

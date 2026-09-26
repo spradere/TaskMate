@@ -1,3 +1,5 @@
+	[build] + [code] scli commands selection in initrc files
+	[code] refactor initrc parser, function dispather and X macro
 	[build] remove useless code and add comments in makefiles
 	[code] upade autoCode init.rc parser
 	[code] add simulation taget FreeBSD-ucontext
