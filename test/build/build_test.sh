@@ -214,19 +214,19 @@ runConfigurationTests()
 	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
 	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
 	logContains ucontext_compile_sources "srcs/system/services/scli.c"
-	logContains ucontext_compile_sources "srcs/system/services/commands/driver.c"
-	logContains ucontext_compile_sources "srcs/system/services/commands/stack.c"
-	logContains ucontext_compile_sources "srcs/system/services/commands/thread.c"
+	logContains ucontext_compile_sources "srcs/system/services/commands/scli_driver.c"
+	logContains ucontext_compile_sources "srcs/system/services/commands/scli_stack.c"
+	logContains ucontext_compile_sources "srcs/system/services/commands/scli_thread.c"
 	logExcludes ucontext_compile_sources "ucontext_scli_commands"
-	logExcludes ucontext_compile_sources "srcs/system/services/commands/date.c"
-	logExcludes ucontext_compile_sources "srcs/system/services/commands/i2c.c"
+	logExcludes ucontext_compile_sources "srcs/system/services/commands/scli_date.c"
+	logExcludes ucontext_compile_sources "srcs/system/services/commands/scli_i2c.c"
 	logExcludes ucontext_compile_sources "srcs/hal/arch/"
 	logExcludes ucontext_compile_sources "srcs/hal/mcu/"
 
 	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
-	logContains default_compile_sources "srcs/system/services/commands/date.c"
-	logContains default_compile_sources "srcs/system/services/commands/stack.c"
+	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
+	logContains default_compile_sources "srcs/system/services/commands/scli_stack.c"
 	logExcludes default_compile_sources "test1_scli_commands"
 
 	expectSuccess default_initrc_sources targetMake -V FILES_INITRC_SRC
@@ -241,7 +241,7 @@ runConfigurationTests()
 	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
 
 	expectSuccess initrc_directory_sources targetMake -V FILES_INITRC_DIR_SRC
-	logContains initrc_directory_sources "srcs/system/services/commands/date.c"
+	logContains initrc_directory_sources "srcs/system/services/commands/scli_date.c"
 	logExcludes initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
 
 	expectSuccess object_mapping targetMake -V FILES_OBJ

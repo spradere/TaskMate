@@ -73,8 +73,8 @@ caseBegin()
 		"${PATH_CASE}/sources/system/services/commands" || \
 		fail "cannot create source fixtures"
 	printf "%s\n" "void fixture(void) {}" > "${PATH_CASE}/sources/system.c"
-	: > "${PATH_CASE}/sources/system/services/commands/date.h"
-	: > "${PATH_CASE}/sources/system/services/commands/driver.h"
+	: > "${PATH_CASE}/sources/system/services/commands/scli_date.h"
+	: > "${PATH_CASE}/sources/system/services/commands/scli_driver.h"
 	printf "%s\n" "static void targetWireSignal(void) {}" \
 		> "${PATH_CASE}/sources/targetWireSignal.c"
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
@@ -359,7 +359,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_scli_command_header
-	find "${PATH_CASE}/sources/system/services/commands/date.h" -delete
+	find "${PATH_CASE}/sources/system/services/commands/scli_date.h" -delete
 	printf '%s\n' 'addScliCommand date' >> "${PATH_CASE}/init.rc"
 	expectFailure missing_scli_command_header "SCLI command header not found" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -655,7 +655,7 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc still initializes a stack pointer directly"
 	fi
-	if ! grep -F -q '#include "system/services/commands/date.h"' \
+	if ! grep -F -q '#include "system/services/commands/scli_date.h"' \
 		"${PATH_CASE}/generated/scli_commands.inc"; then
 		fail "scli_commands generated include is missing"
 	fi

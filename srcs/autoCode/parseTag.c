@@ -364,7 +364,7 @@ static void writeScliCommands(const parse_tag_t *parse)
 	for( uint8_t i = 0; i < parse->data_base->scli.count; i++ )
 	{
 		fprintf(parse->file,
-				"#include \"system/services/commands/%s.h\"\n",
+				"#include \"system/services/commands/scli_%s.h\"\n",
 				parse->data_base->scli.commands[i].name);
 	}
 	fprintf(parse->file, "\nstatic const scli_cmd_t scli_commands[] = {\n");

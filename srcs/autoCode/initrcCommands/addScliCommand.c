@@ -72,7 +72,7 @@ static bool commandHeaderExists(const initrc_command_t *command, const char *nam
 	char path[AC_BUFFER_SIZE];
 	const int length = snprintf(path,
 							  sizeof(path),
-							  "%s/system/services/commands/%s.h",
+							  "%s/system/services/commands/scli_%s.h",
 							  command->source_path,
 							  name);
 	if( (length < 0) || ((size_t)length >= sizeof(path)) ) { return false; }

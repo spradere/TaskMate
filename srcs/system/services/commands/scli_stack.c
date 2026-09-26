@@ -7,7 +7,7 @@
  */
 
 /**
- * @file stack.c
+ * @file scli_stack.c
  * @brief Stack command implementation.
  */
 
@@ -15,7 +15,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "stack.h"
+#include "scli_stack.h"
 
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_threads.h"

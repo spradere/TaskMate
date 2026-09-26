@@ -7,12 +7,12 @@
  */
 
 /**
- * @file i2c.h
- * @brief I2C command declarations.
+ * @file scli_stack.h
+ * @brief Stack command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_I2C_H
-#define SERVICES_COMMANDS_I2C_H
+#ifndef SERVICES_COMMANDS_SCLI_STACK_H
+#define SERVICES_COMMANDS_SCLI_STACK_H
 
 /* ============================================================================
  * Includes
@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool i2cCommand(uint8_t argc, char *argv[]);
+bool stackCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_I2C_H
+#endif // SERVICES_COMMANDS_SCLI_STACK_H

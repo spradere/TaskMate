@@ -7,12 +7,12 @@
  */
 
 /**
- * @file thread.h
- * @brief thread command declarations.
+ * @file scli_date.h
+ * @brief Date command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_THREAD_H
-#define SERVICES_COMMANDS_THREAD_H
+#ifndef SERVICES_COMMANDS_SCLI_DATE_H
+#define SERVICES_COMMANDS_SCLI_DATE_H
 
 /* ============================================================================
  * Includes
@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool threadCommand(uint8_t argc, char *argv[]);
+bool dateCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_THREAD_H
+#endif // SERVICES_COMMANDS_SCLI_DATE_H

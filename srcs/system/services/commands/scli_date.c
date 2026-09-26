@@ -7,7 +7,7 @@
  */
 
 /**
- * @file date.c
+ * @file scli_date.c
  * @brief Date command implementation.
  */
 
@@ -15,7 +15,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "date.h"
+#include "scli_date.h"
 
 #include "interfaces/drv_rtc.h"
 #include "interfaces/tm_define.h"
