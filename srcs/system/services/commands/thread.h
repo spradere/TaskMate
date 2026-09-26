@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool thread(uint8_t argc, char *argv[]);
+bool threadCommand(uint8_t argc, char *argv[]);
 
 #endif // SERVICES_COMMANDS_THREAD_H

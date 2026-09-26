@@ -39,6 +39,12 @@
  * Target command table
  * ---------------------------------------------*/
 
+typedef struct
+{
+	const char *name;
+	bool (*func)(uint8_t argc, char *argv[]);
+} scli_cmd_t;
+
 // [autoCode_tag] scli_commands
 #include "scli_commands.inc"
 // [/tag]

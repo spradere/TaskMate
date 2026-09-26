@@ -367,13 +367,7 @@ static void writeScliCommands(const parse_tag_t *parse)
 				"#include \"system/services/commands/%s.h\"\n",
 				parse->data_base->scli.commands[i].name);
 	}
-
-	fprintf(parse->file, "\ntypedef struct\n");
-	fprintf(parse->file, "{\n");
-	fprintf(parse->file, "\tconst char *name;\n");
-	fprintf(parse->file, "\tbool (*func)(uint8_t argc, char *argv[]);\n");
-	fprintf(parse->file, "} scli_cmd_t;\n\n");
-	fprintf(parse->file, "static const scli_cmd_t scli_commands[] = {\n");
+	fprintf(parse->file, "\nstatic const scli_cmd_t scli_commands[] = {\n");
 	for( uint8_t i = 0; i < parse->data_base->scli.count; i++ )
 	{
 		fprintf(parse->file,

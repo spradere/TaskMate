@@ -67,7 +67,7 @@ static const driver_cmd_t driver_cmd[] = {
  * Command dispatch
  * ---------------------------------------------*/
 
-bool driver(uint8_t argc, char *argv[])
+bool driverCommand(uint8_t argc, char *argv[])
 {
 	if( argc < 2 )
 	{

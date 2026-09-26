@@ -64,7 +64,7 @@ static const thread_cmd_t thread_cmd[] = {
  * Command dispatch
  * ---------------------------------------------*/
 
-bool thread(uint8_t argc, char *argv[])
+bool threadCommand(uint8_t argc, char *argv[])
 {
 	if( argc < 2 )
 	{

@@ -60,7 +60,7 @@ static const i2c_cmd_t i2c_cmd[] = {
  * Command dispatch
  * ---------------------------------------------*/
 
-bool i2c(uint8_t argc, char *argv[])
+bool i2cCommand(uint8_t argc, char *argv[])
 {
 	if( argc < 2 )
 	{

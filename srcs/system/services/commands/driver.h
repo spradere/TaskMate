@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool driver(uint8_t argc, char *argv[]);
+bool driverCommand(uint8_t argc, char *argv[]);
 
 #endif // SERVICES_COMMANDS_DRIVER_H

@@ -26,7 +26,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-bool stack(uint8_t argc, char *argv[])
+bool stackCommand(uint8_t argc, char *argv[])
 {
 	if( (argc != 2) ||
 		(tm_strncmp(TM_STR_RAM(argv[1]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0) )

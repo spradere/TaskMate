@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool i2c(uint8_t argc, char *argv[]);
+bool i2cCommand(uint8_t argc, char *argv[]);
 
 #endif // SERVICES_COMMANDS_I2C_H

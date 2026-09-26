@@ -35,10 +35,10 @@ typedef struct
 
 static const scli_command_definition_t scli_command_definitions[] = {
 	{"date", "dateCommand"},
-	{"driver", "driver"},
-	{"i2c", "i2c"},
-	{"stack", "stack"},
-	{"thread", "thread"},
+	{"driver", "driverCommand"},
+	{"i2c", "i2cCommand"},
+	{"stack", "stackCommand"},
+	{"thread", "threadCommand"},
 };
 
 /* =============================================================================
