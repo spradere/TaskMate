@@ -21,38 +21,13 @@
 #include <stdbool.h>
 
 #include "fileUtility.h"
+#include "tagWriters/tagWriters.h"
 #include "tokenizer.h"
-
-/* -----------------------------------------------
- * Private types
- * ---------------------------------------------*/
-
-typedef struct
-{
-	const modules_database_t *data_base;
-	FILE *file;
-	const error_catalog_t *errors;
-	const options_list_t *auto_options;
-	bool *file_error;
-} parse_tag_t;
 
 /* -----------------------------------------------
  * Private function prototypes
  * ---------------------------------------------*/
 
-static void writeModulesCount(const parse_tag_t *parse);
-static void writeDriversAlloc(const parse_tag_t *parse);
-static void writeThreadStacks(const parse_tag_t *parse);
-static void writeThreadsAlloc(const parse_tag_t *parse);
-static void writeDriverNameCatalog(const parse_tag_t *parse);
-static void writeThreadNameCatalog(const parse_tag_t *parse);
-static const char *errorLevelName(err_level_t level);
-static void writeErrorCatalog(const parse_tag_t *parse);
-static void writeErrorEnum(const parse_tag_t *parse);
-static void writeModulesList(const parse_tag_t *parse);
-static void writeGpioSignals(const parse_tag_t *parse);
-static void writeWireGpio(const parse_tag_t *parse);
-static void writeScliCommands(const parse_tag_t *parse);
 static int generatedFileName(char *file_name, size_t file_name_size, const char *generated_path,
 							 const char *tag);
 
@@ -61,28 +36,22 @@ static int generatedFileName(char *file_name, size_t file_name_size, const char 
  * ---------------------------------------------*/
 
 #define HAVE_TAG(X)                                                            \
-	X(HAVE_THREAD_STACKS, "thread_stacks", writeThreadStacks)                  \
-	X(HAVE_THREADS_ALLOC, "threads_alloc", writeThreadsAlloc)                  \
-	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", writeDriversAlloc)                  \
-	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", writeThreadNameCatalog) \
-	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", writeDriverNameCatalog) \
-	X(HAVE_ERROR_ENUM, "error_enum", writeErrorEnum)                           \
-	X(HAVE_ERROR_CATALOG, "error_catalog", writeErrorCatalog)                  \
-	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)                      \
-	X(HAVE_MOD_LIST, "modules_list", writeModulesList)                         \
-	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)                     \
-	X(HAVE_WIRE_GPIO, "wire_gpio", writeWireGpio)                              \
-	X(HAVE_SCLI_COMMANDS, "scli_commands", writeScliCommands)
-
-static const struct
-{
-	const char *tag;
-	void (*func)(const parse_tag_t *parse);
-} tags_cmds[] = {
-#define X(e, s, f) {(s), (f)},
-	HAVE_TAG(X)
-#undef X
-		{NULL, NULL}};
+	X(HAVE_THREAD_STACKS, "thread_stacks", tagWriterWriteThreadStacks)         \
+	X(HAVE_THREADS_ALLOC, "threads_alloc", tagWriterWriteThreadsAlloc)         \
+	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", tagWriterWriteDriversAlloc)         \
+	X(HAVE_THREAD_NAME_CATALOG,                                                 \
+	  "thread_name_catalog",                                                   \
+	  tagWriterWriteThreadNameCatalog)                                          \
+	X(HAVE_DRIVER_NAME_CATALOG,                                                 \
+	  "driver_name_catalog",                                                   \
+	  tagWriterWriteDriverNameCatalog)                                          \
+	X(HAVE_ERROR_ENUM, "error_enum", tagWriterWriteErrorEnum)                  \
+	X(HAVE_ERROR_CATALOG, "error_catalog", tagWriterWriteErrorCatalog)         \
+	X(HAVE_MOD_COUNT, "modules_count", tagWriterWriteModulesCount)             \
+	X(HAVE_MOD_LIST, "modules_list", tagWriterWriteModulesList)                \
+	X(HAVE_GPIO_SIGNALS, "gpio_signals", tagWriterWriteGpioSignals)            \
+	X(HAVE_WIRE_GPIO, "wire_gpio", tagWriterWriteWireGpio)                     \
+	X(HAVE_SCLI_COMMANDS, "scli_commands", tagWriterWriteScliCommands)
 
 enum
 {
@@ -91,6 +60,17 @@ enum
 #undef X
 		HAVE_COUNT
 };
+
+static const struct
+{
+	int id;
+	const char *tag;
+	void (*func)(const tag_writer_context_t *context);
+} tags_cmds[] = {
+#define X(e, s, f) {(e), (s), (f)},
+	HAVE_TAG(X)
+#undef X
+		{0, NULL, NULL}};
 
 static const char *have_to_string[HAVE_COUNT] = {
 #define X(e, s, f) [e] = (s),
@@ -117,13 +97,14 @@ static const char *string_from_have(const int id)
 	return NULL;
 }
 
-static int tagCmdDispatch(const char *cmd, const parse_tag_t *parse)
+static int tagCmdDispatch(const char *cmd, const tag_writer_context_t *context)
 {
 	for( int i = 0; tags_cmds[i].tag != NULL; i++ )
 	{
 		if( strcmp(cmd, tags_cmds[i].tag) == 0 )
 		{
-			(*tags_cmds[i].func)(parse);
+			(*tags_cmds[i].func)(context);
+			if( !*context->file_error ) { have_tag_count[tags_cmds[i].id]++; }
 			return 0;
 		}
 	}
@@ -170,11 +151,11 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	}
 
 	bool file_error = false;
-	parse_tag_t parse = {.data_base = data_base,
-						 .file = NULL,
-						 .errors = errors,
-						 .auto_options = auto_options,
-						 .file_error = &file_error};
+	tag_writer_context_t context = {.data_base = data_base,
+								.file = NULL,
+								.errors = errors,
+								.auto_options = auto_options,
+								.file_error = &file_error};
 
 	// Read from source
 	int tag_section = 0;
@@ -233,18 +214,18 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 				file_error = true;
 				break;
 			}
-			parse.file = file_generated.stream;
+			context.file = file_generated.stream;
 
-			fprintf(parse.file, "/*\n");
-			fprintf(parse.file, "* do not edit code in this file \n");
-			fprintf(parse.file, "* code generated by autoCode, any change will be lost\n");
-			fprintf(parse.file, "*/\n");
+			fprintf(context.file, "/*\n");
+			fprintf(context.file, "* do not edit code in this file \n");
+			fprintf(context.file, "* code generated by autoCode, any change will be lost\n");
+			fprintf(context.file, "*/\n");
 
-			fprintf(parse.file, "\n#line %i\n\n", AC_GENERATED_LINE_START);
+			fprintf(context.file, "\n#line %i\n\n", AC_GENERATED_LINE_START);
 
 			tag_section = 1;
 
-			int err = tagCmdDispatch(tok.tokens[2], &parse);
+			int err = tagCmdDispatch(tok.tokens[2], &context);
 			if( fileClose(&file_generated, __FILE__, __LINE__) != 0 ) { file_error = true; }
 			if( file_error )
 			{
@@ -299,334 +280,4 @@ void parseTagHave(void)
 			AUTOCODE_MSG_ERROR("required autoCode tag %s is multiple set", string_from_have(i));
 		}
 	}
-}
-
-/* -----------------------------------------------
- * Code generation
- * ---------------------------------------------*/
-
-static void writeGpioSignals(const parse_tag_t *parse)
-{
-	file_t file_signals;
-	fileInit(&file_signals);
-	file_signals.name = (char *)parse->auto_options->file_gpio_signals;
-	if( fileOpen(&file_signals, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
-	{
-		*parse->file_error = true;
-		return;
-	}
-
-	fprintf(parse->file, "typedef enum\n");
-	fprintf(parse->file, "{\n");
-
-	tokenizer_t tok = {0};
-	int line = 0;
-	file_get_line_result_t line_result;
-	while( (line_result = fileGetLine(&file_signals, tok.line, sizeof(tok.line))) ==
-		   FILE_GET_LINE_SUCCESS )
-	{
-		if( tokenizer(&tok) != 0 ) { continue; }
-		line++;
-		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
-		{
-			if( tok.count > 1 )
-			{
-				AUTOCODE_MSG_ERROR(
-					"in file %s wrong token count line %i\n", file_signals.name, line);
-			}
-			fprintf(parse->file, "\t%s,\n", tok.tokens[0]);
-		}
-	}
-	if( line_result == FILE_GET_LINE_ERROR )
-	{
-		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", file_signals.name, line);
-		*parse->file_error = true;
-	}
-	fprintf(parse->file, "\tGPIO_SIGNAL_COUNT\n");
-	fprintf(parse->file, "} gpio_signal_t;\n");
-
-	tokenizerFree(&tok);
-	if( fileClose(&file_signals, __FILE__, __LINE__) != 0 ) { *parse->file_error = true; }
-	if( *parse->file_error ) { return; }
-	have_tag_count[HAVE_GPIO_SIGNALS]++;
-}
-
-static void writeWireGpio(const parse_tag_t *parse)
-{
-	const char *wire_gpio = parse->auto_options->file_wire_gpio;
-
-	fprintf(parse->file, "#include \"%s\"\n", wire_gpio);
-	have_tag_count[HAVE_WIRE_GPIO]++;
-}
-
-static void writeScliCommands(const parse_tag_t *parse)
-{
-	for( uint8_t i = 0; i < parse->data_base->scli.count; i++ )
-	{
-		fprintf(parse->file,
-				"#include \"system/services/commands/scli_%s.h\"\n",
-				parse->data_base->scli.commands[i].name);
-	}
-	fprintf(parse->file, "\nstatic const scli_cmd_t scli_commands[] = {\n");
-	for( uint8_t i = 0; i < parse->data_base->scli.count; i++ )
-	{
-		fprintf(parse->file,
-				"\t{\"%s\", %s},\n",
-				parse->data_base->scli.commands[i].name,
-				parse->data_base->scli.commands[i].function);
-	}
-	fprintf(parse->file, "\t{0, 0},\n");
-	fprintf(parse->file, "};\n");
-	have_tag_count[HAVE_SCLI_COMMANDS]++;
-}
-
-static void writeModulesList(const parse_tag_t *parse)
-{
-	const module_type_t *mod = &parse->data_base->modules_type[MOD_THREAD_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		if( mod->modules[i].subtype == THREAD_BIT_TYPE_SYS )
-		{
-			fprintf(parse->file, "#include \"system/services/%s.h\"\n", mod->modules[i].name);
-		}
-		if( mod->modules[i].subtype == THREAD_BIT_TYPE_USER )
-		{
-			fprintf(parse->file, "#include \"user/tasks/%s.h\"\n", mod->modules[i].name);
-		}
-	}
-	fprintf(parse->file, "\n");
-
-	mod = &parse->data_base->modules_type[MOD_DRIVER_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(parse->file, "#include \"interfaces/drv_%s.h\"\n", mod->modules[i].name);
-	}
-	have_tag_count[HAVE_MOD_LIST]++;
-}
-
-static void writeModulesCount(const parse_tag_t *parse)
-{
-	fprintf(parse->file,
-			"#define MOD_DRIVER_COUNT %i\n",
-			parse->data_base->modules_type[MOD_DRIVER_ID].modules_count);
-	fprintf(parse->file,
-			"#define MOD_THREAD_COUNT %i\n",
-			parse->data_base->modules_type[MOD_THREAD_ID].modules_count);
-
-	have_tag_count[HAVE_MOD_COUNT]++;
-}
-
-static void writeThreadStacks(const parse_tag_t *parse)
-{
-	int threads_count = 1;
-	const module_type_t *mod = &parse->data_base->modules_type[MOD_THREAD_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		int thread_index = threads_count;
-		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
-		else { threads_count++; }
-
-		fprintf(parse->file,
-				"static hal_stack_word_t thread%i_stack[%u];\n",
-				thread_index,
-				mod->modules[i].stack_size);
-	}
-
-	have_tag_count[HAVE_THREAD_STACKS]++;
-}
-
-static void writeThreadsAlloc(const parse_tag_t *parse)
-{
-	int threads_count = 1;
-	int thread_index;
-	bool in_system = false;
-	bool system_thread_found = false;
-	const module_type_t *mod;
-
-	fprintf(parse->file, "\tmod_thread_item_t *mod;\n");
-
-	mod = &parse->data_base->modules_type[MOD_THREAD_ID];
-
-	// List other threads
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		// The first thread must be the system thread
-		if( strcmp(mod->modules[i].name, "system") == 0 )
-		{
-			thread_index = 0;
-			in_system = true;
-			system_thread_found = true;
-		}
-		else { thread_index = threads_count; }
-
-		fprintf(parse->file, "\n\tmod = mod_threadGetPointer(%i);\n", thread_index);
-		fprintf(parse->file, "\tmod->stack = thread%i_stack;\n", thread_index);
-		fprintf(parse->file, "\tmod->stack_size = %u;\n", mod->modules[i].stack_size);
-		fprintf(parse->file, "\tmod_threadStackInit(mod);\n");
-
-		fprintf(parse->file,
-				"\n\thal_threadContextInit(%s, &(mod->context), "
-				"&(mod->stack[mod->stack_size - MOD_STACK_CANARY_WORD_COUNT]));\n",
-				mod->modules[i].name);
-
-		fprintf(parse->file, "\tmod->software_time_counter = 0;\n");
-		fprintf(parse->file, "\tmod->status = %i;\n", mod->modules[i].status);
-		fprintf(
-			parse->file, "\tmod->saved_run_level = %i;\n", mod->modules[i].status & RL_LEVEL_MASK);
-		fprintf(parse->file, "\tmod->main = %s;\n", mod->modules[i].name);
-
-		if( in_system == false ) { threads_count++; }
-		in_system = false;
-	}
-	have_tag_count[HAVE_THREADS_ALLOC]++;
-
-	if( system_thread_found == false ) { AUTOCODE_MSG_ERROR("thread system was not found."); }
-}
-
-static void writeThreadNameCatalog(const parse_tag_t *parse)
-{
-	int threads_count = 1;
-	const module_type_t *mod = &parse->data_base->modules_type[MOD_THREAD_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		int thread_index = threads_count;
-		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
-		else { threads_count++; }
-
-		fprintf(parse->file,
-				"TM_STR_NEW(thread%i_name, \"%s\");\n",
-				thread_index,
-				mod->modules[i].name);
-	}
-
-	fprintf(parse->file,
-			"\nstatic const tm_string_t *const thread_name_catalog[MOD_THREAD_COUNT] =\n{\n");
-	threads_count = 1;
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		int thread_index = threads_count;
-		if( strcmp(mod->modules[i].name, "system") == 0 ) { thread_index = 0; }
-		else { threads_count++; }
-		fprintf(parse->file, "\t[%i] = &thread%i_name,\n", thread_index, thread_index);
-	}
-	fprintf(parse->file, "};\n");
-
-	have_tag_count[HAVE_THREAD_NAME_CATALOG]++;
-}
-
-static void writeDriversAlloc(const parse_tag_t *parse)
-{
-	const module_type_t *mod = &parse->data_base->modules_type[MOD_DRIVER_ID];
-
-	fprintf(parse->file, "\tmod_driver_item_t *mod;\n");
-	fprintf(parse->file, "\thal_driver_control_data_t control_data;\n");
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(parse->file, "\n\tmod = mod_driverGetPointer(%i);\n", i);
-		fprintf(parse->file, "\tcontrol_data.run_level = %i;\n", mod->modules[i].status);
-		fprintf(
-			parse->file, "\thal_%sControl(DRV_CTRL_RLSET, &control_data);\n", mod->modules[i].name);
-		fprintf(parse->file, "\t*(mod) = (mod_driver_item_t)\n");
-		fprintf(parse->file, "\t{\n");
-		if( mod->modules[i].address == MOD_DRIVER_ADDRESS_NONE )
-		{
-			fprintf(parse->file, "\t\t.address = MOD_DRIVER_ADDRESS_NONE,\n");
-		}
-		else { fprintf(parse->file, "\t\t.address = 0x%02X,\n", mod->modules[i].address); }
-		fprintf(parse->file, "\t\t.control = hal_%sControl\n", mod->modules[i].name);
-		fprintf(parse->file, "\t};\n");
-	}
-	have_tag_count[HAVE_DRIVERS_ALLOC]++;
-}
-
-static void writeDriverNameCatalog(const parse_tag_t *parse)
-{
-	const module_type_t *mod = &parse->data_base->modules_type[MOD_DRIVER_ID];
-
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(parse->file, "TM_STR_NEW(driver%i_name, \"%s\");\n", i, mod->modules[i].name);
-	}
-
-	fprintf(parse->file,
-			"\nstatic const tm_string_t *const driver_name_catalog[MOD_DRIVER_COUNT] =\n{\n");
-	for( int i = 0; i < mod->modules_count; i++ )
-	{
-		fprintf(parse->file, "\t&driver%i_name,\n", i);
-	}
-	fprintf(parse->file, "};\n");
-
-	have_tag_count[HAVE_DRIVER_NAME_CATALOG]++;
-}
-
-static void writeErrorCatalog(const parse_tag_t *parse)
-{
-
-	for( int i = 0; i < parse->errors->error_count; i++ )
-	{
-		if( parse->errors->catalog[i].level != ERR_LEVEL_FLOW )
-		{
-			fprintf(parse->file, "TM_STR_NEW(err%i, %s);\n", i, parse->errors->catalog[i].message);
-		}
-	}
-
-	fprintf(parse->file, "\nconst err_item_t error_catalog[] = \n{\n");
-
-	for( int i = 0; i < parse->errors->error_count; i++ )
-	{
-		if( parse->errors->catalog[i].level == ERR_LEVEL_FLOW )
-		{
-			fprintf(parse->file, "\t{NULL, ERR_LEVEL_FLOW},\n");
-		}
-		else
-		{
-			fprintf(parse->file,
-					"\t{&err%i, %s},\n",
-					i,
-					errorLevelName(parse->errors->catalog[i].level));
-		}
-	}
-	fprintf(parse->file, "};\n");
-
-	have_tag_count[HAVE_ERROR_CATALOG]++;
-}
-
-static const char *errorLevelName(const err_level_t level)
-{
-	switch( level )
-	{
-		case ERR_LEVEL_FLOW:
-			return "ERR_LEVEL_FLOW";
-		case ERR_LEVEL_WARN:
-			return "ERR_LEVEL_WARN";
-		case ERR_LEVEL_FAIL:
-			return "ERR_LEVEL_FAIL";
-		case ERR_LEVEL_PANIC:
-			return "ERR_LEVEL_PANIC";
-	}
-
-	AUTOCODE_MSG_ERROR("unknown TaskMate error level <%i>", level);
-
-	return "ERR_LEVEL_FAIL";
-}
-
-static void writeErrorEnum(const parse_tag_t *parse)
-{
-	// Write the error enum
-	fprintf(parse->file, "typedef enum\n");
-	fprintf(parse->file, "{\n");
-
-	for( int i = 0; i < parse->errors->error_count; i++ )
-	{
-		fprintf(parse->file, "\t%s,\n", parse->errors->catalog[i].name);
-	}
-	fprintf(parse->file, "\tERROR_COUNT\n");
-	fprintf(parse->file, "} err_codes_t;\n\n");
-
-	have_tag_count[HAVE_ERROR_ENUM]++;
 }
