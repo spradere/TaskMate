@@ -89,8 +89,8 @@ FILES_NOTARGET_SRC_ALL = ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H}
 FILES_NOTARGET_SRC_ALL := ${FILES_NOTARGET_SRC_ALL:O}
 
 # Documentation files
-FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md"; \
-		find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.txt"
+FILES_DOC != find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.md" && \
+			find ${PATH_DOCS} ${OPT_FIND_EXCLUDE} -type f -name "*.txt"
 
 # Makefiles
 FILES_MK_MK != find  ./${PATH_MAKEFILES} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"

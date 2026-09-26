@@ -126,7 +126,8 @@ clean:
 	@printf "${PATH_BUILD_TARGET}/*autoCode*\n"
 	@printf "${COLOUR_RESET}"
 		
-	@-find "${PATH_BUILD_TARGET}" -type f \( -name "*.o" -o -name "*.d" \) -delete
+	@-find "${PATH_BUILD_TARGET}" -type f -name "*.o" -delete
+	@-find "${PATH_BUILD_TARGET}" -type f -name "*.d" -delete
 	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "TaskMate*" -delete
 	@-find "${FILE_AUTOCODE_TARGET}" -type f -delete
 	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete
