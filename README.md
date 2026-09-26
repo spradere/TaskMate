@@ -14,10 +14,10 @@ At a much smaller scale and within my own limits, this project is also a way to 
 step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
-> <span style="color:green"> **Project Stats (v0.31 [^1] )**</span>
+> <span style="color:green"> **Project Stats (v0.32 [^1] )**</span>
 >
-> <span style="color:green">983 commits • 141 source files • 12501 lines of code •
-> AVR target binary size: 15588 bytes • RAM usage: 1820 bytes</span>
+> <span style="color:green">1085 commits • 178 source files • 15150 lines of code •
+> AVR target binary size: 15990 bytes • RAM usage: 1327 bytes</span>
 
 ![Project stats](doc/stats.png)
 
