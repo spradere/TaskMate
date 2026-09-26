@@ -195,12 +195,5 @@ static void setupDatabase(modules_database_t *data_base)
 	for( int i = 0; i < MOD_TYPE_COUNT; i++ )
 	{
 		data_base->modules_type[i].modules_count = 0;
-		for( int j = 0; j < MOD_COUNT_MAX; j++ )
-		{
-			data_base->modules_type[i].modules[j].cnt_set_runlevel = 0;
-			data_base->modules_type[i].modules[j].cnt_set_address = 0;
-			data_base->modules_type[i].modules[j].cnt_set_stack_size = 0;
-			data_base->modules_type[i].modules[j].cnt_set_source = 0;
-		}
 	}
 }
