@@ -28,7 +28,9 @@ CFLAGS += -DBOARD_arduinoMega
 VAL_CPU_FREQ = 16000000UL
 
 VAL_PROGRAMMER = avrispmkII
+.if ${OPT_ENVIRONMENT} == "freebsd"
 VAL_PROGRAMMER_PORT = /dev/ttyU0
+.endif
 
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}

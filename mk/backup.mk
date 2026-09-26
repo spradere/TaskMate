@@ -36,13 +36,6 @@ ${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
 	@printf "${file}\n" >> "${FILE_GIT_IGNORE}"
 .endfor
 
-# USB paths
-.if ${OPT_ENVIRONMENT} == "freebsd"
-PATH_USBKEY = /media/usbkey
-FILE_USBDEV = /dev/da0s1
-.endif
-VAL_USB_LABEL_EXPECTED = TASKMATE
-
 .PHONY: backup
 backup:
 #help [global] USB key backup with version in directory name.
