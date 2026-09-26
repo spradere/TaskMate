@@ -7,12 +7,12 @@
  */
 
 /**
- * @file date.h
- * @brief Date command declarations.
+ * @file scli_i2c.h
+ * @brief I2C command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_DATE_H
-#define SERVICES_COMMANDS_DATE_H
+#ifndef SERVICES_COMMANDS_SCLI_I2C_H
+#define SERVICES_COMMANDS_SCLI_I2C_H
 
 /* ============================================================================
  * Includes
@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool dateCommand(uint8_t argc, char *argv[]);
+bool i2cCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_DATE_H
+#endif // SERVICES_COMMANDS_SCLI_I2C_H

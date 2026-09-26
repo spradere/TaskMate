@@ -7,7 +7,7 @@
  */
 
 /**
- * @file i2c.c
+ * @file scli_i2c.c
  * @brief I2C command implementation.
  */
 
@@ -15,7 +15,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "i2c.h"
+#include "scli_i2c.h"
 
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_driver.h"

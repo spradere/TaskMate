@@ -7,7 +7,7 @@
  */
 
 /**
- * @file thread.c
+ * @file scli_thread.c
  * @brief thread command implementation.
  */
 
@@ -15,7 +15,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "thread.h"
+#include "scli_thread.h"
 
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_threads.h"

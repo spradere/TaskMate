@@ -7,12 +7,12 @@
  */
 
 /**
- * @file stack.h
- * @brief Stack command declarations.
+ * @file scli_thread.h
+ * @brief thread command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_STACK_H
-#define SERVICES_COMMANDS_STACK_H
+#ifndef SERVICES_COMMANDS_SCLI_THREAD_H
+#define SERVICES_COMMANDS_SCLI_THREAD_H
 
 /* ============================================================================
  * Includes
@@ -25,6 +25,6 @@
  * Public API
  * ========================================================================== */
 
-bool stackCommand(uint8_t argc, char *argv[]);
+bool threadCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_STACK_H
+#endif // SERVICES_COMMANDS_SCLI_THREAD_H

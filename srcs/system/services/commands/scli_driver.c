@@ -7,7 +7,7 @@
  */
 
 /**
- * @file driver.c
+ * @file scli_driver.c
  * @brief Driver command implementation.
  */
 
@@ -15,7 +15,7 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "driver.h"
+#include "scli_driver.h"
 
 #include "interfaces/hal_drivers.h"
 #include "interfaces/tm_define.h"
