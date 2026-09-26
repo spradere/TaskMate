@@ -23,7 +23,7 @@
 #define AC_GENERATED_LINE_START 1000
 #define AC_THREAD_STACK_SIZE_MIN 3UL
 #define AC_INITRC_EXPECTED_VER_MAJOR 1
-#define AC_INITRC_EXPECTED_VER_MINOR 7
+#define AC_INITRC_EXPECTED_VER_MINOR 8
 #define AC_AUTOCODE_VER_MAJOR 1
 #define AC_AUTOCODE_VER_MINOR 2
 
@@ -101,10 +101,6 @@ typedef struct
 	unsigned char subtype;
 	unsigned char address;
 	uint16_t stack_size;
-	int cnt_set_runlevel;
-	int cnt_set_address;
-	int cnt_set_stack_size;
-	int cnt_set_source;
 
 } module_item_t;
 

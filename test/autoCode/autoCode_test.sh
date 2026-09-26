@@ -19,7 +19,7 @@ VAL_TEST_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 7'
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 8'
 }
 
 fail()
@@ -75,7 +75,7 @@ caseBegin()
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
 	printf '%s\n' "${PATH_CASE}/errors.err" > "${PATH_CASE}/errors.list"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addService system -run core -stack 256 -source_file system.c' \
+	printf '%s\n' 'addModule service system -run core -stack 256 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
 	printf '%s\n' "${PATH_CASE}/init.rc" > "${PATH_CASE}/initrc.list"
 	writeTags "${PATH_CASE}/tags.c"
@@ -283,55 +283,59 @@ runInitrcTests()
 	caseBegin valid_commands
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
-		'addDriver driver -run driver -i2c 0x20 -source_file system.c' \
-		'addService system -run service -stack 256 -source_file system.c' \
-		'addTask task -run user -stack 256 -source_file system.c' >> "${PATH_CASE}/init.rc"
+		'addModule driver driver -run driver -i2c 0x20 -source_file system.c' \
+		'addModule service system -run service -stack 256 -source_file system.c' \
+		'addModule task task -run user -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_commands "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_source_option
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "addService system -run core -stack 256" >> "${PATH_CASE}/init.rc"
+	printf "%s\n" "addModule service system -run core -stack 256" \
+		>> "${PATH_CASE}/init.rc"
 	expectFailure missing_source_option "-source_file or -source_dir option is not set" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin invalid_source_file
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "addService system -run core -stack 256 -source_file missing.c" \
+	printf "%s\n" "addModule service system -run core -stack 256 -source_file missing.c" \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure invalid_source_file "unknown data" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin invalid_source_dir
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "addService system -run core -stack 256 -source_dir system.c" \
+	printf "%s\n" "addModule service system -run core -stack 256 -source_dir system.c" \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure invalid_source_dir "unknown data" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_source_dir
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" "addService system -run core -stack 256 -source_dir commands" \
+	printf "%s\n" "addModule service system -run core -stack 256 -source_dir commands" \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_source_dir "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_multiple_source_files
 	printf '%s\n' 'void commandFixture(void) {}' > "${PATH_CASE}/sources/commands/date.c"
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" \
-		"addService system -run core -stack 256 -source_file system.c -source_file commands/date.c" \
+	printf "%s%s\n" \
+		"addModule service system -run core -stack 256 -source_file system.c" \
+		" -source_file commands/date.c" \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_multiple_source_files "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_mixed_sources
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf "%s\n" \
-		"addService system -run core -stack 256 -source_file system.c -source_dir commands" \
+	printf "%s%s\n" \
+		"addModule service system -run core -stack 256 -source_file system.c" \
+		" -source_dir commands" \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_mixed_sources "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_stack
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addService system -run core -source_file system.c' \
+	printf '%s\n' 'addModule service system -run core -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure missing_stack "-stack option is not set" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -342,7 +346,7 @@ runInitrcTests()
 		caseBegin "invalid_stack_${VAL_NAME}"
 		writeInitrcVersion > "${PATH_CASE}/init.rc"
 		printf '%s\n' \
-			"addService system -run core -stack ${VAL_STACK} -source_file system.c" \
+			"addModule service system -run core -stack ${VAL_STACK} -source_file system.c" \
 			>> "${PATH_CASE}/init.rc"
 		expectFailure "invalid_stack_${VAL_NAME}" "unknown data" \
 			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -351,20 +355,20 @@ runInitrcTests()
 	caseBegin multiple_stack
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
-		'addService system -run core -stack 256 -stack 512 -source_file system.c' \
+		'addModule service system -run core -stack 256 -stack 512 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure multiple_stack "-stack option is multiple set" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin driver_stack
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addDriver driver -run core -stack 256 -source_file system.c' \
+	printf '%s\n' 'addModule driver driver -run core -stack 256 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
-	expectFailure driver_stack "-stack option is only valid for threads" \
+	expectFailure driver_stack "-stack option is not valid for driver modules" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_initrc_version
-	printf '%s\n' 'addService system -run core -stack 256' > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'addModule service system -run core -stack 256' > "${PATH_CASE}/init.rc"
 	expectFailure missing_initrc_version "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
@@ -387,7 +391,7 @@ runInitrcTests()
 
 	caseBegin missing_minor_initrc_version
 	printf '%s\n' 'setVersion major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing setVersion minor 7" \
+	expectFailure missing_minor_initrc_version "missing setVersion minor 8" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin malformed_initrc_version
@@ -396,14 +400,14 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_before_minor_initrc_version
-	printf '%s\n' 'setVersion major 1' 'addService system -run core' \
+	printf '%s\n' 'setVersion major 1' 'addModule service system -run core' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure module_before_minor_initrc_version "second init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' 'setVersion major 0' 'setVersion minor 7' \
-		'addService must_not_be_parsed -run core -stack 256 -source_file system.c' \
+	printf '%s\n' 'setVersion major 0' 'setVersion minor 8' \
+		'addModule service must_not_be_parsed -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -416,14 +420,14 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' 'setVersion minor 7' 'setVersion major 1' \
+	printf '%s\n' 'setVersion minor 8' 'setVersion major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc line" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addService system -run core -stack 256' 'setVersion minor 7' \
+	printf '%s\n' 'addModule service system -run core -stack 256' 'setVersion minor 8' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure late_initrc_version "setVersion command outside header" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -431,34 +435,38 @@ runInitrcTests()
 	caseBegin malformed_initrc
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
-		'addService system -run core -stack 256 -source_file system.c' \
-		'addTask few' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		'addModule task few' \
 		'badCommand badcmd -run user -stack 256 -source_file system.c' \
-		'addTask badoption -bad value -run user -stack 256 -source_file system.c' \
-		'addTask badrun -run invalid -stack 256 -source_file system.c' \
+		'addTask legacy -run user -stack 256 -source_file system.c' \
+		'addModule task badoption -bad value -run user -stack 256 -source_file system.c' \
+		'addModule task badrun -run invalid -stack 256 -source_file system.c' \
 		'legacy -type user -run user -stack 256 -source_file system.c' \
-		'addDriver badi2c -run core -i2c invalid -source_file system.c' \
-		'addTask abcdefghijklmnopqrstuvwxyzabcdef -run user -stack 256 -source_file system.c' \
-		'addTask duplicate -run user -stack 256 -source_file system.c' \
-		'addTask duplicate -run user -stack 256 -source_file system.c' \
-		'addTask no_run -stack 256 -source_file system.c' \
-		'addTask run_multi -run user -run user -stack 256 -source_file system.c' \
-		'addDriver i2c_multi -i2c 1 -i2c 2 -source_file system.c' \
-		'addTask i2c_thread -run user -stack 256 -i2c 1 -source_file system.c' \
-		'addTask unterminated -run "user' >> "${PATH_CASE}/init.rc"
+		'addModule invalid badtype -run core -source_file system.c' \
+		'addModule driver badi2c -run core -i2c invalid -source_file system.c' \
+		'addModule task abcdefghijklmnopqrstuvwxyzabcdef -run user -stack 256 -source_file system.c' \
+		'addModule task duplicate -run user -stack 256 -source_file system.c' \
+		'addModule task duplicate -run user -stack 256 -source_file system.c' \
+		'addModule task no_run -stack 256 -source_file system.c' \
+		'addModule task run_multi -run user -run user -stack 256 -source_file system.c' \
+		'addModule driver i2c_multi -i2c 1 -i2c 2 -source_file system.c' \
+		'addModule task i2c_thread -run user -stack 256 -i2c 1 -source_file system.c' \
+		'addModule task unterminated -run "user' >> "${PATH_CASE}/init.rc"
 	VAL_INDEX=0
 	while [ "${VAL_INDEX}" -le 256 ]
 	do
-		printf 'addDriver driver_%03d -run core -source_file system.c\n' "${VAL_INDEX}" \
+		printf 'addModule driver driver_%03d -run core -source_file system.c\n' \
+			"${VAL_INDEX}" \
 			>> "${PATH_CASE}/init.rc"
 		VAL_INDEX=$((VAL_INDEX + 1))
 	done
 	expectFailure malformed_initrc "wrong token count" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	for VAL_PATTERN in "unknown command" "unknown option" "unknown data" "Name too long" \
+	for VAL_PATTERN in "unknown command" "unknown module type" "unknown option" "unknown data" \
+		"Name too long" \
 		"duplicate name" \
 		"-run option is not set" "-run option is multiple set" \
-		"-i2c option is multiple set" "-i2c option is only valid for drivers" \
+		"-i2c option is multiple set" "-i2c option is not valid for task modules" \
 		"too much modules" "unterminated string"
 	do
 		logContains malformed_initrc "${VAL_PATTERN}"
@@ -544,7 +552,7 @@ runParseTagTests()
 
 	caseBegin missing_system_thread
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addTask task -run user -stack 256 -source_file system.c' \
+	printf '%s\n' 'addModule task task -run user -stack 256 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
 	runTagCase missing_system_thread "thread system was not found"
 

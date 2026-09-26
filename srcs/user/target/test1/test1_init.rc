@@ -1,23 +1,23 @@
 setVersion major 1
-setVersion minor 7
+setVersion minor 8
 # Hardware target test1 init.rc
 
 # System core, 
-addDriver timerSched -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
-addDriver timerSTC -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
-addDriver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
+addModule driver timerSched -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
+addModule driver timerSTC -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
+addModule driver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
-addService system -run core -stack 234 -source_file system/services/system.c
+addModule service system -run core -stack 234 -source_file system/services/system.c
 
 # Drivers
-addDriver i2c -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
+addModule driver i2c -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
 
-addDriver lcd -run driver -i2c 0x3C -source_file hal/drivers/lcd/lcd_AMC2004.c
-addDriver rtc -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS042.c
+addModule driver lcd -run driver -i2c 0x3C -source_file hal/drivers/lcd/lcd_AMC2004.c
+addModule driver rtc -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS042.c
 
 # Services
-addService scli -run service -stack 216 -source_file system/services/scli.c -source_file user/target/test1/test1_scli_commands.c -source_dir system/services/commands
+addModule service scli -run service -stack 216 -source_file system/services/scli.c -source_file user/target/test1/test1_scli_commands.c -source_dir system/services/commands
 
 # Tasks
-addTask task1 -run user -stack 50 -source_file user/tasks/task1.c
-addTask task2 -run user -stack 50 -source_file user/tasks/task2.c
+addModule task task1 -run user -stack 50 -source_file user/tasks/task1.c
+addModule task task2 -run user -stack 50 -source_file user/tasks/task2.c
