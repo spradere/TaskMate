@@ -140,6 +140,13 @@ runConfigurationTests()
 	assertWordsSorted autocode_source_order
 	logContains autocode_source_order "srcs/autoCode/autoCode.c"
 	logContains autocode_source_order "srcs/autoCode/autoCode.h"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters.h"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_drivers.c"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_errors.c"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_gpio.c"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_modules.c"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_scli.c"
+	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_threads.c"
 	expectSuccess taskmate_source_order bmake -C "${PATH_PROJECT}" \
 		-V FILES_NOTARGET_SRC_ALL
 	assertWordsSorted taskmate_source_order
