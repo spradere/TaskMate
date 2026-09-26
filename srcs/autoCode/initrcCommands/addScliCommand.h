@@ -7,27 +7,23 @@
  */
 
 /**
- * @file ucontext_scli_commands.c
- * @brief ucontext SCLI command table implementation.
+ * @file addScliCommand.h
+ * @brief init.rc addScliCommand command declarations.
  */
 
-/* =============================================================================
- * Declarations - Include
- * ===========================================================================*/
-
-#include "ucontext_scli_commands.h"
-
-#include "system/services/commands/driver.h"
-#include "system/services/commands/stack.h"
-#include "system/services/commands/thread.h"
+#ifndef AUTOCODE_INITRCCOMMANDS_ADDSCLICOMMAND_H
+#define AUTOCODE_INITRCCOMMANDS_ADDSCLICOMMAND_H
 
 /* =============================================================================
- * Public definitions
+ * Includes
  * ===========================================================================*/
 
-const scli_cmd_t scli_commands[] = {
-	{"driver", driver},
-	{"stack", stack},
-	{"thread", thread},
-	{0, 0},
-};
+#include "initrcCommand.h"
+
+/* =============================================================================
+ * Public API
+ * ===========================================================================*/
+
+void initrcAddScliCommand(const initrc_command_t *command);
+
+#endif // AUTOCODE_INITRCCOMMANDS_ADDSCLICOMMAND_H

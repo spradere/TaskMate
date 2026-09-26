@@ -20,6 +20,7 @@
 
 #include "fileUtility.h"
 #include "initrcCommands/addModule.h"
+#include "initrcCommands/addScliCommand.h"
 #include "initrcCommands/setVersion.h"
 #include "tokenizer.h"
 
@@ -27,8 +28,9 @@
  * init.rc command dispatch table
  * ---------------------------------------------*/
 
-#define INITRC_COMMAND(X) \
-	X("addModule", initrcAddModule)
+#define INITRC_COMMAND(X)                         \
+	X("addModule", initrcAddModule)              \
+	X("addScliCommand", initrcAddScliCommand)
 
 static const struct
 {

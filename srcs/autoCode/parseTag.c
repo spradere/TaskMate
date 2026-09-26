@@ -52,6 +52,7 @@ static void writeErrorEnum(const parse_tag_t *parse);
 static void writeModulesList(const parse_tag_t *parse);
 static void writeGpioSignals(const parse_tag_t *parse);
 static void writeWireGpio(const parse_tag_t *parse);
+static void writeScliCommands(const parse_tag_t *parse);
 static int generatedFileName(char *file_name, size_t file_name_size, const char *generated_path,
 							 const char *tag);
 
@@ -70,7 +71,8 @@ static int generatedFileName(char *file_name, size_t file_name_size, const char 
 	X(HAVE_MOD_COUNT, "modules_count", writeModulesCount)                      \
 	X(HAVE_MOD_LIST, "modules_list", writeModulesList)                         \
 	X(HAVE_GPIO_SIGNALS, "gpio_signals", writeGpioSignals)                     \
-	X(HAVE_WIRE_GPIO, "wire_gpio", writeWireGpio)
+	X(HAVE_WIRE_GPIO, "wire_gpio", writeWireGpio)                              \
+	X(HAVE_SCLI_COMMANDS, "scli_commands", writeScliCommands)
 
 static const struct
 {
@@ -355,6 +357,33 @@ static void writeWireGpio(const parse_tag_t *parse)
 
 	fprintf(parse->file, "#include \"%s\"\n", wire_gpio);
 	have_tag_count[HAVE_WIRE_GPIO]++;
+}
+
+static void writeScliCommands(const parse_tag_t *parse)
+{
+	for( uint8_t i = 0; i < parse->data_base->scli.count; i++ )
+	{
+		fprintf(parse->file,
+				"#include \"system/services/commands/%s.h\"\n",
+				parse->data_base->scli.commands[i].name);
+	}
+
+	fprintf(parse->file, "\ntypedef struct\n");
+	fprintf(parse->file, "{\n");
+	fprintf(parse->file, "\tconst char *name;\n");
+	fprintf(parse->file, "\tbool (*func)(uint8_t argc, char *argv[]);\n");
+	fprintf(parse->file, "} scli_cmd_t;\n\n");
+	fprintf(parse->file, "static const scli_cmd_t scli_commands[] = {\n");
+	for( uint8_t i = 0; i < parse->data_base->scli.count; i++ )
+	{
+		fprintf(parse->file,
+				"\t{\"%s\", %s},\n",
+				parse->data_base->scli.commands[i].name,
+				parse->data_base->scli.commands[i].function);
+	}
+	fprintf(parse->file, "\t{0, 0},\n");
+	fprintf(parse->file, "};\n");
+	have_tag_count[HAVE_SCLI_COMMANDS]++;
 }
 
 static void writeModulesList(const parse_tag_t *parse)

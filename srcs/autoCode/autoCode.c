@@ -192,6 +192,7 @@ void autoCodeExit(ac_error_cmd_t cmd)
 
 static void setupDatabase(modules_database_t *data_base)
 {
+	data_base->scli.count = 0;
 	for( int i = 0; i < MOD_TYPE_COUNT; i++ )
 	{
 		data_base->modules_type[i].modules_count = 0;
