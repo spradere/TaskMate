@@ -25,9 +25,9 @@
 
 typedef enum
 {
-	ADD_MODULE_OPTION_OK,
-	ADD_MODULE_OPTION_INVALID_DATA
-} add_module_option_result_t;
+	ADD_MODULE_OK,
+	ADD_MODULE_INVALID_DATA
+} add_module_result_t;
 
 typedef enum
 {
@@ -41,10 +41,10 @@ typedef struct
 {
 	module_item_t *module;
 	const char *source_path;
-} add_module_option_context_t;
+} add_module_context_t;
 
-typedef add_module_option_result_t (*add_module_option_func_t)(
-	const char *data, const add_module_option_context_t *context);
+typedef add_module_result_t (*add_module_option_func_t)(
+	const char *data, const add_module_context_t *context);
 
 /* -----------------------------------------------
  * Module type dispatch table
@@ -78,26 +78,18 @@ static const struct
  * Module option dispatch table
  * ---------------------------------------------*/
 
-static add_module_option_result_t optionRun(const char *data,
-											 const add_module_option_context_t *context);
-static add_module_option_result_t optionI2c(const char *data,
-											 const add_module_option_context_t *context);
-static add_module_option_result_t optionStack(const char *data,
-											   const add_module_option_context_t *context);
-static add_module_option_result_t optionSourceFile(
-	const char *data, const add_module_option_context_t *context);
-static add_module_option_result_t optionSourceDir(
-	const char *data, const add_module_option_context_t *context);
+static add_module_result_t optionRun( const char *data, const add_module_context_t *context);
+static add_module_result_t optionI2c( const char *data, const add_module_context_t *context);
+static add_module_result_t optionStack( const char *data,const add_module_context_t *context);
+static add_module_result_t optionSourceFile( const char *data, const add_module_context_t *context);
+static add_module_result_t optionSourceDir( const char *data, const add_module_context_t *context);
 
 #define ADD_MODULE_OPTION(X)                                                   \
 	X(RUN, "-run", optionRun, OPTION_REQUIRED, OPTION_REQUIRED, OPTION_REQUIRED) \
 	X(I2C, "-i2c", optionI2c, OPTION_OPTIONAL, OPTION_FORBIDDEN, OPTION_FORBIDDEN) \
-	X(STACK, "-stack", optionStack, OPTION_FORBIDDEN, OPTION_REQUIRED,           \
-	  OPTION_REQUIRED)                                                            \
-	X(SOURCE_FILE, "-source_file", optionSourceFile, OPTION_CUMULATIVE,          \
-	  OPTION_CUMULATIVE, OPTION_CUMULATIVE)                                       \
-	X(SOURCE_DIR, "-source_dir", optionSourceDir, OPTION_CUMULATIVE,             \
-	  OPTION_CUMULATIVE, OPTION_CUMULATIVE)
+	X(STACK, "-stack", optionStack, OPTION_FORBIDDEN, OPTION_REQUIRED, OPTION_REQUIRED)                 \
+	X(SOURCE_FILE, "-source_file", optionSourceFile, OPTION_CUMULATIVE, OPTION_CUMULATIVE, OPTION_CUMULATIVE)                                       \
+	X(SOURCE_DIR, "-source_dir", optionSourceDir, OPTION_CUMULATIVE, OPTION_CUMULATIVE, OPTION_CUMULATIVE)
 
 typedef enum
 {
@@ -122,36 +114,36 @@ static const struct
  * Implementation - Functions
  * ===========================================================================*/
 
-static add_module_option_result_t optionRun(const char *data,
-											 const add_module_option_context_t *context)
+static add_module_result_t optionRun(const char *data,
+											 const add_module_context_t *context)
 {
 	if( strcmp(data, "none") == 0 ) { context->module->status |= RL_RUN_NONE; }
 	else if( strcmp(data, "core") == 0 ) { context->module->status |= RL_RUN_CORE; }
 	else if( strcmp(data, "driver") == 0 ) { context->module->status |= RL_RUN_DRIVER; }
 	else if( strcmp(data, "service") == 0 ) { context->module->status |= RL_RUN_SERVICE; }
 	else if( strcmp(data, "user") == 0 ) { context->module->status |= RL_RUN_USER; }
-	else { return ADD_MODULE_OPTION_INVALID_DATA; }
+	else { return ADD_MODULE_INVALID_DATA; }
 
-	return ADD_MODULE_OPTION_OK;
+	return ADD_MODULE_OK;
 }
 
-static add_module_option_result_t optionI2c(const char *data,
-											 const add_module_option_context_t *context)
+static add_module_result_t optionI2c(const char *data,
+											 const add_module_context_t *context)
 {
 	char *end;
 	const unsigned long address = strtoul(data, &end, 16);
 
 	if( (data[0] == 0) || (*end != 0) || (address > MOD_I2C_ADDRESS_MAX) )
 	{
-		return ADD_MODULE_OPTION_INVALID_DATA;
+		return ADD_MODULE_INVALID_DATA;
 	}
 
 	context->module->address = (unsigned char)address;
-	return ADD_MODULE_OPTION_OK;
+	return ADD_MODULE_OK;
 }
 
-static add_module_option_result_t optionStack(const char *data,
-											   const add_module_option_context_t *context)
+static add_module_result_t optionStack(const char *data,
+											   const add_module_context_t *context)
 {
 	char *end;
 	const unsigned long stack_size = strtoul(data, &end, 10);
@@ -159,40 +151,40 @@ static add_module_option_result_t optionStack(const char *data,
 	if( (data[0] == 0) || (*end != 0) || (stack_size < AC_THREAD_STACK_SIZE_MIN) ||
 		(stack_size > UINT16_MAX) )
 	{
-		return ADD_MODULE_OPTION_INVALID_DATA;
+		return ADD_MODULE_INVALID_DATA;
 	}
 
 	context->module->stack_size = (uint16_t)stack_size;
-	return ADD_MODULE_OPTION_OK;
+	return ADD_MODULE_OK;
 }
 
-static add_module_option_result_t optionSource(const char *data,
+static add_module_result_t optionSource(const char *data,
 											  const bool directory,
-											  const add_module_option_context_t *context)
+											  const add_module_context_t *context)
 {
 	char path[AC_BUFFER_SIZE];
 	const int length = snprintf(path, sizeof(path), "%s/%s", context->source_path, data);
 
 	if( (length < 0) || ((size_t)length >= sizeof(path)) )
 	{
-		return ADD_MODULE_OPTION_INVALID_DATA;
+		return ADD_MODULE_INVALID_DATA;
 	}
 
 	struct stat status;
-	if( stat(path, &status) != 0 ) { return ADD_MODULE_OPTION_INVALID_DATA; }
-	if( directory && !S_ISDIR(status.st_mode) ) { return ADD_MODULE_OPTION_INVALID_DATA; }
-	if( !directory && !S_ISREG(status.st_mode) ) { return ADD_MODULE_OPTION_INVALID_DATA; }
-	return ADD_MODULE_OPTION_OK;
+	if( stat(path, &status) != 0 ) { return ADD_MODULE_INVALID_DATA; }
+	if( directory && !S_ISDIR(status.st_mode) ) { return ADD_MODULE_INVALID_DATA; }
+	if( !directory && !S_ISREG(status.st_mode) ) { return ADD_MODULE_INVALID_DATA; }
+	return ADD_MODULE_OK;
 }
 
-static add_module_option_result_t optionSourceFile(
-	const char *data, const add_module_option_context_t *context)
+static add_module_result_t optionSourceFile(
+	const char *data, const add_module_context_t *context)
 {
 	return optionSource(data, false, context);
 }
 
-static add_module_option_result_t optionSourceDir(
-	const char *data, const add_module_option_context_t *context)
+static add_module_result_t optionSourceDir(
+	const char *data, const add_module_context_t *context)
 {
 	return optionSource(data, true, context);
 }
@@ -239,7 +231,7 @@ static bool moduleOptionsParse(const initrc_command_t *command,
 		return false;
 	}
 
-	const add_module_option_context_t context = {.module = module,
+	const add_module_context_t context = {.module = module,
 												 .source_path = command->source_path};
 	bool module_is_valid = true;
 	for( int token = 3; token < command->tok->count; token += 2 )
@@ -254,7 +246,7 @@ static bool moduleOptionsParse(const initrc_command_t *command,
 
 			option_found = true;
 			if( (*module_options[option].func)(command->tok->tokens[token + 1], &context) ==
-				ADD_MODULE_OPTION_OK )
+				ADD_MODULE_OK )
 			{
 				option_count[option]++;
 			}
