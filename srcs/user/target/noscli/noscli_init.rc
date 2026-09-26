@@ -1,5 +1,5 @@
 setVersion major 1
-setVersion minor 8
+setVersion minor 9
 # Hardware target noscli init.rc
 
 # System core, 

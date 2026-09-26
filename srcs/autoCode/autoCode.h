@@ -22,10 +22,12 @@
 #define AC_BUFFER_SIZE 256
 #define AC_GENERATED_LINE_START 1000
 #define AC_THREAD_STACK_SIZE_MIN 3UL
+#define AC_SCLI_COMMAND_COUNT_MAX 16
+#define AC_SCLI_COMMAND_NAME_SIZE_MAX 32
 #define AC_INITRC_EXPECTED_VER_MAJOR 1
-#define AC_INITRC_EXPECTED_VER_MINOR 8
+#define AC_INITRC_EXPECTED_VER_MINOR 9
 #define AC_AUTOCODE_VER_MAJOR 1
-#define AC_AUTOCODE_VER_MINOR 2
+#define AC_AUTOCODE_VER_MINOR 3
 
 /* ============================================================================
  * Includes
@@ -114,6 +116,15 @@ typedef struct
 typedef struct
 {
 	module_type_t modules_type[MOD_TYPE_COUNT];
+	struct
+	{
+		struct
+		{
+			char name[AC_SCLI_COMMAND_NAME_SIZE_MAX];
+			char function[AC_SCLI_COMMAND_NAME_SIZE_MAX];
+		} commands[AC_SCLI_COMMAND_COUNT_MAX];
+		uint8_t count;
+	} scli;
 
 } modules_database_t;
 

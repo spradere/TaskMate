@@ -94,6 +94,7 @@ rules.
 
 - Use `<stdint.h>` fixed-width types and `<stdbool.h>` `bool` where appropriate.
   Keep private state `static`; validate inputs, bounds, and pointers.
+- The use of `extern` is formally prohibited throughout the TaskMate project.
 - Name units and document timing, ISR/concurrency, initialization order, and
   non-obvious hardware constraints. Avoid magic numbers and dynamic allocation
   without an explicit architectural reason.

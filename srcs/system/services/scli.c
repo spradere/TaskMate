@@ -18,8 +18,6 @@
 
 #include "scli.h"
 
-#include "scli_commands.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -36,6 +34,14 @@
 
 #define SCLI_LINE_SIZE 64
 #define SCLI_ARGUMENT_COUNT_MAX 4
+
+/* -----------------------------------------------
+ * Target command table
+ * ---------------------------------------------*/
+
+// [autoCode_tag] scli_commands
+#include "scli_commands.inc"
+// [/tag]
 
 /* -----------------------------------------------
  * Private variables
