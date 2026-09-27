@@ -264,18 +264,18 @@ runConfigurationTests()
 
 	expectSuccess default_initrc_sources targetMake -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"
+	logContains default_initrc_sources "srcs/system/services/commands/scli_date.c"
+	logContains default_initrc_sources "srcs/system/services/commands/scli_stack.c"
 	logExcludes default_initrc_sources "test1_scli_commands"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSched.c"
-	expectOutput default_initrc_dirs "srcs/system/services/commands" \
+	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
 	expectSuccess default_extra_sources targetMake -V FILES_EXTRA_SRC
 	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
 	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
 
-	expectSuccess initrc_directory_sources targetMake -V FILES_INITRC_DIR_SRC
-	logContains initrc_directory_sources "srcs/system/services/commands/scli_date.c"
-	logExcludes initrc_directory_sources "srcs/hal/arch/avr8/avr8_context.c"
+	expectOutput initrc_directory_sources "" targetMake -V FILES_INITRC_DIR_SRC
 
 	expectSuccess object_mapping targetMake -V FILES_OBJ
 	logContains object_mapping \
@@ -362,13 +362,13 @@ runScriptTests()
 	FILE_INITRC_SOURCES="${PATH_PROJECT}/scripts/initrc_sources.awk"
 
 	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
-		'#define AC_INITRC_EXPECTED_VER_MINOR 9' \
+		'#define AC_INITRC_EXPECTED_VER_MINOR 10' \
 		'#define AC_AUTOCODE_VER_MAJOR 1' \
 		'#define AC_AUTOCODE_VER_MINOR 3' > "${PATH_STAGE_WORK}/autoCode.h"
 	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=3 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectOutput autocode_version_report "autoCode : 1.3
-initrc : 1.9" awk -v expected_major=1 -v expected_minor=3 -v report_versions=1 \
+initrc : 1.10" awk -v expected_major=1 -v expected_minor=3 -v report_versions=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
 		-v expected_major=2 -v expected_minor=3 -f "${FILE_AUTOCODE_VERSION}" \
@@ -388,7 +388,8 @@ initrc : 1.9" awk -v expected_major=1 -v expected_minor=3 -v report_versions=1 \
 
 	printf '%s\n' \
 		'addModule service first -source_file shared.c -source_dir commands' \
-		'addModule task second -source_file shared.c -source_dir commands' \
+		'addScliCommand date -source_file shared.c' \
+		'addModule task second -source_dir commands' \
 		> "${PATH_STAGE_WORK}/duplicate_sources.rc"
 	expectFailure initrc_duplicate_source_file "Duplicate -source_file path <srcs/shared.c>" \
 		awk -v source_option=-source_file -v source_root=srcs \

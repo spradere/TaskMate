@@ -19,7 +19,7 @@ VAL_TEST_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 9'
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 10'
 }
 
 fail()
@@ -75,6 +75,8 @@ caseBegin()
 	printf "%s\n" "void fixture(void) {}" > "${PATH_CASE}/sources/system.c"
 	: > "${PATH_CASE}/sources/system/services/commands/scli_date.h"
 	: > "${PATH_CASE}/sources/system/services/commands/scli_driver.h"
+	: > "${PATH_CASE}/sources/system/services/commands/scli_date.c"
+	: > "${PATH_CASE}/sources/system/services/commands/scli_driver.c"
 	printf "%s\n" "static void targetWireSignal(void) {}" \
 		> "${PATH_CASE}/sources/targetWireSignal.c"
 	printf '%s\n' 'ERR_TEST "" FLOW' > "${PATH_CASE}/errors.err"
@@ -339,39 +341,62 @@ runInitrcTests()
 	expectSuccess valid_mixed_sources "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_scli_commands
-	printf '%s\n' 'addScliCommand date' 'addScliCommand driver' \
+	printf '%s\n' \
+		'addScliCommand date -source_file system/services/commands/scli_date.c' \
+		'addScliCommand driver -source_file system/services/commands/scli_driver.c' \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess valid_scli_commands "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	caseBegin invalid_scli_command_count
-	printf '%s\n' 'addScliCommand date dateCommand' >> "${PATH_CASE}/init.rc"
-	expectFailure invalid_scli_command_count "addScliCommand token count" \
+	caseBegin missing_scli_source_file
+	printf '%s\n' 'addScliCommand date' >> "${PATH_CASE}/init.rc"
+	expectFailure missing_scli_source_file "addScliCommand token count" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin invalid_scli_source_option
+	printf '%s\n' 'addScliCommand date -source_dir system/services/commands' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure invalid_scli_source_option "addScliCommand unknown option" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin missing_scli_source_file_path
+	printf '%s\n' 'addScliCommand date -source_file system/services/commands/missing.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure missing_scli_source_file_path "SCLI command source file not found" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin invalid_scli_command_identifier
-	printf '%s\n' 'addScliCommand bad/name' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'addScliCommand bad/name -source_file system/services/commands/scli_date.c' \
+		>> "${PATH_CASE}/init.rc"
 	expectFailure invalid_scli_command_identifier "invalid SCLI command identifier" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin unknown_scli_command
-	printf '%s\n' 'addScliCommand missing' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'addScliCommand missing -source_file system/services/commands/scli_date.c' \
+		>> "${PATH_CASE}/init.rc"
 	expectFailure unknown_scli_command "unknown SCLI command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin missing_scli_command_header
 	find "${PATH_CASE}/sources/system/services/commands/scli_date.h" -delete
-	printf '%s\n' 'addScliCommand date' >> "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'addScliCommand date -source_file system/services/commands/scli_date.c' \
+		>> "${PATH_CASE}/init.rc"
 	expectFailure missing_scli_command_header "SCLI command header not found" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin long_scli_command_identifier
-	printf '%s\n' 'addScliCommand abcdefghijklmnopqrstuvwxyzabcdef' \
+	printf '%s\n' \
+		'addScliCommand abcdefghijklmnopqrstuvwxyzabcdef -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure long_scli_command_identifier "SCLI command identifier is too long" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin duplicate_scli_command
-	printf '%s\n' 'addScliCommand date' 'addScliCommand date' \
+	printf '%s\n' \
+		'addScliCommand date -source_file system/services/commands/scli_date.c' \
+		'addScliCommand date -source_file system/services/commands/scli_date.c' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure duplicate_scli_command "duplicate SCLI command name" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -436,7 +461,7 @@ runInitrcTests()
 
 	caseBegin missing_minor_initrc_version
 	printf '%s\n' 'setVersion major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing setVersion minor 9" \
+	expectFailure missing_minor_initrc_version "missing setVersion minor 10" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin malformed_initrc_version
@@ -451,7 +476,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' 'setVersion major 0' 'setVersion minor 9' \
+	printf '%s\n' 'setVersion major 0' 'setVersion minor 10' \
 		'addModule service must_not_be_parsed -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
@@ -465,14 +490,14 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' 'setVersion minor 9' 'setVersion major 1' \
+	printf '%s\n' 'setVersion minor 10' 'setVersion major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addModule service system -run core -stack 256' 'setVersion minor 9' \
+	printf '%s\n' 'addModule service system -run core -stack 256' 'setVersion minor 10' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure late_initrc_version "setVersion command after init.rc version declaration" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -626,7 +651,9 @@ runCompareReplaceTests()
 {
 	stageBegin compare_replace
 	caseBegin stable_generation
-	printf '%s\n' 'addScliCommand date' 'addScliCommand driver' \
+	printf '%s\n' \
+		'addScliCommand date -source_file system/services/commands/scli_date.c' \
+		'addScliCommand driver -source_file system/services/commands/scli_driver.c' \
 		>> "${PATH_CASE}/init.rc"
 	expectSuccess initial_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	logContains initial_generation 'stack=256 words'

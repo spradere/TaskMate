@@ -1,5 +1,5 @@
 setVersion major 1
-setVersion minor 9
+setVersion minor 10
 # z600 FreeBSD ucontext simulation init.rc
 
 # Virtual HAL drivers
@@ -11,10 +11,10 @@ addModule driver usart -run none -source_file hal/host/freebsd/freebsd_usart.c
 addModule service system -run core -stack 32768 -source_file system/services/ucontext_system.c
 
 # SCLI commands supported by the minimal virtual HAL.
-addModule service scli -run service -stack 32768 -source_file system/services/scli.c -source_dir system/services/commands
-addScliCommand driver
-addScliCommand stack
-addScliCommand thread
+addModule service scli -run service -stack 32768 -source_file system/services/scli.c
+addScliCommand driver -source_file system/services/commands/scli_driver.c
+addScliCommand stack -source_file system/services/commands/scli_stack.c
+addScliCommand thread -source_file system/services/commands/scli_thread.c
 
 # Demonstration tasks
 addModule task task1 -run user -stack 32768 -source_file user/tasks/task1.c
