@@ -81,6 +81,17 @@ static bool commandHeaderExists(const initrc_command_t *command, const char *nam
 	return (stat(path, &status) == 0) && S_ISREG(status.st_mode);
 }
 
+static bool commandSourceFileExists(const initrc_command_t *command, const char *source_file)
+{
+	char path[AC_BUFFER_SIZE];
+	const int length =
+		snprintf(path, sizeof(path), "%s/%s", command->source_path, source_file);
+	if( (length < 0) || ((size_t)length >= sizeof(path)) ) { return false; }
+
+	struct stat status;
+	return (stat(path, &status) == 0) && S_ISREG(status.st_mode);
+}
+
 static const scli_command_definition_t *commandDefinitionFind(const char *name)
 {
 	for( size_t i = 0;
@@ -97,12 +108,20 @@ static const scli_command_definition_t *commandDefinitionFind(const char *name)
 
 void initrcAddScliCommand(const initrc_command_t *command)
 {
-	if( command->tok->count != 2 )
+	if( command->tok->count != 4 )
 	{
-		AUTOCODE_MSG_ERROR("addScliCommand token count [%s:%i] is %i, should be 2",
+		AUTOCODE_MSG_ERROR("addScliCommand token count [%s:%i] is %i, should be 4",
 						   command->initrc_name,
 						   command->file_line_number,
 						   command->tok->count);
+		return;
+	}
+	if( strcmp(command->tok->tokens[2], "-source_file") != 0 )
+	{
+		AUTOCODE_MSG_ERROR("addScliCommand unknown option [%s:%i] %s",
+						   command->initrc_name,
+						   command->file_line_number,
+						   command->tok->tokens[2]);
 		return;
 	}
 
@@ -138,6 +157,14 @@ void initrcAddScliCommand(const initrc_command_t *command)
 						   command->initrc_name,
 						   command->file_line_number,
 						   name);
+		return;
+	}
+	if( commandSourceFileExists(command, command->tok->tokens[3]) == false )
+	{
+		AUTOCODE_MSG_ERROR("SCLI command source file not found [%s:%i] %s",
+						   command->initrc_name,
+						   command->file_line_number,
+						   command->tok->tokens[3]);
 		return;
 	}
 
