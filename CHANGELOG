@@ -1,3 +1,6 @@
+	[arch] move ucontext files and directory
+	[doc] general review
+
 TaskMate 0.32
 
 	[build] + [code] scli commands selection in initrc files

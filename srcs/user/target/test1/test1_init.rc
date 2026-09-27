@@ -1,6 +1,7 @@
+# Hardware target test1 init.rc, reference build/test target.
+
 setVersion major 1
 setVersion minor 10
-# Hardware target test1 init.rc
 
 # System core, 
 addModule driver timerSched -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c

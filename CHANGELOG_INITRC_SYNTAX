@@ -1,3 +1,6 @@
+v1.10	add `-source_file` to `addScliCommand`
+v1.9	add `addscliCommand`
+v1.8 	remove `addDriver` `addService` `addtask`, add command `addModule` with type
 v1.7	add `set_ver_*` commands
 v1.6	add commands `add*` and commands parser
 v1.5	add stack size for threads

@@ -1,6 +1,7 @@
+# Hardware target noscli, copy of test1 without scli.
+
 setVersion major 1
 setVersion minor 10
-# Hardware target noscli init.rc
 
 # System core, 
 addModule driver timerSched -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
