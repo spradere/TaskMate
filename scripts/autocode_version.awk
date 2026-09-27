@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Check and report autoCode and initrc versions
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Check and optionally report autoCode and initrc versions.
+#
+# Inputs: autoCode header, expected_major, expected_minor, and optional report_versions.
+# Outputs: Optional version report on stdout, diagnostics on stderr, and validation status.
+# ------------------------------------------------------------------------------
 
 BEGIN {
 	major_name = "AC_AUTOCODE_VER_MAJOR"

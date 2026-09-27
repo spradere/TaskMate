@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Show the line count in the build summary
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Show the line count in the build summary.
+#
+# Inputs: Generated line-count data containing a code_total record.
+# Outputs: Formatted lines-of-code value on stdout.
+# ------------------------------------------------------------------------------
 
 $1 == "code_total" {
 	printf("\t%-16s : %s\n", "lines of code", $2)

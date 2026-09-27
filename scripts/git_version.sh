@@ -10,9 +10,12 @@
 #
 ################################################################################
 
-################################################################################
-# Print the TaskMate version derived from the closest Git tag
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Derive the TaskMate version from the closest Git tag.
+#
+# Inputs: Current Git repository context, with no command-line arguments.
+# Outputs: Version on stdout, or 0.00 when no Git description is available.
+# ------------------------------------------------------------------------------
 
 if git_description=$(git describe --tags 2>/dev/null); then
 	git_version=${git_description%%-*}

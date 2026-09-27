@@ -10,6 +10,13 @@
 #
 ################################################################################
 
+# ------------------------------------------------------------------------------
+# Description: Run one stage or the complete build-system test corpus.
+#
+# Inputs: Stage name, project directory, and test work directory.
+# Outputs: Test progress and diagnostics, work fixtures, and nonzero status on failure.
+# ------------------------------------------------------------------------------
+
 set -u
 
 VAL_STAGE=$1

@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Count lines of code
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Calculate source, comment, build, and documentation line counts.
+#
+# Inputs: Raw cloc report and the output path supplied through the file variable.
+# Outputs: Aggregated line-count values written to the requested output file.
+# ------------------------------------------------------------------------------
 
 $1 == "C" {
 	c_blank += $3

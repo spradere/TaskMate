@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Calculate AVR flash and RAM usage
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Calculate AVR flash and static RAM usage.
+#
+# Inputs: avr-size data plus flash_total_k, ram_total_k, and output_file variables.
+# Outputs: Flash and RAM totals and percentages written to the output file.
+# ------------------------------------------------------------------------------
 
 NR == 2 {
 	text = $1

@@ -10,9 +10,12 @@
 #
 ################################################################################
 
-################################################################################
-# Check that every program listed in a file is available
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Check that every program listed in a file is available.
+#
+# Inputs: Path to a readable file containing one program name per line.
+# Outputs: Missing programs on stderr and a nonzero status when a check fails.
+# ------------------------------------------------------------------------------
 
 if [ "$#" -ne 1 ]; then
 	printf "Usage: %s <programs-list>\n" "$0" >&2
