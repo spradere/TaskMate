@@ -51,7 +51,7 @@ FILES_COMPILE_SRC = \
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O}
 
 .for file in ${FILES_COMPILE_SRC}
-_TEST != ${SCRIPT_CHECK_PATH_FILE} -f  file; printf '%s\n' "$$?"
+_TEST != ${SCRIPT_CHECK_PATH_FILE} -f ${file}; printf '%s\n' "$$?"
 .if ${_TEST} != 0
 .error >>> path check failed for file ${file} <<<
 .endif

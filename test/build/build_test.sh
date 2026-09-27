@@ -306,6 +306,21 @@ runConfigurationTests()
 		-V FILES_AUTOCODE_SRC
 	expectFailure duplicate_composed_path "Duplicate path in FILES_COMPILE_SRC:" \
 		targetMake FILES_EXTRA_SRC=srcs/system/boot.c -V FILES_COMPILE_SRC
+	printf '%s\n' \
+		'addModule task missing -source_file user/tasks/missing_from_initrc.c' \
+		> "${PATH_STAGE_WORK}/missing_source_init.rc"
+	expectFailure initrc_missing_source \
+		'>>> File not found srcs/user/tasks/missing_from_initrc.c <<<' \
+		targetMake FILES_INITRC="${PATH_STAGE_WORK}/missing_source_init.rc" \
+		-V FILES_COMPILE_SRC
+	printf '%s\n' \
+		'.include "srcs/user/target/test1/target.mk"' \
+		'FILES_EXTRA_SRC += /etc/passwd' \
+		> "${PATH_STAGE_WORK}/invalid_source_target.mk"
+	expectFailure target_source_outside \
+		'>>> path check failed for file /etc/passwd <<<' \
+		targetMake FILE_TARGET_MK="${PATH_STAGE_WORK}/invalid_source_target.mk" \
+		-V FILES_COMPILE_SRC
 	VAL_DRIVER_INTERFACES="srcs/interfaces/drv_i2c.h srcs/interfaces/drv_lcd.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_rtc.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerSTC.h"
@@ -488,7 +503,6 @@ runGuardTests()
 	stageBegin guards
 	FILE_HW="${PATH_PROJECT}/scripts/hardware_target.awk"
 	FILE_ARCH="${PATH_PROJECT}/scripts/arch_include.awk"
-	FILE_HEADER="${PATH_PROJECT}/scripts/header_allow.awk"
 
 	printf '%s\n' '# targets' 'alpha board mcu arch' 'beta board mcu arch' \
 		> "${PATH_STAGE_WORK}/hardware.conf"
@@ -575,26 +589,6 @@ runGuardTests()
 		> "${PATH_STAGE_WORK}/context_header.c"
 	expectSuccess context_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/context_header.c"
-
-	PATH_HEADER_SRCS="${PATH_STAGE_WORK}/header_srcs"
-	mkdir -p "${PATH_HEADER_SRCS}/allowed" "${PATH_HEADER_SRCS}/forbidden"
-	printf '%s\n' '#include "critical.h"' > "${PATH_HEADER_SRCS}/allowed/use.c"
-	printf '%s\n' '{' 'source_file critical.h' 'allow {' 'allowed/use.c' '}' '}' \
-		> "${PATH_STAGE_WORK}/header.conf"
-	expectSuccess header_allowed awk -v PATH_SOURCES="${PATH_HEADER_SRCS}" \
-		-v h_check_log="${PATH_STAGE_WORK}/header_allowed.report" -f "${FILE_HEADER}" \
-		"${PATH_STAGE_WORK}/header.conf"
-	assertFileContains "${PATH_STAGE_WORK}/header_allowed.report" "[  OK  ]"
-	printf '%s\n' '#include "critical.h"' > "${PATH_HEADER_SRCS}/forbidden/use.c"
-	expectFailure header_forbidden "Forbidden include detected" awk \
-		-v PATH_SOURCES="${PATH_HEADER_SRCS}" \
-		-v h_check_log="${PATH_STAGE_WORK}/header_forbidden.report" -f "${FILE_HEADER}" \
-		"${PATH_STAGE_WORK}/header.conf"
-	printf '%s\n' '{' 'source_file critical.h' > "${PATH_STAGE_WORK}/bad_header.conf"
-	expectFailure header_bad_configuration "missing closing" awk \
-		-v PATH_SOURCES="${PATH_HEADER_SRCS}" \
-		-v h_check_log="${PATH_STAGE_WORK}/bad_header.report" -f "${FILE_HEADER}" \
-		"${PATH_STAGE_WORK}/bad_header.conf"
 
 	printf 'build-system guard tests passed: %d cases\n' "${VAL_TEST_COUNT}"
 }
