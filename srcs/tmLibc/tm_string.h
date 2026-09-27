@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_LIBC_TM_STRING_H
-#define TM_LIBC_TM_STRING_H
+#ifndef TMLIBC_TM_STRING_H
+#define TMLIBC_TM_STRING_H
 
 /* ============================================================================
  * Target selection
@@ -40,4 +40,4 @@
 
 // clang-format on
 
-#endif // TM_LIBC_TM_STRING_H
+#endif // TMLIBC_TM_STRING_H

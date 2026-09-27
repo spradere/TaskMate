@@ -11,8 +11,8 @@
  * @brief ucontext execution-context declarations.
  */
 
-#ifndef HAL_TARGET_UCONTEXT_UCONTEXT_CONTEXT_H
-#define HAL_TARGET_UCONTEXT_UCONTEXT_CONTEXT_H
+#ifndef UCONTEXT_UCONTEXT_CONTEXT_H
+#define UCONTEXT_UCONTEXT_CONTEXT_H
 
 /* ============================================================================
  * Includes
@@ -20,4 +20,4 @@
 
 #include "interfaces/hal_context.h"
 
-#endif // HAL_TARGET_UCONTEXT_UCONTEXT_CONTEXT_H
+#endif // UCONTEXT_UCONTEXT_CONTEXT_H

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_LIBC_TM_STDIO_H
-#define TM_LIBC_TM_STDIO_H
+#ifndef TMLIBC_TM_STDIO_H
+#define TMLIBC_TM_STDIO_H
 
 /* ============================================================================
  * Target selection
@@ -35,4 +35,4 @@
 
 // clang-format on
 
-#endif // TM_LIBC_TM_STDIO_H
+#endif // TMLIBC_TM_STDIO_H

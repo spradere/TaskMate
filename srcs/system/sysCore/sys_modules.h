@@ -11,8 +11,8 @@
  * @brief modules header declarations.
  */
 
-#ifndef SYSCORE_MODULES_H
-#define SYSCORE_MODULES_H
+#ifndef SYSCORE_SYS_MODULES_H
+#define SYSCORE_SYS_MODULES_H
 
 /* ============================================================================
  * Includes
@@ -76,4 +76,4 @@ mod_thread_item_t *mod_threadGetPointer(uint8_t id);
 void mod_threadsAlloc(void);
 void mod_driversAlloc(void);
 
-#endif // SYSCORE_MODULES_H
+#endif // SYSCORE_SYS_MODULES_H

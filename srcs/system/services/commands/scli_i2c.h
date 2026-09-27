@@ -11,8 +11,8 @@
  * @brief I2C command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_SCLI_I2C_H
-#define SERVICES_COMMANDS_SCLI_I2C_H
+#ifndef COMMANDS_SCLI_I2C_H
+#define COMMANDS_SCLI_I2C_H
 
 /* ============================================================================
  * Includes
@@ -27,4 +27,4 @@
 
 bool i2cCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_SCLI_I2C_H
+#endif // COMMANDS_SCLI_I2C_H

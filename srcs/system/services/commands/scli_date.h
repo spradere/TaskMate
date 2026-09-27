@@ -11,8 +11,8 @@
  * @brief Date command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_SCLI_DATE_H
-#define SERVICES_COMMANDS_SCLI_DATE_H
+#ifndef COMMANDS_SCLI_DATE_H
+#define COMMANDS_SCLI_DATE_H
 
 /* ============================================================================
  * Includes
@@ -27,4 +27,4 @@
 
 bool dateCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_SCLI_DATE_H
+#endif // COMMANDS_SCLI_DATE_H

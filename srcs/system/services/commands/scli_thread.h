@@ -11,8 +11,8 @@
  * @brief thread command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_SCLI_THREAD_H
-#define SERVICES_COMMANDS_SCLI_THREAD_H
+#ifndef COMMANDS_SCLI_THREAD_H
+#define COMMANDS_SCLI_THREAD_H
 
 /* ============================================================================
  * Includes
@@ -27,4 +27,4 @@
 
 bool threadCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_SCLI_THREAD_H
+#endif // COMMANDS_SCLI_THREAD_H

@@ -11,8 +11,8 @@
  * @brief init.rc addScliCommand command declarations.
  */
 
-#ifndef AUTOCODE_INITRCCOMMANDS_ADDSCLICOMMAND_H
-#define AUTOCODE_INITRCCOMMANDS_ADDSCLICOMMAND_H
+#ifndef INITRCCOMMANDS_ADDSCLICOMMAND_H
+#define INITRCCOMMANDS_ADDSCLICOMMAND_H
 
 /* =============================================================================
  * Includes
@@ -26,4 +26,4 @@
 
 void initrcAddScliCommand(const initrc_command_t *command);
 
-#endif // AUTOCODE_INITRCCOMMANDS_ADDSCLICOMMAND_H
+#endif // INITRCCOMMANDS_ADDSCLICOMMAND_H

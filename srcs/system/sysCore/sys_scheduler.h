@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef SYSCORE_TM_SCHEDULER_H
-#define SYSCORE_TM_SCHEDULER_H
+#ifndef SYSCORE_SYS_SCHEDULER_H
+#define SYSCORE_SYS_SCHEDULER_H
 
 /* ============================================================================
  * Includes
@@ -32,4 +32,4 @@ void tm_schedulerCoop(void);
 bool tm_schedulerRunLevelSet(uint8_t run_level);
 uint8_t tm_schedulerRunLevelGet(void);
 
-#endif // SYSCORE_TM_SCHEDULER_H
+#endif // SYSCORE_SYS_SCHEDULER_H

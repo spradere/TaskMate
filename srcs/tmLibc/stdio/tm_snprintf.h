@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_LIBC_TM_SNPRINTF_H
-#define TM_LIBC_TM_SNPRINTF_H
+#ifndef STDIO_TM_SNPRINTF_H
+#define STDIO_TM_SNPRINTF_H
 
 /* ============================================================================
  * Includes
@@ -42,4 +42,4 @@ int tm_vprintf(tm_string_t format, va_list args);
 int tm_snprintf(char *ptr, uint8_t size, tm_string_t format, ...);
 int tm_vsnprintf(char *ptr, uint8_t size, tm_string_t format, va_list args);
 
-#endif // TM_LIBC_TM_SNPRINTF_H
+#endif // STDIO_TM_SNPRINTF_H

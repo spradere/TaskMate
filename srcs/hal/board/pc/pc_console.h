@@ -11,8 +11,8 @@
  * @brief PC ncurses console declarations.
  */
 
-#ifndef HAL_BOARD_PC_PC_CONSOLE_H
-#define HAL_BOARD_PC_PC_CONSOLE_H
+#ifndef PC_PC_CONSOLE_H
+#define PC_PC_CONSOLE_H
 
 /* ============================================================================
  * Includes
@@ -33,4 +33,4 @@ bool pc_consoleReadByte(uint8_t *data);
 void pc_consolePollInput(void);
 void pc_consoleLedWrite(uint8_t index, const char *name, bool value);
 
-#endif // HAL_BOARD_PC_PC_CONSOLE_H
+#endif // PC_PC_CONSOLE_H

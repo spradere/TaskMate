@@ -11,8 +11,8 @@
  * @brief ucontext target string macro declarations.
  */
 
-#ifndef HAL_TARGET_UCONTEXT_UCONTEXT_STRING_MACRO_H
-#define HAL_TARGET_UCONTEXT_UCONTEXT_STRING_MACRO_H
+#ifndef UCONTEXT_UCONTEXT_STRING_MACRO_H
+#define UCONTEXT_UCONTEXT_STRING_MACRO_H
 
 /* ============================================================================
  * Includes
@@ -38,4 +38,4 @@
 
 #define HAL_STRING(string) HAL_STRING_ROM(string)
 
-#endif // HAL_TARGET_UCONTEXT_UCONTEXT_STRING_MACRO_H
+#endif // UCONTEXT_UCONTEXT_STRING_MACRO_H

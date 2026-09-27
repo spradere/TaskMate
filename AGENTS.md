@@ -19,6 +19,7 @@ and the applicable rules in `doc/rules/`.
 - Keep corrections and refactors limited to the scope named in the request. Do
   not absorb adjacent audit findings, hardening, locking, reentrancy, or broader
   cleanup without a separately scoped request.
+- Never modify code under `legacy/`. It is preserved as a historical snapshot.
 - Do not run code formatters or reformat code unless the prompt explicitly asks
   for formatting. Preserve the existing formatting during implementation and
   validation.
@@ -110,6 +111,9 @@ rules.
 - `.c` files include their matching local header first. New C/header/Make/AWK
   files use the BSD-2-Clause banner; C headers and
   sources also include a Doxygen `@file` / `@brief` block.
+- Header guards use `<LAST_PARENT_DIRECTORY>_<FILE_NAME>_H`. Convert the immediate
+  parent directory and file name to uppercase, preserve word-separating underscores,
+  replace other separators with underscores, and omit the file extension.
 - Types are `snake_case_t`; constants/enums are `UPPER_SNAKE_CASE`; static data
   is descriptive `snake_case`; functions are descriptive camelCase. Use prefixes
   only for real boundaries: `tm_`, `sc_`, `gpio_`, `err_`, `mod_`, and `rl_`.

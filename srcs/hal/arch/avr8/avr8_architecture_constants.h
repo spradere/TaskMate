@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ARCH_AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
-#define HAL_ARCH_AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
+#ifndef AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
+#define AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
 
 /* ============================================================================
  * Public definitions
@@ -21,4 +21,4 @@
 
 #define AVR8_REGISTER_COUNT 32 // from R0 to R31
 
-#endif // HAL_ARCH_AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
+#endif // AVR8_AVR8_ARCHITECTURE_CONSTANTS_H

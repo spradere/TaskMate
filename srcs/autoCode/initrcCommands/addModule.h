@@ -11,8 +11,8 @@
  * @brief init.rc addModule command declarations.
  */
 
-#ifndef AUTOCODE_INITRCCOMMANDS_ADDMODULE_H
-#define AUTOCODE_INITRCCOMMANDS_ADDMODULE_H
+#ifndef INITRCCOMMANDS_ADDMODULE_H
+#define INITRCCOMMANDS_ADDMODULE_H
 
 /* =============================================================================
  * Includes
@@ -26,4 +26,4 @@
 
 void initrcAddModule(const initrc_command_t *command);
 
-#endif // AUTOCODE_INITRCCOMMANDS_ADDMODULE_H
+#endif // INITRCCOMMANDS_ADDMODULE_H

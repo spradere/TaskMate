@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#ifndef SERVICES_SYSTEM_H
+#define SERVICES_SYSTEM_H
 
 /* ============================================================================
  * Public API
@@ -21,4 +21,4 @@
 
 void system(void);
 
-#endif // SYSTEM_H
+#endif // SERVICES_SYSTEM_H

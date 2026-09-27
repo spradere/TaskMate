@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ARCH_AVR8_AVR8_STRING_MACRO_H
-#define HAL_ARCH_AVR8_AVR8_STRING_MACRO_H
+#ifndef AVR8_AVR8_STRING_MACRO_H
+#define AVR8_AVR8_STRING_MACRO_H
 
 /* ============================================================================
  * Includes
@@ -40,4 +40,4 @@
 // Default storage for AVR8
 #define HAL_STRING(string) HAL_STRING_ROM(string)
 
-#endif // HAL_ARCH_AVR8_AVR8_STRING_MACRO_H
+#endif // AVR8_AVR8_STRING_MACRO_H

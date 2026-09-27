@@ -11,8 +11,8 @@
  * @brief Driver command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_SCLI_DRIVER_H
-#define SERVICES_COMMANDS_SCLI_DRIVER_H
+#ifndef COMMANDS_SCLI_DRIVER_H
+#define COMMANDS_SCLI_DRIVER_H
 
 /* ============================================================================
  * Includes
@@ -27,4 +27,4 @@
 
 bool driverCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_SCLI_DRIVER_H
+#endif // COMMANDS_SCLI_DRIVER_H

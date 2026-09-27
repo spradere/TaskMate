@@ -11,8 +11,8 @@
  * @brief FreeBSD ucontext target type declarations.
  */
 
-#ifndef HAL_TARGET_UCONTEXT_UCONTEXT_TYPES_H
-#define HAL_TARGET_UCONTEXT_UCONTEXT_TYPES_H
+#ifndef UCONTEXT_UCONTEXT_TYPES_H
+#define UCONTEXT_UCONTEXT_TYPES_H
 
 /* ============================================================================
  * Includes
@@ -37,4 +37,4 @@ struct hal_context
 	ucontext_t *native;
 };
 
-#endif // HAL_TARGET_UCONTEXT_UCONTEXT_TYPES_H
+#endif // UCONTEXT_UCONTEXT_TYPES_H

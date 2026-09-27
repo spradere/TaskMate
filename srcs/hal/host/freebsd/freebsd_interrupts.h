@@ -11,8 +11,8 @@
  * @brief FreeBSD virtual-interrupt declarations.
  */
 
-#ifndef HAL_HOST_FREEBSD_FREEBSD_INTERRUPTS_H
-#define HAL_HOST_FREEBSD_FREEBSD_INTERRUPTS_H
+#ifndef FREEBSD_FREEBSD_INTERRUPTS_H
+#define FREEBSD_FREEBSD_INTERRUPTS_H
 
 /* ============================================================================
  * Includes
@@ -35,4 +35,4 @@
 bool freebsd_interruptsMask(sigset_t *mask);
 bool freebsd_interruptsBlock(sigset_t *previous);
 
-#endif // HAL_HOST_FREEBSD_FREEBSD_INTERRUPTS_H
+#endif // FREEBSD_FREEBSD_INTERRUPTS_H

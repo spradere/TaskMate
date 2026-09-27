@@ -11,8 +11,8 @@
  * @brief Stack command declarations.
  */
 
-#ifndef SERVICES_COMMANDS_SCLI_STACK_H
-#define SERVICES_COMMANDS_SCLI_STACK_H
+#ifndef COMMANDS_SCLI_STACK_H
+#define COMMANDS_SCLI_STACK_H
 
 /* ============================================================================
  * Includes
@@ -27,4 +27,4 @@
 
 bool stackCommand(uint8_t argc, char *argv[]);
 
-#endif // SERVICES_COMMANDS_SCLI_STACK_H
+#endif // COMMANDS_SCLI_STACK_H

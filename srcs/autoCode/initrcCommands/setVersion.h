@@ -11,8 +11,8 @@
  * @brief init.rc setVersion command declarations.
  */
 
-#ifndef AUTOCODE_INITRCCOMMANDS_SETVERSION_H
-#define AUTOCODE_INITRCCOMMANDS_SETVERSION_H
+#ifndef INITRCCOMMANDS_SETVERSION_H
+#define INITRCCOMMANDS_SETVERSION_H
 
 /* =============================================================================
  * Includes
@@ -26,4 +26,4 @@
 
 bool initrcSetVersion(const initrc_command_t *command);
 
-#endif // AUTOCODE_INITRCCOMMANDS_SETVERSION_H
+#endif // INITRCCOMMANDS_SETVERSION_H

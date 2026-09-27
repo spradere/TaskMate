@@ -11,8 +11,8 @@
  * @brief FreeBSD scheduler-timer private declarations.
  */
 
-#ifndef HAL_HOST_FREEBSD_FREEBSD_TIMERSCHED_H
-#define HAL_HOST_FREEBSD_FREEBSD_TIMERSCHED_H
+#ifndef FREEBSD_FREEBSD_TIMERSCHED_H
+#define FREEBSD_FREEBSD_TIMERSCHED_H
 
 /* ============================================================================
  * Private host API
@@ -20,4 +20,4 @@
 
 void freebsd_timerSchedActivate(void);
 
-#endif // HAL_HOST_FREEBSD_FREEBSD_TIMERSCHED_H
+#endif // FREEBSD_FREEBSD_TIMERSCHED_H
