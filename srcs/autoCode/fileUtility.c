@@ -173,16 +173,15 @@ static int fileCompare(file_t *file_old, file_t *file_new)
 	return same ? 0 : 1;
 }
 
-file_get_line_result_t fileGetLine(file_t *file, char *line, const size_t line_size)
+file_get_line_result_t fileGetLine(file_t *file, char *line, const size_t line_size_max)
 {
-	if( (file == NULL) || (file->stream == NULL) || (line == NULL) || (line_size < 2U) ||
-		((size_t)(int)line_size != line_size) )
+	if( (file == NULL) || (file->stream == NULL) || (line == NULL) || (line_size_max < 2U) )
 	{
 		errno = EINVAL;
 		return FILE_GET_LINE_ERROR;
 	}
 
-	if( fgets(line, (int)line_size, file->stream) == NULL )
+	if( fgets(line, (int)line_size_max, file->stream) == NULL )
 	{
 		return feof(file->stream) ? FILE_GET_LINE_EOF : FILE_GET_LINE_ERROR;
 	}
@@ -195,7 +194,8 @@ file_get_line_result_t fileGetLine(file_t *file, char *line, const size_t line_s
 	}
 
 	const size_t index = line_length - 1U;
-	if( autoCodeBufferIndexIsValid(index, line_size) == false )
+	//if( autoCodeBufferIndexIsValid(index, line_size_max) == false )
+	if( line_length >= line_size_max-1 )
 	{
 		errno = EOVERFLOW;
 		return FILE_GET_LINE_ERROR;

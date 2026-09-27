@@ -317,7 +317,7 @@ static bool moduleOptionsValidate(const char *name,
 static void moduleAdd(const initrc_command_t *command, const module_item_t *module)
 {
 	const char *name = command->tok->tokens[2];
-	if( autoCodeBufferStringFits(name, sizeof(module->name)) == false )
+	if( strlen(name) >= sizeof(module->name)-1) 
 	{
 		AUTOCODE_MSG_ERROR(
 			"Name too long <%s> (maximum %zu characters)", name, sizeof(module->name) - 1U);

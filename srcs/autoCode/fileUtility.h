@@ -51,7 +51,7 @@ typedef enum
 void filePrintModified(void);
 int fileCmpReplaceAll(void);
 int fileClose(file_t *file, const char *caller, int line);
-file_get_line_result_t fileGetLine(file_t *file, char *line, size_t line_size);
+file_get_line_result_t fileGetLine(file_t *file, char *line, size_t line_size_max);
 void fileInit(file_t *file);
 int fileOpen(file_t *file, const char *mode, int special_mode, const char *caller, int line);
 int fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, int line);
