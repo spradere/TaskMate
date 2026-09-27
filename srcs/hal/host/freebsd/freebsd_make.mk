@@ -41,6 +41,8 @@ CFLAGS += -ffunction-sections -fdata-sections
 
 LDFLAGS = -Wl,--gc-sections -lncursesw -ltinfow
 
+.include "${PATH_SRCS}/hal/host/ucontext/ucontext_make.mk"
+
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
 .endif

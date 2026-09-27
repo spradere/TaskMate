@@ -8,12 +8,13 @@
 #
 ################################################################################
 
-.ifndef HAL_HOST_UCONTEXT_UCONTEXT_MAKE_MK
-HAL_HOST_UCONTEXT_UCONTEXT_MAKE_MK = 1
+.ifndef HOST_UCONTEXT_UCONTEXT_MAKE_MK
+HOST_UCONTEXT_UCONTEXT_MAKE_MK = 1
 
 ################################################################################
 # ucontext host makefile
 ################################################################################
+VAL_HW_STACK += ucontext
 
 PATH_UCONTEXT = ${PATH_SRCS}/hal/host/ucontext
 PATHS_SOURCE_SEARCH += ${PATH_UCONTEXT}
@@ -24,8 +25,6 @@ CFLAGS += -DHOST_ucontext
 FILE_HAL_STRING_MACRO = ${PATH_UCONTEXT}/ucontext_string_macro.h
 FILE_HAL_ARCHITECTURE_TYPES = ${PATH_UCONTEXT}/ucontext_types.h
 CFLAGS += -include ${FILE_HAL_ARCHITECTURE_TYPES}
-
-.include "${PATH_SRCS}/hal/board/pc/pc_make.mk"
 
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}

@@ -20,18 +20,15 @@ VAL_HW_STACK = z600
 PATH_TARGET_Z600 = ${PATH_SRCS}/user/target/z600
 PATHS_SOURCE_SEARCH += ${PATH_TARGET_Z600}
 PATHS_EXTRA_SRC += ${PATH_SRCS}/tmLibc
-FILES_EXTRA_SRC += \
-	${PATH_SRCS}/system/services/commands/scli_driver.c \
-	${PATH_SRCS}/system/services/commands/scli_stack.c \
-	${PATH_SRCS}/system/services/commands/scli_thread.c
 
 FILE_GPIO_SIGNALS = ${PATH_TARGET_Z600}/signals.gpio
 FILE_WIREGPIO = ${PATH_TARGET_Z600}/targetWireSignal.c
 FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/board/pc/pc_gpio.c
 
 CFLAGS += -DHWT_z600
-.include "${PATH_SRCS}/hal/host/ucontext/ucontext_make.mk"
-CFLAGS_${PATH_TARGET_Z600}/ucontext_system.c += -include ${FILE_HAL_STRING_MACRO}
+.include "${PATH_SRCS}/hal/board/pc/pc_make.mk"
+
+#CFLAGS_${PATH_TARGET_Z600}/ucontext_system.c += -include ${FILE_HAL_STRING_MACRO}
 
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
