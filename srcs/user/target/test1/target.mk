@@ -15,6 +15,8 @@ TARGET_MK = 1
 # test1 hardware target
 ################################################################################
 
+#help TARGET=test1: [test1] Build the test1 target for Arduino Mega.
+
 # Registration in the global system
 VAL_HW_STACK = test1
 

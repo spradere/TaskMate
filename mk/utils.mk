@@ -14,7 +14,7 @@
 
 .PHONY: doc
 doc:
-#help [global] Generate Doxygen documentation.
+#help doc: [global] Generate Doxygen documentation.
 	@printf "\n%sMake Doxygen documentation%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	doxygen ${PATH_DOCS}/Doxyfile
@@ -29,7 +29,7 @@ _cloc_data:
 
 .PHONY: cloc
 cloc: _cloc_data
-#help [global] Count lines of code.
+#help cloc: [global] Count lines of code.
 	@printf "\n%sCount lines of codes%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -40,7 +40,7 @@ cloc: _cloc_data
 
 .PHONY: note
 note:
-#help [global] Look for TODO / FIX / HACK comments in code.
+#help note: [global] Look for TODO / FIX / HACK comments in code.
 	@printf "\n%sLook for TODO / FIX / HACK%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} \
@@ -48,7 +48,7 @@ note:
 
 .PHONY: cppcheck
 cppcheck:
-#help [global] cppcheck static code analysis.
+#help cppcheck: [global] cppcheck static code analysis.
 	@printf "\n%scppcheck static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@cppcheck -I${PATH_SRCS} \
@@ -61,14 +61,14 @@ cppcheck:
 
 .PHONY: format
 format:
-#help [global] Format code with clang-format.
+#help format: [global] Format code with clang-format.
 	@printf "%sAuto formatting code%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format19 -i ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} ${FILES_AUTOCODE_SRC}
 
 .PHONY: tidy_autoCode
 tidy_autoCode:
-#help [global] tidy static code analysis for autoCode.
+#help tidy_autoCode: [global] tidy static code analysis for autoCode.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@clang-tidy19 ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} -- \
@@ -77,7 +77,7 @@ tidy_autoCode:
 # Help system: targets beginning with '_' or '$' are internal only and are not displayed by 'make help'.
 .PHONY: help
 help:
-#help [global] List all utility targets, not the system ones.
+#help help: [global] List all utility targets, not the system ones.
 	@printf "%sPrint all utility targets%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@awk -f ${SCRIPT_MAKE_HELP} ${FILES_MK}

@@ -644,12 +644,12 @@ runReportTests()
 		-f "${PATH_PROJECT}/scripts/build_summary_memory.awk" \
 		"${PATH_STAGE_WORK}/memory_error.data"
 
-	printf '%s\n' 'zebra_target:' '#help [group] Last target.' \
-		'public_target:' '#help [group] Public target.' '_private_target:' \
-		'alpha_target:' '#help [group] First target.' \
+	printf '%s\n' 'unrelated_target:' '#help zebra_target: [group] Last target.' \
+		'#help public_target: [group] Public target.' '_private_target:' \
+		'#help alpha_target: [group] First target.' \
 		> "${PATH_STAGE_WORK}/help.mk"
-	printf '%s\n' 'target_name_longer_than_twenty_one_characters:' \
-		'#help [group] This description is deliberately longer than fifty-seven characters.' \
+	printf '%s%s\n' '#help target_name_longer_than_twenty_one_characters:' \
+		' [group] This description is deliberately longer than fifty-seven characters.' \
 		>> "${PATH_STAGE_WORK}/help.mk"
 	expectOutput help_report "alpha_target:         [group] First target.
 public_target:        [group] Public target.
@@ -664,6 +664,9 @@ zebra_target:         [group] Last target." awk \
 	expectSuccess integrated_help bmake -C "${PATH_PROJECT}" help
 	logContains integrated_help "test_build_system:"
 	logContains integrated_help "Run the complete build black-box test corpus."
+	logContains integrated_help "TARGET=noscli:        [noscli]"
+	logContains integrated_help "TARGET=test1:         [test1]"
+	logContains integrated_help "TARGET=z600:          [z600]"
 
 	printf 'build-system report tests passed: %d cases\n' "${VAL_TEST_COUNT}"
 }

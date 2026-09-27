@@ -12,13 +12,13 @@
 # Show documented Make targets
 ################################################################################
 
-/^([A-Za-z0-9][A-Za-z0-9_-]*):/ {
-	target = $1
-}
-
-$1 == "#help" {
-	description = $0
-	sub(/^#help /, "", description)
+/^#help[[:space:]]+[^:]+:[[:space:]]*/ {
+	help = $0
+	sub(/^#help[[:space:]]+/, "", help)
+	separator_index = index(help, ":")
+	target = substr(help, 1, separator_index)
+	description = substr(help, separator_index + 1)
+	sub(/^[[:space:]]*/, "", description)
 	help_list[++help_count] = sprintf("%-21.21s %.57s", target, description)
 }
 

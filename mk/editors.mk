@@ -33,25 +33,25 @@ ${FILE_TAGS_STAMP}: ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} ${FILES_AUTOCO
 
 .PHONY: vim_mk
 vim_mk: ${FILE_TAGS_STAMP}
-#help [global] Open Vim with all .mk Makefiles.
+#help vim_mk: [global] Open Vim with all .mk Makefiles.
 	vim ${FILES_EDITOR_MK}
 
 .PHONY: geany_autoCode
 geany_autoCode:
-#help [global] Open Geany with all autoCode .c and .h files.
+#help geany_autoCode: [global] Open Geany with all autoCode .c and .h files.
 	geany ${FILES_EDITOR_AUTOCODE}
 
 .PHONY: geany_mk
 geany_mk:
-#help [global] Open Geany with all .mk Makefiles.
+#help geany_mk: [global] Open Geany with all .mk Makefiles.
 	geany ${FILES_EDITOR_MK}
 
 .PHONY: geany_tm
 geany_tm:
-#help [global] Open Geany with all TaskMate .c and .h files.
+#help geany_tm: [global] Open Geany with all TaskMate .c and .h files.
 	geany ${FILES_EDITOR_TM}
 
 .PHONY: geany_doc
 geany_doc:
-#help [global] Open Geany with all documentations files.
+#help geany_doc: [global] Open Geany with all documentations files.
 	geany ${FILES_EDITOR_DOC}

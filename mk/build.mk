@@ -85,7 +85,7 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 all: ${FILE_GIT_IGNORE} _hardware_target_check \
 	_autocode .WAIT _architecture_include_check .WAIT _dependency \
 	${FILE_TARGET} _mcu_memory_data _cloc_data
-#help [global] TaskMate build.
+#help all: [global] TaskMate build.
 	@printf "\n%sBuild complete%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 
@@ -97,7 +97,7 @@ _dependency:
 
 .PHONY: clean_hard
 clean_hard:
-#help [global] Remove all build files for current target.
+#help clean_hard: [global] Remove all build files for current target.
 	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_BUILD_TARGET}" "${PATH_BUILDS}"
 	@printf "\n%sRemove all files: ${PATH_BUILDS}/*\nRemove all files and subdir: ${PATH_BUILD_TARGET}/* %s\n\n" \
 		"${COLOUR_CLEAN}" "${COLOUR_RESET}"
@@ -109,7 +109,7 @@ clean_hard:
 
 .PHONY: clean
 clean:
-#help [global] Remove base build files for current target.
+#help clean: [global] Remove base build files for current target.
 	@${SCRIPT_CHECK_PATH_FILE} -d \
 		"${PATH_BUILD_TARGET}" \
 		"${PATH_BUILDS}"

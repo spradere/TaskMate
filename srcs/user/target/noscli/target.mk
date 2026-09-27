@@ -15,6 +15,8 @@ TARGET_MK = 1
 # noscli hardware target
 ################################################################################
 
+#help TARGET=noscli: [noscli] Build the noscli target for Arduino Mega.
+
 # Registration in the global system
 VAL_HW_STACK = noscli
 
