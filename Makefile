@@ -34,6 +34,7 @@ PATH_TEST = test
 # File processing
 .include "${PATH_MAKEFILES}/sources.mk"
 .include "${PATH_MAKEFILES}/header_allow.mk"
+.include "${PATH_MAKEFILES}/autoCode_tool.mk"
 
 # Make global process
 .include "${PATH_MAKEFILES}/utils.mk"
