@@ -232,29 +232,29 @@ runConfigurationTests()
 	expectOutput cpu_frequency "16000000UL" targetMake -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" targetMake -V VAL_MCU_SERIAL
 
-	expectOutput ucontext_stack "ucontext pc freebsd" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V VAL_HW_STACK
-	expectOutput ucontext_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V FILE_ARCH_CC
-	expectOutput ucontext_types_header \
-		"srcs/hal/target/ucontext/ucontext_types.h" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=ucontext -V FILE_HAL_ARCHITECTURE_TYPES
-	expectSuccess ucontext_compile_sources bmake -C "${PATH_PROJECT}" \
-		VAL_TARGET=ucontext -V FILES_COMPILE_SRC
-	logContains ucontext_compile_sources "srcs/hal/target/ucontext/ucontext_context.c"
-	logContains ucontext_compile_sources "srcs/hal/board/pc/pc_gpio.c"
-	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
-	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
-	logContains ucontext_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
-	logContains ucontext_compile_sources "srcs/system/services/scli.c"
-	logContains ucontext_compile_sources "srcs/system/services/commands/scli_driver.c"
-	logContains ucontext_compile_sources "srcs/system/services/commands/scli_stack.c"
-	logContains ucontext_compile_sources "srcs/system/services/commands/scli_thread.c"
-	logExcludes ucontext_compile_sources "ucontext_scli_commands"
-	logExcludes ucontext_compile_sources "srcs/system/services/commands/scli_date.c"
-	logExcludes ucontext_compile_sources "srcs/system/services/commands/scli_i2c.c"
-	logExcludes ucontext_compile_sources "srcs/hal/arch/"
-	logExcludes ucontext_compile_sources "srcs/hal/mcu/"
+	expectOutput z600_stack "z600 pc freebsd" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V VAL_HW_STACK
+	expectOutput z600_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_ARCH_CC
+	expectOutput z600_types_header \
+		"srcs/hal/host/ucontext/ucontext_types.h" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_HAL_ARCHITECTURE_TYPES
+	expectSuccess z600_compile_sources bmake -C "${PATH_PROJECT}" \
+		VAL_TARGET=z600 -V FILES_COMPILE_SRC
+	logContains z600_compile_sources "srcs/hal/host/ucontext/ucontext_context.c"
+	logContains z600_compile_sources "srcs/hal/board/pc/pc_gpio.c"
+	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
+	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
+	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
+	logContains z600_compile_sources "srcs/system/services/scli.c"
+	logContains z600_compile_sources "srcs/system/services/commands/scli_driver.c"
+	logContains z600_compile_sources "srcs/system/services/commands/scli_stack.c"
+	logContains z600_compile_sources "srcs/system/services/commands/scli_thread.c"
+	logExcludes z600_compile_sources "ucontext_scli_commands"
+	logExcludes z600_compile_sources "srcs/system/services/commands/scli_date.c"
+	logExcludes z600_compile_sources "srcs/system/services/commands/scli_i2c.c"
+	logExcludes z600_compile_sources "srcs/hal/arch/"
+	logExcludes z600_compile_sources "srcs/hal/mcu/"
 
 	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"

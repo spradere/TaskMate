@@ -25,7 +25,7 @@
 #include <ucontext.h>
 
 #include "freebsd_interrupts.h"
-#include "hal/target/ucontext/ucontext_types.h"
+#include "hal/host/ucontext/ucontext_types.h"
 #include "interfaces/drv_timerSched.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
