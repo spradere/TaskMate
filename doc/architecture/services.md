@@ -1,4 +1,4 @@
-# 🧩 Architecture Note — services
+# 🧩 Architecture Note: services
 
 ## Historical developments
 Services introduced reusable system threads above the kernel, including the serial CLI.

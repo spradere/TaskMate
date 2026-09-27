@@ -1,4 +1,4 @@
-# 🧵 Architecture Note — tasks
+# 🧵 Architecture Note: tasks
 
 ## Historical developments
 User tasks began as direct test routines before autoCode gave them fixed records and stacks.

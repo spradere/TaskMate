@@ -15,7 +15,7 @@ when supporting new platforms.
 Generic driver interface files use the `drv_<driver>.h` filename form. The following rules define how
 the `interfaces/` layer must be used.
 
-## Rule 1 — Interface independence
+## Rule 1 - Interface independence
 
 The `interfaces/` layer must not depend on any higher or lower system layer.
 
@@ -29,7 +29,7 @@ Examples: `stdint.h`, `stdbool.h`, `tm_types.h`
 No dependency from `interfaces/` to HAL, sysCore, `sysCall`, `tmLibc`, services, or tasks is
 allowed.
 
-## Rule 2 — HAL dependency direction
+## Rule 2 - HAL dependency direction
 
 The Hardware Abstraction Layer **may depend on** `interfaces/`, but must never depend on higher layers
  such as:
@@ -41,7 +41,7 @@ The Hardware Abstraction Layer **may depend on** `interfaces/`, but must never d
 The HAL implements the contracts defined in `interfaces/`, but it must remain completely unaware of
 how higher layers use those interfaces.
 
-## Rule 3 — System layer usage
+## Rule 3 - System layer usage
 
 HAL, sysCore, `sysCall`, `tmLibc`, and services may consume the neutral contracts permitted by
 `conf/arch_valid_matrix.md`. Tasks use service, `sysCall`, or `tmLibc` APIs rather than including
@@ -49,7 +49,7 @@ HAL, sysCore, `sysCall`, `tmLibc`, and services may consume the neutral contract
 
 `interfaces/` remains the only transversal layer.
 
-## Rule 4 — Hardware-specific interfaces
+## Rule 4 - Hardware-specific interfaces
 
 If an interface is specific to a particular architecture, MCU, or board, it **must not be** placed in
 `interfaces/`.

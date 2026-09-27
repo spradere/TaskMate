@@ -1,4 +1,4 @@
-# TaskMate — Section Comment Formatting Rules
+# Section Comment Formatting Rules
 
 ## Purpose
 
@@ -32,7 +32,7 @@ clearly redundant.
 
 TaskMate uses three visual levels.
 
-### Level 1 — Major file section
+### Level 1 - Major file section
 
 Use `=` separators for major structural parts of a file.
 
@@ -52,7 +52,7 @@ Major sections should be used sparingly.
 
 ---
 
-### Level 2 — Functional group
+### Level 2 - Functional group
 
 Use `-` separators for groups inside a major section.
 
@@ -80,7 +80,7 @@ Names should describe the role of the following code, not merely its syntax.
 
 ---
 
-### Level 3 — Minor subgroup
+### Level 3 - Minor subgroup
 
 For small subdivisions inside a functional group, use a simple comment.
 

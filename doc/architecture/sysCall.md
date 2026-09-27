@@ -1,4 +1,4 @@
-# 📞 Architecture Note — sysCall
+# 📞 Architecture Note: sysCall
 
 ## Historical developments
 `sysCall` became the task-visible boundary for kernel state and logical hardware operations.

@@ -1,4 +1,4 @@
-# 🔌 Architecture Note — interfaces
+# 🔌 Architecture Note: interfaces
 
 ## Historical developments
 `interfaces/` emerged as portable contracts were separated from hardware implementations.

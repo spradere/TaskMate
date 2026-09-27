@@ -1,4 +1,4 @@
-# 📚 Architecture Note — tmLibc
+# 📚 Architecture Note: tmLibc
 
 ## Historical developments
 `tmLibc` was introduced for bounded, small-footprint strings, formatting, and logging.

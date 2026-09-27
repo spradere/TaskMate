@@ -6,7 +6,7 @@ This document defines file and directory naming rules for TaskMate source code
 and build inputs. Names must remain predictable and safe for POSIX tools, shell
 scripts, Makefiles, and cross-platform builds.
 
-## Rule 1 — Use the POSIX portable filename character set
+## Rule 1 - Use the POSIX portable filename character set
 
 Every file and directory name must use only:
 
@@ -21,7 +21,7 @@ Do not use spaces, tabs, control characters, non-ASCII characters, or shell
 metacharacters in names. Contributors who require spaces must handle that need
 outside the TaskMate tree.
 
-## Rule 2 — Avoid ambiguous or unsafe names
+## Rule 2 - Avoid ambiguous or unsafe names
 
 - Do not begin a file or directory name with `-`; command-line tools may treat
   it as an option.
@@ -31,7 +31,7 @@ outside the TaskMate tree.
 - Keep names concise and descriptive; do not encode temporary status or author
   names in them.
 
-## Rule 3 — Source-code files
+## Rule 3 - Source-code files
 
 - Preserve the established subsystem naming style when naming C source and
   header files.
@@ -43,7 +43,7 @@ outside the TaskMate tree.
 - Do not introduce whitespace as a substitute for word boundaries; use the
   naming form already established by the owning subsystem.
 
-## Rule 4 — Build files and scripts
+## Rule 4 - Build files and scripts
 
 - All names referenced by Makefiles, shell scripts, or AWK scripts must comply
   with these rules, including generated files and target-specific paths.
