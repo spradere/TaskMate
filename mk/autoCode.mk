@@ -136,7 +136,7 @@ ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ER
 # Run autoCode alone
 .PHONY: autoCode_alone
 autoCode_alone: ${FILE_AUTOCODE_TARGET}
-#help [global] Run autoCode alone.
+#help autoCode_alone: [global] Run autoCode alone.
 	@printf "%sForce running autoCode alone%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${SCRIPT_CHECK_PATH_FILE} -f "${FILE_AUTOCODE_STAMP}"

@@ -15,6 +15,8 @@ TARGET_MK = 1
 # z600 FreeBSD ucontext simulation target
 ################################################################################
 
+#help TARGET=z600: [z600] Build the z600 FreeBSD ucontext simulation target.
+
 VAL_HW_STACK = z600
 
 PATH_TARGET_Z600 = ${PATH_SRCS}/user/target/z600
