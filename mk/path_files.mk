@@ -34,7 +34,6 @@ VAL_USB_LABEL_EXPECTED = TASKMATE
 # Configuration
 CONF_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
 CONF_HARDWARE_TARGETS = ${PATH_CONF}/hardware-targets.conf
-CONF_SYSTEM_HEADER_ALLOW = ${PATH_CONF}/system_header_allow.conf
 
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
