@@ -1,288 +1,289 @@
-# Audit — journal commun des écritures d'autoCode et du build
+# Audit of a shared autoCode and build write journal
 
-Date : 25 septembre 2026
+Date: 25 September 2026
 
-Branche auditée : `work`
+Audited branch: `work`
 
-Révision auditée : `c45ecfce76c3aba33509913b27386b88d79ca04d`
+Audited revision: `c45ecfce76c3aba33509913b27386b88d79ca04d`
 
-Environnement d'audit : Linux 6.18.44, sans BSD `bmake`
+Audit environment: Linux 6.18.44, without BSD `bmake`
 
-## Objet et définition du besoin
+## Purpose and requirement
 
-Cet audit évalue la possibilité d'un journal commun à autoCode et aux Makefiles, contrôlé à la fin du
-build, pour détecter qu'un fichier produit n'a pas été intégralement écrit ou correctement fermé. Il
-couvre les sorties créées par le build normal `test1`, et non chaque fichier lu par `bmake`, le
-compilateur ou les utilitaires externes.
+This audit assesses a journal shared by autoCode and the Makefiles, checked at the end of the
+build, to detect when a produced file was not completely written or properly closed. It covers
+outputs created by the normal `test1` build, not every file read by `bmake`, the compiler, or
+external utilities.
 
-Trois propriétés doivent être distinguées :
+Three properties must be distinguished:
 
-- **fermé** : le producteur a demandé une fermeture et en a vérifié le résultat ;
-- **complet** : le contenu satisfait un contrat connu du producteur ;
-- **publié** : seul un contenu complet est visible sous le nom final.
+- **closed**: the producer requested closure and checked its result;
+- **complete**: the content satisfies a contract known to the producer;
+- **published**: only complete content is visible under the final name.
 
-Un journal peut prouver qu'un événement a été déclaré. Il ne peut pas, à lui seul, prouver que les
-octets attendus existent, que les tampons ont été durablement écrits, ni qu'un processus tué a eu le
-temps de journaliser son échec. Le besoin est donc techniquement réalisable pour les **sorties gérées
-et déclarées**, mais pas pour « tous les fichiers ouverts » au sens littéral.
+A journal can prove that an event was declared. By itself, it cannot prove that the expected
+bytes exist, that buffers were durably written, or that a killed process had time to record its
+failure. The requirement is therefore technically feasible for **managed and declared outputs**,
+but not literally for "every open file".
 
 ## Verdict
 
-La solution recommandée n'est pas un registre universel des ouvertures. C'est un **manifeste de
-publication par exécution**, partagé par protocole entre autoCode et le build, associé à des écritures
-temporaires puis à un renommage. Le contrôle final vérifie que chaque sortie déclarée possède un
-événement terminal `committed`, que le fichier final satisfait son contrat et qu'aucun temporaire de
-l'exécution ne subsiste.
+The recommended solution is not a universal open-file registry. It is a **per-run publication
+manifest**, shared by protocol between autoCode and the build, combined with temporary writes and
+renaming. The final check verifies that every declared output has a terminal `committed` event,
+that the final file satisfies its contract, and that no temporary file from the run remains.
 
-La faisabilité est élevée et le coût reste moyen si le périmètre initial se limite à autoCode et aux
-fichiers texte écrits directement par les recettes. La complexité devient élevée pour inclure les
-objets, dépendances, exécutables et fichiers internes de tous les outils. Cette extension apporterait
-peu : la fin réussie de chaque processus garantit déjà la fermeture de ses descripteurs par le noyau,
-mais pas la validité sémantique de sa sortie.
+Feasibility is high and cost remains moderate if the initial scope is limited to autoCode and
+text files written directly by recipes. Complexity becomes high when objects, dependencies,
+executables, and internal files from every tool are included. This extension would add little.
+Successful process termination already ensures that the kernel closes its descriptors, but not
+that its output is semantically valid.
 
-Le gain de fiabilité d'un journal seul est faible. Il devient important lorsqu'il accompagne :
+A journal alone provides little reliability. It becomes valuable when combined with:
 
-1. une liste exhaustive des sorties attendues ;
-2. une fermeture contrôlée avant publication ;
-3. une publication atomique par renommage adjacent ;
-4. des critères de complétude propres à chaque type de sortie ;
-5. un échec du build si le validateur final trouve un état absent ou incohérent.
+1. an exhaustive list of expected outputs;
+2. checked closure before publication;
+3. atomic publication by adjacent rename;
+4. completeness criteria for each output type;
+5. build failure if the final validator finds a missing or inconsistent state.
 
-| Périmètre | Faisabilité | Complexité | Gain de fiabilité | Avis |
+| Scope | Feasibility | Complexity | Reliability gain | Recommendation |
 | --- | --- | --- | --- | --- |
-| Sorties autoCode | Élevée | Faible à moyenne | Élevé avec validation | Prioritaire |
-| Textes produits par les Makefiles | Élevée | Moyenne | Élevé avec écriture atomique | Prioritaire |
-| Objets, `.d`, ELF et rapports d'outils | Moyenne | Élevée | Faible à moyen | Hors lot initial |
-| Toutes les lectures et écritures des descendants | Faible | Très élevée | Faible | À rejeter |
+| autoCode outputs | High | Low to medium | High with validation | Priority |
+| Text produced by Makefiles | High | Medium | High with atomic writes | Priority |
+| Objects, `.d`, ELF, and tool reports | Medium | High | Low to medium | Outside initial batch |
+| All child-process reads and writes | Low | Very high | Low | Reject |
 
-## État actuel
+## Current state
 
-### autoCode possède déjà la majeure partie du contrôle local
+### autoCode already provides most local control
 
-Toutes ses ouvertures passent par `fileOpen()` ou `fileMakeTmp()`. `file_t` mémorise l'état ouvert et
-le droit d'écriture (`srcs/autoCode/fileUtility.h:31-38`). `fileClose()` teste `ferror()`, vérifie
-`fclose()` puis réinitialise l'objet (`srcs/autoCode/fileUtility.c:208-228`). Les destinations générées
-sont écrites dans des temporaires, fermées, puis comparées et renommées
+All opens go through `fileOpen()` or `fileMakeTmp()`. `file_t` stores open state and write
+permission (`srcs/autoCode/fileUtility.h:31-38`). `fileClose()` checks `ferror()`, checks
+`fclose()`, then resets the object (`srcs/autoCode/fileUtility.c:208-228`). Generated
+destinations are written to temporary files, closed, compared, and renamed
 (`srcs/autoCode/fileUtility.c:65-101,289-302`).
 
-Cette base rend un contrôle interne faisable sans interposition système. Il subsiste toutefois trois
-limites pour le besoin étudié :
+This foundation makes internal control feasible without system interposition. Three limitations
+remain for this requirement:
 
-- plusieurs appels ignorent le résultat de `fileClose()`, notamment les fichiers de liste du `main`
-  (`srcs/autoCode/autoCode.c:89-160`) ;
-- le booléen `stream_opened` est porté par chaque objet local, sans registre de tous les flux vivants ;
-- le renommage prouve la publication d'un temporaire, pas la complétude sémantique du fragment.
+- several calls ignore the `fileClose()` result, especially the list files in `main`
+  (`srcs/autoCode/autoCode.c:89-160`);
+- each local object carries its own `stream_opened` boolean, with no registry of all live
+  streams;
+- renaming proves that a temporary file was published, not that the fragment is semantically
+  complete.
 
-L'actuel résumé compte seulement les destinations modifiées ou inchangées
-(`srcs/autoCode/fileUtility.c:57-63`). Il ne constitue donc pas un bilan des ouvertures et fermetures.
+The current summary counts only modified or unchanged destinations
+(`srcs/autoCode/fileUtility.c:57-63`). It is not an account of opens and closes.
 
-### Les recettes ne partagent ni processus ni abstraction de fichier
+### Recipes share neither a process nor a file abstraction
 
-Les recettes construisent plusieurs sorties avec une troncature `>` suivie d'ajouts `>>` :
+Recipes construct several outputs using truncation with `>`, followed by appends with `>>`:
 
-- configuration et listes autoCode (`mk/autoCode.mk:66-79,97-114`) ;
-- `tm_info.h.tmp`, puis comparaison et renommage (`mk/build.mk:18-40`) ;
-- manifeste de build écrit directement sous son nom final (`mk/build.mk:51-70`) ;
-- agrégation des dépendances (`mk/build.mk:95-99`) ;
-- `.gitignore`, rapports d'architecture, statistiques et journaux.
+- autoCode configuration and lists (`mk/autoCode.mk:66-79,97-114`);
+- `tm_info.h.tmp`, followed by comparison and rename (`mk/build.mk:18-40`);
+- the build manifest written directly under its final name (`mk/build.mk:51-70`);
+- dependency aggregation (`mk/build.mk:95-99`);
+- `.gitignore`, architecture reports, statistics, and logs.
 
-Chaque ligne de recette peut lancer un nouveau shell. `bmake` n'a donc pas accès aux descripteurs
-internes des commandes, et un état gardé dans une variable shell ne survit pas nécessairement à la
-recette suivante. Les redirections sont en outre ouvertes par le shell avant l'utilitaire appelé.
+Each recipe line may start a new shell. `bmake` therefore cannot access command-internal file
+descriptors, and state held in a shell variable does not necessarily survive into the next
+recipe. Redirections are also opened by the shell before the called utility runs.
 
-Le build est déclaré `.NOTPARALLEL` (`mk/options.mk:16-17`), ce qui simplifie un journal séquentiel,
-mais les sous-makes et deux builds lancés séparément restent des producteurs distincts. Le journal
-doit avoir un identifiant d'exécution et ne doit jamais être un fichier global réutilisé sans garde.
+The build is declared `.NOTPARALLEL` (`mk/options.mk:16-17`), which simplifies a sequential
+journal. Sub-makes and two separately launched builds remain distinct producers. The journal
+must have a run identifier and must never be an unguarded reusable global file.
 
-### La cible finale actuelle ne convient pas au rôle de preuve
+### The current final target cannot serve as proof
 
-`.END` produit `last_build_info.txt` et le résumé (`mk/build.mk:51-86`), tandis que `all` annonce la
-fin après ses dépendances (`mk/build.mk:88-93`). Un validateur de fiabilité doit être une dépendance
-explicite placée après les producteurs, pas seulement une commande cosmétique de `.END`. Son statut
-doit participer directement au succès de `all`, et il ne doit pas valider un journal ancien lorsque le
-build s'arrête avant de l'atteindre.
+`.END` produces `last_build_info.txt` and the summary (`mk/build.mk:51-86`), while `all`
+announces completion after its dependencies (`mk/build.mk:88-93`). A reliability validator
+must be an explicit dependency placed after the producers, not only a cosmetic `.END` command.
+Its status must directly affect the success of `all`, and it must not validate an old journal
+when the build stops before reaching it.
 
-## Limites d'une observation universelle
+## Limits of universal observation
 
-### Fermeture
+### Closure
 
-À la terminaison d'un processus, le noyau ferme ses descripteurs encore ouverts. Un instantané pris
-après le build ne peut donc pas distinguer une fermeture explicite réussie d'une fermeture automatique.
-Il ne permet pas davantage d'attribuer sûrement un descripteur hérité, dupliqué ou rouvert.
+When a process terminates, the kernel closes its remaining open descriptors. A snapshot taken
+after the build cannot distinguish a successful explicit close from automatic closure. It also
+cannot reliably attribute an inherited, duplicated, or reopened descriptor.
 
-Une interception par `LD_PRELOAD` manquerait les binaires statiques, les appels système directs et les
-programmes qui neutralisent l'environnement. Une trace système (`ktrace`/`truss` sur FreeBSD) serait
-volumineuse, spécifique à l'hôte et complexe à corréler avec `fork`, `exec`, `dup`, `rename` et les
-sorties ouvertes par le shell. Ces techniques conviennent à un diagnostic ponctuel, pas à un contrat
-de build déterministe.
+`LD_PRELOAD` interposition would miss static binaries, direct system calls, and programs that
+clear their environment. A system trace, such as `ktrace` or `truss` on FreeBSD, would be
+large, host-specific, and difficult to correlate with `fork`, `exec`, `dup`, `rename`,
+and shell-opened outputs. These techniques suit occasional diagnosis, not a deterministic build
+contract.
 
-### Complétude
+### Completeness
 
-Ni `close(2)` ni un événement `closed` ne définit ce que « complet » signifie. Un fichier vide peut
-être valide ; un fichier non vide peut être tronqué mais syntaxiquement plausible. Chaque classe exige
-donc un contrat : nombre et noms des fragments autoCode, grammaire des listes, en-tête et dernière
-ligne attendus, parseur de fichier `.d`, ou succès de l'outil producteur.
+Neither `close(2)` nor a `closed` event defines "complete". An empty file may be valid. A
+non-empty file may be truncated but syntactically plausible. Each class therefore needs a
+contract: number and names of autoCode fragments, list grammar, expected header and final line,
+a `.d` file parser, or successful completion of the producing tool.
 
-Un hash consigné après fermeture détecte une modification ultérieure, mais ne prouve pas que le bon
-contenu a été produit. `fsync()` ajouterait une garantie de durabilité après perte d'alimentation, au
-prix d'un coût hôte notable ; ce n'est pas nécessaire pour détecter une erreur de fermeture dans le
-build local et ne doit pas être confondu avec la publication atomique.
+A hash recorded after closure detects later modification, but does not prove that the right
+content was produced. `fsync()` would add durability after power loss, at notable host cost.
+It is unnecessary for detecting a close error in a local build and must not be confused with
+atomic publication.
 
-## Architecture recommandée
+## Recommended architecture
 
-### 1. Un protocole commun, pas une bibliothèque commune
+### 1. A shared protocol, not a shared library
 
-autoCode en C et les recettes shell ne doivent pas partager artificiellement une bibliothèque. Ils
-peuvent produire le même format de manifeste, dans un répertoire propre à l'exécution. Chaque entrée
-terminale devrait au minimum contenir :
+C autoCode and shell recipes should not artificially share a library. They can produce the same
+manifest format in a run-specific directory. Each terminal record should contain at least:
 
-- version du protocole et identifiant unique du build ;
-- producteur et chemin de destination canonique ;
-- classe de sortie et critère de complétude ;
-- résultat de fermeture, taille finale et, si utile, empreinte ;
-- état terminal `committed`, `unchanged` ou `failed`.
+- protocol version and unique build identifier;
+- producer and canonical destination path;
+- output class and completeness criterion;
+- close result, final size, and a digest if useful;
+- terminal state: `committed`, `unchanged`, or `failed`.
 
-Un fichier d'événements partagé et ouvert en ajout créerait lui-même le problème à contrôler : écritures
-concurrentes, ligne partielle et verrouillage. Il est préférable que chaque producteur publie un petit
-enregistrement atomique dans `${PATH_BUILD_TARGET}/journal/<run-id>/`, puis que le validateur agrège
-ces enregistrements. Le nom final de l'enregistrement vaut engagement ; un temporaire seul vaut échec.
+A shared append-only event file would itself create the problem being controlled: concurrent
+writes, partial lines, and locking. Each producer should instead atomically publish a small
+record in `${PATH_BUILD_TARGET}/journal/<run-id>/`, after which the validator aggregates the
+records. The final record name is the commitment. A temporary record alone means failure.
 
-### 2. Un inventaire attendu déclaré par le graphe
+### 2. An expected inventory declared by the graph
 
-Le validateur doit comparer les engagements à une liste préparée avant les écritures. Pour autoCode,
-elle vient des fragments requis et des destinations rencontrées lors de l'analyse des tags. Pour Make,
-elle doit lister explicitement les fichiers texte que le projet produit lui-même. Une entrée observée
-sans attente et une attente sans entrée sont toutes deux des erreurs.
+The validator must compare commitments with a list prepared before writes begin. For autoCode,
+the list comes from required fragments and destinations found while analysing tags. For Make,
+it must explicitly list text files produced by the project itself. An unexpected record and an
+expected record that is absent are both errors.
 
-Le périmètre initial recommandé comprend : configuration et listes autoCode, fragments générés,
-`tm_info.h`, `.deps.d`, rapports d'architecture et d'en-têtes, données de taille/LOC et manifeste final.
-Le journal stdout d'autoCode peut rester un diagnostic : sa complétude dépend d'abord du statut de la
-redirection et du processus. Les `.o`, `.d` individuels, l'exécutable autoCode et le firmware doivent
-rester sous le contrat naturel « recette réussie + cible présente », sauf défaut concret ultérieur.
+The recommended initial scope includes autoCode configuration and lists, generated fragments,
+`tm_info.h`, `.deps.d`, architecture and header reports, size and LOC data, and the final
+manifest. The autoCode stdout log may remain diagnostic because its completeness primarily
+depends on redirection and process status. Individual `.o` and `.d` files, the autoCode
+executable, and the firmware should retain their natural "successful recipe plus present
+target" contract unless a later concrete defect justifies more.
 
-### 3. Publication atomique avant journalisation
+### 3. Atomic publication before journalling
 
-Les sorties Make gérées doivent passer par un helper unique : créer un temporaire adjacent et unique,
-écrire en une seule invocation, contrôler son statut, vérifier le contrat, puis le renommer. Le helper
-publie ensuite son engagement. Un échec avant le renommage conserve l'ancienne destination et laisse
-au validateur un état absent ou `failed`.
+Managed Make outputs must use one helper: create a unique adjacent temporary file, write it in
+one invocation, check status, verify the contract, then rename it. The helper then publishes
+its commitment. A failure before the rename preserves the old destination and leaves a missing
+or `failed` state for the validator.
 
-autoCode doit conserver son abstraction C, mais enregistrer centralement chaque `file_t` ouvert, rendre
-tous les échecs de fermeture fatals avant `rename()` et publier ses engagements seulement après la
-comparaison/remplacement. Un contrôle `atexit()` peut signaler les flux encore enregistrés, mais il ne
-remplace pas les chemins d'erreur explicites et ne s'exécute pas après `SIGKILL` ou arrêt de la machine.
+autoCode should retain its C abstraction, but centrally register every open `file_t`, make all
+close failures fatal before `rename()`, and publish commitments only after comparison or
+replacement. An `atexit()` check can report streams still registered, but does not replace
+explicit error paths and does not run after `SIGKILL` or machine shutdown.
 
-### 4. Validation ordonnée et nettoyage
+### 4. Ordered validation and cleanup
 
-Une cible interne `_file_journal_check` doit dépendre de tous les producteurs concernés et précéder le
-message `Build complete`. Elle vérifie l'identifiant, l'exhaustivité, l'unicité, les états terminaux, les
-critères par classe, les chemins confinés et l'absence de temporaires associés au run.
+An internal `_file_journal_check` target must depend on all relevant producers and precede the
+`Build complete` message. It checks the identifier, completeness, uniqueness, terminal states,
+class-specific criteria, confined paths, and absence of temporary files associated with the run.
 
-Le journal n'est marqué `complete` qu'après cette validation. Au démarrage suivant, un run non complet
-est archivé comme diagnostic ou supprimé de façon confinée ; il n'est jamais accepté comme preuve du
-nouveau build. Un build sans travail doit soit créer et valider un nouveau run, soit vérifier un
-manifeste final versionné dont toutes les sorties sont encore cohérentes.
+The journal is marked `complete` only after this validation. At the next start, an incomplete
+run is archived for diagnosis or removed in a confined manner. It is never accepted as proof of
+the new build. A no-op build must either create and validate a new run, or verify a versioned
+final manifest whose outputs remain consistent.
 
-## Constats et priorités
+## Findings and priorities
 
-### P1 — le terme « tous les fichiers ouverts » n'est pas un contrat vérifiable
+### P1: "every open file" is not a verifiable contract
 
-Sans périmètre et sans définition de complétude, l'implémentation produirait beaucoup de traces sans
-preuve utile. Elle pourrait même donner une assurance trompeuse : un couple `open/close` équilibré ne
-dit rien du contenu. La première décision doit limiter le contrat aux sorties écrites et possédées par
-TaskMate pendant `all`.
+Without scope and a definition of completeness, the implementation would produce many traces
+without useful evidence. It could even create false assurance because a balanced `open/close`
+pair says nothing about content. The first decision must limit the contract to outputs written
+and owned by TaskMate during `all`.
 
-### P1 — le journal ne corrige pas les publications directes
+### P1: the journal does not fix direct publication
 
-Plusieurs recettes écrivent leur destination en place. Un journal terminal peut détecter certains
-échecs, mais il ne restaure pas le contenu précédent. L'écriture atomique est un prérequis au gain de
-fiabilité annoncé, et non une amélioration indépendante à reporter.
+Several recipes write their destinations in place. A terminal journal can detect some failures,
+but cannot restore previous content. Atomic writing is a prerequisite for the claimed
+reliability gain, not an independent improvement to defer.
 
-### P1 — une validation finale seule ne couvre pas les interruptions
+### P1: final validation alone does not cover interruptions
 
-Si le build est interrompu, la cible finale ne s'exécute pas. Le prochain lancement doit reconnaître
-le run incomplet avant de réutiliser ses stamps ou sorties. L'identifiant du run et la publication d'un
-marqueur final sont donc obligatoires.
+If the build is interrupted, the final target does not run. The next invocation must recognise
+the incomplete run before reusing its stamps or outputs. A run identifier and publication of a
+final marker are therefore mandatory.
 
-### P2 — autoCode peut garantir ses propres flux à faible coût
+### P2: autoCode can guarantee its own streams at low cost
 
-Le passage centralisé par `fileUtility` permet d'ajouter un registre borné ou dynamique sur l'hôte,
-des identifiants d'ouverture et un bilan final. Le principal travail est la propagation stricte des
-retours de fermeture et les tests par injection de fautes, pas la journalisation elle-même.
+The central path through `fileUtility` makes it possible to add a bounded or host-dynamic
+registry, open identifiers, and a final report. The main work is strict propagation of close
+results and fault-injection tests, not journalling itself.
 
-### P2 — l'inclusion des outils externes augmenterait fortement le coût
+### P2: including external tools would greatly increase cost
 
-Clang, AVR GCC, `awk`, `cloc`, Git et le shell ont leurs propres fichiers et stratégies. Les envelopper
-au niveau système rendrait le build dépendant de détails FreeBSD et du comportement de versions
-d'outils. Leur statut de sortie, les cibles déclarées et des validateurs de format ciblés offrent un
-meilleur rapport coût/fiabilité.
+Clang, AVR GCC, `awk`, `cloc`, Git, and the shell have their own files and strategies.
+Wrapping them at system level would make the build depend on FreeBSD details and tool-version
+behaviour. Their exit status, declared targets, and focused format validators provide a better
+cost-to-reliability ratio.
 
-## Plan d'implémentation estimé
+## Estimated implementation plan
 
-### Étape 1 — contrat et prototype (complexité faible, 1 à 2 jours)
+### Step 1: contract and prototype, low complexity, 1 to 2 days
 
-1. Définir le périmètre, le format versionné, les états et les critères de chaque classe.
-2. Générer un identifiant par invocation de `all` et un inventaire attendu dans `build/`.
-3. Prototyper le validateur sur des manifestes synthétiques, sans modifier les producteurs.
+1. Define scope, versioned format, states, and criteria for each class.
+2. Generate one identifier per `all` invocation and an expected inventory in `build/`.
+3. Prototype the validator on synthetic manifests without changing producers.
 
-### Étape 2 — autoCode (complexité moyenne, 2 à 4 jours)
+### Step 2: autoCode, medium complexity, 2 to 4 days
 
-1. Enregistrer les flux ouverts et imposer la vérification de chaque fermeture.
-2. Émettre un engagement atomique après chaque publication ou conservation validée.
-3. Injecter les fautes d'ouverture, d'écriture, de fermeture, de renommage et d'interruption.
+1. Register open streams and require every close to be checked.
+2. Emit an atomic commitment after each validated publication or retention.
+3. Inject open, write, close, rename, and interruption failures.
 
-Cette étape est système-critique car elle touche le générateur et exige les tests normaux et
-sanitizers existants, puis une revue des sorties générées.
+This step is system-critical because it changes the generator. It requires the existing normal
+and sanitizer tests, followed by a review of generated outputs.
 
-### Étape 3 — producteurs Make (complexité moyenne à élevée, 3 à 6 jours)
+### Step 3: Make producers, medium to high complexity, 3 to 6 days
 
-1. Créer et tester le helper d'écriture atomique et d'engagement.
-2. Migrer les sorties texte par petits groupes, sans reformater les Makefiles.
-3. Ajouter `_file_journal_check` au graphe de `all` avec un ordre explicite.
-4. Ne migrer les sorties d'outils externes que si un mode de défaillance concret le justifie.
+1. Create and test the atomic-write and commitment helper.
+2. Migrate text outputs in small groups without reformatting the Makefiles.
+3. Add `_file_journal_check` to the `all` graph with explicit ordering.
+4. Migrate external-tool outputs only when justified by a concrete failure mode.
 
-### Étape 4 — robustesse (complexité moyenne, 2 à 4 jours)
+### Step 4: robustness, medium complexity, 2 to 4 days
 
-Tester le disque plein, l'échec de fermeture, le signal, le temporaire résiduel, l'entrée dupliquée, le
-run ancien, la destination modifiée après engagement et deux builds concurrents. Vérifier également un
-build incrémental sans régénération et un échec survenant avant le validateur final.
+Test a full disk, close failure, signal, leftover temporary file, duplicate record, old run,
+destination modified after commitment, and two concurrent builds. Also check an incremental
+build without regeneration and a failure before the final validator.
 
-L'estimation totale est de 8 à 16 jours selon le nombre de sorties Make incluses. Une interception de
-tous les appels système dépasserait nettement ce coût et imposerait une maintenance continue, sans
-apporter de preuve de complétude.
+The total estimate is 8 to 16 days, depending on the number of Make outputs included.
+Intercepting every system call would far exceed this cost and require continuous maintenance,
+without proving completeness.
 
-## Critères d'acceptation proposés
+## Proposed acceptance criteria
 
-- aucun succès de `all` sans inventaire et marqueur final du même identifiant d'exécution ;
-- exactement un engagement terminal par sortie attendue ;
-- aucune publication si l'écriture, la validation ou la fermeture échoue ;
-- aucune destination antérieure altérée après une faute avant renommage ;
-- aucun temporaire du run après succès, et détection certaine après interruption ;
-- aucun journal ancien accepté par un nouveau build ;
-- tests compatibles avec la plateforme FreeBSD/`bmake` officielle ;
-- aucune exigence ajoutée au firmware embarqué : le mécanisme reste entièrement côté hôte.
+- no successful `all` without an inventory and final marker for the same run identifier;
+- exactly one terminal commitment for each expected output;
+- no publication if writing, validation, or closure fails;
+- no previous destination changed after a failure before rename;
+- no temporary file from the run after success, and reliable detection after interruption;
+- no old journal accepted by a new build;
+- tests compatible with the official FreeBSD and `bmake` platform;
+- no requirement added to embedded firmware because the mechanism remains entirely host-side.
 
-## Validation effectuée pendant l'audit
+## Validation performed during the audit
 
-- lecture des notes d'architecture `build` et `autoCode`, des règles et de l'audit de sûreté existant ;
-- inventaire statique des appels `fopen`/`fclose`, des wrappers autoCode et de leurs appelants ;
-- inventaire statique des redirections, créations, déplacements et suppressions dans `mk/` et
-  `scripts/` ;
-- inspection du graphe `all`, de `.BEGIN`, de `.END`, de `.NOTPARALLEL` et des sorties déclarées ;
-- vérification de la branche et de la révision auditées.
+- read the `build` and `autoCode` architecture notes, rules, and existing safety audit;
+- statically inventoried `fopen` and `fclose` calls, autoCode wrappers, and their callers;
+- statically inventoried redirections, creations, moves, and removals in `mk/` and
+  `scripts/`;
+- inspected the `all` graph, `.BEGIN`, `.END`, `.NOTPARALLEL`, and declared outputs;
+- verified the audited branch and revision.
 
-BSD `bmake` n'étant pas installé dans l'environnement Linux de l'audit, aucun développement du graphe
-ni build `test1` n'a été exécuté. Aucun fichier généré et aucune valeur de build n'ont été modifiés.
-Aucune validation sur matériel physique n'est requise pour ce rapport de conception.
+BSD `bmake` was not installed in the Linux audit environment. No graph expansion or `test1`
+build was run. No generated file or build value was changed. This design report requires no
+validation on physical hardware.
 
 ## Conclusion
 
-Un journal commun est techniquement pertinent s'il devient un protocole de **publication vérifiable**,
-et non un traceur de descripteurs. Le meilleur compromis est de couvrir d'abord autoCode et les sorties
-texte possédées par les Makefiles, avec inventaire préalable, temporaires adjacents, fermeture vérifiée,
-renommage atomique et engagement par producteur.
+A shared journal is technically relevant if it becomes a **verifiable publication** protocol,
+not a descriptor tracer. The best compromise is to cover autoCode and Makefile-owned text
+outputs first, with a prior inventory, adjacent temporary files, checked closure, atomic rename,
+and a commitment from each producer.
 
-Cette approche apporte un gain élevé contre les fichiers partiels, les échecs de fermeture ignorés et
-les runs interrompus. Elle reste indépendante du firmware et cohérente avec le choix FreeBSD/`bmake`.
-Étendre la journalisation à tous les fichiers de tous les outils serait coûteux, fragile et incapable de
-prouver la complétude ; cette voie n'est pas recommandée.
+This approach provides a large reliability improvement against partial files, ignored close
+failures, and interrupted runs. It remains independent of firmware and consistent with the
+FreeBSD and `bmake` choice. Extending journalling to every file used by every tool would be
+costly, fragile, and unable to prove completeness. That approach is not recommended.

@@ -1,177 +1,177 @@
-# Audit de factorisation de `hal_*GetStatus()` et `hal_*Control()`
+# Audit of `hal_*GetStatus()` and `hal_*Control()` factorisation
 
-## Objet et périmètre
+## Purpose and scope
 
-Cet audit évalue la factorisation des six pilotes enregistrés sur la cible actuelle
-`avr8 / atmega2560 / arduinoMega` : I2C, USART, timer d'ordonnancement, timer STC, LCD
-AMC2004 et RTC ZS042. Il porte sur les fonctions privées `hal_*GetStatus()` et les points
-d'entrée publics `hal_*Control()` ; il ne propose pas de modifier les fonctions métier des
-pilotes.
+This audit assesses the factorisation of the six drivers registered for the current
+`avr8 / atmega2560 / arduinoMega` target: I2C, USART, scheduling timer, STC timer, AMC2004
+LCD, and ZS042 RTC. It covers the private `hal_*GetStatus()` functions and the public
+`hal_*Control()` entry points. It does not propose changes to the drivers' functional
+operations.
 
-Les chiffres ci-dessous sont des estimations statiques pour AVR8 avec les options actuelles
-(`-Os`, `-fshort-enums`, sections séparées et LTO). Ils donnent des ordres de grandeur, pas une
-mesure du binaire : la chaîne AVR n'est pas disponible dans l'environnement de l'audit. Toute
-implémentation devra donc être comparée au binaire de référence avec `avr-size`, `avr-nm` et
-`avr-objdump`.
+The figures below are static estimates for AVR8 with the current options
+(`-Os`, `-fshort-enums`, separate sections, and LTO). They provide orders of magnitude,
+not binary measurements, because the AVR toolchain is unavailable in the audit environment.
+Any implementation must therefore be compared with the reference binary using `avr-size`,
+`avr-nm`, and `avr-objdump`.
 
-## Constat
+## Findings
 
-Les six fonctions `Control()` ont le même protocole :
+The six `Control()` functions use the same protocol:
 
-1. trois commandes de cycle de vie spécifiques (`INIT`, `START`, `STOP`) ;
-2. sept commandes génériques qui lisent ou modifient le niveau d'exécution, les bits d'état,
-   l'état calculé et la dernière erreur ;
-3. les mêmes contrôles de pointeur, de niveau et d'indice de bit ;
-4. une erreur `ERR_HAL_DRIVER_INVALID_CONTROL` pour toute autre commande.
+1. three driver-specific life-cycle commands (`INIT`, `START`, and `STOP`);
+2. seven generic commands that read or modify the run level, status bits, computed state,
+   and last error;
+3. the same pointer, level, and bit-index checks;
+4. an `ERR_HAL_DRIVER_INVALID_CONTROL` error for every other command.
 
-Cela représente six copies d'un bloc d'environ 55 lignes, dont environ 45 lignes sont purement
-génériques. Les six `GetStatus()` partagent aussi la même machine à états locale : priorité à
-`DEAD`, puis `ERROR`, cohérence de `INIT`/`START`, puis conversion en état public.
+This represents six copies of a block of about 55 lines, of which about 45 lines are entirely
+generic. The six `GetStatus()` functions also share the same local state machine: `DEAD`
+takes priority, followed by `ERROR`, `INIT` and `START` consistency, then conversion to a
+public state.
 
-La similitude n'est toutefois pas totale :
+The implementations are not completely identical:
 
-- LCD et RTC vérifient l'état du pilote I2C **après** `DEAD` et `ERROR`, mais **avant** les bits
-  `INIT` et `START` ;
-- chaque pilote conserve son état et sa dernière erreur dans des objets privés ;
-- la dernière erreur USART est `volatile` car elle est aussi écrite depuis l'ISR RX ;
-- les opérations `INIT`, `START` et `STOP` restent spécifiques au matériel et peuvent toucher des
-  registres volatils ou activer des interruptions.
+- LCD and RTC check the I2C driver state after `DEAD` and `ERROR`, but before the `INIT`
+  and `START` bits;
+- each driver keeps its state and last error in private objects;
+- the USART last error is `volatile` because the RX ISR also writes it;
+- `INIT`, `START`, and `STOP` remain hardware-specific and may access volatile registers
+  or enable interrupts.
 
-La priorité des tests fait partie du comportement observable : déplacer la vérification de la
-dépendance I2C avant `DEAD`, par exemple, peut remplacer une erreur fatale locale par une erreur de
-dépendance. Une factorisation ne doit donc pas réduire la machine à états à une simple table sans
-préserver cet ordre.
+The test priority is part of the observable behaviour. Moving the I2C dependency check before
+`DEAD`, for example, can replace a local fatal error with a dependency error. Factorisation
+must therefore preserve this order instead of reducing the state machine to a simple table.
 
-## Options étudiées
+## Options considered
 
-### 1. Macro ou génération de source
+### 1. Macro or source generation
 
-Un gabarit de préprocesseur, un fichier inclus paramétré ou une génération à la compilation peut
-produire les corps actuels en injectant les noms de l'état, de l'erreur et des trois fonctions de
-cycle de vie.
+A preprocessor template, a parameterised included file, or build-time generation can produce
+the current bodies by injecting the names of the state, error, and three life-cycle functions.
 
-| Effet | Estimation |
+| Effect | Estimate |
 |---|---:|
-| Flash | 0 octet (à quelques octets d'optimisation LTO près) |
-| RAM statique | 0 octet |
-| Pile | 0 octet |
-| Temps CPU | 0 cycle |
-| Source manuscrite | environ 250 à 300 lignes supprimées |
+| Flash | 0 bytes, apart from a few bytes of possible LTO optimisation |
+| Static RAM | 0 bytes |
+| Stack | 0 bytes |
+| CPU time | 0 cycles |
+| Handwritten source | about 250 to 300 lines removed |
 
-Cette option garantit le comportement binaire le plus proche, mais déplace la complexité vers le
-préprocesseur ou le générateur. Elle rend les diagnostics et le débogage moins directs. Étendre
-autoCode uniquement pour ces six pilotes serait disproportionné ; un générateur ne devient
-intéressant que si le nombre de pilotes augmente nettement ou si leurs déclarations deviennent déjà
-des données de configuration.
+This option offers behaviour closest to the existing binary, but moves complexity into the
+preprocessor or generator. It makes diagnostics and debugging less direct. Extending autoCode
+only for these six drivers would be disproportionate. A generator becomes useful only if the
+number of drivers increases substantially or if their declarations already become
+configuration data.
 
-### 2. Fonctions communes à l'exécution, sans descripteur persistant
+### 2. Shared run-time functions without persistent descriptors
 
-Une unité HAL commune peut fournir :
+A shared HAL unit can provide:
 
-- un évaluateur de la machine à états locale prenant les adresses de l'octet d'état et de la dernière
-  erreur ;
-- un traitement des sept commandes génériques ;
-- un petit wrapper par pilote qui traite `INIT`, `START` et `STOP`, puis appelle le traitement commun.
+- an evaluator for the local state machine that takes the addresses of the state byte and last
+  error;
+- processing for the seven generic commands;
+- a small wrapper for each driver that handles `INIT`, `START`, and `STOP`, then calls the
+  common processing.
 
-LCD et RTC conserveraient un wrapper d'état pour insérer la vérification I2C au point exact de la
-séquence. Les pointeurs peuvent être passés à chaque appel afin de ne créer aucune table en RAM.
+LCD and RTC would retain a state wrapper to insert the I2C check at the exact point in the
+sequence. Pointers can be passed on each call, avoiding any RAM table.
 
-| Effet total pour six pilotes | Estimation |
+| Total effect for six drivers | Estimate |
 |---|---:|
-| Flash | gain net de 350 à 650 octets |
-| RAM statique | 0 octet |
-| Pile maximale | +2 à +8 octets selon l'allocation des registres/LTO |
-| `GETSTATUS` simple | +8 à +25 cycles |
-| commande générique | +12 à +35 cycles |
-| commande de cycle de vie | +8 à +20 cycles |
+| Flash | net saving of 350 to 650 bytes |
+| Static RAM | 0 bytes |
+| Maximum stack | +2 to +8 bytes depending on register allocation and LTO |
+| Simple `GETSTATUS` | +8 to +25 cycles |
+| Generic command | +12 to +35 cycles |
+| Life-cycle command | +8 to +20 cycles |
 
-Les bornes incluent un appel/retour supplémentaire, le chargement des adresses et, suivant les
-décisions de LTO, d'éventuels spills sur la pile. Elles excluent le temps propre aux périphériques ;
-pour LCD/RTC, l'interrogation I2C domine largement ce surcoût. Le gain flash est plausible parce que
-le gros `switch` n'existe plus qu'une fois, mais LTO peut ré-inliner le helper et annuler une partie
-du gain. Le helper devra donc être mesuré avec et sans attribut empêchant l'inlining, sans imposer cet
-attribut avant d'avoir observé le désassemblage.
+The ranges include an additional call and return, address loading, and possible stack spills
+depending on LTO decisions. They exclude peripheral-specific time. For LCD and RTC, the I2C
+query greatly exceeds this overhead. The flash saving is plausible because the large `switch`
+exists only once, but LTO may inline the helper again and cancel part of the saving. The helper
+must therefore be measured with and without an attribute that prevents inlining. Such an
+attribute should not be imposed before the disassembly has been inspected.
 
-### 3. Descripteur générique avec callbacks
+### 3. Generic descriptor with callbacks
 
-Un descripteur par pilote pourrait contenir les adresses de l'état, de la dernière erreur et des
-callbacks `init/start/stop`, éventuellement un callback de dépendance. Cette solution réduit encore
-les wrappers et facilite l'ajout de pilotes.
+A descriptor for each driver could contain the addresses of the state and last error, plus
+`init/start/stop` callbacks and possibly a dependency callback. This solution further reduces
+wrappers and makes adding drivers easier.
 
-Sur ATmega2560, six descripteurs nécessiteraient environ 60 à 84 octets selon le nombre et la taille
-effective des pointeurs. En C AVR, un objet `const` ordinaire n'est pas une garantie de zéro RAM : il
-peut être copié de la flash vers `.data`. Le placer explicitement en mémoire programme supprime ce
-coût RAM, mais impose des lectures `pgm_read_*`, complique la portabilité et ajoute des cycles.
+On ATmega2560, six descriptors would require about 60 to 84 bytes, depending on the number and
+effective size of pointers. In AVR C, an ordinary `const` object does not guarantee zero RAM
+use. It may be copied from flash into `.data`. Explicitly placing it in program memory removes
+this RAM cost, but requires `pgm_read_*` accesses, complicates portability, and adds cycles.
 
-| Effet total pour six pilotes | Estimation |
+| Total effect for six drivers | Estimate |
 |---|---:|
-| Flash, descripteurs inclus | gain net de 400 à 750 octets |
-| RAM statique, `const` ordinaire | coût de 60 à 84 octets |
-| RAM statique, stockage programme explicite | 0 octet |
-| Pile maximale | +4 à +10 octets |
-| Commande | +20 à +55 cycles, hors opération matérielle |
+| Flash, including descriptors | net saving of 400 to 750 bytes |
+| Static RAM, ordinary `const` | cost of 60 to 84 bytes |
+| Static RAM, explicit program storage | 0 bytes |
+| Maximum stack | +4 to +10 bytes |
+| Command | +20 to +55 cycles, excluding the hardware operation |
 
-Le faible gain flash supplémentaire ne justifie pas 60 à 84 octets de RAM sur une cible de 8 Kio,
-ni une nouvelle abstraction `PROGMEM` transversale. Les appels indirects rendent aussi l'analyse du
-graphe d'appel et du temps maximal plus difficile. Cette option est donc rejetée pour la cible
-actuelle.
+The small additional flash saving does not justify 60 to 84 bytes of RAM on an 8 KiB target,
+or a new cross-cutting `PROGMEM` abstraction. Indirect calls also make call-graph and
+worst-case-time analysis more difficult. This option is therefore rejected for the current
+target.
 
-### 4. `static inline` commun
+### 4. Shared `static inline`
 
-Un helper `static inline` dans un header améliore la maintenance du texte mais autorise une copie
-spécialisée dans chaque unité de traduction. Avec `-Os` et LTO, le résultat peut aller d'une bonne
-mutualisation à une duplication complète ; ni le gain flash ni le temps CPU ne sont prévisibles.
-Cette option n'est pas retenue comme stratégie d'optimisation mesurable.
+A `static inline` helper in a header improves source maintenance but allows a specialised copy
+in every translation unit. With `-Os` and LTO, the result may range from good sharing to full
+duplication. Neither flash savings nor CPU time are predictable. This option is not retained as
+a measurable optimisation strategy.
 
-## Contraintes fonctionnelles et de concurrence
+## Functional and concurrency constraints
 
-- L'octet d'état est atomique sur AVR8, mais une factorisation doit conserver les accès aux registres
-  et aux états dans leur ordre actuel. Elle ne doit pas introduire de section critique générique.
-- La dernière erreur USART doit rester `volatile`. Une API commune ne doit pas faire disparaître ce
-  qualificateur par conversion de pointeur ; il faut soit un chemin dédié, soit un contrat acceptant
-  explicitement un pointeur volatile.
-- `GETLASTERROR` n'est pas une lecture sans effet : l'appel final à `GetStatus()` peut remplacer
-  l'erreur retournée dans l'état interne si les bits décrivent un état invalide. Le comportement doit
-  être couvert par des tests avant refactoring.
-- `SETBIT` et `CLEARBIT` exposent `INIT`, `START`, `ERROR` et `DEAD`. Toutes les combinaisons, y compris
-  `START=1` avec `INIT=0`, doivent garder le même résultat et la même dernière erreur.
-- Le code commun appartient à une unité HAL neutre, consommable par `mcu/` et `drivers/`. Il ne doit
-  pas être placé dans `interfaces/`, qui ne contient que le contrat portable et aucune logique
-  d'exécution.
+- The state byte is atomic on AVR8, but factorisation must preserve the current order of state
+  and register accesses. It must not introduce a generic critical section.
+- The USART last error must remain `volatile`. A shared API must not discard this qualifier
+  through pointer conversion. It needs either a dedicated path or a contract that explicitly
+  accepts a volatile pointer.
+- `GETLASTERROR` is not a side-effect-free read. The final `GetStatus()` call may replace the
+  returned error in internal state if the bits describe an invalid state. Tests must cover this
+  behaviour before refactoring.
+- `SETBIT` and `CLEARBIT` expose `INIT`, `START`, `ERROR`, and `DEAD`. Every combination,
+  including `START=1` with `INIT=0`, must retain the same result and last error.
+- The shared code belongs in a neutral HAL unit that `mcu/` and `drivers/` can consume. It
+  must not be placed in `interfaces/`, which contains only the portable contract and no
+  run-time logic.
 
-## Verdict et recommandation
+## Verdict and recommendation
 
-La factorisation est **techniquement faisable**. Pour six pilotes, la meilleure balance est l'option
-2 : un helper HAL compilé une seule fois, aucun descripteur persistant, et des wrappers explicites
-pour le cycle de vie et les dépendances. Le gain attendu est de **350 à 650 octets de flash**, sans
-RAM statique supplémentaire, au prix d'environ **8 à 35 cycles** et de quelques octets de pile par
-commande. Ce coût est acceptable pour les commandes de gestion, qui ne sont pas sur le chemin de
-l'ISR d'ordonnancement ; il faut néanmoins éviter d'utiliser le helper générique depuis une ISR.
+Factorisation is **technically feasible**. For six drivers, option 2 offers the best balance: a
+HAL helper compiled once, no persistent descriptor, and explicit wrappers for life-cycle and
+dependency handling. The expected saving is **350 to 650 bytes of flash**, with no additional
+static RAM, at a cost of about **8 to 35 cycles** and a few stack bytes per command. This cost is
+acceptable for management commands, which are not on the scheduling ISR path. The generic
+helper must nevertheless not be used from an ISR.
 
-Si l'objectif prioritaire est uniquement de supprimer la répétition sans aucune variation du
-binaire ou du WCET, l'option 1 est préférable, mais un petit gabarit local est recommandé plutôt
-qu'une extension d'autoCode.
+If the primary objective is only to remove repetition without any change in the binary or WCET,
+option 1 is preferable. A small local template is recommended instead of an autoCode extension.
 
-La mise en œuvre devrait être séparée en deux étapes mesurables :
+Implementation should be separated into two measurable steps:
 
-1. mutualiser et tester seulement la machine `GetStatus()` ;
-2. mutualiser ensuite les sept commandes génériques de `Control()`.
+1. share and test only the `GetStatus()` state machine;
+2. then share the seven generic `Control()` commands.
 
-Un seuil d'acceptation raisonnable pour conserver le refactoring est un gain mesuré d'au moins
-**256 octets de flash**, **0 octet de RAM statique**, et un surcoût maximal de **40 cycles** pour une
-commande générique. En dessous de ce gain, la version générée à coût d'exécution nul est plus adaptée.
+A reasonable acceptance threshold for retaining the refactor is a measured saving of at least
+**256 bytes of flash**, **0 bytes of static RAM**, and a maximum overhead of **40 cycles** for a
+generic command. Below this saving, the generated version with no run-time cost is more
+appropriate.
 
-## Plan de validation obligatoire
+## Required validation plan
 
-1. Construire la référence propre avec `bmake clean && bmake` et archiver ELF, map et sortie
-   `avr-size`.
-2. Ajouter des tests de table pour les 16 combinaisons des quatre bits d'état, avec et sans dépendance
-   I2C disponible, et vérifier état retourné **et** dernière erreur.
-3. Construire chaque étape avec exactement les mêmes options et comparer `.text`, `.data`, `.bss`,
-   les symboles et le désassemblage.
-4. Compter les cycles sur les chemins `GETSTATUS`, `RLGET`, `SETBIT`, commande invalide et
-   `INIT`, en incluant prologue, épilogue et appels indirects éventuels.
-5. Rechercher les appels depuis ISR et contrôler la profondeur de pile sur le pire chemin.
-6. Exécuter `bmake cppcheck` et la vérification des frontières incluse dans `bmake`.
-7. Valider enfin sur Arduino Mega les transitions de niveau, l'USART sous interruption, les timers,
-   puis la perte de dépendance I2C vue par LCD et RTC.
+1. Build a clean reference with `bmake clean && bmake`, and archive the ELF file, map, and
+   `avr-size` output.
+2. Add table-driven tests for all 16 combinations of the four state bits, with and without an
+   available I2C dependency, and verify both the returned state and last error.
+3. Build each step with exactly the same options and compare `.text`, `.data`, `.bss`,
+   symbols, and disassembly.
+4. Count cycles on the `GETSTATUS`, `RLGET`, `SETBIT`, invalid-command, and `INIT` paths,
+   including prologues, epilogues, and any indirect calls.
+5. Search for calls from ISRs and check stack depth on the worst path.
+6. Run `bmake cppcheck` and the boundary validation included in `bmake`.
+7. Finally, validate run-level transitions, interrupt-driven USART, timers, and loss of the I2C
+   dependency as seen by LCD and RTC on an Arduino Mega.

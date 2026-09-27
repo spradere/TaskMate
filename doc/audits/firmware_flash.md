@@ -1,17 +1,17 @@
-# Audit de réduction de la taille flash du firmware
+# Firmware flash size reduction audit
 
-## Objet et périmètre
+## Purpose and scope
 
-Cet audit recherche des réductions sensibles de la flash du firmware pour la cible actuelle
-`test1 / arduinoMega / atmega2560 / avr8`. Il couvre les options de compilation, les services,
-les diagnostics, le catalogue d'erreurs, le formateur et le protocole commun des pilotes.
+This audit investigates significant firmware flash reductions for the current
+`test1 / arduinoMega / atmega2560 / avr8` target. It covers compilation options,
+services, diagnostics, the error catalogue, the formatter, and the common driver protocol.
 
-L'analyse correspond au commit `400ac8b`. Aucun changement de comportement du firmware n'est
-inclus dans cet audit.
+The analysis corresponds to commit `400ac8b`. This audit includes no firmware behaviour
+change.
 
-## Méthode
+## Method
 
-La référence a été reconstruite avec :
+The reference was rebuilt with:
 
 ```sh
 bmake clean && bmake
@@ -20,211 +20,211 @@ avr-nm --format=posix --print-size --size-sort -r \
 	build/test1_arduinoMega_atmega2560_avr8/TaskMate.elf
 ```
 
-La mesure de flash utilisée est `.text + .data`. La section `.data` occupe de la RAM à
-l'exécution, mais son image initiale est aussi stockée en flash.
+The flash measurement is `.text + .data`. The `.data` section occupies RAM at run time,
+but its initial image is also stored in flash.
 
-Les variantes de compilation ont été reconstruites intégralement avec les mêmes sources. Les
-variantes fonctionnelles ont été reliées avec des substituts minimaux afin de laisser LTO et
-`--gc-sections` éliminer les chemins devenus inaccessibles. Ces liens mesurent la contribution
-des fonctionnalités, mais ne sont pas des firmwares exécutables validés.
+Compilation variants were rebuilt completely with the same sources. Functional variants were
+linked with minimal substitutes so that LTO and `--gc-sections` could remove paths that had
+become unreachable. These links measure feature contributions, but they are not validated,
+executable firmware images.
 
-## Référence
+## Reference
 
-Le build propre se termine par `Build complete` et produit :
+The clean build ends with `Build complete` and produces:
 
-| Section | Taille |
+| Section | Size |
 |---|---:|
-| `.text` | 15 678 octets |
-| `.data` | 454 octets |
-| Flash totale | 16 132 octets |
-| `.bss` | 1 364 octets |
+| `.text` | 15,678 bytes |
+| `.data` | 454 bytes |
+| Total flash | 16,132 bytes |
+| `.bss` | 1,364 bytes |
 
-Les principaux symboles de code sont :
+The main code symbols are:
 
-| Symbole | Taille |
+| Symbol | Size |
 |---|---:|
-| `main` | 984 octets |
-| `system` | 642 octets |
-| `scli` | 542 octets |
-| `tm_vsnprintf` | 538 octets |
-| `sc_i2cScan` | 528 octets |
-| `hal_lcdControl` | 404 octets |
-| `sc_rtcRead` | 372 octets |
+| `main` | 984 bytes |
+| `system` | 642 bytes |
+| `scli` | 542 bytes |
+| `tm_vsnprintf` | 538 bytes |
+| `sc_i2cScan` | 528 bytes |
+| `hal_lcdControl` | 404 bytes |
+| `sc_rtcRead` | 372 bytes |
 
-Le projet active déjà `-Os`, `-mrelax`, `-fshort-enums`, LTO, les sections séparées et
-`--gc-sections`. Une simple activation de LTO ou du ramasse-miettes de sections n'est donc pas
-une piste nouvelle.
+The project already enables `-Os`, `-mrelax`, `-fshort-enums`, LTO, separate sections,
+and `--gc-sections`. Simply enabling LTO or section garbage collection is therefore not a
+new option.
 
-## Résultats mesurés
+## Measured results
 
-| Variante | Flash | Gain | Nature de la mesure |
+| Variant | Flash | Saving | Measurement type |
 |---|---:|---:|---|
-| Référence | 16 132 octets | - | build complet |
-| `-mcall-prologues` | 15 480 octets | 652 octets, 4,04 % | build complet |
-| Deux options AVR | 15 398 octets | 734 octets, 4,55 % | build complet |
-| Textes du catalogue d'erreurs absents | 15 196 octets | 936 octets, 5,80 % | lien expérimental |
-| Logs retirés | 11 150 octets | 4 982 octets, 30,88 % | lien expérimental |
-| Chaîne SCLI retirée | 8 990 octets | 7 142 octets, 44,27 % | lien expérimental |
+| Reference | 16,132 bytes | - | complete build |
+| `-mcall-prologues` | 15,480 bytes | 652 bytes, 4.04% | complete build |
+| Two AVR options | 15,398 bytes | 734 bytes, 4.55% | complete build |
+| Error catalogue text absent | 15,196 bytes | 936 bytes, 5.80% | experimental link |
+| Logs removed | 11,150 bytes | 4,982 bytes, 30.88% | experimental link |
+| SCLI chain removed | 8,990 bytes | 7,142 bytes, 44.27% | experimental link |
 
-`-Oz` ne modifie pas le résultat obtenu avec cet AVR-GCC 14.2.0. `-maccumulate-args` et
-`-fno-jump-tables` augmentent la taille et doivent être écartés.
+`-Oz` does not change the result with this AVR-GCC 14.2.0. `-maccumulate-args` and
+`-fno-jump-tables` increase the size and must be rejected.
 
-Les gains ne sont pas additifs : LTO transforme et mutualise le programme entier après chaque
+The savings are not additive. LTO transforms and combines the whole program after each
 variation.
 
-## Priorité 1 - profils développement et production
+## Priority 1: development and production profiles
 
-La réduction la plus importante consiste à ne pas embarquer les fonctions de diagnostic dans un
-firmware qui ne les utilise pas. Deux profils sont recommandés :
+The largest reduction comes from excluding diagnostic features from firmware that does not use
+them. Two profiles are recommended:
 
-- `development` : SCLI, commandes, textes complets et logs actuels ;
-- `production` : SCLI absente, logs ordinaires supprimés à la compilation, codes numériques et
-  chemin `panic()` conservés.
+- `development`: SCLI, commands, complete text, and current logs;
+- `production`: no SCLI, ordinary logs removed at compile time, with numeric codes and the
+  `panic()` path retained.
 
-SCLI est enregistrée dans `target*_init.rc`. Le profil doit sélectionner
-l'entrée autoCode appropriée afin que la base des threads, les includes générés et le graphe
-d'appel restent cohérents. Exclure seulement `scli.c` du Makefile laisserait une référence générée
-invalide et contournerait la source de vérité.
+SCLI is registered in `target*_init.rc`. The profile must select the appropriate autoCode
+input so that the thread database, generated includes, and call graph remain consistent.
+Excluding only `scli.c` from the Makefile would leave an invalid generated reference and
+bypass the source of truth.
 
-Le retrait expérimental de toute la chaîne SCLI économise 7 142 octets. Il élimine les commandes,
-leurs textes, leurs tables, les syscalls exclusivement diagnostiques et le catalogue textuel qui
-n'est alors plus référencé.
+The experimental removal of the entire SCLI chain saves 7,142 bytes. It removes the commands,
+their text, their tables, syscalls used only for diagnostics, and the textual catalogue that is
+then no longer referenced.
 
-La contribution marginale de chaque famille de commandes a aussi été mesurée :
+The marginal contribution of each command family was also measured:
 
-| Commande absente | Gain flash |
+| Command absent | Flash saving |
 |---|---:|
-| `date` | 1 970 octets |
-| `driver` | 1 650 octets |
-| `thread` | 1 472 octets |
-| `i2c` | 598 octets |
+| `date` | 1,970 bytes |
+| `driver` | 1,650 bytes |
+| `thread` | 1,472 bytes |
+| `i2c` | 598 bytes |
 
-Ces valeurs incluent ce que LTO peut supprimer avec la commande. La somme diffère du retrait total
-de SCLI à cause des fonctions partagées, de son lecteur USART, de son tokenizer et de son dispatch.
+These values include everything LTO can remove with the command. Their sum differs from the
+complete SCLI removal because of shared functions, its USART reader, tokenizer, and dispatch.
 
-Si SCLI doit rester disponible, un profil intermédiaire peut sélectionner seulement les commandes
-nécessaires. La commande `date`, puis les commandes `driver` et `thread`, sont les premières à
-retirer d'une image compacte.
+If SCLI must remain available, an intermediate profile can select only the required commands.
+The `date` command, followed by `driver` and `thread`, should be removed first from a
+compact image.
 
-## Priorité 2 - options de compilation AVR
+## Priority 2: AVR compilation options
 
-Ajouter `-mcall-prologues` aux options de l'architecture économise 652 octets sans variation de
-`.data` ou `.bss`. AVR-GCC remplace certains prologues et épilogues répétés par des routines
-partagées.
+Adding `-mcall-prologues` to the architecture options saves 652 bytes without changing
+`.data` or `.bss`. AVR-GCC replaces some repeated prologues and epilogues with shared
+routines.
 
-L'ajout de `-fno-inline-functions-called-once` porte le gain à 734 octets. Cette option matérialise
-davantage de fonctions et réduit plusieurs gros corps issus de LTO, notamment `main`, `system` et
-`tm_vsnprintf`.
+Adding `-fno-inline-functions-called-once` increases the saving to 734 bytes. This option
+materialises more functions and reduces several large bodies produced by LTO, especially
+`main`, `system`, and `tm_vsnprintf`.
 
-Le premier drapeau est le changement le moins intrusif. Le second doit être accepté seulement après
-mesure des cycles et de la profondeur de pile sur les chemins sensibles. Les ISR nues et le
-changement de contexte doivent être contrôlés dans le désassemblage même si le compilateur ne doit
-pas leur ajouter de prologue ordinaire.
+The first flag is the least intrusive change. The second should be accepted only after
+measuring cycles and stack depth on sensitive paths. Naked ISRs and context switching must be
+checked in the disassembly even though the compiler should not add an ordinary prologue to
+them.
 
-## Priorité 3 - politique de logs
+## Priority 3: log policy
 
-Les littéraux créés par `TM_STR()` représentent 1 600 octets de flash dans le binaire de référence,
-hors messages du catalogue d'erreurs. Les textes sont déjà placés correctement en mémoire programme
-par le HAL AVR ; les déplacer vers `PROGMEM` une seconde fois ne réduirait pas la flash.
+Literals created by `TM_STR()` account for 1,600 bytes of flash in the reference binary,
+excluding messages from the error catalogue. The AVR HAL already places the text correctly in
+program memory. Moving it to `PROGMEM` again would not reduce flash use.
 
-Un substitut de `tm_syslog()` sans effet laisse LTO éliminer 4 982 octets. Le gain dépasse la taille
-des chaînes parce que disparaissent aussi les appels, la préparation des arguments, la consultation
-des erreurs et plusieurs branches de présentation.
+A no-op substitute for `tm_syslog()` allows LTO to remove 4,982 bytes. The saving exceeds the
+size of the strings because calls, argument preparation, error queries, and several display
+branches also disappear.
 
-Une vraie politique doit utiliser des macros de niveau qui retirent l'expression complète au
-préprocesseur. Appeler une fonction vide sans LTO, ou continuer à évaluer ses arguments, ne garantit
-pas ce résultat. Les drivers doivent continuer à exposer leurs états et erreurs plutôt que produire
-directement des messages.
+A real policy must use level macros that remove the entire expression in the preprocessor.
+Calling an empty function without LTO, or continuing to evaluate its arguments, does not
+guarantee this result. Drivers must continue to expose their states and errors instead of
+producing messages directly.
 
-Le profil production peut conserver une sortie minimale et bornée pour le démarrage critique et
-`panic()`, séparée des logs ordinaires et sans dépendre de SCLI.
+The production profile may retain minimal, bounded output for critical startup and `panic()`.
+It should be separate from ordinary logs and must not depend on SCLI.
 
-## Priorité 4 - catalogue d'erreurs compact
+## Priority 4: compact error catalogue
 
-Le catalogue actuel représente directement :
+The current catalogue directly accounts for:
 
-| Élément | Taille flash |
+| Item | Flash size |
 |---|---:|
-| 18 textes | 517 octets |
-| 18 descripteurs `tm_string_t` | 54 octets |
-| table de 23 entrées | 69 octets |
-| Total des données identifiées | 640 octets |
+| 18 messages | 517 bytes |
+| 18 `tm_string_t` descriptors | 54 bytes |
+| 23-entry table | 69 bytes |
+| Total identified data | 640 bytes |
 
-Le lien expérimental sans textes économise 936 octets une fois les fonctions et branches devenues
-inutiles éliminées. Les codes `err_codes_t` doivent rester stables ; seule leur représentation
-humaine doit devenir optionnelle.
+The experimental link without text saves 936 bytes after unused functions and branches are
+removed. The `err_codes_t` values must remain stable. Only their human-readable
+representation should become optional.
 
-Cette évolution appartient aux fichiers `*.err` et à autoCode. Les régions générées de
-`srcs/system/sysCall/sc_errors.c` et `srcs/interfaces/error_catalog.h` ne doivent pas être modifiées
-manuellement. Les messages provisoires `ERR_UNKNOWN` et `ERR_RUNTIME` sont les premiers candidats à
-supprimer indépendamment du profil.
+This change belongs in the `*.err` files and autoCode. Generated regions in
+`srcs/system/sysCall/sc_errors.c` and `srcs/interfaces/error_catalog.h` must not be edited
+manually. The placeholder `ERR_UNKNOWN` and `ERR_RUNTIME` messages are the first candidates
+for removal independently of the profile.
 
-## Priorité 5 - contrôleurs de pilotes
+## Priority 5: driver controllers
 
-Les six fonctions `hal_*Control()` occupent ensemble 1 752 octets :
+The six `hal_*Control()` functions occupy 1,752 bytes in total:
 
-| Contrôleur | Taille |
+| Controller | Size |
 |---|---:|
-| LCD | 404 octets |
-| timer STC | 312 octets |
-| I2C | 304 octets |
-| RTC | 282 octets |
-| timer d'ordonnancement | 234 octets |
-| USART | 216 octets |
+| LCD | 404 bytes |
+| STC timer | 312 bytes |
+| I2C | 304 bytes |
+| RTC | 282 bytes |
+| scheduling timer | 234 bytes |
+| USART | 216 bytes |
 
-Elles répètent les traitements `RLSET`, `RLGET`, `SETBIT`, `CLEARBIT`, `GETBIT`, `GETSTATUS` et
-`GETLASTERROR`. L'audit `doc/audits/driver_control_factorisation.md` recommande déjà un helper HAL
-compilé une seule fois, sans descripteur persistant. Son gain estimé de 350 à 650 octets reste
-plausible au vu des 1 752 octets maintenant mesurés.
+They repeat the `RLSET`, `RLGET`, `SETBIT`, `CLEARBIT`, `GETBIT`, `GETSTATUS`, and
+`GETLASTERROR` processing. The `doc/audits/driver_control_factorisation.md` audit already
+recommends a HAL helper compiled once, without persistent descriptors. Its estimated saving of
+350 to 650 bytes remains plausible in light of the 1,752 bytes now measured.
 
-Cette factorisation doit préserver l'ordre des erreurs, la dépendance I2C de LCD et RTC, et le
-caractère `volatile` de la dernière erreur USART. Un prototype binaire est indispensable : des
-callbacks indirects ou une ré-inlining LTO peuvent réduire le bénéfice.
+This factorisation must preserve error ordering, the LCD and RTC I2C dependency, and the
+`volatile` nature of the USART last error. A binary prototype is essential because indirect
+callbacks or LTO re-inlining may reduce the benefit.
 
-## Priorité 6 - formateur compact
+## Priority 6: compact formatter
 
-`tm_vsnprintf()` occupe 538 octets. Le firmware utilise `%i`, `%s`, `%x` et le remplissage par zéro,
-mais aucun appel actuel n'utilise `%c`, `%b` ou `%%`. La conversion générique conserve pourtant les
-trois bases et effectue division et modulo sur 16 bits.
+`tm_vsnprintf()` occupies 538 bytes. The firmware uses `%i`, `%s`, `%x`, and zero
+padding, but no current call uses `%c`, `%b`, or `%%`. The generic conversion nevertheless
+retains all three bases and performs 16-bit division and modulo.
 
-Un profil de formateur limité aux conversions réellement requises peut retirer les branches mortes
-que le compilateur ne peut pas déduire depuis une chaîne interprétée à l'exécution. Le gain attendu
-est secondaire face à SCLI et aux logs. Il doit être mesuré avant de réduire le contrat public du
-formateur.
+A formatter profile limited to the conversions actually required can remove dead branches that
+the compiler cannot infer from a string interpreted at run time. The expected saving is
+secondary to SCLI and logs. It must be measured before reducing the formatter's public
+contract.
 
-## Fausses pistes
+## Unproductive options
 
-- Déplacer les tables de commandes `const` en mémoire programme économiserait surtout de la RAM :
-  leurs octets restent présents dans l'image flash et les accès AVR deviennent plus coûteux.
-- Supprimer les sections DWARF de l'ELF réduit la taille du fichier de débogage, pas celle de
-  l'image programmée.
-- Retirer le scan I2C de démarrage changerait la découverte et la réconciliation des pilotes ; ce
-  n'est pas une optimisation neutre.
-- Réduire les piles de threads ne diminue pas la flash, car elles résident dans `.bss`.
-- Remplacer le formateur TaskMate par le `printf` standard risque au contraire d'augmenter fortement
-  la taille et d'affaiblir les bornes adaptées au microcontrôleur.
+- Moving `const` command tables into program memory would mainly save RAM. Their bytes remain
+  in the flash image and AVR accesses become more expensive.
+- Removing DWARF sections from the ELF file reduces the debug file size, not the programmed
+  image size.
+- Removing the startup I2C scan would change driver discovery and reconciliation. This is not
+  a neutral optimisation.
+- Reducing thread stacks does not reduce flash because they reside in `.bss`.
+- Replacing the TaskMate formatter with standard `printf` could greatly increase size and
+  weaken the bounds designed for the microcontroller.
 
-## Ordre de mise en œuvre recommandé
+## Recommended implementation order
 
-1. Ajouter et mesurer `-mcall-prologues` dans le backend AVR.
-2. Introduire un profil production piloté par les entrées autoCode, sans SCLI.
-3. Ajouter des niveaux de logs éliminés à la compilation et un catalogue sans textes.
-4. Décider commande par commande du contenu d'un éventuel profil SCLI compact.
-5. Prototyper la factorisation des contrôleurs et conserver seulement un gain mesuré.
-6. Spécialiser le formateur en dernier.
+1. Add and measure `-mcall-prologues` in the AVR backend.
+2. Introduce a production profile controlled by autoCode inputs, without SCLI.
+3. Add compile-time-eliminated log levels and a catalogue without text.
+4. Decide command by command what belongs in an optional compact SCLI profile.
+5. Prototype controller factorisation and retain it only if the saving is measured.
+6. Specialise the formatter last.
 
-Après chaque étape, exécuter `bmake autoCode_alone` si ses entrées changent, puis
-`bmake clean && bmake`, comparer `.text`, `.data`, `.bss`, le fichier map et les symboles du même
-ELF. Les changements de prologue, de factorisation et de formatage doivent aussi être vérifiés dans
-le désassemblage. Enfin, le build AVR valide l'intégration logicielle mais pas le comportement sur
-Arduino Mega, les interruptions, les délais matériels ou le bus I2C réel.
+After each step, run `bmake autoCode_alone` if its inputs change, then
+`bmake clean && bmake`. Compare `.text`, `.data`, `.bss`, the map file, and symbols from
+the same ELF file. Changes to prologues, factorisation, and formatting must also be checked in
+the disassembly. Finally, the AVR build validates software integration, but not behaviour on
+an Arduino Mega, interrupts, hardware timing, or the real I2C bus.
 
 ## Verdict
 
-Le meilleur gain sans retrait fonctionnel identifié est de 652 octets avec `-mcall-prologues`, ou
-734 octets avec une politique d'inlining plus restrictive.
+The best identified saving without feature removal is 652 bytes with `-mcall-prologues`, or
+734 bytes with a more restrictive inlining policy.
 
-Pour une réduction réellement sensible, un profil production est nécessaire. Retirer SCLI permet à
-LTO d'éliminer environ 7,1 Kio, soit 44 % de l'image actuelle. Les logs et textes d'erreurs doivent
-ensuite être traités comme des fonctionnalités de diagnostic configurables, tout en conservant les
-codes, les états, `panic()` et les frontières `services -> sysCall -> HAL`.
+A production profile is required for a truly significant reduction. Removing SCLI allows LTO
+to eliminate about 7.1 KiB, or 44% of the current image. Logs and error text should then be
+treated as configurable diagnostic features while retaining codes, states, `panic()`, and
+the `services -> sysCall -> HAL` boundaries.

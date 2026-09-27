@@ -1,4 +1,4 @@
-# TaskMate — agent guide
+# TaskMate: agent guide
 
 TaskMate is an experimental, low-level C RTOS for microcontroller. The reference 
 target is `test1 -> avr8 / atmega2560 / Arduino Mega`. Preserve portability, deterministic
@@ -6,6 +6,13 @@ behaviour, readability, and explicit architectural boundaries.
 
 Before a substantial change, read the relevant documents in `doc/architecture/`
 and the applicable rules in `doc/rules/`.
+
+## Writing style
+
+- Write all project text in English.
+- Use a simple, technical style. Avoid literary phrasing.
+- Do not use em dashes in prose. Prefer short sentences with commas and full stops.
+- Use paragraphs, colons, and bullet lists to structure and space the text.
 
 ## Working scope and validation
 

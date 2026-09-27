@@ -1,212 +1,212 @@
-# Audit de portage du build vers Windows 10, MSYS2 et UCRT64
+# Windows 10, MSYS2, and UCRT64 build port audit
 
-Date : 16 septembre 2026  
-Branche auditée : `test`  
-Révision auditée : `d0fabace2babc6fb61828d30b737ea0125c6639e`  
-Poste observé : Windows 10 Pro 22H2, build 19045, Cygwin 3.6.6, `bmake` 20240314
+Date: 16 September 2026
 
-## Objet et périmètre
+Audited branch: `test`
 
-Cet audit évalue la faisabilité technique et le mode opératoire d'un portage du système de build de
-TaskMate vers Windows 10 avec MSYS2 et son environnement UCRT64. Il couvre l'orchestration BSD
-`bmake`, autoCode, les scripts shell et AWK, la compilation AVR, les tests hôte, les outils de qualité,
-le flashage d'une Arduino Mega et les utilitaires annexes.
+Audited revision: `d0fabace2babc6fb61828d30b737ea0125c6639e`
 
-Le code du RTOS et son architecture embarquée ne nécessitent pas de portage vers Windows : seul l'hôte
-de construction change. La cible reste `avr8 / atmega2560 / Arduino Mega` et doit conserver les mêmes
-options de compilation, contrôles de frontières, données générées et contraintes déterministes.
+Observed host: Windows 10 Pro 22H2, build 19045, Cygwin 3.6.6, `bmake` 20240314
 
-L'audit repose sur la lecture de `doc/architecture/build.md`, `doc/architecture/autoCode.md`, des règles
-du projet, du `Makefile`, de `mk/*.mk`, des fragments AVR, des scripts et des tests. Il n'a pas installé
-MSYS2 ni modifié le build.
+## Purpose and scope
+
+This audit assesses the technical feasibility and procedure for porting the TaskMate build
+system to Windows 10 with MSYS2 and its UCRT64 environment. It covers BSD `bmake`
+orchestration, autoCode, shell and AWK scripts, AVR compilation, host tests, quality tools,
+flashing an Arduino Mega, and supporting utilities.
+
+The RTOS code and embedded architecture do not require a Windows port. Only the build host
+changes. The target remains `avr8 / atmega2560 / Arduino Mega` and must retain the same
+compilation options, boundary checks, generated data, and deterministic constraints.
+
+The audit is based on the project rules, `doc/architecture/build.md`,
+`doc/architecture/autoCode.md`, the `Makefile`, `mk/*.mk`, AVR fragments, scripts, and
+tests. It did not install MSYS2 or modify the build.
 
 ## Verdict
 
-**Le portage vers MSYS2/UCRT64 est faisable, avec un risque technique moyen et un effort estimé à trois
-à six jours de développement et de validation hors matériel.** Il ne fonctionne toutefois pas sans
-adaptation dans l'état actuel du dépôt.
+**The MSYS2/UCRT64 port is feasible, with medium technical risk and an estimated three to six
+days of development and validation excluding hardware.** It does not work without changes in
+the current repository.
 
-La solution recommandée est hybride :
+The recommended solution is hybrid:
 
-- le shell, AWK et les utilitaires POSIX proviennent du sous-système MSYS ;
-- Clang, la toolchain AVR et `avrdude` sont des exécutables Windows UCRT64 natifs ;
-- BSD `bmake` est conservé et provisionné comme outil épinglé du projet ;
-- les cibles strictement FreeBSD, notamment `backup`, sont isolées du build normal ;
-- une commande de diagnostic vérifie les outils requis par la cible demandée, et non tous les
-  utilitaires possibles.
+- shell, AWK, and POSIX utilities come from the MSYS subsystem;
+- Clang, the AVR toolchain, and `avrdude` are native UCRT64 Windows executables;
+- BSD `bmake` is retained and provisioned as a pinned project tool;
+- strictly FreeBSD targets, especially `backup`, are isolated from the normal build;
+- a diagnostic command checks tools required by the requested target, not every possible
+  utility.
 
-MSYS2 recommande UCRT64 et construit son `PATH` sous la forme `/ucrt64/bin:/usr/bin` : les outils
-Windows natifs sont donc prioritaires, tout en gardant les commandes MSYS nécessaires aux recettes
-POSIX. C'est précisément le modèle adapté à TaskMate. Il faut cependant comprendre que MSYS2 ne
-supprime pas toute couche d'émulation : ses outils `/usr/bin` reposent encore sur un runtime dérivé de
-Cygwin. Le gain de vitesse par rapport à Cygwin doit être mesuré, pas présumé.
+MSYS2 recommends UCRT64 and constructs its `PATH` as `/ucrt64/bin:/usr/bin`. Native Windows
+tools therefore take priority while the POSIX recipes retain the required MSYS commands. This
+model suits TaskMate. MSYS2 does not remove every emulation layer because its `/usr/bin` tools
+still use a Cygwin-derived runtime. Any performance gain over Cygwin must be measured.
 
-Un obstacle de distribution subsiste : le dépôt MSYS2 ne contient pas de paquet `bmake` au jour de
-l'audit. GNU Make ne sait pas interpréter sans réécriture les `.include`, `.if`, `.for`, `.WAIT`, les
-modificateurs `:T`, `:ts`, les affectations `!=` et les transformations de suffixes utilisées ici.
-Le bootstrap de pkgsrc sous MSYS2 est documenté et installe `bmake`; il constitue une voie de preuve de
-concept acceptable. Pour une utilisation pérenne, TaskMate devrait produire un paquet ou une archive
-interne de `bmake`, avec version et somme de contrôle figées.
+One distribution obstacle remains. At audit time, the MSYS2 repository has no `bmake` package.
+GNU Make cannot interpret the current `.include`, `.if`, `.for`, `.WAIT`, `:T`, `:ts`,
+`!=`, and suffix transformations without a rewrite. The documented pkgsrc bootstrap on MSYS2
+installs `bmake` and is acceptable for a proof of concept. For long-term use, TaskMate should
+provide an internal `bmake` package or archive with a fixed version and checksum.
 
-## Architecture actuelle du build
+## Current build architecture
 
-Le build complet suit aujourd'hui cette chaîne :
+The complete build currently follows this sequence:
 
-1. `bmake` lit la composition cible → carte → MCU → architecture ;
-2. une cible `.BEGIN` vérifie une liste globale de programmes et crée les répertoires de build ;
-3. les fichiers sont découverts par `find` et des listes dynamiques sont calculées par le shell ;
-4. autoCode est compilé pour l'hôte avec Clang, puis génère les fragments contractuels ;
-5. les contrôles d'en-têtes et d'architecture sont exécutés en AWK ;
-6. le firmware est compilé et lié par `avr-gcc` ;
-7. `avr-size`, AWK et CLOC produisent le bilan ;
-8. `avrdude` flashe éventuellement la carte.
+1. `bmake` reads the target, board, MCU, and architecture composition;
+2. a `.BEGIN` target checks a global program list and creates build directories;
+3. `find` discovers files, and the shell calculates dynamic lists;
+4. Clang builds autoCode for the host, then autoCode generates contract fragments;
+5. AWK runs header and architecture checks;
+6. `avr-gcc` compiles and links the firmware;
+7. `avr-size`, AWK, and CLOC produce the report;
+8. `avrdude` optionally flashes the board.
 
-Cette organisation est portable vers un environnement POSIX Windows. Les formats générés et le code
-embarqué n'emploient aucune API Windows. Les principaux risques sont dans la disponibilité des outils,
-les noms de fichiers Windows, les chemins et les cibles périphériques.
+This structure can be ported to a POSIX environment on Windows. Generated formats and embedded
+code use no Windows API. The main risks concern tool availability, Windows file names, paths,
+and peripheral targets.
 
-## Compatibilité des composants
+## Component compatibility
 
-| Composant | État sous MSYS2/UCRT64 | Action |
+| Component | State under MSYS2/UCRT64 | Action |
 | --- | --- | --- |
-| BSD `bmake` | Bloquant : absent du dépôt MSYS2 officiel | Bootstrap pkgsrc pour le prototype, puis paquet interne épinglé |
-| `sh`, AWK, `find`, `grep`, `sed`, Coreutils | Disponibles dans le dépôt MSYS | Installer explicitement les paquets, conserver `/usr/bin` après `/ucrt64/bin` |
-| Clang hôte | Disponible en UCRT64 | Installer `mingw-w64-ucrt-x86_64-clang` |
-| `clang-format`, `clang-tidy` | Disponibles, sans suffixe de version garanti | Utiliser des variables d'outil et les noms non versionnés |
-| AVR GCC, Binutils et avr-libc | Groupe UCRT64 officiel complet | Installer `mingw-w64-ucrt-x86_64-avr-toolchain` |
-| `avrdude` | Paquet UCRT64 officiel | Installer séparément ; configurer un port `COMn` |
-| CLOC, Ctags, Doxygen, Cppcheck, rsync | Disponibles, mais non requis par tout build | Vérifier seulement dans les cibles qui les emploient |
-| autoCode | C portable compilé pour l'hôte | Tester les renommages, fins de ligne et suffixes `.exe` |
-| ASan/UBSan hôte | À qualifier avec la version Clang retenue | Cible facultative tant que le runtime n'est pas validé |
-| `backup` | Incompatible : périphérique et montage FreeBSD | Désactiver sous Windows ou concevoir une cible Windows séparée et sûre |
-| Upload Arduino | Faisable avec `avrdude.exe` | Rendre le port configurable (`COM3`, etc.) et tester sur matériel |
+| BSD `bmake` | Blocking: absent from the official MSYS2 repository | Bootstrap pkgsrc for the prototype, then use a pinned internal package |
+| `sh`, AWK, `find`, `grep`, `sed`, Coreutils | Available in the MSYS repository | Install packages explicitly and keep `/usr/bin` after `/ucrt64/bin` |
+| Host Clang | Available in UCRT64 | Install `mingw-w64-ucrt-x86_64-clang` |
+| `clang-format`, `clang-tidy` | Available, with no guaranteed version suffix | Use tool variables and unversioned names |
+| AVR GCC, Binutils, avr-libc | Complete official UCRT64 group | Install `mingw-w64-ucrt-x86_64-avr-toolchain` |
+| `avrdude` | Official UCRT64 package | Install separately and configure a `COMn` port |
+| CLOC, Ctags, Doxygen, Cppcheck, rsync | Available, but not required by every build | Check only in targets that use them |
+| autoCode | Portable C built for the host | Test renames, line endings, and `.exe` suffixes |
+| Host ASan/UBSan | Must be qualified with the selected Clang | Keep optional until the runtime is validated |
+| `backup` | Incompatible: FreeBSD device and mount | Disable on Windows or design a separate safe Windows target |
+| Arduino upload | Feasible with `avrdude.exe` | Make the port configurable and test on hardware |
 
-Le groupe UCRT64 AVR officiel contient bien `avr-binutils`, `avr-gcc` et `avr-libc`; l'ATmega2560 est
-présent dans les spécifications livrées par GCC. Le paquet `avrdude` fournit un exécutable natif sous
-`/ucrt64/bin`.
+The official UCRT64 AVR group includes `avr-binutils`, `avr-gcc`, and `avr-libc`.
+ATmega2560 is present in the GCC specifications. The `avrdude` package provides a native
+executable under `/ucrt64/bin`.
 
-## Écarts bloquants ou importants dans le dépôt
+## Blocking or important repository gaps
 
-### 1. Nom de journal interdit sous Windows
+### 1. Log name forbidden on Windows
 
-`mk/sources.mk:35` fabrique `VAL_DATE_TIME` avec `%H:%M:%S`, puis ce texte entre dans le nom du journal
-autoCode. Le caractère `:` est interdit dans un nom de fichier Win32. Il faut employer par exemple
-`%Y_%m_%d_%H-%M-%S`. Cette correction est portable et ne change aucune donnée embarquée.
+`mk/sources.mk:35` builds `VAL_DATE_TIME` with `%H:%M:%S`, then includes it in the
+autoCode log name. Win32 forbids `:` in file names. Use, for example,
+`%Y_%m_%d_%H-%M-%S`. This portable fix changes no embedded data.
 
-### 2. Dépendances globales trop larges
+### 2. Global dependencies are too broad
 
-`conf/programs-list.conf` exige notamment CLOC, Ctags, `mount`, `umount` et rsync avant le build normal,
-alors que ces outils concernent des fonctions optionnelles. Cette conception explique une partie des
-« programmes manquants » observés sous Cygwin et reproduirait le problème sous MSYS2.
+`conf/programs-list.conf` requires CLOC, Ctags, `mount`, `umount`, and rsync before a normal
+build, although they support optional features. This explains some missing-program errors under
+Cygwin and would reproduce them under MSYS2.
 
-Il faut séparer au minimum :
+Separate at least:
 
-- les outils nécessaires à l'analyse du Makefile et au firmware ;
-- les outils des tests hôte ;
-- les outils de qualité et documentation ;
-- les outils d'édition ;
-- les outils de sauvegarde propres à la plateforme.
+- tools required to parse the Makefile and build firmware;
+- host-test tools;
+- quality and documentation tools;
+- editing tools;
+- platform-specific backup tools.
 
-Le contrôle doit être un prérequis explicite des cibles concernées, pas un effet global de `.BEGIN`.
-Le stamp doit inclure ou vérifier l'environnement actif, car un stamp ancien survit actuellement à un
-changement de `PATH`.
+The check should be an explicit prerequisite of relevant targets, not a global `.BEGIN` side
+effect. Its stamp must include or verify the active environment because an old stamp currently
+survives a `PATH` change.
 
-### 3. Outils et chemins codés en dur
+### 3. Hard-coded tools and paths
 
-`mk/utils.mk` appelle `clang-format19` et `clang-tidy19`, tandis que le paquet UCRT64 fournit les noms
-usuels `clang-format` et `clang-tidy`. Les commandes Cppcheck et Clang-Tidy contiennent aussi
-`/root/code/TaskMate/TaskMate_current`, chemin étranger au checkout Windows.
+`mk/utils.mk` calls `clang-format19` and `clang-tidy19`, while UCRT64 provides the usual
+`clang-format` and `clang-tidy` names. Cppcheck and Clang-Tidy commands also contain
+`/root/code/TaskMate/TaskMate_current`, which is unrelated to the Windows checkout.
 
-Il faut définir des variables de rôle, par exemple `FORMAT`, `TIDY` et `CPPCHECK`, avec des valeurs par
-défaut non versionnées, puis utiliser uniquement `${.CURDIR}` et `${PATH_SRCS}` pour les inclusions. La
-cible documentée `clang_format` ne correspond en outre pas à la cible réelle `format`; un seul nom doit
-être retenu ou un alias ajouté.
+Define role variables such as `FORMAT`, `TIDY`, and `CPPCHECK`, with unversioned defaults,
+then use only `${.CURDIR}` and `${PATH_SRCS}` for includes. The documented
+`clang_format` target also differs from the real `format` target. Keep one name or add an
+alias.
 
-### 4. Contrat de chemins insuffisant
+### 4. Insufficient path contract
 
-La découverte `find` est transformée en listes Make séparées par des espaces et de nombreuses recettes
-développent ces listes sans guillemets. Les noms internes du dépôt sont simples, mais le chemin absolu
-du checkout observé contient `PC HP`. Les chemins relatifs limitent le problème sans le supprimer,
-notamment pour les dépendances produites par les compilateurs et les appels `bmake -C`.
+`find` output becomes space-separated Make lists, and many recipes expand these lists without
+quotes. Internal repository names are simple, but the observed absolute checkout path contains
+`PC HP`. Relative paths reduce the issue without eliminating it, especially for
+compiler-produced dependencies and `bmake -C`.
 
-Pour le premier port, il est recommandé de travailler sous un chemin ASCII sans espace, par exemple
-`C:\work\TaskMate_current`, et d'en faire un contrat explicite. Étendre immédiatement le build à tous
-les noms Win32/POSIX serait disproportionné.
+For the first port, use an ASCII path without spaces, such as
+`C:\work\TaskMate_current`, and make this an explicit contract. Immediate support for all
+Win32 and POSIX names would be disproportionate.
 
-### 5. Fins de ligne et exécution des scripts
+### 5. Line endings and script execution
 
-Les scripts `#!/bin/sh` doivent rester en LF. Une conversion Git en CRLF peut rendre le shebang ou des
-comparaisons de fichiers invalides. Le dépôt devrait fixer les fins de ligne de `*.sh`, `*.awk`, `*.mk`,
-`Makefile`, `*.rc`, `*.err`, `*.gpio` et `*.list` dans `.gitattributes`, sans dépendre du réglage global
-`core.autocrlf` de chaque poste.
+Scripts with `#!/bin/sh` must remain LF. Git conversion to CRLF can invalidate a shebang or
+file comparison. The repository should define line endings for `*.sh`, `*.awk`, `*.mk`,
+`Makefile`, `*.rc`, `*.err`, `*.gpio`, and `*.list` in `.gitattributes`, without
+depending on each host's global `core.autocrlf`.
 
-Le comportement du binaire autoCode natif doit aussi être qualifié : suffixe `.exe`, ouverture en mode
-texte, fins de ligne produites, `rename()` d'un fichier existant et stabilité de
-`compare-and-replace`. Les tests existants couvrent bien la logique fonctionnelle et doivent devenir
-la preuve de compatibilité Windows.
+The native autoCode binary must also be qualified for the `.exe` suffix, text-mode opening,
+produced line endings, `rename()` over an existing file, and stable compare-and-replace.
+Existing tests cover the functional logic well and should become the Windows compatibility
+evidence.
 
-### 6. Cibles FreeBSD et périphériques
+### 6. FreeBSD targets and peripherals
 
-`PATH_USBKEY=/media/usbkey`, `FILE_USBDEV=/dev/da0s1` et `mount -t msdosfs` sont spécifiques à
-FreeBSD. La cible `backup` utilise en plus `rsync --delete`; elle ne doit jamais être adaptée par une
-simple substitution de chemin. Elle doit être rendue indisponible sous Windows avec un diagnostic
-clair, ou remplacée par une implémentation Windows séparée avec validation canonique du volume,
-sentinelle et simulation préalable.
+`PATH_USBKEY=/media/usbkey`, `FILE_USBDEV=/dev/da0s1`, and `mount -t msdosfs` are
+FreeBSD-specific. The `backup` target also uses `rsync --delete`. It must never be adapted
+by simple path substitution. Make it unavailable on Windows with a clear diagnostic, or replace
+it with a separate Windows implementation that validates the canonical volume, requires a
+sentinel, and runs a preview first.
 
-Le port série `/dev/ttyU0` est également spécifique. `VAL_PROGRAMMER_PORT` doit être surchargeable, par
-exemple `bmake upload VAL_PROGRAMMER_PORT=COM3`. Le flashage doit rester une étape matérielle explicite,
-hors validation automatique initiale.
+The `/dev/ttyU0` serial port is also specific. `VAL_PROGRAMMER_PORT` must be overrideable,
+for example with `bmake upload VAL_PROGRAMMER_PORT=COM3`. Flashing must remain an explicit
+hardware step outside initial automated validation.
 
-### 7. Version des outils et reproductibilité
+### 7. Tool versions and reproducibility
 
-Le paquet UCRT64 AVR évolue indépendamment de l'environnement historique. Une nouvelle version de GCC
-peut modifier diagnostics, taille, LTO et binaire final sans changement source. Le portage doit donc
-enregistrer au minimum les sorties de `bmake`, `clang`, `avr-gcc`, `avr-ld`, `avr-libc` et `avrdude`, et
-figer un instantané MSYS2 ou une liste de versions qualifiées pour les releases.
+The UCRT64 AVR package evolves independently of the historical environment. A new GCC version
+can change diagnostics, size, LTO, and the final binary without a source change. The port must
+record at least the versions of `bmake`, `clang`, `avr-gcc`, `avr-ld`, `avr-libc`, and
+`avrdude`. Pin an MSYS2 snapshot or qualified version list for releases.
 
-Comparer uniquement les fichiers HEX entre Cygwin et MSYS2 n'est pas une preuve suffisante si les
-versions de compilateur diffèrent. La qualification doit comparer à version égale, puis examiner les
-écarts de taille, sections, symboles, désassemblage et comportement sur la carte.
+Comparing only HEX files between Cygwin and MSYS2 is insufficient if compiler versions differ.
+Qualification should first compare equal versions, then inspect size, sections, symbols,
+disassembly, and board behaviour.
 
-## Mode opératoire recommandé
+## Recommended procedure
 
-### Phase 0 — conserver un retour arrière
+### Phase 0: retain a rollback path
 
-1. Conserver l'installation Cygwin actuelle jusqu'à validation complète de MSYS2.
-2. Capturer ses versions d'outils, un build propre, les rapports mémoire, le HEX et le journal
-   autoCode de référence.
-3. Ne pas partager un même répertoire `build/` entre une exécution Cygwin et une exécution MSYS2 ;
-   effectuer les comparaisons dans deux checkouts ou deux worktrees distincts.
+1. Keep the current Cygwin installation until MSYS2 is fully validated.
+2. Record its tool versions, a clean build, memory reports, HEX file, and reference autoCode log.
+3. Do not share one `build/` directory between Cygwin and MSYS2. Compare two checkouts or
+   worktrees.
 
-L'installation Cygwin observée est incomplète : avec un `PATH` POSIX explicite, il manque au minimum
-AWK, Clang, Ctags, Findutils, Git, rsync, Sed et toute la toolchain AVR, dont `avrdude`. Le paquet
-`bmake` est en revanche bien installé. Cela montre que l'échec actuel vient largement du provisionnement
-et du contrôle global des outils, pas d'une impossibilité fondamentale de Cygwin.
+The observed Cygwin installation is incomplete. With an explicit POSIX `PATH`, it lacks at
+least AWK, Clang, Ctags, Findutils, Git, rsync, Sed, and the entire AVR toolchain, including
+`avrdude`. The `bmake` package is installed. The current failure therefore comes largely
+from provisioning and global tool checks, not a fundamental Cygwin limitation.
 
-### Phase 1 — installer MSYS2/UCRT64
+### Phase 1: install MSYS2/UCRT64
 
-Sur Windows 10 22H2, installer MSYS2 dans son chemin standard `C:\msys64`, mettre à jour le système,
-fermer/réouvrir le terminal si demandé, puis répéter la mise à jour :
+On Windows 10 22H2, install MSYS2 in `C:\msys64`, update the system, close and reopen the
+terminal if requested, then repeat the update:
 
 ```sh
 pacman -Syu
 pacman -Syu
 ```
 
-Toujours lancer le profil **UCRT64**, et vérifier :
+Always start the **UCRT64** profile and check:
 
 ```sh
 test "${MSYSTEM}" = UCRT64
 printf '%s\n' "${PATH}"
 ```
 
-Le début du `PATH` attendu est `/ucrt64/bin:/usr/bin`. Ne pas ajouter globalement les répertoires de
-Cygwin au `PATH` MSYS2 : mélanger les DLL, shells et conventions de chemins rendrait les diagnostics
-non reproductibles.
+The expected `PATH` prefix is `/ucrt64/bin:/usr/bin`. Do not globally add Cygwin directories
+to the MSYS2 `PATH`. Mixing DLLs, shells, and path conventions makes diagnostics
+non-reproducible.
 
-### Phase 2 — installer les paquets
+### Phase 2: install packages
 
-Jeu initial proposé pour le prototype :
+Proposed initial prototype set:
 
 ```sh
 pacman -S --needed \
@@ -218,16 +218,16 @@ pacman -S --needed \
 	mingw-w64-ucrt-x86_64-avrdude
 ```
 
-Le manifeste définitif devra être obtenu avec `pacman -Q` après qualification et archivé avec le
-rapport de build. Les éditeurs et outils de sauvegarde ne doivent pas entrer dans le socle minimal.
+After qualification, obtain the final manifest with `pacman -Q` and archive it with the build
+report. Editors and backup tools must not enter the minimal base set.
 
-### Phase 3 — provisionner BSD `bmake`
+### Phase 3: provision BSD `bmake`
 
-Pour la preuve de concept, utiliser le bootstrap non privilégié de pkgsrc dans un emplacement sans
-espace. Le guide NetBSD précise que ce bootstrap installe `bmake`, et un retour spécifique à
-Windows 10/11 avec MSYS2 UCRT64 confirme ce chemin.
+For the proof of concept, use the unprivileged pkgsrc bootstrap in a path without spaces. The
+NetBSD guide states that it installs `bmake`, and a Windows 10/11 report for MSYS2 UCRT64
+confirms this path.
 
-Exemple de principe :
+Principle:
 
 ```sh
 git clone --depth 1 https://github.com/NetBSD/pkgsrc.git /opt/pkgsrc
@@ -237,34 +237,35 @@ export PATH=/opt/taskmate-pkg/bin:/ucrt64/bin:/usr/bin
 bmake -V MAKE_VERSION
 ```
 
-Ce clone courant ne convient pas à une chaîne de release durable. Après le prototype :
+This live clone is unsuitable for a durable release chain. After the prototype:
 
-1. choisir une version de `bmake` validée ;
-2. conserver les sources exactes et leur licence ;
-3. construire un paquet MSYS2 interne ou une archive d'outils ;
-4. publier la somme SHA-256 et la procédure reproductible ;
-5. tester explicitement `.WAIT`, `.MAKE.EXPAND_VARIABLES`, `:T`, `:ts`, `!=`, `.for` et `.include` ;
-6. refuser une version inconnue dans la commande de diagnostic.
+1. select a validated `bmake` version;
+2. retain the exact sources and licence;
+3. build an internal MSYS2 package or tool archive;
+4. publish the SHA-256 checksum and reproducible procedure;
+5. explicitly test `.WAIT`, `.MAKE.EXPAND_VARIABLES`, `:T`, `:ts`, `!=`, `.for`, and
+   `.include`;
+6. reject an unknown version in the diagnostic command.
 
-### Phase 4 — appliquer les adaptations minimales du dépôt
+### Phase 4: apply minimal repository adaptations
 
-Ordre conseillé :
+Recommended order:
 
-1. remplacer les deux-points du nom de journal ;
-2. introduire les variables d'outils hôte et supprimer les chemins `/root/...` ;
-3. séparer les manifestes de programmes par cible et retirer la vérification de `.BEGIN` ;
-4. déclarer les fins de ligne Git ;
-5. rendre le port de programmation surchargeable ;
-6. déclarer `backup` non pris en charge sur Windows ;
-7. ajouter une cible `doctor` non destructive affichant environnement, chemins et versions ;
-8. enregistrer un manifeste de versions dans `build/`.
+1. remove colons from the log name;
+2. introduce host-tool variables and remove `/root/...` paths;
+3. split program manifests by target and remove the `.BEGIN` check;
+4. declare Git line endings;
+5. make the programming port overrideable;
+6. declare `backup` unsupported on Windows;
+7. add a non-destructive `doctor` target that reports the environment, paths, and versions;
+8. record a version manifest in `build/`.
 
-Ces changements doivent rester dans le système de build. Aucun `#if Windows` ne doit être introduit
-dans le code firmware ou dans autoCode lorsque le C standard suffit.
+These changes must remain in the build system. Do not add `#if Windows` to firmware code or
+autoCode where standard C is sufficient.
 
-### Phase 5 — valider sans matériel
+### Phase 5: validate without hardware
 
-Depuis un checkout sans espace et avec `MSYSTEM=UCRT64` :
+From a checkout without spaces and with `MSYSTEM=UCRT64`:
 
 ```sh
 bmake doctor
@@ -279,145 +280,144 @@ bmake clean
 bmake
 ```
 
-Critères d'acceptation :
+Acceptance criteria:
 
-- toutes les commandes retournent zéro et aucun outil Windows homonyme, tel `find.exe` de Windows,
-  n'est sélectionné ;
-- les tests autoCode ne laissent aucun `.tmp` et un second passage ne modifie pas les sorties ;
-- les contrôles d'architecture et d'en-têtes bloquent bien sur une fixture invalide ;
-- `clean` reste confiné sous `build/` avec les chemins MSYS ;
-- le firmware lie pour ATmega2560, les sections et la RAM restent dans les limites ;
-- un second build sans changement ne recompile ni autoCode ni le firmware inutilement ;
-- le résultat est identique entre deux builds MSYS2 propres utilisant le même manifeste d'outils.
+- every command returns zero, and no Windows homonym such as Windows `find.exe` is selected;
+- autoCode tests leave no `.tmp`, and a second pass changes no output;
+- architecture and header checks fail correctly on an invalid fixture;
+- `clean` remains confined under `build/` with MSYS paths;
+- firmware links for ATmega2560, with sections and RAM within limits;
+- a second unchanged build does not rebuild autoCode or firmware unnecessarily;
+- results match between two clean MSYS2 builds using the same tool manifest.
 
-La cible sanitizer doit être qualifiée séparément. Son absence temporaire ne doit pas masquer l'échec
-des tests ordinaires, mais elle doit rester obligatoire sur au moins une plateforme de CI supportée.
+Qualify the sanitizer target separately. Its temporary absence must not hide ordinary test
+failures, but it must remain mandatory on at least one supported CI platform.
 
-### Phase 6 — valider le matériel et les performances
+### Phase 6: validate hardware and performance
 
-1. Identifier le port Arduino dans le Gestionnaire de périphériques.
-2. Exécuter `avrdude -v` et sauvegarder sa version/configuration.
-3. Flasher explicitement avec `VAL_PROGRAMMER_PORT=COMn`.
-4. Faire un test de démarrage, timer, ordonnanceur, GPIO et USART/SCLI sur la Mega 2560.
-5. Comparer Cygwin et MSYS2 sur cinq builds propres et cinq builds incrémentaux, antivirus et machine
-   identiques. Mesurer temps total, temps autoCode, compilation, lien et rapport CLOC.
+1. Identify the Arduino port in Device Manager.
+2. Run `avrdude -v` and save its version and configuration.
+3. Flash explicitly with `VAL_PROGRAMMER_PORT=COMn`.
+4. Test startup, timer, scheduler, GPIO, and USART/SCLI on the Mega 2560.
+5. Compare Cygwin and MSYS2 using five clean and five incremental builds on the same machine
+   with the same antivirus. Measure total, autoCode, compile, link, and CLOC times.
 
-Une amélioration de performance ne doit pas être obtenue en désactivant globalement l'antivirus sur le
-répertoire de développement. Si l'antivirus domine les mesures, toute exclusion doit faire l'objet
-d'une décision de sécurité locale explicite et limitée.
+A performance improvement must not rely on globally disabling antivirus for the development
+directory. If antivirus dominates measurements, any exclusion requires an explicit, limited
+local security decision.
 
-## Autres voies possibles
+## Other possible approaches
 
-| Voie | Faisabilité | Avantages | Limites | Avis |
+| Approach | Feasibility | Advantages | Limits | Recommendation |
 | --- | --- | --- | --- | --- |
-| MSYS2/UCRT64 hybride | Bonne après adaptations | Paquets récents, AVR et avrdude natifs, intégration Windows directe | `bmake` à provisionner ; commandes POSIX toujours sous runtime MSYS | **Choix recommandé pour le pilote** |
-| Cygwin64 durci | Très bonne, effort minimal | `bmake` officiellement empaqueté ; sémantique POSIX déjà connue | Lenteur constatée, installation actuelle incomplète, toolchain à installer | Excellent filet de sécurité et solution court terme |
-| WSL2 Linux | Très bonne pour build/test | Paquets Linux complets, environnement CI naturel, bonnes performances si le dépôt est dans le FS Linux | USB non natif, `usbipd-win` nécessaire ; accès `/mnt/c` plus coûteux ; couche VM | **Meilleure alternative si le bootstrap `bmake` MSYS2 est refusé** |
-| Conteneur Linux sous WSL2/Docker | Bonne pour build reproductible | Image versionnée, isolation forte des dépendances | USB et flashage pénibles, volume Windows potentiellement lent, complexité supplémentaire | Bon candidat CI, moins bon poste embarqué interactif |
-| VM Linux/FreeBSD complète | Bonne | Proche de l'environnement Unix de référence, USB pass-through possible | Coût d'administration, stockage et démarrage, intégration éditeur moindre | Solution de repli robuste mais lourde |
-| Réécriture CMake + Ninja native | Faisable à moyen terme | Très bonne portabilité et vitesse Windows native, écosystème IDE/CI large | Réécriture du graphe, double maintenance transitoire, risque sur autoCode et contrôles | Étude future, pas préalable au port MSYS2 |
-| GNU Make/Git Bash/Scoop seuls | Faible sans réécriture | Installation légère | GNU Make incompatible avec les Makefiles BSD ; outils incomplets et versions dispersées | Non recommandé |
+| Hybrid MSYS2/UCRT64 | Good after adaptations | Recent packages, native AVR and avrdude, direct Windows integration | `bmake` must be provisioned; POSIX commands still use MSYS runtime | **Recommended for the pilot** |
+| Hardened Cygwin64 | Very good, minimal effort | Official `bmake` package; known POSIX semantics | Observed slowness, incomplete current installation, toolchain to install | Excellent safety net and short-term solution |
+| WSL2 Linux | Very good for build and test | Complete Linux packages, natural CI environment, good performance in Linux FS | No native USB, requires `usbipd-win`; `/mnt/c` is slower; VM layer | **Best alternative if MSYS2 `bmake` bootstrap is rejected** |
+| Linux container under WSL2/Docker | Good for reproducible builds | Versioned image, strong dependency isolation | Awkward USB and flashing, potentially slow Windows volume, extra complexity | Good CI candidate, weaker interactive embedded workstation |
+| Full Linux or FreeBSD VM | Good | Close to the reference Unix environment, possible USB pass-through | Administration, storage, startup, and weaker editor integration | Robust but heavy fallback |
+| Native CMake and Ninja rewrite | Feasible in the medium term | Strong portability, native Windows speed, broad IDE and CI support | Graph rewrite, temporary dual maintenance, risk to autoCode and checks | Future study, not a prerequisite |
+| GNU Make, Git Bash, or Scoop alone | Low without a rewrite | Lightweight installation | GNU Make is incompatible with BSD Makefiles; incomplete, scattered tools | Not recommended |
 
-### Cygwin64 peut être réparé immédiatement
+### Cygwin64 can be repaired immediately
 
-Cygwin publie officiellement un paquet `bmake`. Les autres manques constatés peuvent être installés par
-`setup-x86_64.exe -P ...`. Une action rapide consiste donc à produire une liste de paquets Cygwin
-versionnée et à scinder les contrôles de programmes. Cela ne résout pas la lenteur intrinsèque observée,
-mais fournit une référence fiable pendant le pilote MSYS2.
+Cygwin officially provides `bmake`. Other observed omissions can be installed with
+`setup-x86_64.exe -P ...`. A quick action is therefore to create a versioned Cygwin package
+list and split program checks. This does not solve observed intrinsic slowness, but provides a
+reliable reference during the MSYS2 pilot.
 
-Il ne faut pas copier `bmake.exe` depuis Cygwin vers MSYS2 : le binaire dépend du runtime Cygwin et
-relancerait des outils avec ses propres conventions. Deux environnements complets et séparés sont plus
-sûrs qu'un mélange de leurs exécutables.
+Do not copy `bmake.exe` from Cygwin into MSYS2. It depends on the Cygwin runtime and would
+launch tools with its conventions. Two complete, separate environments are safer than mixed
+executables.
 
-### WSL2 est la meilleure voie de repli
+### WSL2 is the best fallback
 
-Le poste observé, build Windows 19045, satisfait le minimum WSL moderne. Le dépôt doit être cloné dans
-le système de fichiers Linux, pas sous `/mnt/c`, pour éviter le coût des accès inter-systèmes. La
-toolchain AVR, Clang, les tests et `bmake` y sont simples à provisionner.
+The observed host, build 19045, meets the modern WSL minimum. Clone the repository in the Linux
+file system, not under `/mnt/c`, to avoid cross-file-system access costs. The AVR toolchain,
+Clang, tests, and `bmake` are simple to provision there.
 
-Le flashage requiert toutefois `usbipd-win`, car l'USB n'est pas présenté nativement à WSL. Microsoft
-documente explicitement ce mécanisme pour des scénarios tels que le flashage Arduino. Sous Windows 10,
-il faut valider la version Store de WSL et le noyau requis avant d'en faire une solution opérateur.
+Flashing requires `usbipd-win` because USB is not exposed natively to WSL. Microsoft
+explicitly documents it for scenarios such as Arduino flashing. On Windows 10, validate the
+Store version of WSL and the required kernel before making it an operator solution.
 
-### CMake/Ninja ne doit pas être confondu avec le portage hôte
+### Do not confuse CMake/Ninja with the host port
 
-Une conversion vers CMake pourrait supprimer à terme la dépendance à `bmake` et la majorité des scripts
-de découverte. Elle doit néanmoins reproduire exactement : composition matérielle, ordre de démarrage,
-génération autoCode, dépendances dynamiques, contrôles de frontières, fichiers de dépendances AVR,
-rapports mémoire, tests négatifs et règles de nettoyage.
+A CMake conversion could eventually remove the `bmake` dependency and most discovery
+scripts. It must reproduce hardware composition, startup order, autoCode generation, dynamic
+dependencies, boundary checks, AVR dependency files, memory reports, negative tests, and clean
+rules exactly.
 
-C'est un projet de build distinct, avec coexistence et tests différentiels nécessaires. Le faire en
-même temps que le changement d'environnement multiplierait les causes possibles d'écart. Il est plus
-sûr de qualifier d'abord le build BSD existant sous MSYS2 ou WSL2, puis de décider sur mesures si une
-réécriture native est rentable.
+This is a separate build project requiring coexistence and differential tests. Doing it with
+the environment change would multiply possible causes of differences. First qualify the
+existing BSD build under MSYS2 or WSL2, then use measurements to decide whether a native rewrite
+is worthwhile.
 
-## Risques et décisions à prendre
+## Risks and decisions
 
-| Risque | Niveau | Réduction recommandée |
+| Risk | Level | Recommended mitigation |
 | --- | --- | --- |
-| `bmake` non fourni par MSYS2 | Haut | Paquet interne épinglé, checksum et test de dialecte |
-| Noms/path/fins de ligne Windows | Haut avant correction | Timestamp sans `:`, checkout sans espace, `.gitattributes`, corpus autoCode |
-| Dérive de version AVR | Haut pour une release embarquée | Manifeste et qualification d'une version précise |
-| Gain de vitesse inférieur aux attentes | Moyen | Benchmark par phase avant abandon de Cygwin |
-| Mélange MSYS/Cygwin/Windows dans le `PATH` | Haut | Environnements isolés et cible `doctor` |
-| Flashage série différent | Moyen | Port configurable et essai matériel explicite |
-| Cible `backup` destructive/incompatible | Haut | La rendre indisponible sous Windows |
-| Windows 10 hors support standard | Haut en sécurité | ESU ou migration Windows 11, même si le build reste techniquement possible |
+| MSYS2 does not provide `bmake` | High | Pinned internal package, checksum, and dialect test |
+| Windows names, paths, and line endings | High before correction | Timestamp without `:`, checkout without spaces, `.gitattributes`, autoCode corpus |
+| AVR version drift | High for an embedded release | Manifest and qualification of one precise version |
+| Speed gain below expectations | Medium | Benchmark each phase before abandoning Cygwin |
+| Mixed MSYS, Cygwin, and Windows `PATH` | High | Isolated environments and `doctor` target |
+| Different serial flashing | Medium | Configurable port and explicit hardware test |
+| Destructive or incompatible `backup` target | High | Make it unavailable on Windows |
+| Windows 10 outside standard support | High security risk | ESU or Windows 11 migration, even if the build remains feasible |
 
-Windows 10 22H2 a atteint sa fin de support standard le 14 octobre 2025. MSYS2 reste techniquement
-compatible avec cette version, mais une chaîne connectée à Internet qui télécharge paquets et sources
-ne devrait pas être pérennisée sur un hôte sans ESU. Cette question de cycle de vie est indépendante de
-la réussite du portage, mais elle doit entrer dans l'acceptation opérationnelle.
+Windows 10 22H2 reached the end of standard support on 14 October 2025. MSYS2 remains
+technically compatible, but an Internet-connected toolchain that downloads packages and sources
+should not be maintained on a host without ESU. This life-cycle issue is independent of port
+success, but must be part of operational acceptance.
 
-## Estimation
+## Estimate
 
-| Lot | Charge indicative |
+| Work package | Indicative effort |
 | --- | ---: |
-| Installation MSYS2, paquets et prototype `bmake` | 0,5 à 1 jour |
-| Corrections minimales du build et cible `doctor` | 1 à 2 jours |
-| Tests hôte, déterminisme et comparaison Cygwin | 1 à 2 jours |
-| Paquet interne/documentation/manifestes | 0,5 à 1 jour |
-| Flashage et recette Arduino Mega | 0,5 jour |
+| MSYS2 installation, packages, and `bmake` prototype | 0.5 to 1 day |
+| Minimal build fixes and `doctor` target | 1 to 2 days |
+| Host tests, determinism, and Cygwin comparison | 1 to 2 days |
+| Internal package, documentation, and manifests | 0.5 to 1 day |
+| Arduino Mega flashing and acceptance | 0.5 day |
 
-L'estimation exclut une réécriture CMake/Ninja, un nouveau système de sauvegarde Windows et la
-résolution d'éventuels défauts fonctionnels préexistants révélés par les tests.
+The estimate excludes a CMake/Ninja rewrite, a new Windows backup system, and fixes for
+pre-existing functional defects exposed by tests.
 
-## Décision recommandée
+## Recommended decision
 
-Lancer un pilote MSYS2/UCRT64 limité à une branche de portage, sans supprimer Cygwin. Le jalon de
-décision doit être pris après les phases 1 à 5 : si le firmware et tous les tests hôte passent avec un
-`bmake` empaqueté et si le benchmark apporte un gain utile, MSYS2 devient l'environnement Windows de
-référence. Si le maintien d'un paquet `bmake` est jugé trop coûteux ou si le gain est faible, adopter
-WSL2 pour le build et conserver un outil Windows natif séparé pour le flashage.
+Start an MSYS2/UCRT64 pilot on a dedicated porting branch without removing Cygwin. Decide after
+phases 1 to 5. If firmware and all host tests pass with packaged `bmake`, and the benchmark
+shows a useful improvement, MSYS2 becomes the reference Windows environment. If maintaining a
+`bmake` package is too costly or the gain is small, use WSL2 for the build and keep a separate
+native Windows flashing tool.
 
-À très court terme, corriger le provisionnement Cygwin reste utile : il donne une base de comparaison
-complète et peut débloquer le projet avant la fin du pilote.
+In the very short term, fixing Cygwin provisioning remains useful. It provides a complete
+comparison baseline and can unblock the project before the pilot ends.
 
-## Sources externes
+## External sources
 
-- [Environnements MSYS2 et recommandation UCRT64](https://www.msys2.org/docs/environments/)
-- [Gestion des paquets MSYS2](https://www.msys2.org/docs/package-management/)
-- [Paquets du dépôt MSYS et absence actuelle de bmake](https://packages.msys2.org/packages/?repo=msys)
-- [Groupe officiel AVR UCRT64](https://packages.msys2.org/groups/mingw-w64-ucrt-x86_64-avr-toolchain)
-- [Paquet officiel avr-gcc UCRT64](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-avr-gcc)
-- [Paquet officiel avrdude UCRT64](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-avrdude)
-- [Clang-Tidy et outils Clang UCRT64](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-clang-tools-extra)
-- [Bootstrap pkgsrc sur une plateforme non-NetBSD](https://www.netbsd.org/docs/pkgsrc/platforms.html)
-- [Retour de bootstrap pkgsrc sous Windows et MSYS2 UCRT64](https://mail-index.netbsd.org/pkgsrc-users/2024/03/23/msg039236.html)
-- [Paquet bmake officiel de Cygwin](https://cygwin.com/packages/summary/bmake.html)
-- [Installation de WSL et prérequis Windows 10](https://learn.microsoft.com/en-us/windows/wsl/install)
-- [Connexion USB à WSL avec usbipd-win](https://learn.microsoft.com/en-us/windows/wsl/connect-usb)
-- [Cycle de vie de Windows 10](https://learn.microsoft.com/en-us/lifecycle/faq/windows)
+- [MSYS2 environments and UCRT64 recommendation](https://www.msys2.org/docs/environments/)
+- [MSYS2 package management](https://www.msys2.org/docs/package-management/)
+- [MSYS repository packages and current absence of bmake](https://packages.msys2.org/packages/?repo=msys)
+- [Official UCRT64 AVR group](https://packages.msys2.org/groups/mingw-w64-ucrt-x86_64-avr-toolchain)
+- [Official UCRT64 avr-gcc package](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-avr-gcc)
+- [Official UCRT64 avrdude package](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-avrdude)
+- [Clang-Tidy and UCRT64 Clang tools](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-clang-tools-extra)
+- [pkgsrc bootstrap on a non-NetBSD platform](https://www.netbsd.org/docs/pkgsrc/platforms.html)
+- [pkgsrc bootstrap report on Windows and MSYS2 UCRT64](https://mail-index.netbsd.org/pkgsrc-users/2024/03/23/msg039236.html)
+- [Official Cygwin bmake package](https://cygwin.com/packages/summary/bmake.html)
+- [WSL installation and Windows 10 requirements](https://learn.microsoft.com/en-us/windows/wsl/install)
+- [Connecting USB to WSL with usbipd-win](https://learn.microsoft.com/en-us/windows/wsl/connect-usb)
+- [Windows 10 life cycle](https://learn.microsoft.com/en-us/lifecycle/faq/windows)
 
-## Validation réalisée pendant l'audit
+## Validation performed during the audit
 
-- inventaire des dépendances directes dans Make, shell, AWK et les fragments AVR ;
-- contrôle des paquets officiels MSYS2 disponibles au 16 septembre 2026 ;
-- constat de l'absence de MSYS2 sur le poste, sans installation ni modification système ;
-- lecture de la version Cygwin et de `bmake` installées ;
-- exécution non destructive du vérificateur de programmes Cygwin avec un `PATH` POSIX explicite ;
-- vérification du système Windows 10 build 19045 ;
-- aucune génération autoCode, compilation firmware, suppression, sauvegarde ou écriture matérielle.
+- inventoried direct dependencies in Make, shell, AWK, and AVR fragments;
+- checked official MSYS2 packages available on 16 September 2026;
+- confirmed that MSYS2 was absent from the host, without installation or system changes;
+- read the installed Cygwin and `bmake` versions;
+- ran the Cygwin program checker non-destructively with an explicit POSIX `PATH`;
+- checked the Windows 10 build 19045 system;
+- performed no autoCode generation, firmware compilation, removal, backup, or hardware write.
 
-La validation complète de faisabilité exige encore le pilote décrit ci-dessus et un essai physique sur
+Full feasibility validation still requires the pilot described above and a physical test on an
 Arduino Mega 2560.

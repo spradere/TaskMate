@@ -1,287 +1,300 @@
-# Audit général du build — sûreté des fichiers et répertoires
+# General build file and directory safety audit
 
-Date : 13 septembre 2026  
-Branche auditée : `codex/build-audit`  
-Révision auditée : `38a2280a8dd5ab7cb4f32d5fa6b814b7ca240174`  
-Environnement : FreeBSD 16.0-CURRENT, BSD `bmake` 20260704
+Date: 13 September 2026
 
-## Objet et position sur la portabilité
+Audited branch: `codex/build-audit`
 
-Cet audit examine principalement les créations, remplacements, suppressions et copies de fichiers,
-la construction des chemins, les fichiers temporaires, les interruptions et les exécutions
-concurrentes. Il couvre le Makefile principal, `mk/*.mk`, les fragments matériels sélectionnés, les
-scripts `sh`/AWK et le sous-système de fichiers d'autoCode.
+Audited revision: `38a2280a8dd5ab7cb4f32d5fa6b814b7ca240174`
 
-Le maintien volontaire de BSD `bmake` et de FreeBSD est considéré comme une contrainte de conception
-valide. Il n'est pas recommandé d'ajouter GNU Make, Linux, CMake ou un autre orchestrateur à ce stade.
-Au contraire, limiter la plateforme réduit la matrice de validation et permet de concentrer l'effort
-sur le code système. Les extensions utilisées (`.WAIT`, `:T`, `:ts`, `find -delete`, `realpath`) doivent
-simplement être assumées, documentées et testées sur cette plateforme.
+Environment: FreeBSD 16.0-CURRENT, BSD `bmake` 20260704
 
-## Modèle de menace
+## Purpose and position on portability
 
-Le build s'exécute avec les droits du développeur et ses Makefiles sont du code exécutable. Il ne peut
-donc pas constituer une frontière de sécurité contre une branche Git volontairement malveillante.
-L'objectif réaliste est de protéger les fichiers du développeur contre :
+This audit primarily examines file creation, replacement, removal, and copying, path
+construction, temporary files, interruptions, and concurrent execution. It covers the main
+Makefile, `mk/*.mk`, selected hardware fragments, shell and AWK scripts, and the autoCode file
+subsystem.
 
-- une variable vide, erronée ou surchargée ;
-- un chemin inattendu ou un lien symbolique ;
-- une interruption, un disque plein ou une erreur d'entrée/sortie ;
-- deux builds lancés en parallèle ;
-- un fichier de configuration mal formé ;
-- une sauvegarde dirigée vers le mauvais système de fichiers.
+The deliberate use of BSD `bmake` and FreeBSD is considered a valid design constraint. Adding
+GNU Make, Linux, CMake, or another orchestrator is not recommended at this stage. Limiting the
+platform reduces the validation matrix and focuses effort on system code. The extensions used,
+including `.WAIT`, `:T`, `:ts`, `find -delete`, and `realpath`, should simply be accepted,
+documented, and tested on that platform.
 
-Les constats de sécurité ci-dessous supposent un dépôt normalement digne de confiance, mais pas un
-environnement parfaitement fiable.
+## Threat model
+
+The build runs with the developer's permissions, and its Makefiles are executable code. It
+cannot provide a security boundary against an intentionally malicious Git branch. The realistic
+goal is to protect developer files against:
+
+- an empty, incorrect, or overridden variable;
+- an unexpected path or symbolic link;
+- interruption, a full disk, or an I/O error;
+- two builds running concurrently;
+- a malformed configuration file;
+- a backup directed to the wrong file system.
+
+The safety findings below assume an ordinarily trusted repository, but not a perfectly reliable
+environment.
 
 ## Verdict
 
-La base est saine pour un usage local, mono-utilisateur et séquentiel : les suppressions sont désormais
-précédées d'un confinement canonique sous `build/`, les écritures autoCode sont différées, les erreurs
-de lecture sont bornées et les artefacts ordinaires sont séparés des sources.
+The foundation is sound for local, single-user, sequential use. Removals are now preceded by
+canonical confinement under `build/`, autoCode writes are deferred, read errors are bounded,
+and ordinary artifacts are separated from sources.
 
-Le build n'est toutefois pas encore robuste face aux erreurs de fichiers les plus importantes. Le
-risque principal est la cible `backup`, qui emploie `rsync --delete` sans prouver que le point de montage
-correspond exactement au périphérique attendu. Viennent ensuite un contrôle d'architecture dont le
-code d'échec est masqué, des fichiers temporaires à nom prévisible, plusieurs écritures non atomiques et
-l'absence de contrat contre les builds concurrents.
+The build is not yet robust against its most important file errors. The main risk is the
+`backup` target, which uses `rsync --delete` without proving that the mount point exactly
+matches the expected device. Other risks are an architecture check whose failure status is
+masked, predictable temporary names, several non-atomic writes, and no contract against
+concurrent builds.
 
-|n| Priorité | Constat | Conséquence principale |
-|---| --- | --- | --- |
-|1| Critique | `backup` ne valide pas exactement le montage avant `rsync --delete` | Suppression possible dans un répertoire du disque local ou sur le mauvais volume |
-|3| Haute | Les fichiers `.tmp` sont prévisibles et parfois publiés sans arrêt immédiat sur erreur | Écrasement, course, lien symbolique ou publication partielle |
-|4| Haute | Les listes autoCode et `.gitignore` sont écrites directement | Une interruption peut laisser un fichier partiel considéré comme à jour |
-|5| Moyenne | autoCode remplace plusieurs destinations sans transaction globale | Une erreur tardive laisse un ensemble généré mixte |
-|6| Moyenne | Le graphe n'interdit pas les builds parallèles ou simultanés | Courses sur les sources générées, journaux, stamps et résultats |
-|10| Faible | Quelques contrôles construisent une commande shell depuis leur configuration | Robustesse réduite aux caractères spéciaux et diagnostics indirects |
+| No. | Priority | Finding | Main consequence |
+|---|---|---|---|
+| 1 | Critical | `backup` does not validate the exact mount before `rsync --delete` | Possible deletion in a local disk directory or on the wrong volume |
+| 3 | High | `.tmp` files are predictable and sometimes published without immediately stopping on error | Overwrite, race, symbolic link, or partial publication |
+| 4 | High | autoCode lists and `.gitignore` are written directly | An interruption can leave a partial file considered up to date |
+| 5 | Medium | autoCode replaces several destinations without a global transaction | A late error leaves a mixed generated set |
+| 6 | Medium | The graph does not prohibit parallel or simultaneous builds | Races on generated sources, logs, stamps, and results |
+| 10 | Low | Some checks construct a shell command from configuration | Reduced robustness with special characters and indirect diagnostics |
 
-## Points solides
+## Strengths
 
-### Confinement des suppressions
+### Removal confinement
 
-`scripts/check_build_delete_path.sh` résout sa propre position, en déduit la racine canonique
-`build/`, refuse les valeurs vides et rejette toute cible extérieure. La racine `build/` elle-même n'est
-acceptée qu'avec `--allow-build-root`. Le script utilise `set -eu` et les appels de `clean`, `clean_hard`
-et `autoCode_alone` lui passent les chemins entre guillemets (`scripts/check_build_delete_path.sh:13-68`,
-`mk/utils.mk:15-79`, `mk/autoCode.mk:153-162`).
+`scripts/check_build_delete_path.sh` resolves its own location, derives the canonical
+`build/` root, rejects empty values, and rejects every external target. The `build/` root
+itself is accepted only with `--allow-build-root`. The script uses `set -eu`, and calls from
+`clean`, `clean_hard`, and `autoCode_alone` quote their paths
+(`scripts/check_build_delete_path.sh:13-68`, `mk/utils.mk:15-79`,
+`mk/autoCode.mk:153-162`).
 
-Les commandes destructives emploient aussi des limites utiles : `-type f`, `-maxdepth 1` ou
-`-mindepth 1` selon le contrat. Le risque critique signalé par l'audit précédent de `find -delete` — une
-surcharge directe vers `/` ou un chemin extérieur — est donc corrigé dans la révision courante.
+Destructive commands also use useful limits such as `-type f`, `-maxdepth 1`, or
+`-mindepth 1`, depending on the contract. The previous audit's critical `find -delete` risk,
+where a direct override could point to `/` or an external path, is fixed in the current
+revision.
 
-La garde accepte les descendants attendus et refuse, lors de la validation ponctuelle, `build/` sans
-l'option explicite ainsi que `/tmp`. Elle réduit très fortement les accidents de variable. Elle n'est
-cependant pas une primitive atomique : un autre processus peut encore modifier un composant du chemin
-entre la validation et le `find`.
+During focused validation, the guard accepted expected descendants and rejected `build/`
+without the explicit option, as well as `/tmp`. It greatly reduces variable-related
+accidents. It is not an atomic primitive. Another process can still change a path component
+between validation and `find`.
 
-### Traitement autoCode avant publication
+### autoCode processing before publication
 
-autoCode lit les fichiers ligne par ligne avec une taille bornée et distingue fin de fichier,
-troncature et erreur (`srcs/autoCode/fileUtility.c:167-206`). Il génère d'abord un fichier temporaire,
-ferme les flux, vérifie les tags requis, puis ne lance la comparaison et le remplacement qu'après les
-phases d'analyse (`srcs/autoCode/autoCode.c:135-165`, `srcs/autoCode/parseTag.c:133-258`).
+autoCode reads files line by line with a bounded size and distinguishes end of file, truncation,
+and error (`srcs/autoCode/fileUtility.c:167-206`). It first generates a temporary file, closes
+streams, verifies required tags, then starts comparison and replacement only after analysis
+(`srcs/autoCode/autoCode.c:135-165`, `srcs/autoCode/parseTag.c:133-258`).
 
-Le remplacement d'une destination modifiée utilise directement `rename(temporaire, destination)` :
-une erreur de `rename` ne supprime donc pas préalablement l'original. Les temporaires enregistrés sont
-nettoyés après traitement et via `atexit()` (`srcs/autoCode/fileUtility.c:65-164,305-385`). Les erreurs
-de flux et de `fclose()` sont détectées. Le corpus de test vérifie notamment qu'une erreur d'analyse ne
-modifie pas une destination antérieure et qu'aucun `.tmp` ne subsiste
-(`test/autoCode/autoCode_test.sh:91-117,433-475`).
+Replacement of a modified destination directly uses `rename(temporary, destination)`.
+A rename error therefore does not first remove the original. Registered temporary files are
+cleaned after processing and through `atexit()`
+(`srcs/autoCode/fileUtility.c:65-164,305-385`). Stream and `fclose()` errors are detected.
+The test corpus checks that a parse error does not modify an earlier destination and that no
+`.tmp` remains (`test/autoCode/autoCode_test.sh:91-117,433-475`).
 
-### Périmètre et dépendances explicites
+### Explicit scope and dependencies
 
-Les chemins principaux sont centralisés dans `mk/path_files.mk`, les fragments cible → carte → MCU →
-architecture sont inclus explicitement, et les valeurs de cible absentes sont refusées à l'analyse du
-Makefile. La liste des programmes requis est contrôlée par un script qui lit littéralement chaque ligne
-et cite son argument (`scripts/check_programs.sh:17-44`). Le build ne télécharge ni dépendance ni code
-pendant son exécution.
+Main paths are centralised in `mk/path_files.mk`. The target, board, MCU, and architecture
+fragments are included explicitly, and missing target values are rejected while parsing the
+Makefile. A script checks required programs by reading each line literally and quoting its
+argument (`scripts/check_programs.sh:17-44`). The build downloads neither dependencies nor
+code during execution.
 
-## Constats détaillés
+## Detailed findings
 
-### 1. Critique — la sauvegarde peut supprimer sur le mauvais système de fichiers
+### 1. Critical: backup can delete on the wrong file system
 
-La cible `backup` décide que la clé est montée avec :
+The `backup` target decides that the device is mounted with:
 
 ```sh
 mount | grep -q "${PATH_USBKEY}"
 ```
 
-Ce test cherche une sous-chaîne dans toute la sortie de `mount`. Il ne vérifie ni l'égalité du point de
-montage, ni le périphérique `${FILE_USBDEV}`, ni le type `msdosfs`. Un autre montage dont la ligne
-contient `/media/usbkey` peut donc produire un faux positif. La recette crée ensuite le répertoire et
-exécute `rsync --delete --delete-excluded` (`mk/backup.mk:39-70`). Si la clé n'est pas réellement montée,
-le répertoire `/media/usbkey/...` peut appartenir au système de fichiers local et son contenu être
-supprimé pour refléter le dépôt.
+This searches for a substring in all `mount` output. It verifies neither exact mount-point
+equality, the `${FILE_USBDEV}` device, nor the `msdosfs` type. Another mount whose line
+contains `/media/usbkey` can therefore create a false positive. The recipe then creates the
+directory and runs `rsync --delete --delete-excluded` (`mk/backup.mk:39-70`). If the device
+is not actually mounted, `/media/usbkey/...` may belong to the local file system, and its
+content may be deleted to mirror the repository.
 
-La cible démonte aussi toujours `${PATH_USBKEY}`, même si le volume était déjà monté avant son lancement.
-À l'inverse, un échec de `rsync` arrête la recette avant `umount`, faute de gestionnaire de sortie. Enfin,
-le nom « backup » masque une sémantique de miroir : relancer la cible sur la même version supprime du
-miroir les fichiers supprimés de la source ; il ne s'agit pas d'un instantané immuable.
+The target also always unmounts `${PATH_USBKEY}`, even if it was mounted before invocation.
+Conversely, an `rsync` failure stops the recipe before `umount` because there is no exit
+handler. Finally, the name "backup" hides mirror semantics. Repeating the target for the same
+version deletes mirror files that were removed from the source. It is not an immutable snapshot.
 
-Correction minimale recommandée :
+Recommended minimum fix:
 
-1. lire la table de montage FreeBSD dans un format analysable et exiger l'égalité exacte du périphérique,
-   du point de montage et du type ;
-2. mémoriser si la recette a elle-même monté le volume ;
-3. installer un `trap` qui ne démonte que dans ce cas ;
-4. canonicaliser la destination et prouver qu'elle est un descendant strict du point de montage ;
-5. exiger une sentinelle propre à la clé, puis lancer d'abord un `rsync --dry-run` affiché à l'opérateur ;
-6. documenter explicitement le choix « miroir destructif » ou retirer `--delete` si un historique est
-   attendu.
+1. read the FreeBSD mount table in a parseable format and require exact equality for the
+   device, mount point, and type;
+2. record whether the recipe mounted the volume itself;
+3. install a `trap` that unmounts only in that case;
+4. canonicalise the destination and prove that it is a strict descendant of the mount point;
+5. require a device-specific sentinel, then first run an operator-visible `rsync --dry-run`;
+6. explicitly document the "destructive mirror" choice, or remove `--delete` if history is
+   expected.
 
-Cette correction peut rester entièrement FreeBSD/POSIX et ne justifie aucun changement de build system.
+This fix can remain entirely FreeBSD and POSIX based and does not justify changing the build
+system.
 
-### 3. Haute — noms temporaires prévisibles et ouverture non exclusive
+### 3. High: predictable temporary names and non-exclusive opening
 
-Trois mécanismes utilisent un suffixe fixe `.tmp` :
+Three mechanisms use a fixed `.tmp` suffix:
 
-- autoCode construit `<destination>.tmp` puis l'ouvre avec `fopen(..., "w+")`
-  (`srcs/autoCode/fileUtility.c:289-303,375-385`) ;
-- `scripts/compare_replace.sh` écrit `${destination}.tmp` (`scripts/compare_replace.sh:17-23`) ;
-- `.BEGIN` écrit `srcs/interfaces/tm_info.h.tmp` (`mk/build.mk:20-39`).
+- autoCode creates `<destination>.tmp` and opens it with `fopen(..., "w+")`
+  (`srcs/autoCode/fileUtility.c:289-303,375-385`);
+- `scripts/compare_replace.sh` writes `${destination}.tmp`
+  (`scripts/compare_replace.sh:17-23`);
+- `.BEGIN` writes `srcs/interfaces/tm_info.h.tmp` (`mk/build.mk:20-39`).
 
-Ces ouvertures tronquent un fichier existant et suivent un lien symbolique. Deux builds simultanés
-écrivent le même temporaire. Un arrêt laisse parfois un `.tmp` dont le prochain lancement peut hériter.
-autoCode enregistre et nettoie mieux ses temporaires, mais n'utilise ni création exclusive ni nom unique,
-et le remplacement change le mode de la destination selon l'`umask` ayant créé le temporaire.
+These opens truncate an existing file and follow symbolic links. Two concurrent builds write
+the same temporary file. A stop can leave a `.tmp` inherited by the next invocation. autoCode
+registers and cleans its temporary files more carefully, but does not use exclusive creation or
+a unique name. Replacement also changes the destination mode according to the `umask` that
+created the temporary file.
 
-`compare_replace.sh` est plus fragile : il n'a ni contrôle d'arguments, ni `set -e`, ni `trap`. Si son
-`printf` échoue, par exemple faute d'espace, le script continue vers `cmp` puis peut renommer un fichier
-temporaire partiel ou ancien sur le fichier valide.
+`compare_replace.sh` is more fragile. It has no argument validation, `set -e`, or `trap`.
+If its `printf` fails, for example because the disk is full, the script continues to `cmp`
+and may rename a partial or old temporary file over the valid file.
 
-Il faut créer les temporaires dans le même répertoire que leur destination avec `mktemp` côté shell et
-`mkstemp(3)` côté C, conserver leur nom dans un `trap`/registre, vérifier toutes les fermetures, puis
-publier par `rename`. autoCode devrait contrôler le type de la destination avec `lstat`/`fstat`, définir
-une politique explicite pour les liens symboliques et préserver le mode attendu.
+Temporary files should be created in the destination directory with `mktemp` in shell and
+`mkstemp(3)` in C. Their names should be retained in a `trap` or registry, every close
+checked, and publication performed with `rename`. autoCode should check destination type with
+`lstat` and `fstat`, define an explicit symbolic-link policy, and preserve the expected mode.
 
-### 4. Haute — plusieurs fichiers de contrôle sont tronqués en place
+### 4. High: several control files are truncated in place
 
-Les listes `files_error`, `files_initrc`, `files_to_parse`, `files_halinit`, `values_funcinit` et
-`files_haldefine` sont vidées puis remplies ligne par ligne directement à leur emplacement final
-(`mk/autoCode.mk:116-150`). Une interruption laisse une liste partielle avec une date récente. Au
-lancement suivant, `bmake` peut la considérer à jour et autoCode peut travailler sur une composition
-incomplète.
+The `files_error`, `files_initrc`, `files_to_parse`, `files_halinit`,
+`values_funcinit`, and `files_haldefine` lists are emptied and then filled line by line at
+their final locations (`mk/autoCode.mk:116-150`). An interruption leaves a partial list with a
+recent timestamp. On the next run, `bmake` may consider it current, and autoCode may process
+an incomplete composition.
 
-La génération de `.gitignore` suit le même modèle (`mk/backup.mk:15-37`). Une interruption peut modifier
-temporairement la visibilité de nombreux artefacts et rendre une commande Git trop large plus risquée.
-`build/last_build_info.txt`, les données CLOC et plusieurs journaux sont également écrits en place ; leur
-impact est moindre, mais le diagnostic peut devenir incohérent.
+`.gitignore` generation follows the same pattern (`mk/backup.mk:15-37`). An interruption may
+temporarily change the visibility of many artifacts and make an overly broad Git command more
+risky. `build/last_build_info.txt`, CLOC data, and several logs are also written in place.
+Their impact is lower, but diagnostics may become inconsistent.
 
-Chaque générateur doit écrire un temporaire adjacent, vérifier le succès complet, puis effectuer un
-`mv`/`rename`. Les listes doivent aussi être triées lorsqu'un ordre sémantique n'est pas requis. Pour les
-`*.rc`, l'ordre ayant un effet sur la composition, il faut soit le définir explicitement, soit le
-documenter comme contrat — pas dépendre de l'énumération de `find`.
+Each generator should write an adjacent temporary file, verify complete success, then use
+`mv` or `rename`. Lists should also be sorted when order has no semantic meaning. Because
+`*.rc` order affects composition, it must either be explicitly defined or documented as a
+contract, not left to `find` enumeration.
 
-### 5. Moyenne — la publication autoCode n'est atomique que fichier par fichier
+### 5. Medium: autoCode publication is atomic only per file
 
-Toutes les entrées sont analysées avant publication, ce qui protège bien des erreurs de syntaxe. En
-revanche, `fileCmpReplaceAll()` remplace les destinations l'une après l'autre. Si le troisième `rename`
-échoue, les deux premières destinations restent nouvelles et les suivantes anciennes
-(`srcs/autoCode/fileUtility.c:65-101`). Le build échoue, mais l'arbre de sources est partiellement mis à
-jour. La note d'architecture reconnaît déjà cette absence de rollback.
+All inputs are analysed before publication, which protects well against syntax errors. However,
+`fileCmpReplaceAll()` replaces destinations one by one. If the third `rename` fails, the first
+two destinations remain new and later ones remain old
+(`srcs/autoCode/fileUtility.c:65-101`). The build fails, but the source tree is partially
+updated. The architecture note already recognises this lack of rollback.
 
-Deux stratégies sont acceptables :
+Two strategies are acceptable:
 
-- assumer explicitement « atomique par fichier, build bloqué en cas d'ensemble mixte », puis garantir
-  qu'un prochain autoCode répare toujours l'ensemble ;
-- ajouter un petit journal de transaction et des sauvegardes adjacentes permettant un rollback.
+- explicitly accept "atomic per file, blocked build for a mixed set", then guarantee that the
+  next autoCode run always repairs the set;
+- add a small transaction journal and adjacent backups that support rollback.
 
-La première option est probablement proportionnée au projet embarqué actuel, à condition d'ajouter un
-test injectant un échec de `rename` après au moins un succès.
+The first option is probably proportionate for the current embedded project, provided a test
+injects a `rename` failure after at least one success.
 
-### 6. Moyenne — le build parallèle n'a pas de contrat sûr
+### 6. Medium: parallel builds have no safe contract
 
-Le graphe emploie `.WAIT`, mais aucun `.NOTPARALLEL`, verrou par cible ou répertoire de session n'est
-déclaré. Avec `bmake -j`, `_system_critical_check` et `_autocode` appartiennent au même groupe précédant
-le premier `.WAIT` (`mk/build.mk:81-83`) : le contrôle peut lire les sources pendant qu'autoCode les
-remplace. Après le second `.WAIT`, le lien, la mesure mémoire et CLOC sont aussi des prérequis frères ;
-`_mcu_memory_data` ne dépend pas explicitement du binaire lié (`srcs/hal/arch/avr8/avr8_CC.mk:59-66`).
+The graph uses `.WAIT`, but declares no `.NOTPARALLEL`, per-target lock, or session directory.
+With `bmake -j`, `_system_critical_check` and `_autocode` belong to the same group before
+the first `.WAIT` (`mk/build.mk:81-83`). The check may read sources while autoCode replaces
+them. After the second `.WAIT`, linking, memory measurement, and CLOC are also sibling
+prerequisites. `_mcu_memory_data` does not explicitly depend on the linked binary
+(`srcs/hal/arch/avr8/avr8_CC.mk:59-66`).
 
-Deux invocations séquentielles mais simultanées sur la même cible partagent en outre les `.tmp`, stamps,
-logs et fichiers générés dans les sources. Des cibles différentes partagent encore `build/autoCode`,
-`build/log` et les mêmes destinations générées.
+Two simultaneous invocations on the same target also share `.tmp` files, stamps, logs, and
+generated source files. Different targets still share `build/autoCode`, `build/log`, and the
+same generated destinations.
 
-À court terme, déclarer le build non parallèle et refuser deux instances via un verrou FreeBSD est plus
-simple que rendre toute la chaîne réentrante. `.WAIT` doit rester utilisé pour exprimer les dépendances
-réelles, notamment binaire lié → mesure mémoire. Une parallélisation sélective des seules compilations
-pourra être réintroduite plus tard si elle apporte un gain mesuré.
+In the short term, declaring the build non-parallel and rejecting two instances with a FreeBSD
+lock is simpler than making the whole chain reentrant. `.WAIT` should continue to express real
+dependencies, especially linked binary before memory measurement. Selective parallel compilation
+can be reintroduced later if it provides a measured gain.
 
-### 10. Faible — le contrôle d'en-têtes construit une commande shell
+### 10. Low: the header check constructs a shell command
 
-`header_allow.awk` concatène `source_file` et `PATH_SOURCES` dans une chaîne passée à un pipe shell vers
-`grep` (`scripts/header_allow.awk:143-168`). Le format autorise plus de caractères que ce que cette
-construction sait citer. Dans un dépôt de confiance, le risque d'injection n'est pas une frontière de
-sécurité réelle, mais un guillemet ou un métacaractère accidentel peut modifier le scan.
+`header_allow.awk` concatenates `source_file` and `PATH_SOURCES` into a string passed to a
+`grep` shell pipe (`scripts/header_allow.awk:143-168`). The format permits more characters
+than this construction can quote. In a trusted repository, injection is not a real security
+boundary, but an accidental quote or metacharacter can change the scan.
 
-Le contrôle cherche aussi une chaîne dans tout le contenu, et non une directive `#include` lexicale ; il
-peut donc inclure commentaires et chaînes. Il serait plus robuste de laisser AWK parcourir directement
-la liste des sources, comme le vérificateur d'architecture, sans construire de commande shell.
+The check also searches for a string in all content, not a lexical `#include` directive, so it
+may include comments and strings. It would be more robust for AWK to traverse the source list
+directly, like the architecture checker, without constructing a shell command.
 
-## Observations secondaires
+## Secondary observations
 
-- Le stamp de contrôle des programmes évite un coût répété, mais ne détecte pas un changement de `PATH`
-  ou de version d'outil. Ce n'est pas un risque de suppression ; il faut seulement supprimer/invalider le
-  stamp lorsqu'un diagnostic d'environnement est nécessaire.
-- Les chemins absolus historiques de `cppcheck` et `tidy_autoCode` ne correspondent pas au checkout
-  actuel. Cela nuit à la reproductibilité, sans créer directement de risque destructif.
-- Le build injecte version Git, compteur et date dans ses sorties. La provenance est utile, mais le
-  résultat n'est volontairement pas reproductible bit à bit.
+- The program-check stamp avoids repeated cost, but does not detect a change in `PATH` or a
+  tool version. This is not a deletion risk. The stamp only needs to be removed or invalidated
+  when diagnosing the environment.
+- Historical absolute paths from `cppcheck` and `tidy_autoCode` do not match the current
+  checkout. This harms reproducibility without directly creating a destructive risk.
+- The build injects the Git version, counter, and date into its outputs. This provenance is
+  useful, but the result is intentionally not bit-for-bit reproducible.
 
-## Plan de durcissement recommandé
+## Recommended hardening plan
 
-### Étape 0 — corrections courtes et urgentes
+### Step 0: short and urgent fixes
 
-1. Rendre le statut non nul du contrôle d'architecture à `bmake`.
-2. Corriger le motif de suppression des logs.
-3. Durcir `backup` avant sa prochaine utilisation : montage exact, sentinelle, destination canonique,
-   gestion du démontage et décision explicite sur `--delete`.
-4. Ajouter `set -eu`, validation d'arguments et temporaire unique à `compare_replace.sh`.
+1. Propagate the architecture check's non-zero status to `bmake`.
+2. Fix the log-removal pattern.
+3. Harden `backup` before its next use: exact mount, sentinel, canonical destination,
+   unmount handling, and an explicit decision about `--delete`.
+4. Add `set -eu`, argument validation, and a unique temporary file to
+   `compare_replace.sh`.
 
-### Étape 1 — publication sûre des fichiers
+### Step 1: safe file publication
 
-1. Introduire un helper shell unique « écrire → fermer → comparer → renommer » avec temporaire adjacent.
-2. L'utiliser pour les listes autoCode, `.gitignore`, `tm_info.h` et les fichiers de métadonnées.
-3. Remplacer `<destination>.tmp` par `mkstemp(3)` dans autoCode, contrôler les types et préserver le mode.
-4. Définir puis tester la politique sur les liens symboliques.
+1. Introduce one shell helper for "write, close, compare, rename" with an adjacent temporary
+   file.
+2. Use it for autoCode lists, `.gitignore`, `tm_info.h`, and metadata files.
+3. Replace `<destination>.tmp` with `mkstemp(3)` in autoCode, check types, and preserve mode.
+4. Define and test the symbolic-link policy.
 
-### Étape 2 — déterminisme et concurrence
+### Step 2: determinism and concurrency
 
-1. Déclarer officiellement que le build complet est non parallèle et ajouter un verrou par checkout.
-2. Corriger les dépendances du graphe avant toute réactivation de `-j`.
-3. Fixer l'ordre des découvertes ou déclarer explicitement les listes dont l'ordre est sémantique.
-4. Ajouter un validateur léger des noms de chemins supportés.
+1. Officially declare the complete build non-parallel and add a per-checkout lock.
+2. Fix graph dependencies before re-enabling `-j`.
+3. Fix discovery order or explicitly declare lists whose order is semantic.
+4. Add a lightweight validator for supported path names.
 
-### Étape 3 — validation des chemins d'échec
+### Step 3: failure-path validation
 
-Ajouter des tests isolés sous un répertoire temporaire pour : disque plein simulé, refus d'ouverture,
-échec de fermeture, temporaire préexistant, lien symbolique, interruption, deux processus concurrents,
-échec du deuxième `rename`, chemin avec espaces, montage absent et destination de sauvegarde incorrecte.
-Les tests de sauvegarde doivent employer une arborescence ou un système de fichiers de test sans jamais
-monter ni supprimer les données réelles de l'opérateur.
+Add isolated tests under a temporary directory for a simulated full disk, open denial, close
+failure, pre-existing temporary file, symbolic link, interruption, two concurrent processes,
+failure of the second `rename`, path with spaces, absent mount, and incorrect backup
+destination. Backup tests must use a test tree or file system and must never mount or delete the
+operator's real data.
 
-## Validation effectuée pendant l'audit
+## Validation performed during the audit
 
-- lecture des documents d'architecture `build` et `autoCode`, des règles de style/interfaces et des
-  Makefiles/scripts applicables ;
-- inspection des valeurs développées par `bmake -V` pour la cible par défaut ;
-- développement non exécuté de `bmake -n help`, confirmant les effets globaux de `.BEGIN`/`.END` ;
-- exécution directe en lecture seule du vérificateur d'architecture : statut `3`, 13 violations ;
-- validation syntaxique par `sh -n` de tous les scripts shell du périmètre ;
-- validation ponctuelle de la garde : descendants de `build/` acceptés, `build/` et `/tmp` refusés ;
-- vérification de l'absence actuelle de liens symboliques sous `build/` et de résidus `.tmp` dans le
-  dépôt hors `.git`.
+- read the `build` and `autoCode` architecture documents, style and interface rules, and
+  applicable Makefiles and scripts;
+- inspected values expanded by `bmake -V` for the default target;
+- expanded `bmake -n help` without execution, confirming the global effects of
+  `.BEGIN` and `.END`;
+- directly ran the architecture checker read-only: status `3`, 13 violations;
+- ran `sh -n` syntax checks for every shell script in scope;
+- focused validation of the guard: descendants of `build/` accepted, `build/` and
+  `/tmp` rejected;
+- verified the current absence of symbolic links under `build/` and residual `.tmp` files
+  in the repository outside `.git`.
 
-Aucun `clean`, `clean_hard`, `backup`, autoCode, build AVR ou test générateur n'a été exécuté : ces
-commandes auraient modifié des artefacts ou des sources générées et n'étaient pas nécessaires pour
-établir les constats. Aucune validation sur matériel physique n'est concernée par cet audit.
+No `clean`, `clean_hard`, `backup`, autoCode, AVR build, or generator test was run. Those
+commands would have modified artifacts or generated sources and were unnecessary to establish
+the findings. No physical hardware validation applies to this audit.
 
 ## Conclusion
 
-Rester sur `bmake` et FreeBSD est raisonnable et même favorable à court terme. La priorité n'est pas la
-portabilité du build, mais la réduction du nombre de chemins d'écriture et la transformation de chacun
-en opération confinée, vérifiée et publiable atomiquement.
+Remaining on `bmake` and FreeBSD is reasonable and even beneficial in the short term. The
+priority is not build portability. It is reducing the number of write paths and turning each
+into a confined, checked, atomically published operation.
 
-Le projet a déjà franchi l'étape la plus dangereuse pour `clean` grâce à la garde canonique. Le prochain
-gain de sûreté vient d'un durcissement ciblé de `backup`, de la propagation stricte des statuts d'erreur,
-de temporaires uniques et d'un contrat séquentiel explicite. Ces changements restent petits, locaux au
-build hôte et n'ajoutent aucune charge de portage au code RTOS embarqué.
+The project has already addressed the most dangerous `clean` issue with the canonical guard.
+The next safety improvement comes from focused `backup` hardening, strict error-status
+propagation, unique temporary files, and an explicit sequential contract. These changes remain
+small and local to the host build, with no portability cost for embedded RTOS code.
