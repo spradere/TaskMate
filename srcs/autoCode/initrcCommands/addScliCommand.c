@@ -103,7 +103,8 @@ void initrcAddScliCommand(const initrc_command_t *command)
 		return;
 	}
 
-	if( autoCodeBufferStringFits(name, MOD_NAME_SIZE_MAX) == false )
+	const char *name = command->tok->tokens[1];
+	if( autoCodeBufferStringFits(name, MOD_NAME_SIZE_MAX-1) == false )
 	{
 		AUTOCODE_MSG_ERROR("SCLI command identifier is too long [%s:%i] %s",
 						   command->initrc_name,
