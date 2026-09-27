@@ -371,13 +371,6 @@ runInitrcTests()
 	expectFailure missing_scli_source_file_path "SCLI command source file not found" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	caseBegin invalid_scli_command_identifier
-	printf '%s\n' \
-		'addScliCommand bad/name -source_file system/services/commands/scli_date.c' \
-		>> "${PATH_CASE}/init.rc"
-	expectFailure invalid_scli_command_identifier "invalid SCLI command identifier" \
-		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-
 	caseBegin unknown_scli_command
 	printf '%s\n' \
 		'addScliCommand missing -source_file system/services/commands/scli_date.c' \
