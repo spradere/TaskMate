@@ -8,7 +8,7 @@
 
 /**
  * @file ucontext_string_macro.h
- * @brief ucontext target string macro declarations.
+ * @brief ucontext host string macro declarations.
  */
 
 #ifndef UCONTEXT_UCONTEXT_STRING_MACRO_H

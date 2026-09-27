@@ -8,7 +8,7 @@
 
 /**
  * @file ucontext_types.h
- * @brief FreeBSD ucontext target type declarations.
+ * @brief FreeBSD ucontext host type declarations.
  */
 
 #ifndef UCONTEXT_UCONTEXT_TYPES_H
