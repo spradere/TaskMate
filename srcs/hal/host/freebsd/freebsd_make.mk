@@ -22,10 +22,7 @@ PATHS_SOURCE_SEARCH += ${PATH_FREEBSD}
 FILES_EXTRA_SRC += \
 	${PATH_FREEBSD}/freebsd_atomic.c \
 	${PATH_FREEBSD}/freebsd_halt.c \
-	${PATH_FREEBSD}/freebsd_interrupts.c \
-	${PATH_FREEBSD}/freebsd_timerSched.c \
-	${PATH_FREEBSD}/freebsd_timerSTC.c \
-	${PATH_FREEBSD}/freebsd_usart.c
+	${PATH_FREEBSD}/freebsd_interrupts.c
 
 CFLAGS += -DHOST_freebsd
 FILE_ARCH_CC = ${PATH_FREEBSD}/freebsd_CC.mk

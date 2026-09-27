@@ -100,9 +100,9 @@ assertWordsSorted()
 {
 	tr ' ' '\n' < "${PATH_STAGE_WORK}/$1.log" | sed '/^$/d' \
 		> "${PATH_STAGE_WORK}/$1.words"
-	LC_ALL=C sort "${PATH_STAGE_WORK}/$1.words" > "${PATH_STAGE_WORK}/$1.sorted"
+	LC_ALL=C sort -u "${PATH_STAGE_WORK}/$1.words" > "${PATH_STAGE_WORK}/$1.sorted"
 	if ! cmp -s "${PATH_STAGE_WORK}/$1.words" "${PATH_STAGE_WORK}/$1.sorted"; then
-		fail "$1: output is not sorted"
+		fail "$1: paths are not sorted or contain duplicates"
 	fi
 }
 
@@ -281,6 +281,24 @@ runConfigurationTests()
 	logContains object_mapping \
 		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/boot.o"
 	logExcludes object_mapping ".c.o"
+
+	for VAL_PATH_LIST in \
+		PATHS_SOURCE_SEARCH PATHS_EXTRA_SRC FILES_EXTRA_SRC FILES_SRC_H \
+		FILES_DRIVER_INTERFACES FILES_INITRC FILES_INITRC_SRC PATHS_INITRC_SOURCES \
+		FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_OBJ \
+		FILES_DEP FILES_ERROR FILES_AUTOCODE_SRC FILES_AUTOCODE_SRC_H \
+		FILES_AUTOCODE_SRC_ALL FILES_NOTARGET_SRC FILES_NOTARGET_SRC_H \
+		FILES_NOTARGET_SRC_ALL FILES_DOC FILES_MK_MK FILES_MK_HAL FILES_MK_TEST \
+		FILES_MK FILES_AUTOCODE_INC FILES_PARSE_TAG PATHS_TM_STRING_ALLOWED
+	do
+		expectSuccess "path_list_${VAL_PATH_LIST}" targetMake -V "${VAL_PATH_LIST}"
+		assertWordsSorted "path_list_${VAL_PATH_LIST}"
+	done
+	expectFailure duplicate_direct_path "Duplicate path in FILES_AUTOCODE_SRC:" \
+		bmake -C "${PATH_PROJECT}" FILES_AUTOCODE_SRC='duplicate.c duplicate.c' \
+		-V FILES_AUTOCODE_SRC
+	expectFailure duplicate_composed_path "Duplicate path in FILES_COMPILE_SRC:" \
+		targetMake FILES_EXTRA_SRC=srcs/system/boot.c -V FILES_COMPILE_SRC
 	VAL_DRIVER_INTERFACES="srcs/interfaces/drv_i2c.h srcs/interfaces/drv_lcd.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_rtc.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerSTC.h"
@@ -341,6 +359,7 @@ runScriptTests()
 	FILE_PATH_CHECK="${PATH_PROJECT}/scripts/check_path_file.sh"
 	FILE_VERSION="${PATH_PROJECT}/scripts/git_version.sh"
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
+	FILE_INITRC_SOURCES="${PATH_PROJECT}/scripts/initrc_sources.awk"
 
 	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
 		'#define AC_INITRC_EXPECTED_VER_MINOR 9' \
@@ -366,6 +385,17 @@ initrc : 1.9" awk -v expected_major=1 -v expected_minor=3 -v report_versions=1 \
 	expectFailure autocode_version_malformed "Invalid autoCode version definition" awk \
 		-v expected_major=1 -v expected_minor=3 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/malformed.h"
+
+	printf '%s\n' \
+		'addModule service first -source_file shared.c -source_dir commands' \
+		'addModule task second -source_file shared.c -source_dir commands' \
+		> "${PATH_STAGE_WORK}/duplicate_sources.rc"
+	expectFailure initrc_duplicate_source_file "Duplicate -source_file path <srcs/shared.c>" \
+		awk -v source_option=-source_file -v source_root=srcs \
+		-f "${FILE_INITRC_SOURCES}" "${PATH_STAGE_WORK}/duplicate_sources.rc"
+	expectFailure initrc_duplicate_source_dir "Duplicate -source_dir path <srcs/commands>" \
+		awk -v source_option=-source_dir -v source_root=srcs \
+		-f "${FILE_INITRC_SOURCES}" "${PATH_STAGE_WORK}/duplicate_sources.rc"
 
 	expectFailure programs_usage "Usage:" "${FILE_PROGRAMS}"
 	expectFailure programs_missing_file "Programs list is not readable" \

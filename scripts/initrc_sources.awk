@@ -40,10 +40,19 @@ BEGIN {
 		}
 
 		path = source_root "/" $(field + 1)
-		if (!seen[path])
+		if (seen[path])
+		{
+			printf("Duplicate %s path <%s> [%s:%d], first declared at [%s:%d]\n", \
+				source_option, path, FILENAME, FNR, first_file[path], first_line[path]) \
+				> "/dev/stderr"
+			have_error = 1
+		}
+		else
 		{
 			print path
 			seen[path] = 1
+			first_file[path] = FILENAME
+			first_line[path] = FNR
 		}
 		field++
 	}

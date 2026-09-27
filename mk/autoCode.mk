@@ -28,6 +28,13 @@ FILES_PARSE_TAG != find ${PATH_SRCS}/system ${PATH_SRCS}/interfaces ${OPT_FIND_E
 	-type f -exec grep -qFl '[autoCode_tag]' {} \; -print | sort
 FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
 
+.for path_list in FILES_AUTOCODE_INC FILES_PARSE_TAG
+${path_list} := ${${path_list}:O}
+.if ${${path_list}:[#]} != ${${path_list}:u:[#]}
+.error Duplicate path in ${path_list}: ${${path_list}}
+.endif
+.endfor
+
 # autoCode list of files
 FILE_INITRC_LIST = ${PATH_BUILD_TARGET}/files_initrc
 FILE_PARSE_TAG_LIST = ${PATH_BUILD_TARGET}/files_to_parse
