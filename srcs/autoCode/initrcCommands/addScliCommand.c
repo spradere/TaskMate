@@ -45,28 +45,6 @@ static const scli_command_definition_t scli_command_definitions[] = {
  * Implementation - Functions
  * ===========================================================================*/
 
-static bool identifierCharacterIsValid(const char character)
-{
-	return ((character >= 'a') && (character <= 'z')) ||
-		   ((character >= 'A') && (character <= 'Z')) ||
-		   ((character >= '0') && (character <= '9')) || (character == '_');
-}
-
-static bool identifierIsValid(const char *identifier)
-{
-	if( !(((identifier[0] >= 'a') && (identifier[0] <= 'z')) ||
-		  ((identifier[0] >= 'A') && (identifier[0] <= 'Z')) || (identifier[0] == '_')) )
-	{
-		return false;
-	}
-
-	for( size_t i = 1; identifier[i] != 0; i++ )
-	{
-		if( identifierCharacterIsValid(identifier[i]) == false ) { return false; }
-	}
-	return true;
-}
-
 static bool commandHeaderExists(const initrc_command_t *command, const char *name)
 {
 	char path[AC_BUFFER_SIZE];
@@ -125,16 +103,7 @@ void initrcAddScliCommand(const initrc_command_t *command)
 		return;
 	}
 
-	const char *name = command->tok->tokens[1];
-	if( identifierIsValid(name) == false )
-	{
-		AUTOCODE_MSG_ERROR("invalid SCLI command identifier [%s:%i] %s",
-						   command->initrc_name,
-						   command->file_line_number,
-						   name);
-		return;
-	}
-	if( autoCodeBufferStringFits(name, AC_SCLI_COMMAND_NAME_SIZE_MAX) == false )
+	if( autoCodeBufferStringFits(name, MOD_NAME_SIZE_MAX) == false )
 	{
 		AUTOCODE_MSG_ERROR("SCLI command identifier is too long [%s:%i] %s",
 						   command->initrc_name,
