@@ -1,4 +1,4 @@
-# 👨‍💻 Architecture Note — autoCode
+# 👨‍💻 Architecture Note: autoCode
 
 ## Historical developments
 `autoCode` replaced manual allocation around `v0.10` and gained `init.rc` in `v0.20`.

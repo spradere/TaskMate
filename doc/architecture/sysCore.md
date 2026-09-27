@@ -1,4 +1,4 @@
-# 🧠 Architecture Note — sysCore
+# 🧠 Architecture Note: sysCore
 
 ## Historical developments
 `sysCore` grew from a prototype into module storage, scheduling, and software-time ownership.

@@ -40,3 +40,8 @@ geany_mk:
 geany_tm:
 #help [global] Open Geany with all TaskMate .c and .h files.
 	geany ${FILES_NOTARGET_SRC_ALL}
+
+.PHONY: geany_doc
+geany_doc:
+#help [global] Open Geany with all documentations files.
+	geany ${FILES_DOC}

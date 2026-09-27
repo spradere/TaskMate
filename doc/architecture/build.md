@@ -1,4 +1,4 @@
-# 🏗️ Architecture Note — build
+# 🏗️ Architecture Note: build
 
 ## Historical developments
 TaskMate evolved from one Makefile into BSD `bmake` orchestration and focused `mk/*.mk` files.

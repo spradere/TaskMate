@@ -1,4 +1,4 @@
-# 🚨 Architecture Note — error
+# 🚨 Architecture Note: error
 
 ## Historical developments
 TaskMate replaced local strings with module-owned `*.err` catalogues between `v0.23` and `v0.26`.

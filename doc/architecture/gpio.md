@@ -1,4 +1,4 @@
-# 💡 Architecture Note — gpio
+# 💡 Architecture Note: gpio
 
 ## Historical developments
 GPIO began as direct MCU pin access; `v0.22` and `v0.26` separated logical signals from pins.

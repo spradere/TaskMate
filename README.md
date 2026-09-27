@@ -10,8 +10,8 @@
 design through hands-on practice, experimentation, and iterative development. 
 TaskMate operating system is designed for microcontroller.**
 
-At a much smaller scale and within my own limits, this project is also a way to retrace—step by
-step—the kind of questions and discoveries that shaped early systems like Unix, by exploring what
+At a much smaller scale and within my own limits this project is also a way to retrace, step by
+step, the kind of questions and discoveries that shaped early systems like Unix, by exploring what
 the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
 > <span style="color:green"> **Project Stats (v0.32 [^1] )**</span>
@@ -41,7 +41,7 @@ Each layer communicates primarily with its direct neighbours, following a strict
 maintain clear boundaries and avoid hidden dependencies.
 
 System features such as messaging, timing, I/O, and services remain fully accessible to user
-tasks—but always through controlled and indirect interactions.
+tasks but always through controlled and indirect interactions.
 
 ---
 
@@ -145,9 +145,9 @@ and disclaimer as described in the `LICENSE` file.
 
 ## 📑 Documentation & books 📚
 
-- **Project development status** — see [Project Progress](doc/progress.md)
-- **Changelog** — version history: see [CHANGELOG](./CHANGELOG)
-- **C Style Guide** — best practices (pointers, errors, etc.): see [code best practices](./doc/C_code_best_practices.md)
+- **Project development status** see [Project Progress](doc/progress.md)
+- **Changelog** version history: see [CHANGELOG](./CHANGELOG)
+- **C Style Guide** best practices (pointers, errors, etc.): see [code best practices](./doc/C_code_best_practices.md)
 
 **Architecture :**
 

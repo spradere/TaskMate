@@ -1,4 +1,4 @@
-# 🔧 Architecture Note — hal
+# 🔧 Architecture Note: hal
 
 ## Historical developments
 TaskMate began as AVR-centric code; `v0.21` separated architecture, MCU, and board ownership.

@@ -15,7 +15,7 @@ part of the `hal_` API; its exported symbols therefore keep the `hal_` prefix.
 
 ## 📋 Overview of the existing prefixes and their intent.
 
-### ● `tm_` — Project identity
+### ● `tm_` Project identity
 
 **Everything that is specific to TaskMate itself**
 
@@ -27,7 +27,7 @@ part of the `hal_` API; its exported symbols therefore keep the `hal_` prefix.
 
 ---
 
-### ● `drv_` — Driver interface
+### ● `drv_` Driver interface
 
 **Portable control operations and state definitions shared by drivers**
 
@@ -41,7 +41,7 @@ hardware-specific implementation details.
 
 ---
 
-### ● `ac_` — autoCode constants and enumerations
+### ● `ac_` autoCode constants and enumerations
 
 **Build-time code-generation definitions owned by autoCode**
 
@@ -53,7 +53,7 @@ hardware-specific implementation details.
 
 ---
 
-### ● `sc_` — Task-visible API boundary (system calls)
+### ● `sc_` Task-visible API boundary (system calls)
 
 **Controlled and limited API access from tasks to system functionality**
 
@@ -67,7 +67,7 @@ At a glance, it reads as:
 
 ---
 
-### ● `sys_` — sysCore implementation
+### ● `sys_` sysCore implementation
 
 **Kernel state, policy, boot support, and scheduling owned by sysCore**
 
@@ -80,7 +80,7 @@ At a glance, it reads as:
 
 ---
 
-### ● `hal_` — Hardware abstraction boundary
+### ● `hal_` Hardware abstraction boundary
 
 **Target-independent hardware-facing API symbols**
 
@@ -92,7 +92,7 @@ prefixes below.
 
 ---
 
-### ● `avr8_` / `at2560_` / `mega_` — Selected HAL implementation
+### ● `avr8_` / `at2560_` / `mega_` Selected HAL implementation
 
 **Files whose implementation belongs to a specific architecture, MCU, or board**
 
@@ -108,7 +108,7 @@ hardware abstraction boundary it serves.
 
 ---
 
-### ● `gpio_` — Logical-to-physical middleware
+### ● `gpio_` Logical-to-physical middleware
 
 **An intermediate semantic layer between software logic and hardware signals**
 
@@ -121,7 +121,7 @@ hardware abstraction boundary it serves.
 
 ---
 
-### ● `err_` — Global error system
+### ● `err_` Global error system
 
 **Cross-cutting error handling infrastructure**
 
@@ -134,7 +134,7 @@ Most importantly:
 
 ---
 
-### ● `mod_` — Module database
+### ● `mod_` Module database
 
 **System-wide description of threads and drivers**
 
@@ -148,7 +148,7 @@ Using a dedicated prefix avoids ambiguity:
 
 ---
 
-### ● `rl_` — Run levels
+### ● `rl_` Run levels
 
 **System life cycle management**
 
@@ -164,7 +164,7 @@ Using a dedicated prefix avoids ambiguity:
 
 A prefix is not decoration.
 
-> **A prefix replaces a comment — it must not become noise.**
+> **A prefix replaces a comment, it must not become noise.**
 
 TaskMate prefixes provide:
 

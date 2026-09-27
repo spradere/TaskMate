@@ -40,15 +40,14 @@ Modularity, strict API, and clean headers
 
 ---
 
-## 2. 📖 Readability: Clarity over cleverness
+## 2. 📖 Readability - Clarity over cleverness
 
 Code is read more than it is written. Prioritise understandable variable names and structure.
 
 * Code is for humans first, compilers second.
   Don't write clever code. Write code you'd understand a year from now with a hangover.
 
-* Use meaningful names.
-`status_t file_status;` is good. `int fs;` is not.
+* Use meaningful names. `status_t file_status;` is good, `int fs;` is not.
 
 * Use typedef and enum for meaning.
 `typedef enum { STATUS_OK, STATUS_ERR } status_t;` is far clearer than using 0 and 1.
@@ -58,7 +57,7 @@ Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
 
 ---
 
-## 3. 🛠️ Maintainability: Avoid cryptic names and magic numbers
+## 3. 🛠️ Maintainability - Avoid cryptic names and magic numbers
 
 Use meaningful names, constants, and enums instead of hard-coded values.
 
@@ -69,14 +68,14 @@ Use `#define TIMEOUT_MS 1000` instead of `if(t > 1000)`.
 `const uint8_t MAX_RETRIES = 5;` makes intent clear.
 
 * Group related logic.
-Keep functions short and focused. One job per function.
+Keep functions short and focused, one job per function.
 
 * Isolate hardware dependencies.
 Wrap I/O in abstraction layers so logic is portable and testable.
 
 **Example:**
 ```c
-fs = 10;                         // bad
+fs = 10;                        // bad
 file_status = STATUS_DEFAULT;   // good
 ```
 
@@ -87,7 +86,7 @@ file_status = STATUS_DEFAULT;   // good
 Use data structures and algorithms.
 
 * Data-driven design beats control-flow spaghetti.
-Instead of a long if/else chain, use function pointer arrays, lookup tables, or dispatch maps.
+Instead of a long if/else chain, use function pointer arrays, lookup tables or dispatch maps.
 
 * Avoid duplication.
 Copied code multiplies bugs and update work. Refactor common logic into functions.
@@ -102,7 +101,7 @@ Anticipate what's likely to change and isolate it.
 Use asserts or clear error returns when contracts are broken.
 
 * Log wisely.
-Not too little, not too much—log what you need to understand what went wrong.
+Not too little, not too much. Log what you need to understand what went wrong.
 
 * Write testable code.
 Decouple logic from I/O and hardware to allow mocking.
@@ -112,31 +111,31 @@ Decouple logic from I/O and hardware to allow mocking.
 ## 6. 🛡️ Safety and Robustness
 
 * Never trust input.
-Validate everything—especially in embedded or user-facing code.
+Validate everything, especially in embedded or user-facing code.
 
 * Watch stack and heap usage.
-Embedded systems die silently on overflows. Use guards, checks, and tools.
+Embedded systems die silently on overflows. Use guards, checks and tools.
 
-* Defensive coding isn't paranoia—it's professionalism.
-Check bounds, handle NULL, and expect the unexpected.
+* Defensive coding isn't paranoia, it's professionalism.
+Check bounds, handle NULL and expect the unexpected.
 
 ---
 ## 7. 🔧 Tooling and Process
 
 * Automate what can be automated.
-Builds, tests, formatting, flashing—your time is precious.
+Builds, tests, formatting, flashing, ... Your time is precious.
 
-* Use version control. Always.
+* Use version control. **Always**.
 Your future self will thank you.
 
 ---
 
 ## 8. 💬 Commenting Rules for Humans
 
-### 8.1. Comment “why”, not “what”
+### 8.1. Comment “why” not “what”
 
-The code shows what happens. Your job is to write why it happens. Self-documenting
-code over excessive comments. Write code so clear it needs fewer comments.
+The code shows what happens, your job is to write why it happens. Self-documenting
+code over excessive comments, write code so clear it needs fewer comments.
 Use comments to explain **why**, not **what**.
 
 * Don't: `timeout = 1000; // set timeout to 1000`
@@ -171,7 +170,7 @@ for(i = 0; i < MAX_RETRIES; i++)
 
 ### 8.5. Highlight workarounds, hacks, and TODO
 
-Comments are a dev diary—use them to flag temporary solutions.
+Comments are a dev diary, use them to flag temporary solutions.
 
 Do:
 
@@ -184,7 +183,7 @@ resetWatchdog();
 
 ### 8.6. Give units when assigning values
 
-Especially in embedded or timing-sensitive code—always say what the units are.
+Especially in embedded or timing-sensitive code, always say what the units are.
 
 * Don't: `delay = 200;`
 * Do: `delay_ms = 200; // 200 ms delay between measurements`
@@ -199,7 +198,7 @@ Do:
 
 ### 8.8. Flag concurrency and timing issues
 
-Race conditions are silent killers. Leave signposts for them.
+Race conditions are silent killers, leave signposts for them.
 
 Do:
 ```c
@@ -231,7 +230,7 @@ The golden rule: If a comment just rewords the code, delete it.
 
 ---
 
-## 9. ✍🏻 Naming: Use plural for collections, singular for items
+## 9. ✍🏻 Naming - Use plural for collections, singular for items
 
 Helps indicate intent and structure of data.
 
@@ -244,7 +243,7 @@ list_table_t *list_table; // unclear
 
 ---
 
-## 10. 🔤 Abbreviations: Use only when standard or obvious
+## 10. 🔤 Abbreviations - Use only when standard or obvious
 
 Avoid cryptic short forms unless they are universally recognised (e.g., USART, ISR).
 Since auto-completion makes long names easy, there's no excuse for being cryptic in the name of brevity.
@@ -257,21 +256,21 @@ messageError();    // clear
 
 ---
 
-## 11. ⚠️ Error messages: Informative, precise, human-readable
+## 11. ⚠️ Error messages - Informative, precise, human-readable
 
-Provide the file, line, nature of the problem, actual vs. expected values, and a solution.
+Provide the file, line, nature of the problem, actual vs. expected values and a solution.
 
-* Includes source file + line of the error → Pinpoint precision
-* States clearly what went wrong → Not vague
-* Shows where the bad data came from → [file]
-* Prints the actual offending line/token → No guessing
+* Includes source file + line of the error → Pinpoint precision.
+* States clearly what went wrong → Not vague.
+* Shows where the bad data came from → [file].
+* Prints the actual offending line/token → No guessing.
 * Handles all common failure cases → Unknown command, missing flags, name duplication, wrong argument count, ...
-* Speaks like a human → Natural and helpful
+* Speaks like a human → Natural and helpful.
 
 ### Very bad
 `driver arg error`
 
-* No file, no line, no values — just frustration.
+* No file, no line, no values, just frustration.
 
 ### Better
 `[autoCode.c:59] driver wrong arg count`
@@ -298,28 +297,26 @@ Provide the file, line, nature of the problem, actual vs. expected values, and a
 
 ## 12. ♻️ Refactoring mindset
 
-Start by thinking “add more comments,” but end by writing cleaner, clearer code that needs fewer of them.
-
 **Takeaway:**
-If you're deleting comments because your code no longer needs them — you're doing it right.
+If you're deleting comments because your code no longer needs them: you're doing it right.
 
 ### Refactoring from chaos to architecture.
 Turning a pile of code into a system.
 
-* Naming things with precision
-* Choosing data structures that reflect intent
-* Writing code that someone else (or future-you) will understand and trust
+* Naming things with precision.
+* Choosing data structures that reflect intent.
+* Writing code that someone else (or future-you) will understand and trust.
 
 ### Truths of good code architecture:
 
-* It's invisible when it works. Bad code screams. Good design whispers.
+* It's invisible when it works: bad code screams, good design whispers.
 * The goal isn't just to make it run. It's to make it changeable without fear.
-* Style is structure. Names, indentation, modularity—they aren't cosmetic. They're communication.
-* You write for readers, not just compilers. Compilers don't rage-quit. Humans do.
+* Style is structure: names, indentation and modularity. They aren't cosmetic, they're communication.
+* You write for readers, not just compilers. Compilers don't rage-quit, humans do.
 
 ### Key points of refactoring
 
-This is the hard part—but it's also what makes a system satisfying to build and maintain.
+This is the hard part, but it's also what makes a system satisfying to build and maintain.
 
 * Abstraction (layers)
 * Architecture (structuring algorithms/data flow)
@@ -333,10 +330,10 @@ Commit messages must be **short, clear, and action-oriented**.
 Each message should begin with a **verb prefix** followed by a short description of the change.
 
 ### Possible prefixes:
-- `add` — for new files, features, or logic
-- `remove` — for deleted code, features, or cleanup
-- `fix` — for bug fixes or corrections
-- `change` — for modifications, refactors, or renames
+- `add` for new files, features, or logic
+- `remove` for deleted code, features, or cleanup
+- `fix` for bug fixes or corrections
+- `change` for modifications, refactors, or renames
 - `upgrade` / `update`
 - `replace` / `move`
 - `bump` / `merge` / `test`
