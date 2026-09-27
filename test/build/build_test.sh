@@ -232,7 +232,7 @@ runConfigurationTests()
 	expectOutput cpu_frequency "16000000UL" targetMake -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" targetMake -V VAL_MCU_SERIAL
 
-	expectOutput z600_stack "z600 pc freebsd" \
+	expectOutput z600_stack "z600 pc freebsd ucontext" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V VAL_HW_STACK
 	expectOutput z600_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_ARCH_CC
