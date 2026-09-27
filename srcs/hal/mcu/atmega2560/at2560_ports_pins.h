@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_MCU_ATMEGA2560_AT2560_PORTS_PINS_H
-#define HAL_MCU_ATMEGA2560_AT2560_PORTS_PINS_H
+#ifndef ATMEGA2560_AT2560_PORTS_PINS_H
+#define ATMEGA2560_AT2560_PORTS_PINS_H
 
 /* ============================================================================
  * Includes
@@ -53,4 +53,4 @@ typedef struct
 	gpio_pin_pull_t pull;
 } hal_pin_t;
 
-#endif // HAL_MCU_ATMEGA2560_AT2560_PORTS_PINS_H
+#endif // ATMEGA2560_AT2560_PORTS_PINS_H

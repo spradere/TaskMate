@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
-#define HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
+#ifndef AVR8_AVR8_ARCHITECTURE_TYPES_H
+#define AVR8_AVR8_ARCHITECTURE_TYPES_H
 
 /* ============================================================================
  * Includes
@@ -34,4 +34,4 @@ struct hal_context
 	hal_stack_word_t *stack_pointer;
 };
 
-#endif // HAL_ARCH_AVR8_AVR8_ARCHITECTURE_TYPES_H
+#endif // AVR8_AVR8_ARCHITECTURE_TYPES_H

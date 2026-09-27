@@ -52,15 +52,17 @@ mod_thread_item_t *thread;
 - Include the matching local header first in `.c` files.
 - After the matching header, include system headers before project headers.
 - Let clang-format sort include blocks.
-- Keep headers guarded with an uppercase path-file name guard:
+- Build each header guard from the immediate parent directory and the file name. Convert both
+  names to uppercase, preserve word-separating underscores, replace other separators with
+  underscores, omit the file extension, and use `<LAST_PARENT_DIRECTORY>_<FILE_NAME>_H`:
 
 ```c
-#ifndef SYSCORE_MODULES_H
-#define SYSCORE_MODULES_H
+#ifndef SYSCORE_SYS_MODULES_H
+#define SYSCORE_SYS_MODULES_H
 
 ...
 
-#endif // SYSCORE_MODULES_H
+#endif // SYSCORE_SYS_MODULES_H
 ```
 
 ## Naming

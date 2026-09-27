@@ -11,8 +11,8 @@
  * @brief modules list header declarations.
  */
 
-#ifndef SYSCORE_MODULES_LIST_H
-#define SYSCORE_MODULES_LIST_H
+#ifndef SYSCORE_SYS_MODULES_LIST_H
+#define SYSCORE_SYS_MODULES_LIST_H
 
 /* ============================================================================
  * Generated includes
@@ -22,4 +22,4 @@
 #include "modules_list.inc"
 // [/tag]
 
-#endif // SYSCORE_MODULES_LIST_H
+#endif // SYSCORE_SYS_MODULES_LIST_H

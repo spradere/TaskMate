@@ -11,8 +11,8 @@
  * @brief Shared init.rc command parser declarations.
  */
 
-#ifndef AUTOCODE_INITRCCOMMANDS_INITRCCOMMAND_H
-#define AUTOCODE_INITRCCOMMANDS_INITRCCOMMAND_H
+#ifndef INITRCCOMMANDS_INITRCCOMMAND_H
+#define INITRCCOMMANDS_INITRCCOMMAND_H
 
 /* =============================================================================
  * Includes
@@ -34,4 +34,4 @@ typedef struct
 	int file_line_number;
 } initrc_command_t;
 
-#endif // AUTOCODE_INITRCCOMMANDS_INITRCCOMMAND_H
+#endif // INITRCCOMMANDS_INITRCCOMMAND_H

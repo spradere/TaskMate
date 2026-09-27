@@ -11,8 +11,8 @@
  * @brief Shared autoCode tag writer declarations.
  */
 
-#ifndef AUTOCODE_TAGWRITERS_TAGWRITERS_H
-#define AUTOCODE_TAGWRITERS_TAGWRITERS_H
+#ifndef TAGWRITERS_TAGWRITERS_H
+#define TAGWRITERS_TAGWRITERS_H
 
 /* =============================================================================
  * Includes
@@ -51,4 +51,4 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context);
 void tagWriterWriteWireGpio(const tag_writer_context_t *context);
 void tagWriterWriteScliCommands(const tag_writer_context_t *context);
 
-#endif // AUTOCODE_TAGWRITERS_TAGWRITERS_H
+#endif // TAGWRITERS_TAGWRITERS_H

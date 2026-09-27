@@ -11,8 +11,8 @@
  * @brief PC virtual GPIO declarations.
  */
 
-#ifndef HAL_BOARD_PC_PC_GPIO_H
-#define HAL_BOARD_PC_PC_GPIO_H
+#ifndef PC_PC_GPIO_H
+#define PC_PC_GPIO_H
 
 /* ============================================================================
  * Includes
@@ -20,4 +20,4 @@
 
 #include "interfaces/gpio_signals.h"
 
-#endif // HAL_BOARD_PC_PC_GPIO_H
+#endif // PC_PC_GPIO_H

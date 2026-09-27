@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef TM_LIBC_TM_SYSLOG_H
-#define TM_LIBC_TM_SYSLOG_H
+#ifndef TMLIBC_TM_SYSLOG_H
+#define TMLIBC_TM_SYSLOG_H
 
 /* ============================================================================
  * Target selection
@@ -37,4 +37,4 @@
 
 // clang-format on
 
-#endif // TM_LIBC_TM_SYSLOG_H
+#endif // TMLIBC_TM_SYSLOG_H
