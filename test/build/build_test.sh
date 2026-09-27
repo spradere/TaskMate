@@ -106,6 +106,18 @@ assertWordsSorted()
 	fi
 }
 
+assertFileNamesSorted()
+{
+	tr ' ' '\n' < "${PATH_STAGE_WORK}/$1.log" | sed '/^$/d' \
+		> "${PATH_STAGE_WORK}/$1.words"
+	awk '{ path = $0; name = path; sub(/^.*\//, "", name); print name "|" path }' \
+		"${PATH_STAGE_WORK}/$1.words" > "${PATH_STAGE_WORK}/$1.keys"
+	LC_ALL=C sort "${PATH_STAGE_WORK}/$1.keys" > "${PATH_STAGE_WORK}/$1.sorted"
+	if ! cmp -s "${PATH_STAGE_WORK}/$1.keys" "${PATH_STAGE_WORK}/$1.sorted"; then
+		fail "$1: filenames are not sorted"
+	fi
+}
+
 targetMake()
 {
 	bmake -C "${PATH_PROJECT}" VAL_TARGET=test1 "$@"
@@ -147,15 +159,29 @@ runConfigurationTests()
 	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_modules.c"
 	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_scli.c"
 	logContains autocode_source_order "srcs/autoCode/tagWriters/tagWriters_threads.c"
+	expectSuccess autocode_editor_order bmake -C "${PATH_PROJECT}" \
+		-V FILES_EDITOR_AUTOCODE
+	assertFileNamesSorted autocode_editor_order
 	expectSuccess taskmate_source_order bmake -C "${PATH_PROJECT}" \
 		-V FILES_NOTARGET_SRC_ALL
 	assertWordsSorted taskmate_source_order
 	logContains taskmate_source_order "srcs/system/boot.c"
 	logExcludes taskmate_source_order "srcs/autoCode/"
+	expectSuccess taskmate_editor_order bmake -C "${PATH_PROJECT}" \
+		-V FILES_EDITOR_TM
+	assertFileNamesSorted taskmate_editor_order
 	expectSuccess makefile_order bmake -C "${PATH_PROJECT}" -V FILES_MK
 	assertWordsSorted makefile_order
 	logContains makefile_order "./Makefile"
 	logContains makefile_order "./test/build_test.mk"
+	expectSuccess makefile_editor_order bmake -C "${PATH_PROJECT}" \
+		-V FILES_EDITOR_MK
+	assertFileNamesSorted makefile_editor_order
+	expectSuccess documentation_editor_order bmake -C "${PATH_PROJECT}" \
+		-V FILES_EDITOR_DOC
+	assertFileNamesSorted documentation_editor_order
+	logContains documentation_editor_order "doc/architecture/build.md"
+	logContains documentation_editor_order "doc/howto_doxygen.txt"
 	expectSuccess selected_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
 		TARGET=test1 FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode
 	logContains selected_target_autocode_test "clang -DAUTOCODE_BUILD"
