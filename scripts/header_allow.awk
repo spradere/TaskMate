@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Parse and check allowed system includes
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Parse include rules and check where restricted headers are referenced.
+#
+# Inputs: Rule file plus PATH_SOURCES, h_check_log, COLOUR_FAIL, and COLOUR_RESET variables.
+# Outputs: Console results, a report file, and nonzero status on parse or scan errors.
+# ------------------------------------------------------------------------------
 
 BEGIN {
 	state = "outside"

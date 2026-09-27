@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Extract one source option from init.rc records
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Extract one source option from init.rc module records.
+#
+# Inputs: init.rc files plus source_option and source_root variables.
+# Outputs: Unique source paths on stdout, with diagnostics and status 2 on invalid records.
+# ------------------------------------------------------------------------------
 
 BEGIN {
 	if ((source_option != "-source_file") && (source_option != "-source_dir"))

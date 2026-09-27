@@ -10,6 +10,13 @@
 #
 # ###############################################################################
 
+# ------------------------------------------------------------------------------
+# Description: Validate that paths have the expected type and remain in the current tree.
+#
+# Inputs: A -d or -f type flag followed by one or more paths.
+# Outputs: Diagnostics on stderr and a nonzero status for any rejected path.
+# ------------------------------------------------------------------------------
+
 set -eu
 
 path_type=${1:-}

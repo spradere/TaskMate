@@ -10,9 +10,12 @@
 #
 ################################################################################
 
-################################################################################
-# Compare files and replace if different
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Replace a text file only when its requested content changes.
+#
+# Inputs: Destination path as $1 and replacement text as $2.
+# Outputs: Creates or updates the destination when the requested content differs.
+# ------------------------------------------------------------------------------
 
 printf '%s\n' "${2}" > "${1}.tmp"
 

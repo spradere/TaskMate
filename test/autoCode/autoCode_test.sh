@@ -10,6 +10,13 @@
 #
 ################################################################################
 
+# ------------------------------------------------------------------------------
+# Description: Run one stage or the complete autoCode test corpus.
+#
+# Inputs: Stage name, autoCode executable path, and test work directory.
+# Outputs: Test progress and diagnostics, work fixtures, and nonzero status on failure.
+# ------------------------------------------------------------------------------
+
 set -u
 
 VAL_STAGE=$1

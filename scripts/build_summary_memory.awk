@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Show memory usage and thresholds in the build summary
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Show memory usage and threshold warnings in the build summary.
+#
+# Inputs: Generated memory data with name, used, total, and percentage fields.
+# Outputs: Formatted usage on stdout, with a nonzero status above the error threshold.
+# ------------------------------------------------------------------------------
 
 NR > 1 {
 	name = $1

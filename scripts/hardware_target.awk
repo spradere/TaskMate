@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Check that a hardware target is listed in the supported target configuration
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Check that a hardware target is present in the supported target list.
+#
+# Inputs: Target list file and the hardware_target variable.
+# Outputs: Unsupported target diagnostic and a nonzero status when no match is found.
+# ------------------------------------------------------------------------------
 
 BEGIN {
 	expected = normalise(hardware_target)

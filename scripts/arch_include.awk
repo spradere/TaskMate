@@ -8,9 +8,12 @@
 #
 ################################################################################
 
-################################################################################
-# Validate direct includes against the architecture matrix
-################################################################################
+# ------------------------------------------------------------------------------
+# Description: Validate direct includes against the architecture matrix.
+#
+# Inputs: Matrix and source files, with matrix_file and optional path_sources variables.
+# Outputs: Validation summary or violations on stdout, with a nonzero status on failure.
+# ------------------------------------------------------------------------------
 
 BEGIN {
 	if (matrix_file == "") fatal("missing matrix_file variable")
