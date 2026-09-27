@@ -83,8 +83,7 @@ static hal_driver_state_t timerSchedGetStatus(void)
 static void timerSchedHandler(int signal, siginfo_t *info, void *native_context)
 {
 	(void)info;
-	if( (signal != FREEBSD_SIGNAL_SCHED) || (sched_callback == 0) ||
-		(native_context == 0) )
+	if( (signal != FREEBSD_SIGNAL_SCHED) || (sched_callback == 0) || (native_context == 0) )
 	{
 		hal_halt();
 	}
@@ -205,10 +204,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			if( command == DRV_CTRL_SETBIT )
-			{
-				TM_SETBIT(timer_sched_status, data->status_bit);
-			}
+			if( command == DRV_CTRL_SETBIT ) { TM_SETBIT(timer_sched_status, data->status_bit); }
 			if( command == DRV_CTRL_CLEARBIT )
 			{
 				TM_CLEARBIT(timer_sched_status, data->status_bit);

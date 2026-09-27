@@ -33,26 +33,26 @@ int main(void)
 {
 	// Usart startup
 	hal_driver_state_t state = hal_usartControl(DRV_CTRL_INIT, 0);
-	if( state != DRV_STATE_INITIALIZED){hal_halt();}
+	if( state != DRV_STATE_INITIALIZED ) { hal_halt(); }
 	state = hal_usartControl(DRV_CTRL_START, 0);
-	if( state != DRV_STATE_RUNNING){hal_halt();}
+	if( state != DRV_STATE_RUNNING ) { hal_halt(); }
 
-	hal_usartWriteByte('\n');	
+	hal_usartWriteByte('\n');
 	hal_usartWriteByte('1');
 	hal_usartSendTXBuffer();
-			
+
 	// Initialise static system allocations
 	mod_driversAlloc();
 	mod_threadsAlloc();
 
 	hal_usartWriteByte('2');
 	hal_usartSendTXBuffer();
-	
+
 	// Start scheduler
 	tm_softwareTimeCounterInit();
 
 	hal_usartWriteByte('3');
-	hal_usartWriteByte('\n');	
+	hal_usartWriteByte('\n');
 	hal_usartSendTXBuffer();
 
 	tm_schedulerInit();

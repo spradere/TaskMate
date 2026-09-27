@@ -28,8 +28,7 @@
 
 bool stackCommand(uint8_t argc, char *argv[])
 {
-	if( (argc != 2) ||
-		(tm_strncmp(TM_STR_RAM(argv[1]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0) )
+	if( (argc != 2) || (tm_strncmp(TM_STR_RAM(argv[1]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0) )
 	{
 		tm_syslog(TM_STR("[stack] usage:\n"));
 		tm_syslog(TM_STR("\tstack depth\n"));

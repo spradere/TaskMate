@@ -26,8 +26,8 @@
 static bool setVersionMajor(const initrc_command_t *command);
 static bool setVersionMinor(const initrc_command_t *command);
 
-#define SET_VERSION_OPTION(X)              \
-	X("major", setVersionMajor)           \
+#define SET_VERSION_OPTION(X)   \
+	X("major", setVersionMajor) \
 	X("minor", setVersionMinor)
 
 static const struct

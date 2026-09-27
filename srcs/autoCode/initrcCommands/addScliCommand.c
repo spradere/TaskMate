@@ -48,11 +48,8 @@ static const scli_command_definition_t scli_command_definitions[] = {
 static bool commandHeaderExists(const initrc_command_t *command, const char *name)
 {
 	char path[AC_BUFFER_SIZE];
-	const int length = snprintf(path,
-							  sizeof(path),
-							  "%s/system/services/commands/scli_%s.h",
-							  command->source_path,
-							  name);
+	const int length = snprintf(
+		path, sizeof(path), "%s/system/services/commands/scli_%s.h", command->source_path, name);
 	if( (length < 0) || ((size_t)length >= sizeof(path)) ) { return false; }
 
 	struct stat status;
@@ -62,8 +59,7 @@ static bool commandHeaderExists(const initrc_command_t *command, const char *nam
 static bool commandSourceFileExists(const initrc_command_t *command, const char *source_file)
 {
 	char path[AC_BUFFER_SIZE];
-	const int length =
-		snprintf(path, sizeof(path), "%s/%s", command->source_path, source_file);
+	const int length = snprintf(path, sizeof(path), "%s/%s", command->source_path, source_file);
 	if( (length < 0) || ((size_t)length >= sizeof(path)) ) { return false; }
 
 	struct stat status;
@@ -72,8 +68,7 @@ static bool commandSourceFileExists(const initrc_command_t *command, const char 
 
 static const scli_command_definition_t *commandDefinitionFind(const char *name)
 {
-	for( size_t i = 0;
-		 i < (sizeof(scli_command_definitions) / sizeof(scli_command_definitions[0]));
+	for( size_t i = 0; i < (sizeof(scli_command_definitions) / sizeof(scli_command_definitions[0]));
 		 i++ )
 	{
 		if( strcmp(scli_command_definitions[i].name, name) == 0 )
@@ -104,7 +99,7 @@ void initrcAddScliCommand(const initrc_command_t *command)
 	}
 
 	const char *name = command->tok->tokens[1];
-	if( strlen(name) >= MOD_NAME_SIZE_MAX-1)
+	if( strlen(name) >= MOD_NAME_SIZE_MAX - 1 )
 	{
 		AUTOCODE_MSG_ERROR("SCLI command identifier is too long [%s:%i] %s",
 						   command->initrc_name,

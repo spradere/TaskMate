@@ -33,10 +33,8 @@ void tagWriterWriteErrorCatalog(const tag_writer_context_t *context)
 	{
 		if( context->errors->catalog[i].level != ERR_LEVEL_FLOW )
 		{
-			fprintf(context->file,
-					"TM_STR_NEW(err%i, %s);\n",
-					i,
-					context->errors->catalog[i].message);
+			fprintf(
+				context->file, "TM_STR_NEW(err%i, %s);\n", i, context->errors->catalog[i].message);
 		}
 	}
 

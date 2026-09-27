@@ -55,8 +55,9 @@ void system(void)
 	systemStart();
 
 	// Print system info
-	tm_syslog(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
-		
+	tm_syslog(
+		TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+
 	// External RTC module test
 	hal_rtc_time_t t;
 	char msg[30];
@@ -69,7 +70,8 @@ void system(void)
 			  t.hours,
 			  t.minutes);
 
-	tm_snprintf(msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	tm_snprintf(
+		msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
 	sc_lcdWriteString(TM_STR_RAM(msg), 0, 0);
 

@@ -15,11 +15,10 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "interfaces/drv_usart.h"
-
 #include <stdint.h>
 
 #include "hal/board/pc/pc_console.h"
+#include "interfaces/drv_usart.h"
 #include "interfaces/hal_atomic.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"

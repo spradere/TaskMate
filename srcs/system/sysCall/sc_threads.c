@@ -92,8 +92,7 @@ uint16_t sc_threadGetCount(void) { return MOD_THREAD_COUNT; }
 bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint16_t *stack_size_bytes)
 {
-	if( (id >= MOD_THREAD_COUNT) || (name == 0) || (run_level == 0) ||
-		(stack_size_bytes == 0) )
+	if( (id >= MOD_THREAD_COUNT) || (name == 0) || (run_level == 0) || (stack_size_bytes == 0) )
 	{
 		return false;
 	}

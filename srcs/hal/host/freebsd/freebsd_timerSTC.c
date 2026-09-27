@@ -15,14 +15,13 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "interfaces/drv_timerSTC.h"
-
 #include <signal.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/time.h>
 
 #include "freebsd_interrupts.h"
+#include "interfaces/drv_timerSTC.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
 
@@ -173,10 +172,7 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 				return timerSTCSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
 			if( command == DRV_CTRL_SETBIT ) { TM_SETBIT(timer_stc_status, data->status_bit); }
-			if( command == DRV_CTRL_CLEARBIT )
-			{
-				TM_CLEARBIT(timer_stc_status, data->status_bit);
-			}
+			if( command == DRV_CTRL_CLEARBIT ) { TM_CLEARBIT(timer_stc_status, data->status_bit); }
 			if( command == DRV_CTRL_GETBIT )
 			{
 				data->bit_value = TM_GETBIT(timer_stc_status, data->status_bit) != 0;

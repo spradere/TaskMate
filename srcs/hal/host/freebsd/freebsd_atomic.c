@@ -15,12 +15,11 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "interfaces/hal_atomic.h"
-
 #include <signal.h>
 #include <stdint.h>
 
 #include "freebsd_interrupts.h"
+#include "interfaces/hal_atomic.h"
 #include "interfaces/hal_halt.h"
 
 /* -----------------------------------------------

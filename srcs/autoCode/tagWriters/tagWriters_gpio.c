@@ -15,10 +15,9 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "tagWriters.h"
-
 #include "../fileUtility.h"
 #include "../tokenizer.h"
+#include "tagWriters.h"
 
 /* =============================================================================
  * Implementation - Functions

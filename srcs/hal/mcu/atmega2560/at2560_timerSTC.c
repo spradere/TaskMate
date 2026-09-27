@@ -99,7 +99,7 @@ static hal_driver_state_t hal_timerSTCInit(void)
 	// Set up timer3 for RTC
 	TM_WRITEBIT(TCCR3B, WGM32, CS32); // CTC mode
 	OCR3A = hal_timerSTC_OVERFLOW_COUNT;
-	
+
 	TM_SETBIT(timer_stc_status, DRV_BIT_INIT);
 	timer_stc_last_error = ERR_NO_ERROR;
 	return DRV_STATE_INITIALIZED;

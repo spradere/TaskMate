@@ -210,10 +210,7 @@ void pc_consolePollInput(void)
 		if( key == KEY_F(10) ) { hal_halt(); }
 		if( (key == '\n') || (key == '\r') || (key == KEY_ENTER) )
 		{
-			for( uint8_t i = 0; i < input_edit_length; i++ )
-			{
-				input_ready[i] = input_edit[i];
-			}
+			for( uint8_t i = 0; i < input_edit_length; i++ ) { input_ready[i] = input_edit[i]; }
 			input_ready_length = input_edit_length;
 			input_ready_index = 0;
 			input_edit_length = 0;
@@ -226,8 +223,7 @@ void pc_consolePollInput(void)
 			consoleInputRender();
 			continue;
 		}
-		if( (key >= 0x20) && (key <= 0x7e) &&
-			(input_edit_length < (PC_CONSOLE_INPUT_SIZE - 1u)) )
+		if( (key >= 0x20) && (key <= 0x7e) && (input_edit_length < (PC_CONSOLE_INPUT_SIZE - 1u)) )
 		{
 			input_edit[input_edit_length++] = (uint8_t)key;
 			consoleInputRender();
@@ -257,14 +253,12 @@ void pc_consoleLedWrite(uint8_t index, const char *name, bool value)
 
 	if( console_colours )
 	{
-		wattron(gpio_console,
-				COLOR_PAIR(value ? PC_CONSOLE_COLOUR_ON : PC_CONSOLE_COLOUR_OFF));
+		wattron(gpio_console, COLOR_PAIR(value ? PC_CONSOLE_COLOUR_ON : PC_CONSOLE_COLOUR_OFF));
 	}
 	mvwprintw(gpio_console, index, 0, "%-12s [%s]", name, value ? "ON " : "OFF");
 	if( console_colours )
 	{
-		wattroff(gpio_console,
-				 COLOR_PAIR(value ? PC_CONSOLE_COLOUR_ON : PC_CONSOLE_COLOUR_OFF));
+		wattroff(gpio_console, COLOR_PAIR(value ? PC_CONSOLE_COLOUR_ON : PC_CONSOLE_COLOUR_OFF));
 	}
 	wrefresh(gpio_console);
 }

@@ -35,22 +35,18 @@ static int generatedFileName(char *file_name, size_t file_name_size, const char 
  * Tag dispatch table
  * ---------------------------------------------*/
 
-#define HAVE_TAG(X)                                                            \
-	X(HAVE_THREAD_STACKS, "thread_stacks", tagWriterWriteThreadStacks)         \
-	X(HAVE_THREADS_ALLOC, "threads_alloc", tagWriterWriteThreadsAlloc)         \
-	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", tagWriterWriteDriversAlloc)         \
-	X(HAVE_THREAD_NAME_CATALOG,                                                 \
-	  "thread_name_catalog",                                                   \
-	  tagWriterWriteThreadNameCatalog)                                          \
-	X(HAVE_DRIVER_NAME_CATALOG,                                                 \
-	  "driver_name_catalog",                                                   \
-	  tagWriterWriteDriverNameCatalog)                                          \
-	X(HAVE_ERROR_ENUM, "error_enum", tagWriterWriteErrorEnum)                  \
-	X(HAVE_ERROR_CATALOG, "error_catalog", tagWriterWriteErrorCatalog)         \
-	X(HAVE_MOD_COUNT, "modules_count", tagWriterWriteModulesCount)             \
-	X(HAVE_MOD_LIST, "modules_list", tagWriterWriteModulesList)                \
-	X(HAVE_GPIO_SIGNALS, "gpio_signals", tagWriterWriteGpioSignals)            \
-	X(HAVE_WIRE_GPIO, "wire_gpio", tagWriterWriteWireGpio)                     \
+#define HAVE_TAG(X)                                                                     \
+	X(HAVE_THREAD_STACKS, "thread_stacks", tagWriterWriteThreadStacks)                  \
+	X(HAVE_THREADS_ALLOC, "threads_alloc", tagWriterWriteThreadsAlloc)                  \
+	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", tagWriterWriteDriversAlloc)                  \
+	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", tagWriterWriteThreadNameCatalog) \
+	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", tagWriterWriteDriverNameCatalog) \
+	X(HAVE_ERROR_ENUM, "error_enum", tagWriterWriteErrorEnum)                           \
+	X(HAVE_ERROR_CATALOG, "error_catalog", tagWriterWriteErrorCatalog)                  \
+	X(HAVE_MOD_COUNT, "modules_count", tagWriterWriteModulesCount)                      \
+	X(HAVE_MOD_LIST, "modules_list", tagWriterWriteModulesList)                         \
+	X(HAVE_GPIO_SIGNALS, "gpio_signals", tagWriterWriteGpioSignals)                     \
+	X(HAVE_WIRE_GPIO, "wire_gpio", tagWriterWriteWireGpio)                              \
 	X(HAVE_SCLI_COMMANDS, "scli_commands", tagWriterWriteScliCommands)
 
 enum
@@ -152,10 +148,10 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 
 	bool file_error = false;
 	tag_writer_context_t context = {.data_base = data_base,
-								.file = NULL,
-								.errors = errors,
-								.auto_options = auto_options,
-								.file_error = &file_error};
+									.file = NULL,
+									.errors = errors,
+									.auto_options = auto_options,
+									.file_error = &file_error};
 
 	// Read from source
 	int tag_section = 0;

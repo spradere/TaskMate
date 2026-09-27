@@ -98,8 +98,7 @@ int fileCmpReplaceAll(void)
 			AUTOCODE_MSG_INFO("keep the old one <%s>", file_tmp_list[i].source_name);
 			if( remove(file_tmp_list[i].temporary_name) != 0 )
 			{
-				AUTOCODE_MSG_ERROR(
-					"removing temporary file <%s>", file_tmp_list[i].temporary_name);
+				AUTOCODE_MSG_ERROR("removing temporary file <%s>", file_tmp_list[i].temporary_name);
 				result = -1;
 				break;
 			}
@@ -107,8 +106,7 @@ int fileCmpReplaceAll(void)
 		}
 		else
 		{
-			AUTOCODE_MSG_INFO(
-				"change for the new one, tmp -> <%s>", file_tmp_list[i].source_name);
+			AUTOCODE_MSG_INFO("change for the new one, tmp -> <%s>", file_tmp_list[i].source_name);
 			if( rename(file_tmp_list[i].temporary_name, file_tmp_list[i].source_name) != 0 )
 			{
 				AUTOCODE_MSG_ERROR("renaming file <%s> to <%s>",
@@ -193,15 +191,13 @@ file_get_line_result_t fileGetLine(file_t *file, char *line, const size_t line_s
 		return FILE_GET_LINE_ERROR;
 	}
 
-	const size_t index = line_length - 1U;
-	//if( autoCodeBufferIndexIsValid(index, line_size_max) == false )
-	if( line_length >= line_size_max-1 )
+	if( line_length >= line_size_max - 1 )
 	{
 		errno = EOVERFLOW;
 		return FILE_GET_LINE_ERROR;
 	}
 
-	if( line[index] == '\n' ) { return FILE_GET_LINE_SUCCESS; }
+	if( line[line_length - 1U] == '\n' ) { return FILE_GET_LINE_SUCCESS; }
 
 	/* Distinguish a valid final line that exactly fills the buffer from a truncated line. */
 	if( feof(file->stream) ) { return FILE_GET_LINE_SUCCESS; }

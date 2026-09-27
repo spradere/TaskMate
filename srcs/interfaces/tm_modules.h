@@ -28,7 +28,7 @@
 
 #ifndef AUTOCODE_BUILD
 	// [autoCode_tag] modules_count
-#include "modules_count.inc"
+	#include "modules_count.inc"
 // [/tag]
 #endif
 

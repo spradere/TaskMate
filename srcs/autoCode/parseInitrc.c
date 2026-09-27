@@ -28,8 +28,8 @@
  * init.rc command dispatch table
  * ---------------------------------------------*/
 
-#define INITRC_COMMAND(X)                         \
-	X("addModule", initrcAddModule)              \
+#define INITRC_COMMAND(X)           \
+	X("addModule", initrcAddModule) \
 	X("addScliCommand", initrcAddScliCommand)
 
 static const struct
@@ -59,13 +59,11 @@ static bool initrcCommandDispatch(const initrc_command_t *command)
 	return false;
 }
 
-static bool initrcVersionCommand(const initrc_command_t *command,
-								 const char *position,
-								 const char *option,
-								 const int expected_version)
+static bool initrcVersionCommand(const initrc_command_t *command, const char *position,
+								 const char *option, const int expected_version)
 {
-	if( (strcmp(command->tok->tokens[0], "setVersion") != 0) ||
-		(command->tok->count < 2) || (strcmp(command->tok->tokens[1], option) != 0) )
+	if( (strcmp(command->tok->tokens[0], "setVersion") != 0) || (command->tok->count < 2) ||
+		(strcmp(command->tok->tokens[1], option) != 0) )
 	{
 		AUTOCODE_MSG_ERROR("%s init.rc command [%s:%i] must be setVersion %s %i",
 						   position,
@@ -111,15 +109,15 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		if( (tok.count == 0) || (strcmp(tok.tokens[0], "#") == 0) ) { continue; }
 
 		const initrc_command_t command = {.data_base = data_base,
-									 .tok = &tok,
-									 .initrc_name = initrc_name,
-									 .source_path = source_path,
-									 .file_line_number = file_line_number};
+										  .tok = &tok,
+										  .initrc_name = initrc_name,
+										  .source_path = source_path,
+										  .file_line_number = file_line_number};
 
 		if( version_major_set == false )
 		{
-			version_major_set = initrcVersionCommand(
-				&command, "first", "major", AC_INITRC_EXPECTED_VER_MAJOR);
+			version_major_set =
+				initrcVersionCommand(&command, "first", "major", AC_INITRC_EXPECTED_VER_MAJOR);
 			if( version_major_set == false )
 			{
 				version_invalid = true;
@@ -129,8 +127,8 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		}
 		if( version_minor_set == false )
 		{
-			version_minor_set = initrcVersionCommand(
-				&command, "second", "minor", AC_INITRC_EXPECTED_VER_MINOR);
+			version_minor_set =
+				initrcVersionCommand(&command, "second", "minor", AC_INITRC_EXPECTED_VER_MINOR);
 			if( version_minor_set == false )
 			{
 				version_invalid = true;

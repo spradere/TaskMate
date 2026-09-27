@@ -25,7 +25,7 @@ typedef enum
 } err_codes_t;
 #else
 	// [autoCode_tag] error_enum
-#include "error_enum.inc"
+	#include "error_enum.inc"
 // [/tag]
 #endif
 

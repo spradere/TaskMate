@@ -86,7 +86,7 @@ static void setFileName(char *destination, const size_t destination_size, const 
 {
 	const size_t value_length = strlen(value);
 
-	if( value_length >= destination_size-1) 
+	if( value_length >= destination_size - 1 )
 	{
 		AUTOCODE_MSG_ERROR("option value is too long (maximum %zu characters)",
 						   destination_size - 1U);

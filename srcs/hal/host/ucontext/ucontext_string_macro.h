@@ -27,10 +27,9 @@
  * Public definitions
  * ========================================================================== */
 
-#define HAL_STRING_INROM(name, txt)                     \
-	static const char TM_UNIQUE_NAME(name)[] = (txt);     \
-	static const tm_string_t(name) = {                    \
-		.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
+#define HAL_STRING_INROM(name, txt)                   \
+	static const char TM_UNIQUE_NAME(name)[] = (txt); \
+	static const tm_string_t(name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
 #define HAL_STRING_ROM(string) ((tm_string_t){.text = (string), .storage = TM_MEM_ROM})
 #define HAL_STRING_RAM(string) ((tm_string_t){.text = (string), .storage = TM_MEM_RAM})
