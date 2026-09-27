@@ -16,8 +16,12 @@
 PATHS_TM_STRING_ALLOWED= \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCall/*.c} \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/*.c} \
-	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/services/commands/*.c} \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/tmLibc/*.c}
+
+PATHS_TM_STRING_ALLOWED := ${PATHS_TM_STRING_ALLOWED:O}
+.if ${PATHS_TM_STRING_ALLOWED:[#]} != ${PATHS_TM_STRING_ALLOWED:u:[#]}
+.error Duplicate path in PATHS_TM_STRING_ALLOWED: ${PATHS_TM_STRING_ALLOWED}
+.endif
 	
 .for src in ${PATHS_TM_STRING_ALLOWED}
 CFLAGS_${src} += -include ${FILE_HAL_STRING_MACRO}

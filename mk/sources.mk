@@ -48,7 +48,7 @@ FILES_COMPILE_SRC = \
 	${FILES_EXTRA_SRC} \
 	${FILES_INITRC_SRC} \
 
-FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O:u}
+FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O}
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Test files provided by the target
@@ -71,6 +71,18 @@ VAL_DATE_TIME != date +"%Y_%m_%d_%Hh%Mm%Ss"
 # Global error
 FILES_ERROR != find ${PATHS_SOURCE_SEARCH} ${OPT_FIND_EXCLUDE}  -type f -name "*.err" | sort
 FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
+
+# Keep build path lists ordered and reject composition errors instead of hiding duplicates.
+.for path_list in \
+	PATHS_SOURCE_SEARCH PATHS_EXTRA_SRC FILES_EXTRA_SRC FILES_SRC_H \
+	FILES_DRIVER_INTERFACES FILES_INITRC FILES_INITRC_SRC PATHS_INITRC_SOURCES \
+	FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_OBJ FILES_DEP \
+	FILES_ERROR
+${path_list} := ${${path_list}:O}
+.if ${${path_list}:[#]} != ${${path_list}:u:[#]}
+.error Duplicate path in ${path_list}: ${${path_list}}
+.endif
+.endfor
 
 # ------------------------------------------------------------------------------
 # End .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
@@ -99,3 +111,13 @@ FILES_MK_TEST != find ./${PATH_TEST} ${OPT_FIND_EXCLUDE} -type f -name "*.mk"
 
 FILES_MK = ./Makefile ${FILES_MK_MK} ${FILES_MK_HAL} ${FILES_MK_TEST}
 FILES_MK := ${FILES_MK:O}
+
+.for path_list in \
+	FILES_AUTOCODE_SRC FILES_AUTOCODE_SRC_H FILES_AUTOCODE_SRC_ALL \
+	FILES_NOTARGET_SRC FILES_NOTARGET_SRC_H FILES_NOTARGET_SRC_ALL FILES_DOC \
+	FILES_MK_MK FILES_MK_HAL FILES_MK_TEST FILES_MK
+${path_list} := ${${path_list}:O}
+.if ${${path_list}:[#]} != ${${path_list}:u:[#]}
+.error Duplicate path in ${path_list}: ${${path_list}}
+.endif
+.endfor
