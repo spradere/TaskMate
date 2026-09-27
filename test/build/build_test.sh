@@ -192,6 +192,8 @@ runConfigurationTests()
 	expectSuccess selected_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
 		TARGET=test1 FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode
 	logContains selected_target_autocode_test "clang -DAUTOCODE_BUILD"
+	expectOutput autocode_sanitize_target "build/autoCode_sanitize" \
+		bmake -C "${PATH_PROJECT}" -V FILE_AUTOCODE_TEST_SANITIZE_TARGET
 	expectOutput freebsd_usb_key "/media/usbkey" bmake -C "${PATH_PROJECT}" \
 		HOST=freebsd -V PATH_USBKEY
 	expectOutput freebsd_usb_device "/dev/da0s1" bmake -C "${PATH_PROJECT}" \
