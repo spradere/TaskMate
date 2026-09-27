@@ -49,6 +49,17 @@ FILES_COMPILE_SRC = \
 	${FILES_INITRC_SRC} \
 
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O}
+
+.for file in ${FILES_COMPILE_SRC}
+_TEST != ${SCRIPT_CHECK_PATH_FILE} -f  file; printf '%s\n' "$$?"
+.if ${_TEST} != 0
+.error >>> path check failed for file ${file} <<<
+.endif
+.if !exists(${file})
+.error >>> File not found ${file} <<<
+.endif
+.endfor
+
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Test files provided by the target
