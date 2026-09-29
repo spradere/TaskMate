@@ -7,7 +7,7 @@
  */
 
 /**
- * @file targetWireSignal.c
+ * @file z600_signals.c
  * @brief FreeBSD simulation GPIO wiring implementation.
  */
 

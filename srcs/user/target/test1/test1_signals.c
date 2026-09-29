@@ -7,8 +7,8 @@
  */
 
 /**
- * @file tagetWireSignal.c
- * @brief target wire signal implementation.
+ * @file test1_signals.c
+ * @brief test1 wire signal implementation.
  */
 
 /* ============================================================================
