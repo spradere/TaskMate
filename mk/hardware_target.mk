@@ -21,10 +21,10 @@ VAL_TARGET = ${TARGET}
 
 .if ${VAL_TARGET} != ${VAL_TARGET_NONE}
 
-FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/target.mk
+FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/${VAL_TARGET}.mk
 
 .if !exists(${FILE_TARGET_MK})
-.error Target makefile not found >>>${VAL_TARGET}/target.mk<<<
+.error Target makefile not found >>>${FILE_TARGET_MK}<<<
 .endif
 .include "${FILE_TARGET_MK}"
 

@@ -3,7 +3,7 @@
 setVersion major 1
 setVersion minor 10
 
-# System core, 
+# System core
 addModule driver timerSched -run none -source_file hal/mcu/atmega2560/at2560_timerSched.c
 addModule driver timerSTC -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
 addModule driver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
