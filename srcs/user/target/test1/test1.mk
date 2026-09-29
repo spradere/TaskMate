@@ -26,7 +26,6 @@ PATHS_EXTRA_SRC += 	${PATH_SRCS}/tmLibc
 
 FILE_GPIO_SIGNALS = ${PATH_TEST1}/signals.gpio
 FILE_WIREGPIO = ${PATH_TEST1}/targetWireSignal.c
-FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/mcu/atmega2560/at2560_gpio.c
 
 CFLAGS += -DHWT_test1
 .include "${PATH_SRCS}/hal/board/arduinoMega/mega_make.mk"

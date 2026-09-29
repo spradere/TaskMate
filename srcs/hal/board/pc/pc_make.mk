@@ -22,6 +22,8 @@ PATHS_SOURCE_SEARCH += ${PATH_PC}
 FILES_EXTRA_SRC += \
 	${PATH_PC}/pc_console.c \
 	${PATH_PC}/pc_gpio.c
+	
+FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/board/pc/pc_gpio.c
 
 CFLAGS += -DBOARD_pc
 
