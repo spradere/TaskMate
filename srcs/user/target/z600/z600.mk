@@ -23,8 +23,8 @@ PATH_TARGET_Z600 = ${PATH_SRCS}/user/target/z600
 PATHS_SOURCE_SEARCH += ${PATH_TARGET_Z600}
 PATHS_EXTRA_SRC += ${PATH_SRCS}/tmLibc
 
-FILE_GPIO_SIGNALS = ${PATH_TARGET_Z600}/signals.gpio
-FILE_WIREGPIO = ${PATH_TARGET_Z600}/targetWireSignal.c
+FILE_GPIO_SIGNALS = ${PATH_TARGET_Z600}/z600_signals.gpio
+FILE_WIREGPIO = ${PATH_TARGET_Z600}/z600_signals.c
 
 CFLAGS += -DHWT_z600
 .include "${PATH_SRCS}/hal/board/pc/pc_make.mk"
