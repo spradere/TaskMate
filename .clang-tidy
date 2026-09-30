@@ -3,9 +3,10 @@ Checks: >
   -clang-analyzer-cplusplus.*,
   -clang-analyzer-security.*,
   bugprone-*,
+  cert-*,
   readability-*,
-  -readability-braces-around-statements,
   performance-*,
+  misc-definitions-in-headers,
   -modernize-*,
   -cppcoreguidelines-*,
   -readability-uppercase-literal-suffix

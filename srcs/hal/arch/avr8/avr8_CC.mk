@@ -91,3 +91,14 @@ modules_size: all
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	avr-size -G -d ${PATH_BUILD_TARGET}/TaskMate.elf
 	avr-nm --format=bsd --size-sort -r ${PATH_BUILD_TARGET}/TaskMate.elf | head -20
+
+# clang-tidy
+tidy_TaskMate:
+	@printf "%sTidy TaskMate static test code, config in clang-tidy%s\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"	
+	@clang-tidy19 $(FILES_COMPILE_SRC) --\
+	-I${PATH_SRCS} -I${PATH_BUILD_GENERATED} I. \
+	-isystem /usr/local/avr/include \
+	-isystem /usr/local/lib/gcc/avr/14.1.0 \
+	-D__AVR__=6 \
+	-DF_CPU=${F_CPU}

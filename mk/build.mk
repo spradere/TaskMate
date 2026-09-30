@@ -132,3 +132,17 @@ clean:
 	@-find "${FILE_AUTOCODE_TARGET}" -type f -delete
 	@-find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name "*autoCode*" -delete
 	@-find "${PATH_BUILDS}" -maxdepth 1 -type f -name "autoCode" -delete
+
+.PHONY: cppcheck
+cppcheck:
+# --addon=misra 
+#help cppcheck: [global] cppcheck static code analysis.
+	@printf "\n%scppcheck static analysis%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@cppcheck -I${PATH_SRCS} \
+		--enable=all --inconclusive --force \
+		--suppress=missingIncludeSystem \
+		--suppress=missingInclude \
+		--check-level=exhaustive \
+		${FILES_COMPILE_SRC} \
+		${FILES_AUTOCODE_SRC}

@@ -46,19 +46,6 @@ note:
 	@grep -r -n -i -E 'TODO|FIX|HACK|enum' ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} \
 		${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 
-.PHONY: cppcheck
-cppcheck:
-#help cppcheck: [global] cppcheck static code analysis.
-	@printf "\n%scppcheck static analysis%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@cppcheck -I${PATH_SRCS} \
-		--enable=all --inconclusive --force \
-		--suppress=missingIncludeSystem \
-		--suppress=missingInclude \
-		--check-level=exhaustive \
-		${FILES_NOTARGET_SRC} \
-		${FILES_AUTOCODE_SRC}
-
 .PHONY: format
 format:
 #help format: [global] Format code with clang-format.
