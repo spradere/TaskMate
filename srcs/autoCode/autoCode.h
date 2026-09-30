@@ -102,8 +102,8 @@ typedef struct
 	{
 		struct
 		{
-			char name[ MOD_NAME_SIZE_MAX];
-			char function[ MOD_NAME_SIZE_MAX];
+			char name[MOD_NAME_SIZE_MAX];
+			char function[MOD_NAME_SIZE_MAX];
 		} commands[AC_SCLI_COMMAND_COUNT_MAX];
 		uint8_t count;
 	} scli;

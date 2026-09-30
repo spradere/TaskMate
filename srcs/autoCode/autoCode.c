@@ -46,7 +46,6 @@
  * ---------------------------------------------*/
 
 static void setupDatabase(modules_database_t *data_base);
-static void errorCountMaximumSet(unsigned int maximum);
 
 /* -----------------------------------------------
  * Private variables
@@ -58,8 +57,6 @@ static unsigned int error_count_maximum = 10U;
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
-
-static void errorCountMaximumSet(const unsigned int maximum) { error_count_maximum = maximum; }
 
 int main(int argc, const char *argv[])
 {
@@ -75,7 +72,7 @@ int main(int argc, const char *argv[])
 
 	options_list_t auto_options = {0};
 	if( options(argv[1], &auto_options) != 0 ) { autoCodeExit(AC_FORCE_EXIT); }
-	errorCountMaximumSet(auto_options.error_count);
+	error_count_maximum = auto_options.error_count;
 	autoCodeExit(AC_FORCE_EXIT);
 
 	// Set up database

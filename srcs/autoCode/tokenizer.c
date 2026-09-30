@@ -18,43 +18,73 @@
 
 #include "tokenizer.h"
 
+/* -------------------------------------
+ * Private API
+ * -----------------------------------*/
+ 
+static bool indexTestOverflow(int *index);
+static bool incIndexTestOverflow(int *index);
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
+static bool indexTestOverflow(int *index)
+{
+	bool overflow = true;
+		
+	if( (*index) < AC_BUFFER_SIZE ){overflow = false;}
+	else{ AUTOCODE_MSG_ERROR("index overflow");}
+		
+	return overflow;
+}
+
+static bool incIndexTestOverflow(int *index)
+{
+	(*index)++;
+	bool overflow = indexTestOverflow(index);
+	
+	if( overflow == true ){(*index)--;}
+	
+	return overflow;
+}
+
+
 int tokenizer(tokenizer_t *tok)
 {
-	char *cursor = tok->line;
+	int index=0;
 
-	// Start reading the line to extract arguments
+	// Start reading line to extract tokens
 	tokenizerFree(tok);
 
-	while( (*cursor != '\n') && (*cursor != 0) )
+	while(	(tok->line[index] != '\n') && 
+			(tok->line[index] != 0) && 
+			(indexTestOverflow(&index) == false) )
 	{
 		// Skip leading spaces and tabs
-		while( (*cursor == ' ') || (*cursor == '\t') ) { cursor++; }
+		while( (tok->line[index] == ' ') || (tok->line[index] == '\t') ) { incIndexTestOverflow(&index); }
 
-		if( (*cursor == '\n') || (*cursor == 0) ) { break; }
+		if( (tok->line[index] == '\n') || (tok->line[index] == 0) ) { break; }
 
-		// Point to one token stored directly in the line
+		// Point to one token stored directly in line
 		char cut_character = ' ';
-		char *token = cursor;
+		char *token = &tok->line[index];
 		bool quoted_string = false;
 
-		if( *cursor == '"' ) // switch to string mode for this token
+		if( tok->line[index] == '"' ) // switch to string mode for this token
 		{
 			cut_character = '"';
 			quoted_string = true;
-			cursor++;
+			incIndexTestOverflow(&index);
 		}
 
-		while( (*cursor != cut_character) && (quoted_string || (*cursor != '\t')) &&
-			   (*cursor != '\n') && (*cursor != 0) )
+		while( (tok->line[index] != cut_character) && (quoted_string || (tok->line[index] != '\t')) &&
+			   (tok->line[index] != '\n') && (tok->line[index] != 0) )
 		{
-			cursor++;
+			incIndexTestOverflow(&index);
 		}
 
-		if( quoted_string && (*cursor != '"') )
+		if( quoted_string && (tok->line[index] != '"') )
 		{
 			AUTOCODE_MSG_ERROR("unterminated string");
 
@@ -62,7 +92,7 @@ int tokenizer(tokenizer_t *tok)
 			return 1;
 		}
 
-		if( *cursor == '"' ) { cursor++; }
+		if( tok->line[index] == '"' ) { incIndexTestOverflow(&index); }
 
 		char **tokens = realloc(tok->tokens, (size_t)(tok->count + 1) * sizeof(*tok->tokens));
 		if( tokens == NULL )
@@ -75,10 +105,10 @@ int tokenizer(tokenizer_t *tok)
 		tok->tokens = tokens;
 		tok->tokens[tok->count] = token;
 
-		if( *cursor != 0 )
+		if( tok->line[index] != 0 )
 		{
-			*cursor = 0;
-			cursor++;
+			tok->line[index] = 0;
+			incIndexTestOverflow(&index);
 		}
 		tok->count++;
 	}

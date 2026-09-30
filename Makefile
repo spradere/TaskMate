@@ -22,8 +22,6 @@ PATH_DOCS = doc
 PATH_SCRIPTS = scripts
 PATH_TEST = test
 
-
-
 # Build data
 .include "${PATH_MAKEFILES}/options.mk"
 .include "${PATH_MAKEFILES}/colours.mk"
@@ -53,7 +51,7 @@ PATH_TEST = test
 .include "${PATH_TEST}/build_test.mk"
 .include "${PATH_TEST}/tm_string_test.mk"
 
-# Architecture-specific Make logic
+# Architecture-specific makefile
 .if !empty(FILE_ARCH_CC)
 .include "${FILE_ARCH_CC}"
 .endif
