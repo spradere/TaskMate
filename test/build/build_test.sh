@@ -194,6 +194,22 @@ runConfigurationTests()
 	logContains selected_target_autocode_test "clang -DAUTOCODE_BUILD"
 	expectOutput autocode_sanitize_target "build/autoCode_sanitize" \
 		bmake -C "${PATH_PROJECT}" -V FILE_AUTOCODE_TEST_SANITIZE_TARGET
+	expectOutput clang_tidy_command "clang-tidy19" bmake -C "${PATH_PROJECT}" \
+		-V VAL_CLANG_TIDY
+	expectOutput cppcheck_command "cppcheck" bmake -C "${PATH_PROJECT}" \
+		-V VAL_CPPCHECK
+	expectSuccess autocode_tidy_recipe targetMake -n \
+		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_autocode
+	logContains autocode_tidy_recipe "taskmate-test-clang-tidy"
+	logContains autocode_tidy_recipe "-std=c17"
+	logExcludes autocode_tidy_recipe "srcs/autoCode/autoCode.h --"
+	expectSuccess autocode_cppcheck_recipe targetMake -n \
+		VAL_CPPCHECK=taskmate-test-cppcheck cppcheck_autoCode
+	logContains autocode_cppcheck_recipe "taskmate-test-cppcheck"
+	logContains autocode_cppcheck_recipe "--platform=unix64"
+	logContains autocode_cppcheck_recipe "--library=bsd"
+	logContains autocode_cppcheck_recipe "-DAUTOCODE_BUILD"
+	logExcludes autocode_cppcheck_recipe "--force"
 	expectSuccess no_target_autocode_sanitize bmake -C "${PATH_PROJECT}" -n \
 		FILE_AUTOCODE_TEST_SANITIZE_TARGET="${PATH_STAGE_WORK}/autoCode_sanitize" \
 		test_ac_sanitize
@@ -223,6 +239,19 @@ runConfigurationTests()
 		targetMake -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		targetMake -V FILE_ARCH_CC
+	expectSuccess taskmate_tidy_recipe targetMake -n \
+		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_taskmate
+	logContains taskmate_tidy_recipe "taskmate-test-clang-tidy"
+	logContains taskmate_tidy_recipe "--target=avr"
+	logContains taskmate_tidy_recipe "-mmcu=atmega2560"
+	logExcludes taskmate_tidy_recipe "srcs/hal/arch/avr8/avr8_context.c"
+	expectSuccess taskmate_cppcheck_recipe targetMake -n \
+		VAL_CPPCHECK=taskmate-test-cppcheck cppcheck
+	logContains taskmate_cppcheck_recipe "taskmate-test-cppcheck"
+	logContains taskmate_cppcheck_recipe "--platform=avr8"
+	logContains taskmate_cppcheck_recipe "--library=avr"
+	logContains taskmate_cppcheck_recipe "-DPROGMEM="
+	logExcludes taskmate_cppcheck_recipe "--force"
 	expectOutput architecture_types_header \
 		"srcs/hal/arch/avr8/avr8_architecture_types.h" \
 		targetMake -V FILE_HAL_ARCHITECTURE_TYPES
@@ -249,6 +278,16 @@ runConfigurationTests()
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V VAL_HW_STACK
 	expectOutput z600_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_ARCH_CC
+	expectSuccess freebsd_tidy_recipe bmake -C "${PATH_PROJECT}" -n VAL_TARGET=z600 \
+		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_freebsd
+	logContains freebsd_tidy_recipe "taskmate-test-clang-tidy"
+	logContains freebsd_tidy_recipe "--target=x86_64-unknown-freebsd"
+	expectSuccess freebsd_cppcheck_recipe bmake -C "${PATH_PROJECT}" -n VAL_TARGET=z600 \
+		VAL_CPPCHECK=taskmate-test-cppcheck cppcheck
+	logContains freebsd_cppcheck_recipe "taskmate-test-cppcheck"
+	logContains freebsd_cppcheck_recipe "--platform=unix64"
+	logContains freebsd_cppcheck_recipe "--library=bsd"
+	logContains freebsd_cppcheck_recipe "--library=posix"
 	expectOutput z600_types_header \
 		"srcs/hal/host/ucontext/ucontext_types.h" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_HAL_ARCHITECTURE_TYPES

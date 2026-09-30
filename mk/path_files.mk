@@ -62,6 +62,14 @@ PATHS_SOURCE_SEARCH += ${PATH_SRCS}/user/tasks
 FILE_RSYNC_LOG = ${PATH_LOGS}/rsync.log
 FILE_ARCH_CHECK_LOG = ${PATH_LOGS}/architecture_check.log
 
+# Static analysis tools
+VAL_CLANG_TIDY = clang-tidy19
+VAL_CPPCHECK = cppcheck
+OPT_CPPCHECK = --std=c17 --language=c
+OPT_CPPCHECK += --enable=warning,style,performance,portability
+OPT_CPPCHECK += --inconclusive --check-level=exhaustive
+OPT_CPPCHECK += --suppress=missingIncludeSystem
+
 # Scripts
 FILE_ARCH_VALID_MATRIX = ${PATH_CONF}/arch_valid_matrix.md
 SCRIPT_ARCH_INCLUDE = ${PATH_SCRIPTS}/arch_include.awk

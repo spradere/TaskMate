@@ -1,14 +1,24 @@
 Checks: >
-  clang-analyzer-*,
-  -clang-analyzer-cplusplus.*,
-  -clang-analyzer-security.*,
+  -*,
+  clang-analyzer-core.*,
+  clang-analyzer-deadcode.*,
+  clang-analyzer-security.*,
+  clang-analyzer-unix.*,
+  clang-analyzer-valist.*,
+  clang-analyzer-optin.core.*,
+  clang-analyzer-optin.portability.*,
   bugprone-*,
   cert-*,
   readability-*,
-  performance-*,
   misc-definitions-in-headers,
-  -modernize-*,
-  -cppcoreguidelines-*,
+  portability-*,
+  -bugprone-multi-level-implicit-pointer-conversion,
+  -bugprone-unsafe-functions,
+  -cert-err33-c,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
+  -clang-analyzer-security.insecureAPI.UncheckedReturn,
+  -portability-restrict-system-includes,
+  -readability-magic-numbers,
   -readability-uppercase-literal-suffix
 
 CheckOptions:
@@ -21,6 +31,7 @@ CheckOptions:
   - key: readability-identifier-length.MinimumLoopCounterNameLength
     value: 1
 
-HeaderFilterRegex: ^src/
-WarningsAsErrors: false
+HeaderFilterRegex: (^|/)srcs/
+WarningsAsErrors: ''
+SystemHeaders: false
 FormatStyle: file

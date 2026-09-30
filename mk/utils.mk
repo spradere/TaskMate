@@ -53,14 +53,6 @@ format:
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	clang-format19 -i ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H} ${FILES_AUTOCODE_SRC}
 
-.PHONY: tidy_autoCode
-tidy_autoCode:
-#help tidy_autoCode: [global] tidy static code analysis for autoCode.
-	@printf "\n%sTidy autoCode static code test%s\n\n" \
-		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@clang-tidy19 ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} -- \
-		${CFLAGS_AUTOCODE}
-
 # Help system: targets beginning with '_' or '$' are internal only and are not displayed by 'make help'.
 .PHONY: help
 help:
