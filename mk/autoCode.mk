@@ -126,11 +126,30 @@ CFLAGS_AUTOCODE = -DAUTOCODE_BUILD -I${PATH_SRCS}/
 CFLAGS_AUTOCODE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion \
 	-Wswitch -Wenum-conversion \
 	-Wno-gnu-zero-variadic-macro-arguments
+CFLAGS_CLANG_TIDY_AUTOCODE = -std=c17 ${CFLAGS_AUTOCODE}
+OPT_CPPCHECK_AUTOCODE = --platform=unix64 --library=bsd --library=posix
+CFLAGS_CPPCHECK_AUTOCODE = -DAUTOCODE_BUILD -I${PATH_SRCS}
 
 ${FILE_AUTOCODE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} ${FILE_ERROR_LEVEL}
 	@printf "%sCompiling autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	${_QUIET}clang ${CFLAGS_AUTOCODE} ${FILES_AUTOCODE_SRC} -o ${FILE_AUTOCODE_TARGET}
+
+.PHONY: tidy_autocode
+tidy_autocode:
+#help tidy_autocode: [global] clang-tidy static code analysis for autoCode.
+	@printf "\n%sTidy autoCode static code test%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@${VAL_CLANG_TIDY} ${FILES_AUTOCODE_SRC} -- ${CFLAGS_CLANG_TIDY_AUTOCODE}
+
+.PHONY: cppcheck_autoCode
+cppcheck_autoCode:
+#help cppcheck_autoCode: [global] cppcheck static code analysis for autoCode.
+	@printf "\n%scppcheck autoCode static analysis%s\n\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@${VAL_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_AUTOCODE} \
+		${CFLAGS_CPPCHECK_AUTOCODE} \
+		${FILES_AUTOCODE_SRC}
 	
 # Run autoCode alone
 .PHONY: autoCode_alone

@@ -93,12 +93,24 @@ modules_size: all
 	avr-nm --format=bsd --size-sort -r ${PATH_BUILD_TARGET}/TaskMate.elf | head -20
 
 # clang-tidy
-tidy_TaskMate:
+# Clang rejects the GCC naked context implementation even with the AVR target.
+FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC:N${PATH_AVR8}/avr8_context.c}
+CFLAGS_CLANG_TIDY = --target=avr -mmcu=${VAL_MCU_SERIAL} -std=gnu17
+CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
+CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CLANG_TIDY += -isystem /usr/local/avr/include
+
+OPT_CPPCHECK_TARGET = --platform=avr8 --library=avr
+# Cppcheck models AVR widths and library calls, but not the PROGMEM declaration macro.
+CFLAGS_CPPCHECK = ${CFLAGS:M-D*} ${CFLAGS:M-I*} -DPROGMEM=
+CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CPPCHECK += --include=${FILE_HAL_STRING_MACRO}
+
+.PHONY: tidy_taskmate
+tidy_taskmate: _autocode
+#help tidy_taskmate: [avr8] clang-tidy static code analysis for TaskMate.
 	@printf "%sTidy TaskMate static test code, config in clang-tidy%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"	
-	@clang-tidy19 $(FILES_COMPILE_SRC) --\
-	-I${PATH_SRCS} -I${PATH_BUILD_GENERATED} I. \
-	-isystem /usr/local/avr/include \
-	-isystem /usr/local/lib/gcc/avr/14.1.0 \
-	-D__AVR__=6 \
-	-DF_CPU=${F_CPU}
+.for file in ${FILES_CLANG_TIDY_SRC}
+	@${VAL_CLANG_TIDY} "${file}" -- ${CFLAGS_CLANG_TIDY} ${CFLAGS_${file}}
+.endfor
