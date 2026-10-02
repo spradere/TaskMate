@@ -41,8 +41,8 @@ CFLAGS += -ffunction-sections -fdata-sections
 LDFLAGS = -Wl,--gc-sections -lncursesw -ltinfow
 
 # Linters
-VAL_CLANG_TIDY_TARGET != ${CC} -dumpmachine
-CFLAGS_CLANG_TIDY = --target=${VAL_CLANG_TIDY_TARGET} -std=gnu17
+FILE_CLANG_TIDY_TARGET != ${CC} -dumpmachine
+CFLAGS_CLANG_TIDY = --target=${FILE_CLANG_TIDY_TARGET} -std=gnu17
 CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
 CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCHITECTURE_TYPES}
 FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC}

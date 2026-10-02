@@ -57,3 +57,9 @@ _QUIET = ${${OPT_VERBOSE_LEVEL} == 1 :? : @}
 # bmake option for -V 
 .MAKE.EXPAND_VARIABLES = true
 .endif
+
+# cppchek options
+OPT_CPPCHECK = --std=c17 --language=c
+OPT_CPPCHECK += --enable=warning,style,performance,portability
+OPT_CPPCHECK += --inconclusive --check-level=exhaustive
+OPT_CPPCHECK += --suppress=missingIncludeSystem
