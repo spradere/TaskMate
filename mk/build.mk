@@ -141,3 +141,12 @@ cppcheck: _autocode
 	@${VAL_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_TARGET} \
 		${CFLAGS_CPPCHECK} \
 		${FILES_COMPILE_SRC}
+
+.PHONY: tidy
+tidy: _autocode
+#help tidy: clang-tidy static code analysis.
+	@printf "%sTidy TaskMate static test code, config in clang-tidy%s\n" \
+		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"	
+.for file in ${FILES_CLANG_TIDY_SRC}
+	@${VAL_CLANG_TIDY} "${file}" -- ${CFLAGS_CLANG_TIDY} ${CFLAGS_${file}}
+.endfor

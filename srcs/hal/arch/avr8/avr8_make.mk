@@ -58,6 +58,20 @@ CFLAGS += -I${PATH_SRCS} -I.
 CFLAGS += -ffunction-sections -fdata-sections -flto
 LDFLAGS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 
+# Linters
+# Clang rejects the GCC naked context implementation even with the AVR target.
+FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC:N${PATH_AVR8}/avr8_context.c}
+CFLAGS_CLANG_TIDY = --target=avr -mmcu=${VAL_MCU_SERIAL} -std=gnu17
+CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
+CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CLANG_TIDY += -isystem /usr/local/avr/include
+
+OPT_CPPCHECK_TARGET = --platform=avr8 --library=avr
+# Cppcheck models AVR widths and library calls, but not the PROGMEM declaration macro.
+CFLAGS_CPPCHECK = ${CFLAGS:M-D*} ${CFLAGS:M-I*} -DPROGMEM=
+CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CPPCHECK += --include=${FILE_HAL_STRING_MACRO}
+
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
 .endif
