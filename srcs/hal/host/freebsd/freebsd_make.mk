@@ -24,7 +24,6 @@ FILES_EXTRA_SRC += \
 	${PATH_FREEBSD}/freebsd_halt.c \
 	${PATH_FREEBSD}/freebsd_interrupts.c
 
-CFLAGS += -DHOST_freebsd
 FILE_ARCH_CC = ${PATH_FREEBSD}/freebsd_CC.mk
 
 CC = cc

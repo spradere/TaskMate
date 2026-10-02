@@ -23,8 +23,7 @@ FILE_COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@printf "%sCompilation ...%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@printf "source : <%s> -> <%s>\n" \
-		"${FILE_COMPILE_SRC}" "${.TARGET}"
+	@printf "source : <%s>\n" ${FILE_COMPILE_SRC}
 	@mkdir -p "${.TARGET:H}"
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
 		-c "${FILE_COMPILE_SRC}" -o "${.TARGET}"
