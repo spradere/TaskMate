@@ -23,8 +23,7 @@ PATHS_SOURCE_SEARCH += ${PATH_AVR8}
 PATHS_EXTRA_SRC += ${PATH_SRCS}/hal/arch/avr8
 
 FILE_HAL_STRING_MACRO = ${PATH_SRCS}/hal/arch/avr8/avr8_string_macro.h
-FILE_HAL_ARCHITECTURE_TYPES = ${PATH_AVR8}/avr8_architecture_types.h
-CFLAGS += -include ${FILE_HAL_ARCHITECTURE_TYPES}
+FILE_HAL_ARCH_TYPES = ${PATH_AVR8}/avr8_types.h
 	
 # Compilation redirection
 FILE_ARCH_CC = ${PATH_SRCS}/hal/arch/avr8/avr8_CC.mk
@@ -63,13 +62,13 @@ LDFLAGS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC:N${PATH_AVR8}/avr8_context.c}
 CFLAGS_CLANG_TIDY = --target=avr -mmcu=${VAL_MCU_SERIAL} -std=gnu17
 CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
-CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCH_TYPES}
 CFLAGS_CLANG_TIDY += -isystem /usr/local/avr/include
 
 OPT_CPPCHECK_TARGET = --platform=avr8 --library=avr
 # Cppcheck models AVR widths and library calls, but not the PROGMEM declaration macro.
 CFLAGS_CPPCHECK = ${CFLAGS:M-D*} ${CFLAGS:M-I*} -DPROGMEM=
-CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCH_TYPES}
 CFLAGS_CPPCHECK += --include=${FILE_HAL_STRING_MACRO}
 
 .else

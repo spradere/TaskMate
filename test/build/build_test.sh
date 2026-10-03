@@ -146,6 +146,8 @@ runConfigurationTests()
 	expectFailure invalid_environment "Invalid option OPT_ENVIRONMENT" \
 		bmake -C "${PATH_PROJECT}" HOST=invalid -V OPT_ENVIRONMENT
 	expectOutput verbose_default "0" bmake -C "${PATH_PROJECT}" -V OPT_VERBOSE_LEVEL
+	expectOutput verbose_linux "0" bmake -C "${PATH_PROJECT}" HOST=linux \
+		-V OPT_VERBOSE_LEVEL
 	expectOutput verbose_enabled "1" bmake -C "${PATH_PROJECT}" VERBOSE=1 \
 		-V OPT_VERBOSE_LEVEL
 	expectOutput verbose_level_two "2" bmake -C "${PATH_PROJECT}" VERBOSE=2 \
@@ -195,11 +197,11 @@ runConfigurationTests()
 	expectOutput autocode_sanitize_target "build/autoCode_sanitize" \
 		bmake -C "${PATH_PROJECT}" -V FILE_AUTOCODE_TEST_SANITIZE_TARGET
 	expectOutput clang_tidy_command "clang-tidy19" bmake -C "${PATH_PROJECT}" \
-		-V VAL_CLANG_TIDY
+		-V FILE_CLANG_TIDY
 	expectOutput cppcheck_command "cppcheck" bmake -C "${PATH_PROJECT}" \
 		-V VAL_CPPCHECK
 	expectSuccess autocode_tidy_recipe targetMake -n \
-		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_autocode
+		FILE_CLANG_TIDY=taskmate-test-clang-tidy tidy_autocode
 	logContains autocode_tidy_recipe "taskmate-test-clang-tidy"
 	logContains autocode_tidy_recipe "-std=c17"
 	logExcludes autocode_tidy_recipe "srcs/autoCode/autoCode.h --"
@@ -240,7 +242,7 @@ runConfigurationTests()
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		targetMake -V FILE_ARCH_CC
 	expectSuccess taskmate_tidy_recipe targetMake -n \
-		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_taskmate
+		FILE_CLANG_TIDY=taskmate-test-clang-tidy tidy_taskmate
 	logContains taskmate_tidy_recipe "taskmate-test-clang-tidy"
 	logContains taskmate_tidy_recipe "--target=avr"
 	logContains taskmate_tidy_recipe "-mmcu=atmega2560"
@@ -253,11 +255,16 @@ runConfigurationTests()
 	logContains taskmate_cppcheck_recipe "-DPROGMEM="
 	logExcludes taskmate_cppcheck_recipe "--force"
 	expectOutput architecture_types_header \
-		"srcs/hal/arch/avr8/avr8_architecture_types.h" \
-		targetMake -V FILE_HAL_ARCHITECTURE_TYPES
-	expectSuccess architecture_types_compile_flag targetMake -V CFLAGS
-	logContains architecture_types_compile_flag \
-		"-include srcs/hal/arch/avr8/avr8_architecture_types.h"
+		"srcs/hal/arch/avr8/avr8_types.h" \
+		targetMake -V FILE_HAL_ARCH_TYPES
+	expectSuccess architecture_types_global_compile_flag targetMake -V CFLAGS
+	logExcludes architecture_types_global_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_types.h"
+	expectOutput architecture_types_selected_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_types.h" \
+		targetMake -V CFLAGS_srcs/system/sysCore/sys_modules.c
+	expectOutput architecture_types_unselected_compile_flag "" \
+		targetMake -V CFLAGS_srcs/hal/mcu/atmega2560/at2560_gpio.c
 	expectSuccess source_search_paths targetMake -V PATHS_SOURCE_SEARCH
 	logExcludes source_search_paths "srcs/hal/public"
 	expectSuccess autocode_generated_inputs targetMake -V FILES_AUTOCODE_INC
@@ -279,7 +286,7 @@ runConfigurationTests()
 	expectOutput z600_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_ARCH_CC
 	expectSuccess freebsd_tidy_recipe bmake -C "${PATH_PROJECT}" -n VAL_TARGET=z600 \
-		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_freebsd
+		FILE_CLANG_TIDY=taskmate-test-clang-tidy tidy_freebsd
 	logContains freebsd_tidy_recipe "taskmate-test-clang-tidy"
 	logContains freebsd_tidy_recipe "--target=x86_64-unknown-freebsd"
 	expectSuccess freebsd_cppcheck_recipe bmake -C "${PATH_PROJECT}" -n VAL_TARGET=z600 \
@@ -290,7 +297,7 @@ runConfigurationTests()
 	logContains freebsd_cppcheck_recipe "--library=posix"
 	expectOutput z600_types_header \
 		"srcs/hal/host/ucontext/ucontext_types.h" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_HAL_ARCHITECTURE_TYPES
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_HAL_ARCH_TYPES
 	expectSuccess z600_compile_sources bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_COMPILE_SRC
 	logContains z600_compile_sources "srcs/hal/host/ucontext/ucontext_context.c"

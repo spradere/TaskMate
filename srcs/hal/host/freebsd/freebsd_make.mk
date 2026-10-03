@@ -44,7 +44,7 @@ LDFLAGS = -Wl,--gc-sections -lncursesw -ltinfow
 FILE_CLANG_TIDY_TARGET != ${CC} -dumpmachine
 CFLAGS_CLANG_TIDY = --target=${FILE_CLANG_TIDY_TARGET} -std=gnu17
 CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
-CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCH_TYPES}
 FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC}
 
 OPT_CPPCHECK_TARGET = --platform=unix64 --library=bsd --library=posix
@@ -52,7 +52,7 @@ OPT_CPPCHECK_TARGET = --platform=unix64 --library=bsd --library=posix
 OPT_CPPCHECK_TARGET += --suppress=getcontextCalled --suppress=makecontextCalled
 OPT_CPPCHECK_TARGET += --suppress=nullPointerRedundantCheck:${PATH_FREEBSD}/freebsd_timerSched.c
 CFLAGS_CPPCHECK = ${CFLAGS:M-D*} ${CFLAGS:M-I*}
-CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCHITECTURE_TYPES}
+CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCH_TYPES}
 CFLAGS_CPPCHECK += --include=${FILE_HAL_STRING_MACRO}
 
 .include "${PATH_SRCS}/hal/host/ucontext/ucontext_make.mk"
