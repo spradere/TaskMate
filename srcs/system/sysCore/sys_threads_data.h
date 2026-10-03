@@ -7,12 +7,12 @@
  */
 
 /**
- * @file sys_modules.h
- * @brief modules header declarations.
+ * @file sys_threads_data.h
+ * @brief Internal thread storage declarations.
  */
 
-#ifndef SYSCORE_SYS_MODULES_H
-#define SYSCORE_SYS_MODULES_H
+#ifndef SYSCORE_SYS_THREADS_DATA_H
+#define SYSCORE_SYS_THREADS_DATA_H
 
 /* ============================================================================
  * Includes
@@ -21,11 +21,9 @@
 #include <stdint.h>
 
 #include "interfaces/hal_context.h"
-#include "interfaces/hal_drivers.h"
-#include "interfaces/tm_modules.h"
 
 /* ============================================================================
- * Public definitions
+ * Internal definitions
  * ========================================================================== */
 
 #define MOD_CANARY 0x5au
@@ -51,29 +49,10 @@ typedef struct
 
 } mod_thread_item_t;
 
-// Driver
-typedef struct
-{
-	uint8_t address;
-
-	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *);
-
-} mod_driver_item_t;
-
 /* ============================================================================
- * Public API
+ * Internal API
  * ========================================================================== */
 
-void mod_threadSetCurrent(uint8_t n);
-uint8_t mod_threadGetCurrent(void);
-
-void mod_threadSetSTC(uint16_t count);
-uint16_t mod_threadGetSTC(void);
-
-mod_driver_item_t *mod_driverGetPointer(uint8_t id);
 mod_thread_item_t *mod_threadGetPointer(uint8_t id);
 
-void mod_threadsAlloc(void);
-void mod_driversAlloc(void);
-
-#endif // SYSCORE_SYS_MODULES_H
+#endif // SYSCORE_SYS_THREADS_DATA_H

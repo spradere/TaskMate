@@ -27,7 +27,8 @@
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_threads.h"
-#include "system/sysCore/sys_modules.h"
+#include "system/sysCore/sys_threads.h"
+#include "system/sysCore/sys_threads_data.h"
 
 /* -----------------------------------------------
  * Private variables

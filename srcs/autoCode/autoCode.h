@@ -26,7 +26,7 @@
 #define AC_INITRC_EXPECTED_VER_MAJOR 1
 #define AC_INITRC_EXPECTED_VER_MINOR 10
 #define AC_AUTOCODE_VER_MAJOR 1
-#define AC_AUTOCODE_VER_MINOR 4
+#define AC_AUTOCODE_VER_MINOR 5
 
 /* ============================================================================
  * Includes

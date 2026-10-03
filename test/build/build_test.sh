@@ -262,9 +262,17 @@ runConfigurationTests()
 		"-include srcs/hal/arch/avr8/avr8_types.h"
 	expectOutput architecture_types_selected_compile_flag \
 		"-include srcs/hal/arch/avr8/avr8_types.h" \
-		targetMake -V CFLAGS_srcs/system/sysCore/sys_modules.c
-	expectOutput architecture_types_unselected_compile_flag "" \
-		targetMake -V CFLAGS_srcs/hal/mcu/atmega2560/at2560_gpio.c
+		targetMake -V CFLAGS_srcs/system/sysCore/sys_threads.c
+	expectOutput architecture_types_scheduler_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_types.h" \
+		targetMake -V CFLAGS_srcs/system/sysCore/sys_scheduler.c
+	for VAL_SOURCE in system/boot.c system/sysCall/sc_driver.c system/sysCall/sc_gpio.c \
+		system/sysCall/sc_threads.c system/sysCore/sys_softwareTimeCounter.c
+	do
+		VAL_NAME=$(printf '%s' "${VAL_SOURCE}" | tr '/.' '__')
+		expectOutput "architecture_types_unselected_${VAL_NAME}" "" \
+			targetMake -V "CFLAGS_srcs/${VAL_SOURCE}"
+	done
 	expectSuccess source_search_paths targetMake -V PATHS_SOURCE_SEARCH
 	logExcludes source_search_paths "srcs/hal/public"
 	expectSuccess autocode_generated_inputs targetMake -V FILES_AUTOCODE_INC
