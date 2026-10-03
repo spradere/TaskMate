@@ -67,6 +67,7 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", file_signals.name, line);
 		*context->file_error = true;
 	}
+	// The final enum value sizes the logical signal table in the target.
 	fprintf(context->file, "\tGPIO_SIGNAL_COUNT\n");
 	fprintf(context->file, "} gpio_signal_t;\n");
 

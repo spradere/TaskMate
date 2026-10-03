@@ -33,7 +33,7 @@ typedef struct
 	FILE *stream;
 	bool stream_opened; // allow fclose()
 	bool write_access; // report buffered write errors on close
-	char *name;
+	char *name; // usually borrowed; temporary file names belong to the registry
 	bool name_allocated; // allow free()
 } file_t;
 

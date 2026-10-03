@@ -37,6 +37,7 @@ void tagWriterWriteScliCommands(const tag_writer_context_t *context)
 				context->data_base->scli.commands[i].name,
 				context->data_base->scli.commands[i].function);
 	}
+	// The service scans this table until the zero entry.
 	fprintf(context->file, "\t{0, 0},\n");
 	fprintf(context->file, "};\n");
 }

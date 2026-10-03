@@ -48,6 +48,7 @@ static bool versionValueMatches(const char *value, const unsigned long expected)
 {
 	char *end;
 
+	// Reject partial numbers and overflow before checking exact compatibility.
 	errno = 0;
 	const unsigned long parsed = strtoul(value, &end, 10);
 	if( (value[0] == 0) || (*end != 0) || (errno == ERANGE) ) { return false; }

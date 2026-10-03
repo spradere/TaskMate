@@ -29,6 +29,7 @@ static const char *errorLevelName(err_level_t level);
 
 void tagWriterWriteErrorCatalog(const tag_writer_context_t *context)
 {
+	// FLOW entries have no message object but keep their catalogue index.
 	for( int i = 0; i < context->errors->error_count; i++ )
 	{
 		if( context->errors->catalog[i].level != ERR_LEVEL_FLOW )

@@ -23,6 +23,7 @@
 
 void tagWriterWriteThreadStacks(const tag_writer_context_t *context)
 {
+	// Reserve index zero for the system thread, regardless of declaration order.
 	int threads_count = 1;
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
@@ -51,10 +52,10 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 
 	mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
-	// List other threads
+	// Use the same index mapping for stacks, records, and name catalogues.
 	for( int i = 0; i < mod->modules_count; i++ )
 	{
-		// The first thread must be the system thread
+		// The system thread occupies record zero.
 		if( strcmp(mod->modules[i].name, "system") == 0 )
 		{
 			thread_index = 0;
@@ -89,6 +90,7 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 
 void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context)
 {
+	// Designated entries preserve the thread indices used by allocation.
 	int threads_count = 1;
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 

@@ -29,7 +29,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 {
 	AUTOCODE_MSG_INFO("open file.err <%s>", src_name);
 
-	// Open files
+	// Read each catalogue into the shared error table.
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
@@ -39,7 +39,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 		return -1;
 	}
 
-	// Read from source
+	// Continue numbering after errors from earlier catalogue files.
 	int file_src_line_number = 0;
 	int error_index = errors->error_count;
 	tokenizer_t tok = {0};
@@ -50,6 +50,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 		   FILE_GET_LINE_SUCCESS )
 	{
 		file_src_line_number++;
+		// Tokenization changes the line; keep the original for diagnostics.
 		snprintf(line, sizeof(line), "%s", tok.line);
 		tokenizer_err_t token_error = tokenizer(&tok);
 		if( token_error != TOK_ERR_NOERR )
@@ -139,6 +140,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 			}
 			if( error_is_valid == false ) { continue; }
 
+			// Expose only entries whose name, message, and level passed validation.
 			error_index++;
 
 			errors->error_count = error_index;

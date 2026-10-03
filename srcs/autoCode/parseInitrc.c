@@ -97,6 +97,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 	bool version_minor_set = false;
 	bool version_invalid = false;
 
+	// The first two commands establish the grammar before any module is accepted.
 	while( (line_result = fileGetLine(&initrc_list, tok.line, sizeof(tok.line))) ==
 		   FILE_GET_LINE_SUCCESS )
 	{
@@ -106,6 +107,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		{
 			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", initrc_name, file_line_number,
 							   tokenizerErrorMessage(token_error));
+			// A malformed version line cannot be skipped in favor of a later command.
 			if( (version_major_set == false) || (version_minor_set == false) )
 			{
 				version_invalid = true;
@@ -145,6 +147,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		}
 		if( strcmp(tok.tokens[0], "setVersion") == 0 )
 		{
+			// Version declarations are valid only at the start of the file.
 			AUTOCODE_MSG_ERROR("setVersion command after init.rc version declaration [%s:%i]",
 							   initrc_name,
 							   file_line_number);

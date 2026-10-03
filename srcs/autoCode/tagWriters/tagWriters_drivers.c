@@ -82,6 +82,7 @@ void tagWriterWriteDriverHave(const tag_writer_context_t *context)
 				(character == 0) ? 0 : (unsigned char)name[character - 1];
 			const unsigned char next = (unsigned char)name[character + 1];
 
+			// Split lower-to-upper and acronym-to-word boundaries in macro names.
 			if( isupper(current) && (character > 0) &&
 				(islower(previous) || isdigit(previous) || (isupper(previous) && islower(next))) )
 			{

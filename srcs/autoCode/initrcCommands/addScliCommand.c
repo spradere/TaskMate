@@ -108,6 +108,7 @@ void initrcAddScliCommand(const initrc_command_t *command)
 		return;
 	}
 	const scli_command_definition_t *definition = commandDefinitionFind(name);
+	// Generated calls use this fixed mapping, so unknown names cannot enter the table.
 	if( definition == NULL )
 	{
 		AUTOCODE_MSG_ERROR("unknown SCLI command [%s:%i] %s",
@@ -135,6 +136,7 @@ void initrcAddScliCommand(const initrc_command_t *command)
 
 	for( uint8_t i = 0; i < command->data_base->scli.count; i++ )
 	{
+		// Duplicate names would make the generated command lookup ambiguous.
 		if( strcmp(command->data_base->scli.commands[i].name, name) == 0 )
 		{
 			AUTOCODE_MSG_ERROR("duplicate SCLI command name [%s:%i] %s",
