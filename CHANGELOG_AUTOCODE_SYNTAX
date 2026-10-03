@@ -1,3 +1,4 @@
+v1.6	add HAVE generation from drivers init.rc
 v1.5	split sys_modules -> sys_threads sys_drivers
 v1.4	change option '-error_count' to '-test_mode'
 v1.3	add tag for scli commadns

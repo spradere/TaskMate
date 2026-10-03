@@ -28,8 +28,6 @@ FILE_WIREGPIO = ${PATH_TARGET_Z600}/z600_signals.c
 
 .include "${PATH_SRCS}/hal/board/pc/pc_make.mk"
 
-#CFLAGS_${PATH_TARGET_Z600}/ucontext_system.c += -include ${FILE_HAL_STRING_MACRO}
-
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
 .endif
