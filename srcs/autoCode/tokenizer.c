@@ -43,7 +43,7 @@ static bool incIndexTestOverflow(int *index)
 {
 	(*index)++;
 	bool overflow = indexTestOverflow((size_t)(*index));
-	if( overflow == true ){(*index)--;}
+	if( overflow == true ){(*index) = (TOKEN_LINE_SIZE_MAX - 1U);}
 	
 	return overflow;
 }

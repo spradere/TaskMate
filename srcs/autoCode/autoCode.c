@@ -111,7 +111,6 @@ int main(int argc, const char *argv[])
 
 		if( stage == AC_STAGE_TAGS ) { parseTagInit(); }
 
-		bool tag_file_error = false;
 		int file_line_number = 0;
 		file_get_line_result_t line_result;
 		while( (line_result = fileGetLine(&list_file, tok.line, sizeof(tok.line))) ==
@@ -125,7 +124,9 @@ int main(int argc, const char *argv[])
 								   tokenizerErrorMessage(token_error));
 				continue;
 			}
+			
 			if( tok.count == 0 ) { continue; }
+			
 			if( (stage == AC_STAGE_ERRORS) &&
 				(globalError(tok.tokens[0], &errors_catalog) != 0) )
 			{
@@ -139,7 +140,6 @@ int main(int argc, const char *argv[])
 			if( (stage == AC_STAGE_TAGS) &&
 				(parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options) != 0) )
 			{
-				tag_file_error = true;
 				break;
 			}
 		}
@@ -147,26 +147,19 @@ int main(int argc, const char *argv[])
 		if( line_result == FILE_GET_LINE_ERROR )
 		{
 			AUTOCODE_MSG_ERROR("reading file <%s>", list_file.name);
-			if( stage == AC_STAGE_TAGS ) { tag_file_error = true; }
 		}
 
 		if( fileClose(&list_file) != FILE_UTILITY_OK )
 		{
 			if( stage == AC_STAGE_ERRORS ) { AUTOCODE_MSG_ERROR("closing error list file"); }
 			if( stage == AC_STAGE_INITRC ) { AUTOCODE_MSG_ERROR("closing initrc list file"); }
-			if( stage == AC_STAGE_TAGS )
-			{
-				AUTOCODE_MSG_ERROR("closing tag list file");
-				tag_file_error = true;
-			}
+			if( stage == AC_STAGE_TAGS ){AUTOCODE_MSG_ERROR("closing tag list file");}
 		}
 
 		tokenizerFree(&tok);
-		if( stage == AC_STAGE_TAGS )
-		{
-			if( tag_file_error ) { autoCodeExit(AC_FORCE_EXIT); }
-			parseTagHave();
-		}
+		autoCodeExit(AC_FORCE_EXIT);	
+			
+		if( stage == AC_STAGE_TAGS ){parseTagHave();}
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
