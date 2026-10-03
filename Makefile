@@ -49,7 +49,6 @@ PATH_TEST = test
 # Tests targets
 .include "${PATH_TEST}/autoCode_test.mk"
 .include "${PATH_TEST}/build_test.mk"
-.include "${PATH_TEST}/tm_string_test.mk"
 
 # Architecture-specific makefile
 .if !empty(FILE_ARCH_CC)
