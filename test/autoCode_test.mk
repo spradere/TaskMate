@@ -12,8 +12,12 @@
 # autoCode black-box tests
 ################################################################################
 
-CFLAGS_AUTOCODE_TEST_SANITIZE = ${CFLAGS_AUTOCODE}
+CFLAGS_AUTOCODE_TEST_SANITIZE = -DAUTOCODE_BUILD -I${PATH_SRCS}/
+CFLAGS_AUTOCODE_TEST_SANITIZE += -Wall -Wextra -Wshadow -Wpedantic -Wconversion
+CFLAGS_AUTOCODE_TEST_SANITIZE += -Wswitch -Wenum-conversion
+CFLAGS_AUTOCODE_TEST_SANITIZE += -Wno-gnu-zero-variadic-macro-arguments
 CFLAGS_AUTOCODE_TEST_SANITIZE += -fsanitize=address,undefined -fno-omit-frame-pointer
+FILE_AUTOCODE_TEST_SANITIZE_CC ?= clang
 
 .PHONY: test_autoCode
 test_autoCode: test_ac_command_line .WAIT test_ac_options .WAIT \
@@ -60,14 +64,26 @@ test_ac_cmp_replace: ${FILE_AUTOCODE_TARGET} ${SCRIPT_AUTOCODE_TEST}
 		"./${FILE_AUTOCODE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}"
 
 ${FILE_AUTOCODE_TEST_SANITIZE_TARGET}: ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H} \
-										 ${FILE_ERROR_LEVEL}
+										${FILE_ERROR_LEVEL}
 	@printf "\n%sCompiling autoCode with sanitizers%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	clang ${CFLAGS_AUTOCODE_TEST_SANITIZE} ${FILES_AUTOCODE_SRC} \
+	${FILE_AUTOCODE_TEST_SANITIZE_CC} ${CFLAGS_AUTOCODE_TEST_SANITIZE} \
+		${FILES_AUTOCODE_SRC} \
 		-o ${FILE_AUTOCODE_TEST_SANITIZE_TARGET}
 
-.PHONY: test_ac_sanitize
-test_ac_sanitize: ${FILE_AUTOCODE_TEST_SANITIZE_TARGET} ${SCRIPT_AUTOCODE_TEST}
-#help test_ac_sanitize: [test] Run the complete autoCode corpus with ASan/UBSan.
+.PHONY: _test_ac_sanitize
+_test_ac_sanitize: ${FILE_AUTOCODE_TEST_SANITIZE_TARGET} ${SCRIPT_AUTOCODE_TEST}
 	@ASAN_OPTIONS=detect_leaks=0 ${SCRIPT_AUTOCODE_TEST} all \
 		"./${FILE_AUTOCODE_TEST_SANITIZE_TARGET}" "${PATH_BUILD_AUTOCODE_TEST}/sanitize"
+
+.PHONY: test_ac_sanitize
+test_ac_sanitize: ${SCRIPT_AUTOCODE_TEST}
+#help test_ac_sanitize: [test] Run the autoCode corpus when Clang supports ASan/UBSan.
+	@if ! printf 'int main(void) { return 0; }\n' | \
+		${FILE_AUTOCODE_TEST_SANITIZE_CC} -fsanitize=address,undefined \
+		-x c - -fsyntax-only > /dev/null 2>&1; then \
+		printf "\n%sSkipping autoCode sanitizer tests: unsupported by Clang%s\n\n" \
+			"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"; \
+	else \
+		${MAKE} _test_ac_sanitize; \
+	fi

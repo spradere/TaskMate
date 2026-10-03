@@ -23,6 +23,7 @@ VAL_STAGE=$1
 FILE_AUTOCODE=$2
 PATH_WORK_ROOT=$3
 VAL_TEST_COUNT=0
+VAL_TEST_SKIP_COUNT=0
 
 writeInitrcVersion()
 {
@@ -147,6 +148,65 @@ assertNoTemporaryFiles()
 	if find "${PATH_STAGE_WORK}" -name '*.tmp' -print | grep -q .; then
 		fail "temporary autoCode files remain in ${PATH_STAGE_WORK}"
 	fi
+}
+
+skipTest()
+{
+	printf 'autoCode test skipped: %s\n' "$1"
+	VAL_TEST_SKIP_COUNT=$((VAL_TEST_SKIP_COUNT + 1))
+}
+
+isCygwin()
+{
+	case "$(uname -s)" in
+		CYGWIN*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+readOnlyDirectoryPreventsCreate()
+{
+	FILE_PERMISSION_PROBE="$1/.create_permission_probe"
+	chmod 0555 "$1" || fail "cannot make directory read-only"
+	if ( : > "${FILE_PERMISSION_PROBE}" ) 2> /dev/null; then
+		VAL_PERMISSION_DENIED=0
+	else
+		VAL_PERMISSION_DENIED=1
+	fi
+	chmod 0755 "$1" || fail "cannot restore directory permissions"
+	rm -f "${FILE_PERMISSION_PROBE}"
+	[ "${VAL_PERMISSION_DENIED}" -eq 1 ]
+}
+
+readOnlyDirectoryPreventsRemove()
+{
+	FILE_PERMISSION_PROBE="$1/.remove_permission_probe"
+	: > "${FILE_PERMISSION_PROBE}" || fail "cannot create remove permission probe"
+	chmod 0555 "$1" || fail "cannot make directory read-only"
+	if rm -f "${FILE_PERMISSION_PROBE}" 2> /dev/null; then
+		VAL_PERMISSION_DENIED=0
+	else
+		VAL_PERMISSION_DENIED=1
+	fi
+	chmod 0755 "$1" || fail "cannot restore directory permissions"
+	rm -f "${FILE_PERMISSION_PROBE}"
+	[ "${VAL_PERMISSION_DENIED}" -eq 1 ]
+}
+
+readOnlyDirectoryPreventsRename()
+{
+	FILE_PERMISSION_PROBE="$1/.rename_permission_probe"
+	FILE_PERMISSION_RENAMED="$1/.renamed_permission_probe"
+	: > "${FILE_PERMISSION_PROBE}" || fail "cannot create rename permission probe"
+	chmod 0555 "$1" || fail "cannot make directory read-only"
+	if mv "${FILE_PERMISSION_PROBE}" "${FILE_PERMISSION_RENAMED}" 2> /dev/null; then
+		VAL_PERMISSION_DENIED=0
+	else
+		VAL_PERMISSION_DENIED=1
+	fi
+	chmod 0755 "$1" || fail "cannot restore directory permissions"
+	rm -f "${FILE_PERMISSION_PROBE}" "${FILE_PERMISSION_RENAMED}"
+	[ "${VAL_PERMISSION_DENIED}" -eq 1 ]
 }
 
 runCommandLineTests()
@@ -761,23 +821,27 @@ runCompareReplaceTests()
 	fi
 
 	caseBegin output_open_failure
-	chmod 0555 "${PATH_CASE}/generated"
-	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
-		> "${PATH_STAGE_WORK}/output_open_failure.log" 2>&1; then
-		VAL_RESULT=0
+	if readOnlyDirectoryPreventsCreate "${PATH_CASE}/generated"; then
+		chmod 0555 "${PATH_CASE}/generated"
+		if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+			> "${PATH_STAGE_WORK}/output_open_failure.log" 2>&1; then
+			VAL_RESULT=0
+		else
+			VAL_RESULT=$?
+		fi
+		chmod 0755 "${PATH_CASE}/generated"
+		if [ "${VAL_RESULT}" -eq 0 ]; then
+			fail "output_open_failure: command unexpectedly succeeded"
+		fi
+		logContains output_open_failure "creating file"
+		if find "${PATH_CASE}/generated" -type f -print | grep -q .; then
+			fail "output_open_failure: an empty destination was created"
+		fi
+		assertNoTemporaryFiles
+		VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	else
-		VAL_RESULT=$?
+		skipTest "output_open_failure: read-only directory permits file creation"
 	fi
-	chmod 0755 "${PATH_CASE}/generated"
-	if [ "${VAL_RESULT}" -eq 0 ]; then
-		fail "output_open_failure: command unexpectedly succeeded"
-	fi
-	logContains output_open_failure "creating file"
-	if find "${PATH_CASE}/generated" -type f -print | grep -q .; then
-		fail "output_open_failure: an empty destination was created"
-	fi
-	assertNoTemporaryFiles
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 
 	caseBegin buffered_write_failure
 	ln -s /dev/full "${PATH_CASE}/tags.c.tmp" || fail "cannot create /dev/full fixture"
@@ -786,49 +850,61 @@ runCompareReplaceTests()
 	assertNoTemporaryFiles
 
 	caseBegin remove_failure
-	expectSuccess remove_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.c.tmp"
-	chmod 0555 "${PATH_CASE}"
-	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
-		> "${PATH_STAGE_WORK}/remove_failure.log" 2>&1; then
-		VAL_RESULT=0
+	if isCygwin; then
+		skipTest "remove_failure: Cygwin does not enforce POSIX remove permissions"
+	elif readOnlyDirectoryPreventsRemove "${PATH_CASE}"; then
+		expectSuccess remove_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+		cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.c.tmp"
+		chmod 0555 "${PATH_CASE}"
+		if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+			> "${PATH_STAGE_WORK}/remove_failure.log" 2>&1; then
+			VAL_RESULT=0
+		else
+			VAL_RESULT=$?
+		fi
+		chmod 0755 "${PATH_CASE}"
+		find "${PATH_CASE}/tags.c.tmp" -type f -delete
+		if [ "${VAL_RESULT}" -eq 0 ]; then
+			fail "remove_failure: command unexpectedly succeeded"
+		fi
+		logContains remove_failure "removing temporary file"
+		assertNoTemporaryFiles
+		VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	else
-		VAL_RESULT=$?
+		skipTest "remove_failure: read-only directory permits file removal"
 	fi
-	chmod 0755 "${PATH_CASE}"
-	find "${PATH_CASE}/tags.c.tmp" -type f -delete
-	if [ "${VAL_RESULT}" -eq 0 ]; then
-		fail "remove_failure: command unexpectedly succeeded"
-	fi
-	logContains remove_failure "removing temporary file"
-	assertNoTemporaryFiles
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 
 	caseBegin rename_failure
-	expectSuccess rename_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	sed 's/#include "thread_stacks.inc"/#include "stale.inc"/' \
-		"${PATH_CASE}/tags.c" > "${PATH_CASE}/changed.c"
-	mv "${PATH_CASE}/changed.c" "${PATH_CASE}/tags.c"
-	cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.expected"
-	: > "${PATH_CASE}/tags.c.tmp"
-	chmod 0555 "${PATH_CASE}"
-	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
-		> "${PATH_STAGE_WORK}/rename_failure.log" 2>&1; then
-		VAL_RESULT=0
+	if isCygwin; then
+		skipTest "rename_failure: Cygwin does not enforce POSIX rename permissions"
+	elif readOnlyDirectoryPreventsRename "${PATH_CASE}"; then
+		expectSuccess rename_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+		sed 's/#include "thread_stacks.inc"/#include "stale.inc"/' \
+			"${PATH_CASE}/tags.c" > "${PATH_CASE}/changed.c"
+		mv "${PATH_CASE}/changed.c" "${PATH_CASE}/tags.c"
+		cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.expected"
+		: > "${PATH_CASE}/tags.c.tmp"
+		chmod 0555 "${PATH_CASE}"
+		if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+			> "${PATH_STAGE_WORK}/rename_failure.log" 2>&1; then
+			VAL_RESULT=0
+		else
+			VAL_RESULT=$?
+		fi
+		chmod 0755 "${PATH_CASE}"
+		find "${PATH_CASE}/tags.c.tmp" -type f -delete
+		if [ "${VAL_RESULT}" -eq 0 ]; then
+			fail "rename_failure: command unexpectedly succeeded"
+		fi
+		logContains rename_failure "renaming file"
+		if ! cmp -s "${PATH_CASE}/tags.expected" "${PATH_CASE}/tags.c"; then
+			fail "rename failure modified the original destination"
+		fi
+		assertNoTemporaryFiles
+		VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	else
-		VAL_RESULT=$?
+		skipTest "rename_failure: read-only directory permits file rename"
 	fi
-	chmod 0755 "${PATH_CASE}"
-	find "${PATH_CASE}/tags.c.tmp" -type f -delete
-	if [ "${VAL_RESULT}" -eq 0 ]; then
-		fail "rename_failure: command unexpectedly succeeded"
-	fi
-	logContains rename_failure "renaming file"
-	if ! cmp -s "${PATH_CASE}/tags.expected" "${PATH_CASE}/tags.c"; then
-		fail "rename failure modified the original destination"
-	fi
-	assertNoTemporaryFiles
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 }
 
 runStage()
@@ -858,3 +934,6 @@ else
 fi
 
 printf 'autoCode tests passed: %s case(s)\n' "${VAL_TEST_COUNT}"
+if [ "${VAL_TEST_SKIP_COUNT}" -ne 0 ]; then
+	printf 'autoCode tests skipped: %s case(s)\n' "${VAL_TEST_SKIP_COUNT}"
+fi

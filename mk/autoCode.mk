@@ -144,7 +144,7 @@ tidy_autocode:
 
 .PHONY: cppcheck_autocode
 cppcheck_autocode:
-#help cppcheck_autoCode: [global] cppcheck static code analysis for autoCode.
+#help cppcheck_autocode: [global] cppcheck static code analysis for autoCode.
 	@printf "\n%scppcheck autoCode static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${FILE_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_AUTOCODE} \
