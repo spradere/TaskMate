@@ -27,7 +27,7 @@
 
 typedef struct
 {
-	unsigned int error_count;
+	bool test_mode;
 	char file_errors_list[AC_BUFFER_SIZE];
 	char file_initrc_list[AC_BUFFER_SIZE];
 	char file_parsetag_list[AC_BUFFER_SIZE];

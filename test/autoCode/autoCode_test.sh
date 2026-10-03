@@ -61,7 +61,7 @@ writeTags()
 writeConfig()
 {
 	printf '%s\n' \
-		"--error_count 1000" \
+		"--test_mode on" \
 		"--errors ${PATH_CASE}/errors.list" \
 		"--initrc ${PATH_CASE}/initrc.list" \
 		"--parsetag ${PATH_CASE}/tags.list" \
@@ -109,6 +109,14 @@ logDoesNotContain()
 {
 	if grep -F -q -- "$2" "${PATH_STAGE_WORK}/$1.log"; then
 		fail "$1: unexpected diagnostic <$2>"
+	fi
+}
+
+logPatternCount()
+{
+	VAL_ACTUAL_COUNT=$(grep -F -c -- "$2" "${PATH_STAGE_WORK}/$1.log")
+	if [ "${VAL_ACTUAL_COUNT}" -ne "$3" ]; then
+		fail "$1: expected $3 occurrence(s) of <$2>, got ${VAL_ACTUAL_COUNT}"
 	fi
 }
 
@@ -161,7 +169,7 @@ runOptionTests()
 		"${FILE_AUTOCODE}" "${PATH_STAGE_WORK}/missing.conf"
 
 	caseBegin wrong_token_count
-	printf '%s\n' '--error_count' > "${PATH_CASE}/autoCode.conf"
+	printf '%s\n' '--test_mode' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure wrong_token_count "wrong token count"
 
 	caseBegin unknown_option
@@ -171,28 +179,22 @@ runOptionTests()
 	caseBegin all_required_missing
 	: > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_missing \
-		"required autoCode option --error_count is not set"
-	logContains all_required_missing "required autoCode option --gpio_signals is not set"
-	logContains all_required_missing "required autoCode option --wire_gpio is not set"
-	logContains all_required_missing "required autoCode option --source_path is not set"
+		"required autoCode option --test_mode is not set"
 
 	caseBegin all_required_duplicate
 	cp "${PATH_CASE}/autoCode.conf" "${PATH_CASE}/duplicate.conf"
 	cat "${PATH_CASE}/duplicate.conf" >> "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_duplicate \
-		"required autoCode option --error_count is multiple set"
-	logContains all_required_duplicate "required autoCode option --gpio_signals is multiple set"
-	logContains all_required_duplicate "required autoCode option --wire_gpio is multiple set"
-	logContains all_required_duplicate "required autoCode option --source_path is multiple set"
+		"required autoCode option --test_mode is multiple set"
 
-	for VAL_VALUE in -1 invalid 1x 4294967296
+	for VAL_VALUE in yes ON 1 0
 	do
 		VAL_NAME=$(printf '%s' "${VAL_VALUE}" | tr -c '[:alnum:]' '_')
-		caseBegin "invalid_error_count_${VAL_NAME}"
-		sed "s/--error_count 1000/--error_count ${VAL_VALUE}/" \
+		caseBegin "invalid_test_mode_${VAL_NAME}"
+		sed "s/--test_mode on/--test_mode ${VAL_VALUE}/" \
 			"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
 		mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
-		runOptionFailure "invalid_error_count_${VAL_NAME}" "invalid --error_count value"
+		runOptionFailure "invalid_test_mode_${VAL_NAME}" "invalid --test_mode value"
 	done
 
 	caseBegin invalid_source_path
@@ -202,7 +204,7 @@ runOptionTests()
 	runOptionFailure invalid_source_path "invalid --source_path directory"
 
 	caseBegin unterminated_option
-	printf '%s\n' '--error_count "1000' > "${PATH_CASE}/autoCode.conf"
+	printf '%s\n' '--test_mode "on' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure unterminated_option "unterminated string"
 
 	caseBegin long_option_line
@@ -214,6 +216,29 @@ runOptionTests()
 runErrorTests()
 {
 	stageBegin errors
+	caseBegin normal_mode_error_limit
+	sed 's/--test_mode on/--test_mode off/' \
+		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
+	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
+	printf '%s\n' 'ERR_FIRST' 'ERR_SECOND' > "${PATH_CASE}/errors.err"
+	expectFailure normal_mode_error_limit "ERR_FIRST" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logPatternCount normal_mode_error_limit "wrong token count != 3" 1
+	logDoesNotContain normal_mode_error_limit "ERR_SECOND"
+
+	caseBegin test_mode_error_limit
+	: > "${PATH_CASE}/errors.err"
+	VAL_INDEX=0
+	while [ "${VAL_INDEX}" -le 100 ]
+	do
+		printf 'ERR_TEST_LIMIT_%03d\n' "${VAL_INDEX}" >> "${PATH_CASE}/errors.err"
+		VAL_INDEX=$((VAL_INDEX + 1))
+	done
+	expectFailure test_mode_error_limit "ERR_TEST_LIMIT_000" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logPatternCount test_mode_error_limit "wrong token count != 3" 100
+	logDoesNotContain test_mode_error_limit "ERR_TEST_LIMIT_100"
+
 	caseBegin missing_error_list
 	sed "s|${PATH_CASE}/errors.list|${PATH_CASE}/missing.list|" \
 		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
