@@ -50,8 +50,8 @@ writeTags()
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
 	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
-		driver_name_catalog error_enum error_catalog modules_count modules_list gpio_signals wire_gpio \
-		scli_commands
+		driver_name_catalog error_enum error_catalog modules_count threads_list drivers_list \
+		gpio_signals wire_gpio scli_commands
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -654,8 +654,8 @@ runParseTagTests()
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
 	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
-		driver_name_catalog error_enum error_catalog modules_count modules_list gpio_signals wire_gpio \
-		scli_commands
+		driver_name_catalog error_enum error_catalog modules_count threads_list drivers_list \
+		gpio_signals wire_gpio scli_commands
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
@@ -677,6 +677,7 @@ runCompareReplaceTests()
 	stageBegin compare_replace
 	caseBegin stable_generation
 	printf '%s\n' \
+		'addModule driver driver -run driver -source_file system.c' \
 		'addScliCommand date -source_file system/services/commands/scli_date.c' \
 		'addScliCommand driver -source_file system/services/commands/scli_driver.c' \
 		>> "${PATH_CASE}/init.rc"
@@ -693,6 +694,14 @@ runCompareReplaceTests()
 	if ! grep -F -q 'static hal_stack_word_t thread0_stack[256];' \
 		"${PATH_CASE}/generated/thread_stacks.inc"; then
 		fail "thread_stacks generated static storage is missing"
+	fi
+	if ! grep -F -q '#include "system/services/system.h"' \
+		"${PATH_CASE}/generated/threads_list.inc"; then
+		fail "threads_list generated service declaration is missing"
+	fi
+	if ! grep -F -q '#include "interfaces/drv_driver.h"' \
+		"${PATH_CASE}/generated/drivers_list.inc"; then
+		fail "drivers_list generated driver declaration is missing"
 	fi
 	if ! grep -F -q 'mod->stack_size = 256;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
@@ -716,9 +725,9 @@ runCompareReplaceTests()
 		fail "scli_commands generated entry is missing"
 	fi
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 13 unchanged"
+	logContains unchanged_generation "0 updated, 14 unchanged"
 
-	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
+	sed 's/#define MOD_DRIVER_COUNT 1/#define MOD_DRIVER_COUNT 99/' \
 		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
 	mv "${PATH_CASE}/changed.inc" "${PATH_CASE}/generated/modules_count.inc"
 	expectSuccess changed_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -732,7 +741,7 @@ runCompareReplaceTests()
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
 	for VAL_TAG in thread_stacks drivers_alloc thread_name_catalog driver_name_catalog error_enum \
-		error_catalog modules_count modules_list wire_gpio scli_commands
+		error_catalog modules_count threads_list drivers_list wire_gpio scli_commands
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"

@@ -1,3 +1,6 @@
+	[code] split sys_modules -> sys_threads sys_drivers
+	[code] refactor hal/*/*_type.h
+	[build] refactor autoCode error count
 	[arch] move ucontext files and directory
 	[doc] general review
 

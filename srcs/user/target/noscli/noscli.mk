@@ -27,7 +27,6 @@ PATHS_EXTRA_SRC += 	${PATH_SRCS}/tmLibc
 FILE_GPIO_SIGNALS = ${PATH_NOSCLI}/noscli_signals.gpio
 FILE_WIREGPIO = ${PATH_NOSCLI}/noscli_signals.c
 
-CFLAGS += -DHWT_noscli
 .include "${PATH_SRCS}/hal/board/arduinoMega/mega_make.mk"
 
 .else

@@ -7,19 +7,19 @@
  */
 
 /**
- * @file sys_modules_list.h
- * @brief modules list header declarations.
+ * @file sys_drivers_list.h
+ * @brief Generated driver declaration list.
  */
 
-#ifndef SYSCORE_SYS_MODULES_LIST_H
-#define SYSCORE_SYS_MODULES_LIST_H
+#ifndef SYSCORE_SYS_DRIVERS_LIST_H
+#define SYSCORE_SYS_DRIVERS_LIST_H
 
 /* ============================================================================
  * Generated includes
  * ========================================================================== */
 
-// [autoCode_tag] modules_list
-#include "modules_list.inc"
+// [autoCode_tag] drivers_list
+#include "drivers_list.inc"
 // [/tag]
 
-#endif // SYSCORE_SYS_MODULES_LIST_H
+#endif // SYSCORE_SYS_DRIVERS_LIST_H

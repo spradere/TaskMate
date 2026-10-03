@@ -21,7 +21,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteModulesList(const tag_writer_context_t *context)
+void tagWriterWriteThreadsList(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
@@ -36,9 +36,11 @@ void tagWriterWriteModulesList(const tag_writer_context_t *context)
 			fprintf(context->file, "#include \"user/tasks/%s.h\"\n", mod->modules[i].name);
 		}
 	}
-	fprintf(context->file, "\n");
+}
 
-	mod = &context->data_base->modules_type[MOD_DRIVER_ID];
+void tagWriterWriteDriversList(const tag_writer_context_t *context)
+{
+	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
 
 	for( int i = 0; i < mod->modules_count; i++ )
 	{

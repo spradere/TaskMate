@@ -18,13 +18,11 @@
 #include "sc_threads.h"
 
 #include "interfaces/hal_atomic.h"
-#include "interfaces/tm_macros.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
-#include "interfaces/tm_threads.h"
 #include "system/sysCall/sc_string.h"
-#include "system/sysCore/sys_modules.h"
 #include "system/sysCore/sys_scheduler.h"
+#include "system/sysCore/sys_threads.h"
 
 /* -----------------------------------------------
  * Thread name catalog
@@ -38,7 +36,7 @@
  * Private function prototypes
  * ---------------------------------------------*/
 
-static mod_thread_item_t *sc_threadGetPointer(const char *name);
+static bool sc_threadGetId(const char *name, uint8_t *id);
 
 /* =============================================================================
  * Implementation - Functions
@@ -98,10 +96,9 @@ bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 	}
 
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_thread_item_t *thread = mod_threadGetPointer((uint8_t)id);
 	*name = thread_name_catalog[id];
-	*run_level = RL_GET_RUN_LEVEL(thread->status);
-	*stack_size_bytes = (uint16_t)(thread->stack_size * sizeof(hal_stack_word_t));
+	*run_level = mod_threadRunLevelGet((uint8_t)id);
+	*stack_size_bytes = mod_threadStackSizeGet((uint8_t)id);
 	hal_atomicEnd(state);
 
 	return *name != 0;
@@ -112,18 +109,7 @@ bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes)
 	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == 0) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	const mod_thread_item_t *thread = mod_threadGetPointer((uint8_t)id);
-	const volatile hal_stack_word_t *stack = thread->stack;
-	const uint16_t usable_words = thread->stack_size - MOD_STACK_CANARY_WORD_COUNT;
-	uint16_t unused_words = 0;
-
-	while( (unused_words < usable_words) &&
-		   (stack[unused_words + MOD_STACK_FIRST_USABLE_INDEX] == MOD_STACK_PATTERN) )
-	{
-		unused_words++;
-	}
-
-	*depth_bytes = (uint16_t)((usable_words - unused_words) * sizeof(hal_stack_word_t));
+	*depth_bytes = mod_threadStackDepthGet((uint8_t)id);
 	hal_atomicEnd(state);
 	return true;
 }
@@ -135,40 +121,28 @@ bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes)
 void sc_threadSetInitialized(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_thread_item_t *thread = mod_threadGetPointer(mod_threadGetCurrent());
-	TM_SETBIT(thread->status, THREAD_BIT_INITIALIZED);
+	mod_threadSetInitialized(mod_threadGetCurrent());
 	hal_atomicEnd(state);
 }
 
 bool sc_threadStart(const char *name, uint8_t initial_run_level)
 {
-	mod_thread_item_t *thread = sc_threadGetPointer(name);
-	if( thread == 0 ) { return false; }
+	uint8_t id;
+	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-
-	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
-	else
-	{
-		thread->status &= (uint8_t)~RL_LEVEL_MASK;
-		thread->status |= thread->saved_run_level;
-	}
-
+	mod_threadStart(id, initial_run_level);
 	hal_atomicEnd(state);
 	return true;
 }
 
 bool sc_threadStop(const char *name)
 {
-	mod_thread_item_t *thread = sc_threadGetPointer(name);
-	if( thread == 0 ) { return false; }
+	uint8_t id;
+	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	uint8_t current_run_level = RL_GET_RUN_LEVEL(thread->status);
-
-	thread->saved_run_level = current_run_level;
-	thread->status &= (uint8_t)~RL_LEVEL_MASK;
-
+	mod_threadStop(id);
 	hal_atomicEnd(state);
 	return true;
 }
@@ -177,19 +151,8 @@ bool sc_threadRunLevelIsReady(uint8_t run_level)
 {
 	if( (run_level == RL_RUN_NONE) || (run_level >= RL_LEVEL_COUNT) ) { return false; }
 
-	bool ready = true;
 	hal_atomic_state_t state = hal_atomicStart();
-	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
-	{
-		mod_thread_item_t *thread = mod_threadGetPointer(i);
-		if( (RL_GET_RUN_LEVEL(thread->status) == run_level) &&
-			((TM_GETBIT(thread->status, THREAD_BIT_INITIALIZED) == 0) ||
-			 (TM_GETBIT(thread->status, THREAD_BIT_DEAD) != 0)) )
-		{
-			ready = false;
-			break;
-		}
-	}
+	bool ready = mod_threadsRunLevelIsReady(run_level);
 	hal_atomicEnd(state);
 
 	return ready;
@@ -202,31 +165,31 @@ bool sc_threadRunLevelIsReady(uint8_t run_level)
 void sc_coopYield(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_thread_item_t *thread = mod_threadGetPointer(mod_threadGetCurrent());
-	TM_SETBIT(thread->status, THREAD_BIT_YIELDED);
+	uint8_t id = mod_threadGetCurrent();
+	mod_threadSetYielded(id);
 	tm_schedulerCoop();
 	hal_atomicEnd(state);
-	while( TM_GETBIT(thread->status, THREAD_BIT_YIELDED) );
+	while( mod_threadIsYielded(id) );
 }
 
 /* -----------------------------------------------
  * Private helpers
  * ---------------------------------------------*/
 
-static mod_thread_item_t *sc_threadGetPointer(const char *name)
+static bool sc_threadGetId(const char *name, uint8_t *id)
 {
-	if( name == 0 ) { return 0; }
+	if( (name == 0) || (id == 0) ) { return false; }
 
 	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
 	{
-		mod_thread_item_t *thread = mod_threadGetPointer(i);
 		const tm_string_t *thread_name = thread_name_catalog[i];
 		if( (thread_name != 0) &&
 			sc_stringCompare(*thread_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
 		{
-			return thread;
+			*id = i;
+			return true;
 		}
 	}
 
-	return 0;
+	return false;
 }
