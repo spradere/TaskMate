@@ -54,6 +54,14 @@ static void setupDatabase(modules_database_t *data_base);
 #define ERROR_COUNT_NORMAL_MODE 1U
 #define ERROR_COUNT_TEST_MODE 100U
 
+typedef enum
+{
+	AC_STAGE_ERRORS,
+	AC_STAGE_INITRC,
+	AC_STAGE_TAGS,
+	AC_STAGE_COUNT
+} ac_stage_t;
+
 static unsigned int error_count = 0U;
 static unsigned int error_count_maximum = ERROR_COUNT_NORMAL_MODE;
 
@@ -83,128 +91,84 @@ int main(int argc, const char *argv[])
 	modules_database_t data_base;
 	setupDatabase(&data_base);
 
-	// Read error files and store entries in the error catalogue
 	error_catalog_t errors_catalog;
 	errors_catalog.error_count = 0;
 
-	file_t ferror;
-	fileInit(&ferror);
-	ferror.name = auto_options.file_errors_list;
-	if( fileOpen(&ferror, "r", FILE_READONLY) != 0 )
+	// Process the lists in dependency order: errors, init.rc, then tags.
+	for( ac_stage_t stage = AC_STAGE_ERRORS; stage < AC_STAGE_COUNT; stage++ )
 	{
-		AUTOCODE_MSG_ERROR("opening file <%s>", ferror.name);
+		file_t list_file;
+		fileInit(&list_file);
+		if( stage == AC_STAGE_ERRORS ) { list_file.name = auto_options.file_errors_list; }
+		if( stage == AC_STAGE_INITRC ) { list_file.name = auto_options.file_initrc_list; }
+		if( stage == AC_STAGE_TAGS ) { list_file.name = auto_options.file_parsetag_list; }
+
+		if( fileOpen(&list_file, "r", FILE_READONLY) != 0 )
+		{
+			AUTOCODE_MSG_ERROR("opening file <%s>", list_file.name);
+			autoCodeExit(AC_FORCE_EXIT);
+		}
+
+		if( stage == AC_STAGE_TAGS ) { parseTagInit(); }
+
+		bool tag_file_error = false;
+		int file_line_number = 0;
+		file_get_line_result_t line_result;
+		while( (line_result = fileGetLine(&list_file, tok.line, sizeof(tok.line))) ==
+			   FILE_GET_LINE_SUCCESS )
+		{
+			file_line_number++;
+			tokenizer_err_t token_error = tokenizer(&tok);
+			if( token_error != TOK_ERR_NOERR )
+			{
+				AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", list_file.name, file_line_number,
+								   tokenizerErrorMessage(token_error));
+				continue;
+			}
+			if( tok.count == 0 ) { continue; }
+			if( (stage == AC_STAGE_ERRORS) &&
+				(globalError(tok.tokens[0], &errors_catalog) != 0) )
+			{
+				break;
+			}
+			if( (stage == AC_STAGE_INITRC) &&
+				(parseInitrc(&data_base, tok.tokens[0], auto_options.source_path) != 0) )
+			{
+				break;
+			}
+			if( (stage == AC_STAGE_TAGS) &&
+				(parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options) != 0) )
+			{
+				tag_file_error = true;
+				break;
+			}
+		}
+
+		if( line_result == FILE_GET_LINE_ERROR )
+		{
+			AUTOCODE_MSG_ERROR("reading file <%s>", list_file.name);
+			if( stage == AC_STAGE_TAGS ) { tag_file_error = true; }
+		}
+
+		if( fileClose(&list_file) != FILE_UTILITY_OK )
+		{
+			if( stage == AC_STAGE_ERRORS ) { AUTOCODE_MSG_ERROR("closing error list file"); }
+			if( stage == AC_STAGE_INITRC ) { AUTOCODE_MSG_ERROR("closing initrc list file"); }
+			if( stage == AC_STAGE_TAGS )
+			{
+				AUTOCODE_MSG_ERROR("closing tag list file");
+				tag_file_error = true;
+			}
+		}
+
+		tokenizerFree(&tok);
+		if( stage == AC_STAGE_TAGS )
+		{
+			if( tag_file_error ) { autoCodeExit(AC_FORCE_EXIT); }
+			parseTagHave();
+		}
 		autoCodeExit(AC_FORCE_EXIT);
 	}
-
-	file_get_line_result_t line_result;
-	int file_line_number = 0;
-	while( (line_result = fileGetLine(&ferror, tok.line, sizeof(tok.line))) ==
-		   FILE_GET_LINE_SUCCESS )
-	{
-		file_line_number++;
-		tokenizer_err_t token_error = tokenizer(&tok);
-		if( token_error != TOK_ERR_NOERR )
-		{
-			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", ferror.name, file_line_number,
-							   tokenizerErrorMessage(token_error));
-			continue;
-		}
-		if( (tok.count != 0) && (globalError(tok.tokens[0], &errors_catalog) != 0) ) { break; }
-	}
-	if( line_result == FILE_GET_LINE_ERROR )
-	{
-		AUTOCODE_MSG_ERROR("reading file <%s>", ferror.name);
-	}
-	if( fileClose(&ferror) != FILE_UTILITY_OK )
-	{
-		AUTOCODE_MSG_ERROR("closing error list file");
-	}
-	tokenizerFree(&tok);
-	autoCodeExit(AC_FORCE_EXIT);
-
-	// Read init.rc files and store entries in the database
-	file_t finitrc;
-	fileInit(&finitrc);
-	finitrc.name = auto_options.file_initrc_list;
-	if( fileOpen(&finitrc, "r", FILE_READONLY) != 0 )
-	{
-		AUTOCODE_MSG_ERROR("opening file <%s>", finitrc.name);
-		autoCodeExit(AC_FORCE_EXIT);
-	}
-
-	file_line_number = 0;
-	while( (line_result = fileGetLine(&finitrc, tok.line, sizeof(tok.line))) ==
-		   FILE_GET_LINE_SUCCESS )
-	{
-		file_line_number++;
-		tokenizer_err_t token_error = tokenizer(&tok);
-		if( token_error != TOK_ERR_NOERR )
-		{
-			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", finitrc.name, file_line_number,
-							   tokenizerErrorMessage(token_error));
-			continue;
-		}
-		if( (tok.count != 0) &&
-			(parseInitrc(&data_base, tok.tokens[0], auto_options.source_path) != 0) )
-		{
-			break;
-		}
-	}
-	if( line_result == FILE_GET_LINE_ERROR )
-	{
-		AUTOCODE_MSG_ERROR("reading file <%s>", finitrc.name);
-	}
-	if( fileClose(&finitrc) != FILE_UTILITY_OK )
-	{
-		AUTOCODE_MSG_ERROR("closing initrc list file");
-	}
-	tokenizerFree(&tok);
-	autoCodeExit(AC_FORCE_EXIT);
-
-	// Parse tags and generate code
-	file_t ftag;
-	fileInit(&ftag);
-	ftag.name = auto_options.file_parsetag_list;
-	if( fileOpen(&ftag, "r", FILE_READONLY) != 0 )
-	{
-		AUTOCODE_MSG_ERROR("opening file <%s>", ftag.name);
-		autoCodeExit(AC_FORCE_EXIT);
-	}
-
-	parseTagInit();
-	bool tag_file_error = false;
-	file_line_number = 0;
-	while( (line_result = fileGetLine(&ftag, tok.line, sizeof(tok.line))) == FILE_GET_LINE_SUCCESS )
-	{
-		file_line_number++;
-		tokenizer_err_t token_error = tokenizer(&tok);
-		if( token_error != TOK_ERR_NOERR )
-		{
-			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", ftag.name, file_line_number,
-							   tokenizerErrorMessage(token_error));
-			continue;
-		}
-		if( (tok.count != 0) &&
-			(parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options) != 0) )
-		{
-			tag_file_error = true;
-			break;
-		}
-	}
-	if( line_result == FILE_GET_LINE_ERROR )
-	{
-		AUTOCODE_MSG_ERROR("reading file <%s>", ftag.name);
-		tag_file_error = true;
-	}
-	if( fileClose(&ftag) != FILE_UTILITY_OK )
-	{
-		AUTOCODE_MSG_ERROR("closing tag list file");
-		tag_file_error = true;
-	}
-	tokenizerFree(&tok);
-	if( tag_file_error ) { autoCodeExit(AC_FORCE_EXIT); }
-	parseTagHave();
-	autoCodeExit(AC_FORCE_EXIT);
 
 	// Compare and replace temp files
 	file_utility_err_t replace_result = fileCmpReplaceAll();
