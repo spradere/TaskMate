@@ -1,25 +1,26 @@
 /*
  * TaskMate Project
- * (c) 2025 PRADERE Sebastien
+ * (c) 2026 PRADERE Sebastien
  *
  * This file is part of TaskMate and is distributed under the BSD-2-Clause License.
  * See the LICENSE file for full license terms.
  */
 
 /**
- * @file options.h
- * @brief options header declarations.
- *
+ * @file sys_drivers.h
+ * @brief Static driver database declarations.
  */
 
-#ifndef AUTOCODE_OPTIONS_H
-#define AUTOCODE_OPTIONS_H
+#ifndef SYSCORE_SYS_DRIVERS_H
+#define SYSCORE_SYS_DRIVERS_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
 
-#include "autoCode.h"
+#include <stdint.h>
+
+#include "interfaces/hal_drivers.h"
 
 /* ============================================================================
  * Public definitions
@@ -27,21 +28,17 @@
 
 typedef struct
 {
-	bool test_mode;
-	char file_errors_list[AC_BUFFER_SIZE];
-	char file_initrc_list[AC_BUFFER_SIZE];
-	char file_parsetag_list[AC_BUFFER_SIZE];
-	char file_gpio_signals[AC_BUFFER_SIZE];
-	char file_wire_gpio[AC_BUFFER_SIZE];
-	char generated_path[AC_BUFFER_SIZE];
-	char source_path[AC_BUFFER_SIZE];
+	uint8_t address;
 
-} options_list_t;
+	hal_driver_state_t (*control)(hal_driver_control_t, hal_driver_control_data_t *);
+
+} mod_driver_item_t;
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-int options(const char *file_name, options_list_t *opt);
+mod_driver_item_t *mod_driverGetPointer(uint8_t id);
+void mod_driversAlloc(void);
 
-#endif // AUTOCODE_OPTIONS_H
+#endif // SYSCORE_SYS_DRIVERS_H

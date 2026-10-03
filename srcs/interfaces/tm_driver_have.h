@@ -7,18 +7,19 @@
  */
 
 /**
- * @file avr8_architecture_constants.h
- * @brief AVR8 architecture constant declarations.
- *
+ * @file tm_driver_have.h
+ * @brief Generated driver-presence definitions.
  */
 
-#ifndef AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
-#define AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
+#ifndef INTERFACES_TM_DRIVER_HAVE_H
+#define INTERFACES_TM_DRIVER_HAVE_H
 
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
 
-#define AVR8_REGISTER_COUNT 32 // from R0 to R31
+// [autoCode_tag] driver_have
+#include "driver_have.inc"
+// [/tag]
 
-#endif // AVR8_AVR8_ARCHITECTURE_CONSTANTS_H
+#endif // INTERFACES_TM_DRIVER_HAVE_H

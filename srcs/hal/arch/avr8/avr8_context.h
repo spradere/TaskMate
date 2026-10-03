@@ -21,8 +21,8 @@
 
 #include <avr/io.h>
 
-#include "avr8_architecture_constants.h"
-#include "hal/arch/avr8/avr8_architecture_types.h"
+#include "avr8_constants.h"
+#include "hal/arch/avr8/avr8_types.h"
 
 /* ============================================================================
  * Private definitions

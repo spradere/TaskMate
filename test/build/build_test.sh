@@ -146,6 +146,8 @@ runConfigurationTests()
 	expectFailure invalid_environment "Invalid option OPT_ENVIRONMENT" \
 		bmake -C "${PATH_PROJECT}" HOST=invalid -V OPT_ENVIRONMENT
 	expectOutput verbose_default "0" bmake -C "${PATH_PROJECT}" -V OPT_VERBOSE_LEVEL
+	expectOutput verbose_linux "0" bmake -C "${PATH_PROJECT}" HOST=linux \
+		-V OPT_VERBOSE_LEVEL
 	expectOutput verbose_enabled "1" bmake -C "${PATH_PROJECT}" VERBOSE=1 \
 		-V OPT_VERBOSE_LEVEL
 	expectOutput verbose_level_two "2" bmake -C "${PATH_PROJECT}" VERBOSE=2 \
@@ -195,16 +197,16 @@ runConfigurationTests()
 	expectOutput autocode_sanitize_target "build/autoCode_sanitize" \
 		bmake -C "${PATH_PROJECT}" -V FILE_AUTOCODE_TEST_SANITIZE_TARGET
 	expectOutput clang_tidy_command "clang-tidy19" bmake -C "${PATH_PROJECT}" \
-		-V VAL_CLANG_TIDY
+		-V FILE_CLANG_TIDY
 	expectOutput cppcheck_command "cppcheck" bmake -C "${PATH_PROJECT}" \
-		-V VAL_CPPCHECK
+		-V FILE_CPPCHECK
 	expectSuccess autocode_tidy_recipe targetMake -n \
-		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_autocode
+		FILE_CLANG_TIDY=taskmate-test-clang-tidy tidy_autocode
 	logContains autocode_tidy_recipe "taskmate-test-clang-tidy"
 	logContains autocode_tidy_recipe "-std=c17"
 	logExcludes autocode_tidy_recipe "srcs/autoCode/autoCode.h --"
 	expectSuccess autocode_cppcheck_recipe targetMake -n \
-		VAL_CPPCHECK=taskmate-test-cppcheck cppcheck_autoCode
+		FILE_CPPCHECK=taskmate-test-cppcheck cppcheck_autocode
 	logContains autocode_cppcheck_recipe "taskmate-test-cppcheck"
 	logContains autocode_cppcheck_recipe "--platform=unix64"
 	logContains autocode_cppcheck_recipe "--library=bsd"
@@ -212,8 +214,12 @@ runConfigurationTests()
 	logExcludes autocode_cppcheck_recipe "--force"
 	expectSuccess no_target_autocode_sanitize bmake -C "${PATH_PROJECT}" -n \
 		FILE_AUTOCODE_TEST_SANITIZE_TARGET="${PATH_STAGE_WORK}/autoCode_sanitize" \
-		test_ac_sanitize
+		_test_ac_sanitize
 	logContains no_target_autocode_sanitize "clang -DAUTOCODE_BUILD -Isrcs/"
+	expectSuccess unavailable_autocode_sanitize bmake -C "${PATH_PROJECT}" \
+		FILE_AUTOCODE_TEST_SANITIZE_CC=false test_ac_sanitize
+	logContains unavailable_autocode_sanitize \
+		"Skipping autoCode sanitizer tests: unsupported by Clang"
 	expectOutput freebsd_usb_key "/media/usbkey" bmake -C "${PATH_PROJECT}" \
 		HOST=freebsd -V PATH_USBKEY
 	expectOutput freebsd_usb_device "/dev/da0s1" bmake -C "${PATH_PROJECT}" \
@@ -239,25 +245,44 @@ runConfigurationTests()
 		targetMake -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		targetMake -V FILE_ARCH_CC
-	expectSuccess taskmate_tidy_recipe targetMake -n \
-		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_taskmate
-	logContains taskmate_tidy_recipe "taskmate-test-clang-tidy"
-	logContains taskmate_tidy_recipe "--target=avr"
-	logContains taskmate_tidy_recipe "-mmcu=atmega2560"
-	logExcludes taskmate_tidy_recipe "srcs/hal/arch/avr8/avr8_context.c"
-	expectSuccess taskmate_cppcheck_recipe targetMake -n \
-		VAL_CPPCHECK=taskmate-test-cppcheck cppcheck
-	logContains taskmate_cppcheck_recipe "taskmate-test-cppcheck"
-	logContains taskmate_cppcheck_recipe "--platform=avr8"
-	logContains taskmate_cppcheck_recipe "--library=avr"
-	logContains taskmate_cppcheck_recipe "-DPROGMEM="
-	logExcludes taskmate_cppcheck_recipe "--force"
+	expectSuccess taskmate_tidy_flags targetMake -V CFLAGS_CLANG_TIDY
+	logContains taskmate_tidy_flags "--target=avr"
+	logContains taskmate_tidy_flags "-mmcu=atmega2560"
+	expectSuccess taskmate_tidy_sources targetMake -V FILES_CLANG_TIDY_SRC
+	logExcludes taskmate_tidy_sources "srcs/hal/arch/avr8/avr8_context.c"
+	expectSuccess taskmate_cppcheck_settings targetMake \
+		FILE_CPPCHECK=taskmate-test-cppcheck -V FILE_CPPCHECK \
+		-V OPT_CPPCHECK_TARGET -V CFLAGS_CPPCHECK
+	logContains taskmate_cppcheck_settings "taskmate-test-cppcheck"
+	logContains taskmate_cppcheck_settings "--platform=avr8"
+	logContains taskmate_cppcheck_settings "--library=avr"
+	logContains taskmate_cppcheck_settings "-DPROGMEM="
+	logExcludes taskmate_cppcheck_settings "--force"
 	expectOutput architecture_types_header \
-		"srcs/hal/arch/avr8/avr8_architecture_types.h" \
-		targetMake -V FILE_HAL_ARCHITECTURE_TYPES
-	expectSuccess architecture_types_compile_flag targetMake -V CFLAGS
-	logContains architecture_types_compile_flag \
-		"-include srcs/hal/arch/avr8/avr8_architecture_types.h"
+		"srcs/hal/arch/avr8/avr8_types.h" \
+		targetMake -V FILE_HAL_ARCH_TYPES
+	expectSuccess architecture_types_global_compile_flag targetMake -V CFLAGS
+	logExcludes architecture_types_global_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_types.h"
+	expectOutput architecture_types_selected_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_types.h" \
+		targetMake -V CFLAGS_srcs/system/sysCore/sys_threads.c
+	expectOutput architecture_types_scheduler_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_types.h" \
+		targetMake -V CFLAGS_srcs/system/sysCore/sys_scheduler.c
+	for VAL_SOURCE in system/boot.c system/sysCall/sc_driver.c system/sysCall/sc_gpio.c \
+		system/sysCall/sc_threads.c system/sysCore/sys_softwareTimeCounter.c
+	do
+		VAL_ARCH_TEST_NAME=$(printf '%s' "${VAL_SOURCE}" | tr '/.' '__')
+		VAL_ARCH_TEST_NAME="architecture_types_unselected_${VAL_ARCH_TEST_NAME}"
+		expectSuccess "${VAL_ARCH_TEST_NAME}" \
+			targetMake -V "CFLAGS_srcs/${VAL_SOURCE}"
+		logExcludes "${VAL_ARCH_TEST_NAME}" \
+			"-include srcs/hal/arch/avr8/avr8_types.h"
+	done
+	expectOutput string_macro_selected_compile_flag \
+		"-include srcs/hal/arch/avr8/avr8_string_macro.h" \
+		targetMake -V CFLAGS_srcs/system/sysCall/sc_driver.c
 	expectSuccess source_search_paths targetMake -V PATHS_SOURCE_SEARCH
 	logExcludes source_search_paths "srcs/hal/public"
 	expectSuccess autocode_generated_inputs targetMake -V FILES_AUTOCODE_INC
@@ -278,19 +303,22 @@ runConfigurationTests()
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V VAL_HW_STACK
 	expectOutput z600_compiler "srcs/hal/host/freebsd/freebsd_CC.mk" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_ARCH_CC
-	expectSuccess freebsd_tidy_recipe bmake -C "${PATH_PROJECT}" -n VAL_TARGET=z600 \
-		VAL_CLANG_TIDY=taskmate-test-clang-tidy tidy_freebsd
-	logContains freebsd_tidy_recipe "taskmate-test-clang-tidy"
-	logContains freebsd_tidy_recipe "--target=x86_64-unknown-freebsd"
-	expectSuccess freebsd_cppcheck_recipe bmake -C "${PATH_PROJECT}" -n VAL_TARGET=z600 \
-		VAL_CPPCHECK=taskmate-test-cppcheck cppcheck
-	logContains freebsd_cppcheck_recipe "taskmate-test-cppcheck"
-	logContains freebsd_cppcheck_recipe "--platform=unix64"
-	logContains freebsd_cppcheck_recipe "--library=bsd"
-	logContains freebsd_cppcheck_recipe "--library=posix"
+	expectSuccess freebsd_tidy_target bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 \
+		-V FILE_CLANG_TIDY_TARGET
+	VAL_FREEBSD_TIDY_TARGET=$(cat "${PATH_STAGE_WORK}/freebsd_tidy_target.log")
+	expectSuccess freebsd_tidy_flags bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 \
+		-V CFLAGS_CLANG_TIDY
+	logContains freebsd_tidy_flags "--target=${VAL_FREEBSD_TIDY_TARGET}"
+	expectSuccess freebsd_cppcheck_settings bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 \
+		FILE_CPPCHECK=taskmate-test-cppcheck -V FILE_CPPCHECK \
+		-V OPT_CPPCHECK_TARGET -V CFLAGS_CPPCHECK
+	logContains freebsd_cppcheck_settings "taskmate-test-cppcheck"
+	logContains freebsd_cppcheck_settings "--platform=unix64"
+	logContains freebsd_cppcheck_settings "--library=bsd"
+	logContains freebsd_cppcheck_settings "--library=posix"
 	expectOutput z600_types_header \
 		"srcs/hal/host/ucontext/ucontext_types.h" \
-		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_HAL_ARCHITECTURE_TYPES
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_HAL_ARCH_TYPES
 	expectSuccess z600_compile_sources bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_COMPILE_SRC
 	logContains z600_compile_sources "srcs/hal/host/ucontext/ucontext_context.c"
@@ -395,7 +423,7 @@ runConfigurationTests()
 		"srcs/user/target/test1/test1_signals.gpio"
 	expectFailure wire_gpio_outside "Path outside current directory rejected" \
 		targetMake \
-		FILE_WIREGPIO="/etc/passwd" \
+		FILE_WIREGPIO="/usr/bin/sh" \
 		_autocode_dependency_check
 	expectFailure wire_gpio_wrong_type "Invalid -f path rejected" \
 		targetMake FILE_WIREGPIO="${PATH_PROJECT}/build" \
@@ -432,26 +460,26 @@ runScriptTests()
 	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
 		'#define AC_INITRC_EXPECTED_VER_MINOR 10' \
 		'#define AC_AUTOCODE_VER_MAJOR 1' \
-		'#define AC_AUTOCODE_VER_MINOR 3' > "${PATH_STAGE_WORK}/autoCode.h"
-	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=3 \
+		'#define AC_AUTOCODE_VER_MINOR 4' > "${PATH_STAGE_WORK}/autoCode.h"
+	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=4 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
-	expectOutput autocode_version_report "autoCode : 1.3
-initrc : 1.10" awk -v expected_major=1 -v expected_minor=3 -v report_versions=1 \
+	expectOutput autocode_version_report "autoCode : 1.4
+initrc : 1.10" awk -v expected_major=1 -v expected_minor=4 -v report_versions=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
-		-v expected_major=2 -v expected_minor=3 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=2 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
-	expectFailure autocode_version_minor_mismatch "expected 4, found 3" awk \
-		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
+	expectFailure autocode_version_minor_mismatch "expected 5, found 4" awk \
+		-v expected_major=1 -v expected_minor=5 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
 	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR 1' > "${PATH_STAGE_WORK}/missing.h"
 	expectFailure autocode_version_missing "Missing autoCode version definition" awk \
-		-v expected_major=1 -v expected_minor=3 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/missing.h"
 	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR one' \
-		'#define AC_AUTOCODE_VER_MINOR 3' > "${PATH_STAGE_WORK}/malformed.h"
+		'#define AC_AUTOCODE_VER_MINOR 4' > "${PATH_STAGE_WORK}/malformed.h"
 	expectFailure autocode_version_malformed "Invalid autoCode version definition" awk \
-		-v expected_major=1 -v expected_minor=3 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/malformed.h"
 
 	printf '%s\n' \

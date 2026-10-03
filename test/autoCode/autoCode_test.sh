@@ -23,6 +23,7 @@ VAL_STAGE=$1
 FILE_AUTOCODE=$2
 PATH_WORK_ROOT=$3
 VAL_TEST_COUNT=0
+VAL_TEST_SKIP_COUNT=0
 
 writeInitrcVersion()
 {
@@ -50,8 +51,8 @@ writeTags()
 	FILE_TAGS=$1
 	: > "${FILE_TAGS}"
 	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
-		driver_name_catalog error_enum error_catalog modules_count modules_list gpio_signals wire_gpio \
-		scli_commands
+		driver_name_catalog driver_have error_enum error_catalog modules_count threads_list drivers_list \
+		gpio_signals wire_gpio scli_commands
 	do
 		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
 			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
@@ -61,7 +62,7 @@ writeTags()
 writeConfig()
 {
 	printf '%s\n' \
-		"--error_count 1000" \
+		"--test_mode on" \
 		"--errors ${PATH_CASE}/errors.list" \
 		"--initrc ${PATH_CASE}/initrc.list" \
 		"--parsetag ${PATH_CASE}/tags.list" \
@@ -112,6 +113,14 @@ logDoesNotContain()
 	fi
 }
 
+logPatternCount()
+{
+	VAL_ACTUAL_COUNT=$(grep -F -c -- "$2" "${PATH_STAGE_WORK}/$1.log")
+	if [ "${VAL_ACTUAL_COUNT}" -ne "$3" ]; then
+		fail "$1: expected $3 occurrence(s) of <$2>, got ${VAL_ACTUAL_COUNT}"
+	fi
+}
+
 expectFailure()
 {
 	VAL_NAME=$1
@@ -141,6 +150,65 @@ assertNoTemporaryFiles()
 	fi
 }
 
+skipTest()
+{
+	printf 'autoCode test skipped: %s\n' "$1"
+	VAL_TEST_SKIP_COUNT=$((VAL_TEST_SKIP_COUNT + 1))
+}
+
+isCygwin()
+{
+	case "$(uname -s)" in
+		CYGWIN*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+readOnlyDirectoryPreventsCreate()
+{
+	FILE_PERMISSION_PROBE="$1/.create_permission_probe"
+	chmod 0555 "$1" || fail "cannot make directory read-only"
+	if ( : > "${FILE_PERMISSION_PROBE}" ) 2> /dev/null; then
+		VAL_PERMISSION_DENIED=0
+	else
+		VAL_PERMISSION_DENIED=1
+	fi
+	chmod 0755 "$1" || fail "cannot restore directory permissions"
+	rm -f "${FILE_PERMISSION_PROBE}"
+	[ "${VAL_PERMISSION_DENIED}" -eq 1 ]
+}
+
+readOnlyDirectoryPreventsRemove()
+{
+	FILE_PERMISSION_PROBE="$1/.remove_permission_probe"
+	: > "${FILE_PERMISSION_PROBE}" || fail "cannot create remove permission probe"
+	chmod 0555 "$1" || fail "cannot make directory read-only"
+	if rm -f "${FILE_PERMISSION_PROBE}" 2> /dev/null; then
+		VAL_PERMISSION_DENIED=0
+	else
+		VAL_PERMISSION_DENIED=1
+	fi
+	chmod 0755 "$1" || fail "cannot restore directory permissions"
+	rm -f "${FILE_PERMISSION_PROBE}"
+	[ "${VAL_PERMISSION_DENIED}" -eq 1 ]
+}
+
+readOnlyDirectoryPreventsRename()
+{
+	FILE_PERMISSION_PROBE="$1/.rename_permission_probe"
+	FILE_PERMISSION_RENAMED="$1/.renamed_permission_probe"
+	: > "${FILE_PERMISSION_PROBE}" || fail "cannot create rename permission probe"
+	chmod 0555 "$1" || fail "cannot make directory read-only"
+	if mv "${FILE_PERMISSION_PROBE}" "${FILE_PERMISSION_RENAMED}" 2> /dev/null; then
+		VAL_PERMISSION_DENIED=0
+	else
+		VAL_PERMISSION_DENIED=1
+	fi
+	chmod 0755 "$1" || fail "cannot restore directory permissions"
+	rm -f "${FILE_PERMISSION_PROBE}" "${FILE_PERMISSION_RENAMED}"
+	[ "${VAL_PERMISSION_DENIED}" -eq 1 ]
+}
+
 runCommandLineTests()
 {
 	stageBegin command_line
@@ -161,7 +229,7 @@ runOptionTests()
 		"${FILE_AUTOCODE}" "${PATH_STAGE_WORK}/missing.conf"
 
 	caseBegin wrong_token_count
-	printf '%s\n' '--error_count' > "${PATH_CASE}/autoCode.conf"
+	printf '%s\n' '--test_mode' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure wrong_token_count "wrong token count"
 
 	caseBegin unknown_option
@@ -171,28 +239,22 @@ runOptionTests()
 	caseBegin all_required_missing
 	: > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_missing \
-		"required autoCode option --error_count is not set"
-	logContains all_required_missing "required autoCode option --gpio_signals is not set"
-	logContains all_required_missing "required autoCode option --wire_gpio is not set"
-	logContains all_required_missing "required autoCode option --source_path is not set"
+		"required autoCode option --test_mode is not set"
 
 	caseBegin all_required_duplicate
 	cp "${PATH_CASE}/autoCode.conf" "${PATH_CASE}/duplicate.conf"
 	cat "${PATH_CASE}/duplicate.conf" >> "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_duplicate \
-		"required autoCode option --error_count is multiple set"
-	logContains all_required_duplicate "required autoCode option --gpio_signals is multiple set"
-	logContains all_required_duplicate "required autoCode option --wire_gpio is multiple set"
-	logContains all_required_duplicate "required autoCode option --source_path is multiple set"
+		"required autoCode option --test_mode is multiple set"
 
-	for VAL_VALUE in -1 invalid 1x 4294967296
+	for VAL_VALUE in yes ON 1 0
 	do
 		VAL_NAME=$(printf '%s' "${VAL_VALUE}" | tr -c '[:alnum:]' '_')
-		caseBegin "invalid_error_count_${VAL_NAME}"
-		sed "s/--error_count 1000/--error_count ${VAL_VALUE}/" \
+		caseBegin "invalid_test_mode_${VAL_NAME}"
+		sed "s/--test_mode on/--test_mode ${VAL_VALUE}/" \
 			"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
 		mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
-		runOptionFailure "invalid_error_count_${VAL_NAME}" "invalid --error_count value"
+		runOptionFailure "invalid_test_mode_${VAL_NAME}" "invalid --test_mode value"
 	done
 
 	caseBegin invalid_source_path
@@ -202,7 +264,7 @@ runOptionTests()
 	runOptionFailure invalid_source_path "invalid --source_path directory"
 
 	caseBegin unterminated_option
-	printf '%s\n' '--error_count "1000' > "${PATH_CASE}/autoCode.conf"
+	printf '%s\n' '--test_mode "on' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure unterminated_option "unterminated string"
 
 	caseBegin long_option_line
@@ -214,6 +276,29 @@ runOptionTests()
 runErrorTests()
 {
 	stageBegin errors
+	caseBegin normal_mode_error_limit
+	sed 's/--test_mode on/--test_mode off/' \
+		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
+	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
+	printf '%s\n' 'ERR_FIRST' 'ERR_SECOND' > "${PATH_CASE}/errors.err"
+	expectFailure normal_mode_error_limit "ERR_FIRST" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logPatternCount normal_mode_error_limit "wrong token count != 3" 1
+	logDoesNotContain normal_mode_error_limit "ERR_SECOND"
+
+	caseBegin test_mode_error_limit
+	: > "${PATH_CASE}/errors.err"
+	VAL_INDEX=0
+	while [ "${VAL_INDEX}" -le 100 ]
+	do
+		printf 'ERR_TEST_LIMIT_%03d\n' "${VAL_INDEX}" >> "${PATH_CASE}/errors.err"
+		VAL_INDEX=$((VAL_INDEX + 1))
+	done
+	expectFailure test_mode_error_limit "ERR_TEST_LIMIT_000" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logPatternCount test_mode_error_limit "wrong token count != 3" 100
+	logDoesNotContain test_mode_error_limit "ERR_TEST_LIMIT_100"
+
 	caseBegin missing_error_list
 	sed "s|${PATH_CASE}/errors.list|${PATH_CASE}/missing.list|" \
 		"${PATH_CASE}/autoCode.conf" > "${PATH_CASE}/changed.conf"
@@ -629,8 +714,8 @@ runParseTagTests()
 	caseBegin unterminated_tag_line
 	printf '%s\n' '"unterminated' > "${PATH_CASE}/tags.c"
 	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
-		driver_name_catalog error_enum error_catalog modules_count modules_list gpio_signals wire_gpio \
-		scli_commands
+		driver_name_catalog driver_have error_enum error_catalog modules_count threads_list drivers_list \
+		gpio_signals wire_gpio scli_commands
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/tags.c"
@@ -652,6 +737,7 @@ runCompareReplaceTests()
 	stageBegin compare_replace
 	caseBegin stable_generation
 	printf '%s\n' \
+		'addModule driver timerSched -run driver -source_file system.c' \
 		'addScliCommand date -source_file system/services/commands/scli_date.c' \
 		'addScliCommand driver -source_file system/services/commands/scli_driver.c' \
 		>> "${PATH_CASE}/init.rc"
@@ -668,6 +754,18 @@ runCompareReplaceTests()
 	if ! grep -F -q 'static hal_stack_word_t thread0_stack[256];' \
 		"${PATH_CASE}/generated/thread_stacks.inc"; then
 		fail "thread_stacks generated static storage is missing"
+	fi
+	if ! grep -F -q '#include "system/services/system.h"' \
+		"${PATH_CASE}/generated/threads_list.inc"; then
+		fail "threads_list generated service declaration is missing"
+	fi
+	if ! grep -F -q '#include "interfaces/drv_timerSched.h"' \
+		"${PATH_CASE}/generated/drivers_list.inc"; then
+		fail "drivers_list generated driver declaration is missing"
+	fi
+	if ! grep -F -q '#define TM_DRIVER_HAVE_TIMER_SCHED 1' \
+		"${PATH_CASE}/generated/driver_have.inc"; then
+		fail "driver_have generated presence definition is missing"
 	fi
 	if ! grep -F -q 'mod->stack_size = 256;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
@@ -691,9 +789,9 @@ runCompareReplaceTests()
 		fail "scli_commands generated entry is missing"
 	fi
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	logContains unchanged_generation "0 updated, 13 unchanged"
+	logContains unchanged_generation "0 updated, 15 unchanged"
 
-	sed 's/#define MOD_DRIVER_COUNT 0/#define MOD_DRIVER_COUNT 99/' \
+	sed 's/#define MOD_DRIVER_COUNT 1/#define MOD_DRIVER_COUNT 99/' \
 		"${PATH_CASE}/generated/modules_count.inc" > "${PATH_CASE}/changed.inc"
 	mv "${PATH_CASE}/changed.inc" "${PATH_CASE}/generated/modules_count.inc"
 	expectSuccess changed_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -706,8 +804,9 @@ runCompareReplaceTests()
 	printf '%s\n' '// [autoCode_tag] threads_alloc' 'ORIGINAL_SENTINEL' '// [/tag]' \
 		> "${PATH_CASE}/first.c"
 	: > "${PATH_CASE}/second.c"
-	for VAL_TAG in thread_stacks drivers_alloc thread_name_catalog driver_name_catalog error_enum \
-		error_catalog modules_count modules_list wire_gpio scli_commands
+	for VAL_TAG in thread_stacks drivers_alloc thread_name_catalog driver_name_catalog \
+		driver_have error_enum \
+		error_catalog modules_count threads_list drivers_list wire_gpio scli_commands
 	do
 		printf '%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" "// [/tag]" \
 			>> "${PATH_CASE}/second.c"
@@ -722,23 +821,27 @@ runCompareReplaceTests()
 	fi
 
 	caseBegin output_open_failure
-	chmod 0555 "${PATH_CASE}/generated"
-	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
-		> "${PATH_STAGE_WORK}/output_open_failure.log" 2>&1; then
-		VAL_RESULT=0
+	if readOnlyDirectoryPreventsCreate "${PATH_CASE}/generated"; then
+		chmod 0555 "${PATH_CASE}/generated"
+		if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+			> "${PATH_STAGE_WORK}/output_open_failure.log" 2>&1; then
+			VAL_RESULT=0
+		else
+			VAL_RESULT=$?
+		fi
+		chmod 0755 "${PATH_CASE}/generated"
+		if [ "${VAL_RESULT}" -eq 0 ]; then
+			fail "output_open_failure: command unexpectedly succeeded"
+		fi
+		logContains output_open_failure "creating file"
+		if find "${PATH_CASE}/generated" -type f -print | grep -q .; then
+			fail "output_open_failure: an empty destination was created"
+		fi
+		assertNoTemporaryFiles
+		VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	else
-		VAL_RESULT=$?
+		skipTest "output_open_failure: read-only directory permits file creation"
 	fi
-	chmod 0755 "${PATH_CASE}/generated"
-	if [ "${VAL_RESULT}" -eq 0 ]; then
-		fail "output_open_failure: command unexpectedly succeeded"
-	fi
-	logContains output_open_failure "creating file"
-	if find "${PATH_CASE}/generated" -type f -print | grep -q .; then
-		fail "output_open_failure: an empty destination was created"
-	fi
-	assertNoTemporaryFiles
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 
 	caseBegin buffered_write_failure
 	ln -s /dev/full "${PATH_CASE}/tags.c.tmp" || fail "cannot create /dev/full fixture"
@@ -747,49 +850,61 @@ runCompareReplaceTests()
 	assertNoTemporaryFiles
 
 	caseBegin remove_failure
-	expectSuccess remove_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.c.tmp"
-	chmod 0555 "${PATH_CASE}"
-	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
-		> "${PATH_STAGE_WORK}/remove_failure.log" 2>&1; then
-		VAL_RESULT=0
+	if isCygwin; then
+		skipTest "remove_failure: Cygwin does not enforce POSIX remove permissions"
+	elif readOnlyDirectoryPreventsRemove "${PATH_CASE}"; then
+		expectSuccess remove_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+		cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.c.tmp"
+		chmod 0555 "${PATH_CASE}"
+		if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+			> "${PATH_STAGE_WORK}/remove_failure.log" 2>&1; then
+			VAL_RESULT=0
+		else
+			VAL_RESULT=$?
+		fi
+		chmod 0755 "${PATH_CASE}"
+		find "${PATH_CASE}/tags.c.tmp" -type f -delete
+		if [ "${VAL_RESULT}" -eq 0 ]; then
+			fail "remove_failure: command unexpectedly succeeded"
+		fi
+		logContains remove_failure "removing temporary file"
+		assertNoTemporaryFiles
+		VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	else
-		VAL_RESULT=$?
+		skipTest "remove_failure: read-only directory permits file removal"
 	fi
-	chmod 0755 "${PATH_CASE}"
-	find "${PATH_CASE}/tags.c.tmp" -type f -delete
-	if [ "${VAL_RESULT}" -eq 0 ]; then
-		fail "remove_failure: command unexpectedly succeeded"
-	fi
-	logContains remove_failure "removing temporary file"
-	assertNoTemporaryFiles
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 
 	caseBegin rename_failure
-	expectSuccess rename_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-	sed 's/#include "thread_stacks.inc"/#include "stale.inc"/' \
-		"${PATH_CASE}/tags.c" > "${PATH_CASE}/changed.c"
-	mv "${PATH_CASE}/changed.c" "${PATH_CASE}/tags.c"
-	cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.expected"
-	: > "${PATH_CASE}/tags.c.tmp"
-	chmod 0555 "${PATH_CASE}"
-	if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
-		> "${PATH_STAGE_WORK}/rename_failure.log" 2>&1; then
-		VAL_RESULT=0
+	if isCygwin; then
+		skipTest "rename_failure: Cygwin does not enforce POSIX rename permissions"
+	elif readOnlyDirectoryPreventsRename "${PATH_CASE}"; then
+		expectSuccess rename_failure_setup "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+		sed 's/#include "thread_stacks.inc"/#include "stale.inc"/' \
+			"${PATH_CASE}/tags.c" > "${PATH_CASE}/changed.c"
+		mv "${PATH_CASE}/changed.c" "${PATH_CASE}/tags.c"
+		cp "${PATH_CASE}/tags.c" "${PATH_CASE}/tags.expected"
+		: > "${PATH_CASE}/tags.c.tmp"
+		chmod 0555 "${PATH_CASE}"
+		if "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf" \
+			> "${PATH_STAGE_WORK}/rename_failure.log" 2>&1; then
+			VAL_RESULT=0
+		else
+			VAL_RESULT=$?
+		fi
+		chmod 0755 "${PATH_CASE}"
+		find "${PATH_CASE}/tags.c.tmp" -type f -delete
+		if [ "${VAL_RESULT}" -eq 0 ]; then
+			fail "rename_failure: command unexpectedly succeeded"
+		fi
+		logContains rename_failure "renaming file"
+		if ! cmp -s "${PATH_CASE}/tags.expected" "${PATH_CASE}/tags.c"; then
+			fail "rename failure modified the original destination"
+		fi
+		assertNoTemporaryFiles
+		VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	else
-		VAL_RESULT=$?
+		skipTest "rename_failure: read-only directory permits file rename"
 	fi
-	chmod 0755 "${PATH_CASE}"
-	find "${PATH_CASE}/tags.c.tmp" -type f -delete
-	if [ "${VAL_RESULT}" -eq 0 ]; then
-		fail "rename_failure: command unexpectedly succeeded"
-	fi
-	logContains rename_failure "renaming file"
-	if ! cmp -s "${PATH_CASE}/tags.expected" "${PATH_CASE}/tags.c"; then
-		fail "rename failure modified the original destination"
-	fi
-	assertNoTemporaryFiles
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 }
 
 runStage()
@@ -819,3 +934,6 @@ else
 fi
 
 printf 'autoCode tests passed: %s case(s)\n' "${VAL_TEST_COUNT}"
+if [ "${VAL_TEST_SKIP_COUNT}" -ne 0 ]; then
+	printf 'autoCode tests skipped: %s case(s)\n' "${VAL_TEST_SKIP_COUNT}"
+fi

@@ -23,8 +23,6 @@ PATHS_SOURCE_SEARCH += ${PATH_ATMEGA2560}
 FILES_EXTRA_SRC += ${PATH_ATMEGA2560}/at2560_gpio.c
 FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/mcu/atmega2560/at2560_gpio.c
 
-CFLAGS += -DMCU_atmega2560
-
 .include "${PATH_SRCS}/hal/arch/avr8/avr8_make.mk"
 
 # MCU settings

@@ -27,6 +27,18 @@ PATHS_TM_STRING_ALLOWED := ${PATHS_TM_STRING_ALLOWED:O}
 CFLAGS_${src} += -include ${FILE_HAL_STRING_MACRO}
 .endfor
 
+# Add architecture types only where a complete context or stack word is required
+FILES_HAL_ARCH_TYPES_ALLOWED = \
+	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCore/sys_scheduler.c} \
+	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCore/sys_threads.c}
+
+.for file in ${FILES_HAL_ARCH_TYPES_ALLOWED}
+.if !exists(${file})
+.error file in FILES_HAL_ARCH_TYPES_ALLOWED not fond >>>${file}<<<
+.endif
+CFLAGS_${file} += -include ${FILE_HAL_ARCH_TYPES}
+.endfor
+
 # Check direct includes against the architecture matrix
 .PHONY: _architecture_include_check
 _architecture_include_check: ${FILE_ARCH_VALID_MATRIX} ${SCRIPT_ARCH_INCLUDE}

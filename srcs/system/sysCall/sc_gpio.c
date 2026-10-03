@@ -19,7 +19,7 @@
 
 #include "interfaces/gpio_signals.h"
 #include "interfaces/hal_atomic.h"
-#include "system/sysCore/sys_modules.h"
+#include "system/sysCore/sys_threads.h"
 
 /* -----------------------------------------------
  * Constants

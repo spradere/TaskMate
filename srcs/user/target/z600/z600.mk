@@ -26,10 +26,7 @@ PATHS_EXTRA_SRC += ${PATH_SRCS}/tmLibc
 FILE_GPIO_SIGNALS = ${PATH_TARGET_Z600}/z600_signals.gpio
 FILE_WIREGPIO = ${PATH_TARGET_Z600}/z600_signals.c
 
-CFLAGS += -DHWT_z600
 .include "${PATH_SRCS}/hal/board/pc/pc_make.mk"
-
-#CFLAGS_${PATH_TARGET_Z600}/ucontext_system.c += -include ${FILE_HAL_STRING_MACRO}
 
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}

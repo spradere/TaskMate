@@ -7,19 +7,18 @@
  */
 
 /**
- * @file sys_modules_list.h
- * @brief modules list header declarations.
+ * @file avr8_constants.h
+ * @brief AVR8 architecture constant declarations.
+ *
  */
 
-#ifndef SYSCORE_SYS_MODULES_LIST_H
-#define SYSCORE_SYS_MODULES_LIST_H
+#ifndef AVR8_AVR8_CONSTANTS_H
+#define AVR8_AVR8_CONSTANTS_H
 
 /* ============================================================================
- * Generated includes
+ * Public definitions
  * ========================================================================== */
 
-// [autoCode_tag] modules_list
-#include "modules_list.inc"
-// [/tag]
+#define AVR8_REGISTER_COUNT 32 // from R0 to R31
 
-#endif // SYSCORE_SYS_MODULES_LIST_H
+#endif // AVR8_AVR8_CONSTANTS_H

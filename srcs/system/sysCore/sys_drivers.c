@@ -7,33 +7,34 @@
  */
 
 /**
- * @file sys_softwareTimeCounter.c
- * @brief tm software time counter implementation.
- *
+ * @file sys_drivers.c
+ * @brief Static driver database implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "sys_softwareTimeCounter.h"
+#include "sys_drivers.h"
 
-#include "interfaces/drv_timerSTC.h"
-#include "system/sysCore/sys_threads.h"
+#include "interfaces/tm_modules.h"
+#include "system/sysCore/sys_drivers_list.h"
 
 /* -----------------------------------------------
- * Private function prototypes
+ * Private variables
  * ---------------------------------------------*/
 
-static void tm_softwareTimeCounter(void);
+static mod_driver_item_t drivers[MOD_DRIVER_COUNT];
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-void tm_softwareTimeCounterInit(void) { hal_timerSTCSetCallback(tm_softwareTimeCounter); }
+mod_driver_item_t *mod_driverGetPointer(uint8_t id) { return &drivers[id]; }
 
-void tm_softwareTimeCounter(void)
+void mod_driversAlloc(void)
 {
-	mod_threadsTickSTC();
+	// [autoCode_tag] drivers_alloc
+#include "drivers_alloc.inc"
+	// [/tag]
 }

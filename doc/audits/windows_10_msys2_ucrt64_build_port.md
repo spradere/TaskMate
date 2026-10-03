@@ -1,423 +1,506 @@
 # Windows 10, MSYS2, and UCRT64 build port audit
 
-Date: 16 September 2026
+Date: 3 October 2026
 
-Audited branch: `test`
+Re-evaluated branch: `test`
 
-Audited revision: `d0fabace2babc6fb61828d30b737ea0125c6639e`
+Re-evaluated revision: `496660f3d2ccf218ce64423955d8b6c575c278ee`
 
-Observed host: Windows 10 Pro 22H2, build 19045, Cygwin 3.6.6, `bmake` 20240314
+Original audited revision: `d0fabace2babc6fb61828d30b737ea0125c6639e`
+
+Observed host: Windows 10 Pro 22H2, build 19045.6466, Cygwin 3.6.10,
+`bmake` 20240314
 
 ## Purpose and scope
 
-This audit assesses the technical feasibility and procedure for porting the TaskMate build
-system to Windows 10 with MSYS2 and its UCRT64 environment. It covers BSD `bmake`
-orchestration, autoCode, shell and AWK scripts, AVR compilation, host tests, quality tools,
-flashing an Arduino Mega, and supporting utilities.
+This audit re-evaluates the feasibility and procedure for running the TaskMate build under
+MSYS2 UCRT64 on Windows 10. It covers BSD `bmake`, autoCode, shell and AWK scripts, AVR
+compilation, host tests, quality tools, Arduino Mega flashing, and supporting utilities.
 
-The RTOS code and embedded architecture do not require a Windows port. Only the build host
-changes. The target remains `avr8 / atmega2560 / Arduino Mega` and must retain the same
-compilation options, boundary checks, generated data, and deterministic constraints.
+The embedded target remains `test1 -> avr8 / atmega2560 / Arduino Mega`. No Windows API is
+required in the firmware. The port concerns the build host and must preserve the same selected
+sources, generated contracts, compiler options, boundary checks, and deterministic behaviour.
 
-The audit is based on the project rules, `doc/architecture/build.md`,
-`doc/architecture/autoCode.md`, the `Makefile`, `mk/*.mk`, AVR fragments, scripts, and
-tests. It did not install MSYS2 or modify the build.
+The re-evaluation inspected the current Makefiles, scripts, tests, architecture notes, official
+MSYS2 package data, and the cited pkgsrc bootstrap report. It also ran the available Cygwin host
+tests. MSYS2 is not installed on the observed host. No UCRT64 build, sanitizer run, upload, or
+hardware test was performed.
 
 ## Verdict
 
-**The MSYS2/UCRT64 port is feasible, with medium technical risk and an estimated three to six
-days of development and validation excluding hardware.** It does not work without changes in
-the current repository.
+**The MSYS2/UCRT64 port remains feasible, but the repository is not ready for a qualifying
+pilot. The current technical risk is high until a supported `bmake` artifact and a clean
+host-test baseline exist.**
 
-The recommended solution is hybrid:
+The recommended design remains a hybrid environment:
 
-- shell, AWK, and POSIX utilities come from the MSYS subsystem;
-- Clang, the AVR toolchain, and `avrdude` are native UCRT64 Windows executables;
-- BSD `bmake` is retained and provisioned as a pinned project tool;
-- strictly FreeBSD targets, especially `backup`, are isolated from the normal build;
-- a diagnostic command checks tools required by the requested target, not every possible
-  utility.
+- MSYS supplies `sh`, AWK, `find`, `grep`, `sed`, and other POSIX utilities;
+- UCRT64 supplies native Clang, the AVR toolchain, Cppcheck, and `avrdude`;
+- TaskMate supplies a pinned and checksummed MSYS-compatible `bmake` package;
+- host-specific operations are selected explicitly and are absent from unrelated targets;
+- each target checks only the tools it actually uses.
 
-MSYS2 recommends UCRT64 and constructs its `PATH` as `/ucrt64/bin:/usr/bin`. Native Windows
-tools therefore take priority while the POSIX recipes retain the required MSYS commands. This
-model suits TaskMate. MSYS2 does not remove every emulation layer because its `/usr/bin` tools
-still use a Cygwin-derived runtime. Any performance gain over Cygwin must be measured.
+MSYS2 still recommends UCRT64 when there is no contrary requirement. Its UCRT64 `PATH` begins
+with `/ucrt64/bin:/usr/bin`. Native Windows tools therefore take priority, while recipes can use
+the MSYS POSIX tools. This is a suitable model for TaskMate, but it does not remove the MSYS
+runtime from shell utilities.
 
-One distribution obstacle remains. At audit time, the MSYS2 repository has no `bmake` package.
-GNU Make cannot interpret the current `.include`, `.if`, `.for`, `.WAIT`, `:T`, `:ts`,
-`!=`, and suffix transformations without a rewrite. The documented pkgsrc bootstrap on MSYS2
-installs `bmake` and is acceptable for a proof of concept. For long-term use, TaskMate should
-provide an internal `bmake` package or archive with a fixed version and checksum.
+The largest unresolved distribution issue is still BSD `bmake`. The official MSYS2 package
+index contains GNU Make but no `bmake` package. The original audit overstated the pkgsrc
+evidence. The cited Windows MSYS2 report reached and built bootstrap `bmake`, but the complete
+pkgsrc bootstrap later failed while building libarchive. It is evidence that a port can be made,
+not a supported installation procedure that can be copied unchanged.
+
+The original estimate of three to six days is optimistic. A realistic estimate is five to nine
+days excluding hardware, with the largest uncertainty in building and packaging `bmake`. If a
+qualified `bmake` artifact already exists, four to six days is reasonable.
+
+## Status of the original findings
+
+| Original finding | Current state | Evidence and required action |
+| --- | --- | --- |
+| Windows-forbidden `:` in log names | Resolved | `VAL_DATE_TIME` now uses `%Y_%m_%d_%Hh%Mm%Ss` |
+| Global dependency check is too broad | Open | `.BEGIN` still checks one broad list and a reusable stamp |
+| Hard-coded tools and paths | Partial | `/root/...` paths are gone, but Clang tool names remain hard-coded |
+| Insufficient path contract | Open | Make lists remain whitespace-delimited and often unquoted |
+| Line endings and script execution | Open | Tracked inputs are currently LF, but `.gitattributes` is absent |
+| FreeBSD backup and serial paths | Partial | Backup data is guarded, but non-FreeBSD `backup` still prompts and succeeds as a no-op |
+| Tool versions and reproducibility | Partial | The build report improved, but omits several host and AVR tool identities |
 
 ## Current build architecture
 
-The complete build currently follows this sequence:
+For `test1`, the current normal build performs these major operations:
 
-1. `bmake` reads the target, board, MCU, and architecture composition;
-2. a `.BEGIN` target checks a global program list and creates build directories;
-3. `find` discovers files, and the shell calculates dynamic lists;
-4. Clang builds autoCode for the host, then autoCode generates contract fragments;
-5. AWK runs header and architecture checks;
-6. `avr-gcc` compiles and links the firmware;
-7. `avr-size`, AWK, and CLOC produce the report;
-8. `avrdude` optionally flashes the board.
+1. `bmake` selects the target, board, MCU, and architecture fragments;
+2. Make and AWK derive selected sources from target and `init.rc` declarations;
+3. `.BEGIN` checks broad host and AVR program lists;
+4. Clang builds autoCode 1.5 for the host;
+5. autoCode validates `init.rc` syntax 1.10 and emits target-local fragments;
+6. AWK enforces architecture and header boundaries;
+7. `avr-gcc` compiles and links the firmware;
+8. AVR tools and CLOC generate memory and source reports;
+9. `avrdude` optionally flashes the Arduino Mega.
 
-This structure can be ported to a POSIX environment on Windows. Generated formats and embedded
-code use no Windows API. The main risks concern tool availability, Windows file names, paths,
-and peripheral targets.
+The structure is portable to a POSIX environment on Windows. The current risks are in host
+selection, executable names, dependency checks, file semantics, path handling, and provisioning.
 
 ## Component compatibility
 
-| Component | State under MSYS2/UCRT64 | Action |
+| Component | MSYS2/UCRT64 state | TaskMate action |
 | --- | --- | --- |
-| BSD `bmake` | Blocking: absent from the official MSYS2 repository | Bootstrap pkgsrc for the prototype, then use a pinned internal package |
-| `sh`, AWK, `find`, `grep`, `sed`, Coreutils | Available in the MSYS repository | Install packages explicitly and keep `/usr/bin` after `/ucrt64/bin` |
-| Host Clang | Available in UCRT64 | Install `mingw-w64-ucrt-x86_64-clang` |
-| `clang-format`, `clang-tidy` | Available, with no guaranteed version suffix | Use tool variables and unversioned names |
-| AVR GCC, Binutils, avr-libc | Complete official UCRT64 group | Install `mingw-w64-ucrt-x86_64-avr-toolchain` |
-| `avrdude` | Official UCRT64 package | Install separately and configure a `COMn` port |
-| CLOC, Ctags, Doxygen, Cppcheck, rsync | Available, but not required by every build | Check only in targets that use them |
-| autoCode | Portable C built for the host | Test renames, line endings, and `.exe` suffixes |
-| Host ASan/UBSan | Must be qualified with the selected Clang | Keep optional until the runtime is validated |
-| `backup` | Incompatible: FreeBSD device and mount | Disable on Windows or design a separate safe Windows target |
-| Arduino upload | Feasible with `avrdude.exe` | Make the port configurable and test on hardware |
+| BSD `bmake` | Blocking, no official package | Build, package, pin, checksum, and test it |
+| `sh`, AWK, `find`, `grep`, `sed`, Coreutils | Available from MSYS | Install explicit packages and keep `/usr/bin` in `PATH` |
+| Host Clang | Available from UCRT64 | Select through a Make variable and record its version |
+| `clang-format`, `clang-tidy` | Available with unversioned executable names | Remove the hard-coded `19` suffix or override it by role |
+| AVR GCC, Binutils, avr-libc | Available as an official UCRT64 group | Pin and qualify a package set |
+| `avrdude` | Available as an official UCRT64 package | Require an explicit Windows serial port |
+| CLOC, Ctags, Doxygen, Cppcheck | Available | Install and check only for targets that use them |
+| autoCode | Standard C host program | Model `.exe` explicitly and run Windows file tests |
+| ASan and UBSan | Compiler support is available in principle | Qualify each UCRT64 runtime separately |
+| `backup` | FreeBSD-only implementation | Fail clearly on unsupported hosts before prompting |
+| Arduino upload | Feasible through native `avrdude.exe` | Validate with a physical board |
 
-The official UCRT64 AVR group includes `avr-binutils`, `avr-gcc`, and `avr-libc`.
-ATmega2560 is present in the GCC specifications. The `avrdude` package provides a native
-executable under `/ucrt64/bin`.
+The official UCRT64 AVR group currently contains `avr-binutils`, `avr-gcc`, and `avr-libc`.
+The official `avrdude` package installs `/ucrt64/bin/avrdude.exe`. These facts remove the need
+to import an unrelated AVR distribution into the MSYS2 environment.
 
-## Blocking or important repository gaps
+## Blocking and important repository gaps
 
-### 1. Log name forbidden on Windows
+### 1. There is no MSYS2 host model
 
-`mk/sources.mk:35` builds `VAL_DATE_TIME` with `%H:%M:%S`, then includes it in the
-autoCode log name. Win32 forbids `:` in file names. Use, for example,
-`%Y_%m_%d_%H-%M-%S`. This portable fix changes no embedded data.
+`mk/options.mk` accepts only `freebsd`, `linux`, and `w10-cygwin`. Running an MSYS2 build as
+`freebsd` would select incorrect peripheral behaviour. Reusing `w10-cygwin` would hide a real
+tool and runtime boundary.
 
-### 2. Global dependencies are too broad
+Add an explicit host such as `w10-msys2-ucrt64`, or replace the runtime-specific name with a
+documented Windows POSIX host class plus an independently detected runtime. Tests must cover the
+accepted value and reject incompatible combinations of `HOST`, `MSYSTEM`, and tool locations.
 
-`conf/programs-list.conf` requires CLOC, Ctags, `mount`, `umount`, and rsync before a normal
-build, although they support optional features. This explains some missing-program errors under
-Cygwin and would reproduce them under MSYS2.
+### 2. `bmake` provisioning is not solved
 
-Separate at least:
+TaskMate uses `.include`, `.if`, `.for`, `.WAIT`, `.BEGIN`, `.MAKE.EXPAND_VARIABLES`, `:T`,
+`:ts`, `!=`, suffix substitutions, and other BSD Make semantics. GNU Make is not a substitute.
 
-- tools required to parse the Makefile and build firmware;
-- host-test tools;
-- quality and documentation tools;
-- editing tools;
-- platform-specific backup tools.
+The official MSYS2 repositories still do not provide `bmake`. The pkgsrc guide states that its
+bootstrap installs `bmake`, but the cited MSYS2 report required local Msys platform files and
+failed before the full bootstrap completed. The old command sequence based on a live pkgsrc clone
+must therefore not be treated as a qualified TaskMate installation procedure.
 
-The check should be an explicit prerequisite of relevant targets, not a global `.BEGIN` side
-effect. Its stamp must include or verify the active environment because an old stamp currently
-survives a `PATH` change.
+The pilot must begin with one of these controlled approaches:
 
-### 3. Hard-coded tools and paths
+1. build standalone `bmake` from a pinned upstream source and package it for MSYS2;
+2. extract and package the proven bootstrap `bmake` stage with all required platform patches;
+3. maintain a TaskMate tool archive containing the executable, required make files, licence,
+   source reference, build procedure, and SHA-256 checksum.
 
-`mk/utils.mk` calls `clang-format19` and `clang-tidy19`, while UCRT64 provides the usual
-`clang-format` and `clang-tidy` names. Cppcheck and Clang-Tidy commands also contain
-`/root/code/TaskMate/TaskMate_current`, which is unrelated to the Windows checkout.
+The resulting binary must pass a TaskMate dialect fixture before it is used for the real build.
+The fixture must cover every BSD Make feature listed above and path values containing a drive
+mount, spaces, and an executable suffix.
 
-Define role variables such as `FORMAT`, `TIDY`, and `CPPCHECK`, with unversioned defaults,
-then use only `${.CURDIR}` and `${PATH_SRCS}` for includes. The documented
-`clang_format` target also differs from the real `format` target. Keep one name or add an
-alias.
+### 3. The current reference baseline is failing
 
-### 4. Insufficient path contract
+The port cannot distinguish Windows defects from existing repository defects until the reference
+host passes. On 3 October 2026, the following Cygwin validations failed:
 
-`find` output becomes space-separated Make lists, and many recipes expand these lists without
-quotes. Internal repository names are simple, but the observed absolute checkout path contains
-`PC HP`. Relative paths reduce the issue without eliminating it, especially for
-compiler-produced dependencies and `bmake -C`.
+- `bmake TARGET=test1 test_build_system` stopped in `mk/header_allow.mk` because the
+  `exists()` condition for allowed architecture-type users is inverted;
+- `bmake test_build_system` reached its configuration stage, then failed its
+  `selected_target_autocode_test` for the same target parsing problem;
+- `bmake test_autoCode` passed 22 cases in its first three stages, then failed
+  `initrc/valid_commands` because the fixture lacks the required `driver_have` tag;
+- a normal `test1` build is blocked by the same `mk/header_allow.mk` condition.
 
-For the first port, use an ASCII path without spaces, such as
-`C:\work\TaskMate_current`, and make this an explicit contract. Immediate support for all
-Win32 and POSIX names would be disproportionate.
+These are not MSYS2 failures. They must be corrected and shown to pass on the existing reference
+host before any result is accepted as port evidence.
 
-### 5. Line endings and script execution
+### 4. Program checks are broad, incomplete, and stale across environments
 
-Scripts with `#!/bin/sh` must remain LF. Git conversion to CRLF can invalidate a shebang or
-file comparison. The repository should define line endings for `*.sh`, `*.awk`, `*.mk`,
-`Makefile`, `*.rc`, `*.err`, `*.gpio`, and `*.list` in `.gitattributes`, without
-depending on each host's global `core.autocrlf`.
+`conf/programs-list.conf` still includes CLOC, Ctags, `mount`, `umount`, and rsync in the
+global list. It also includes all AVR tools even though an AVR-specific list and stamp exist.
+Conversely, it omits Doxygen, Cppcheck, `clang-format19`, and `clang-tidy19` even though targets
+invoke them.
 
-The native autoCode binary must also be qualified for the `.exe` suffix, text-mode opening,
-produced line endings, `rename()` over an existing file, and stable compare-and-replace.
-Existing tests cover the functional logic well and should become the Windows compatibility
-evidence.
+Both host and AVR checks are attached through `.BEGIN`. Their stamps depend on list files, not on
+the active `PATH`, `HOST`, `MSYSTEM`, executable identity, or tool version. A stamp produced by
+one environment can suppress checks after switching environments.
 
-### 6. FreeBSD targets and peripherals
+Replace these checks with explicit prerequisites for these groups:
 
-`PATH_USBKEY=/media/usbkey`, `FILE_USBDEV=/dev/da0s1`, and `mount -t msdosfs` are
-FreeBSD-specific. The `backup` target also uses `rsync --delete`. It must never be adapted
-by simple path substitution. Make it unavailable on Windows with a clear diagnostic, or replace
-it with a separate Windows implementation that validates the canonical volume, requires a
-sentinel, and runs a preview first.
+- minimum parser and normal firmware build tools;
+- selected architecture compiler and report tools;
+- host tests and sanitizers;
+- formatting and static analysis;
+- documentation and editor utilities;
+- host-specific backup or upload tools.
 
-The `/dev/ttyU0` serial port is also specific. `VAL_PROGRAMMER_PORT` must be overrideable,
-for example with `bmake upload VAL_PROGRAMMER_PORT=COM3`. Flashing must remain an explicit
-hardware step outside initial automated validation.
+A check may create a stamp only if the stamp records and validates the environment identity and
+resolved executable paths. A non-destructive `doctor` target should always perform a fresh check.
 
-### 7. Tool versions and reproducibility
+### 5. Host executable and tool names are not abstracted consistently
 
-The UCRT64 AVR package evolves independently of the historical environment. A new GCC version
-can change diagnostics, size, LTO, and the final binary without a source change. The port must
-record at least the versions of `bmake`, `clang`, `avr-gcc`, `avr-ld`, `avr-libc`, and
-`avrdude`. Pin an MSYS2 snapshot or qualified version list for releases.
+The `/root/code/...` include paths identified by the original audit are gone. The current build
+also defines variables for Clang-Tidy and Cppcheck. However:
 
-Comparing only HEX files between Cygwin and MSYS2 is insufficient if compiler versions differ.
-Qualification should first compare equal versions, then inspect size, sections, symbols,
-disassembly, and board behaviour.
+- `mk/utils.mk` directly calls `clang-format19`;
+- `FILE_CLANG_TIDY` defaults to `clang-tidy19`;
+- `mk/autoCode.mk` directly calls `clang`;
+- host output names omit the native `.exe` suffix;
+- tests hard-code several of the same names and suffix-free paths.
 
-## Recommended procedure
+Use role variables for the host C compiler, formatter, tidy tool, Cppcheck, and host executable
+suffix. UCRT64 defaults should use `clang`, `clang-format`, `clang-tidy`, `cppcheck`, and `.exe`.
+Keep the AVR `CC` and host compiler roles separate.
 
-### Phase 0: retain a rollback path
+The suffix is not cosmetic. A native compiler can create `autoCode.exe` while Make tracks
+`build/autoCode`. This can cause repeated rebuilding or a missing-target error even if the MSYS
+shell can execute the suffix-free name.
 
-1. Keep the current Cygwin installation until MSYS2 is fully validated.
-2. Record its tool versions, a clean build, memory reports, HEX file, and reference autoCode log.
-3. Do not share one `build/` directory between Cygwin and MSYS2. Compare two checkouts or
-   worktrees.
+### 6. Windows path support needs an explicit first-stage contract
 
-The observed Cygwin installation is incomplete. With an explicit POSIX `PATH`, it lacks at
-least AWK, Clang, Ctags, Findutils, Git, rsync, Sed, and the entire AVR toolchain, including
-`avrdude`. The `bmake` package is installed. The current failure therefore comes largely
-from provisioning and global tool checks, not a fundamental Cygwin limitation.
+The current checkout path, `C:\TaskMate_current`, avoids spaces. The repository still converts
+`find` output into whitespace-separated Make lists and expands many lists without per-item
+quoting. Supporting arbitrary Win32 names would require a wider redesign of discovery and Make
+list handling.
 
-### Phase 1: install MSYS2/UCRT64
+For the first port, require:
 
-On Windows 10 22H2, install MSYS2 in `C:\msys64`, update the system, close and reopen the
-terminal if requested, then repeat the update:
+- an ASCII checkout path without spaces, tabs, wildcard characters, or trailing dots;
+- MSYS-style paths inside Make and shell commands;
+- no Cygwin directories in the MSYS2 `PATH`;
+- no Windows `find.exe`, `sort.exe`, or other homonyms before `/usr/bin`;
+- a separate checkout or worktree and `build/` tree for each environment.
+
+The `doctor` target must reject a violated contract instead of allowing a later partial build.
+
+### 7. Line endings and native file replacement remain unqualified
+
+The inspected tracked Make, shell, AWK, `init.rc`, error, GPIO, and list files currently use LF.
+The repository has no `.gitattributes`, so this property depends on each Git installation.
+
+Add a tracked `.gitattributes` with LF rules for at least `Makefile`, `*.mk`, `*.sh`, `*.awk`,
+`*.rc`, `*.err`, `*.gpio`, and `*.list`. Allow that file through `mk/path_files.mk`, then
+regenerate `.gitignore`. Do not edit the generated `.gitignore` directly. Tests must cover LF
+shebangs and stable byte output after a second generation.
+
+Native autoCode must also be tested for:
+
+- text-mode newline behaviour;
+- `.exe` discovery and execution;
+- replacement of an existing destination with `rename()` on Windows;
+- cleanup after open, write, close, remove, and rename failures;
+- unchanged-file detection and preservation of modification times where expected.
+
+The expanded autoCode tests are useful evidence, but the current suite does not pass and several
+permission and `/dev/full` fixtures are Unix-specific. Windows equivalents or conditional fixture
+implementations are required without weakening the asserted behaviour.
+
+### 8. Backup and upload behaviour is only partially isolated
+
+FreeBSD device and mount operations are now inside a FreeBSD conditional. This is an improvement.
+The `backup` target still prints its destination, prompts for Enter, and then succeeds without
+doing anything on a non-FreeBSD host. An unsupported destructive utility must fail before any
+prompt with a clear diagnostic.
+
+The Arduino port defaults to `/dev/ttyU0` only on FreeBSD. Other hosts leave it empty. Require an
+explicit `VAL_PROGRAMMER_PORT=COMn` for Windows and validate that it is non-empty before invoking
+`avrdude`. Upload must remain an explicit target and must never be part of automated host tests.
+
+### 9. Reproducibility reporting remains incomplete
+
+The current build report records TaskMate, hardware, Git, the selected target compiler, autoCode,
+and `init.rc` versions. It does not identify `bmake`, MSYS runtime, host Clang, `avr-ld`,
+`avr-libc`, `avrdude`, resolved executable paths, or the MSYS2 package manifest.
+
+For a qualified build, record at least:
+
+- Windows build, `MSYSTEM`, MSYS runtime, and effective `PATH` policy;
+- `bmake` source revision, package version, and checksum;
+- host Clang and sanitizer runtime versions;
+- `avr-gcc`, `avr-ld`, `avr-libc`, Binutils, and `avrdude` versions;
+- `pacman -Q` output for the selected package set;
+- repository revision, dirty state, target, full hardware stack, and input format versions.
+
+Equal firmware output is meaningful only when the compiler, linker, libraries, options, and
+inputs match. With different tool versions, compare sections, symbols, disassembly, size, and
+hardware behaviour instead of treating a HEX difference alone as a failure.
+
+## Revised implementation procedure
+
+### Phase 0: restore a passing reference
+
+1. Correct the current build-system and autoCode test regressions in separate scoped work.
+2. Run `test_build_system`, `test_autoCode`, `autoCode_alone`, and a clean `test1` build under
+   the existing Cygwin reference.
+3. Save tool versions, generated output, build report, ELF, HEX, section data, and size data.
+4. Keep Cygwin installed and do not share its checkout or build artifacts with MSYS2.
+
+The observed Cygwin environment is no longer missing the main build tools listed by the original
+audit. Cygwin 3.6.10 provides the POSIX utilities and Clang, while AVR executables are available
+from an external Windows toolchain. `clang-format19` and `clang-tidy19` were not found.
+
+### Phase 1: prepare and isolate MSYS2 UCRT64
+
+Install current 64-bit MSYS2 in its default location and update it fully:
 
 ```sh
 pacman -Syu
-pacman -Syu
 ```
 
-Always start the **UCRT64** profile and check:
+If MSYS2 requests a terminal restart, close the terminal, reopen the UCRT64 profile, and repeat
+the update. Validate the selected environment:
 
 ```sh
 test "${MSYSTEM}" = UCRT64
 printf '%s\n' "${PATH}"
 ```
 
-The expected `PATH` prefix is `/ucrt64/bin:/usr/bin`. Do not globally add Cygwin directories
-to the MSYS2 `PATH`. Mixing DLLs, shells, and path conventions makes diagnostics
-non-reproducible.
+The expected leading paths are `/ucrt64/bin:/usr/bin`. Do not add Cygwin directories. Use a new
+checkout such as `/c/TaskMate_current_msys2` and retain the no-space path contract.
 
-### Phase 2: install packages
+### Phase 2: install a minimal package set
 
-Proposed initial prototype set:
+Normal build and host-test prototype:
 
 ```sh
 pacman -S --needed \
-	base-devel bash coreutils diffutils findutils gawk grep sed git rsync cloc ctags doxygen \
+	base-devel bash coreutils diffutils findutils gawk grep sed git cloc \
 	mingw-w64-ucrt-x86_64-clang \
-	mingw-w64-ucrt-x86_64-clang-tools-extra \
-	mingw-w64-ucrt-x86_64-cppcheck \
 	mingw-w64-ucrt-x86_64-avr-toolchain \
 	mingw-w64-ucrt-x86_64-avrdude
 ```
 
-After qualification, obtain the final manifest with `pacman -Q` and archive it with the build
-report. Editors and backup tools must not enter the minimal base set.
-
-### Phase 3: provision BSD `bmake`
-
-For the proof of concept, use the unprivileged pkgsrc bootstrap in a path without spaces. The
-NetBSD guide states that it installs `bmake`, and a Windows 10/11 report for MSYS2 UCRT64
-confirms this path.
-
-Principle:
+Optional quality and documentation targets:
 
 ```sh
-git clone --depth 1 https://github.com/NetBSD/pkgsrc.git /opt/pkgsrc
-cd /opt/pkgsrc/bootstrap
-./bootstrap --unprivileged --prefix=/opt/taskmate-pkg
-export PATH=/opt/taskmate-pkg/bin:/ucrt64/bin:/usr/bin
-bmake -V MAKE_VERSION
+pacman -S --needed \
+	ctags doxygen \
+	mingw-w64-ucrt-x86_64-clang-tools-extra \
+	mingw-w64-ucrt-x86_64-cppcheck
 ```
 
-This live clone is unsuitable for a durable release chain. After the prototype:
+Do not install rsync or mount tools merely to satisfy the normal build. Capture `pacman -Q` after
+qualification. Release builds need a controlled snapshot or archived package set, not only a
+list of moving package names.
 
-1. select a validated `bmake` version;
-2. retain the exact sources and licence;
-3. build an internal MSYS2 package or tool archive;
-4. publish the SHA-256 checksum and reproducible procedure;
-5. explicitly test `.WAIT`, `.MAKE.EXPAND_VARIABLES`, `:T`, `:ts`, `!=`, `.for`, and
-   `.include`;
-6. reject an unknown version in the diagnostic command.
+### Phase 3: qualify the packaged `bmake`
 
-### Phase 4: apply minimal repository adaptations
+Before changing TaskMate, run the package in a standalone fixture that verifies:
+
+- the exact BSD Make operators and directives used by the repository;
+- `.WAIT` ordering and `.BEGIN` behaviour;
+- shell selection and exit status propagation;
+- MSYS drive paths and a checkout path contract violation;
+- native `.exe` targets and incremental timestamp behaviour;
+- `bmake -C`, `.CURDIR`, `.PARSEDIR`, and relative includes.
+
+Reject an unknown package revision or checksum. Do not copy `bmake.exe` from Cygwin. A
+Cygwin-linked executable keeps Cygwin runtime and path semantics and does not qualify MSYS2.
+
+### Phase 4: apply repository adaptations
 
 Recommended order:
 
-1. remove colons from the log name;
-2. introduce host-tool variables and remove `/root/...` paths;
-3. split program manifests by target and remove the `.BEGIN` check;
-4. declare Git line endings;
-5. make the programming port overrideable;
-6. declare `backup` unsupported on Windows;
-7. add a non-destructive `doctor` target that reports the environment, paths, and versions;
-8. record a version manifest in `build/`.
+1. add and test the MSYS2 UCRT64 host model;
+2. abstract host compiler, quality tools, and executable suffixes;
+3. split tool checks and remove environment-sensitive `.BEGIN` stamps;
+4. add the line-ending contract;
+5. reject unsupported backup execution before prompting;
+6. validate an explicit Windows programming port;
+7. add `doctor` and a complete version manifest;
+8. add Windows variants for host file-failure tests.
 
-These changes must remain in the build system. Do not add `#if Windows` to firmware code or
-autoCode where standard C is sufficient.
+Keep these changes in the build system and tests. Do not add Windows conditionals to firmware
+code where standard C and host build selection are sufficient.
 
 ### Phase 5: validate without hardware
 
-From a checkout without spaces and with `MSYSTEM=UCRT64`:
+After the current reference defects and the port changes are fixed, run from UCRT64:
 
 ```sh
-bmake doctor
-bmake -V VAL_HW_STACK
-bmake -V FILES_SRC
-bmake test_build_system
-bmake test_autoCode
-bmake test_tm_string
-bmake autoCode_alone
-bmake
-bmake clean
-bmake
+bmake HOST=w10-msys2-ucrt64 doctor
+bmake HOST=w10-msys2-ucrt64 TARGET=test1 -V VAL_HW_STACK
+bmake HOST=w10-msys2-ucrt64 TARGET=test1 -V FILES_COMPILE_SRC
+bmake HOST=w10-msys2-ucrt64 test_build_system
+bmake HOST=w10-msys2-ucrt64 test_autoCode
+bmake HOST=w10-msys2-ucrt64 TARGET=test1 autoCode_alone
+bmake HOST=w10-msys2-ucrt64 TARGET=test1
+bmake HOST=w10-msys2-ucrt64 TARGET=test1 clean
+bmake HOST=w10-msys2-ucrt64 TARGET=test1
 ```
 
 Acceptance criteria:
 
-- every command returns zero, and no Windows homonym such as Windows `find.exe` is selected;
-- autoCode tests leave no `.tmp`, and a second pass changes no output;
-- architecture and header checks fail correctly on an invalid fixture;
-- `clean` remains confined under `build/` with MSYS paths;
-- firmware links for ATmega2560, with sections and RAM within limits;
-- a second unchanged build does not rebuild autoCode or firmware unnecessarily;
-- results match between two clean MSYS2 builds using the same tool manifest.
+- all commands return zero;
+- `doctor` resolves only UCRT64 and MSYS executables from approved prefixes;
+- no Windows homonym such as `C:\Windows\System32\find.exe` is selected;
+- autoCode leaves no temporary files and its second pass changes no generated output;
+- negative architecture and header fixtures still fail for the expected reason;
+- clean operations remain confined below the selected `build/` directory;
+- the firmware links for ATmega2560 and remains within flash and RAM limits;
+- a second unchanged build performs no unnecessary host or firmware compilation;
+- two clean builds with one package manifest produce equivalent results.
 
-Qualify the sanitizer target separately. Its temporary absence must not hide ordinary test
-failures, but it must remain mandatory on at least one supported CI platform.
+Run sanitizer tests separately and record whether the UCRT64 runtime supports every requested
+sanitizer. A missing Windows sanitizer must not suppress ordinary functional tests. Keep a
+sanitizer-qualified platform in CI.
 
-### Phase 6: validate hardware and performance
+### Phase 6: validate upload and performance
 
 1. Identify the Arduino port in Device Manager.
-2. Run `avrdude -v` and save its version and configuration.
-3. Flash explicitly with `VAL_PROGRAMMER_PORT=COMn`.
-4. Test startup, timer, scheduler, GPIO, and USART/SCLI on the Mega 2560.
-5. Compare Cygwin and MSYS2 using five clean and five incremental builds on the same machine
-   with the same antivirus. Measure total, autoCode, compile, link, and CLOC times.
+2. Record `avrdude -v` and its selected configuration file.
+3. build normally, then upload explicitly with `VAL_PROGRAMMER_PORT=COMn`;
+4. test boot, timer, scheduler, GPIO, USART, and SCLI on the Mega 2560;
+5. compare Cygwin and MSYS2 using the same source revision and qualified tool versions;
+6. measure five clean and five incremental builds, including autoCode, compile, link, and CLOC.
 
-A performance improvement must not rely on globally disabling antivirus for the development
-directory. If antivirus dominates measurements, any exclusion requires an explicit, limited
-local security decision.
+Do not justify the port by assumed speed. MSYS POSIX utilities still use an emulation runtime.
+Measure on the same host under the same antivirus policy.
 
-## Other possible approaches
+## Alternative environments
 
-| Approach | Feasibility | Advantages | Limits | Recommendation |
+| Approach | Feasibility | Main advantage | Main limitation | Decision |
 | --- | --- | --- | --- | --- |
-| Hybrid MSYS2/UCRT64 | Good after adaptations | Recent packages, native AVR and avrdude, direct Windows integration | `bmake` must be provisioned; POSIX commands still use MSYS runtime | **Recommended for the pilot** |
-| Hardened Cygwin64 | Very good, minimal effort | Official `bmake` package; known POSIX semantics | Observed slowness, incomplete current installation, toolchain to install | Excellent safety net and short-term solution |
-| WSL2 Linux | Very good for build and test | Complete Linux packages, natural CI environment, good performance in Linux FS | No native USB, requires `usbipd-win`; `/mnt/c` is slower; VM layer | **Best alternative if MSYS2 `bmake` bootstrap is rejected** |
-| Linux container under WSL2/Docker | Good for reproducible builds | Versioned image, strong dependency isolation | Awkward USB and flashing, potentially slow Windows volume, extra complexity | Good CI candidate, weaker interactive embedded workstation |
-| Full Linux or FreeBSD VM | Good | Close to the reference Unix environment, possible USB pass-through | Administration, storage, startup, and weaker editor integration | Robust but heavy fallback |
-| Native CMake and Ninja rewrite | Feasible in the medium term | Strong portability, native Windows speed, broad IDE and CI support | Graph rewrite, temporary dual maintenance, risk to autoCode and checks | Future study, not a prerequisite |
-| GNU Make, Git Bash, or Scoop alone | Low without a rewrite | Lightweight installation | GNU Make is incompatible with BSD Makefiles; incomplete, scattered tools | Not recommended |
+| Hybrid MSYS2/UCRT64 | Good after the listed work | Native current AVR and Windows upload tools | TaskMate must own `bmake` packaging | Pilot after prerequisites |
+| Hardened Cygwin64 | Very good | Official `bmake` and known semantics | Mixed external AVR provisioning and measured performance concerns | Keep as reference and fallback |
+| WSL2 Linux | Very good for build and tests | Straightforward Linux packages and CI | USB requires `usbipd-win`; Windows filesystem access is slower | Best fallback if `bmake` ownership is rejected |
+| Linux container under WSL2 | Good for reproducible builds | Versioned dependency image | More awkward USB and interactive use | Good CI option |
+| Full Linux or FreeBSD VM | Good | Close to a Unix reference | Administrative and editor overhead | Robust but heavy fallback |
+| CMake and Ninja rewrite | Feasible as a separate project | Removes BSD Make distribution issue | Must reproduce the complete build contract | Do not combine with this port |
+| GNU Make, Git Bash, or Scoop alone | Low | Small initial installation | Does not implement the current BSD Make graph | Reject without a rewrite |
 
-### Cygwin64 can be repaired immediately
+Cygwin is now a stronger short-term option than the original audit reported because its main
+program set is present on the observed host. Its baseline still needs the repository defects
+listed above to be fixed.
 
-Cygwin officially provides `bmake`. Other observed omissions can be installed with
-`setup-x86_64.exe -P ...`. A quick action is therefore to create a versioned Cygwin package
-list and split program checks. This does not solve observed intrinsic slowness, but provides a
-reliable reference during the MSYS2 pilot.
+WSL2 remains the best fallback when maintaining `bmake` for MSYS2 is unacceptable. Keep the
+checkout in the Linux filesystem for build performance. Arduino access requires `usbipd-win` and
+must be qualified separately, or flashing can remain a native Windows step.
 
-Do not copy `bmake.exe` from Cygwin into MSYS2. It depends on the Cygwin runtime and would
-launch tools with its conventions. Two complete, separate environments are safer than mixed
-executables.
-
-### WSL2 is the best fallback
-
-The observed host, build 19045, meets the modern WSL minimum. Clone the repository in the Linux
-file system, not under `/mnt/c`, to avoid cross-file-system access costs. The AVR toolchain,
-Clang, tests, and `bmake` are simple to provision there.
-
-Flashing requires `usbipd-win` because USB is not exposed natively to WSL. Microsoft
-explicitly documents it for scenarios such as Arduino flashing. On Windows 10, validate the
-Store version of WSL and the required kernel before making it an operator solution.
-
-### Do not confuse CMake/Ninja with the host port
-
-A CMake conversion could eventually remove the `bmake` dependency and most discovery
-scripts. It must reproduce hardware composition, startup order, autoCode generation, dynamic
-dependencies, boundary checks, AVR dependency files, memory reports, negative tests, and clean
-rules exactly.
-
-This is a separate build project requiring coexistence and differential tests. Doing it with
-the environment change would multiply possible causes of differences. First qualify the
-existing BSD build under MSYS2 or WSL2, then use measurements to decide whether a native rewrite
-is worthwhile.
+A CMake or Ninja conversion remains a separate build-system project. It must reproduce target
+composition, autoCode generation, dynamic dependencies, boundary checks, negative tests, AVR
+dependency files, memory reports, and confined clean behaviour before replacing BSD Make.
 
 ## Risks and decisions
 
-| Risk | Level | Recommended mitigation |
+| Risk | Level | Required mitigation |
 | --- | --- | --- |
-| MSYS2 does not provide `bmake` | High | Pinned internal package, checksum, and dialect test |
-| Windows names, paths, and line endings | High before correction | Timestamp without `:`, checkout without spaces, `.gitattributes`, autoCode corpus |
-| AVR version drift | High for an embedded release | Manifest and qualification of one precise version |
-| Speed gain below expectations | Medium | Benchmark each phase before abandoning Cygwin |
-| Mixed MSYS, Cygwin, and Windows `PATH` | High | Isolated environments and `doctor` target |
-| Different serial flashing | Medium | Configurable port and explicit hardware test |
-| Destructive or incompatible `backup` target | High | Make it unavailable on Windows |
-| Windows 10 outside standard support | High security risk | ESU or Windows 11 migration, even if the build remains feasible |
+| No official MSYS2 `bmake` | High | Pinned TaskMate package, checksum, source, and dialect tests |
+| Failing current reference tests | High | Restore a green Cygwin baseline before port qualification |
+| Native `.exe` and Windows file semantics | High | Explicit suffix model and Windows autoCode tests |
+| Broad and reusable tool-check stamps | High | Target-scoped checks tied to environment identity |
+| Paths and line endings | High before correction | Restricted checkout contract and generated attributes |
+| AVR package version drift | High for releases | Archive a qualified package manifest and compare artefacts |
+| Mixed MSYS2, Cygwin, and Windows `PATH` | High | Isolated shells, checkouts, and `doctor` enforcement |
+| Unsupported backup behaviour | Medium | Fail before prompting on non-FreeBSD hosts |
+| Serial upload differences | Medium | Explicit port and physical hardware test |
+| Performance gain below expectations | Medium | Phase measurements before changing the reference host |
+| Windows 10 end of support | High operational risk | Use ESU for the pilot or migrate the workstation |
 
-Windows 10 22H2 reached the end of standard support on 14 October 2025. MSYS2 remains
-technically compatible, but an Internet-connected toolchain that downloads packages and sources
-should not be maintained on a host without ESU. This life-cycle issue is independent of port
-success, but must be part of operational acceptance.
+Windows 10 22H2 left standard support on 14 October 2025. MSYS2 currently requires 64-bit
+Windows 10 as its minimum Windows baseline and remains technically compatible with this host.
+Compatibility does not remove the security and maintenance risk of downloading toolchain
+packages on an operating system without standard security support. Operational acceptance
+requires ESU or migration.
 
-## Estimate
+## Revised estimate
 
 | Work package | Indicative effort |
 | --- | ---: |
-| MSYS2 installation, packages, and `bmake` prototype | 0.5 to 1 day |
-| Minimal build fixes and `doctor` target | 1 to 2 days |
-| Host tests, determinism, and Cygwin comparison | 1 to 2 days |
-| Internal package, documentation, and manifests | 0.5 to 1 day |
-| Arduino Mega flashing and acceptance | 0.5 day |
+| Restore and capture the reference baseline | 0.5 to 1 day |
+| Build, package, and test `bmake` | 1 to 2.5 days |
+| Repository host, tool, suffix, and line-ending adaptations | 1.5 to 2.5 days |
+| Host tests, determinism, and Cygwin comparison | 1.5 to 2 days |
+| Manifests and operator procedure | 0.5 to 1 day |
+| Arduino Mega upload and hardware acceptance | 0.5 day |
 
-The estimate excludes a CMake/Ninja rewrite, a new Windows backup system, and fixes for
-pre-existing functional defects exposed by tests.
+The estimate excludes a CMake rewrite, a Windows backup implementation, and unrelated functional
+defects discovered during qualification.
 
 ## Recommended decision
 
-Start an MSYS2/UCRT64 pilot on a dedicated porting branch without removing Cygwin. Decide after
-phases 1 to 5. If firmware and all host tests pass with packaged `bmake`, and the benchmark
-shows a useful improvement, MSYS2 becomes the reference Windows environment. If maintaining a
-`bmake` package is too costly or the gain is small, use WSL2 for the build and keep a separate
-native Windows flashing tool.
+Do not start by installing MSYS2 and modifying TaskMate in one uncontrolled environment. First
+restore the green Cygwin baseline. In parallel, produce a pinned standalone `bmake` artifact and
+make it pass the dialect fixture. These are the two entry criteria for an MSYS2 pilot branch.
 
-In the very short term, fixing Cygwin provisioning remains useful. It provides a complete
-comparison baseline and can unblock the project before the pilot ends.
+Proceed with phases 1 to 5 only after both criteria pass. Adopt MSYS2 as the reference Windows
+environment only if the complete host tests and firmware build pass reproducibly, the packaged
+`bmake` has a maintainable update process, and measurements show a useful operational benefit.
+
+If TaskMate should not own a `bmake` package, retain hardened Cygwin for native Windows work or
+use WSL2 for builds and tests with a separate native Windows upload step.
 
 ## External sources
 
-- [MSYS2 environments and UCRT64 recommendation](https://www.msys2.org/docs/environments/)
-- [MSYS2 package management](https://www.msys2.org/docs/package-management/)
-- [MSYS repository packages and current absence of bmake](https://packages.msys2.org/packages/?repo=msys)
-- [Official UCRT64 AVR group](https://packages.msys2.org/groups/mingw-w64-ucrt-x86_64-avr-toolchain)
-- [Official UCRT64 avr-gcc package](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-avr-gcc)
+- [MSYS2 environments and UCRT64 path model](https://www.msys2.org/docs/environments/)
+- [MSYS2 supported Windows versions](https://www.msys2.org/docs/windows_support/)
+- [MSYS2 package management and package discovery](https://www.msys2.org/docs/package-management/)
+- [MSYS package index, currently without bmake](https://packages.msys2.org/packages/?repo=msys)
+- [Official UCRT64 AVR toolchain group](https://packages.msys2.org/groups/mingw-w64-ucrt-x86_64-avr-toolchain)
 - [Official UCRT64 avrdude package](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-avrdude)
-- [Clang-Tidy and UCRT64 Clang tools](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-clang-tools-extra)
-- [pkgsrc bootstrap on a non-NetBSD platform](https://www.netbsd.org/docs/pkgsrc/platforms.html)
-- [pkgsrc bootstrap report on Windows and MSYS2 UCRT64](https://mail-index.netbsd.org/pkgsrc-users/2024/03/23/msg039236.html)
+- [Official UCRT64 Clang tools package](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-clang-tools-extra)
+- [pkgsrc bootstrap guide](https://www.netbsd.org/docs/pkgsrc/platforms.html)
+- [MSYS2 UCRT64 pkgsrc bootstrap report and failure](https://mail-index.netbsd.org/pkgsrc-users/2024/03/23/msg039236.html)
 - [Official Cygwin bmake package](https://cygwin.com/packages/summary/bmake.html)
-- [WSL installation and Windows 10 requirements](https://learn.microsoft.com/en-us/windows/wsl/install)
-- [Connecting USB to WSL with usbipd-win](https://learn.microsoft.com/en-us/windows/wsl/connect-usb)
-- [Windows 10 life cycle](https://learn.microsoft.com/en-us/lifecycle/faq/windows)
+- [Microsoft WSL USB and Arduino guidance](https://learn.microsoft.com/en-us/windows/wsl/connect-usb)
+- [Windows 10 end-of-support notice](https://learn.microsoft.com/en-us/lifecycle/announcements/windows-10-end-of-support)
+- [Windows 10 Extended Security Updates](https://learn.microsoft.com/en-us/windows/whats-new/extended-security-updates)
 
-## Validation performed during the audit
+## Validation performed during this re-evaluation
 
-- inventoried direct dependencies in Make, shell, AWK, and AVR fragments;
-- checked official MSYS2 packages available on 16 September 2026;
-- confirmed that MSYS2 was absent from the host, without installation or system changes;
-- read the installed Cygwin and `bmake` versions;
-- ran the Cygwin program checker non-destructively with an explicit POSIX `PATH`;
-- checked the Windows 10 build 19045 system;
-- performed no autoCode generation, firmware compilation, removal, backup, or hardware write.
+- compared the current repository with the original audited revision;
+- rechecked every original repository gap against current Makefiles, scripts, and tests;
+- verified that relevant tracked text inputs currently contain no CR bytes;
+- verified that `.gitattributes` and an MSYS2 host value are absent;
+- checked official MSYS2 package data on 3 October 2026;
+- corrected the interpretation of the cited pkgsrc MSYS2 report;
+- confirmed that MSYS2 is absent from the observed host;
+- recorded Windows build 19045.6466, Cygwin 3.6.10, and `bmake` 20240314;
+- confirmed paths for AWK, Clang, AVR GCC, AVR LD, avrdude, CLOC, Ctags, Findutils, Git,
+  rsync, and Sed under the current Cygwin login environment;
+- confirmed that `clang-format19` and `clang-tidy19` are absent there;
+- ran `test_build_system`, `test_autoCode`, and selected-target parsing under Cygwin and
+  recorded their current failures;
+- performed no MSYS2 installation, package change, firmware upload, backup, or hardware write.
 
-Full feasibility validation still requires the pilot described above and a physical test on an
-Arduino Mega 2560.
+Full feasibility validation still requires the packaged `bmake`, a passing reference baseline,
+the UCRT64 pilot, and a physical Arduino Mega 2560 test.

@@ -21,10 +21,8 @@ PATHS_SOURCE_SEARCH += ${PATH_UCONTEXT}
 FILES_EXTRA_SRC += \
 	${PATH_UCONTEXT}/ucontext_context.c
 
-CFLAGS += -DHOST_ucontext
 FILE_HAL_STRING_MACRO = ${PATH_UCONTEXT}/ucontext_string_macro.h
-FILE_HAL_ARCHITECTURE_TYPES = ${PATH_UCONTEXT}/ucontext_types.h
-CFLAGS += -include ${FILE_HAL_ARCHITECTURE_TYPES}
+FILE_HAL_ARCH_TYPES = ${PATH_UCONTEXT}/ucontext_types.h
 
 .else
 .error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}

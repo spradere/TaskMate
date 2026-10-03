@@ -20,8 +20,6 @@ VAL_HW_STACK += arduinoMega
 PATH_ARDUINOMEGA = ${PATH_SRCS}/hal/board/arduinoMega
 PATHS_SOURCE_SEARCH += ${PATH_ARDUINOMEGA}
 
-CFLAGS += -DBOARD_arduinoMega
-
 .include "${PATH_SRCS}/hal/mcu/atmega2560/at2560_make.mk"
 
 # Board settings

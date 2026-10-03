@@ -51,8 +51,11 @@ static void setupDatabase(modules_database_t *data_base);
  * Private variables
  * ---------------------------------------------*/
 
+#define ERROR_COUNT_NORMAL_MODE 1U
+#define ERROR_COUNT_TEST_MODE 100U
+
 static unsigned int error_count = 0U;
-static unsigned int error_count_maximum = 10U;
+static unsigned int error_count_maximum = ERROR_COUNT_NORMAL_MODE;
 
 /* =============================================================================
  * Implementation - Functions
@@ -72,7 +75,8 @@ int main(int argc, const char *argv[])
 
 	options_list_t auto_options = {0};
 	if( options(argv[1], &auto_options) != 0 ) { autoCodeExit(AC_FORCE_EXIT); }
-	error_count_maximum = auto_options.error_count;
+	error_count_maximum =
+		auto_options.test_mode ? ERROR_COUNT_TEST_MODE : ERROR_COUNT_NORMAL_MODE;
 	autoCodeExit(AC_FORCE_EXIT);
 
 	// Set up database
@@ -179,7 +183,7 @@ void autoCodeExit(ac_error_cmd_t cmd)
 	if( cmd == AC_INCREMENT )
 	{
 		error_count++;
-		if( error_count > error_count_maximum ) { exit(EXIT_FAILURE); }
+		if( error_count >= error_count_maximum ) { exit(EXIT_FAILURE); }
 	}
 	if( cmd == AC_FORCE_EXIT )
 	{

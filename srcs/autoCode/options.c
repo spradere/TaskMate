@@ -18,8 +18,6 @@
 
 #include "options.h"
 
-#include <errno.h>
-#include <limits.h>
 #include <sys/stat.h>
 
 #include "fileUtility.h"
@@ -36,14 +34,14 @@ static void setGpioSignalsFile(const char *value, options_list_t *opt);
 static void setWireGpioFile(const char *value, options_list_t *opt);
 static void setGeneratedPath(const char *value, options_list_t *opt);
 static void setSourcePath(const char *value, options_list_t *opt);
-static void setErrorCount(const char *value, options_list_t *opt);
+static void setTestMode(const char *value, options_list_t *opt);
 
 /* -----------------------------------------------
  * Option dispatch table
  * ---------------------------------------------*/
 
 #define HAVE_OPTIONS(X)                                          \
-	X(HAVE_ERROR_COUNT, "--error_count", setErrorCount)          \
+	X(HAVE_TEST_MODE, "--test_mode", setTestMode)                \
 	X(HAVE_ERRORS, "--errors", setErrorsFile)                    \
 	X(HAVE_INITRC, "--initrc", setInitrcFile)                    \
 	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)              \
@@ -112,22 +110,23 @@ static void setErrorsFile(const char *value, options_list_t *opt)
 	have_options_count[HAVE_ERRORS]++;
 }
 
-static void setErrorCount(const char *value, options_list_t *opt)
+static void setTestMode(const char *value, options_list_t *opt)
 {
-	char *end = NULL;
-	errno = 0;
-	const unsigned long error_count = strtoul(value, &end, 10);
-
-	if( (errno != 0) || (end == value) || (*end != '\0') || (value[0] == '-') ||
-		(error_count > UINT_MAX) )
+	if( strcmp(value, "on") == 0 )
 	{
-		AUTOCODE_MSG_ERROR("invalid --error_count value <%s>", value);
-
+		opt->test_mode = true;
+	}
+	else if( strcmp(value, "off") == 0 )
+	{
+		opt->test_mode = false;
+	}
+	else
+	{
+		AUTOCODE_MSG_ERROR("invalid --test_mode value <%s>, expected on or off", value);
 		return;
 	}
 
-	opt->error_count = (unsigned int)error_count;
-	have_options_count[HAVE_ERROR_COUNT]++;
+	have_options_count[HAVE_TEST_MODE]++;
 }
 
 static void setInitrcFile(const char *value, options_list_t *opt)

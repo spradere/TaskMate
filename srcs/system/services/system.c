@@ -20,13 +20,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "interfaces/tm_driver_have.h"
 #include "interfaces/tm_info.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_gpio.h"
 #include "system/sysCall/sc_threads.h"
+#ifdef TM_DRIVER_HAVE_LCD
 #include "tmLibc/tm_stdio.h"
+#endif
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 
@@ -35,6 +38,8 @@
  * ---------------------------------------------*/
 
 #define SYSTEM_RUN_LEVEL_RR_ROUND_COUNT 10u
+#define SYSTEM_IDLE_STC_TICKS 1u
+#define SYSTEM_DISPLAY_STC_TICKS 50u
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -58,40 +63,44 @@ void system(void)
 	tm_syslog(
 		TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
-	// External RTC module test
-	hal_rtc_time_t t;
-	char msg[30];
-
-	sc_rtcRead(&t);
+#ifdef TM_DRIVER_HAVE_RTC
+	hal_rtc_time_t time;
+	sc_rtcRead(&time);
 	tm_syslog(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
-			  t.day,
-			  t.month,
-			  t.year,
-			  t.hours,
-			  t.minutes);
+			  time.day,
+			  time.month,
+			  time.year,
+			  time.hours,
+			  time.minutes);
+#endif
 
+#ifdef TM_DRIVER_HAVE_LCD
+	char msg[30];
 	tm_snprintf(
 		msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
 	sc_lcdWriteString(TM_STR_RAM(msg), 0, 0);
+#endif
 
 	while( 1 )
 	{
-
-		// print date and time
-		sc_rtcRead(&t);
+#if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
+		sc_rtcRead(&time);
 		tm_snprintf(msg,
 					sizeof(msg),
 					TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
-					t.day,
-					t.month,
-					t.year,
-					t.hours,
-					t.minutes,
-					t.seconds);
+					time.day,
+					time.month,
+					time.year,
+					time.hours,
+					time.minutes,
+					time.seconds);
 		sc_lcdWriteString(TM_STR_RAM(msg), 1, 0);
+		sc_threadSetSTC(SYSTEM_DISPLAY_STC_TICKS);
+#else
+		sc_threadSetSTC(SYSTEM_IDLE_STC_TICKS);
+#endif
 
-		sc_threadSetSTC(50);
 		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
 	}
 }
@@ -135,8 +144,12 @@ static void systemRunLevelStart(uint8_t run_level)
 	tm_syslog(TM_STR("[system] switch to run level %u\n"), run_level);
 	sc_driverRunLevelStart(run_level);
 
+#ifdef TM_DRIVER_HAVE_I2C
 	if( run_level == RL_RUN_CORE ) { (void)sc_i2cScan(); }
+#endif
+#ifdef TM_DRIVER_HAVE_RTC
 	if( run_level == RL_RUN_DRIVER ) { (void)sc_rtcSaveStartupTime(); }
+#endif
 }
 
 static bool systemRunLevelIsReady(uint8_t run_level)

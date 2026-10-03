@@ -39,12 +39,14 @@ typedef struct
  * ===========================================================================*/
 
 void tagWriterWriteModulesCount(const tag_writer_context_t *context);
-void tagWriterWriteModulesList(const tag_writer_context_t *context);
+void tagWriterWriteThreadsList(const tag_writer_context_t *context);
+void tagWriterWriteDriversList(const tag_writer_context_t *context);
 void tagWriterWriteThreadStacks(const tag_writer_context_t *context);
 void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context);
 void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context);
 void tagWriterWriteDriversAlloc(const tag_writer_context_t *context);
 void tagWriterWriteDriverNameCatalog(const tag_writer_context_t *context);
+void tagWriterWriteDriverHave(const tag_writer_context_t *context);
 void tagWriterWriteErrorEnum(const tag_writer_context_t *context);
 void tagWriterWriteErrorCatalog(const tag_writer_context_t *context);
 void tagWriterWriteGpioSignals(const tag_writer_context_t *context);

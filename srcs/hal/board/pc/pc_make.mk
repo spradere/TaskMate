@@ -25,8 +25,6 @@ FILES_EXTRA_SRC += \
 	
 FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/board/pc/pc_gpio.c
 
-CFLAGS += -DBOARD_pc
-
 .include "${PATH_SRCS}/hal/host/freebsd/freebsd_make.mk"
 
 .else

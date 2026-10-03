@@ -29,7 +29,7 @@ OPT_FIND_EXCLUDE = ! -path '*/.*'
 
 # autoCode options
 VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR=1
-VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR=3
+VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR=6
 
 OPT_CLEAN_AUTOCODE_LOGS = yes
 
@@ -52,8 +52,11 @@ OPT_VERBOSE_LEVEL = ${VERBOSE}
 
 _QUIET = ${${OPT_VERBOSE_LEVEL} == 1 :? : @}
 
-# Windows10-Cygwin64 options
-.if ${OPT_ENVIRONMENT} == "w10-cygwin"
-# bmake option for -V 
+# Expand values reported by bmake -V consistently on every supported host
 .MAKE.EXPAND_VARIABLES = true
-.endif
+
+# cppchek options
+OPT_CPPCHECK = --std=c17 --language=c
+OPT_CPPCHECK += --enable=warning,style,performance,portability
+OPT_CPPCHECK += --inconclusive --check-level=exhaustive
+OPT_CPPCHECK += --suppress=missingIncludeSystem

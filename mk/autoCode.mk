@@ -73,7 +73,7 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 
 	# Write autoCode options
 	@printf "# autoCode options\n" > "${FILE_AUTOCODE_CONFIG}"
-	@printf "%s\n" "--error_count 10" >> "${FILE_AUTOCODE_CONFIG}"
+	@printf "%s\n" "--test_mode off" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
@@ -140,14 +140,14 @@ tidy_autocode:
 #help tidy_autocode: [global] clang-tidy static code analysis for autoCode.
 	@printf "\n%sTidy autoCode static code test%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${VAL_CLANG_TIDY} ${FILES_AUTOCODE_SRC} -- ${CFLAGS_CLANG_TIDY_AUTOCODE}
+	@${FILE_CLANG_TIDY} ${FILES_AUTOCODE_SRC} -- ${CFLAGS_CLANG_TIDY_AUTOCODE}
 
-.PHONY: cppcheck_autoCode
-cppcheck_autoCode:
-#help cppcheck_autoCode: [global] cppcheck static code analysis for autoCode.
+.PHONY: cppcheck_autocode
+cppcheck_autocode:
+#help cppcheck_autocode: [global] cppcheck static code analysis for autoCode.
 	@printf "\n%scppcheck autoCode static analysis%s\n\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
-	@${VAL_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_AUTOCODE} \
+	@${FILE_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_AUTOCODE} \
 		${CFLAGS_CPPCHECK_AUTOCODE} \
 		${FILES_AUTOCODE_SRC}
 	

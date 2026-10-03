@@ -17,6 +17,8 @@
 
 #include "tagWriters.h"
 
+#include <ctype.h>
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -63,4 +65,30 @@ void tagWriterWriteDriverNameCatalog(const tag_writer_context_t *context)
 		fprintf(context->file, "\t&driver%i_name,\n", i);
 	}
 	fprintf(context->file, "};\n");
+}
+
+void tagWriterWriteDriverHave(const tag_writer_context_t *context)
+{
+	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
+
+	for( int i = 0; i < mod->modules_count; i++ )
+	{
+		const char *name = mod->modules[i].name;
+		fprintf(context->file, "#define TM_DRIVER_HAVE_");
+		for( size_t character = 0; name[character] != 0; character++ )
+		{
+			const unsigned char current = (unsigned char)name[character];
+			const unsigned char previous =
+				(character == 0) ? 0 : (unsigned char)name[character - 1];
+			const unsigned char next = (unsigned char)name[character + 1];
+
+			if( isupper(current) && (character > 0) &&
+				(islower(previous) || isdigit(previous) || (isupper(previous) && islower(next))) )
+			{
+				fputc('_', context->file);
+			}
+			fputc(toupper(current), context->file);
+		}
+		fprintf(context->file, " 1\n");
+	}
 }
