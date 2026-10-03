@@ -73,7 +73,7 @@ int main(int argc, const char *argv[])
 {
 	tokenizer_t tok = {0};
 
-	// Get options
+	// The configuration must be valid before any input list is processed.
 	if( argc != 2 )
 	{
 		AUTOCODE_MSG_ERROR("autoCode bad argc (is %i, not 2)\n\tuse autoCode configuration_file",
@@ -87,7 +87,7 @@ int main(int argc, const char *argv[])
 		auto_options.test_mode ? ERROR_COUNT_TEST_MODE : ERROR_COUNT_NORMAL_MODE;
 	autoCodeExit(AC_FORCE_EXIT);
 
-	// Set up database
+	// Keep one database for all stages so tags use the validated declarations.
 	modules_database_t data_base;
 	setupDatabase(&data_base);
 
@@ -163,7 +163,7 @@ int main(int argc, const char *argv[])
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
-	// Compare and replace temp files
+	// Publish only after every input stage has completed without errors.
 	file_utility_err_t replace_result = fileCmpReplaceAll();
 	if( replace_result != FILE_UTILITY_OK )
 	{
@@ -171,7 +171,7 @@ int main(int argc, const char *argv[])
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
-	// Print module information
+	// Report the declarations and the files actually changed by publication.
 	printModules(&data_base);
 	filePrintModified();
 	return EXIT_SUCCESS;

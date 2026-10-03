@@ -187,10 +187,10 @@ static int optionCmdDispatch(const char *cmd, const char *value, options_list_t 
 
 int options(const char *file_name, options_list_t *opt)
 {
-	// Initialise required options
+	// Count accepted values to detect both missing and repeated options.
 	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
 
-	// Process options from files
+	// A malformed line reports an error without stopping later diagnostics.
 	file_t file;
 	fileInit(&file);
 	file.name = (char *)file_name;
@@ -251,7 +251,7 @@ int options(const char *file_name, options_list_t *opt)
 	}
 	if( result != 0 ) { return result; }
 
-	// Test required options
+	// Check cardinality after the complete configuration has been read.
 	for( int i = 0; i < HAVE_COUNT; i++ )
 	{
 		if( have_options_count[i] == 0 )

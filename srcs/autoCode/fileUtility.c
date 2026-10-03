@@ -68,6 +68,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 {
 	file_utility_err_t result = FILE_UTILITY_OK;
 
+	// Compare each staged file before replacing its destination.
 	for( size_t i = 0; i < file_tmp_source_count; i++ )
 	{
 		file_t file_src;
@@ -100,6 +101,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		if( result == FILE_UTILITY_OK ) { result = close_result; }
 		if( result != FILE_UTILITY_OK ) { goto exit; }
 
+		// Keep identical destinations untouched so their timestamps remain stable.
 		if( comparison == FILE_UTILITY_OK )
 		{
 			AUTOCODE_MSG_INFO("keep the old one <%s>", file_tmp_list[i].source_name);
@@ -126,6 +128,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 
 exit:
 	{
+		// Remove any staged files left after publication or an early error.
 		file_utility_err_t cleanup_result = fileTmpCleanupAll();
 		if( result == FILE_UTILITY_OK ) { result = cleanup_result; }
 	}
@@ -152,6 +155,7 @@ static file_utility_err_t fileCompare(file_t *file_old, file_t *file_new)
 	}
 	if( file_old->stream == NULL )
 	{
+		// A destination that does not exist always needs the new contents.
 		result = FILE_UTILITY_DIFFERENT;
 		goto exit;
 	}
@@ -273,6 +277,7 @@ file_utility_err_t fileOpen(file_t *file, const char *mode, const int special_mo
 	file->stream = fopen(file->name, mode);
 	if( file->stream == NULL )
 	{
+		// Comparison permits an absent destination; other opens must succeed.
 		struct stat file_info;
 		if( (special_mode != FILE_MISSING_ALLOWED) || (strcmp(mode, "r") != 0) ||
 			(stat(file->name, &file_info) == 0) )
@@ -341,6 +346,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 	*temporary_name = NULL;
 	if( file_tmp_cleanup_registered == false )
 	{
+		// Clean staged files if parsing exits before publication.
 		if( atexit(fileTmpCleanup) != 0 )
 		{
 			result = FILE_UTILITY_REGISTER;

@@ -168,6 +168,7 @@ static add_module_result_t optionStack(const char *data, const add_module_contex
 static add_module_result_t optionSource(const char *data, const bool directory,
 										const add_module_context_t *context)
 {
+	// Source declarations also drive the build list, so their paths must exist.
 	char path[AC_BUFFER_SIZE];
 	const int length = snprintf(path, sizeof(path), "%s/%s", context->source_path, data);
 
@@ -233,6 +234,7 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 
 	const add_module_context_t context = {.module = module, .source_path = command->source_path};
 	bool module_is_valid = true;
+	// Option names and values occur in pairs after the module type and name.
 	for( int token = 3; token < command->tok->count; token += 2 )
 	{
 		bool option_found = false;
@@ -277,6 +279,7 @@ static bool moduleOptionsValidate(const char *name, const add_module_type_t modu
 								  const unsigned int *option_count)
 {
 	bool module_is_valid = true;
+	// Cardinality depends on whether the declaration is a driver, service, or task.
 	for( size_t option = 0; option < ADD_MODULE_OPTION_COUNT; option++ )
 	{
 		const option_cardinality_t cardinality = module_options[option].cardinality[module_type];
@@ -313,6 +316,7 @@ static bool moduleOptionsValidate(const char *name, const add_module_type_t modu
 
 static void moduleAdd(const initrc_command_t *command, const module_item_t *module)
 {
+	// Commit the validated record only after checking the shared type list.
 	const char *name = command->tok->tokens[2];
 	if( strlen(name) >= sizeof(module->name) - 1 )
 	{
