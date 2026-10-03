@@ -35,11 +35,19 @@ typedef struct
 
 } tokenizer_t;
 
+typedef enum
+{
+	TOK_ERR_NOERR,
+	TOK_ERR_OF,
+	TOK_ERR_STRING,
+	TOK_ERR_ALLOC,
+} tokenizer_err_t;
+
 /* ============================================================================
  * Public API
  * ========================================================================== */
-
-int tokenizer(tokenizer_t *tok);
+ 
+tokenizer_err_t tokenizer(tokenizer_t *tok);
 void tokenizerFree(tokenizer_t *tok);
 
 #endif // AUTOCODE_TOKENIZER_H
