@@ -41,6 +41,7 @@ static int generatedFileName(char *file_name, size_t file_name_size, const char 
 	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", tagWriterWriteDriversAlloc)                  \
 	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", tagWriterWriteThreadNameCatalog) \
 	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", tagWriterWriteDriverNameCatalog) \
+	X(HAVE_DRIVER_HAVE, "driver_have", tagWriterWriteDriverHave)                        \
 	X(HAVE_ERROR_ENUM, "error_enum", tagWriterWriteErrorEnum)                           \
 	X(HAVE_ERROR_CATALOG, "error_catalog", tagWriterWriteErrorCatalog)                  \
 	X(HAVE_MOD_COUNT, "modules_count", tagWriterWriteModulesCount)                      \
