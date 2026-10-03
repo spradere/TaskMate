@@ -9,6 +9,7 @@ and the applicable rules in `doc/rules/`.
 
 ## Writing style
 
+- When replying in French, address the user with "tu".
 - Write all project text in English.
 - Use a simple, technical style. Avoid literary phrasing.
 - Do not use em dashes in prose. Prefer short sentences with commas and full stops.

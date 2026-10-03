@@ -12,7 +12,11 @@
 # autoCode black-box tests
 ################################################################################
 
+.if ${VAL_TARGET} == ${VAL_TARGET_NONE}
+CFLAGS_AUTOCODE_TEST_SANITIZE = -DAUTOCODE_BUILD -I${PATH_SRCS}/
+.else
 CFLAGS_AUTOCODE_TEST_SANITIZE = ${CFLAGS_AUTOCODE}
+.endif
 CFLAGS_AUTOCODE_TEST_SANITIZE += -fsanitize=address,undefined -fno-omit-frame-pointer
 
 .PHONY: test_autoCode

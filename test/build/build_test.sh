@@ -374,7 +374,8 @@ runConfigurationTests()
 	expectOutput driver_interface_order "${VAL_DRIVER_INTERFACES}" \
 		targetMake -V FILES_DRIVER_INTERFACES
 
-	expectFailure invalid_target "Target makefile not found >>>missing/target.mk<<<" \
+	expectFailure invalid_target \
+		"Target makefile not found >>>srcs/user/target/missing/missing.mk<<<" \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=missing -V VAL_HW_STACK
 	expectFailure invalid_option 'Invalid option OPT_CLEAN_AUTOCODE_LOGS : "invalid"' \
 		targetMake OPT_CLEAN_AUTOCODE_LOGS=invalid -V VAL_HW_STACK
@@ -391,7 +392,7 @@ runConfigurationTests()
 		FILE_AVR8_PROGRAMS_CHECK_STAMP="${PATH_STAGE_WORK}/avr8_programs.stamp" \
 		_autocode_dependency_check
 	assertFileContains "${PATH_MANIFESTS}/gpio_signals.deps" \
-		"srcs/user/target/test1/signals.gpio"
+		"srcs/user/target/test1/test1_signals.gpio"
 	expectFailure wire_gpio_outside "Path outside current directory rejected" \
 		targetMake \
 		FILE_WIREGPIO="/etc/passwd" \
