@@ -84,7 +84,11 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 	file_t initrc_list;
 	fileInit(&initrc_list);
 	initrc_list.name = (char *)initrc_name;
-	if( fileOpen(&initrc_list, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
+	if( fileOpen(&initrc_list, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", initrc_name);
+		return -1;
+	}
 
 	int file_line_number = 0;
 	tokenizer_t tok = {0};
@@ -172,6 +176,10 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 	}
 	tokenizerFree(&tok);
 	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
-	if( fileClose(&initrc_list, __FILE__, __LINE__) != 0 ) { result = -1; }
+	if( fileClose(&initrc_list) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing file <%s>", initrc_name);
+		result = -1;
+	}
 	return result;
 }

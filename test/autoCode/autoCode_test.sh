@@ -866,7 +866,7 @@ runCompareReplaceTests()
 		if [ "${VAL_RESULT}" -eq 0 ]; then
 			fail "output_open_failure: command unexpectedly succeeded"
 		fi
-		logContains output_open_failure "creating file"
+		logContains output_open_failure "creating temporary file"
 		if find "${PATH_CASE}/generated" -type f -print | grep -q .; then
 			fail "output_open_failure: an empty destination was created"
 		fi
@@ -878,7 +878,7 @@ runCompareReplaceTests()
 
 	caseBegin buffered_write_failure
 	ln -s /dev/full "${PATH_CASE}/tags.c.tmp" || fail "cannot create /dev/full fixture"
-	expectFailure buffered_write_failure "close file" \
+	expectFailure buffered_write_failure "closing temporary file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	assertNoTemporaryFiles
 
@@ -929,7 +929,8 @@ runCompareReplaceTests()
 		if [ "${VAL_RESULT}" -eq 0 ]; then
 			fail "rename_failure: command unexpectedly succeeded"
 		fi
-		logContains rename_failure "renaming file"
+		logContains rename_failure "renaming temporary file failed"
+		logContains rename_failure "[autoCode.c:"
 		if ! cmp -s "${PATH_CASE}/tags.expected" "${PATH_CASE}/tags.c"; then
 			fail "rename failure modified the original destination"
 		fi

@@ -28,8 +28,9 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	file_t file_signals;
 	fileInit(&file_signals);
 	file_signals.name = (char *)context->auto_options->file_gpio_signals;
-	if( fileOpen(&file_signals, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
+	if( fileOpen(&file_signals, "r", FILE_READONLY) != 0 )
 	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", file_signals.name);
 		*context->file_error = true;
 		return;
 	}
@@ -70,7 +71,11 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	fprintf(context->file, "} gpio_signal_t;\n");
 
 	tokenizerFree(&tok);
-	if( fileClose(&file_signals, __FILE__, __LINE__) != 0 ) { *context->file_error = true; }
+	if( fileClose(&file_signals) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing GPIO signals file");
+		*context->file_error = true;
+	}
 }
 
 void tagWriterWriteWireGpio(const tag_writer_context_t *context)
