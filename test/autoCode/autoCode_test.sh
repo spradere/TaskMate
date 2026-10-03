@@ -306,6 +306,13 @@ runErrorTests()
 	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
 	expectFailure missing_error_list "opening file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logContains missing_error_list "${PATH_CASE}/missing.list"
+
+	caseBegin error_list_before_initrc_list
+	find "${PATH_CASE}/errors.list" "${PATH_CASE}/initrc.list" -delete
+	expectFailure error_list_before_initrc_list "${PATH_CASE}/errors.list" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logDoesNotContain error_list_before_initrc_list "opening file <${PATH_CASE}/initrc.list>"
 
 	caseBegin missing_error_file
 	printf '%s\n' "${PATH_CASE}/missing.err" > "${PATH_CASE}/errors.list"
@@ -375,6 +382,13 @@ runInitrcTests()
 	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
 	expectFailure missing_initrc_list "opening file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logContains missing_initrc_list "${PATH_CASE}/missing.list"
+
+	caseBegin initrc_list_before_tag_list
+	find "${PATH_CASE}/initrc.list" "${PATH_CASE}/tags.list" -delete
+	expectFailure initrc_list_before_tag_list "${PATH_CASE}/initrc.list" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logDoesNotContain initrc_list_before_tag_list "opening file <${PATH_CASE}/tags.list>"
 
 	caseBegin missing_initrc_file
 	printf '%s\n' "${PATH_CASE}/missing.rc" > "${PATH_CASE}/initrc.list"
