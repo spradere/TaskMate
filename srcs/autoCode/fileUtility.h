@@ -39,21 +39,35 @@ typedef struct
 
 typedef enum
 {
-	FILE_GET_LINE_ERROR = -1,
-	FILE_GET_LINE_EOF = 0,
-	FILE_GET_LINE_SUCCESS = 1
-} file_get_line_result_t;
+	FILE_UTILITY_OK = 0,
+	FILE_GET_LINE_SUCCESS = FILE_UTILITY_OK,
+	FILE_GET_LINE_EOF,
+	FILE_UTILITY_DIFFERENT,
+	FILE_GET_LINE_ERROR,
+	FILE_UTILITY_INVALID,
+	FILE_UTILITY_OPEN,
+	FILE_UTILITY_WRITE,
+	FILE_UTILITY_CLOSE,
+	FILE_UTILITY_SEEK,
+	FILE_UTILITY_REMOVE,
+	FILE_UTILITY_RENAME,
+	FILE_UTILITY_ALLOC,
+	FILE_UTILITY_REGISTER
+} file_utility_err_t;
+
+typedef file_utility_err_t file_get_line_result_t;
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
 void filePrintModified(void);
-int fileCmpReplaceAll(void);
-int fileClose(file_t *file, const char *caller, int line);
-file_get_line_result_t fileGetLine(file_t *file, char *line, size_t line_size_max);
+file_utility_err_t fileCmpReplaceAll(void);
+file_utility_err_t fileClose(file_t *file);
+file_utility_err_t fileGetLine(file_t *file, char *line, size_t line_size_max);
 void fileInit(file_t *file);
-int fileOpen(file_t *file, const char *mode, int special_mode, const char *caller, int line);
-int fileMakeTmp(const char *file_src_name, file_t *file_tmp, const char *caller, int line);
+file_utility_err_t fileOpen(file_t *file, const char *mode, int special_mode);
+file_utility_err_t fileMakeTmp(const char *file_src_name, file_t *file_tmp);
+const char *fileUtilityErrorMessage(file_utility_err_t error);
 
 #endif // AUTOCODE_FILEUTILITY_H

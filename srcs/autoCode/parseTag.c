@@ -138,13 +138,21 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)file_name;
-	if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
+	if( fileOpen(&file_src, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", file_name);
+		return -1;
+	}
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
-	if( fileMakeTmp(file_src.name, &file_tmp, __FILE__, __LINE__) != 0 )
+	if( fileMakeTmp(file_src.name, &file_tmp) != 0 )
 	{
-		(void)fileClose(&file_src, __FILE__, __LINE__);
+		AUTOCODE_MSG_ERROR("creating temporary file for <%s>", file_name);
+		if( fileClose(&file_src) != FILE_UTILITY_OK )
+		{
+			AUTOCODE_MSG_ERROR("closing file <%s>", file_name);
+		}
 		return -1;
 	}
 
@@ -213,8 +221,9 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 
 			file_t file_generated;
 			fileInit(&file_generated);
-			if( fileMakeTmp(generated_file_name, &file_generated, __FILE__, __LINE__) != 0 )
+			if( fileMakeTmp(generated_file_name, &file_generated) != 0 )
 			{
+				AUTOCODE_MSG_ERROR("creating temporary file for <%s>", generated_file_name);
 				file_error = true;
 				break;
 			}
@@ -230,7 +239,11 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 			tag_section = 1;
 
 			int err = tagCmdDispatch(tok.tokens[2], &context);
-			if( fileClose(&file_generated, __FILE__, __LINE__) != 0 ) { file_error = true; }
+			if( fileClose(&file_generated) != FILE_UTILITY_OK )
+			{
+				AUTOCODE_MSG_ERROR("closing generated file <%s>", generated_file_name);
+				file_error = true;
+			}
 			if( file_error )
 			{
 				tag_section = 0;
@@ -264,8 +277,16 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	{
 		AUTOCODE_MSG_ERROR("missing end tag [/tag] [%s:%i]", file_src.name, file_line_number);
 	}
-	if( fileClose(&file_src, __FILE__, __LINE__) != 0 ) { file_error = true; }
-	if( fileClose(&file_tmp, __FILE__, __LINE__) != 0 ) { file_error = true; }
+	if( fileClose(&file_src) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing file <%s>", file_name);
+		file_error = true;
+	}
+	if( fileClose(&file_tmp) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing temporary file for <%s>", file_name);
+		file_error = true;
+	}
 	return file_error ? -1 : 0;
 }
 

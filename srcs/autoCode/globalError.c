@@ -33,7 +33,11 @@ int globalError(const char *src_name, error_catalog_t *errors)
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
-	if( fileOpen(&file_src, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
+	if( fileOpen(&file_src, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", src_name);
+		return -1;
+	}
 
 	// Read from source
 	int file_src_line_number = 0;
@@ -147,6 +151,10 @@ int globalError(const char *src_name, error_catalog_t *errors)
 
 	tokenizerFree(&tok);
 	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
-	if( fileClose(&file_src, __FILE__, __LINE__) != 0 ) { result = -1; }
+	if( fileClose(&file_src) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing file <%s>", src_name);
+		result = -1;
+	}
 	return result;
 }

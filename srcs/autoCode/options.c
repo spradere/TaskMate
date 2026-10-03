@@ -194,7 +194,11 @@ int options(const char *file_name, options_list_t *opt)
 	file_t file;
 	fileInit(&file);
 	file.name = (char *)file_name;
-	if( fileOpen(&file, "r", FILE_READONLY, __FILE__, __LINE__) != 0 ) { return -1; }
+	if( fileOpen(&file, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", file_name);
+		return -1;
+	}
 
 	int file_line_number = 0;
 	tokenizer_t tok = {0};
@@ -240,7 +244,11 @@ int options(const char *file_name, options_list_t *opt)
 	}
 	tokenizerFree(&tok);
 	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
-	if( fileClose(&file, __FILE__, __LINE__) != 0 ) { result = -1; }
+	if( fileClose(&file) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing file <%s>", file_name);
+		result = -1;
+	}
 	if( result != 0 ) { return result; }
 
 	// Test required options

@@ -90,8 +90,9 @@ int main(int argc, const char *argv[])
 	file_t ferror;
 	fileInit(&ferror);
 	ferror.name = auto_options.file_errors_list;
-	if( fileOpen(&ferror, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
+	if( fileOpen(&ferror, "r", FILE_READONLY) != 0 )
 	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", ferror.name);
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
@@ -114,7 +115,10 @@ int main(int argc, const char *argv[])
 	{
 		AUTOCODE_MSG_ERROR("reading file <%s>", ferror.name);
 	}
-	fileClose(&ferror, __FILE__, __LINE__);
+	if( fileClose(&ferror) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing error list file");
+	}
 	tokenizerFree(&tok);
 	autoCodeExit(AC_FORCE_EXIT);
 
@@ -122,8 +126,9 @@ int main(int argc, const char *argv[])
 	file_t finitrc;
 	fileInit(&finitrc);
 	finitrc.name = auto_options.file_initrc_list;
-	if( fileOpen(&finitrc, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
+	if( fileOpen(&finitrc, "r", FILE_READONLY) != 0 )
 	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", finitrc.name);
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
@@ -149,7 +154,10 @@ int main(int argc, const char *argv[])
 	{
 		AUTOCODE_MSG_ERROR("reading file <%s>", finitrc.name);
 	}
-	fileClose(&finitrc, __FILE__, __LINE__);
+	if( fileClose(&finitrc) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing initrc list file");
+	}
 	tokenizerFree(&tok);
 	autoCodeExit(AC_FORCE_EXIT);
 
@@ -157,8 +165,9 @@ int main(int argc, const char *argv[])
 	file_t ftag;
 	fileInit(&ftag);
 	ftag.name = auto_options.file_parsetag_list;
-	if( fileOpen(&ftag, "r", FILE_READONLY, __FILE__, __LINE__) != 0 )
+	if( fileOpen(&ftag, "r", FILE_READONLY) != 0 )
 	{
+		AUTOCODE_MSG_ERROR("opening file <%s>", ftag.name);
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
@@ -187,14 +196,23 @@ int main(int argc, const char *argv[])
 		AUTOCODE_MSG_ERROR("reading file <%s>", ftag.name);
 		tag_file_error = true;
 	}
-	if( fileClose(&ftag, __FILE__, __LINE__) != 0 ) { tag_file_error = true; }
+	if( fileClose(&ftag) != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("closing tag list file");
+		tag_file_error = true;
+	}
 	tokenizerFree(&tok);
 	if( tag_file_error ) { autoCodeExit(AC_FORCE_EXIT); }
 	parseTagHave();
 	autoCodeExit(AC_FORCE_EXIT);
 
 	// Compare and replace temp files
-	if( fileCmpReplaceAll() != 0 ) { autoCodeExit(AC_FORCE_EXIT); }
+	file_utility_err_t replace_result = fileCmpReplaceAll();
+	if( replace_result != FILE_UTILITY_OK )
+	{
+		AUTOCODE_MSG_ERROR("publishing generated files: %s", fileUtilityErrorMessage(replace_result));
+		autoCodeExit(AC_FORCE_EXIT);
+	}
 
 	// Print module information
 	printModules(&data_base);
