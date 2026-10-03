@@ -266,6 +266,7 @@ runOptionTests()
 	caseBegin unterminated_option
 	printf '%s\n' '--test_mode "on' > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure unterminated_option "unterminated string"
+	logContains unterminated_option "autoCode.conf:1"
 
 	caseBegin long_option_line
 	awk 'BEGIN { printf "--errors "; for (i = 0; i < 260; i++) printf "x"; \
@@ -342,6 +343,15 @@ runErrorTests()
 	do
 		logContains malformed_errors "${VAL_PATTERN}"
 	done
+	logContains malformed_errors "errors.err:6"
+
+	caseBegin unterminated_error_list
+	printf '%s\n' '"unterminated' "${PATH_CASE}/errors.err" \
+		> "${PATH_CASE}/errors.list"
+	expectFailure unterminated_error_list "unterminated string" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logContains unterminated_error_list "errors.list:1"
+	logContains unterminated_error_list "open file.err <${PATH_CASE}/errors.err>"
 
 	caseBegin long_error_line
 	awk 'BEGIN { printf "ERR_LONG \""; for (i = 0; i < 260; i++) printf "x"; \
@@ -626,6 +636,15 @@ runInitrcTests()
 	do
 		logContains malformed_initrc "${VAL_PATTERN}"
 	done
+	logContains malformed_initrc "init.rc:19"
+
+	caseBegin unterminated_initrc_list
+	printf '%s\n' '"unterminated' "${PATH_CASE}/init.rc" \
+		> "${PATH_CASE}/initrc.list"
+	expectFailure unterminated_initrc_list "unterminated string" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	logContains unterminated_initrc_list "initrc.list:1"
+	logContains unterminated_initrc_list "open <${PATH_CASE}/init.rc>"
 
 	caseBegin long_initrc_line
 	awk 'BEGIN { for (i = 0; i < 260; i++) printf "x"; printf "\n" }' \
@@ -721,6 +740,20 @@ runParseTagTests()
 			>> "${PATH_CASE}/tags.c"
 	done
 	runTagCase unterminated_tag_line "unterminated string"
+	logContains unterminated_tag_line "tags.c:1"
+
+	caseBegin unterminated_tag_list
+	printf '%s\n' '"unterminated' "${PATH_CASE}/tags.c" \
+		> "${PATH_CASE}/tags.list"
+	runTagCase unterminated_tag_list "unterminated string"
+	logContains unterminated_tag_list "tags.list:1"
+	logContains unterminated_tag_list "open <${PATH_CASE}/tags.c>"
+
+	caseBegin unterminated_gpio
+	printf '%s\n' '"unterminated' 'GPIO_SIGNAL_TEST' \
+		> "${PATH_CASE}/signals.gpio"
+	runTagCase unterminated_gpio "unterminated string"
+	logContains unterminated_gpio "signals.gpio:1"
 
 	for VAL_INPUT in tags.c signals.gpio
 	do

@@ -127,6 +127,18 @@ exit:
 	return tokenizer_status;
 }
 
+const char *tokenizerErrorMessage(tokenizer_err_t error)
+{
+	switch( error )
+	{
+		case TOK_ERR_OF: return "token line overflow";
+		case TOK_ERR_STRING: return "unterminated string";
+		case TOK_ERR_ALLOC: return "token allocation failed";
+		case TOK_ERR_NOERR: return "no error";
+	}
+	return "unknown tokenizer error";
+}
+
 void tokenizerFree(tokenizer_t *tok)
 {
 	assert(tok != NULL);

@@ -203,7 +203,13 @@ int options(const char *file_name, options_list_t *opt)
 	while( (line_result = fileGetLine(&file, tok.line, sizeof(tok.line))) == FILE_GET_LINE_SUCCESS )
 	{
 		file_line_number++;
-		if( tokenizer(&tok) != 0 ) { continue; }
+		tokenizer_err_t token_error = tokenizer(&tok);
+		if( token_error != TOK_ERR_NOERR )
+		{
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", file.name, file_line_number,
+							   tokenizerErrorMessage(token_error));
+			continue;
+		}
 
 		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
 		{

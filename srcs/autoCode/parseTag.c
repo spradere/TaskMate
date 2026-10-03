@@ -167,7 +167,13 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	{
 		file_line_number++;
 		snprintf(line, sizeof(line), "%s", tok.line);
-		if( tokenizer(&tok) != 0 ) { continue; }
+		tokenizer_err_t token_error = tokenizer(&tok);
+		if( token_error != TOK_ERR_NOERR )
+		{
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", file_src.name, file_line_number,
+							   tokenizerErrorMessage(token_error));
+			continue;
+		}
 
 		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
 			!(strcmp(tok.tokens[1], "[autoCode_tag]")) )
