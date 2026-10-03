@@ -43,8 +43,14 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	while( (line_result = fileGetLine(&file_signals, tok.line, sizeof(tok.line))) ==
 		   FILE_GET_LINE_SUCCESS )
 	{
-		if( tokenizer(&tok) != 0 ) { continue; }
 		line++;
+		tokenizer_err_t token_error = tokenizer(&tok);
+		if( token_error != TOK_ERR_NOERR )
+		{
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", file_signals.name, line,
+							   tokenizerErrorMessage(token_error));
+			continue;
+		}
 		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
 		{
 			if( tok.count > 1 )

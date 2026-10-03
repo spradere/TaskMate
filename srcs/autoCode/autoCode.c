@@ -96,10 +96,18 @@ int main(int argc, const char *argv[])
 	}
 
 	file_get_line_result_t line_result;
+	int file_line_number = 0;
 	while( (line_result = fileGetLine(&ferror, tok.line, sizeof(tok.line))) ==
 		   FILE_GET_LINE_SUCCESS )
 	{
-		if( tokenizer(&tok) != 0 ) { continue; }
+		file_line_number++;
+		tokenizer_err_t token_error = tokenizer(&tok);
+		if( token_error != TOK_ERR_NOERR )
+		{
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", ferror.name, file_line_number,
+							   tokenizerErrorMessage(token_error));
+			continue;
+		}
 		if( (tok.count != 0) && (globalError(tok.tokens[0], &errors_catalog) != 0) ) { break; }
 	}
 	if( line_result == FILE_GET_LINE_ERROR )
@@ -119,10 +127,18 @@ int main(int argc, const char *argv[])
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
+	file_line_number = 0;
 	while( (line_result = fileGetLine(&finitrc, tok.line, sizeof(tok.line))) ==
 		   FILE_GET_LINE_SUCCESS )
 	{
-		if( tokenizer(&tok) != 0 ) { continue; }
+		file_line_number++;
+		tokenizer_err_t token_error = tokenizer(&tok);
+		if( token_error != TOK_ERR_NOERR )
+		{
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", finitrc.name, file_line_number,
+							   tokenizerErrorMessage(token_error));
+			continue;
+		}
 		if( (tok.count != 0) &&
 			(parseInitrc(&data_base, tok.tokens[0], auto_options.source_path) != 0) )
 		{
@@ -148,9 +164,17 @@ int main(int argc, const char *argv[])
 
 	parseTagInit();
 	bool tag_file_error = false;
+	file_line_number = 0;
 	while( (line_result = fileGetLine(&ftag, tok.line, sizeof(tok.line))) == FILE_GET_LINE_SUCCESS )
 	{
-		if( tokenizer(&tok) != 0 ) { continue; }
+		file_line_number++;
+		tokenizer_err_t token_error = tokenizer(&tok);
+		if( token_error != TOK_ERR_NOERR )
+		{
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", ftag.name, file_line_number,
+							   tokenizerErrorMessage(token_error));
+			continue;
+		}
 		if( (tok.count != 0) &&
 			(parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options) != 0) )
 		{

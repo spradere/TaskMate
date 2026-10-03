@@ -48,6 +48,7 @@ typedef enum
  * ========================================================================== */
  
 tokenizer_err_t tokenizer(tokenizer_t *tok);
+const char *tokenizerErrorMessage(tokenizer_err_t error);
 void tokenizerFree(tokenizer_t *tok);
 
 #endif // AUTOCODE_TOKENIZER_H
