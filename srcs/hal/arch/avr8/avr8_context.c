@@ -21,7 +21,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-#include "avr8_architecture_constants.h"
+#include "avr8_constants.h"
 
 /* =============================================================================
  * Implementation - Functions

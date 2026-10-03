@@ -52,11 +52,8 @@ OPT_VERBOSE_LEVEL = ${VERBOSE}
 
 _QUIET = ${${OPT_VERBOSE_LEVEL} == 1 :? : @}
 
-# Windows10-Cygwin64 options
-.if ${OPT_ENVIRONMENT} == "w10-cygwin"
-# bmake option for -V 
+# Expand values reported by bmake -V consistently on every supported host
 .MAKE.EXPAND_VARIABLES = true
-.endif
 
 # cppchek options
 OPT_CPPCHECK = --std=c17 --language=c
