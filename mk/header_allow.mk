@@ -33,7 +33,7 @@ FILES_HAL_ARCH_TYPES_ALLOWED = \
 	${FILES_COMPILE_SRC:M${PATH_SRCS}/system/sysCore/sys_threads.c}
 
 .for file in ${FILES_HAL_ARCH_TYPES_ALLOWED}
-.if exists(${file})
+.if !exists(${file})
 .error file in FILES_HAL_ARCH_TYPES_ALLOWED not fond >>>${file}<<<
 .endif
 CFLAGS_${file} += -include ${FILE_HAL_ARCH_TYPES}
