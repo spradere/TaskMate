@@ -1,3 +1,4 @@
+v1.4	change option '-error_count' to '-test_mode'
 v1.3	add tag for scli commadns
 v1.2	add stack generation with size
 v1.1 	remove useless init.c init.h and define.h files
