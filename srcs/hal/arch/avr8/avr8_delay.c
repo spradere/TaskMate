@@ -15,9 +15,9 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "interfaces/hal_delay.h"
-
 #include <util/delay.h>
+
+#include "interfaces/hal_delay.h"
 
 /* =============================================================================
  * Implementation - Functions

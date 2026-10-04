@@ -23,7 +23,7 @@
 /* -------------------------------------
  * Private API
  * -----------------------------------*/
- 
+
 static bool indexTestOverflow(size_t index);
 static bool incIndexTestOverflow(int *index);
 
@@ -34,8 +34,8 @@ static bool incIndexTestOverflow(int *index);
 static bool indexTestOverflow(size_t index)
 {
 	bool overflow = false;
-	if( index > (TOKEN_LINE_SIZE_MAX - 1U) ){overflow = true;}
-		
+	if( index > (TOKEN_LINE_SIZE_MAX - 1U) ) { overflow = true; }
+
 	return overflow;
 }
 
@@ -43,8 +43,8 @@ static bool incIndexTestOverflow(int *index)
 {
 	(*index)++;
 	bool overflow = indexTestOverflow((size_t)(*index));
-	if( overflow == true ){(*index) = (TOKEN_LINE_SIZE_MAX - 1U);}
-	
+	if( overflow == true ) { (*index) = (TOKEN_LINE_SIZE_MAX - 1U); }
+
 	return overflow;
 }
 
@@ -54,20 +54,23 @@ static bool incIndexTestOverflow(int *index)
  */
 tokenizer_err_t tokenizer(tokenizer_t *tok)
 {
-	int index=0;
+	int index = 0;
 	tokenizer_err_t tokenizer_status = TOK_ERR_NOERR;
-	
+
 	// Start reading the line to extract tokens
 	tokenizerFree(tok);
 
-	while(	(tok->line[index] != '\n') && 
-			(tok->line[index] != 0) )
+	while( (tok->line[index] != '\n') && (tok->line[index] != 0) )
 	{
 		// Skip leading spaces and tabs
-		while( (tok->line[index] == ' ') || (tok->line[index] == '\t') ) 
-		{ 
-			bool status = incIndexTestOverflow(&index); 
-			if(status == true){tokenizer_status = TOK_ERR_OF; goto exit;}
+		while( (tok->line[index] == ' ') || (tok->line[index] == '\t') )
+		{
+			bool status = incIndexTestOverflow(&index);
+			if( status == true )
+			{
+				tokenizer_status = TOK_ERR_OF;
+				goto exit;
+			}
 		}
 
 		if( (tok->line[index] == '\n') || (tok->line[index] == 0) ) { break; }
@@ -81,17 +84,25 @@ tokenizer_err_t tokenizer(tokenizer_t *tok)
 		{
 			cut_character = '"';
 			quoted_string = true;
-			bool status = incIndexTestOverflow(&index); 
-			if(status == true){tokenizer_status = TOK_ERR_OF; goto exit;}			
+			bool status = incIndexTestOverflow(&index);
+			if( status == true )
+			{
+				tokenizer_status = TOK_ERR_OF;
+				goto exit;
+			}
 		}
 
 		// read charters
-		while( 	(tok->line[index] != cut_character) && 
-				(quoted_string || (tok->line[index] != '\t')) &&
-				(tok->line[index] != '\n') && (tok->line[index] != 0) )
+		while( (tok->line[index] != cut_character) &&
+			   (quoted_string || (tok->line[index] != '\t')) && (tok->line[index] != '\n') &&
+			   (tok->line[index] != 0) )
 		{
-			bool status = incIndexTestOverflow(&index); 
-			if(status == true){tokenizer_status = TOK_ERR_OF; goto exit;}
+			bool status = incIndexTestOverflow(&index);
+			if( status == true )
+			{
+				tokenizer_status = TOK_ERR_OF;
+				goto exit;
+			}
 		}
 
 		// quoted token handle
@@ -101,10 +112,14 @@ tokenizer_err_t tokenizer(tokenizer_t *tok)
 			goto exit;
 		}
 
-		if( tok->line[index] == '"' ) 
-		{ 
-			bool status = incIndexTestOverflow(&index); 
-			if(status == true){tokenizer_status = TOK_ERR_OF; goto exit;}
+		if( tok->line[index] == '"' )
+		{
+			bool status = incIndexTestOverflow(&index);
+			if( status == true )
+			{
+				tokenizer_status = TOK_ERR_OF;
+				goto exit;
+			}
 		}
 
 		// realloc tokens table
@@ -112,22 +127,26 @@ tokenizer_err_t tokenizer(tokenizer_t *tok)
 		if( tokens == NULL )
 		{
 			tokenizer_status = TOK_ERR_ALLOC;
-			goto exit;	
+			goto exit;
 		}
 		tok->tokens = tokens;
 		tok->tokens[tok->count] = one_token;
 
 		// close current token
 		tok->line[index] = 0;
-		bool status = incIndexTestOverflow(&index); 
-		if(status == true){tokenizer_status = TOK_ERR_OF; goto exit;}
+		bool status = incIndexTestOverflow(&index);
+		if( status == true )
+		{
+			tokenizer_status = TOK_ERR_OF;
+			goto exit;
+		}
 
 		tok->count++;
 	}
 	tokenizer_status = TOK_ERR_NOERR;
 
 exit:
-	if(tokenizer_status != TOK_ERR_NOERR){tokenizerFree(tok);}
+	if( tokenizer_status != TOK_ERR_NOERR ) { tokenizerFree(tok); }
 	return tokenizer_status;
 }
 
@@ -135,10 +154,14 @@ const char *tokenizerErrorMessage(tokenizer_err_t error)
 {
 	switch( error )
 	{
-		case TOK_ERR_OF: return "token line overflow";
-		case TOK_ERR_STRING: return "unterminated string";
-		case TOK_ERR_ALLOC: return "token allocation failed";
-		case TOK_ERR_NOERR: return "no error";
+		case TOK_ERR_OF:
+			return "token line overflow";
+		case TOK_ERR_STRING:
+			return "unterminated string";
+		case TOK_ERR_ALLOC:
+			return "token allocation failed";
+		case TOK_ERR_NOERR:
+			return "no error";
 	}
 	return "unknown tokenizer error";
 }
@@ -146,7 +169,7 @@ const char *tokenizerErrorMessage(tokenizer_err_t error)
 void tokenizerFree(tokenizer_t *tok)
 {
 	assert(tok != NULL);
-	
+
 	free(tok->tokens);
 	tok->tokens = NULL;
 	tok->count = 0;
