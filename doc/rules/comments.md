@@ -70,9 +70,7 @@ GPIO_PIN_MODE_OUTPUT_PP, // push-pull mode
 
 ### Function comments
 
-Use BSD-style comments for important functions when they add information or improve
-readability. Short functions usually need no descriptive comment when their names and code
-are clear. Longer functions may need comments to mark their main steps.
+Use BSD-style comments for important functions; the goal is twofold: to provide information and to make the code more readable. Short functions of 10-20 lines will likely not require descriptive comments if the function and variable names are self-documenting and contains some inline comments. Functions longer than a page will require comments, if only to break up the monotony of the code. Longer functions may need comments to mark their main steps.
 
 Use function comments to explain:
 
@@ -83,7 +81,9 @@ Use function comments to explain:
 
 ```c
 /*
- * Token pointers refer to the input line, which this function modifies.
+ * All major routines should have a comment briefly describing what
+ * they do.  The comment before the "main" routine should describe
+ * what the program does.
  */
 ```
 
@@ -135,8 +135,7 @@ Typical groups include:
 
 - `Constants`
 - `Private types`
-- `Private variables`
-- `Private function prototypes`
+- `Private variables / functions`
 - `Macros`
 - `Types`
 - `Driver lifecycle / operations`
