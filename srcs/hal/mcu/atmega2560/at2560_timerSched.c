@@ -211,14 +211,14 @@ static hal_driver_state_t hal_timerSchedStop(void)
  */
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	asm volatile(AVR8_CONTEXT_SAVE);
-	asm volatile(TIMER_SCHED_STOP);
-
-	asm volatile(TM_SCHED_CALLBACK);
-
-	asm volatile(TIMER_SCHED_START);
-	asm volatile(AVR8_CONTEXT_RESTORE);
-	asm volatile("reti \n\t");
+	asm volatile(
+		AVR8_CONTEXT_SAVE
+		TIMER_SCHED_STOP
+		TM_SCHED_CALLBACK
+		TIMER_SCHED_START
+		AVR8_CONTEXT_RESTORE
+		"reti \n\t"
+		);
 }
 
 /* -----------------------------------------------
