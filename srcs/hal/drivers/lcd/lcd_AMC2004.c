@@ -42,11 +42,20 @@ static err_codes_t lcd_last_error = ERR_NO_ERROR;
  * Constants
  * ---------------------------------------------*/
 
-#define LCDAMC2004_I2C_ADDR 0x3C // AiP31068L I2C address (Write mode)
-#define LCDAMC2004_CMD 0x80 // Co=1 RS = 0, Write Command
-#define LCDAMC2004_DATA 0x40 // Co=0 RS = 1, Write Data series
-#define LCDAMC2004_RAW 4
-#define LCDAMC2004_COL 20
+#define LCDAMC2004_I2C_ADDR 0x3CU // AiP31068L I2C address (Write mode)
+#define LCDAMC2004_CMD 0x80U // Co=1 RS = 0, Write Command
+#define LCDAMC2004_DATA 0x40U // Co=0 RS = 1, Write Data series
+#define LCDAMC2004_RAW 4U
+#define LCDAMC2004_COL 20U
+
+#define LCDAMC2004_DELAY_POWERUP_ms 50U
+#define LCDAMC2004_DELAY_CMDPROCESS_us 110U
+#define LCDAMC2004_DELAY_CLEAR_ms 11U
+
+#define LCDAMC2004_CMD_SETUP 0x38U 	// Function Set: 8-bit mode, 2 lines, 5x8 dots
+#define LCDAMC2004_CMD_DISPLAYMODE 0x0CU // Display ON, Cursor OFF, Blink OFF
+#define LCDAMC2004_CMD_CLEAR 0x01U 	// Clear Display
+#define LCDAMC2004_CMD_ENTRYMODE 0x06U 	// Entry Mode: Cursor moves right, no shift	
 
 /* =============================================================================
  * Implementation - Functions
@@ -103,20 +112,19 @@ static hal_driver_state_t hal_lcdInit(void)
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
 
-	_delay_ms(50); // Wait for LCD to power up
+	_delay_ms(LCDAMC2004_DELAY_POWERUP_ms); // Wait for LCD to power up
 
-	if( lcdAMC2004SendCommand(0x38) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	// Function Set: 8-bit mode, 2 lines, 5x8 dots
-	_delay_us(110);
-	if( lcdAMC2004SendCommand(0x0C) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	// Display ON, Cursor OFF, Blink OFF
-	_delay_us(110);
-	if( lcdAMC2004SendCommand(0x01) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	// Clear Display
-	_delay_ms(11);
-	if( lcdAMC2004SendCommand(0x06) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	// Entry Mode: Cursor moves right, no shift
-	_delay_us(110);
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_SETUP) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	_delay_us(LCDAMC2004_DELAY_CMDPROCESS_us);
+
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_DISPLAYMODE) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	_delay_us(LCDAMC2004_DELAY_CMDPROCESS_us);
+	
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_CLEAR) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	_delay_ms(LCDAMC2004_DELAY_CLEAR_ms);
+
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_ENTRYMODE) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	_delay_us(LCDAMC2004_DELAY_CMDPROCESS_us);
 
 	TM_SETBIT(lcd_status, DRV_BIT_INIT);
 	lcd_last_error = ERR_NO_ERROR;
