@@ -117,10 +117,13 @@ static hal_driver_state_t hal_timerSchedInit(void)
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_DEAD);
 	}
-	// Set up timer1 interrupt for scheduler
-	TM_SETBIT(TCCR1B, WGM12); // CTC mode
+	// Configure CTC mode while the clock is stopped, then load TOP from a known count.
+	TCCR1A = 0;
+	TM_WRITEBIT(TCCR1B, WGM12);
+	TCNT1 = 0;
 	OCR1A = TIMER1_OVERFLOW_COUNT;
-	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
+	TM_CLEARBIT(TIMSK1, OCIE1A);
+	TM_WRITEBIT(TIFR1, OCF1A);
 
 	TM_SETBIT(timer_sched_status, DRV_BIT_INIT);
 	timer_sched_last_error = ERR_NO_ERROR;
@@ -147,6 +150,10 @@ static hal_driver_state_t hal_timerSchedStart(void)
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
+	// Clear a stale compare before enabling the interrupt and the divide-by-8 clock.
+	TCNT1 = 0;
+	TM_WRITEBIT(TIFR1, OCF1A);
+	TM_SETBIT(TIMSK1, OCIE1A);
 	asm volatile(TIMER_SCHED_START);
 	TM_SETBIT(timer_sched_status, DRV_BIT_START);
 	return DRV_STATE_RUNNING;
@@ -158,7 +165,7 @@ static hal_driver_state_t hal_timerSchedStart(void)
 	"sts  %0, r24\n\t"                                \
 	"sts %2,r1 \n\t"                                  \
 	"sts %3,r1 \n\t" : : "M"(_SFR_MEM_ADDR(TCCR1B)),  \
-						 "n"((uint8_t)~(1u << CS11)), \
+						 "n"((uint8_t)~((1u << CS12) | (1u << CS11) | (1u << CS10))), \
 						 "M"(_SFR_MEM_ADDR(TCNT1H)),  \
 						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
 		: "r24"
@@ -166,6 +173,8 @@ static hal_driver_state_t hal_timerSchedStart(void)
 static hal_driver_state_t hal_timerSchedStop(void)
 {
 	asm volatile(TIMER_SCHED_STOP);
+	TM_CLEARBIT(TIMSK1, OCIE1A);
+	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_CLEARBIT(timer_sched_status, DRV_BIT_START);
 	return hal_timerSchedGetStatus();
 }
