@@ -245,6 +245,7 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 				continue;
 			}
 
+			// Apply the matched value and count only options whose data is valid.
 			option_found = true;
 			if( (*module_options[option].func)(command->tok->tokens[token + 1], &context) ==
 				ADD_MODULE_OK )
@@ -263,6 +264,7 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 			break;
 		}
 
+		// Continue through the remaining pairs to report all unknown options.
 		if( option_found == false )
 		{
 			AUTOCODE_MSG_ERROR("unknown option [%s:%i] %s",
@@ -327,6 +329,7 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 
 	AUTOCODE_MSG_INFO("found module : %s", name);
 	module_type_t *module_list = &command->data_base->modules_type[module->type];
+	// Names must be unique within the shared driver or thread list.
 	for( int i = 0; i < module_list->modules_count; i++ )
 	{
 		if( strcmp(module_list->modules[i].name, name) == 0 )
@@ -346,6 +349,7 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 		return;
 	}
 
+	// Publish the record only after name and capacity checks have passed.
 	snprintf(
 		module_list->modules[index].name, sizeof(module_list->modules[index].name), "%s", name);
 	module_list->modules[index].status = module->status;

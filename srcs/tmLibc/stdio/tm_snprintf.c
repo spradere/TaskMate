@@ -120,6 +120,10 @@ static void tm_putChar(char ch)
 	}
 }
 
+/*
+ * Format through shared static state. Calls must not overlap, including calls from an ISR
+ * or another thread; a null destination sends bytes to the console.
+ */
 int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
 {
 
@@ -134,6 +138,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 
 	while( format_c )
 	{
+		// Consume a conversion marker and its optional one-digit zero width.
 		if( format_c == '%' )
 		{
 			format_c = (char)sc_stringGetByte(&format, format_index++);
@@ -146,6 +151,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 				format_c = (char)sc_stringGetByte(&format, format_index++);
 			}
 
+			// Each supported conversion emits through the same character sink.
 			switch( format_c )
 			{
 
@@ -169,6 +175,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					break;
 				}
 
+				// Numeric conversions share base conversion and padding.
 				case 'u':
 				case 'x':
 				case 'b':
@@ -210,6 +217,7 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 
 exit:
 
+	// Leave a bounded string terminated even after an unsupported width.
 	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0); } // close string
 	return tm_snprintf_buffer.index;
 }

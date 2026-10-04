@@ -103,9 +103,14 @@ static void consoleDrawFrames(void)
 	doupdate();
 }
 
+/*
+ * Set up the three terminal views and register shutdown after all windows are ready.
+ * A terminal smaller than the fixed layout is rejected.
+ */
 bool pc_consoleInit(void)
 {
 	if( console_started ) { return true; }
+	// Check terminal dimensions before allocating the three view windows.
 	(void)setlocale(LC_ALL, "");
 	if( initscr() == 0 ) { return false; }
 
@@ -118,6 +123,7 @@ bool pc_consoleInit(void)
 		return false;
 	}
 
+	// Allocate frames first, then the inner windows owned by those frames.
 	const int output_width = columns - PC_CONSOLE_GPIO_WIDTH;
 	const int output_height = rows - PC_CONSOLE_INPUT_HEIGHT;
 	output_frame = newwin(output_height, output_width, 0, 0);
@@ -140,6 +146,7 @@ bool pc_consoleInit(void)
 		return false;
 	}
 
+	// Configure terminal input before enabling nonblocking polling.
 	if( (cbreak() == ERR) || (noecho() == ERR) )
 	{
 		consoleDeleteWindows();
@@ -151,6 +158,7 @@ bool pc_consoleInit(void)
 	scrollok(output_console, true);
 	(void)curs_set(1);
 
+	// Colour is optional; the LED view remains usable without it.
 	if( has_colors() )
 	{
 		start_color();
@@ -160,6 +168,7 @@ bool pc_consoleInit(void)
 		console_colours = true;
 	}
 
+	// Register terminal cleanup only after initialization can be completed.
 	input_edit_length = 0;
 	input_ready_length = 0;
 	input_ready_index = 0;
@@ -200,6 +209,10 @@ static void consoleInputRender(void)
 	wrefresh(input_console);
 }
 
+/*
+ * Keep one completed input line until its bytes have been consumed. New key presses remain
+ * in ncurses while that line is pending.
+ */
 void pc_consolePollInput(void)
 {
 	if( !console_started || (input_ready_index < input_ready_length) ) { return; }
@@ -208,6 +221,7 @@ void pc_consolePollInput(void)
 	while( (key = wgetch(input_console)) != ERR )
 	{
 		if( key == KEY_F(10) ) { hal_halt(); }
+		// A submitted line becomes immutable until USART has read every byte.
 		if( (key == '\n') || (key == '\r') || (key == KEY_ENTER) )
 		{
 			for( uint8_t i = 0; i < input_edit_length; i++ ) { input_ready[i] = input_edit[i]; }
@@ -217,12 +231,14 @@ void pc_consolePollInput(void)
 			consoleInputRender();
 			return;
 		}
+		// Editing affects only the line still visible in the input window.
 		if( (key == KEY_BACKSPACE) || (key == 0x7f) || (key == '\b') )
 		{
 			if( input_edit_length > 0 ) { input_edit_length--; }
 			consoleInputRender();
 			continue;
 		}
+		// Reserve one byte so the edit buffer never reaches its full capacity.
 		if( (key >= 0x20) && (key <= 0x7e) && (input_edit_length < (PC_CONSOLE_INPUT_SIZE - 1u)) )
 		{
 			input_edit[input_edit_length++] = (uint8_t)key;

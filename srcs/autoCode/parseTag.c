@@ -188,6 +188,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
 			!(strcmp(tok.tokens[1], "[autoCode_tag]")) )
 		{
+			// A start tag needs one name and cannot nest inside another region.
 			if( tok.count != 3 )
 			{
 				AUTOCODE_MSG_ERROR(
@@ -224,6 +225,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 
 			file_t file_generated;
 			fileInit(&file_generated);
+			// Stage each fragment separately from its tagged source file.
 			if( fileMakeTmp(generated_file_name, &file_generated) != 0 )
 			{
 				AUTOCODE_MSG_ERROR("creating temporary file for <%s>", generated_file_name);
@@ -242,6 +244,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 
 			tag_section = 1;
 
+			// Finish the writer's stream before accepting the generated tag.
 			int err = tagCmdDispatch(tok.tokens[2], &context);
 			if( fileClose(&file_generated) != FILE_UTILITY_OK )
 			{
@@ -261,6 +264,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 			}
 		}
 
+		// Closing a region resumes copying the source text unchanged.
 		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
 			!(strcmp(tok.tokens[1], "[/tag]")) )
 		{
@@ -277,6 +281,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	}
 	tokenizerFree(&tok);
 
+	// Report an unterminated region, then close both source and staged output.
 	if( tag_section == 1 )
 	{
 		AUTOCODE_MSG_ERROR("missing end tag [/tag] [%s:%i]", file_src.name, file_line_number);

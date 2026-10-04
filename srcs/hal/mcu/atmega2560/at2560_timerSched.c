@@ -196,6 +196,10 @@ static hal_driver_state_t hal_timerSchedStop(void)
 		  "i"(&scheduler_context)                                \
 		: "r18", "r19", "r24", "r25", "r30", "r31", "memory"
 
+/*
+ * Naked ISR: save the interrupted context before any C code runs, switch stacks through
+ * the scheduler callback, then restore registers and return to the selected thread.
+ */
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
 	asm volatile(AVR8_CONTEXT_SAVE);
@@ -223,6 +227,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			return hal_timerSchedStart();
 		case DRV_CTRL_STOP:
 			return hal_timerSchedStop();
+		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
 			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
@@ -236,6 +241,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			data->run_level = timer_sched_status & RL_LEVEL_MASK;
 			return hal_timerSchedGetStatus();
+		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
@@ -260,6 +266,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			}
 			data->bit_value = TM_GETBIT(timer_sched_status, data->status_bit) != 0;
 			return hal_timerSchedGetStatus();
+		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_timerSchedGetStatus();
 		case DRV_CTRL_GETLASTERROR:

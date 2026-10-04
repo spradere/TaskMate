@@ -95,6 +95,10 @@ void tm_schedulerCoop(void) { hal_timerSchedLoad(); }
  * Round-robin policy
  * ---------------------------------------------*/
 
+/*
+ * Called by the scheduling timer with a saved context. Check both stack canaries before
+ * returning the next runnable thread's context to the HAL.
+ */
 static hal_context_t *tm_schedulerRR(hal_context_t *context)
 {
 	mod_thread_item_t *thread;

@@ -262,6 +262,7 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			return hal_i2cStart();
 		case DRV_CTRL_STOP:
 			return hal_i2cStop();
+		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
 			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
@@ -275,6 +276,7 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
 			data->run_level = i2c_status & RL_LEVEL_MASK;
 			return hal_i2cGetStatus();
+		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == 0 ) { return i2cSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
@@ -299,6 +301,7 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			}
 			data->bit_value = TM_GETBIT(i2c_status, data->status_bit) != 0;
 			return hal_i2cGetStatus();
+		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_i2cGetStatus();
 		case DRV_CTRL_GETLASTERROR:

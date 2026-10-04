@@ -170,12 +170,14 @@ hal_driver_state_t hal_rtcWrite(const hal_rtc_time_t *time)
 	hal_driver_state_t state = rtcRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
 	if( time == 0 ) { return rtcSetError(ERR_NULL_POINTER); }
+	// Reject invalid calendar fields before writing any device register.
 	if( (time->seconds > 59) || (time->minutes > 59) || (time->hours > 23) || (time->weekday < 1) ||
 		(time->weekday > 7) || (time->day < 1) || (time->day > 31) || (time->month < 1) ||
 		(time->month > 12) || (time->year > 99) )
 	{
 		return rtcSetError(ERR_HAL_RTC_TIME_OUT_OF_RANGE);
 	}
+	// Encode the seven RTC registers in the device's BCD format.
 	buf[0] = binToBcd(time->seconds & 0x7F); // bit 7 = 0, clock ON
 	buf[1] = binToBcd(time->minutes);
 	buf[2] = binToBcd(time->hours) & 0x3F; // mode 24h
@@ -184,6 +186,7 @@ hal_driver_state_t hal_rtcWrite(const hal_rtc_time_t *time)
 	buf[5] = binToBcd(time->month & 0x1F);
 	buf[6] = binToBcd(time->year);
 
+	// Select register zero, then write the complete time record in order.
 	if( hal_i2cCommStart(ZS042_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
 	{
 		return rtcSetError(ERR_HAL_DRIVER_DEPENDENCY);
@@ -215,6 +218,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			return hal_rtcStart();
 		case DRV_CTRL_STOP:
 			return hal_rtcStop();
+		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
 			if( data == 0 ) { return rtcSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
@@ -228,6 +232,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			if( data == 0 ) { return rtcSetError(ERR_NULL_POINTER); }
 			data->run_level = rtc_status & RL_LEVEL_MASK;
 			return hal_rtcGetStatus();
+		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == 0 ) { return rtcSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
@@ -252,6 +257,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			}
 			data->bit_value = TM_GETBIT(rtc_status, data->status_bit) != 0;
 			return hal_rtcGetStatus();
+		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_rtcGetStatus();
 		case DRV_CTRL_GETLASTERROR:
