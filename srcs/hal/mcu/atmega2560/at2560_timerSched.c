@@ -18,6 +18,7 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <stddef.h>
 #include <util/atomic.h>
 
 #include "hal/arch/avr8/avr8_context.h"
@@ -130,13 +131,19 @@ static hal_driver_state_t hal_timerSchedInit(void)
 	return DRV_STATE_INITIALIZED;
 }
 
+// contractual fixing of magic number
+_Static_assert(CS10 == 0, "Unexpected CS10 position");
+_Static_assert(CS11 == 1, "Unexpected CS11 position");
+_Static_assert(CS12 == 2, "Unexpected CS12 position");
+_Static_assert(_SFR_MEM_ADDR(TCCR1B) == 0x81, "Unexpected TCCR1B address");
+_Static_assert(_SFR_MEM_ADDR(TCNT1H) == 0x85, "Unexpected TCCR1B address");
+_Static_assert(_SFR_MEM_ADDR(TCNT1L) == 0x84, "Unexpected TCCR1B address");
+
 // Start timer1 by enabling prescaler=8
-#define TIMER_SCHED_START                              \
-	"lds r24, %0\n\t"                                  \
-	"ori r24, %1\n\t"                                  \
-	"sts  %0, r24\n\t" : : "M"(_SFR_MEM_ADDR(TCCR1B)), \
-						   "n"((uint8_t)(1u << CS11))  \
-		: "r24"
+#define TIMER_SCHED_START      \
+	"lds r24, 0x81\n\t"      \
+	"ori r24, 0x02\n\t" 	\
+	"sts  0x81, r24\n\t"	\
 
 static hal_driver_state_t hal_timerSchedStart(void)
 {
@@ -159,16 +166,15 @@ static hal_driver_state_t hal_timerSchedStart(void)
 	return DRV_STATE_RUNNING;
 }
 
-#define TIMER_SCHED_STOP                              \
-	"lds r24, %0\n\t"                                 \
-	"andi r24, %1\n\t"                                \
-	"sts  %0, r24\n\t"                                \
-	"sts %2,r1 \n\t"                                  \
-	"sts %3,r1 \n\t" : : "M"(_SFR_MEM_ADDR(TCCR1B)),  \
-						 "n"((uint8_t)~((1u << CS12) | (1u << CS11) | (1u << CS10))), \
-						 "M"(_SFR_MEM_ADDR(TCNT1H)),  \
-						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
-		: "r24"
+// stop timer by setting CS1x = 0
+
+#define TIMER_SCHED_STOP                             \
+	"clr r1 \n\t"                                    \
+	"lds r24, 0x81\n\t"                            \
+	"andi r24, 0xF8\n\t" 							\
+	"sts  0x81, r24\n\t"                           \
+	"sts 0x85,r1 \n\t"                             \
+	"sts 0x84,r1 \n\t"							 \
 
 static hal_driver_state_t hal_timerSchedStop(void)
 {
@@ -183,27 +189,27 @@ static hal_driver_state_t hal_timerSchedStop(void)
  * Context-switch interrupt
  * ---------------------------------------------*/
 
-#define TM_SCHED_CALLBACK                                        \
-	"in r18, 0x3d \n\t"                                          \
-	"in r19, 0x3e \n\t"                                          \
-	"sts %0, r18 \n\t"                                           \
-	"sts %0+1, r19 \n\t"                                         \
-	"ldi r24, lo8(%2) \n\t"                                      \
-	"ldi r25, hi8(%2) \n\t"                                      \
-	"lds r30, %1 \n\t"                                           \
-	"lds r31, %1+1 \n\t"                                         \
-	"sbiw r30, 0x00 \n\t"                                        \
-	"breq 1f \n\t"                                               \
-	"eicall \n\t"                                                \
-	"1: \n\t"                                                    \
-	"movw r30, r24 \n\t"                                         \
-	"ld r18, Z+ \n\t"                                            \
-	"ld r19, Z \n\t"                                             \
-	"out 0x3e, r19 \n\t"                                         \
-	"out 0x3d, r18 \n\t" : "=m"(scheduler_context.stack_pointer) \
-		: "m"(sched_callback),                                   \
-		  "i"(&scheduler_context)                                \
-		: "r18", "r19", "r24", "r25", "r30", "r31", "memory"
+_Static_assert(offsetof(hal_context_t, stack_pointer) == 0,
+			   "stack_pointer must be first in scheduler_context_t");
+
+static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
+{
+	if( sched_callback != NULL ) { return sched_callback(&scheduler_context); }
+
+	return &scheduler_context;
+}
+
+#define TM_SCHED_CALLBACK               \
+	"in r18, 0x3d \n\t"                 \
+	"in r19, 0x3e \n\t"                 \
+	"sts scheduler_context, r18 \n\t"   \
+	"sts scheduler_context+1, r19 \n\t" \
+	"call schedWrapper\n\t"             \
+	"movw r30, r24 \n\t"                \
+	"ld r18, Z+ \n\t"                   \
+	"ld r19, Z \n\t"                    \
+	"out 0x3e, r19 \n\t"                \
+	"out 0x3d, r18 \n\t"				\
 
 /*
  * Naked ISR: save the interrupted context before any C code runs, switch stacks through
@@ -212,13 +218,8 @@ static hal_driver_state_t hal_timerSchedStop(void)
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
 	asm volatile(
-		AVR8_CONTEXT_SAVE
-		TIMER_SCHED_STOP
-		TM_SCHED_CALLBACK
-		TIMER_SCHED_START
-		AVR8_CONTEXT_RESTORE
-		"reti \n\t"
-		);
+		AVR8_CONTEXT_SAVE TIMER_SCHED_STOP TM_SCHED_CALLBACK TIMER_SCHED_START AVR8_CONTEXT_RESTORE
+		"reti \n\t");
 }
 
 /* -----------------------------------------------

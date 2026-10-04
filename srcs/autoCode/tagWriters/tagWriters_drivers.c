@@ -15,9 +15,9 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "tagWriters.h"
-
 #include <ctype.h>
+
+#include "tagWriters.h"
 
 /* =============================================================================
  * Implementation - Functions
