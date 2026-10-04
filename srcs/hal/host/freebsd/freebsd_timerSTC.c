@@ -150,6 +150,7 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			return timerSTCStart();
 		case DRV_CTRL_STOP:
 			return timerSTCStop();
+		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
 			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
@@ -163,6 +164,7 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			data->run_level = timer_stc_status & RL_LEVEL_MASK;
 			return timerSTCGetStatus();
+		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 		case DRV_CTRL_CLEARBIT:
 		case DRV_CTRL_GETBIT:
@@ -178,6 +180,7 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 				data->bit_value = TM_GETBIT(timer_stc_status, data->status_bit) != 0;
 			}
 			return timerSTCGetStatus();
+		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return timerSTCGetStatus();
 		case DRV_CTRL_GETLASTERROR:

@@ -79,8 +79,13 @@ static const scli_command_definition_t *commandDefinitionFind(const char *name)
 	return NULL;
 }
 
+/*
+ * Accept only commands supported by the generated dispatch table and present in the source tree.
+ * The database changes only after all checks pass.
+ */
 void initrcAddScliCommand(const initrc_command_t *command)
 {
+	// Validate the fixed command shape before indexing its tokens.
 	if( command->tok->count != 4 )
 	{
 		AUTOCODE_MSG_ERROR("addScliCommand token count [%s:%i] is %i, should be 4",
@@ -98,6 +103,7 @@ void initrcAddScliCommand(const initrc_command_t *command)
 		return;
 	}
 
+	// A generated call requires a known name, its header, and its declared source.
 	const char *name = command->tok->tokens[1];
 	if( strlen(name) >= MOD_NAME_SIZE_MAX - 1 )
 	{
@@ -156,6 +162,7 @@ void initrcAddScliCommand(const initrc_command_t *command)
 		return;
 	}
 
+	// Store the validated name and matching function as one new table entry.
 	const uint8_t index = command->data_base->scli.count;
 	snprintf(command->data_base->scli.commands[index].name,
 			 sizeof(command->data_base->scli.commands[index].name),

@@ -40,6 +40,10 @@ the block it explains. For example, `tokenizer.c` separates skipping whitespace,
 quoted tokens, growing the token table, and terminating a token. Describe the purpose of a
 step, not each statement inside it.
 
+In long functions, aim for one inline comment per 10 lines of code. A gap of 5 to 20 lines
+between comments is a useful range when the code has distinct operations. Follow the
+logical blocks rather than a fixed quota; do not add comments that only restate the code.
+
 Explain data ownership and side effects when they are easy to miss. In `tokenizer.c`, tokens
 point into the input line, and the parser terminates each token in that line. A short comment
 at that point helps readers understand why the line is modified.
@@ -56,7 +60,7 @@ Use short section comments for groups of declarations when they improve scanning
  */
 ```
 
-Use inline comments sparingly for compact hardware meanings or guard names. Put a comment
+Use end-of-line comments sparingly for compact hardware meanings or guard names. Put a comment
 before a block when it explains the whole block:
 
 ```c

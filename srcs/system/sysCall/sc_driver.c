@@ -225,6 +225,7 @@ err_codes_t sc_i2cScan(void)
 	hal_driver_control_data_t control_data;
 	bool address_buffer_full = false;
 
+	// Gather the complete bus scan before changing any declared driver state.
 	i2c_scan_address_count = 0;
 	while( hal_i2cScan(&address) == DRV_STATE_RUNNING )
 	{
@@ -236,10 +237,12 @@ err_codes_t sc_i2cScan(void)
 		else { address_buffer_full = true; }
 	}
 
+	// An incomplete scan or a full address buffer leaves existing states untouched.
 	hal_i2cControl(DRV_CTRL_GETLASTERROR, &control_data);
 	if( control_data.error != ERR_HAL_I2C_SCAN_COMPLETE ) { return control_data.error; }
 	if( address_buffer_full ) { return ERR_I2C_SCAN_ADDRESS_BUFFER_FULL; }
 
+	// Mark declared devices absent from the bus as dead.
 	control_data.status_bit = DRV_BIT_DEAD;
 	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
 	{
@@ -250,6 +253,7 @@ err_codes_t sc_i2cScan(void)
 		}
 	}
 
+	// Clear stale state when a previously dead device is present again.
 	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);

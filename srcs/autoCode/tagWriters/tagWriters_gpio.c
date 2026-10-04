@@ -41,6 +41,7 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	tokenizer_t tok = {0};
 	int line = 0;
 	file_get_line_result_t line_result;
+	// Emit the first token of each signal line and report any extra tokens.
 	while( (line_result = fileGetLine(&file_signals, tok.line, sizeof(tok.line))) ==
 		   FILE_GET_LINE_SUCCESS )
 	{
@@ -71,6 +72,7 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	fprintf(context->file, "\tGPIO_SIGNAL_COUNT\n");
 	fprintf(context->file, "} gpio_signal_t;\n");
 
+	// Release parser storage and report any failure to close the signal source.
 	tokenizerFree(&tok);
 	if( fileClose(&file_signals) != FILE_UTILITY_OK )
 	{

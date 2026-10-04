@@ -185,6 +185,10 @@ static int optionCmdDispatch(const char *cmd, const char *value, options_list_t 
 	return -1;
 }
 
+/*
+ * Read the configuration and report all line and option-count errors in one pass.
+ * Fatal file errors return -1; diagnostics from parsed options use autoCode's error count.
+ */
 int options(const char *file_name, options_list_t *opt)
 {
 	// Count accepted values to detect both missing and repeated options.
@@ -207,6 +211,7 @@ int options(const char *file_name, options_list_t *opt)
 	while( (line_result = fileGetLine(&file, tok.line, sizeof(tok.line))) == FILE_GET_LINE_SUCCESS )
 	{
 		file_line_number++;
+		// Continue after a bad line to report later configuration errors together.
 		tokenizer_err_t token_error = tokenizer(&tok);
 		if( token_error != TOK_ERR_NOERR )
 		{
@@ -215,6 +220,7 @@ int options(const char *file_name, options_list_t *opt)
 			continue;
 		}
 
+		// Effective lines contain one option and one value.
 		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
 		{
 			if( tok.count == 2 )
@@ -242,6 +248,7 @@ int options(const char *file_name, options_list_t *opt)
 	{
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", file.name, file_line_number);
 	}
+	// Release token storage and close the list before checking option cardinality.
 	tokenizerFree(&tok);
 	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
 	if( fileClose(&file) != FILE_UTILITY_OK )

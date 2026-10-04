@@ -69,6 +69,10 @@ static unsigned int error_count_maximum = ERROR_COUNT_NORMAL_MODE;
  * Implementation - Functions
  * ===========================================================================*/
 
+/*
+ * Read the configured error, init.rc, and tag lists in order, then publish the generated
+ * fragments only after every stage has completed without recorded errors.
+ */
 int main(int argc, const char *argv[])
 {
 	tokenizer_t tok = {0};
@@ -111,6 +115,7 @@ int main(int argc, const char *argv[])
 
 		if( stage == AC_STAGE_TAGS ) { parseTagInit(); }
 
+		// Read every path in this stage's list before checking the accumulated errors.
 		int file_line_number = 0;
 		file_get_line_result_t line_result;
 		while( (line_result = fileGetLine(&list_file, tok.line, sizeof(tok.line))) ==
@@ -127,6 +132,7 @@ int main(int argc, const char *argv[])
 			
 			if( tok.count == 0 ) { continue; }
 			
+			// Each stage consumes the same list format but validates a different input.
 			if( (stage == AC_STAGE_ERRORS) &&
 				(globalError(tok.tokens[0], &errors_catalog) != 0) )
 			{
@@ -149,6 +155,7 @@ int main(int argc, const char *argv[])
 			AUTOCODE_MSG_ERROR("reading file <%s>", list_file.name);
 		}
 
+		// Finish this list before evaluating errors or moving to the next stage.
 		if( fileClose(&list_file) != FILE_UTILITY_OK )
 		{
 			if( stage == AC_STAGE_ERRORS ) { AUTOCODE_MSG_ERROR("closing error list file"); }

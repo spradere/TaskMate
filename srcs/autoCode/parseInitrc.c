@@ -77,6 +77,10 @@ static bool initrcVersionCommand(const initrc_command_t *command, const char *po
 	return initrcSetVersion(command);
 }
 
+/*
+ * Require the two version commands before any declaration. Parsing errors are recorded by
+ * autoCode; the return value reports file access failures.
+ */
 int parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path)
 {
 	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
@@ -102,6 +106,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		   FILE_GET_LINE_SUCCESS )
 	{
 		file_line_number++;
+		// Keep malformed version lines from shifting the required command positions.
 		tokenizer_err_t token_error = tokenizer(&tok);
 		if( token_error != TOK_ERR_NOERR )
 		{
@@ -154,6 +159,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 			version_invalid = true;
 			break;
 		}
+		// Only declarations reach normal dispatch after both version commands.
 		if( initrcCommandDispatch(&command) == false )
 		{
 			AUTOCODE_MSG_ERROR(
@@ -165,6 +171,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 	{
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", initrc_list.name, file_line_number);
 	}
+	// At EOF, distinguish missing version commands from malformed ones already reported.
 	if( (version_invalid == false) && (version_major_set == false) )
 	{
 		AUTOCODE_MSG_ERROR("missing setVersion major %i as first command of init.rc file <%s>",

@@ -64,6 +64,10 @@ void filePrintModified(void)
 	AUTOCODE_MSG_INFO("*******************************************************");
 }
 
+/*
+ * Publish staged files one at a time. A failure stops publication and removes remaining
+ * temporary files; earlier replacements are not rolled back.
+ */
 file_utility_err_t fileCmpReplaceAll(void)
 {
 	file_utility_err_t result = FILE_UTILITY_OK;
@@ -71,6 +75,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 	// Compare each staged file before replacing its destination.
 	for( size_t i = 0; i < file_tmp_source_count; i++ )
 	{
+		// The destination may be absent; the staged file must already exist.
 		file_t file_src;
 		fileInit(&file_src);
 		file_src.name = file_tmp_list[i].source_name;
@@ -95,6 +100,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		{
 			result = comparison;
 		}
+		// Close both streams before removing or renaming the staged path.
 		file_utility_err_t close_result = fileClose(&file_src);
 		if( result == FILE_UTILITY_OK ) { result = close_result; }
 		close_result = fileClose(&file_tmp);
@@ -142,6 +148,7 @@ static file_utility_err_t fileCompare(file_t *file_old, file_t *file_new)
 	bool same = true;
 	file_utility_err_t result = FILE_UTILITY_OK;
 
+	// Compare from the beginning even if a caller has already read either stream.
 	if( (file_old->stream != NULL) && (fseek(file_old->stream, 0L, SEEK_SET) != 0) )
 	{
 		result = FILE_UTILITY_SEEK;
@@ -160,6 +167,7 @@ static file_utility_err_t fileCompare(file_t *file_old, file_t *file_new)
 		goto exit;
 	}
 
+	// Both lines and EOF positions must match before the destination can be kept.
 	while( true )
 	{
 		file_utility_err_t old_result = fileGetLine(file_old, old, sizeof(old));
@@ -187,6 +195,10 @@ exit:
 	return result;
 }
 
+/*
+ * Reject truncated lines, including a final line that fills the buffer without a newline.
+ * The caller must distinguish EOF from a read error.
+ */
 file_utility_err_t fileGetLine(file_t *file, char *line, const size_t line_size_max)
 {
 	file_utility_err_t result = FILE_GET_LINE_SUCCESS;
@@ -197,6 +209,7 @@ file_utility_err_t fileGetLine(file_t *file, char *line, const size_t line_size_
 		goto exit;
 	}
 
+	// Keep normal EOF distinct from a stream error for list readers.
 	if( fgets(line, (int)line_size_max, file->stream) == NULL )
 	{
 		result = feof(file->stream) ? FILE_GET_LINE_EOF : FILE_GET_LINE_ERROR;
@@ -210,6 +223,7 @@ file_utility_err_t fileGetLine(file_t *file, char *line, const size_t line_size_
 		goto exit;
 	}
 
+	// A filled buffer cannot prove that the complete input line was read.
 	if( line_length >= line_size_max - 1 )
 	{
 		result = FILE_GET_LINE_ERROR;
@@ -339,6 +353,9 @@ static file_utility_err_t fileTmpCleanupAll(void)
 	return result;
 }
 
+/*
+ * Keep owned names until publication or process exit so staged files can be cleaned up.
+ */
 static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temporary_name)
 {
 	file_utility_err_t result = FILE_UTILITY_OK;
@@ -355,6 +372,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 		file_tmp_cleanup_registered = true;
 	}
 
+	// Own both names because the caller's path storage may not survive publication.
 	const size_t source_name_size = strlen(file_src_name) + 1;
 	source_name = malloc(source_name_size);
 	if( source_name == NULL )
@@ -369,6 +387,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 		goto exit;
 	}
 
+	// Append only after both names are ready, leaving the existing list intact on failure.
 	file_tmp_item_t *list = realloc(file_tmp_list, (file_tmp_source_count + 1) * sizeof(*list));
 	if( list == NULL )
 	{

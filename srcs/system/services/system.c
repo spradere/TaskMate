@@ -55,6 +55,7 @@ static bool systemRunLevelIsReady(uint8_t run_level);
 
 void system(void)
 {
+	// Finish staged startup before reporting system information.
 	sc_gpio_signalInit();
 	sc_threadSetInitialized();
 	systemStart();
@@ -82,6 +83,7 @@ void system(void)
 	sc_lcdWriteString(TM_STR_RAM(msg), 0, 0);
 #endif
 
+	// After startup, refresh the display when available and yield between updates.
 	while( 1 )
 	{
 #if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
@@ -109,6 +111,10 @@ void system(void)
  * System startup
  * ---------------------------------------------*/
 
+/*
+ * Advance each run level after a complete scheduling round confirms its drivers and
+ * threads are ready. Halt if readiness does not arrive within the fixed round limit.
+ */
 static void systemStart(void)
 {
 	uint8_t run_level = sc_runLevelGet();

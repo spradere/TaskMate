@@ -81,6 +81,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 				continue;
 			}
 
+			// Names must be unique across all catalogues already read.
 			for( int i = 0; i < error_index; i++ )
 			{
 				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
@@ -92,6 +93,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 			}
 			if( error_is_valid == false ) { continue; }
 
+			// Check fixed catalogue storage before copying either field.
 			const size_t name_length = strlen(tok.tokens[0]);
 			const size_t message_length = strlen(tok.tokens[1]);
 			if( (name_length >= sizeof(errors->catalog[error_index].name) - 1) ||
@@ -108,6 +110,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 
 			AUTOCODE_MSG_INFO("[%i] %s", error_index, tok.tokens[0]);
 
+			// Classify the level; FLOW entries carry no message in firmware.
 			if( strcmp(tok.tokens[2], "FLOW") == 0 )
 			{
 				errors->catalog[error_index].level = ERR_LEVEL_FLOW;
@@ -151,6 +154,7 @@ int globalError(const char *src_name, error_catalog_t *errors)
 		AUTOCODE_MSG_ERROR("reading file <%s> after line %i", file_src.name, file_src_line_number);
 	}
 
+	// Release per-file parser state even after a read error.
 	tokenizerFree(&tok);
 	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
 	if( fileClose(&file_src) != FILE_UTILITY_OK )

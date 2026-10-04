@@ -48,6 +48,10 @@ static bool incIndexTestOverflow(int *index)
 	return overflow;
 }
 
+/*
+ * Tokens point into tok->line. Separators are replaced with NUL bytes, so the input line
+ * is modified and token pointers remain valid only while that line is unchanged.
+ */
 tokenizer_err_t tokenizer(tokenizer_t *tok)
 {
 	int index=0;

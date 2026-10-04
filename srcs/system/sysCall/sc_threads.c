@@ -162,6 +162,10 @@ bool sc_threadRunLevelIsReady(uint8_t run_level)
  * Cooperative scheduling
  * ---------------------------------------------*/
 
+/*
+ * Request an early timer switch, then wait until the scheduler clears this thread's
+ * yielded bit when it is selected again.
+ */
 void sc_coopYield(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();

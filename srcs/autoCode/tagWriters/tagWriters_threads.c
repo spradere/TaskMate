@@ -69,11 +69,13 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 		fprintf(context->file, "\tmod->stack_size = %u;\n", mod->modules[i].stack_size);
 		fprintf(context->file, "\tmod_threadStackInit(mod);\n");
 
+		// Use the generated stack boundary when creating the entry context.
 		fprintf(context->file,
 				"\n\thal_threadContextInit(%s, &(mod->context), "
 				"&(mod->stack[mod->stack_size - MOD_STACK_CANARY_WORD_COUNT]));\n",
 				mod->modules[i].name);
 
+		// Initialize scheduler metadata only after the context has been created.
 		fprintf(context->file, "\tmod->software_time_counter = 0;\n");
 		fprintf(context->file, "\tmod->status = %i;\n", mod->modules[i].status);
 		fprintf(context->file,

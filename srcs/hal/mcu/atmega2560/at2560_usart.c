@@ -224,6 +224,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			return hal_usartStart();
 		case DRV_CTRL_STOP:
 			return hal_usartStop();
+		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
 			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
@@ -237,6 +238,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
 			data->run_level = usart_status & RL_LEVEL_MASK;
 			return hal_usartGetStatus();
+		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
@@ -261,6 +263,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			}
 			data->bit_value = TM_GETBIT(usart_status, data->status_bit) != 0;
 			return hal_usartGetStatus();
+		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_usartGetStatus();
 		case DRV_CTRL_GETLASTERROR:
