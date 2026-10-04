@@ -1,7 +1,7 @@
 # 🪶 TaskMate Coding Style Rules
 
 **This guide documents the style used in the TaskMate codebase. It complements the existing `.clang-format`, `.clang-tidy`, architecture rules, and prefix rules.**
- 
+
 ---
 
 ## Formatting
@@ -20,7 +20,7 @@ if( condition )
 
 - Keep the project spacing style around control statements:
   `if( condition )`, `for( ... )`, `while( ... )`.
-- Short simple bodies may stay on one line when this improves readability:
+- Short, simple bodies may stay on one line when this improves readability:
 
 ```c
 if( value == 0 ) { return ERR_NO_ERROR; }
@@ -41,7 +41,8 @@ mod_thread_item_t *thread;
 
 ## File Structure
 
-Start C, header, scripts, and Makefile fragments with the TaskMate BSD-2-Clause. Add a Doxygen file block after the license banner in C and header files:
+Start C files, headers, scripts, and Makefile fragments with the TaskMate BSD-2-Clause
+license banner. Add a Doxygen file comment after the banner in C and header files:
 
 ```
 /**
@@ -73,20 +74,21 @@ Start C, header, scripts, and Makefile fragments with the TaskMate BSD-2-Clause.
 Use the established TaskMate prefixes only when they describe a real boundary or subsystem. Follow `doc/rules/TaskMate_prefixes.md` and `doc/rules/make_prefixes.md`.
 
 - Public subsystem APIs use lower camel case after the prefix.
-- Types use snake case with a `_t` suffix.
-- Enum constants and preprocessor constants use uppercase snake case.
-- Variables uses descriptive snake case.
+- Types use `snake_case` with a `_t` suffix.
+- Enum constants and preprocessor constants use `UPPER_SNAKE_CASE`.
+- Variables use descriptive `snake_case`.
 
 ---
 
 ## C Design Rules
 
-**Specifics of embedded code:**
+**Embedded code:**
 
-- Mandatory usage of explicit fixed-width integer types from `<stdint.h>` for embedded data.
+- Use explicit fixed-width integer types from `<stdint.h>` for embedded data.
 - Use `bool` from `<stdbool.h>` for boolean state.
-- Keep hardware-specific code inside HAL architecture.
-- Keep portable contracts in `srcs/interfaces/`; they must not depend on HAL,sysCall, services, or tasks.
+- Keep hardware-specific code inside the HAL architecture.
+- Keep portable contracts in `srcs/interfaces/`; they must not depend on HAL, sysCall,
+  services, or tasks.
 - Tasks should use sysCall and service APIs, not raw HAL or MCU registers.
 - Keep module state private with `static` file-local storage unless it is part of an intentional public interface.
 - Prefer small focused functions over large mixed-responsibility functions.
@@ -98,7 +100,7 @@ Use the established TaskMate prefixes only when they describe a real boundary or
 
 ## Generated Code
 
-**Do not manually edit generated regions.** Generated regions are marked with autoCode tags :
+**Do not manually edit generated regions.** Generated regions are marked with autoCode tags:
 
 ```c
 // [autoCode_tag] name
@@ -117,3 +119,4 @@ Use the established TaskMate prefixes only when they describe a real boundary or
   noise to normal build output.
 - Use aligned, readable `printf` output for build summaries and diagnostics.
 - In AWK scripts, keep parser state explicit with named state variables and
+  clear state transitions.
