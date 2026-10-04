@@ -2,18 +2,13 @@
 
 ## Introduction
 
-TaskMate separates **portable system contracts** from **hardware-specific implementations**.
-To achieve this, the project defines a dedicated `interfaces/` directory containing **neutral interface
-definitions** that are shared across all architectures.
+TaskMate separates **portable system contracts** from **hardware-specific implementations**. To achieve this, the project defines a dedicated `interfaces/` directory containing **neutral interface definitions** that are shared across all architectures.
 
-These interfaces describe **what the system expects**, while the Hardware Abstraction Layer (HAL)
-implements **how the hardware fulfils those expectations**.
+These interfaces describe **what the system expects**, while the Hardware Abstraction Layer (HAL) implements **how the hardware fulfils those expectations**.
 
-This separation keeps the architecture clear, prevents dependency inversions, and improves portability
-when supporting new platforms.
+This separation keeps the architecture clear, prevents dependency inversions, and improves portability when supporting new platforms.
 
-Generic driver interface files use the `drv_<driver>.h` filename form. The following rules define how
-the `interfaces/` layer must be used.
+Generic driver interface files use the `drv_<driver>.h` filename form. The following rules define how the `interfaces/` layer must be used.
 
 ## Rule 1 - Interface independence
 
@@ -26,36 +21,28 @@ It may only include:
 
 Examples: `stdint.h`, `stdbool.h`, `tm_types.h`
 
-No dependency from `interfaces/` to HAL, sysCore, `sysCall`, `tmLibc`, services, or tasks is
-allowed.
+No dependency from `interfaces/` to HAL, sysCore, `sysCall`, `tmLibc`, services, or tasks is allowed.
 
 ## Rule 2 - HAL dependency direction
 
-The Hardware Abstraction Layer **may depend on** `interfaces/`, but must never depend on higher layers
- such as:
+The Hardware Abstraction Layer **may depend on** `interfaces/`, but must never depend on higher layers such as:
 
 - `sysCall/`
 - `services/`
 - `tasks/`
 
-The HAL implements the contracts defined in `interfaces/`, but it must remain completely unaware of
-how higher layers use those interfaces.
+The HAL implements the contracts defined in `interfaces/`, but it must remain completely unaware of how higher layers use those interfaces.
 
 ## Rule 3 - System layer usage
 
-HAL, sysCore, `sysCall`, `tmLibc`, and services may consume the neutral contracts permitted by
-`conf/arch_valid_matrix.md`. Tasks use service, `sysCall`, or `tmLibc` APIs rather than including
-`interfaces/` directly.
+HAL, sysCore, `sysCall`, `tmLibc`, and services may consume the neutral contracts permitted by `conf/arch_valid_matrix.md`. Tasks use service, `sysCall`, or `tmLibc` APIs rather than including `interfaces/` directly.
 
 `interfaces/` remains the only transversal layer.
 
 ## Rule 4 - Hardware-specific interfaces
 
-If an interface is specific to a particular architecture, MCU, or board, it **must not be** placed in
-`interfaces/`.
+If an interface is specific to a particular architecture, MCU, or board, it **must not be** placed in `interfaces/`.
 
-Hardware-specific definitions belong in the **HAL layer**, where they remain isolated from portable
-system contracts.
+Hardware-specific definitions belong in the **HAL layer**, where they remain isolated from portable system contracts.
 
-The `interfaces/` directory must only contain definitions that are meaningful across all supported
-platforms.
+The `interfaces/` directory must only contain definitions that are meaningful across all supported platforms.

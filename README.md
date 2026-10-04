@@ -6,27 +6,19 @@
 
 ## ▶️ Introduction
 
-**TaskMate is a personal project focused on learning C programming and real-time operating system
-design through hands-on practice, experimentation, and iterative development. 
-TaskMate operating system is designed for microcontroller.**
+**TaskMate is a personal project focused on learning C programming and real-time operating system design through hands-on practice, experimentation, and iterative development. TaskMate operating system is designed for microcontroller.**
 
-At a much smaller scale and within my own limits this project is also a way to retrace, step by
-step, the kind of questions and discoveries that shaped early systems like Unix, by exploring what
-the fundamental primitives of an operating system should be and how they can be implemented from scratch.
+At a much smaller scale and within my own limits this project is also a way to retrace, step by step, the kind of questions and discoveries that shaped early systems like Unix, by exploring what the fundamental primitives of an operating system should be and how they can be implemented from scratch.
 
 > <span style="color:green"> **Project Stats (v0.32 [^1] )**</span>
 >
-> <span style="color:green">1085 commits • 178 source files • 15150 lines of code •
-> AVR target binary size: 15990 bytes • RAM usage: 1327 bytes</span>
+> <span style="color:green">1085 commits • 178 source files • 15150 lines of code • AVR target binary size: 15990 bytes • RAM usage: 1327 bytes</span>
 
 ![Project stats](doc/stats.png)
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
-> <span style="color:red">TaskMate is currently in active development and
-> should be considered **experimental**. While the core system and architecture are
-> functional, many components are still evolving. It is **not yet suitable for production use**,
-> and both API and internal structures may change without notice.</span>
+> <span style="color:red">TaskMate is currently in active development and should be considered **experimental**. While the core system and architecture are functional, many components are still evolving. It is **not yet suitable for production use**, and both API and internal structures may change without notice.</span>
 
 
 ---
@@ -36,12 +28,9 @@ the fundamental primitives of an operating system should be and how they can be 
 ![System Layer Diagram](doc/TaskMate_layers.png)
 
 
-The diagram shows the architectural direction of TaskMate.
-Each layer communicates primarily with its direct neighbours, following a strict top-down model to
-maintain clear boundaries and avoid hidden dependencies.
+The diagram shows the architectural direction of TaskMate. Each layer communicates primarily with its direct neighbours, following a strict top-down model to maintain clear boundaries and avoid hidden dependencies.
 
-System features such as messaging, timing, I/O, and services remain fully accessible to user
-tasks but always through controlled and indirect interactions.
+System features such as messaging, timing, I/O, and services remain fully accessible to user tasks but always through controlled and indirect interactions.
 
 ---
 
@@ -60,24 +49,18 @@ TaskMate uses a custom build system that fully manages dependencies and workflow
 
 ## 🔀 Portability
 
-The primary development target is an AVR ATmega2560 microcontroller; a successful initial port was achieved following the latest changes (v0.31) 
-designed to increase the system's abstraction level: a simulation target running on FreeBSD-ucontext, using virtual drivers and an ncurses I/O console.
-A success, because not a single line of the system code had to be modified to carry out this port.
+The primary development target is an AVR ATmega2560 microcontroller; a successful initial port was achieved following the latest changes (v0.31) designed to increase the system's abstraction level: a simulation target running on FreeBSD-ucontext, using virtual drivers and an ncurses I/O console. A success, because not a single line of the system code had to be modified to carry out this port.
 
 This simulation port validates the portability of the core system and its independence from the AVR toolchain; a future port to STM32 will validate the capabilities of the HAL layer.
 
 ---
 ## ⏱️ Real-Time Behaviour
 
-Although TaskMate includes pre-emptive scheduling and a software real-time clock,
-it **is not yet a true real-time operating system** in the strict sense.
+Although TaskMate includes pre-emptive scheduling and a software real-time clock, it **is not yet a true real-time operating system** in the strict sense.
 
-At its current stage, TaskMate guarantees **task switching** and **time slicing** with good stability,
-but it does not yet ensure **hard real-time determinism.**
+At its current stage, TaskMate guarantees **task switching** and **time slicing** with good stability, but it does not yet ensure **hard real-time determinism.**
 
-System latency and jitter are acceptable for testing and lightweight applications,
-yet they remain **non-deterministic** under specific conditions such as nested interrupts,
-driver contention, or prolonged critical sections.
+System latency and jitter are acceptable for testing and lightweight applications, yet they remain **non-deterministic** under specific conditions such as nested interrupts, driver contention, or prolonged critical sections.
 
 ---
 
@@ -88,42 +71,29 @@ driver contention, or prolonged critical sections.
 
 **HAL (Hardware Abstraction Layer)**
 
-The HAL isolates all hardware-specific details behind a consistent interface.
-It allows the system to remain portable and predictable, regardless of the underlying architecture.
+The HAL isolates all hardware-specific details behind a consistent interface. It allows the system to remain portable and predictable, regardless of the underlying architecture.
 
 **SysCall (System Call Layer)**
 
-The system call layer acts as a controlled boundary between user space and the system core.
-It ensures that all interactions with the kernel are explicit, validated, and well-defined.
+The system call layer acts as a controlled boundary between user space and the system core. It ensures that all interactions with the kernel are explicit, validated, and well-defined.
 
 
 **Interfaces**
 
-Interfaces provide neutral contracts between layers.
-They help reduce coupling by defining shared types and behaviours without exposing implementation details,
-making the system easier to evolve and refactor.
+Interfaces provide neutral contracts between layers. They help reduce coupling by defining shared types and behaviours without exposing implementation details, making the system easier to evolve and refactor.
 
 
 **AutoCode**
 
-AutoCode is used to generate parts of the system from simple configuration files.
-It helps maintain consistency, reduce boilerplate, and keep the overall structure aligned with the intended architecture.
-All generation happens at build time, with static allocation, ensuring zero runtime overhead and fully deterministic behaviour.
+AutoCode is used to generate parts of the system from simple configuration files. It helps maintain consistency, reduce boilerplate, and keep the overall structure aligned with the intended architecture. All generation happens at build time, with static allocation, ensuring zero runtime overhead and fully deterministic behaviour.
 
 ---
 
 ## 🧭 About ChatGPT and TaskMate
 
-Although **no code from ChatGPT is ever copied directly** into the TaskMate source
-tree, the project would never have reached its current level of maturity without
-the assistance of AI. ChatGPT has been a great tool for structuring ideas,
-learning new concepts, and refining both code and architectural design. It
-provides technical guidance.
+Although **no code from ChatGPT is ever copied directly** into the TaskMate source tree, the project would never have reached its current level of maturity without the assistance of AI. ChatGPT has been a great tool for structuring ideas, learning new concepts, and refining both code and architectural design. It provides technical guidance.
 
-Codex is now (v0.27) also used, mainly for audits and complex refactors. It runs in a
-sandboxed environment on a separate machine and under a dedicated account.
-Its changes go through merge and test before reaching the main project branch;
-this review process does not make AI output automatically correct.
+Codex is now (v0.27) also used, mainly for audits and complex refactors. It runs in a sandboxed environment on a separate machine and under a dedicated account. Its changes go through merge and test before reaching the main project branch; this review process does not make AI output automatically correct.
 
 ---
 
@@ -131,9 +101,7 @@ this review process does not make AI output automatically correct.
 
 This software is distributed under the **BSD-2-Clause License**.
 
-You may use, modify, and redistribute it in source or binary form,
-provided that you keep the copyright notice, license conditions,
-and disclaimer as described in the `LICENSE` file.
+You may use, modify, and redistribute it in source or binary form, provided that you keep the copyright notice, license conditions, and disclaimer as described in the `LICENSE` file.
 
 ---
 
@@ -151,9 +119,7 @@ and disclaimer as described in the `LICENSE` file.
 
 **Architecture :**
 
-You will find more information about the architecture in the files under `doc/architecture/`.
-These files contain information about the development history, current implementation,
-strengths and weaknesses of the source code.
+You will find more information about the architecture in the files under `doc/architecture/`. These files contain information about the development history, current implementation, strengths and weaknesses of the source code.
 
 **Books :**
 

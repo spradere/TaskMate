@@ -10,20 +10,13 @@ Commits `721aa4b` and `a0d0943` versioned the generator API and enforced build c
 Before `v0.31`, obsolete HAL startup and definition generation chains were removed end to end.
 
 ## Current implementation
-`bmake` compiles autoCode 1.1 as a host tool. It accepts only `init.rc` syntax 1.4 and reads
-selected module declarations, error catalogues, logical GPIO signals, and tagged destinations.
+`bmake` compiles autoCode 1.1 as a host tool. It accepts only `init.rc` syntax 1.4 and reads selected module declarations, error catalogues, logical GPIO signals, and tagged destinations.
 
-Each module declares its type, run level, and at least one existing source file or directory.
-Drivers may also declare an I2C address. The same declarations feed generation and Make source
-selection, so module registration and compilation share one source of truth.
+Each module declares its type, run level, and at least one existing source file or directory. Drivers may also declare an I2C address. The same declarations feed generation and Make source selection, so module registration and compilation share one source of truth.
 
-The generator validates bounded tokens, names, versions, duplicate modules, errors, required
-options, and exactly one instance of each required tag. It emits ten guarded `.inc` fragments in
-the selected target's generated directory; tracked sources retain only stable include anchors.
+The generator validates bounded tokens, names, versions, duplicate modules, errors, required options, and exactly one instance of each required tag. It emits ten guarded `.inc` fragments in the selected target's generated directory; tracked sources retain only stable include anchors.
 
-Temporary files protect each destination from parse failures. Make tracks input lists and every
-fragment, so missing or changed generated output triggers regeneration. Normal and sanitizer
-black-box targets exercise valid inputs, malformed data, version checks, and stable replacement.
+Temporary files protect each destination from parse failures. Make tracks input lists and every fragment, so missing or changed generated output triggers regeneration. Normal and sanitizer black-box targets exercise valid inputs, malformed data, version checks, and stable replacement.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

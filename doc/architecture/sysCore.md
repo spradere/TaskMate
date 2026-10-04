@@ -9,16 +9,11 @@ Commits `221e69b` and `1e2fd4d` clarified sysCore file ownership and moved names
 Before `v0.31`, GPIO left sysCore and context operations moved behind neutral interfaces.
 
 ## Current implementation
-sysCore owns static driver and thread records, current-thread state, saved contexts, per-thread
-software counters, stack canaries, the active run level, and round-robin selection policy.
+sysCore owns static driver and thread records, current-thread state, saved contexts, per-thread software counters, stack canaries, the active run level, and round-robin selection policy.
 
-Boot allocates generated records, connects the software-counter callback, initializes scheduling,
-and starts thread zero. The scheduling timer saves the current opaque context, checks both canaries,
-and chooses the next thread whose non-zero run level does not exceed the active level.
+Boot allocates generated records, connects the software-counter callback, initializes scheduling, and starts thread zero. The scheduling timer saves the current opaque context, checks both canaries, and chooses the next thread whose non-zero run level does not exceed the active level.
 
-The system service advances run levels through sysCall after readiness checks. A separate periodic
-timer decrements software counters. Cooperative yield marks the caller and requests an early
-scheduling interrupt; sysCore contains no tmLibc or concrete HAL-header dependency.
+The system service advances run levels through sysCall after readiness checks. A separate periodic timer decrements software counters. Cooperative yield marks the caller and requests an early scheduling interrupt; sysCore contains no tmLibc or concrete HAL-header dependency.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

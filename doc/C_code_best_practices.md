@@ -21,8 +21,7 @@
 
 ## 1. 🪙 The Golden Rule of Code
 
-**Define once. Define clearly. Define where it makes sense.**
-Promotes clarity, avoids duplication, and keeps logic in the right layer.
+**Define once. Define clearly. Define where it makes sense.** Promotes clarity, avoids duplication, and keeps logic in the right layer.
 
 **A Commonly Overlooked Truth**
 
@@ -43,16 +42,13 @@ Modularity, strict API, and clean headers are cognitive guardrails.
 
 Code is read more than it is written. Prioritise understandable variable names and structure.
 
-* Code is for humans first, compilers second.
-  Don't write clever code. Write code you'd understand a year from now with a hangover.
+* Code is for humans first, compilers second. Don't write clever code. Write code you'd understand a year from now with a hangover.
 
 * Use meaningful names. `status_t file_status;` is good, `int fs;` is not.
 
-* Use typedef and enum for meaning.
-`typedef enum { STATUS_OK, STATUS_ERR } status_t;` is far clearer than using 0 and 1.
+* Use typedef and enum for meaning. `typedef enum { STATUS_OK, STATUS_ERR } status_t;` is far clearer than using 0 and 1.
 
-* Be explicit, not implicit.
-Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
+* Be explicit, not implicit. Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
 
 ---
 
@@ -60,17 +56,13 @@ Prefer `if (ptr == NULL)` over `if (!ptr)` when clarity matters.
 
 Use meaningful names, constants, and enums instead of hard-coded values.
 
-* Avoid magic numbers.
-Use `#define TIMEOUT_MS 1000` instead of `if(t > 1000)`.
+* Avoid magic numbers. Use `#define TIMEOUT_MS 1000` instead of `if(t > 1000)`.
 
-* Prefer constants over hard-coded values.
-`const uint8_t MAX_RETRIES = 5;` makes intent clear.
+* Prefer constants over hard-coded values. `const uint8_t MAX_RETRIES = 5;` makes intent clear.
 
-* Group related logic.
-Keep functions short and focused, one job per function.
+* Group related logic. Keep functions short and focused, one job per function.
 
-* Isolate hardware dependencies.
-Wrap I/O in abstraction layers so logic is portable and testable.
+* Isolate hardware dependencies. Wrap I/O in abstraction layers so logic is portable and testable.
 
 **Example:**
 ```c
@@ -84,48 +76,37 @@ file_status = STATUS_DEFAULT;   // good
 
 Use data structures and algorithms.
 
-* Data-driven design beats control-flow spaghetti.
-Instead of a long if/else chain, use function pointer arrays, lookup tables or dispatch maps.
+* Data-driven design beats control-flow spaghetti. Instead of a long if/else chain, use function pointer arrays, lookup tables or dispatch maps.
 
-* Avoid duplication.
-Copied code multiplies bugs and update work. Refactor common logic into functions.
+* Avoid duplication. Copied code multiplies bugs and update work. Refactor common logic into functions.
 
-* Design for change, not perfection.
-Anticipate what's likely to change and isolate it.
+* Design for change, not perfection. Anticipate what's likely to change and isolate it.
 
 ---
 ## 5. 💻 Testing and Debugging
 
-* Fail early, fail loud.
-Use asserts or clear error returns when contracts are broken.
+* Fail early, fail loud. Use asserts or clear error returns when contracts are broken.
 
-* Log wisely.
-Not too little, not too much. Log what you need to understand what went wrong.
+* Log wisely. Not too little, not too much. Log what you need to understand what went wrong.
 
-* Write testable code.
-Decouple logic from I/O and hardware to allow mocking.
+* Write testable code. Decouple logic from I/O and hardware to allow mocking.
 
 ---
 
 ## 6. 🛡️ Safety and Robustness
 
-* Never trust input.
-Validate everything, especially in embedded or user-facing code.
+* Never trust input. Validate everything, especially in embedded or user-facing code.
 
-* Watch stack and heap usage.
-Embedded systems die silently on overflows. Use guards, checks and tools.
+* Watch stack and heap usage. Embedded systems die silently on overflows. Use guards, checks and tools.
 
-* Defensive coding isn't paranoia, it's professionalism.
-Check bounds, handle NULL and expect the unexpected.
+* Defensive coding isn't paranoia, it's professionalism. Check bounds, handle NULL and expect the unexpected.
 
 ---
 ## 7. 🔧 Tooling and Process
 
-* Automate what can be automated.
-Builds, tests, formatting, flashing, ... Your time is precious.
+* Automate what can be automated. Builds, tests, formatting, flashing, ... Your time is precious.
 
-* Use version control. **Always**.
-Your future self will thank you.
+* Use version control. **Always**. Your future self will thank you.
 
 ---
 
@@ -133,9 +114,7 @@ Your future self will thank you.
 
 ### 8.1. Comment “why” not “what”
 
-The code shows what happens, your job is to write why it happens. Self-documenting
-code over excessive comments, write code so clear it needs fewer comments.
-Use comments to explain **why**, not **what**.
+The code shows what happens, your job is to write why it happens. Self-documenting code over excessive comments, write code so clear it needs fewer comments. Use comments to explain **why**, not **what**.
 
 * Don't: `timeout = 1000; // set timeout to 1000`
 * Do: `timeout_ms = 1000; // 1 second max wait before watchdog reset`
@@ -189,8 +168,7 @@ Especially in embedded or timing-sensitive code, always say what the units are.
 
 ### 8.7. Explain why something was not done
 
-Prevent future bugs by documenting why something wasn't done.
-Do:
+Prevent future bugs by documenting why something wasn't done. Do:
 ```c
 // Do not call free() here: pointer is shared across tasks
 ```
@@ -244,8 +222,7 @@ list_table_t *list_table; // unclear
 
 ## 10. 🔤 Abbreviations - Use only when standard or obvious
 
-Avoid cryptic short forms unless they are universally recognised (e.g., USART, ISR).
-Since auto-completion makes long names easy, there's no excuse for being cryptic in the name of brevity.
+Avoid cryptic short forms unless they are universally recognised (e.g., USART, ISR). Since auto-completion makes long names easy, there's no excuse for being cryptic in the name of brevity.
 
 **Example:**
 ```c
@@ -296,8 +273,7 @@ Provide the file, line, nature of the problem, actual vs. expected values and a 
 
 ## 12. ♻️ Refactoring mindset
 
-**Takeaway:**
-If you're deleting comments because your code no longer needs them: you're doing it right.
+**Takeaway:** If you're deleting comments because your code no longer needs them: you're doing it right.
 
 ### Refactoring from chaos to architecture.
 Turning a pile of code into a system.
@@ -325,8 +301,7 @@ This is the hard part, but it's also what makes a system satisfying to build and
 
 ## 13. 📩 Git Commit Message Guidelines
 
-Commit messages must be **short, clear, and action-oriented**.
-Each message should begin with a **verb prefix** followed by a short description of the change.
+Commit messages must be **short, clear, and action-oriented**. Each message should begin with a **verb prefix** followed by a short description of the change.
 
 ### Possible prefixes:
 - `add` for new files, features, or logic
@@ -353,8 +328,6 @@ Use **imperative mood** (like a commit is a command: "fix", not "fixed")
 
 ### 14. 🧭 Endnote
 
-These guidelines are not meant to restrict creativity, but to make correctness,
-clarity, and long-term maintainability the default.
+These guidelines are not meant to restrict creativity, but to make correctness, clarity, and long-term maintainability the default.
 
-These practices are especially important in layered and safety-oriented systems
-such as RTOS.
+These practices are especially important in layered and safety-oriented systems such as RTOS.

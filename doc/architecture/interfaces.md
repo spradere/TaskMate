@@ -9,16 +9,11 @@ Before `v0.31`, halt, atomic, context, GPIO, and driver contracts replaced `hal/
 Commit `776edf5` made interfaces the sole neutral boundary to selected HAL implementations.
 
 ## Current implementation
-The layer contains no dependency on HAL implementation, sysCore, sysCall, tmLibc, services, tasks,
-or target configuration. It owns neutral driver protocols, logical GPIO operations, opaque context,
-atomic and halt contracts, common types, run levels, string descriptors, and generated catalogues.
+The layer contains no dependency on HAL implementation, sysCore, sysCall, tmLibc, services, tasks, or target configuration. It owns neutral driver protocols, logical GPIO operations, opaque context, atomic and halt contracts, common types, run levels, string descriptors, and generated catalogues.
 
-Generated fragments provide error codes, signal identifiers, module counts, and selected limits.
-Driver state and control use one compact protocol, while driver-specific operations remain dedicated
-HAL functions rather than generic control commands.
+Generated fragments provide error codes, signal identifiers, module counts, and selected limits. Driver state and control use one compact protocol, while driver-specific operations remain dedicated HAL functions rather than generic control commands.
 
-The architecture matrix makes this the only deliberately transversal layer. HAL and portable system
-layers may consume permitted contracts; tasks remain behind service, sysCall, or tmLibc APIs.
+The architecture matrix makes this the only deliberately transversal layer. HAL and portable system layers may consume permitted contracts; tasks remain behind service, sysCall, or tmLibc APIs.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
