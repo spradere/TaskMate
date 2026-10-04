@@ -1,4 +1,4 @@
-# 🥇 Code Style, Readability, Refactoring & Best Practices Summary
+# 🥇 C Code Best Practices Summary
 
 ## 📋 Table of Contents
 
@@ -26,7 +26,7 @@ Promotes clarity, avoids duplication, and keeps logic in the right layer.
 
 **A Commonly Overlooked Truth**
 
-The *best* systems are not the ones:
+The best systems are not the ones:
 
 * that allow you to do everything
 
@@ -35,8 +35,7 @@ But rather the ones:
 * that prevent you from doing just anything
 * and that **reduce the space of possible errors**
 
-Modularity, strict API, and clean headers
-👉 are cognitive guardrails.
+Modularity, strict API, and clean headers are cognitive guardrails.
 
 ---
 

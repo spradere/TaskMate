@@ -9,7 +9,7 @@
 ################################################################################
 
 # ------------------------------------------------------------------------------
-# Description: Validate direct includes against the architecture matrix.
+# Description: Validate direct includes against the architecture matrix in conf/.
 #
 # Inputs: Matrix and source files, with matrix_file and optional path_sources variables.
 # Outputs: Validation summary or violations on stdout, with a nonzero status on failure.

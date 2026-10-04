@@ -1,4 +1,4 @@
-# 🏷️ Makefile variable prefix guide
+# 🏷️ Makefile variable prefix rules
 
 This project uses prefixed variable names to make Makefiles easier to read and safer to extend.
 

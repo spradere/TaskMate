@@ -1,4 +1,4 @@
-# TaskMate File Naming Rules
+# 📝 TaskMate File Naming Rules
 
 ## Purpose
 

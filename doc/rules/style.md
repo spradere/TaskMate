@@ -1,13 +1,13 @@
-# TaskMate Coding Style
+# 🪶 TaskMate Coding Style Rules
 
-This guide documents the style used in the TaskMate codebase, excluding
-`srcs/autoCode/` and generated sections. It complements the existing
-`.clang-format`, `.clang-tidy`, architecture rules, and prefix rules.
+**This guide documents the style used in the TaskMate codebase. It complements the existing `.clang-format`, `.clang-tidy`, architecture rules, and prefix rules.**
+ 
+---
 
 ## Formatting
 
-- Use the project `.clang-format` file as the source of truth for C and header
-  formatting.
+Use the project `.clang-format` file as the source of truth for C and header formatting.
+
 - Indent with tabs. Tab width and indentation width are both 4.
 - Use Allman braces:
 
@@ -37,12 +37,13 @@ mod_thread_item_t *thread;
 - Prefer explicit parentheses in conditions and macros when operator precedence
   could be unclear.
 
+---
+
 ## File Structure
 
-- Start C, header, scripts, and Makefile fragments with the TaskMate BSD-2-Clause.
-- Add a Doxygen file block after the license banner in C and header files:
+Start C, header, scripts, and Makefile fragments with the TaskMate BSD-2-Clause. Add a Doxygen file block after the license banner in C and header files:
 
-```c
+```
 /**
  * @file module.c
  * @brief module implementation.
@@ -65,81 +66,39 @@ mod_thread_item_t *thread;
 #endif // SYSCORE_SYS_MODULES_H
 ```
 
+---
+
 ## Naming
 
-- Use the established TaskMate prefixes only when they describe a real boundary
-  or subsystem. Follow `doc/rules/TaskMate_prefixes.md` and `doc/rules/make_prefixes.md`
-- Public subsystem APIs use lower camel case after the prefix:
+Use the established TaskMate prefixes only when they describe a real boundary or subsystem. Follow `doc/rules/TaskMate_prefixes.md` and `doc/rules/make_prefixes.md`.
 
-```c
-void mod_threadSetCurrent(uint8_t n);
-bool sc_gpio_signalGet(gpio_signal_t signal);
-```
+- Public subsystem APIs use lower camel case after the prefix.
+- Types use snake case with a `_t` suffix.
+- Enum constants and preprocessor constants use uppercase snake case.
+- Variables uses descriptive snake case.
 
-- Types use snake case with a `_t` suffix:
-
-```c
-typedef struct
-{
-	...
-} mod_thread_item_t;
-```
-
-- Enum constants and preprocessor constants use uppercase snake case:
-
-```c
-GPIO_PIN_MODE_OUTPUT_PP
-MOD_CANARY
-```
-
-- Static file-local data uses descriptive snake case:
-
-```c
-static rl_data_base_t to_run;
-static const hal_port_t mcu_ports[PORT_COUNT];
-```
+---
 
 ## C Design Rules
 
-- Prefer explicit fixed-width integer types from `<stdint.h>` for embedded data.
+**Specifics of embedded code:**
+
+- Mandatory usage of explicit fixed-width integer types from `<stdint.h>` for embedded data.
 - Use `bool` from `<stdbool.h>` for boolean state.
 - Keep hardware-specific code inside HAL architecture.
-- Keep portable contracts in `srcs/interfaces/`; they must not depend on HAL,
-  sysCall, services, or tasks.
+- Keep portable contracts in `srcs/interfaces/`; they must not depend on HAL,sysCall, services, or tasks.
 - Tasks should use sysCall and service APIs, not raw HAL or MCU registers.
-- Keep module state private with `static` file-local storage unless it is part of
-  an intentional public interface.
+- Keep module state private with `static` file-local storage unless it is part of an intentional public interface.
 - Prefer small focused functions over large mixed-responsibility functions.
-- Avoid magic numbers in hand-written code. Use named constants or document why a
-  literal is required.
+- Avoid magic numbers in hand-written code. Use named constants or document why a literal is required.
 - Use explicit null or zero checks when this makes intent clearer.
-- For register macros and bit manipulation, fully parenthesize macro parameters
-  and results.
+- For register macros and bit manipulation, fully parenthesize macro parameters and results.
 
-## Comments
-
-- Comments should explain intent, constraints, hardware behaviour, timing, or
-  non-obvious ordering.
-- Do not repeat what the code already states.
-- Use short section comments for groups of declarations when it improves scanning:
-
-```c
-/*
- * Modules functions
- */
-```
-
-- Use inline comments sparingly for compact hardware meanings or guard names:
-
-```c
-GPIO_PIN_MODE_OUTPUT_PP, // push-pull
-#endif // INTERFACES_GPIO_COMMON_H
-```
+---
 
 ## Generated Code
 
-- Do not manually edit generated regions.
-- Generated regions are marked with autoCode tags :
+**Do not manually edit generated regions.** Generated regions are marked with autoCode tags :
 
 ```c
 // [autoCode_tag] name
@@ -147,6 +106,8 @@ GPIO_PIN_MODE_OUTPUT_PP, // push-pull
 #include "files.inc"
 // [/tag]
 ```
+
+---
 
 ## Build Scripts
 
