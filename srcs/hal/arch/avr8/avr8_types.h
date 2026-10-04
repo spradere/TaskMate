@@ -29,6 +29,9 @@
 
 typedef uint8_t hal_stack_word_t;
 
+/**
+ * @brief Stores the AVR8 stack pointer for a suspended thread.
+ */
 struct hal_context
 {
 	hal_stack_word_t *stack_pointer;

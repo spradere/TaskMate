@@ -26,6 +26,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Holds RTC calendar time fields.
+ */
 typedef struct
 {
 	uint8_t seconds; // 0-59
@@ -41,8 +44,24 @@ typedef struct
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Apply a common RTC driver control command.
+ * @param command Common driver control command.
+ * @param[in,out] data Command input or output, when required.
+ * @return Resulting driver state.
+ */
 hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_control_data_t *data);
+/**
+ * @brief Read the current RTC time.
+ * @param[out] time Receives the RTC calendar fields on success.
+ * @return Driver state after reading.
+ */
 hal_driver_state_t hal_rtcRead(hal_rtc_time_t *time);
+/**
+ * @brief Set the RTC time.
+ * @param time Calendar fields to write.
+ * @return Driver state after writing.
+ */
 hal_driver_state_t hal_rtcWrite(const hal_rtc_time_t *time);
 
 #endif // INTERFACES_DRV_RTC_H

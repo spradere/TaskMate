@@ -77,6 +77,35 @@ Use function comments to explain:
  */
 ```
 
+### Doxygen in headers
+
+Add Doxygen comments to public structure types and public function declarations in headers. Keep existing `@file` comments as specified by `doc/rules/style.md`. Do not add Doxygen comments to private declarations, macros, enums, or individual structure fields.
+
+- Place the comment immediately before the declaration. For a `typedef struct`, place it before `typedef`.
+- Use a one-sentence `@brief` that states the purpose or contract. Do not repeat the identifier in prose.
+- For functions, add `@param` for each parameter when its role, units, valid range, ownership, or output behavior needs explanation. Use `[out]` or `[in,out]` where appropriate.
+- Add `@return` when the return value needs interpretation, especially for status codes and boolean results. State what each result means without restating the return type.
+- Mention timing, interrupt context, initialization order, or other constraints only when they affect correct use. Keep each description brief and precise.
+- Document the public contract in the header. Avoid repeating the same Doxygen block in the `.c` definition.
+
+```c
+/**
+ * @brief Identifies string data and its storage location.
+ */
+typedef struct
+{
+	const char *text;
+	const tm_string_storage_t storage;
+} tm_string_t;
+
+/**
+ * @brief Read one byte from the USART receive buffer.
+ * @param[out] data Receives the byte when the call succeeds.
+ * @return ERR_NO_ERROR if a byte was read; an error code otherwise.
+ */
+err_codes_t sc_usartRead(uint8_t *data);
+```
+
 ---
 
 ## Section comments in .c/.h

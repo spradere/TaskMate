@@ -31,7 +31,13 @@
 
 #if TM_LIBC_TASKMATE
 	#include <stdarg.h>
+/**
+ * @brief Write formatted text to the system log.
+ */
 	void tm_syslog(tm_string_t format, ...);
+/**
+ * @brief Write argument-list formatted text to the system log.
+ */
 	void tm_vsyslog(tm_string_t format, va_list args);
 #endif
 

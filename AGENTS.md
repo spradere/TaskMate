@@ -16,6 +16,7 @@ Before a substantial change, read the relevant documents in `doc/architecture/` 
 ## Working scope and validation
 
 - Keep corrections and refactors limited to the scope named in the request. Do not absorb adjacent audit findings, hardening, locking, reentrancy, or broader cleanup without a separately scoped request.
+- Treat files not tracked by Git as outside Codex's working scope unless the prompt explicitly requests them.
 - Never modify code under `legacy/`. It is preserved as a historical snapshot.
 - Do not run code formatters or reformat code unless the prompt explicitly asks for formatting. Preserve the existing formatting during implementation and validation.
 - Do not update documentation unless the prompt explicitly asks for a documentation change.

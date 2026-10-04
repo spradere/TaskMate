@@ -32,9 +32,22 @@ typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Apply a common scheduler timer control command.
+ * @return Resulting driver state.
+ */
 hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 										 hal_driver_control_data_t *data);
+/**
+ * @brief Register the scheduler timer callback.
+ * @param func_ptr Callback invoked from the scheduler timer interrupt.
+ * @return Driver state after registration.
+ */
 hal_driver_state_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr);
+/**
+ * @brief Load the scheduler timer period.
+ * @return Driver state after loading the timer.
+ */
 hal_driver_state_t hal_timerSchedLoad(void);
 
 #endif // INTERFACES_DRV_TIMERSCHED_H

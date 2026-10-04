@@ -28,6 +28,9 @@
 
 #define ERROR_COUNT_MAX 256
 
+/**
+ * @brief Stores one parsed error declaration.
+ */
 typedef struct
 {
 	char name[AC_BUFFER_SIZE];
@@ -35,6 +38,9 @@ typedef struct
 	err_level_t level;
 } error_item_t;
 
+/**
+ * @brief Holds the parsed error catalogue.
+ */
 typedef struct
 {
 	error_item_t catalog[ERROR_COUNT_MAX];
@@ -45,6 +51,12 @@ typedef struct
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Parse an error catalogue into the supplied storage.
+ * @param src_name Error catalogue path.
+ * @param[out] errors Receives parsed error definitions.
+ * @return Zero on success; a negative value on file failure.
+ */
 int globalError(const char *src_name, error_catalog_t *errors);
 
 #endif // AUTOCODE_GLOBALERROR_H

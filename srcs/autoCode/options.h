@@ -25,6 +25,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Holds autoCode input and output paths and test mode.
+ */
 typedef struct
 {
 	bool test_mode;
@@ -42,6 +45,12 @@ typedef struct
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Read autoCode options from a configuration file.
+ * @param file_name Options file path.
+ * @param[out] opt Receives parsed paths and flags.
+ * @return Zero on success; a negative value on file failure.
+ */
 int options(const char *file_name, options_list_t *opt);
 
 #endif // AUTOCODE_OPTIONS_H

@@ -25,6 +25,10 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Handle the SCLI stack command.
+ * @return true if the command completed successfully.
+ */
 bool stackCommand(uint8_t argc, char *argv[]);
 
 #endif // COMMANDS_SCLI_STACK_H

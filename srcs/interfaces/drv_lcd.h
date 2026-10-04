@@ -26,11 +26,37 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Apply a common LCD driver control command.
+ * @param command Common driver control command.
+ * @param[in,out] data Command input or output, when required.
+ * @return Resulting driver state.
+ */
 hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_control_data_t *data);
+/**
+ * @brief Clear the display.
+ * @return Driver state after clearing.
+ */
 hal_driver_state_t hal_lcdClear(void);
+/**
+ * @brief Set the display cursor position.
+ * @return Driver state after positioning the cursor.
+ */
 hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col);
+/**
+ * @brief Begin a display write sequence.
+ * @return Driver state after starting the write sequence.
+ */
 hal_driver_state_t hal_lcdWriteStart(void);
+/**
+ * @brief Write one display character.
+ * @return Driver state after writing the byte.
+ */
 hal_driver_state_t hal_lcdWriteByte(uint8_t data);
+/**
+ * @brief End the display write sequence.
+ * @return Driver state after ending the write sequence.
+ */
 hal_driver_state_t hal_lcdWriteEnd(void);
 
 #endif // INTERFACES_DRV_LCD_H

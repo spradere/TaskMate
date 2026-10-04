@@ -24,6 +24,9 @@
  * Public API
  * ===========================================================================*/
 
+/**
+ * @brief Add a module from a parsed init.rc command.
+ */
 void initrcAddModule(const initrc_command_t *command);
 
 #endif // INITRCCOMMANDS_ADDMODULE_H

@@ -24,6 +24,10 @@
  * Public API
  * ===========================================================================*/
 
+/**
+ * @brief Validate the init.rc version command.
+ * @return true if the syntax version matches autoCode.
+ */
 bool initrcSetVersion(const initrc_command_t *command);
 
 #endif // INITRCCOMMANDS_SETVERSION_H

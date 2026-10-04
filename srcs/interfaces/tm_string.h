@@ -27,6 +27,9 @@ typedef enum
 	TM_MEM_ROM
 } tm_string_storage_t;
 
+/**
+ * @brief Identifies string data and its RAM or ROM storage.
+ */
 typedef struct
 {
 	const char *text;

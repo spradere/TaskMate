@@ -19,6 +19,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Run the second user task.
+ */
 void task2(void);
 
 #endif // TASKS_TASK2_H

@@ -25,6 +25,10 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Handle the SCLI thread command.
+ * @return true if the command completed successfully.
+ */
 bool threadCommand(uint8_t argc, char *argv[]);
 
 #endif // COMMANDS_SCLI_THREAD_H

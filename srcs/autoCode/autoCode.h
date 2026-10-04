@@ -71,12 +71,19 @@ typedef enum
 	AC_FORCE_EXIT
 } ac_error_cmd_t;
 
+/**
+ * @brief Record an autoCode error or terminate generation.
+ * @param cmd Increment the error count or force immediate exit.
+ */
 void autoCodeExit(ac_error_cmd_t cmd);
 
 /* -----------------------------------------------
  * Module database types
  * ---------------------------------------------*/
 
+/**
+ * @brief Stores one parsed module's configuration.
+ */
 typedef struct
 {
 	char name[MOD_NAME_SIZE_MAX];
@@ -88,6 +95,9 @@ typedef struct
 
 } module_item_t;
 
+/**
+ * @brief Groups modules of one type in the generated database.
+ */
 typedef struct
 {
 	module_item_t modules[MOD_COUNT_MAX];
@@ -95,6 +105,9 @@ typedef struct
 
 } module_type_t;
 
+/**
+ * @brief Holds parsed modules and SCLI commands for code generation.
+ */
 typedef struct
 {
 	module_type_t modules_type[MOD_TYPE_COUNT];

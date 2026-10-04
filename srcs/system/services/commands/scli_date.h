@@ -25,6 +25,10 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Handle the SCLI date command.
+ * @return true if the command completed successfully.
+ */
 bool dateCommand(uint8_t argc, char *argv[]);
 
 #endif // COMMANDS_SCLI_DATE_H

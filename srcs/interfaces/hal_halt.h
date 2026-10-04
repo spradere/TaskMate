@@ -18,6 +18,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Stop execution without returning.
+ */
 _Noreturn void hal_halt(void);
 
 #endif // INTERFACES_HAL_HALT_H

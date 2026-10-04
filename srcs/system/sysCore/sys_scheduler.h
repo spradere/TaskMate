@@ -26,10 +26,26 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Initialize scheduler state.
+ */
 void tm_schedulerInit(void);
+/**
+ * @brief Start scheduling configured threads.
+ */
 void tm_schedulerStart(void);
+/**
+ * @brief Yield through the cooperative scheduler path.
+ */
 void tm_schedulerCoop(void);
+/**
+ * @brief Set the scheduler run level.
+ * @return true if the run level was accepted.
+ */
 bool tm_schedulerRunLevelSet(uint8_t run_level);
+/**
+ * @brief Get the scheduler run level.
+ */
 uint8_t tm_schedulerRunLevelGet(void);
 
 #endif // SYSCORE_SYS_SCHEDULER_H
