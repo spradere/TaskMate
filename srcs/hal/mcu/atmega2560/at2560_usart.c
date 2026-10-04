@@ -18,7 +18,7 @@
 
 #include <avr/interrupt.h>
 
-#include "at2560_peripheral_constants.h"
+#include "at2560_constants.h"
 #include "interfaces/drv_usart.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
