@@ -11,31 +11,19 @@ This audit assesses two new targets without changing the code:
 - a native functional simulation on FreeBSD/amd64 using `ucontext`;
 - an embedded port to an STM32G4 Cortex-M4F and a Nucleo board.
 
-It updates the earlier FreeBSD analysis without modifying that
-[historical snapshot](amd64_freebsd_ucontext.md).
+It updates the earlier FreeBSD analysis without modifying that [historical snapshot](amd64_freebsd_ucontext.md).
 
-Both ports are **feasible**, but neither is a simple compiler change. The verdict is
-**conditional GO**. First, the context and stack contracts must become truly independent of
-AVR, the 16-bit ABI assumptions in formatting must be fixed, then each hardware stack must be
-added within the existing `arch`, `mcu`, `board`, and `target` layers.
+Both ports are **feasible**, but neither is a simple compiler change. The verdict is **conditional GO**. First, the context and stack contracts must become truly independent of AVR, the 16-bit ABI assumptions in formatting must be fixed, then each hardware stack must be added within the existing `arch`, `mcu`, `board`, and `target` layers.
 
-The FreeBSD port is the shortest path to reproducible functional tests. STM32G4 is the better
-test of embedded portability and real-time behaviour, but it requires on-board validation, a
-startup and linker script, and a carefully verified Cortex-M context switch.
+The FreeBSD port is the shortest path to reproducible functional tests. STM32G4 is the better test of embedded portability and real-time behaviour, but it requires on-board validation, a startup and linker script, and a carefully verified Cortex-M context switch.
 
 ## Existing favourable boundaries
 
-- [hal_context_t](../../srcs/interfaces/hal_context.h#L21) is opaque to the kernel, and
-  [hal_contextStart()](../../srcs/interfaces/hal_context.h#L31) already confines the first
-  start to HAL.
-- The scheduler calls a timer through the neutral `drv_timerSched.h` interface. Its
-  [round-robin](../../srcs/system/sysCore/sys_scheduler.c#L96) policy accesses no AVR register.
-- GPIO, USART, I2C, and timers have neutral contracts. The LCD and RTC drivers can therefore
-  be retained if the new I2C backend matches their semantics exactly.
-- The `target -> board -> mcu -> arch` selection and autoCode source lists allow
-  implementations to be added without hardware `#if` directives in portable code.
-- Thread stacks, contexts, and records are static. STM32 needs no dynamic allocator.
-  autoCode remains a host tool and does not need to be ported to the MCU.
+- [hal_context_t](../../srcs/interfaces/hal_context.h#L21) is opaque to the kernel, and [hal_contextStart()](../../srcs/interfaces/hal_context.h#L31) already confines the first start to HAL.
+- The scheduler calls a timer through the neutral `drv_timerSched.h` interface. Its [round-robin](../../srcs/system/sysCore/sys_scheduler.c#L96) policy accesses no AVR register.
+- GPIO, USART, I2C, and timers have neutral contracts. The LCD and RTC drivers can therefore be retained if the new I2C backend matches their semantics exactly.
+- The `target -> board -> mcu -> arch` selection and autoCode source lists allow implementations to be added without hardware `#if` directives in portable code.
+- Thread stacks, contexts, and records are static. STM32 needs no dynamic allocator. autoCode remains a host tool and does not need to be ported to the MCU.
 
 ## High-priority common blockers
 
@@ -51,8 +39,7 @@ startup and linker script, and a carefully verified Cortex-M context switch.
 | P1 | Two time sources are assumed: 1 ms quantum and 10 ms STC | An incorrectly multiplexed single tick drifts or changes callback order | Use either two timers, or one monotonic base with a documented divider and expiry catch-up |
 | P2 | Some public sizes and counters remain limited to 8 bits | Not currently blocking, but silent limits change on 32-bit and 64-bit hosts | Keep embedded bounds, add assertions, and do not blindly replace them with `size_t` |
 
-These changes are system-critical. The autoCode sources, generated regions, generator tests,
-and AVR build must be changed and validated together.
+These changes are system-critical. The autoCode sources, generated regions, generator tests, and AVR build must be changed and validated together.
 
 ## Option A: amd64/FreeBSD simulation with `ucontext`
 
@@ -65,29 +52,18 @@ srcs/hal/board/hostSim/       process and terminal initialisation
 srcs/user/target/simFreeBSD/  init.rc, virtual GPIO, and application choices
 ```
 
-The name `mcu/freebsd` adapts the current hardware taxonomy. It represents host OS services,
-not a microcontroller. A future simulator family might justify a `platform` layer, but it is
-not needed for this first port.
+The name `mcu/freebsd` adapts the current hardware taxonomy. It represents host OS services, not a microcontroller. A future simulator family might justify a `platform` layer, but it is not needed for this first port.
 
 ### Contexts and scheduling
 
-`getcontext()` initialises each `ucontext_t`, then `makecontext()` assigns its entry point,
-`uc_stack.ss_sp`, `uc_stack.ss_size`, and completion link. `setcontext()` is suitable for
-the first start. A returning task must go to an explicit fatal trampoline because a TaskMate
-task is not expected to return.
+`getcontext()` initialises each `ucontext_t`, then `makecontext()` assigns its entry point, `uc_stack.ss_sp`, `uc_stack.ss_size`, and completion link. `setcontext()` is suitable for the first start. A returning task must go to an explicit fatal trampoline because a TaskMate task is not expected to return.
 
 Two levels are possible:
 
-1. **Cooperative MVP**: `hal_timerSchedLoad()` performs a controlled switch. This is simple
-   and useful for testing autoCode, run levels, and syscalls, but does not validate preemption.
-2. **Preemptive simulation**: a monotonic timer delivers a signal installed with
-   `SA_SIGINFO`. The handler receives the interrupted context, invokes policy, then lets the
-   signal return restore the selected context.
+1. **Cooperative MVP**: `hal_timerSchedLoad()` performs a controlled switch. This is simple and useful for testing autoCode, run levels, and syscalls, but does not validate preemption.
+2. **Preemptive simulation**: a monotonic timer delivers a signal installed with `SA_SIGINFO`. The handler receives the interrupted context, invokes policy, then lets the signal return restore the selected context.
 
-`swapcontext()` must not be assumed to be async-signal-safe. The handler must be minimal and
-must call neither stdio nor allocation. The exact design for modifying the signal context must
-be validated on the selected FreeBSD version. The signal must be blocked during
-initialisation, selection, and every shared non-atomic update.
+`swapcontext()` must not be assumed to be async-signal-safe. The handler must be minimal and must call neither stdio nor allocation. The exact design for modifying the signal context must be validated on the selected FreeBSD version. The signal must be blocked during initialisation, selection, and every shared non-atomic update.
 
 ### FreeBSD blockers and solutions
 
@@ -104,19 +80,13 @@ initialisation, selection, and every shared non-atomic update.
 
 ### What the simulation does and does not prove
 
-It can validate round-robin policy, run levels, syscalls, STCs, services, tasks, SCLI, and
-virtual peripheral errors. It cannot prove SRAM or flash footprint, IRQ latency and priority,
-volatile-register semantics, Harvard separation or `PROGMEM`, electrical behaviour, or MCU
-real-time guarantees.
+It can validate round-robin policy, run levels, syscalls, STCs, services, tasks, SCLI, and virtual peripheral errors. It cannot prove SRAM or flash footprint, IRQ latency and priority, volatile-register semantics, Harvard separation or `PROGMEM`, electrical behaviour, or MCU real-time guarantees.
 
 ## Option B: STM32G4 port on a Nucleo board
 
 ### Reference target to fix
 
-`STM32G4` and `Nucleo` do not identify one target. The first milestone must fix the MCU and
-board references and the board revision. **NUCLEO-G474RE** is a consistent candidate:
-STM32G474RE, Cortex-M4F, ST-LINK connector, and Nucleo-64 format. USART, I2C, LED, button,
-crystal, and solder-bridge pins must come from the board user manual, not Arduino assumptions.
+`STM32G4` and `Nucleo` do not identify one target. The first milestone must fix the MCU and board references and the board revision. **NUCLEO-G474RE** is a consistent candidate: STM32G474RE, Cortex-M4F, ST-LINK connector, and Nucleo-64 format. USART, I2C, LED, button, crystal, and solder-bridge pins must come from the board user manual, not Arduino assumptions.
 
 Proposed organisation:
 
@@ -127,14 +97,11 @@ srcs/hal/board/nucleoG474RE/    board startup, clock, and ST-LINK/VCP pinout
 srcs/user/target/nucleoG474RE/  init.rc and logical signals
 ```
 
-The architecture layer must remain `armv7em`, not `stm32`, so the Cortex-M mechanism can
-serve other MCUs. STM32 registers and vectors remain in `mcu`. Pin assignments remain in
-`board` and `target`.
+The architecture layer must remain `armv7em`, not `stm32`, so the Cortex-M mechanism can serve other MCUs. STM32 registers and vectors remain in `mcu`. Pin assignments remain in `board` and `target`.
 
 ### Cortex-M4F context switch
 
-The recommended path uses PSP for threads, MSP for handlers, SysTick or a TIM for the tick, and
-PendSV at the lowest priority for the actual switch:
+The recommended path uses PSP for threads, MSP for handlers, SysTick or a TIM for the tick, and PendSV at the lowest priority for the actual switch:
 
 1. the exception automatically stacks R0-R3, R12, LR, PC, and xPSR;
 2. PendSV saves R4-R11 and the PSP in the current context;
@@ -142,11 +109,7 @@ PendSV at the lowest priority for the actual switch:
 4. PendSV restores R4-R11 and the PSP, then returns from the exception;
 5. `hal_contextStart()` loads PSP and CONTROL, then performs a synthetic exception return.
 
-The initial stack must meet the 8-byte AAPCS alignment, provide xPSR with the Thumb bit, a
-correctly paired PC, and an LR that points to the fatal trampoline. If the FPU is allowed, the
-contract must specify lazy saving and the S16-S31 registers. Disabling it in TaskMate firmware
-for the first milestone greatly reduces risk. `DSB` and `ISB` barriers must be placed as
-specified by the ARM manual when masks, priorities, and contexts change.
+The initial stack must meet the 8-byte AAPCS alignment, provide xPSR with the Thumb bit, a correctly paired PC, and an LR that points to the fatal trampoline. If the FPU is allowed, the contract must specify lazy saving and the S16-S31 registers. Disabling it in TaskMate firmware for the first milestone greatly reduces risk. `DSB` and `ISB` barriers must be placed as specified by the ARM manual when masks, priorities, and contexts change.
 
 ### STM32G4 blockers and solutions
 
@@ -169,12 +132,9 @@ specified by the ARM manual when masks, priorities, and contexts change.
 Two designs are suitable:
 
 - SysTick at 1 ms requests PendSV, and a divider calls the STC every 10 occurrences;
-- one TIM produces the quantum and a second TIM produces the STC, at the cost of one more
-  peripheral.
+- one TIM produces the quantum and a second TIM produces the STC, at the cost of one more peripheral.
 
-The first minimises code and provides a shared time base. The second separates the two
-contracts more clearly and more closely resembles AVR. In both cases, context switching must
-remain in PendSV, and the order of simultaneous processing must be documented.
+The first minimises code and provides a shared time base. The second separates the two contracts more clearly and more closely resembles AVR. In both cases, context switching must remain in PendSV, and the order of simultaneous processing must be documented.
 
 ## Comparison and recommended strategy
 
@@ -232,5 +192,4 @@ Recommended order:
 - [ST RM0440, STM32G4 reference manual](https://www.st.com/resource/en/reference_manual/rm0440-stm32g4-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)
 - [Arm CMSIS-Core, Cortex-M4](https://arm-software.github.io/CMSIS_6/latest/Core/group__CMSIS__Core.html)
 
-Pin numbers, alternate functions, maximum frequencies, and revisions must be rechecked in the
-MCU datasheet and the user manual for the selected board revision at implementation time.
+Pin numbers, alternate functions, maximum frequencies, and revisions must be rechecked in the MCU datasheet and the user manual for the selected board revision at implementation time.

@@ -2,9 +2,7 @@
 
 ## Purpose
 
-This document defines the formatting and usage rules for comments in TaskMate source files.
-The goal is to improve readability and navigation without adding redundant comments or
-changing code behavior.
+This document defines the formatting and usage rules for comments in TaskMate source files. The goal is to improve readability and navigation without adding redundant comments or changing code behavior.
 
 Add comments to explain intent, constraints, and behavior that is not obvious from the code.
 
@@ -14,8 +12,7 @@ Add comments to explain intent, constraints, and behavior that is not obvious fr
 
 ## Script files
 
-A boxed comment must follow a script file's license header. It briefly describes the script,
-its inputs, and its outputs.
+A boxed comment must follow a script file's license header. It briefly describes the script, its inputs, and its outputs.
 
 Example from `arch_include.awk`:
 
@@ -32,25 +29,15 @@ Example from `arch_include.awk`:
 
 ## Comments in code
 
-Comments should explain intent, constraints, hardware behavior, timing, or non-obvious
-ordering. Do not repeat what the code already states.
+Comments should explain intent, constraints, hardware behavior, timing, or non-obvious ordering. Do not repeat what the code already states.
 
-Use short comments to mark the main steps of a longer function. Place each comment before
-the block it explains. For example, `tokenizer.c` separates skipping whitespace, handling
-quoted tokens, growing the token table, and terminating a token. Describe the purpose of a
-step, not each statement inside it.
+Use short comments to mark the main steps of a longer function. Place each comment before the block it explains. For example, `tokenizer.c` separates skipping whitespace, handling quoted tokens, growing the token table, and terminating a token. Describe the purpose of a step, not each statement inside it.
 
-In long functions, aim for one inline comment per 10 lines of code. A gap of 5 to 20 lines
-between comments is a useful range when the code has distinct operations. Follow the
-logical blocks rather than a fixed quota; do not add comments that only restate the code.
+In long functions, aim for one inline comment per 10 lines of code. A gap of 5 to 20 lines between comments is a useful range when the code has distinct operations. Follow the logical blocks rather than a fixed quota; do not add comments that only restate the code.
 
-Explain data ownership and side effects when they are easy to miss. In `tokenizer.c`, tokens
-point into the input line, and the parser terminates each token in that line. A short comment
-at that point helps readers understand why the line is modified.
+Explain data ownership and side effects when they are easy to miss. In `tokenizer.c`, tokens point into the input line, and the parser terminates each token in that line. A short comment at that point helps readers understand why the line is modified.
 
-Comment non-obvious error handling or ordering, such as cleaning up allocated tokens after
-an error. Keep comments short and update them when the behavior changes. Do not add a
-comment to every function or repeat a clear function name.
+Comment non-obvious error handling or ordering, such as cleaning up allocated tokens after an error. Keep comments short and update them when the behavior changes. Do not add a comment to every function or repeat a clear function name.
 
 Use short section comments for groups of declarations when they improve scanning:
 
@@ -60,8 +47,7 @@ Use short section comments for groups of declarations when they improve scanning
  */
 ```
 
-Use end-of-line comments sparingly for compact hardware meanings or guard names. Put a comment
-before a block when it explains the whole block:
+Use end-of-line comments sparingly for compact hardware meanings or guard names. Put a comment before a block when it explains the whole block:
 
 ```c
 GPIO_PIN_MODE_OUTPUT_PP, // push-pull mode
@@ -95,11 +81,9 @@ Use function comments to explain:
 
 ## Section comments in .c/.h
 
-**Section comments describe the structure of a file**, not the behavior of individual
-functions or variables. Use them to make the organization of a file visible when scrolling.
+**Section comments describe the structure of a file**, not the behavior of individual functions or variables. Use them to make the organization of a file visible when scrolling.
 
-**Do not create empty sections.** Keep meaningful comments unless they conflict with these
-rules or are clearly redundant.
+**Do not create empty sections.** Keep meaningful comments unless they conflict with these rules or are clearly redundant.
 
 TaskMate uses three visual levels:
 
@@ -159,8 +143,7 @@ For small subdivisions inside a functional group, use a simple comment.
  */
 ```
 
-Use this level only when it improves readability. Do not use decorative separators for minor
-subgroups.
+Use this level only when it improves readability. Do not use decorative separators for minor subgroups.
 
 ---
 
@@ -216,8 +199,7 @@ Only sections containing actual content should be present.
 
 ### Header files recommended structure
 
-Header files use the same visual hierarchy but should reflect the structure of a
-public or internal interface rather than copy the `.c` layout directly.
+Header files use the same visual hierarchy but should reflect the structure of a public or internal interface rather than copy the `.c` layout directly.
 
 
 ```c
@@ -285,5 +267,4 @@ When asked to apply this document to existing TaskMate files:
 11. Do not perform unrelated style cleanup.
 12. If the correct logical grouping is ambiguous, ask user.
 
-The purpose of this operation is readability and source navigation, not code
-refactoring.
+The purpose of this operation is readability and source navigation, not code refactoring.

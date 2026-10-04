@@ -9,16 +9,11 @@ Commit `94ff337` grouped formatting below `tmLibc/stdio/`.
 Before `v0.31`, string macros became target-selected without a `hal/public` relay.
 
 ## Current implementation
-Build options select TaskMate implementations or partial standard-library aliases. TaskMate mode
-provides bounded copy and comparison plus compact formatting for characters, strings, integers,
-hexadecimal, binary, percent, and one-digit zero padding.
+Build options select TaskMate implementations or partial standard-library aliases. TaskMate mode provides bounded copy and comparison plus compact formatting for characters, strings, integers, hexadecimal, binary, percent, and one-digit zero padding.
 
-tmLibc consumes storage-aware descriptors and calls sysCall to read bytes and transport console
-output. On AVR8, build-selected macros place constant text in program memory while RAM buffers are
-wrapped explicitly. Tasks and services may use the layer; HAL, sysCore, and sysCall may not.
+tmLibc consumes storage-aware descriptors and calls sysCall to read bytes and transport console output. On AVR8, build-selected macros place constant text in program memory while RAM buffers are wrapped explicitly. Tasks and services may use the layer; HAL, sysCore, and sysCall may not.
 
-Formatting uses fixed static state and no heap. Boot no longer depends on tmLibc: early USART status
-bytes are emitted through the neutral driver contract before scheduling and normal service logging.
+Formatting uses fixed static state and no heap. Boot no longer depends on tmLibc: early USART status bytes are emitted through the neutral driver contract before scheduling and normal service logging.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

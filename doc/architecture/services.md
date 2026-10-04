@@ -9,16 +9,11 @@ Run-level admission and cooperative yield then made startup ordering explicit.
 At `v0.31`, `test1` remains the sole composition and always includes system and SCLI services.
 
 ## Current implementation
-autoCode registers `system` at the core level and `scli` at the service level, each with a fixed
-stack. Both declare initialization through sysCall and use sysCall for thread or hardware mediation.
+autoCode registers `system` at the core level and `scli` at the service level, each with a fixed stack. Both declare initialization through sysCall and use sysCall for thread or hardware mediation.
 
-The system service initializes logical GPIO, advances run levels, starts matching drivers, performs
-I2C discovery, captures RTC startup time, and waits for driver and thread readiness. It then logs
-system data and periodically displays RTC time on the LCD.
+The system service initializes logical GPIO, advances run levels, starts matching drivers, performs I2C discovery, captures RTC startup time, and waits for driver and thread readiness. It then logs system data and periodically displays RTC time on the LCD.
 
-SCLI reads USART into a fixed buffer and dispatches `date`, `driver`, `i2c`, and `thread` commands.
-Services use tmLibc for strings, formatting, and logging and may consume neutral data contracts;
-they do not include concrete HAL headers or call HAL functions directly.
+SCLI reads USART into a fixed buffer and dispatches `date`, `driver`, `i2c`, and `thread` commands. Services use tmLibc for strings, formatting, and logging and may consume neutral data contracts; they do not include concrete HAL headers or call HAL functions directly.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

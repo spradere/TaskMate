@@ -10,20 +10,13 @@ Commit `776edf5` removed the `hal/public` facade and made boundary checks build-
 After `v0.31`, the build manifest gained both autoCode and `init.rc` version reporting.
 
 ## Current implementation
-The sole configured target is `test1`, selecting Arduino Mega, ATmega2560, and AVR8. Its Make
-fragments contribute target configuration, hardware settings, compiler flags, and selected sources.
+The sole configured target is `test1`, selecting Arduino Mega, ATmega2560, and AVR8. Its Make fragments contribute target configuration, hardware settings, compiler flags, and selected sources.
 
-Firmware sources combine the sysCore/sysCall base and boot entry point with module files and
-directories declared in `test1_init.rc`. Target fragments add tmLibc, architecture support, and the
-MCU GPIO implementation. The final list is sorted and deduplicated before object mapping.
+Firmware sources combine the sysCore/sysCall base and boot entry point with module files and directories declared in `test1_init.rc`. Target fragments add tmLibc, architecture support, and the MCU GPIO implementation. The final list is sorted and deduplicated before object mapping.
 
-The normal pipeline validates tools and the hardware stack, rejects retired HAL facade tokens,
-checks the autoCode API version, regenerates target-local fragments, and enforces direct-include
-and critical-header rules. It then builds dependencies and AVR firmware and reports size data.
+The normal pipeline validates tools and the hardware stack, rejects retired HAL facade tokens, checks the autoCode API version, regenerates target-local fragments, and enforces direct-include and critical-header rules. It then builds dependencies and AVR firmware and reports size data.
 
-Build artifacts, generated code, logs, manifests, and stamps live below `build/`. Destructive Make
-utilities pass paths through a type-aware repository-confinement guard. The final manifest records
-TaskMate, hardware, Git, compiler, autoCode, and `init.rc` versions.
+Build artifacts, generated code, logs, manifests, and stamps live below `build/`. Destructive Make utilities pass paths through a type-aware repository-confinement guard. The final manifest records TaskMate, hardware, Git, compiler, autoCode, and `init.rc` versions.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

@@ -9,16 +9,11 @@ Commits `9c64446` and `58958b8` moved storage-aware strings here and removed the
 The pre-`v0.31` GPIO and HAL-facade work made all hardware calls target-neutral.
 
 ## Current implementation
-Five focused groups mediate driver and peripheral operations, errors and halt, logical GPIO,
-storage-aware strings and console output, and thread/run-level/time-counter operations.
+Five focused groups mediate driver and peripheral operations, errors and halt, logical GPIO, storage-aware strings and console output, and thread/run-level/time-counter operations.
 
-Driver syscalls use generated module metadata and neutral HAL contracts for lifecycle, LCD, RTC,
-I2C discovery, and USART. Thread syscalls protect shared AVR state with short atomic sections and
-delegate database and scheduling policy to sysCore. GPIO calls reach the neutral HAL signal API.
+Driver syscalls use generated module metadata and neutral HAL contracts for lifecycle, LCD, RTC, I2C discovery, and USART. Thread syscalls protect shared AVR state with short atomic sections and delegate database and scheduling policy to sysCore. GPIO calls reach the neutral HAL signal API.
 
-String syscalls read RAM or program-memory descriptors, compare and copy bounded text, and transport
-console bytes. Build-selected macros create target-appropriate descriptors at call sites. tmLibc is
-strictly above this boundary; syscall sources no longer include or call it.
+String syscalls read RAM or program-memory descriptors, compare and copy bounded text, and transport console bytes. Build-selected macros create target-appropriate descriptors at call sites. tmLibc is strictly above this boundary; syscall sources no longer include or call it.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

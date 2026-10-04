@@ -17,7 +17,6 @@
 | Usability & control CLI | ~40% | Initial planning done, implementation pending |
 | Testing & validation | 0% | Full system stress and failure handling not tested yet |
 
-The overall completion estimate reflects functional maturity for real-world usage,
-not code volume or architectural completeness.
+The overall completion estimate reflects functional maturity for real-world usage, not code volume or architectural completeness.
 
 - **Total System Completion Estimate: ~40%**

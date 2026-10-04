@@ -9,15 +9,11 @@ The source-selection refactor now attaches each task translation unit to its `in
 At `v0.31`, `test1` remains the sole target and contains two demonstration tasks.
 
 ## Current implementation
-autoCode registers `task1` and `task2` at the user run level with fixed 256-byte AVR stacks,
-initial contexts, generated names, status, saved run levels, and entry callbacks.
+autoCode registers `task1` and `task2` at the user run level with fixed 256-byte AVR stacks, initial contexts, generated names, status, saved run levels, and entry callbacks.
 
-The scheduler excludes both tasks until staged startup reaches the user level. Each task then marks
-itself initialized, toggles its target-defined logical LED, loads a 50-tick software counter, and
-busy-waits while periodic scheduling interrupts continue to preempt it.
+The scheduler excludes both tasks until staged startup reaches the user level. Each task then marks itself initialized, toggles its target-defined logical LED, loads a 50-tick software counter, and busy-waits while periodic scheduling interrupts continue to preempt it.
 
-Tasks include only their local API plus sysCall headers. They may use service and tmLibc APIs, but
-must not include neutral interfaces, sysCore, concrete HAL headers, or MCU registers directly.
+Tasks include only their local API plus sysCall headers. They may use service and tmLibc APIs, but must not include neutral interfaces, sysCore, concrete HAL headers, or MCU registers directly.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

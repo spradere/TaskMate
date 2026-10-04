@@ -37,12 +37,7 @@ From the repository root:
 Windows 10 with Cygwin64
 ------------------------
 
-Install Cygwin64, then use setup-x86_64.exe to install the bmake, clang, cloc,
-ctags, coreutils, findutils, gawk, git, rsync, sed, and util-linux packages.
-Install a complete native Windows AVR toolchain and avrdude separately, then add
-its bin directory to the Cygwin PATH. /usr/local/bin and /usr/bin must remain
-before the Windows directories to avoid selecting Windows programs such as
-find.exe or sort.exe. Example for the Cygwin profile:
+Install Cygwin64, then use setup-x86_64.exe to install the bmake, clang, cloc, ctags, coreutils, findutils, gawk, git, rsync, sed, and util-linux packages. Install a complete native Windows AVR toolchain and avrdude separately, then add its bin directory to the Cygwin PATH. /usr/local/bin and /usr/bin must remain before the Windows directories to avoid selecting Windows programs such as find.exe or sort.exe. Example for the Cygwin profile:
 
     export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/avr-gcc/bin:$PATH"
 
@@ -53,8 +48,7 @@ Adjust the path to match the local installation. Then check the environment:
     ./scripts/check_programs.sh conf/programs-list.conf
     ./scripts/check_programs.sh srcs/hal/arch/avr8/avr8_programs.list
 
-If the Cygwin cloc package reports `Can't open perl script "perl"`, create the
-following /usr/local/bin/cloc launcher and make it executable:
+If the Cygwin cloc package reports `Can't open perl script "perl"`, create the following /usr/local/bin/cloc launcher and make it executable:
 
     #!/bin/sh
     exec /usr/bin/perl /usr/bin/cloc "$@"
@@ -80,6 +74,4 @@ Uploading is an explicit operation:
 
     bmake upload VAL_PROGRAMMER_PORT=<port>
 
-For example, use /dev/ttyU0 on FreeBSD. On Windows, adjust the port to the
-notation understood by the installed avrdude version. The backup target depends
-on FreeBSD device mounting and must not be used unchanged on Windows.
+For example, use /dev/ttyU0 on FreeBSD. On Windows, adjust the port to the notation understood by the installed avrdude version. The backup target depends on FreeBSD device mounting and must not be used unchanged on Windows.

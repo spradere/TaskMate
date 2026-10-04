@@ -9,16 +9,11 @@ Commit `f78057f` replaced formatted panic handling with a minimal neutral halt c
 After `v0.31`, generic system errors were consolidated in `system/general.err`.
 
 ## Current implementation
-Selected catalogues declare a symbolic code, quoted message, and one of four levels: `FLOW` for
-normal control interruption, `WARN` for recoverable anomalies, `FAIL` for component failure, and
-`PANIC` for a critical condition requiring a controlled halt.
+Selected catalogues declare a symbolic code, quoted message, and one of four levels: `FLOW` for normal control interruption, `WARN` for recoverable anomalies, `FAIL` for component failure, and `PANIC` for a critical condition requiring a controlled halt.
 
-The build sorts declarations before autoCode generates the enum and fixed catalogue. `FLOW` entries
-have no stored message; other entries use target-appropriate constant text. Syscalls translate HAL
-driver state into error codes and provide bounded message lookup to services.
+The build sorts declarations before autoCode generates the enum and fixed catalogue. `FLOW` entries have no stored message; other entries use target-appropriate constant text. Syscalls translate HAL driver state into error codes and provide bounded message lookup to services.
 
-Fatal paths call the neutral `_Noreturn` halt contract. The AVR8 implementation disables interrupts
-and loops permanently, without formatting, USART output, allocation, or scheduler dependence.
+Fatal paths call the neutral `_Noreturn` halt contract. The AVR8 implementation disables interrupts and loops permanently, without formatting, USART output, allocation, or scheduler dependence.
 
 ## Well-built code and implementation weaknesses
 ### Strengths

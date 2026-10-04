@@ -33,8 +33,7 @@ Symbol and filename prefixes are related, but they are not interchangeable. Publ
 - Keeps the driver control protocol distinct from TaskMate core constants
 - Uses `DRV_CTRL_` for every operation accepted by a driver control function
 
-👉 This prefix is reserved for the **portable driver contract**, not for
-hardware-specific implementation details.
+👉 This prefix is reserved for the **portable driver contract**, not for hardware-specific implementation details.
 
 ---
 
@@ -71,8 +70,7 @@ At a glance, it reads as:
 
 - Prefixes every C source and header owned by `srcs/system/sysCore/`
 - Distinguishes kernel implementation files from the task-visible `sc_` boundary
-- Does not create a new public API namespace: symbols retain their established domain prefixes
-  when appropriate
+- Does not create a new public API namespace: symbols retain their established domain prefixes when appropriate
 
 👉 `sys_` identifies **sysCore file ownership**, not generic project-wide code.
 
@@ -85,8 +83,7 @@ At a glance, it reads as:
 - Prefixes HAL functions declared by neutral contracts in `srcs/interfaces/`
 - Keeps the hardware boundary distinct from the selected target implementation
 
-👉 `hal_` identifies a **HAL operation**; target-specific implementation filenames use the target
-prefixes below.
+👉 `hal_` identifies a **HAL operation**; target-specific implementation filenames use the target prefixes below.
 
 ---
 
@@ -97,12 +94,10 @@ prefixes below.
 - `avr8_` prefixes files in `srcs/hal/arch/avr8/`
 - `at2560_` prefixes files in `srcs/hal/mcu/atmega2560/`
 - `mega_` prefixes files in `srcs/hal/board/arduinoMega/`
-- Applies to implementation-support files as well as C and headers, including `.mk`, `.awk`,
-  `.list`, and `.err` files
+- Applies to implementation-support files as well as C and headers, including `.mk`, `.awk`, `.list`, and `.err` files
 - Makes target selection explicit without scattering target conditionals through portable code
 
-👉 Target prefixes identify **where an implementation belongs**, while `hal_` identifies the
-hardware abstraction boundary it serves.
+👉 Target prefixes identify **where an implementation belongs**, while `hal_` identifies the hardware abstraction boundary it serves.
 
 ---
 
@@ -114,8 +109,7 @@ hardware abstraction boundary it serves.
 - Not application code
 - Not a pure driver
 
-👉 Using a dedicated prefix explicitly acknowledges the existence of an
-**intermediate semantic layer**, rather than hiding it inside unrelated components.
+👉 Using a dedicated prefix explicitly acknowledges the existence of an **intermediate semantic layer**, rather than hiding it inside unrelated components.
 
 ---
 

@@ -9,18 +9,11 @@ Commit `46c7521` made initial context restoration one indivisible AVR8 operation
 Commit `776edf5` physically removed `hal/public`; tag `v0.31` records that boundary.
 
 ## Current implementation
-The implemented stack is `avr8 / atmega2560 / arduinoMega`, selected by `test1`. Architecture code
-owns context, atomics, halt, string storage, compiler support, and memory reporting. MCU code
-owns GPIO, I2C, USART, and the scheduling timers. Board code contributes hardware configuration.
-Reusable drivers implement the AMC2004 LCD and ZS042 RTC contracts.
+The implemented stack is `avr8 / atmega2560 / arduinoMega`, selected by `test1`. Architecture code owns context, atomics, halt, string storage, compiler support, and memory reporting. MCU code owns GPIO, I2C, USART, and the scheduling timers. Board code contributes hardware configuration. Reusable drivers implement the AMC2004 LCD and ZS042 RTC contracts.
 
-HAL operations are declared by neutral interfaces and implemented by selected target sources; no
-public relay directory remains. A build guard rejects the old facade and an include checker prevents
-system, tmLibc, interfaces, and tasks from reaching concrete architecture, MCU, or board headers.
+HAL operations are declared by neutral interfaces and implemented by selected target sources; no public relay directory remains. A build guard rejects the old facade and an include checker prevents system, tmLibc, interfaces, and tasks from reaching concrete architecture, MCU, or board headers.
 
-The boot path initializes USART before allocating modules and starting the scheduler. Run-level
-drivers are then initialized and started through syscalls. Context start restores the AVR stack,
-registers, status, and interrupt return as one naked non-returning backend operation.
+The boot path initializes USART before allocating modules and starting the scheduler. Run-level drivers are then initialized and started through syscalls. Context start restores the AVR stack, registers, status, and interrupt return as one naked non-returning backend operation.
 
 ## Well-built code and implementation weaknesses
 ### Strengths
