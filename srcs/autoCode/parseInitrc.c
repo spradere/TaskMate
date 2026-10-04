@@ -110,7 +110,9 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		tokenizer_err_t token_error = tokenizer(&tok);
 		if( token_error != TOK_ERR_NOERR )
 		{
-			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", initrc_name, file_line_number,
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s",
+							   initrc_name,
+							   file_line_number,
 							   tokenizerErrorMessage(token_error));
 			// A malformed version line cannot be skipped in favor of a later command.
 			if( (version_major_set == false) || (version_minor_set == false) )

@@ -49,7 +49,9 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 		tokenizer_err_t token_error = tokenizer(&tok);
 		if( token_error != TOK_ERR_NOERR )
 		{
-			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", file_signals.name, line,
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s",
+							   file_signals.name,
+							   line,
 							   tokenizerErrorMessage(token_error));
 			continue;
 		}

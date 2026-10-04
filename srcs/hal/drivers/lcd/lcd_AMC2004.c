@@ -52,10 +52,10 @@ static err_codes_t lcd_last_error = ERR_NO_ERROR;
 #define LCDAMC2004_DELAY_CLEAR_ms 11U
 #define LCDAMC2004_DELAY_I2CSTOP_us 200U
 
-#define LCDAMC2004_CMD_SETUP 0x38U 	// Function Set: 8-bit mode, 2 lines, 5x8 dots
+#define LCDAMC2004_CMD_SETUP 0x38U // Function Set: 8-bit mode, 2 lines, 5x8 dots
 #define LCDAMC2004_CMD_DISPLAYMODE 0x0CU // Display ON, Cursor OFF, Blink OFF
-#define LCDAMC2004_CMD_CLEAR 0x01U 	// Clear Display
-#define LCDAMC2004_CMD_ENTRYMODE 0x06U 	// Entry Mode: Cursor moves right, no shift	
+#define LCDAMC2004_CMD_CLEAR 0x01U // Clear Display
+#define LCDAMC2004_CMD_ENTRYMODE 0x06U // Entry Mode: Cursor moves right, no shift
 
 /* =============================================================================
  * Implementation - Functions
@@ -117,13 +117,19 @@ static hal_driver_state_t hal_lcdInit(void)
 	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_SETUP) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
 	hal_delayUs(LCDAMC2004_DELAY_CMDPROCESS_us);
 
-	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_DISPLAYMODE) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_DISPLAYMODE) == DRV_STATE_ERROR )
+	{
+		return DRV_STATE_ERROR;
+	}
 	hal_delayUs(LCDAMC2004_DELAY_CMDPROCESS_us);
-	
+
 	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_CLEAR) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
 	hal_delayMs(LCDAMC2004_DELAY_CLEAR_ms);
 
-	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_ENTRYMODE) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_ENTRYMODE) == DRV_STATE_ERROR )
+	{
+		return DRV_STATE_ERROR;
+	}
 	hal_delayUs(LCDAMC2004_DELAY_CMDPROCESS_us);
 
 	TM_SETBIT(lcd_status, DRV_BIT_INIT);

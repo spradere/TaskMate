@@ -80,10 +80,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		fileInit(&file_src);
 		file_src.name = file_tmp_list[i].source_name;
 		result = fileOpen(&file_src, "r", FILE_MISSING_ALLOWED);
-		if( result != FILE_UTILITY_OK )
-		{
-			goto exit;
-		}
+		if( result != FILE_UTILITY_OK ) { goto exit; }
 
 		file_t file_tmp;
 		fileInit(&file_tmp);
@@ -133,11 +130,11 @@ file_utility_err_t fileCmpReplaceAll(void)
 	}
 
 exit:
-	{
-		// Remove any staged files left after publication or an early error.
-		file_utility_err_t cleanup_result = fileTmpCleanupAll();
-		if( result == FILE_UTILITY_OK ) { result = cleanup_result; }
-	}
+{
+	// Remove any staged files left after publication or an early error.
+	file_utility_err_t cleanup_result = fileTmpCleanupAll();
+	if( result == FILE_UTILITY_OK ) { result = cleanup_result; }
+}
 	return result;
 }
 
@@ -202,8 +199,8 @@ exit:
 file_utility_err_t fileGetLine(file_t *file, char *line, const size_t line_size_max)
 {
 	file_utility_err_t result = FILE_GET_LINE_SUCCESS;
-	if( (file == NULL) || (file->stream == NULL) || (line == NULL) ||
-		(line_size_max < 2U) || (line_size_max > (size_t)INT_MAX) )
+	if( (file == NULL) || (file->stream == NULL) || (line == NULL) || (line_size_max < 2U) ||
+		(line_size_max > (size_t)INT_MAX) )
 	{
 		result = FILE_GET_LINE_ERROR;
 		goto exit;
@@ -254,15 +251,9 @@ file_utility_err_t fileClose(file_t *file)
 
 	if( file->stream_opened )
 	{
-		if( file->write_access && (ferror(file->stream) != 0) )
-		{
-			result = FILE_UTILITY_WRITE;
-		}
+		if( file->write_access && (ferror(file->stream) != 0) ) { result = FILE_UTILITY_WRITE; }
 		int err = fclose(file->stream);
-		if( err != 0 )
-		{
-			result = FILE_UTILITY_CLOSE;
-		}
+		if( err != 0 ) { result = FILE_UTILITY_CLOSE; }
 		if( file->name_allocated ) { free(file->name); }
 		fileInit(file);
 	}
@@ -382,10 +373,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 	}
 	memcpy(source_name, file_src_name, source_name_size);
 	result = fileTmpName(file_src_name, temporary_name);
-	if( result != FILE_UTILITY_OK )
-	{
-		goto exit;
-	}
+	if( result != FILE_UTILITY_OK ) { goto exit; }
 
 	// Append only after both names are ready, leaving the existing list intact on failure.
 	file_tmp_item_t *list = realloc(file_tmp_list, (file_tmp_source_count + 1) * sizeof(*list));
@@ -430,19 +418,45 @@ const char *fileUtilityErrorMessage(file_utility_err_t error)
 	const char *message = "unknown file utility error";
 	switch( error )
 	{
-		case FILE_UTILITY_OK: message = "no error"; break;
-		case FILE_GET_LINE_EOF: message = "end of file"; break;
-		case FILE_UTILITY_DIFFERENT: message = "files differ"; break;
-		case FILE_GET_LINE_ERROR: message = "reading line failed or line too long"; break;
-		case FILE_UTILITY_INVALID: message = "invalid file argument"; break;
-		case FILE_UTILITY_OPEN: message = "opening file failed"; break;
-		case FILE_UTILITY_WRITE: message = "writing file failed"; break;
-		case FILE_UTILITY_CLOSE: message = "closing file failed"; break;
-		case FILE_UTILITY_SEEK: message = "seeking file failed"; break;
-		case FILE_UTILITY_REMOVE: message = "removing temporary file failed"; break;
-		case FILE_UTILITY_RENAME: message = "renaming temporary file failed"; break;
-		case FILE_UTILITY_ALLOC: message = "allocating file data failed"; break;
-		case FILE_UTILITY_REGISTER: message = "registering temporary cleanup failed"; break;
+		case FILE_UTILITY_OK:
+			message = "no error";
+			break;
+		case FILE_GET_LINE_EOF:
+			message = "end of file";
+			break;
+		case FILE_UTILITY_DIFFERENT:
+			message = "files differ";
+			break;
+		case FILE_GET_LINE_ERROR:
+			message = "reading line failed or line too long";
+			break;
+		case FILE_UTILITY_INVALID:
+			message = "invalid file argument";
+			break;
+		case FILE_UTILITY_OPEN:
+			message = "opening file failed";
+			break;
+		case FILE_UTILITY_WRITE:
+			message = "writing file failed";
+			break;
+		case FILE_UTILITY_CLOSE:
+			message = "closing file failed";
+			break;
+		case FILE_UTILITY_SEEK:
+			message = "seeking file failed";
+			break;
+		case FILE_UTILITY_REMOVE:
+			message = "removing temporary file failed";
+			break;
+		case FILE_UTILITY_RENAME:
+			message = "renaming temporary file failed";
+			break;
+		case FILE_UTILITY_ALLOC:
+			message = "allocating file data failed";
+			break;
+		case FILE_UTILITY_REGISTER:
+			message = "registering temporary cleanup failed";
+			break;
 	}
 	goto exit;
 exit:

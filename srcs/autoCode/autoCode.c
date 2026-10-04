@@ -87,8 +87,7 @@ int main(int argc, const char *argv[])
 
 	options_list_t auto_options = {0};
 	if( options(argv[1], &auto_options) != 0 ) { autoCodeExit(AC_FORCE_EXIT); }
-	error_count_maximum =
-		auto_options.test_mode ? ERROR_COUNT_TEST_MODE : ERROR_COUNT_NORMAL_MODE;
+	error_count_maximum = auto_options.test_mode ? ERROR_COUNT_TEST_MODE : ERROR_COUNT_NORMAL_MODE;
 	autoCodeExit(AC_FORCE_EXIT);
 
 	// Keep one database for all stages so tags use the validated declarations.
@@ -125,16 +124,17 @@ int main(int argc, const char *argv[])
 			tokenizer_err_t token_error = tokenizer(&tok);
 			if( token_error != TOK_ERR_NOERR )
 			{
-				AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", list_file.name, file_line_number,
+				AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s",
+								   list_file.name,
+								   file_line_number,
 								   tokenizerErrorMessage(token_error));
 				continue;
 			}
-			
+
 			if( tok.count == 0 ) { continue; }
-			
+
 			// Each stage consumes the same list format but validates a different input.
-			if( (stage == AC_STAGE_ERRORS) &&
-				(globalError(tok.tokens[0], &errors_catalog) != 0) )
+			if( (stage == AC_STAGE_ERRORS) && (globalError(tok.tokens[0], &errors_catalog) != 0) )
 			{
 				break;
 			}
@@ -160,13 +160,13 @@ int main(int argc, const char *argv[])
 		{
 			if( stage == AC_STAGE_ERRORS ) { AUTOCODE_MSG_ERROR("closing error list file"); }
 			if( stage == AC_STAGE_INITRC ) { AUTOCODE_MSG_ERROR("closing initrc list file"); }
-			if( stage == AC_STAGE_TAGS ){AUTOCODE_MSG_ERROR("closing tag list file");}
+			if( stage == AC_STAGE_TAGS ) { AUTOCODE_MSG_ERROR("closing tag list file"); }
 		}
 
 		tokenizerFree(&tok);
-		autoCodeExit(AC_FORCE_EXIT);	
-			
-		if( stage == AC_STAGE_TAGS ){parseTagHave();}
+		autoCodeExit(AC_FORCE_EXIT);
+
+		if( stage == AC_STAGE_TAGS ) { parseTagHave(); }
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
@@ -174,7 +174,8 @@ int main(int argc, const char *argv[])
 	file_utility_err_t replace_result = fileCmpReplaceAll();
 	if( replace_result != FILE_UTILITY_OK )
 	{
-		AUTOCODE_MSG_ERROR("publishing generated files: %s", fileUtilityErrorMessage(replace_result));
+		AUTOCODE_MSG_ERROR("publishing generated files: %s",
+						   fileUtilityErrorMessage(replace_result));
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
