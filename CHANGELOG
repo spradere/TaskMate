@@ -1,3 +1,7 @@
+	[doc] [code] add Doxygen comments in .h code
+	[doc] [code] add inline comments in C code
+	[doc] [code] add functions comments in C code
+	[doc] review of comments related documentation
 	[code] split sys_modules -> sys_threads sys_drivers
 	[code] refactor hal/*/*_type.h
 	[build] refactor autoCode error count
@@ -6,7 +10,7 @@
 
 TaskMate 0.32
 
-	[build] + [code] scli commands selection in initrc files
+	[build] [code] scli commands selection in initrc files
 	[code] refactor initrc parser, function dispather and X macro
 	[build] remove useless code and add comments in makefiles
 	[code] upade autoCode init.rc parser
@@ -17,9 +21,9 @@ TaskMate 0.32
 
 TaskMate 0.31
 
-	[arch] + [code] remove hal/public
+	[arch] [code] remove hal/public
 	[code] upgrade schedler to handle context instead of stack
-	[arch] + [build] portable macro for string storage
+	[arch] [build] portable macro for string storage
  	[arch] remove useless init.* in code, makefiles and autoCode
 	[build] select and validate compilation sources through init.rc
 	[test] add host coverage for string and formatting boundaries
