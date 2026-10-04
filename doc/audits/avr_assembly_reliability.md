@@ -31,7 +31,7 @@ No tracked non-legacy `.S`, `.s`, or `.asm` source exists. The critical routine 
 
 ### A1, critical: `r1` is destroyed before it is saved
 
-`AVR8_CONTEXT_SAVE` saves `r0` and `SREG`, executes `clr r1`, and only then pushes `r1`. Restore later pops the saved byte into `r1`. This records zero, not the interrupted value.
+~~`AVR8_CONTEXT_SAVE` saves `r0` and `SREG`, executes `clr r1`, and only then pushes `r1`. Restore later pops the saved byte into `r1`. This records zero, not the interrupted value.
 
 The ABI requires `r1` to be zero at normal C sequence points, but code generation may use it transiently, notably as the high result register of multiply instructions. An interrupt may occur between the instruction that changes it and the instruction that clears it. Interrupt transparency requires the sequence to push `r1` first, then clear it before calling C.
 
@@ -42,7 +42,7 @@ Recommended correction:
 3. Add an instruction-level regression check for `push r1` preceding `clr r1` and for the reverse restore order.
 4. Run an on-target stress test that preempts multiply-heavy code at a high scheduler frequency and checks deterministic results.
 
-Primary ABI reference: <https://avrdudes.github.io/avr-libc/avr-libc-user-manual/FAQ.html>.
+Primary ABI reference: <https://avrdudes.github.io/avr-libc/avr-libc-user-manual/FAQ.html>.~~
 
 ### A2, high: extended assembly is used in a naked function
 

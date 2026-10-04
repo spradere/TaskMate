@@ -1,4 +1,5 @@
-	[doc] [code] add Doxygen comments in .h code
+	[code] fix AVR timer3 init/start/stop, harden timer1 stop
+ 	[doc] [code] add Doxygen comments in .h code
 	[doc] [code] add inline comments in C code
 	[doc] [code] add functions comments in C code
 	[doc] review of comments related documentation
