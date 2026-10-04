@@ -14,7 +14,15 @@
 #ifndef INTERFACES_HAL_DELAY_H
 #define INTERFACES_HAL_DELAY_H
 
+/* ============================================================================
+ * Includes
+ * ========================================================================== */
+
 #include <stdint.h>
+
+/* ============================================================================
+ * Public API
+ * ========================================================================== */
 
 /** Block the caller for at least the requested number of milliseconds. */
 void hal_delayMs(uint16_t milliseconds);
