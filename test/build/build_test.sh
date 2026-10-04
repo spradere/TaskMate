@@ -338,6 +338,8 @@ runConfigurationTests()
 
 	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
+	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_delay.c"
+	logContains default_compile_sources "srcs/hal/drivers/lcd/lcd_AMC2004.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_stack.c"
 	logExcludes default_compile_sources "test1_scli_commands"
@@ -658,6 +660,10 @@ runGuardTests()
 	printf '#include "interfaces/hal_atomic.h"\n' > "${PATH_STAGE_WORK}/atomic_header.c"
 	expectSuccess atomic_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/atomic_header.c"
+
+	printf '#include "interfaces/hal_delay.h"\n' > "${PATH_STAGE_WORK}/delay_header.c"
+	expectSuccess delay_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/delay_header.c"
 
 	printf '#include "interfaces/hal_context.h"\nhal_context_t *context;\n' \
 		> "${PATH_STAGE_WORK}/context_header.c"
