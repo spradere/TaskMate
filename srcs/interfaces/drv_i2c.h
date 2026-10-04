@@ -26,12 +26,18 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Selects I2C transfer direction.
+ */
 typedef enum
 {
 	HAL_I2C_WRITE,
 	HAL_I2C_READ
 } hal_i2c_direction_t;
 
+/**
+ * @brief Selects the acknowledge bit sent after an I2C read.
+ */
 typedef enum
 {
 	HAL_I2C_NACK,

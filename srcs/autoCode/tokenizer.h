@@ -25,6 +25,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Input line capacity in bytes for tokenization.
+ */
 #define TOKEN_LINE_SIZE_MAX 256
 
 /**
@@ -38,6 +41,9 @@ typedef struct
 
 } tokenizer_t;
 
+/**
+ * @brief Reports tokenization results.
+ */
 typedef enum
 {
 	TOK_ERR_NOERR,

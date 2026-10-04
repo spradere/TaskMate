@@ -19,14 +19,27 @@
  * Constants
  * ========================================================================== */
 
+/**
+ * @name autoCode buffer and table limits
+ * @brief Set autoCode buffer, line, stack, and command constants.
+ * @{
+ */
 #define AC_BUFFER_SIZE 256
 #define AC_GENERATED_LINE_START 1000
 #define AC_THREAD_STACK_SIZE_MIN 3UL
 #define AC_SCLI_COMMAND_COUNT_MAX 16
+/** @} */
+
+/**
+ * @name autoCode syntax versions
+ * @brief Identify accepted init.rc syntax and the autoCode version.
+ * @{
+ */
 #define AC_INITRC_EXPECTED_VER_MAJOR 1
 #define AC_INITRC_EXPECTED_VER_MINOR 10
 #define AC_AUTOCODE_VER_MAJOR 1
 #define AC_AUTOCODE_VER_MINOR 6
+/** @} */
 
 /* ============================================================================
  * Includes
@@ -51,6 +64,11 @@
  * Message macros
  * ---------------------------------------------*/
 
+/**
+ * @name autoCode diagnostics
+ * @brief Emit error or information messages during generation.
+ * @{
+ */
 #define AUTOCODE_MSG_ERROR(format, ...)                                                          \
 	do {                                                                                         \
 		fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__); \
@@ -60,11 +78,15 @@
 
 #define AUTOCODE_MSG_INFO(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
+/** @} */
 
 /* -----------------------------------------------
  * Error handling
  * ---------------------------------------------*/
 
+/**
+ * @brief Selects error counting or immediate termination.
+ */
 typedef enum
 {
 	AC_INCREMENT,

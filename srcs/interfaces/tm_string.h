@@ -19,8 +19,14 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Maximum length used by storage-aware string operations.
+ */
 #define TM_STRING_SIZE_MAX 255
 
+/**
+ * @brief Identifies whether a string resides in RAM or ROM.
+ */
 typedef enum
 {
 	TM_MEM_RAM,

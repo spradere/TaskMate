@@ -27,8 +27,14 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @name Host thread stack sizes
+ * @brief Reserve ucontext stack words and boundary canaries.
+ * @{
+ */
 #define UCONTEXT_THREAD_STACK_WORD_COUNT 32768u
 #define UCONTEXT_THREAD_STACK_CANARY_WORD_COUNT 2u
+/** @} */
 
 typedef uint8_t hal_stack_word_t;
 

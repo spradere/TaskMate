@@ -27,6 +27,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Identifies an ATmega2560 GPIO port.
+ */
 typedef enum
 {
 	PORT_A,

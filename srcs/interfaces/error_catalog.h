@@ -19,6 +19,9 @@
  * ========================================================================== */
 
 #ifdef AUTOCODE_BUILD
+/**
+ * @brief Provides the placeholder error count during autoCode compilation.
+ */
 typedef enum
 {
 	ERROR_COUNT

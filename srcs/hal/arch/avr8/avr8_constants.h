@@ -19,6 +19,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Number of AVR8 general-purpose registers.
+ */
 #define AVR8_REGISTER_COUNT 32 // from R0 to R31
 
 #endif // AVR8_AVR8_CONSTANTS_H
