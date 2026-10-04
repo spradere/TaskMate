@@ -28,12 +28,18 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Maps a logical signal to a pin and active level.
+ */
 typedef struct
 {
 	hal_pin_t pin;
 	bool active_high;
 } hal_signal_t;
 
+/**
+ * @brief Groups GPIO register addresses for one port.
+ */
 typedef struct
 {
 	volatile uint8_t *ddr;
@@ -45,8 +51,18 @@ typedef struct
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Configure a physical GPIO pin.
+ */
 void hal_gpioPinInit(const hal_pin_t *pin);
+/**
+ * @brief Set a physical GPIO pin level.
+ */
 void hal_gpioPinWrite(const hal_pin_t pin, bool value);
+/**
+ * @brief Read a physical GPIO pin level.
+ * @return Current electrical level of the pin.
+ */
 bool hal_gpioPinRead(const hal_pin_t pin);
 
 #endif // ATMEGA2560_AT2560_GPIO_H

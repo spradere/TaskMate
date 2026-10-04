@@ -45,6 +45,9 @@ typedef enum
 	PORT_COUNT
 } hal_port_list_t;
 
+/**
+ * @brief Describes one ATmega2560 GPIO pin and its configuration.
+ */
 typedef struct
 {
 	hal_port_list_t port;

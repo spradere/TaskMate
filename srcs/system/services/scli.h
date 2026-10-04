@@ -19,6 +19,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Run the SCLI service thread.
+ */
 void scli(void);
 
 #endif // SERVICES_SCLI_H

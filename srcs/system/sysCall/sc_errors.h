@@ -29,6 +29,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Associates an error message with its severity.
+ */
 typedef struct
 {
 	const tm_string_t *name;
@@ -39,7 +42,15 @@ typedef struct
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Get the message for an error code.
+ * @param num Error code index.
+ * @return Stored message for the code.
+ */
 const tm_string_t *err_getMessage(uint8_t num);
+/**
+ * @brief Stop system execution.
+ */
 void sc_halt(void);
 
 #endif // SYSCALL_SC_ERRORS_H

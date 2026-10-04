@@ -32,6 +32,9 @@
 
 typedef uint8_t hal_stack_word_t;
 
+/**
+ * @brief Holds the native host context for a suspended thread.
+ */
 struct hal_context
 {
 	ucontext_t *native;

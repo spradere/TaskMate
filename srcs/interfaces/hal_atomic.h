@@ -32,14 +32,16 @@ typedef uintptr_t hal_atomic_state_t;
  * ========================================================================== */
 
 /**
- * Capture the complete interrupt state and mask interrupts without an intervening window.
+ * @brief Mask interrupts and capture the prior interrupt state.
  * Nested calls and calls from interrupt context preserve the state seen by each caller.
- *
  * @return State token to pass unchanged to the matching hal_atomicEnd().
  */
 hal_atomic_state_t hal_atomicStart(void);
 
-/** Restore exactly the interrupt state captured by the matching hal_atomicStart(). */
+/**
+ * @brief Restore the interrupt state captured by the matching atomic entry.
+ * @param state Token returned by hal_atomicStart().
+ */
 void hal_atomicEnd(hal_atomic_state_t state);
 
 #endif // INTERFACES_HAL_ATOMIC_H

@@ -25,6 +25,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Print the parsed module database.
+ */
 void printModules(const modules_database_t *data_base);
 
 #endif // AUTOCODE_PRINTMODULES_H

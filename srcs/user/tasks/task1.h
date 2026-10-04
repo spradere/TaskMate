@@ -19,6 +19,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Run the first user task.
+ */
 void task1(void);
 
 #endif // TASKS_TASK1_H

@@ -25,6 +25,9 @@
  * Public definitions
  * ===========================================================================*/
 
+/**
+ * @brief Provides shared context for one parsed init.rc command.
+ */
 typedef struct
 {
 	modules_database_t *data_base;

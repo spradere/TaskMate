@@ -18,16 +18,26 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Opaque execution context owned by the selected HAL backend.
+ */
 typedef struct hal_context hal_context_t;
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-/** Initialize a context on the final word of architecture-defined stack storage. */
+/**
+ * @brief Initialize a thread context on architecture-defined stack storage.
+ * @param func Entry function for the thread.
+ * @param[out] context Context to initialize.
+ * @param stack_top Final word of the allocated stack.
+ */
 void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top);
 
-/** Restore and start a context as one indivisible architecture operation. */
+/**
+ * @brief Restore and start a context as one indivisible architecture operation.
+ */
 _Noreturn void hal_contextStart(const hal_context_t *context);
 
 #endif // INTERFACES_HAL_CONTEXT_H

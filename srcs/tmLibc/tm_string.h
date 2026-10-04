@@ -34,7 +34,17 @@
 	#include <stdint.h>
 	#include "system/sysCall/sc_string.h"
 
+/**
+ * @brief Compare up to n bytes of storage-aware strings.
+ * @param n Maximum number of bytes to compare.
+ * @return Zero if equal within the limit; negative or positive for ordering.
+ */
 	int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n);
+/**
+ * @brief Copy up to n bytes of a storage-aware string to RAM.
+ * @param[out] dest Destination RAM buffer.
+ * @param n Maximum number of bytes to copy.
+ */
 	void tm_strncpy(char *dest, tm_string_t src, uint8_t n);
 #endif
 

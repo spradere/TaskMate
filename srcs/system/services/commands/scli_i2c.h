@@ -25,6 +25,10 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Handle the SCLI I2C command.
+ * @return true if the command completed successfully.
+ */
 bool i2cCommand(uint8_t argc, char *argv[]);
 
 #endif // COMMANDS_SCLI_I2C_H

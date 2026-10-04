@@ -19,6 +19,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Initialize the software time counter.
+ */
 void tm_softwareTimeCounterInit(void);
 
 #endif // SYSCORE_SYS_SOFTWARETIMECOUNTER_H

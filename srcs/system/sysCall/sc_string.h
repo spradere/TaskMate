@@ -49,12 +49,39 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Send one byte to the console.
+ * @return ERR_NO_ERROR on success; an error code otherwise.
+ */
 err_codes_t sc_consoleWriteByte(uint8_t data);
+/**
+ * @brief Flush pending console output.
+ * @return ERR_NO_ERROR on success; an error code otherwise.
+ */
 err_codes_t sc_consoleFlush(void);
 
+/**
+ * @brief Read a byte from RAM or ROM string storage.
+ * @param string Storage-aware string descriptor.
+ * @param index Byte offset in the string.
+ * @return Byte at the requested offset.
+ */
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index);
 
+/**
+ * @brief Compare bounded RAM or ROM strings.
+ * @param left First string to compare.
+ * @param right Second string to compare.
+ * @param size Maximum number of bytes to compare.
+ * @return Zero for equal prefixes; negative or positive for ordering.
+ */
 int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size);
+/**
+ * @brief Copy bounded string data to RAM.
+ * @param[out] dest Destination RAM buffer.
+ * @param src Source string descriptor.
+ * @param size Maximum number of bytes to copy.
+ */
 void sc_stringCopy(char *dest, tm_string_t src, uint8_t size);
 
 #endif // SYSCALL_SC_STRING_H

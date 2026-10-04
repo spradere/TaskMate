@@ -25,6 +25,10 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Handle the SCLI driver command.
+ * @return true if the command completed successfully.
+ */
 bool driverCommand(uint8_t argc, char *argv[]);
 
 #endif // COMMANDS_SCLI_DRIVER_H

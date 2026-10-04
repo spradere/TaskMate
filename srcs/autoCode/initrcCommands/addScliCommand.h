@@ -24,6 +24,9 @@
  * Public API
  * ===========================================================================*/
 
+/**
+ * @brief Add an SCLI command from a parsed init.rc command.
+ */
 void initrcAddScliCommand(const initrc_command_t *command);
 
 #endif // INITRCCOMMANDS_ADDSCLICOMMAND_H

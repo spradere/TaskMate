@@ -19,6 +19,9 @@
  * Public API
  * ========================================================================== */
 
+/**
+ * @brief Run the system service thread.
+ */
 void system(void);
 
 #endif // SERVICES_SYSTEM_H
