@@ -7,13 +7,13 @@
  */
 
 /**
- * @file at2560_peripheral_constants.h
+ * @file at2560_constants.h
  * @brief ATmega2560 peripheral constant declarations.
  *
  */
 
-#ifndef ATMEGA2560_AT2560_PERIPHERAL_CONSTANTS_H
-#define ATMEGA2560_AT2560_PERIPHERAL_CONSTANTS_H
+#ifndef ATMEGA2560_AT2560_CONSTANTS_H
+#define ATMEGA2560_AT2560_CONSTANTS_H
 
 /* ============================================================================
  * Public definitions
@@ -28,4 +28,4 @@
 #define I2C_FREQ 100000UL // Standard mode 100 kHz
 /** @} */
 
-#endif // ATMEGA2560_AT2560_PERIPHERAL_CONSTANTS_H
+#endif // ATMEGA2560_AT2560_CONSTANTS_H
