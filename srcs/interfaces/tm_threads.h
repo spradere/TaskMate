@@ -19,6 +19,9 @@
  * ========================================================================== */
 
 // Bits [2:0] contain the run level
+/**
+ * @brief Identifies status bits in the thread status word.
+ */
 typedef enum
 {
 	THREAD_BIT_TYPE_USER = 3,

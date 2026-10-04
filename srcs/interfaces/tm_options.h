@@ -19,10 +19,19 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Compile-time diagnostic verbosity level.
+ */
 #define VERBOSE_LEVEL 0
 
+/**
+ * @name C library selection
+ * @brief Select exactly one TaskMate or standard C library implementation.
+ * @{
+ */
 #define TM_LIBC_TASKMATE 1
 #define TM_LIBC_CSTD 0
+/** @} */
 
 #if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
 _Static_assert(0, "Select exactly one libc, external or internal");

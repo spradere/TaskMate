@@ -25,8 +25,14 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @name Managed file opening flags
+ * @brief Select read-only access and optional missing files.
+ * @{
+ */
 #define FILE_READONLY 1
 #define FILE_MISSING_ALLOWED 2
+/** @} */
 
 /**
  * @brief Tracks a managed stream and ownership of its file name.
@@ -40,6 +46,9 @@ typedef struct
 	bool name_allocated; // allow free()
 } file_t;
 
+/**
+ * @brief Reports managed file operation results.
+ */
 typedef enum
 {
 	FILE_UTILITY_OK = 0,

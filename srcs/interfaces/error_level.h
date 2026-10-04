@@ -18,6 +18,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Classifies how TaskMate handles an error.
+ */
 typedef enum
 {
 	ERR_LEVEL_FLOW, // Normal flow interruption; handled by the thread.

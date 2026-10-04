@@ -28,6 +28,11 @@
  * String macro redirection
  * ========================================================================== */
 
+/**
+ * @name TaskMate string constructors
+ * @brief Select RAM or ROM storage through the configured string backend.
+ * @{
+ */
 #if defined(HAL_STRING) && defined(HAL_STRING_INROM) && defined(HAL_STRING_RAM) && \
 	defined(HAL_STRING_ROM)
 	#define TM_STR(string) HAL_STRING(string)
@@ -44,6 +49,7 @@
 
 	#define TM_STR_NEW(name, txt) char name[] = (txt);
 #endif
+/** @} */
 
 /* ============================================================================
  * Public API

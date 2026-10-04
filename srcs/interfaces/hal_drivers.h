@@ -27,6 +27,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Selects a common driver control operation.
+ */
 typedef enum
 {
 	DRV_CTRL_INIT,
@@ -44,6 +47,9 @@ typedef enum
 typedef uint8_t hal_driver_status_t;
 
 // bits [2:0] contain the run level
+/**
+ * @brief Identifies status bits in the driver status word.
+ */
 typedef enum
 {
 	DRV_BIT_INIT = 3,
@@ -52,6 +58,9 @@ typedef enum
 	DRV_BIT_DEAD
 } hal_driver_status_bit_t;
 
+/**
+ * @brief Describes the current driver life cycle state.
+ */
 typedef enum
 {
 	DRV_STATE_OFF,

@@ -26,6 +26,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Maximum entries in a parsed error catalogue.
+ */
 #define ERROR_COUNT_MAX 256
 
 /**

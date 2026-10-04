@@ -18,6 +18,9 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @brief Selects a physical GPIO pin mode.
+ */
 typedef enum
 {
 	GPIO_PIN_MODE_INPUT,
@@ -26,6 +29,9 @@ typedef enum
 	GPIO_PIN_MODE_OUTPUT_HZ, // high impedance
 } gpio_pin_mode_t;
 
+/**
+ * @brief Selects a physical GPIO pin pull configuration.
+ */
 typedef enum
 {
 	GPIO_PIN_PULL_NONE,

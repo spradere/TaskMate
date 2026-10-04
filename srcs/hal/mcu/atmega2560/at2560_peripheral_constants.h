@@ -19,7 +19,13 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @name Peripheral bus rates
+ * @brief Set USART baud and I2C bus frequency.
+ * @{
+ */
 #define USART_BAUD_RATE 9600
 #define I2C_FREQ 100000UL // Standard mode 100 kHz
+/** @} */
 
 #endif // ATMEGA2560_AT2560_PERIPHERAL_CONSTANTS_H

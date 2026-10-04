@@ -26,8 +26,14 @@
 
 #if TM_LIBC_CSTD
 	#include <string.h>
+/**
+ * @name Standard string aliases
+ * @brief Route bounded string operations to the standard C library.
+ * @{
+ */
 	#define tm_strncmp strncmp
 	#define tm_strncpy strncpy
+/** @} */
 #endif
 
 #if TM_LIBC_TASKMATE

@@ -25,8 +25,14 @@
 
 #if TM_LIBC_CSTD
 	#include <stdio.h>
+/**
+ * @name Standard formatting aliases
+ * @brief Route formatting operations to the standard C library.
+ * @{
+ */
 	#define tm_snprintf snprintf
 	#define tm_printf printf
+/** @} */
 #endif
 
 #if TM_LIBC_TASKMATE

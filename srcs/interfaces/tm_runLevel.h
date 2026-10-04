@@ -18,15 +18,30 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @name Run level identifiers
+ * @brief Order system startup from core through user tasks.
+ * @{
+ */
 #define RL_RUN_NONE 0
 #define RL_RUN_CORE 1
 #define RL_RUN_DRIVER 2
 #define RL_RUN_SERVICE 3
 #define RL_RUN_USER 4
+/** @} */
 
+/**
+ * @name Run level encoding
+ * @brief Bound run levels and extract their status bit field.
+ * @{
+ */
 #define RL_LEVEL_MASK 0x07
 #define RL_LEVEL_COUNT 5
+/** @} */
 
+/**
+ * @brief Extract run level bits from a status value.
+ */
 #define RL_GET_RUN_LEVEL(status) ((status) & RL_LEVEL_MASK)
 
 #endif // INTERFACES_TM_RUNLEVEL_H

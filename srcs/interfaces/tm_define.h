@@ -20,6 +20,9 @@
  * ========================================================================== */
 
 // General system definitions
+/**
+ * @brief Null pointer constant for TaskMate interfaces.
+ */
 #define NULL ((void *)0)
 
 #endif // INTERFACES_TM_DEFINE_H

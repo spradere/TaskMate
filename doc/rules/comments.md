@@ -79,16 +79,27 @@ Use function comments to explain:
 
 ### Doxygen in headers
 
-Add Doxygen comments to public structure types and public function declarations in headers. Keep existing `@file` comments as specified by `doc/rules/style.md`. Do not add Doxygen comments to private declarations, macros, enums, or individual structure fields.
+Add Doxygen comments to public structures, enums, functions, constants, and macros in headers. Keep existing `@file` comments as specified by `doc/rules/style.md`. Do not document private declarations, header guards, generated regions, or individual structure fields.
 
-- Place the comment immediately before the declaration. For a `typedef struct`, place it before `typedef`.
+- Place a structure or enum comment immediately before `typedef` or the named declaration.
 - Use a one-sentence `@brief` that states the purpose or contract. Do not repeat the identifier in prose.
+- Group related public `#define` declarations with one brief Doxygen `@name` block and `@{` / `@}` markers. Use an individual `@brief` only when a macro has a distinct contract.
+- Keep implementation helpers and public macros in separate groups when the distinction matters to callers.
 - For functions, add `@param` for each parameter when its role, units, valid range, ownership, or output behavior needs explanation. Use `[out]` or `[in,out]` where appropriate.
 - Add `@return` when the return value needs interpretation, especially for status codes and boolean results. State what each result means without restating the return type.
 - Mention timing, interrupt context, initialization order, or other constraints only when they affect correct use. Keep each description brief and precise.
 - Document the public contract in the header. Avoid repeating the same Doxygen block in the `.c` definition.
 
 ```c
+/**
+ * @brief Selects RAM or ROM storage for a string.
+ */
+typedef enum
+{
+	TM_MEM_RAM,
+	TM_MEM_ROM
+} tm_string_storage_t;
+
 /**
  * @brief Identifies string data and its storage location.
  */
@@ -104,6 +115,17 @@ typedef struct
  * @return ERR_NO_ERROR if a byte was read; an error code otherwise.
  */
 err_codes_t sc_usartRead(uint8_t *data);
+```
+
+```c
+/**
+ * @name Run level encoding
+ * @brief Bound run levels and extract their status bit field.
+ * @{
+ */
+#define RL_LEVEL_MASK 0x07
+#define RL_LEVEL_COUNT 5
+/** @} */
 ```
 
 ---

@@ -28,6 +28,11 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @name AVR8 string storage
+ * @brief Create string descriptors with AVR8 RAM or program-memory storage.
+ * @{
+ */
 #define HAL_STRING_INROM(name, txt)                           \
 	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
 	static const tm_string_t(name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
@@ -39,5 +44,6 @@
 
 // Default storage for AVR8
 #define HAL_STRING(string) HAL_STRING_ROM(string)
+/** @} */
 
 #endif // AVR8_AVR8_STRING_MACRO_H

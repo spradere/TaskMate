@@ -27,6 +27,11 @@
  * Public definitions
  * ========================================================================== */
 
+/**
+ * @name Host string storage
+ * @brief Create string descriptors backed by host memory.
+ * @{
+ */
 #define HAL_STRING_INROM(name, txt)                   \
 	static const char TM_UNIQUE_NAME(name)[] = (txt); \
 	static const tm_string_t(name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
@@ -36,5 +41,6 @@
 #define HAL_STRING_ROMGETBYTE(ptr) (*(const uint8_t *)(ptr))
 
 #define HAL_STRING(string) HAL_STRING_ROM(string)
+/** @} */
 
 #endif // UCONTEXT_UCONTEXT_STRING_MACRO_H

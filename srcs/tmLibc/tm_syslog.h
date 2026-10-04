@@ -26,6 +26,9 @@
 
 #if TM_LIBC_CSTD
 	#include <syslog.h>
+/**
+ * @brief Map TaskMate logging to the standard C library.
+ */
 	#define tm_syslog syslog
 #endif
 
