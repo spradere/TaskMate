@@ -41,11 +41,11 @@ static err_codes_t lcd_last_error = ERR_NO_ERROR;
  * Constants
  * ---------------------------------------------*/
 
-#define LCDAMC2004_I2C_ADDR 0x3CU // AiP31068L I2C address (Write mode)
-#define LCDAMC2004_CMD 0x80U // Co=1 RS = 0, Write Command
-#define LCDAMC2004_DATA 0x40U // Co=0 RS = 1, Write Data series
-#define LCDAMC2004_RAW 4U
-#define LCDAMC2004_COL 20U
+#define LCDAMC2004_VAL_I2C_ADDR 0x3CU // AiP31068L I2C address (Write mode)
+#define LCDAMC2004_VAL_CMD 0x80U // Co=1 RS = 0, Write Command
+#define LCDAMC2004_VAL_DATA 0x40U // Co=0 RS = 1, Write Data series
+#define LCDAMC2004_VAL_RAW 4U
+#define LCDAMC2004_VAL_COL 20U
 
 #define LCDAMC2004_DELAY_POWERUP_ms 50U
 #define LCDAMC2004_DELAY_CMDPROCESS_us 110U
@@ -158,11 +158,11 @@ static hal_driver_state_t hal_lcdStop(void)
 
 static hal_driver_state_t lcdAMC2004SendCommand(uint8_t command)
 {
-	if( hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
+	if( hal_i2cCommStart(LCDAMC2004_VAL_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
-	if( hal_i2cWrite(LCDAMC2004_CMD) == DRV_STATE_ERROR )
+	if( hal_i2cWrite(LCDAMC2004_VAL_CMD) == DRV_STATE_ERROR )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
@@ -193,7 +193,7 @@ hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 {
 	hal_driver_state_t state = lcdRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
-	if( (row >= LCDAMC2004_RAW) || (col >= LCDAMC2004_COL) )
+	if( (row >= LCDAMC2004_VAL_RAW) || (col >= LCDAMC2004_VAL_COL) )
 	{
 		return lcdSetError(ERR_HAL_LCD_CURSOR_OUT_OF_RANGE);
 	}
@@ -206,11 +206,11 @@ hal_driver_state_t hal_lcdWriteStart(void)
 	hal_driver_state_t state = lcdRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
 
-	if( hal_i2cCommStart(LCDAMC2004_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
+	if( hal_i2cCommStart(LCDAMC2004_VAL_I2C_ADDR, HAL_I2C_WRITE) == DRV_STATE_ERROR )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
-	if( hal_i2cWrite(LCDAMC2004_DATA) == DRV_STATE_ERROR )
+	if( hal_i2cWrite(LCDAMC2004_VAL_DATA) == DRV_STATE_ERROR )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
