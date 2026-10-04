@@ -50,6 +50,7 @@ static err_codes_t lcd_last_error = ERR_NO_ERROR;
 #define LCDAMC2004_DELAY_POWERUP_ms 50U
 #define LCDAMC2004_DELAY_CMDPROCESS_us 110U
 #define LCDAMC2004_DELAY_CLEAR_ms 11U
+#define LCDAMC2004_DELAY_I2CSTOP_us 200U
 
 #define LCDAMC2004_CMD_SETUP 0x38U 	// Function Set: 8-bit mode, 2 lines, 5x8 dots
 #define LCDAMC2004_CMD_DISPLAYMODE 0x0CU // Display ON, Cursor OFF, Blink OFF
@@ -170,14 +171,14 @@ static hal_driver_state_t lcdAMC2004SendCommand(uint8_t command)
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
 	if( hal_i2cCommStop() == DRV_STATE_ERROR ) { return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY); }
-	hal_delayUs(200); // Small delay for LCD to process the command
+	hal_delayUs(LCDAMC2004_DELAY_I2CSTOP_us); // Small delay for LCD to process the command
 	return DRV_STATE_RUNNING;
 }
 
 static hal_driver_state_t lcdAMC2004Clear(void)
 {
-	if( lcdAMC2004SendCommand(0x01) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	hal_delayMs(2);
+	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_CLEAR) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
+	hal_delayMs(LCDAMC2004_DELAY_CLEAR_ms);
 	return DRV_STATE_RUNNING;
 }
 
