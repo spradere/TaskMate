@@ -16,10 +16,9 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include <util/delay.h>
-
 #include "interfaces/drv_i2c.h"
 #include "interfaces/drv_lcd.h"
+#include "interfaces/hal_delay.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
 
@@ -112,19 +111,19 @@ static hal_driver_state_t hal_lcdInit(void)
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
 
-	_delay_ms(LCDAMC2004_DELAY_POWERUP_ms); // Wait for LCD to power up
+	hal_delayMs(LCDAMC2004_DELAY_POWERUP_ms); // Wait for LCD to power up
 
 	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_SETUP) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	_delay_us(LCDAMC2004_DELAY_CMDPROCESS_us);
+	hal_delayUs(LCDAMC2004_DELAY_CMDPROCESS_us);
 
 	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_DISPLAYMODE) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	_delay_us(LCDAMC2004_DELAY_CMDPROCESS_us);
+	hal_delayUs(LCDAMC2004_DELAY_CMDPROCESS_us);
 	
 	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_CLEAR) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	_delay_ms(LCDAMC2004_DELAY_CLEAR_ms);
+	hal_delayMs(LCDAMC2004_DELAY_CLEAR_ms);
 
 	if( lcdAMC2004SendCommand(LCDAMC2004_CMD_ENTRYMODE) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	_delay_us(LCDAMC2004_DELAY_CMDPROCESS_us);
+	hal_delayUs(LCDAMC2004_DELAY_CMDPROCESS_us);
 
 	TM_SETBIT(lcd_status, DRV_BIT_INIT);
 	lcd_last_error = ERR_NO_ERROR;
@@ -171,14 +170,14 @@ static hal_driver_state_t lcdAMC2004SendCommand(uint8_t command)
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
 	if( hal_i2cCommStop() == DRV_STATE_ERROR ) { return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY); }
-	_delay_us(200); // Small delay for LCD to process the command
+	hal_delayUs(200); // Small delay for LCD to process the command
 	return DRV_STATE_RUNNING;
 }
 
 static hal_driver_state_t lcdAMC2004Clear(void)
 {
 	if( lcdAMC2004SendCommand(0x01) == DRV_STATE_ERROR ) { return DRV_STATE_ERROR; }
-	_delay_ms(2);
+	hal_delayMs(2);
 	return DRV_STATE_RUNNING;
 }
 
