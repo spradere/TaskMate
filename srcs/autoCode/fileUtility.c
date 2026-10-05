@@ -135,11 +135,11 @@ file_utility_err_t fileCmpReplaceAll(void)
 	}
 
 exit:
-	{
-		// Remove any staged files left after publication or an early error.
-		file_utility_err_t cleanup_result = fileTmpCleanupAll();
-		if( result == FILE_UTILITY_OK ) { result = cleanup_result; }
-	}
+{
+	// Remove any staged files left after publication or an early error.
+	file_utility_err_t cleanup_result = fileTmpCleanupAll();
+	if( result == FILE_UTILITY_OK ) { result = cleanup_result; }
+}
 	return result;
 }
 
@@ -384,10 +384,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 	}
 	memcpy(source_name, file_src_name, source_name_size);
 	result = fileTmpName(file_src_name, temporary_name);
-	if( result != FILE_UTILITY_OK )
-	{
-		goto exit;
-	}
+	if( result != FILE_UTILITY_OK ) { goto exit; }
 
 	// Append only after both names are ready, leaving the existing list intact on failure.
 	file_tmp_item_t *list = realloc(file_tmp_list, (file_tmp_source_count + 1U) * sizeof(*list));
@@ -432,19 +429,45 @@ const char *fileUtilityErrorMessage(file_utility_err_t error)
 	const char *message = "unknown file utility error";
 	switch( error )
 	{
-		case FILE_UTILITY_OK: message = "no error"; break;
-		case FILE_GET_LINE_EOF: message = "end of file"; break;
-		case FILE_UTILITY_DIFFERENT: message = "files differ"; break;
-		case FILE_GET_LINE_ERROR: message = "reading line failed or line too long"; break;
-		case FILE_UTILITY_INVALID: message = "invalid file argument"; break;
-		case FILE_UTILITY_OPEN: message = "opening file failed"; break;
-		case FILE_UTILITY_WRITE: message = "writing file failed"; break;
-		case FILE_UTILITY_CLOSE: message = "closing file failed"; break;
-		case FILE_UTILITY_SEEK: message = "seeking file failed"; break;
-		case FILE_UTILITY_REMOVE: message = "removing temporary file failed"; break;
-		case FILE_UTILITY_RENAME: message = "renaming temporary file failed"; break;
-		case FILE_UTILITY_ALLOC: message = "allocating file data failed"; break;
-		case FILE_UTILITY_REGISTER: message = "registering temporary cleanup failed"; break;
+		case FILE_UTILITY_OK:
+			message = "no error";
+			break;
+		case FILE_GET_LINE_EOF:
+			message = "end of file";
+			break;
+		case FILE_UTILITY_DIFFERENT:
+			message = "files differ";
+			break;
+		case FILE_GET_LINE_ERROR:
+			message = "reading line failed or line too long";
+			break;
+		case FILE_UTILITY_INVALID:
+			message = "invalid file argument";
+			break;
+		case FILE_UTILITY_OPEN:
+			message = "opening file failed";
+			break;
+		case FILE_UTILITY_WRITE:
+			message = "writing file failed";
+			break;
+		case FILE_UTILITY_CLOSE:
+			message = "closing file failed";
+			break;
+		case FILE_UTILITY_SEEK:
+			message = "seeking file failed";
+			break;
+		case FILE_UTILITY_REMOVE:
+			message = "removing temporary file failed";
+			break;
+		case FILE_UTILITY_RENAME:
+			message = "renaming temporary file failed";
+			break;
+		case FILE_UTILITY_ALLOC:
+			message = "allocating file data failed";
+			break;
+		case FILE_UTILITY_REGISTER:
+			message = "registering temporary cleanup failed";
+			break;
 	}
 	goto exit;
 exit:

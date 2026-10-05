@@ -8,7 +8,7 @@ addModule driver timerSched -run none -source_file hal/mcu/atmega2560/at2560_tim
 addModule driver timerSTC -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
 addModule driver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
-addModule service system -run core -stack 234 -source_file system/services/system.c
+addModule service system -run core -stack 256 -source_file system/services/system.c
 
 # Drivers
 addModule driver i2c -run core -source_file hal/mcu/atmega2560/at2560_i2c.c
@@ -17,7 +17,7 @@ addModule driver lcd -run driver -i2c 0x3C -source_file hal/drivers/lcd/lcd_AMC2
 addModule driver rtc -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS042.c
 
 # Services
-addModule service scli -run service -stack 216 -source_file system/services/scli.c
+addModule service scli -run service -stack 256 -source_file system/services/scli.c
 addScliCommand date -source_file system/services/commands/scli_date.c
 addScliCommand driver -source_file system/services/commands/scli_driver.c
 addScliCommand i2c -source_file system/services/commands/scli_i2c.c
@@ -25,5 +25,5 @@ addScliCommand stack -source_file system/services/commands/scli_stack.c
 addScliCommand thread -source_file system/services/commands/scli_thread.c
 
 # Tasks
-addModule task task1 -run user -stack 50 -source_file user/tasks/task1.c
-addModule task task2 -run user -stack 50 -source_file user/tasks/task2.c
+addModule task task1 -run user -stack 100 -source_file user/tasks/task1.c
+addModule task task2 -run user -stack 100 -source_file user/tasks/task2.c
