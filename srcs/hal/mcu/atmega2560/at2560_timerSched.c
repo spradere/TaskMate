@@ -33,6 +33,12 @@
 
 #define AT2560TIMERSCHED_COUNT_OVERFLOW 1999U // Interrupt every 1 ms
 #define AT2560TIMERSCHED_COUNT_GUARD 4U
+#define AT2560TIMERSCHED_BIT_CS10 0U
+#define AT2560TIMERSCHED_BIT_CS11 1U
+#define AT2560TIMERSCHED_BIT_CS12 2U
+#define AT2560TIMERSCHED_ADDR_TCCR1B 0x81U
+#define AT2560TIMERSCHED_ADDR_TCNT1H 0x85U
+#define AT2560TIMERSCHED_ADDR_TCNT1L 0x84U
 
 /* -----------------------------------------------
  * Private variables
@@ -118,23 +124,35 @@ static hal_driver_state_t hal_timerSchedInit(void)
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_DEAD);
 	}
-	// Set up timer1 interrupt for scheduler
-	TM_SETBIT(TCCR1B, WGM12); // CTC mode
+	// Configure CTC mode while the clock is stopped, then load TOP from a known count.
+	TCCR1A = 0U;
+	TM_WRITEBIT(TCCR1B, WGM12);
+	TCNT1 = 0U;
 	OCR1A = AT2560TIMERSCHED_COUNT_OVERFLOW;
-	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
+	TM_CLEARBIT(TIMSK1, OCIE1A);
+	TM_WRITEBIT(TIFR1, OCF1A);
 
 	TM_SETBIT(timer_sched_status, DRV_BIT_INIT);
 	timer_sched_last_error = ERR_NO_ERROR;
 	return DRV_STATE_INITIALIZED;
 }
 
+// contractual fixing of magic number
+_Static_assert(CS10 == AT2560TIMERSCHED_BIT_CS10, "Unexpected CS10 position");
+_Static_assert(CS11 == AT2560TIMERSCHED_BIT_CS11, "Unexpected CS11 position");
+_Static_assert(CS12 == AT2560TIMERSCHED_BIT_CS12, "Unexpected CS12 position");
+_Static_assert(_SFR_MEM_ADDR(TCCR1B) == AT2560TIMERSCHED_ADDR_TCCR1B,
+			   "Unexpected TCCR1B address");
+_Static_assert(_SFR_MEM_ADDR(TCNT1H) == AT2560TIMERSCHED_ADDR_TCNT1H,
+			   "Unexpected TCNT1H address");
+_Static_assert(_SFR_MEM_ADDR(TCNT1L) == AT2560TIMERSCHED_ADDR_TCNT1L,
+			   "Unexpected TCNT1L address");
+
 // Start timer1 by enabling prescaler=8
-#define TIMER_SCHED_START                              \
-	"lds r24, %0\n\t"                                  \
-	"ori r24, %1\n\t"                                  \
-	"sts  %0, r24\n\t" : : "M"(_SFR_MEM_ADDR(TCCR1B)), \
-						   "n"((uint8_t)(1u << CS11))  \
-		: "r24"
+#define TIMER_SCHED_START      \
+	"lds r24, 0x81\n\t"      \
+	"ori r24, 0x02\n\t" 	\
+	"sts  0x81, r24\n\t"	\
 
 static hal_driver_state_t hal_timerSchedStart(void)
 {
@@ -148,25 +166,30 @@ static hal_driver_state_t hal_timerSchedStart(void)
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
+	// Clear a stale compare before enabling the interrupt and the divide-by-8 clock.
+	TCNT1 = 0U;
+	TM_WRITEBIT(TIFR1, OCF1A);
+	TM_SETBIT(TIMSK1, OCIE1A);
 	asm volatile(TIMER_SCHED_START);
 	TM_SETBIT(timer_sched_status, DRV_BIT_START);
 	return DRV_STATE_RUNNING;
 }
 
-#define TIMER_SCHED_STOP                              \
-	"lds r24, %0\n\t"                                 \
-	"andi r24, %1\n\t"                                \
-	"sts  %0, r24\n\t"                                \
-	"sts %2,r1 \n\t"                                  \
-	"sts %3,r1 \n\t" : : "M"(_SFR_MEM_ADDR(TCCR1B)),  \
-						 "n"((uint8_t)~(1u << CS11)), \
-						 "M"(_SFR_MEM_ADDR(TCNT1H)),  \
-						 "M"(_SFR_MEM_ADDR(TCNT1L))   \
-		: "r24"
+// stop timer by setting CS1x = 0
+
+#define TIMER_SCHED_STOP                             \
+	"clr r1 \n\t"                                    \
+	"lds r24, 0x81\n\t"                            \
+	"andi r24, 0xF8\n\t" 							\
+	"sts  0x81, r24\n\t"                           \
+	"sts 0x85,r1 \n\t"                             \
+	"sts 0x84,r1 \n\t"							 \
 
 static hal_driver_state_t hal_timerSchedStop(void)
 {
 	asm volatile(TIMER_SCHED_STOP);
+	TM_CLEARBIT(TIMSK1, OCIE1A);
+	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_CLEARBIT(timer_sched_status, DRV_BIT_START);
 	return hal_timerSchedGetStatus();
 }
@@ -175,27 +198,27 @@ static hal_driver_state_t hal_timerSchedStop(void)
  * Context-switch interrupt
  * ---------------------------------------------*/
 
-#define TM_SCHED_CALLBACK                                        \
-	"in r18, 0x3d \n\t"                                          \
-	"in r19, 0x3e \n\t"                                          \
-	"sts %0, r18 \n\t"                                           \
-	"sts %0+1, r19 \n\t"                                         \
-	"ldi r24, lo8(%2) \n\t"                                      \
-	"ldi r25, hi8(%2) \n\t"                                      \
-	"lds r30, %1 \n\t"                                           \
-	"lds r31, %1+1 \n\t"                                         \
-	"sbiw r30, 0x00 \n\t"                                        \
-	"breq 1f \n\t"                                               \
-	"eicall \n\t"                                                \
-	"1: \n\t"                                                    \
-	"movw r30, r24 \n\t"                                         \
-	"ld r18, Z+ \n\t"                                            \
-	"ld r19, Z \n\t"                                             \
-	"out 0x3e, r19 \n\t"                                         \
-	"out 0x3d, r18 \n\t" : "=m"(scheduler_context.stack_pointer) \
-		: "m"(sched_callback),                                   \
-		  "i"(&scheduler_context)                                \
-		: "r18", "r19", "r24", "r25", "r30", "r31", "memory"
+_Static_assert(offsetof(hal_context_t, stack_pointer) == 0U,
+			   "stack_pointer must be first in scheduler_context_t");
+
+static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
+{
+	if( sched_callback != NULL ) { return sched_callback(&scheduler_context); }
+
+	return &scheduler_context;
+}
+
+#define TM_SCHED_CALLBACK               \
+	"in r18, 0x3d \n\t"                 \
+	"in r19, 0x3e \n\t"                 \
+	"sts scheduler_context, r18 \n\t"   \
+	"sts scheduler_context+1, r19 \n\t" \
+	"call schedWrapper\n\t"             \
+	"movw r30, r24 \n\t"                \
+	"ld r18, Z+ \n\t"                   \
+	"ld r19, Z \n\t"                    \
+	"out 0x3e, r19 \n\t"                \
+	"out 0x3d, r18 \n\t"				\
 
 /*
  * Naked ISR: save the interrupted context before any C code runs, switch stacks through
@@ -203,14 +226,9 @@ static hal_driver_state_t hal_timerSchedStop(void)
  */
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	asm volatile(AVR8_CONTEXT_SAVE);
-	asm volatile(TIMER_SCHED_STOP);
-
-	asm volatile(TM_SCHED_CALLBACK);
-
-	asm volatile(TIMER_SCHED_START);
-	asm volatile(AVR8_CONTEXT_RESTORE);
-	asm volatile("reti \n\t");
+	asm volatile(
+		AVR8_CONTEXT_SAVE TIMER_SCHED_STOP TM_SCHED_CALLBACK TIMER_SCHED_START AVR8_CONTEXT_RESTORE
+		"reti \n\t");
 }
 
 /* -----------------------------------------------

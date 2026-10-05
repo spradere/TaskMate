@@ -96,9 +96,13 @@ static hal_driver_state_t hal_timerSTCInit(void)
 		return timerSTCSetError(ERR_HAL_DRIVER_DEAD);
 	}
 
-	// Set up timer3 for RTC
-	TM_WRITEBIT(TCCR3B, WGM32, CS32); // CTC mode
+	// Configure CTC mode while the clock is stopped, then load TOP from a known count.
+	TCCR3A = 0U;
+	TM_WRITEBIT(TCCR3B, WGM32);
+	TCNT3 = 0U;
 	OCR3A = AT2560TIMERSTC_COUNT_OVERFLOW;
+	TM_CLEARBIT(TIMSK3, OCIE3A);
+	TM_WRITEBIT(TIFR3, OCF3A);
 
 	TM_SETBIT(timer_stc_status, DRV_BIT_INIT);
 	timer_stc_last_error = ERR_NO_ERROR;
@@ -117,8 +121,11 @@ static hal_driver_state_t hal_timerSTCStart(void)
 		return timerSTCSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
-	// Start by enabling presaler=256 and interrupt
+	// Clear a stale compare before enabling the interrupt and the divide-by-256 clock.
+	TCNT3 = 0U;
+	TM_WRITEBIT(TIFR3, OCF3A);
 	TM_SETBIT(TIMSK3, OCIE3A);
+	TM_SETBIT(TCCR3B, CS32);
 
 	TM_SETBIT(timer_stc_status, DRV_BIT_START);
 	return DRV_STATE_RUNNING;
@@ -126,8 +133,11 @@ static hal_driver_state_t hal_timerSTCStart(void)
 
 static hal_driver_state_t hal_timerSTCStop(void)
 {
-	// Stop by disabling the interrupt
+	// Stop the clock before resetting the interrupt state and counter.
+	TM_CLEARBIT(TCCR3B, CS32, CS31, CS30);
 	TM_CLEARBIT(TIMSK3, OCIE3A);
+	TCNT3 = 0U;
+	TM_WRITEBIT(TIFR3, OCF3A);
 
 	TM_CLEARBIT(timer_stc_status, DRV_BIT_START);
 	return hal_timerSTCGetStatus();

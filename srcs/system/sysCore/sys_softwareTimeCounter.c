@@ -33,7 +33,4 @@ static void tm_softwareTimeCounter(void);
 
 void tm_softwareTimeCounterInit(void) { hal_timerSTCSetCallback(tm_softwareTimeCounter); }
 
-void tm_softwareTimeCounter(void)
-{
-	mod_threadsTickSTC();
-}
+void tm_softwareTimeCounter(void) { mod_threadsTickSTC(); }

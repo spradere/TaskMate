@@ -126,7 +126,9 @@ int main(int argc, const char *argv[])
 			tokenizer_err_t token_error = tokenizer(&tok);
 			if( token_error != TOK_ERR_NOERR )
 			{
-				AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", list_file.name, file_line_number,
+				AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s",
+								   list_file.name,
+								   file_line_number,
 								   tokenizerErrorMessage(token_error));
 				continue;
 			}
@@ -161,13 +163,13 @@ int main(int argc, const char *argv[])
 		{
 			if( stage == AC_STAGE_ERRORS ) { AUTOCODE_MSG_ERROR("closing error list file"); }
 			if( stage == AC_STAGE_INITRC ) { AUTOCODE_MSG_ERROR("closing initrc list file"); }
-			if( stage == AC_STAGE_TAGS ){AUTOCODE_MSG_ERROR("closing tag list file");}
+			if( stage == AC_STAGE_TAGS ) { AUTOCODE_MSG_ERROR("closing tag list file"); }
 		}
 
 		tokenizerFree(&tok);
-		autoCodeExit(AC_FORCE_EXIT);	
-			
-		if( stage == AC_STAGE_TAGS ){parseTagHave();}
+		autoCodeExit(AC_FORCE_EXIT);
+
+		if( stage == AC_STAGE_TAGS ) { parseTagHave(); }
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 
@@ -175,7 +177,8 @@ int main(int argc, const char *argv[])
 	file_utility_err_t replace_result = fileCmpReplaceAll();
 	if( replace_result != FILE_UTILITY_OK )
 	{
-		AUTOCODE_MSG_ERROR("publishing generated files: %s", fileUtilityErrorMessage(replace_result));
+		AUTOCODE_MSG_ERROR("publishing generated files: %s",
+						   fileUtilityErrorMessage(replace_result));
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 

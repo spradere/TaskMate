@@ -15,11 +15,10 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "tagWriters.h"
-
 #include <ctype.h>
 
 #define TAGWRITERSDRIVERS_WIDTH_ADDRESS 2U
+#include "tagWriters.h"
 
 /* =============================================================================
  * Implementation - Functions

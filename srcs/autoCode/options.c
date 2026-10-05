@@ -221,7 +221,9 @@ ac_result_t options(const char *file_name, options_list_t *opt)
 		tokenizer_err_t token_error = tokenizer(&tok);
 		if( token_error != TOK_ERR_NOERR )
 		{
-			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s", file.name, file_line_number,
+			AUTOCODE_MSG_ERROR("tokenizer [%s:%i]: %s",
+							   file.name,
+							   file_line_number,
 							   tokenizerErrorMessage(token_error));
 			continue;
 		}

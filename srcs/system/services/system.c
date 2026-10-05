@@ -28,7 +28,7 @@
 #include "system/sysCall/sc_gpio.h"
 #include "system/sysCall/sc_threads.h"
 #ifdef TM_DRIVER_HAVE_LCD
-#include "tmLibc/tm_stdio.h"
+	#include "tmLibc/tm_stdio.h"
 #endif
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
