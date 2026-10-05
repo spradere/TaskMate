@@ -810,9 +810,13 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/drivers_list.inc"; then
 		fail "drivers_list generated driver declaration is missing"
 	fi
-	if ! grep -F -q '#define TM_DRIVER_HAVE_TIMER_SCHED 1' \
+	if ! grep -F -q '#define TM_DRIVER_HAVE_TIMER_SCHED 1U' \
 		"${PATH_CASE}/generated/driver_have.inc"; then
 		fail "driver_have generated presence definition is missing"
+	fi
+	if ! grep -F -q 'mod->software_time_counter = 0U;' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc generated zero initialization is missing"
 	fi
 	if ! grep -F -q 'mod->stack_size = 256;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
@@ -834,6 +838,10 @@ runCompareReplaceTests()
 	if ! grep -F -q '{"date", dateCommand},' \
 		"${PATH_CASE}/generated/scli_commands.inc"; then
 		fail "scli_commands generated entry is missing"
+	fi
+	if ! grep -F -q '{0U, 0U},' \
+		"${PATH_CASE}/generated/scli_commands.inc"; then
+		fail "scli_commands generated sentinel is missing"
 	fi
 	expectSuccess unchanged_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	logContains unchanged_generation "0 updated, 15 unchanged"

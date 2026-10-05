@@ -24,11 +24,20 @@
 #include "tagWriters/tagWriters.h"
 #include "tokenizer.h"
 
+enum
+{
+	PARSETAG_COUNT_MARKER = 2U,
+	PARSETAG_COUNT_START = 3U,
+	PARSETAG_INDEX_NAME = 2U,
+	PARSETAG_COUNT_ALLOWED = 1U
+};
+
 /* -----------------------------------------------
  * Private function prototypes
  * ---------------------------------------------*/
 
-static int generatedFileName(char *file_name, size_t file_name_size, const char *generated_path,
+static ac_result_t generatedFileName(char *file_name, size_t file_name_size,
+								 const char *generated_path,
 							 const char *tag);
 
 /* -----------------------------------------------
@@ -68,7 +77,7 @@ static const struct
 #define X(e, s, f) {(e), (s), (f)},
 	HAVE_TAG(X)
 #undef X
-		{0, NULL, NULL}};
+		{0U, NULL, NULL}};
 
 static const char *have_to_string[HAVE_COUNT] = {
 #define X(e, s, f) [e] = (s),
@@ -95,42 +104,43 @@ static const char *string_from_have(const int id)
 	return NULL;
 }
 
-static int tagCmdDispatch(const char *cmd, const tag_writer_context_t *context)
+static ac_result_t tagCmdDispatch(const char *cmd, const tag_writer_context_t *context)
 {
-	for( int i = 0; tags_cmds[i].tag != NULL; i++ )
+	for( int i = 0U; tags_cmds[i].tag != NULL; i++ )
 	{
-		if( strcmp(cmd, tags_cmds[i].tag) == 0 )
+		if( strcmp(cmd, tags_cmds[i].tag) == 0U )
 		{
 			(*tags_cmds[i].func)(context);
 			// A writer with a file error has not satisfied the required tag.
 			if( !*context->file_error ) { have_tag_count[tags_cmds[i].id]++; }
-			return 0;
+			return AC_RESULT_OK;
 		}
 	}
-	return -1;
+	return AC_RESULT_ERROR;
 }
 
-static int generatedFileName(char *file_name, const size_t file_name_size,
+static ac_result_t generatedFileName(char *file_name, const size_t file_name_size,
 							 const char *generated_path, const char *tag)
 {
 	const int length = snprintf(file_name, file_name_size, "%s/%s.inc", generated_path, tag);
 
-	if( (length < 0) || ((size_t)length >= file_name_size) )
+	if( (length < (int)0U) || ((size_t)length >= file_name_size) )
 	{
 		AUTOCODE_MSG_ERROR("generated file name is too long for tag <%s>", tag);
-		return -1;
+		return AC_RESULT_ERROR;
 	}
 
-	return 0;
+	return AC_RESULT_OK;
 }
 
 void parseTagInit(void)
 {
 	// Count tags across every source file in the tag list.
-	for( int i = 0; i < HAVE_COUNT; i++ ) { have_tag_count[i] = 0; }
+	for( int i = 0U; i < HAVE_COUNT; i++ ) { have_tag_count[i] = 0U; }
 }
 
-int parseTag(modules_database_t *data_base, const char *file_name, const error_catalog_t *errors,
+ac_result_t parseTag(modules_database_t *data_base, const char *file_name,
+				 const error_catalog_t *errors,
 			 const options_list_t *auto_options)
 {
 	// Stage the tagged source alongside its generated fragment.
@@ -139,22 +149,22 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)file_name;
-	if( fileOpen(&file_src, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	if( fileOpen(&file_src, "r", FILEUTILITY_MODE_READONLY) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("opening file <%s>", file_name);
-		return -1;
+		return AC_RESULT_ERROR;
 	}
 
 	file_t file_tmp;
 	fileInit(&file_tmp);
-	if( fileMakeTmp(file_src.name, &file_tmp) != 0 )
+	if( fileMakeTmp(file_src.name, &file_tmp) != 0U )
 	{
 		AUTOCODE_MSG_ERROR("creating temporary file for <%s>", file_name);
 		if( fileClose(&file_src) != FILE_UTILITY_OK )
 		{
 			AUTOCODE_MSG_ERROR("closing file <%s>", file_name);
 		}
-		return -1;
+		return AC_RESULT_ERROR;
 	}
 
 	bool file_error = false;
@@ -165,10 +175,10 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 									.file_error = &file_error};
 
 	// Copy text outside tagged regions; replace each region with an include.
-	int tag_section = 0;
-	int file_line_number = 0;
-	tokenizer_t tok = {0};
-	char line[TOKEN_LINE_SIZE_MAX];
+	int tag_section = 0U;
+	int file_line_number = 0U;
+	tokenizer_t tok = {0U};
+	char line[TOKENIZER_SIZE_LINEMAX];
 	file_get_line_result_t line_result;
 
 	while( (line_result = fileGetLine(&file_src, tok.line, sizeof(tok.line))) ==
@@ -187,18 +197,19 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 			continue;
 		}
 
-		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
-			!(strcmp(tok.tokens[1], "[autoCode_tag]")) )
+		if( (tok.count >= PARSETAG_COUNT_MARKER) && !(strcmp(tok.tokens[0U], "//")) &&
+			!(strcmp(tok.tokens[1U], "[autoCode_tag]")) )
 		{
 			// A start tag needs one name and cannot nest inside another region.
-			if( tok.count != 3 )
+			if( tok.count != PARSETAG_COUNT_START )
 			{
 				AUTOCODE_MSG_ERROR(
-					"token count != 3 tok.line [%s:%i] %s", file_src.name, file_line_number, line);
+					"token count != %i tok.line [%s:%i] %s",
+					PARSETAG_COUNT_START, file_src.name, file_line_number, line);
 				break;
 			}
 
-			if( tag_section == 1 )
+			if( tag_section == 1U )
 			{
 				AUTOCODE_MSG_ERROR(
 					"Start new tag section without previous end tag [/tag] [%s:%i] %s",
@@ -208,18 +219,18 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 				break;
 			}
 
-			AUTOCODE_MSG_INFO("found tag %s", tok.tokens[2]);
+			AUTOCODE_MSG_INFO("found tag %s", tok.tokens[PARSETAG_INDEX_NAME]);
 
 			// The source keeps its tag anchor and includes the generated fragment.
 			fprintf(file_tmp.stream, "%s", line);
 
-			fprintf(file_tmp.stream, "#include \"%s.inc\"\n", tok.tokens[2]);
+			fprintf(file_tmp.stream, "#include \"%s.inc\"\n", tok.tokens[PARSETAG_INDEX_NAME]);
 
-			char generated_file_name[AC_BUFFER_SIZE];
+			char generated_file_name[AUTOCODE_SIZE_BUFFER];
 			if( generatedFileName(generated_file_name,
 								  sizeof(generated_file_name),
 								  auto_options->generated_path,
-								  tok.tokens[2]) != 0 )
+								  tok.tokens[PARSETAG_INDEX_NAME]) != AC_RESULT_OK )
 			{
 				file_error = true;
 				break;
@@ -228,7 +239,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 			file_t file_generated;
 			fileInit(&file_generated);
 			// Stage each fragment separately from its tagged source file.
-			if( fileMakeTmp(generated_file_name, &file_generated) != 0 )
+			if( fileMakeTmp(generated_file_name, &file_generated) != 0U )
 			{
 				AUTOCODE_MSG_ERROR("creating temporary file for <%s>", generated_file_name);
 				file_error = true;
@@ -242,12 +253,12 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 			fprintf(context.file, "* code generated by autoCode, any change will be lost\n");
 			fprintf(context.file, "*/\n");
 
-			fprintf(context.file, "\n#line %i\n\n", AC_GENERATED_LINE_START);
+			fprintf(context.file, "\n#line %i\n\n", AUTOCODE_LINE_GENERATED);
 
-			tag_section = 1;
+			tag_section = 1U;
 
 			// Finish the writer's stream before accepting the generated tag.
-			int err = tagCmdDispatch(tok.tokens[2], &context);
+			ac_result_t err = tagCmdDispatch(tok.tokens[PARSETAG_INDEX_NAME], &context);
 			if( fileClose(&file_generated) != FILE_UTILITY_OK )
 			{
 				AUTOCODE_MSG_ERROR("closing generated file <%s>", generated_file_name);
@@ -255,26 +266,27 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 			}
 			if( file_error )
 			{
-				tag_section = 0;
+				tag_section = 0U;
 				break;
 			}
 
-			if( err != 0 )
+			if( err != AC_RESULT_OK )
 			{
 				AUTOCODE_MSG_ERROR(
-					"unknown tag [%s:%i] %s\n", file_name, file_line_number, tok.tokens[2]);
+					"unknown tag [%s:%i] %s\n", file_name, file_line_number,
+					tok.tokens[PARSETAG_INDEX_NAME]);
 			}
 		}
 
 		// Closing a region resumes copying the source text unchanged.
-		if( (tok.count >= 2) && !(strcmp(tok.tokens[0], "//")) &&
-			!(strcmp(tok.tokens[1], "[/tag]")) )
+		if( (tok.count >= PARSETAG_COUNT_MARKER) && !(strcmp(tok.tokens[0U], "//")) &&
+			!(strcmp(tok.tokens[1U], "[/tag]")) )
 		{
 			AUTOCODE_MSG_INFO("end tag");
-			tag_section = 0;
+			tag_section = 0U;
 		}
 
-		if( tag_section == 0 ) { fprintf(file_tmp.stream, "%s", line); }
+		if( tag_section == 0U ) { fprintf(file_tmp.stream, "%s", line); }
 	}
 	if( line_result == FILE_GET_LINE_ERROR )
 	{
@@ -284,7 +296,7 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 	tokenizerFree(&tok);
 
 	// Report an unterminated region, then close both source and staged output.
-	if( tag_section == 1 )
+	if( tag_section == 1U )
 	{
 		AUTOCODE_MSG_ERROR("missing end tag [/tag] [%s:%i]", file_src.name, file_line_number);
 	}
@@ -298,20 +310,20 @@ int parseTag(modules_database_t *data_base, const char *file_name, const error_c
 		AUTOCODE_MSG_ERROR("closing temporary file for <%s>", file_name);
 		file_error = true;
 	}
-	return file_error ? -1 : 0;
+	return file_error ? AC_RESULT_ERROR : AC_RESULT_OK;
 }
 
 void parseTagHave(void)
 {
 	// Every known tag must have produced exactly one fragment.
-	for( int i = 0; i < HAVE_COUNT; i++ )
+	for( int i = 0U; i < HAVE_COUNT; i++ )
 	{
-		if( have_tag_count[i] == 0 )
+		if( have_tag_count[i] == 0U )
 		{
 			AUTOCODE_MSG_ERROR("required autoCode tag %s is not set", string_from_have(i));
 		}
 
-		if( have_tag_count[i] > 1 )
+		if( have_tag_count[i] > PARSETAG_COUNT_ALLOWED )
 		{
 			AUTOCODE_MSG_ERROR("required autoCode tag %s is multiple set", string_from_have(i));
 		}

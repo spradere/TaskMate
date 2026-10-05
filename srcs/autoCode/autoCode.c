@@ -51,8 +51,9 @@ static void setupDatabase(modules_database_t *data_base);
  * Private variables
  * ---------------------------------------------*/
 
-#define ERROR_COUNT_NORMAL_MODE 1U
-#define ERROR_COUNT_TEST_MODE 100U
+#define AUTOCODE_COUNT_ARGC 2U
+#define AUTOCODE_COUNT_ERRORNORMAL 1U
+#define AUTOCODE_COUNT_ERRORTEST 100U
 
 typedef enum
 {
@@ -63,7 +64,7 @@ typedef enum
 } ac_stage_t;
 
 static unsigned int error_count = 0U;
-static unsigned int error_count_maximum = ERROR_COUNT_NORMAL_MODE;
+static unsigned int error_count_maximum = AUTOCODE_COUNT_ERRORNORMAL;
 
 /* =============================================================================
  * Implementation - Functions
@@ -75,19 +76,20 @@ static unsigned int error_count_maximum = ERROR_COUNT_NORMAL_MODE;
  */
 int main(int argc, const char *argv[])
 {
-	tokenizer_t tok = {0};
+	tokenizer_t tok = {0U};
 
 	// The configuration must be valid before any input list is processed.
-	if( argc != 2 )
+	if( argc != AUTOCODE_COUNT_ARGC )
 	{
-		AUTOCODE_MSG_ERROR("autoCode bad argc (is %i, not 2)\n\tuse autoCode configuration_file",
-						   argc);
+		AUTOCODE_MSG_ERROR("autoCode bad argc (is %i, not %u)\n\tuse autoCode configuration_file",
+						   argc, AUTOCODE_COUNT_ARGC);
 		return EXIT_FAILURE;
 	}
 
-	options_list_t auto_options = {0};
-	if( options(argv[1], &auto_options) != 0 ) { autoCodeExit(AC_FORCE_EXIT); }
-	error_count_maximum = auto_options.test_mode ? ERROR_COUNT_TEST_MODE : ERROR_COUNT_NORMAL_MODE;
+	options_list_t auto_options = {0U};
+	if( options(argv[1U], &auto_options) != AC_RESULT_OK ) { autoCodeExit(AC_FORCE_EXIT); }
+	error_count_maximum =
+		auto_options.test_mode ? AUTOCODE_COUNT_ERRORTEST : AUTOCODE_COUNT_ERRORNORMAL;
 	autoCodeExit(AC_FORCE_EXIT);
 
 	// Keep one database for all stages so tags use the validated declarations.
@@ -95,7 +97,7 @@ int main(int argc, const char *argv[])
 	setupDatabase(&data_base);
 
 	error_catalog_t errors_catalog;
-	errors_catalog.error_count = 0;
+	errors_catalog.error_count = 0U;
 
 	// Process the lists in dependency order: errors, init.rc, then tags.
 	for( ac_stage_t stage = AC_STAGE_ERRORS; stage < AC_STAGE_COUNT; stage++ )
@@ -106,7 +108,7 @@ int main(int argc, const char *argv[])
 		if( stage == AC_STAGE_INITRC ) { list_file.name = auto_options.file_initrc_list; }
 		if( stage == AC_STAGE_TAGS ) { list_file.name = auto_options.file_parsetag_list; }
 
-		if( fileOpen(&list_file, "r", FILE_READONLY) != 0 )
+		if( fileOpen(&list_file, "r", FILEUTILITY_MODE_READONLY) != 0U )
 		{
 			AUTOCODE_MSG_ERROR("opening file <%s>", list_file.name);
 			autoCodeExit(AC_FORCE_EXIT);
@@ -115,7 +117,7 @@ int main(int argc, const char *argv[])
 		if( stage == AC_STAGE_TAGS ) { parseTagInit(); }
 
 		// Read every path in this stage's list before checking the accumulated errors.
-		int file_line_number = 0;
+		int file_line_number = 0U;
 		file_get_line_result_t line_result;
 		while( (line_result = fileGetLine(&list_file, tok.line, sizeof(tok.line))) ==
 			   FILE_GET_LINE_SUCCESS )
@@ -130,21 +132,22 @@ int main(int argc, const char *argv[])
 								   tokenizerErrorMessage(token_error));
 				continue;
 			}
-
-			if( tok.count == 0 ) { continue; }
-
+			
+			if( tok.count == 0U ) { continue; }
+			
 			// Each stage consumes the same list format but validates a different input.
-			if( (stage == AC_STAGE_ERRORS) && (globalError(tok.tokens[0], &errors_catalog) != 0) )
+			if( (stage == AC_STAGE_ERRORS) &&
+				(globalError(tok.tokens[0U], &errors_catalog) != AC_RESULT_OK) )
 			{
 				break;
 			}
 			if( (stage == AC_STAGE_INITRC) &&
-				(parseInitrc(&data_base, tok.tokens[0], auto_options.source_path) != 0) )
+				(parseInitrc(&data_base, tok.tokens[0U], auto_options.source_path) != AC_RESULT_OK) )
 			{
 				break;
 			}
 			if( (stage == AC_STAGE_TAGS) &&
-				(parseTag(&data_base, tok.tokens[0], &errors_catalog, &auto_options) != 0) )
+				(parseTag(&data_base, tok.tokens[0U], &errors_catalog, &auto_options) != AC_RESULT_OK) )
 			{
 				break;
 			}
@@ -194,12 +197,12 @@ void autoCodeExit(ac_error_cmd_t cmd)
 	}
 	if( cmd == AC_FORCE_EXIT )
 	{
-		if( error_count > 0 ) { exit(EXIT_FAILURE); }
+		if( error_count > 0U ) { exit(EXIT_FAILURE); }
 	}
 }
 
 static void setupDatabase(modules_database_t *data_base)
 {
-	data_base->scli.count = 0;
-	for( int i = 0; i < MOD_TYPE_COUNT; i++ ) { data_base->modules_type[i].modules_count = 0; }
+	data_base->scli.count = 0U;
+	for( int i = 0U; i < MOD_TYPE_COUNT; i++ ) { data_base->modules_type[i].modules_count = 0U; }
 }

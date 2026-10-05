@@ -24,10 +24,10 @@
  * @brief Set autoCode buffer, line, stack, and command constants.
  * @{
  */
-#define AC_BUFFER_SIZE 256
-#define AC_GENERATED_LINE_START 1000
-#define AC_THREAD_STACK_SIZE_MIN 3UL
-#define AC_SCLI_COMMAND_COUNT_MAX 16
+#define AUTOCODE_SIZE_BUFFER 256U
+#define AUTOCODE_LINE_GENERATED 1000U
+#define AUTOCODE_SIZE_STACKMIN 3UL
+#define AUTOCODE_COUNT_SCLIMAX 16U
 /** @} */
 
 /**
@@ -35,10 +35,10 @@
  * @brief Identify accepted init.rc syntax and the autoCode version.
  * @{
  */
-#define AC_INITRC_EXPECTED_VER_MAJOR 1
-#define AC_INITRC_EXPECTED_VER_MINOR 10
-#define AC_AUTOCODE_VER_MAJOR 1
-#define AC_AUTOCODE_VER_MINOR 6
+#define AUTOCODE_VERSION_INITRCMAJOR 1U
+#define AUTOCODE_VERSION_INITRCMINOR 10U
+#define AUTOCODE_VERSION_MAJOR 1U
+#define AUTOCODE_VERSION_MINOR 6U
 /** @} */
 
 /* ============================================================================
@@ -74,7 +74,7 @@
 		fprintf(stderr, "[%s:%d] error : " format "\n", __FILE_NAME__, __LINE__, ##__VA_ARGS__); \
 		perror("\t");                                                                            \
 		autoCodeExit(AC_INCREMENT);                                                              \
-	} while( 0 )
+	} while( 0U )
 
 #define AUTOCODE_MSG_INFO(format, ...) \
 	fprintf(stdout, "[%s] info : " format "\n", __FILE_NAME__, ##__VA_ARGS__)
@@ -92,6 +92,15 @@ typedef enum
 	AC_INCREMENT,
 	AC_FORCE_EXIT
 } ac_error_cmd_t;
+
+/**
+ * @brief Reports success or failure from an autoCode input operation.
+ */
+typedef enum
+{
+	AC_RESULT_OK = 0U,
+	AC_RESULT_ERROR
+} ac_result_t;
 
 /**
  * @brief Record an autoCode error or terminate generation.
@@ -139,7 +148,7 @@ typedef struct
 		{
 			char name[MOD_NAME_SIZE_MAX];
 			char function[MOD_NAME_SIZE_MAX];
-		} commands[AC_SCLI_COMMAND_COUNT_MAX];
+		} commands[AUTOCODE_COUNT_SCLIMAX];
 		uint8_t count;
 	} scli;
 

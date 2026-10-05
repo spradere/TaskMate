@@ -72,6 +72,7 @@ Use the established TaskMate prefixes only when they describe a real boundary or
 - Types use `snake_case` with a `_t` suffix.
 - Enum constants and preprocessor constants use `UPPER_SNAKE_CASE`.
 - Variables use descriptive `snake_case`.
+- Name numeric constants `<FILE>_<TYPE>_<DESCRIPTION>`, using a compact uppercase form of the source file name, a short type or role, and a concise description. Add a lowercase unit suffix when needed, as in `LCDAMC2004_DELAY_POWERUP_ms` from `lcd_AMC2004.c`. Avoid extra underscores within each part.
 
 ---
 
@@ -86,7 +87,8 @@ Use the established TaskMate prefixes only when they describe a real boundary or
 - Tasks should use sysCall and service APIs, not raw HAL or MCU registers.
 - Keep module state private with `static` file-local storage unless it is part of an intentional public interface.
 - Prefer small focused functions over large mixed-responsibility functions.
-- Avoid magic numbers in hand-written code. Use named constants or document why a literal is required.
+- Outside named constant definitions, the only permitted numeric literals in C code are `0U` and `1U`. Give every other fixed value a named constant, including syntax counts, protocol values, array limits, and fixed values emitted into generated C code. Values read from configuration remain data.
+- Keep a numeric constant near its owner. Use a shared header only when multiple source files need the same contract. Preserve required integer types and signed comparisons when replacing literals.
 - Use explicit null or zero checks when this makes intent clearer.
 - For register macros and bit manipulation, fully parenthesize macro parameters and results.
 

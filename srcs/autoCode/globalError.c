@@ -21,11 +21,14 @@
 #include "fileUtility.h"
 #include "tokenizer.h"
 
+#define GLOBALERROR_COUNT_FIELDS 3U
+#define GLOBALERROR_INDEX_LEVEL 2U
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-int globalError(const char *src_name, error_catalog_t *errors)
+ac_result_t globalError(const char *src_name, error_catalog_t *errors)
 {
 	AUTOCODE_MSG_INFO("open file.err <%s>", src_name);
 
@@ -33,17 +36,17 @@ int globalError(const char *src_name, error_catalog_t *errors)
 	file_t file_src;
 	fileInit(&file_src);
 	file_src.name = (char *)src_name;
-	if( fileOpen(&file_src, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	if( fileOpen(&file_src, "r", FILEUTILITY_MODE_READONLY) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("opening file <%s>", src_name);
-		return -1;
+		return AC_RESULT_ERROR;
 	}
 
 	// Continue numbering after errors from earlier catalogue files.
-	int file_src_line_number = 0;
+	int file_src_line_number = 0U;
 	int error_index = errors->error_count;
-	tokenizer_t tok = {0};
-	char line[TOKEN_LINE_SIZE_MAX];
+	tokenizer_t tok = {0U};
+	char line[TOKENIZER_SIZE_LINEMAX];
 	file_get_line_result_t line_result;
 
 	while( (line_result = fileGetLine(&file_src, tok.line, sizeof(tok.line))) ==
@@ -62,13 +65,14 @@ int globalError(const char *src_name, error_catalog_t *errors)
 			continue;
 		}
 
-		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
+		if( (tok.count != 0U) && (tok.tokens[0U][0U] != '#') )
 		{
 			bool error_is_valid = true;
 
-			if( tok.count != 3 )
+			if( tok.count != GLOBALERROR_COUNT_FIELDS )
 			{
-				AUTOCODE_MSG_ERROR("wrong token count != 3 tok.line [%s:%i] <%s>",
+				AUTOCODE_MSG_ERROR("wrong token count != %u tok.line [%s:%i] <%s>",
+								   GLOBALERROR_COUNT_FIELDS,
 								   file_src.name,
 								   file_src_line_number,
 								   line);
@@ -76,19 +80,19 @@ int globalError(const char *src_name, error_catalog_t *errors)
 				continue;
 			}
 
-			if( error_index >= ERROR_COUNT_MAX )
+			if( error_index >= GLOBALERROR_COUNT_MAX )
 			{
-				AUTOCODE_MSG_ERROR("Too many errors >= %i", ERROR_COUNT_MAX);
+				AUTOCODE_MSG_ERROR("Too many errors >= %i", GLOBALERROR_COUNT_MAX);
 
 				continue;
 			}
 
 			// Names must be unique across all catalogues already read.
-			for( int i = 0; i < error_index; i++ )
+			for( int i = 0U; i < error_index; i++ )
 			{
-				if( strcmp(tok.tokens[0], errors->catalog[i].name) == 0 )
+				if( strcmp(tok.tokens[0U], errors->catalog[i].name) == 0U )
 				{
-					AUTOCODE_MSG_ERROR("Duplicate error name <%s>", tok.tokens[0]);
+					AUTOCODE_MSG_ERROR("Duplicate error name <%s>", tok.tokens[0U]);
 
 					error_is_valid = false;
 				}
@@ -96,10 +100,10 @@ int globalError(const char *src_name, error_catalog_t *errors)
 			if( error_is_valid == false ) { continue; }
 
 			// Check fixed catalogue storage before copying either field.
-			const size_t name_length = strlen(tok.tokens[0]);
-			const size_t message_length = strlen(tok.tokens[1]);
-			if( (name_length >= sizeof(errors->catalog[error_index].name) - 1) ||
-				(message_length >= sizeof(errors->catalog[error_index].message) - 1) )
+			const size_t name_length = strlen(tok.tokens[0U]);
+			const size_t message_length = strlen(tok.tokens[1U]);
+			if( (name_length >= sizeof(errors->catalog[error_index].name) - 1U) ||
+				(message_length >= sizeof(errors->catalog[error_index].message) - 1U) )
 			{
 				AUTOCODE_MSG_ERROR("Error name or message is too long [%s:%i]",
 								   file_src.name,
@@ -107,16 +111,16 @@ int globalError(const char *src_name, error_catalog_t *errors)
 
 				continue;
 			}
-			memcpy(errors->catalog[error_index].name, tok.tokens[0], name_length + 1U);
-			memcpy(errors->catalog[error_index].message, tok.tokens[1], message_length + 1U);
+			memcpy(errors->catalog[error_index].name, tok.tokens[0U], name_length + 1U);
+			memcpy(errors->catalog[error_index].message, tok.tokens[1U], message_length + 1U);
 
-			AUTOCODE_MSG_INFO("[%i] %s", error_index, tok.tokens[0]);
+			AUTOCODE_MSG_INFO("[%i] %s", error_index, tok.tokens[0U]);
 
 			// Classify the level; FLOW entries carry no message in firmware.
-			if( strcmp(tok.tokens[2], "FLOW") == 0 )
+			if( strcmp(tok.tokens[GLOBALERROR_INDEX_LEVEL], "FLOW") == 0U )
 			{
 				errors->catalog[error_index].level = ERR_LEVEL_FLOW;
-				if( strcmp(tok.tokens[1], "\"\"") != 0 )
+				if( strcmp(tok.tokens[1U], "\"\"") != 0U )
 				{
 					AUTOCODE_MSG_ERROR("FLOW error message must be empty [%s:%i]",
 									   file_src.name,
@@ -125,21 +129,22 @@ int globalError(const char *src_name, error_catalog_t *errors)
 					error_is_valid = false;
 				}
 			}
-			else if( strcmp(tok.tokens[2], "WARN") == 0 )
+			else if( strcmp(tok.tokens[GLOBALERROR_INDEX_LEVEL], "WARN") == 0U )
 			{
 				errors->catalog[error_index].level = ERR_LEVEL_WARN;
 			}
-			else if( strcmp(tok.tokens[2], "FAIL") == 0 )
+			else if( strcmp(tok.tokens[GLOBALERROR_INDEX_LEVEL], "FAIL") == 0U )
 			{
 				errors->catalog[error_index].level = ERR_LEVEL_FAIL;
 			}
-			else if( strcmp(tok.tokens[2], "PANIC") == 0 )
+			else if( strcmp(tok.tokens[GLOBALERROR_INDEX_LEVEL], "PANIC") == 0U )
 			{
 				errors->catalog[error_index].level = ERR_LEVEL_PANIC;
 			}
 			else
 			{
-				AUTOCODE_MSG_ERROR("wrong error level argument <%s>", tok.tokens[2]);
+				AUTOCODE_MSG_ERROR("wrong error level argument <%s>",
+							   tok.tokens[GLOBALERROR_INDEX_LEVEL]);
 
 				error_is_valid = false;
 			}
@@ -158,11 +163,11 @@ int globalError(const char *src_name, error_catalog_t *errors)
 
 	// Release per-file parser state even after a read error.
 	tokenizerFree(&tok);
-	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
+	ac_result_t result = (line_result == FILE_GET_LINE_ERROR) ? AC_RESULT_ERROR : AC_RESULT_OK;
 	if( fileClose(&file_src) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("closing file <%s>", src_name);
-		result = -1;
+		result = AC_RESULT_ERROR;
 	}
 	return result;
 }

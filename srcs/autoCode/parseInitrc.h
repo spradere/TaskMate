@@ -30,8 +30,9 @@
  * @param[in,out] data_base Receives parsed modules and commands.
  * @param initrc_name init.rc file path.
  * @param source_path Base path for referenced sources.
- * @return Zero on file success; a negative value on file failure.
+ * @return AC_RESULT_OK on file success; AC_RESULT_ERROR on file failure.
  */
-int parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path);
+ac_result_t parseInitrc(modules_database_t *data_base, const char *initrc_name,
+						const char *source_path);
 
 #endif // AUTOCODE_PARSEINITRC_H

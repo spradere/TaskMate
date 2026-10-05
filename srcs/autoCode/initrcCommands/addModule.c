@@ -19,6 +19,18 @@
 
 #include <sys/stat.h>
 
+enum
+{
+	ADDMODULE_BASE_HEX = 16U,
+	ADDMODULE_BASE_DECIMAL = 10U,
+	ADDMODULE_COUNT_MIN = 5U,
+	ADDMODULE_COUNT_HEADER = 3U,
+	ADDMODULE_COUNT_PAIR = 2U,
+	ADDMODULE_INDEX_TYPE = 1U,
+	ADDMODULE_INDEX_NAME = 2U,
+	ADDMODULE_COUNT_NEXT = 1U
+};
+
 /* =============================================================================
  * Declarations - Local types
  * ===========================================================================*/
@@ -51,7 +63,7 @@ typedef add_module_result_t (*add_module_option_func_t)(const char *data,
  * ---------------------------------------------*/
 
 #define ADD_MODULE_TYPE(X)                                    \
-	X(DRIVER, "driver", MOD_DRIVER_ID, 0)                     \
+	X(DRIVER, "driver", MOD_DRIVER_ID, 0U)                     \
 	X(SERVICE, "service", MOD_THREAD_ID, THREAD_BIT_TYPE_SYS) \
 	X(TASK, "task", MOD_THREAD_ID, THREAD_BIT_TYPE_USER)
 
@@ -126,11 +138,11 @@ static const struct
 
 static add_module_result_t optionRun(const char *data, const add_module_context_t *context)
 {
-	if( strcmp(data, "none") == 0 ) { context->module->status |= RL_RUN_NONE; }
-	else if( strcmp(data, "core") == 0 ) { context->module->status |= RL_RUN_CORE; }
-	else if( strcmp(data, "driver") == 0 ) { context->module->status |= RL_RUN_DRIVER; }
-	else if( strcmp(data, "service") == 0 ) { context->module->status |= RL_RUN_SERVICE; }
-	else if( strcmp(data, "user") == 0 ) { context->module->status |= RL_RUN_USER; }
+	if( strcmp(data, "none") == 0U ) { context->module->status |= RL_RUN_NONE; }
+	else if( strcmp(data, "core") == 0U ) { context->module->status |= RL_RUN_CORE; }
+	else if( strcmp(data, "driver") == 0U ) { context->module->status |= RL_RUN_DRIVER; }
+	else if( strcmp(data, "service") == 0U ) { context->module->status |= RL_RUN_SERVICE; }
+	else if( strcmp(data, "user") == 0U ) { context->module->status |= RL_RUN_USER; }
 	else { return ADD_MODULE_INVALID_DATA; }
 
 	return ADD_MODULE_OK;
@@ -139,9 +151,9 @@ static add_module_result_t optionRun(const char *data, const add_module_context_
 static add_module_result_t optionI2c(const char *data, const add_module_context_t *context)
 {
 	char *end;
-	const unsigned long address = strtoul(data, &end, 16);
+	const unsigned long address = strtoul(data, &end, ADDMODULE_BASE_HEX);
 
-	if( (data[0] == 0) || (*end != 0) || (address > MOD_I2C_ADDRESS_MAX) )
+	if( (data[0U] == 0U) || (*end != 0U) || (address > MOD_I2C_ADDRESS_MAX) )
 	{
 		return ADD_MODULE_INVALID_DATA;
 	}
@@ -153,9 +165,9 @@ static add_module_result_t optionI2c(const char *data, const add_module_context_
 static add_module_result_t optionStack(const char *data, const add_module_context_t *context)
 {
 	char *end;
-	const unsigned long stack_size = strtoul(data, &end, 10);
+	const unsigned long stack_size = strtoul(data, &end, ADDMODULE_BASE_DECIMAL);
 
-	if( (data[0] == 0) || (*end != 0) || (stack_size < AC_THREAD_STACK_SIZE_MIN) ||
+	if( (data[0U] == 0U) || (*end != 0U) || (stack_size < AUTOCODE_SIZE_STACKMIN) ||
 		(stack_size > UINT16_MAX) )
 	{
 		return ADD_MODULE_INVALID_DATA;
@@ -169,13 +181,13 @@ static add_module_result_t optionSource(const char *data, const bool directory,
 										const add_module_context_t *context)
 {
 	// Source declarations also drive the build list, so their paths must exist.
-	char path[AC_BUFFER_SIZE];
+	char path[AUTOCODE_SIZE_BUFFER];
 	const int length = snprintf(path, sizeof(path), "%s/%s", context->source_path, data);
 
-	if( (length < 0) || ((size_t)length >= sizeof(path)) ) { return ADD_MODULE_INVALID_DATA; }
+	if( (length < (int)0U) || ((size_t)length >= sizeof(path)) ) { return ADD_MODULE_INVALID_DATA; }
 
 	struct stat status;
-	if( stat(path, &status) != 0 ) { return ADD_MODULE_INVALID_DATA; }
+	if( stat(path, &status) != 0U ) { return ADD_MODULE_INVALID_DATA; }
 	if( directory && !S_ISDIR(status.st_mode) ) { return ADD_MODULE_INVALID_DATA; }
 	if( !directory && !S_ISREG(status.st_mode) ) { return ADD_MODULE_INVALID_DATA; }
 	return ADD_MODULE_OK;
@@ -193,20 +205,20 @@ static add_module_result_t optionSourceDir(const char *data, const add_module_co
 
 static void moduleInit(module_item_t *module, const add_module_type_t module_type)
 {
-	module->status = 0;
+	module->status = 0U;
 	module->type = module_types[module_type].type;
 	module->subtype = module_types[module_type].subtype;
 	module->address = MOD_DRIVER_ADDRESS_NONE;
-	module->stack_size = 0;
+	module->stack_size = 0U;
 
-	if( module->type == MOD_THREAD_ID ) { module->status |= (1 << module->subtype); }
+	if( module->type == MOD_THREAD_ID ) { module->status |= (1U << module->subtype); }
 }
 
 static bool moduleTypeParse(const initrc_command_t *command, add_module_type_t *module_type)
 {
-	for( size_t i = 0; i < (sizeof(module_types) / sizeof(module_types[0])); i++ )
+	for( size_t i = 0U; i < (sizeof(module_types) / sizeof(module_types[0U])); i++ )
 	{
-		if( strcmp(command->tok->tokens[1], module_types[i].name) == 0 )
+		if( strcmp(command->tok->tokens[ADDMODULE_INDEX_TYPE], module_types[i].name) == 0U )
 		{
 			*module_type = (add_module_type_t)i;
 			return true;
@@ -216,38 +228,41 @@ static bool moduleTypeParse(const initrc_command_t *command, add_module_type_t *
 	AUTOCODE_MSG_ERROR("unknown module type [%s:%i] %s",
 					   command->initrc_name,
 					   command->file_line_number,
-					   command->tok->tokens[1]);
+					   command->tok->tokens[ADDMODULE_INDEX_TYPE]);
 	return false;
 }
 
 static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *module,
 							   unsigned int *option_count)
 {
-	if( (command->tok->count < 5) || ((command->tok->count % 2) == 0) )
+	if( (command->tok->count < ADDMODULE_COUNT_MIN) ||
+		((command->tok->count % ADDMODULE_COUNT_PAIR) == 0U) )
 	{
-		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least 5",
+		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least %i",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count);
+						   command->tok->count, ADDMODULE_COUNT_MIN);
 		return false;
 	}
 
 	const add_module_context_t context = {.module = module, .source_path = command->source_path};
 	bool module_is_valid = true;
 	// Option names and values occur in pairs after the module type and name.
-	for( int token = 3; token < command->tok->count; token += 2 )
+	for( int token = ADDMODULE_COUNT_HEADER; token < command->tok->count;
+		 token += ADDMODULE_COUNT_PAIR )
 	{
 		bool option_found = false;
-		for( size_t option = 0; option < ADD_MODULE_OPTION_COUNT; option++ )
+		for( size_t option = 0U; option < ADD_MODULE_OPTION_COUNT; option++ )
 		{
-			if( strcmp(command->tok->tokens[token], module_options[option].name) != 0 )
+			if( strcmp(command->tok->tokens[token], module_options[option].name) != 0U )
 			{
 				continue;
 			}
 
 			// Apply the matched value and count only options whose data is valid.
 			option_found = true;
-			if( (*module_options[option].func)(command->tok->tokens[token + 1], &context) ==
+			if( (*module_options[option].func)(
+					command->tok->tokens[token + ADDMODULE_COUNT_NEXT], &context) ==
 				ADD_MODULE_OK )
 			{
 				option_count[option]++;
@@ -257,7 +272,7 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 				AUTOCODE_MSG_ERROR("unknown data [%s:%i] %s for option %s",
 								   command->initrc_name,
 								   command->file_line_number,
-								   command->tok->tokens[token + 1],
+								   command->tok->tokens[token + ADDMODULE_COUNT_NEXT],
 								   command->tok->tokens[token]);
 				module_is_valid = false;
 			}
@@ -282,16 +297,16 @@ static bool moduleOptionsValidate(const char *name, const add_module_type_t modu
 {
 	bool module_is_valid = true;
 	// Cardinality depends on whether the declaration is a driver, service, or task.
-	for( size_t option = 0; option < ADD_MODULE_OPTION_COUNT; option++ )
+	for( size_t option = 0U; option < ADD_MODULE_OPTION_COUNT; option++ )
 	{
 		const option_cardinality_t cardinality = module_options[option].cardinality[module_type];
-		if( (cardinality == OPTION_REQUIRED) && (option_count[option] == 0) )
+		if( (cardinality == OPTION_REQUIRED) && (option_count[option] == 0U) )
 		{
 			AUTOCODE_MSG_ERROR(
 				"Module %s : %s option is not set", name, module_options[option].name);
 			module_is_valid = false;
 		}
-		if( (cardinality == OPTION_FORBIDDEN) && (option_count[option] > 0) )
+		if( (cardinality == OPTION_FORBIDDEN) && (option_count[option] > 0U) )
 		{
 			AUTOCODE_MSG_ERROR("Module %s : %s option is not valid for %s modules",
 							   name,
@@ -299,7 +314,7 @@ static bool moduleOptionsValidate(const char *name, const add_module_type_t modu
 							   module_types[module_type].name);
 			module_is_valid = false;
 		}
-		else if( (cardinality != OPTION_CUMULATIVE) && (option_count[option] > 1) )
+		else if( (cardinality != OPTION_CUMULATIVE) && (option_count[option] > 1U) )
 		{
 			AUTOCODE_MSG_ERROR(
 				"Module %s : %s option is multiple set", name, module_options[option].name);
@@ -308,7 +323,7 @@ static bool moduleOptionsValidate(const char *name, const add_module_type_t modu
 	}
 
 	if( (option_count[ADD_MODULE_OPTION_SOURCE_FILE] +
-		 option_count[ADD_MODULE_OPTION_SOURCE_DIR]) == 0 )
+		 option_count[ADD_MODULE_OPTION_SOURCE_DIR]) == 0U )
 	{
 		AUTOCODE_MSG_ERROR("Module %s : -source_file or -source_dir option is not set", name);
 		module_is_valid = false;
@@ -319,8 +334,8 @@ static bool moduleOptionsValidate(const char *name, const add_module_type_t modu
 static void moduleAdd(const initrc_command_t *command, const module_item_t *module)
 {
 	// Commit the validated record only after checking the shared type list.
-	const char *name = command->tok->tokens[2];
-	if( strlen(name) >= sizeof(module->name) - 1 )
+	const char *name = command->tok->tokens[ADDMODULE_INDEX_NAME];
+	if( strlen(name) >= sizeof(module->name) - 1U )
 	{
 		AUTOCODE_MSG_ERROR(
 			"Name too long <%s> (maximum %zu characters)", name, sizeof(module->name) - 1U);
@@ -330,9 +345,9 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 	AUTOCODE_MSG_INFO("found module : %s", name);
 	module_type_t *module_list = &command->data_base->modules_type[module->type];
 	// Names must be unique within the shared driver or thread list.
-	for( int i = 0; i < module_list->modules_count; i++ )
+	for( int i = 0U; i < module_list->modules_count; i++ )
 	{
-		if( strcmp(module_list->modules[i].name, name) == 0 )
+		if( strcmp(module_list->modules[i].name, name) == 0U )
 		{
 			AUTOCODE_MSG_ERROR("duplicate name [%s:%i] %s\n\n",
 							   command->initrc_name,
@@ -343,7 +358,7 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 	}
 
 	const int index = module_list->modules_count;
-	if( index > MOD_COUNT_MAX - 1 )
+	if( index >= MOD_COUNT_MAX )
 	{
 		AUTOCODE_MSG_ERROR("too much modules > %i type=%i\n", index, module->type);
 		return;
@@ -356,17 +371,17 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 	module_list->modules[index].subtype = module->subtype;
 	module_list->modules[index].address = module->address;
 	module_list->modules[index].stack_size = module->stack_size;
-	module_list->modules_count = index + 1;
+	module_list->modules_count = index + ADDMODULE_COUNT_NEXT;
 }
 
 void initrcAddModule(const initrc_command_t *command)
 {
-	if( command->tok->count < 3 )
+	if( command->tok->count < ADDMODULE_COUNT_HEADER )
 	{
-		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least 5",
+		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least %i",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count);
+						   command->tok->count, ADDMODULE_COUNT_MIN);
 		return;
 	}
 
@@ -375,9 +390,10 @@ void initrcAddModule(const initrc_command_t *command)
 
 	module_item_t module;
 	moduleInit(&module, module_type);
-	unsigned int option_count[ADD_MODULE_OPTION_COUNT] = {0};
+	unsigned int option_count[ADD_MODULE_OPTION_COUNT] = {0U};
 	if( moduleOptionsParse(command, &module, option_count) == false ) { return; }
-	if( moduleOptionsValidate(command->tok->tokens[2], module_type, option_count) == false )
+	if( moduleOptionsValidate(command->tok->tokens[ADDMODULE_INDEX_NAME],
+							  module_type, option_count) == false )
 	{
 		return;
 	}

@@ -16,10 +16,10 @@
 # ------------------------------------------------------------------------------
 
 BEGIN {
-	major_name = "AC_AUTOCODE_VER_MAJOR"
-	minor_name = "AC_AUTOCODE_VER_MINOR"
-	initrc_major_name = "AC_INITRC_EXPECTED_VER_MAJOR"
-	initrc_minor_name = "AC_INITRC_EXPECTED_VER_MINOR"
+	major_name = "AUTOCODE_VERSION_MAJOR"
+	minor_name = "AUTOCODE_VERSION_MINOR"
+	initrc_major_name = "AUTOCODE_VERSION_INITRCMAJOR"
+	initrc_minor_name = "AUTOCODE_VERSION_INITRCMINOR"
 	failure = 0
 
 	validateExpectedVersion("major", expected_major)
@@ -28,7 +28,7 @@ BEGIN {
 
 ($1 == "#define") && (($2 == major_name) || ($2 == minor_name) || \
 	(report_versions && (($2 == initrc_major_name) || ($2 == initrc_minor_name)))) {
-	if (($2 in version_value) || (NF != 3) || ($3 !~ /^[0-9]+$/))
+	if (($2 in version_value) || (NF != 3) || ($3 !~ /^[0-9]+U$/))
 	{
 		version_type = (($2 == major_name) || ($2 == minor_name)) ? "autoCode" : "initrc"
 		printf("Invalid %s version definition for %s\n", version_type, $2) > "/dev/stderr"
@@ -36,7 +36,7 @@ BEGIN {
 		next
 	}
 
-	version_value[$2] = $3
+	version_value[$2] = substr($3, 1, length($3) - 1)
 }
 
 END {

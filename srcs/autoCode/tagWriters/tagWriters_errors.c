@@ -30,7 +30,7 @@ static const char *errorLevelName(err_level_t level);
 void tagWriterWriteErrorCatalog(const tag_writer_context_t *context)
 {
 	// FLOW entries have no message object but keep their catalogue index.
-	for( int i = 0; i < context->errors->error_count; i++ )
+	for( int i = 0U; i < context->errors->error_count; i++ )
 	{
 		if( context->errors->catalog[i].level != ERR_LEVEL_FLOW )
 		{
@@ -41,7 +41,7 @@ void tagWriterWriteErrorCatalog(const tag_writer_context_t *context)
 
 	fprintf(context->file, "\nconst err_item_t error_catalog[] = \n{\n");
 
-	for( int i = 0; i < context->errors->error_count; i++ )
+	for( int i = 0U; i < context->errors->error_count; i++ )
 	{
 		if( context->errors->catalog[i].level == ERR_LEVEL_FLOW )
 		{
@@ -82,7 +82,7 @@ void tagWriterWriteErrorEnum(const tag_writer_context_t *context)
 	fprintf(context->file, "typedef enum\n");
 	fprintf(context->file, "{\n");
 
-	for( int i = 0; i < context->errors->error_count; i++ )
+	for( int i = 0U; i < context->errors->error_count; i++ )
 	{
 		fprintf(context->file, "\t%s,\n", context->errors->catalog[i].name);
 	}
