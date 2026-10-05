@@ -31,13 +31,13 @@
 typedef struct
 {
 	bool test_mode;
-	char file_errors_list[AC_BUFFER_SIZE];
-	char file_initrc_list[AC_BUFFER_SIZE];
-	char file_parsetag_list[AC_BUFFER_SIZE];
-	char file_gpio_signals[AC_BUFFER_SIZE];
-	char file_wire_gpio[AC_BUFFER_SIZE];
-	char generated_path[AC_BUFFER_SIZE];
-	char source_path[AC_BUFFER_SIZE];
+	char file_errors_list[AUTOCODE_SIZE_BUFFER];
+	char file_initrc_list[AUTOCODE_SIZE_BUFFER];
+	char file_parsetag_list[AUTOCODE_SIZE_BUFFER];
+	char file_gpio_signals[AUTOCODE_SIZE_BUFFER];
+	char file_wire_gpio[AUTOCODE_SIZE_BUFFER];
+	char generated_path[AUTOCODE_SIZE_BUFFER];
+	char source_path[AUTOCODE_SIZE_BUFFER];
 
 } options_list_t;
 
@@ -49,8 +49,8 @@ typedef struct
  * @brief Read autoCode options from a configuration file.
  * @param file_name Options file path.
  * @param[out] opt Receives parsed paths and flags.
- * @return Zero on success; a negative value on file failure.
+ * @return AC_RESULT_OK on success; AC_RESULT_ERROR on file failure.
  */
-int options(const char *file_name, options_list_t *opt);
+ac_result_t options(const char *file_name, options_list_t *opt);
 
 #endif // AUTOCODE_OPTIONS_H

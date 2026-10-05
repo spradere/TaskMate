@@ -459,10 +459,10 @@ runScriptTests()
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
 	FILE_INITRC_SOURCES="${PATH_PROJECT}/scripts/initrc_sources.awk"
 
-	printf '%s\n' '#define AC_INITRC_EXPECTED_VER_MAJOR 1' \
-		'#define AC_INITRC_EXPECTED_VER_MINOR 10' \
-		'#define AC_AUTOCODE_VER_MAJOR 1' \
-		'#define AC_AUTOCODE_VER_MINOR 4' > "${PATH_STAGE_WORK}/autoCode.h"
+	printf '%s\n' '#define AUTOCODE_VERSION_INITRCMAJOR 1U' \
+		'#define AUTOCODE_VERSION_INITRCMINOR 10U' \
+		'#define AUTOCODE_VERSION_MAJOR 1U' \
+		'#define AUTOCODE_VERSION_MINOR 4U' > "${PATH_STAGE_WORK}/autoCode.h"
 	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=4 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectOutput autocode_version_report "autoCode : 1.4
@@ -474,12 +474,12 @@ initrc : 1.10" awk -v expected_major=1 -v expected_minor=4 -v report_versions=1 
 	expectFailure autocode_version_minor_mismatch "expected 5, found 4" awk \
 		-v expected_major=1 -v expected_minor=5 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
-	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR 1' > "${PATH_STAGE_WORK}/missing.h"
+	printf '%s\n' '#define AUTOCODE_VERSION_MAJOR 1U' > "${PATH_STAGE_WORK}/missing.h"
 	expectFailure autocode_version_missing "Missing autoCode version definition" awk \
 		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/missing.h"
-	printf '%s\n' '#define AC_AUTOCODE_VER_MAJOR one' \
-		'#define AC_AUTOCODE_VER_MINOR 4' > "${PATH_STAGE_WORK}/malformed.h"
+	printf '%s\n' '#define AUTOCODE_VERSION_MAJOR one' \
+		'#define AUTOCODE_VERSION_MINOR 4U' > "${PATH_STAGE_WORK}/malformed.h"
 	expectFailure autocode_version_malformed "Invalid autoCode version definition" awk \
 		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/malformed.h"

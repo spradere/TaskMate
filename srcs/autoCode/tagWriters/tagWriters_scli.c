@@ -23,14 +23,14 @@
 
 void tagWriterWriteScliCommands(const tag_writer_context_t *context)
 {
-	for( uint8_t i = 0; i < context->data_base->scli.count; i++ )
+	for( uint8_t i = 0U; i < context->data_base->scli.count; i++ )
 	{
 		fprintf(context->file,
 				"#include \"system/services/commands/scli_%s.h\"\n",
 				context->data_base->scli.commands[i].name);
 	}
 	fprintf(context->file, "\nstatic const scli_cmd_t scli_commands[] = {\n");
-	for( uint8_t i = 0; i < context->data_base->scli.count; i++ )
+	for( uint8_t i = 0U; i < context->data_base->scli.count; i++ )
 	{
 		fprintf(context->file,
 				"\t{\"%s\", %s},\n",
@@ -38,6 +38,6 @@ void tagWriterWriteScliCommands(const tag_writer_context_t *context)
 				context->data_base->scli.commands[i].function);
 	}
 	// The service scans this table until the zero entry.
-	fprintf(context->file, "\t{0, 0},\n");
+	fprintf(context->file, "\t{0U, 0U},\n");
 	fprintf(context->file, "};\n");
 }

@@ -23,6 +23,12 @@
 #include "fileUtility.h"
 #include "tokenizer.h"
 
+enum
+{
+	OPTIONS_COUNT_FIELDS = 2U,
+	OPTIONS_COUNT_ALLOWED = 1U
+};
+
 /* -----------------------------------------------
  * Private function prototypes
  * ---------------------------------------------*/
@@ -84,7 +90,7 @@ static void setFileName(char *destination, const size_t destination_size, const 
 {
 	const size_t value_length = strlen(value);
 
-	if( value_length >= destination_size - 1 )
+	if( value_length >= destination_size - 1U )
 	{
 		AUTOCODE_MSG_ERROR("option value is too long (maximum %zu characters)",
 						   destination_size - 1U);
@@ -112,11 +118,11 @@ static void setErrorsFile(const char *value, options_list_t *opt)
 
 static void setTestMode(const char *value, options_list_t *opt)
 {
-	if( strcmp(value, "on") == 0 )
+	if( strcmp(value, "on") == 0U )
 	{
 		opt->test_mode = true;
 	}
-	else if( strcmp(value, "off") == 0 )
+	else if( strcmp(value, "off") == 0U )
 	{
 		opt->test_mode = false;
 	}
@@ -162,7 +168,7 @@ static void setWireGpioFile(const char *value, options_list_t *opt)
 static void setSourcePath(const char *value, options_list_t *opt)
 {
 	struct stat status;
-	if( (stat(value, &status) != 0) || !S_ISDIR(status.st_mode) )
+	if( (stat(value, &status) != 0U) || !S_ISDIR(status.st_mode) )
 	{
 		AUTOCODE_MSG_ERROR("invalid --source_path directory <%s>", value);
 		return;
@@ -172,40 +178,40 @@ static void setSourcePath(const char *value, options_list_t *opt)
 	have_options_count[HAVE_SOURCE_PATH]++;
 }
 
-static int optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
+static ac_result_t optionCmdDispatch(const char *cmd, const char *value, options_list_t *opt)
 {
-	for( int i = 0; options_cmds[i].name != NULL; i++ )
+	for( int i = 0U; options_cmds[i].name != NULL; i++ )
 	{
-		if( strcmp(cmd, options_cmds[i].name) == 0 )
+		if( strcmp(cmd, options_cmds[i].name) == 0U )
 		{
 			(*options_cmds[i].func)(value, opt);
-			return 0;
+			return AC_RESULT_OK;
 		}
 	}
-	return -1;
+	return AC_RESULT_ERROR;
 }
 
 /*
  * Read the configuration and report all line and option-count errors in one pass.
- * Fatal file errors return -1; diagnostics from parsed options use autoCode's error count.
+ * Fatal file errors return AC_RESULT_ERROR; parsed options use autoCode's error count.
  */
-int options(const char *file_name, options_list_t *opt)
+ac_result_t options(const char *file_name, options_list_t *opt)
 {
 	// Count accepted values to detect both missing and repeated options.
-	for( int i = 0; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0; }
+	for( int i = 0U; i < HAVE_COUNT; i++ ) { have_options_count[i] = 0U; }
 
 	// A malformed line reports an error without stopping later diagnostics.
 	file_t file;
 	fileInit(&file);
 	file.name = (char *)file_name;
-	if( fileOpen(&file, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	if( fileOpen(&file, "r", FILEUTILITY_MODE_READONLY) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("opening file <%s>", file_name);
-		return -1;
+		return AC_RESULT_ERROR;
 	}
 
-	int file_line_number = 0;
-	tokenizer_t tok = {0};
+	int file_line_number = 0U;
+	tokenizer_t tok = {0U};
 	file_get_line_result_t line_result;
 	AUTOCODE_MSG_INFO("read file %s", file_name);
 	while( (line_result = fileGetLine(&file, tok.line, sizeof(tok.line))) == FILE_GET_LINE_SUCCESS )
@@ -221,26 +227,26 @@ int options(const char *file_name, options_list_t *opt)
 		}
 
 		// Effective lines contain one option and one value.
-		if( (tok.count != 0) && (tok.tokens[0][0] != '#') )
+		if( (tok.count != 0U) && (tok.tokens[0U][0U] != '#') )
 		{
-			if( tok.count == 2 )
+			if( tok.count == OPTIONS_COUNT_FIELDS )
 			{
-				AUTOCODE_MSG_INFO("parsing %s = %s", tok.tokens[0], tok.tokens[1]);
+				AUTOCODE_MSG_INFO("parsing %s = %s", tok.tokens[0U], tok.tokens[1U]);
 
-				int err = optionCmdDispatch(tok.tokens[0], tok.tokens[1], opt);
+				ac_result_t err = optionCmdDispatch(tok.tokens[0U], tok.tokens[1U], opt);
 
-				if( err != 0 )
+				if( err != AC_RESULT_OK )
 				{
 					AUTOCODE_MSG_ERROR(
-						"unknown option [%s:%i] %s\n", file.name, file_line_number, tok.tokens[0]);
+						"unknown option [%s:%i] %s\n", file.name, file_line_number, tok.tokens[0U]);
 				}
 			}
 			else
 			{
-				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be 2",
+				AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be %i",
 								   file.name,
 								   file_line_number,
-								   tok.count);
+								   tok.count, OPTIONS_COUNT_FIELDS);
 			}
 		}
 	}
@@ -250,26 +256,26 @@ int options(const char *file_name, options_list_t *opt)
 	}
 	// Release token storage and close the list before checking option cardinality.
 	tokenizerFree(&tok);
-	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
+	ac_result_t result = (line_result == FILE_GET_LINE_ERROR) ? AC_RESULT_ERROR : AC_RESULT_OK;
 	if( fileClose(&file) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("closing file <%s>", file_name);
-		result = -1;
+		result = AC_RESULT_ERROR;
 	}
-	if( result != 0 ) { return result; }
+	if( result != AC_RESULT_OK ) { return result; }
 
 	// Check cardinality after the complete configuration has been read.
-	for( int i = 0; i < HAVE_COUNT; i++ )
+	for( int i = 0U; i < HAVE_COUNT; i++ )
 	{
-		if( have_options_count[i] == 0 )
+		if( have_options_count[i] == 0U )
 		{
 			AUTOCODE_MSG_ERROR("required autoCode option %s is not set", string_from_have(i));
 		}
 
-		if( have_options_count[i] > 1 )
+		if( have_options_count[i] > OPTIONS_COUNT_ALLOWED )
 		{
 			AUTOCODE_MSG_ERROR("required autoCode option %s is multiple set", string_from_have(i));
 		}
 	}
-	return 0;
+	return AC_RESULT_OK;
 }

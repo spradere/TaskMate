@@ -24,6 +24,8 @@
 #include "initrcCommands/setVersion.h"
 #include "tokenizer.h"
 
+enum { PARSEINITRC_COUNT_VERSIONMIN = 2U };
+
 /* -----------------------------------------------
  * init.rc command dispatch table
  * ---------------------------------------------*/
@@ -48,9 +50,9 @@ static const struct
 
 static bool initrcCommandDispatch(const initrc_command_t *command)
 {
-	for( size_t i = 0; i < (sizeof(initrc_commands) / sizeof(initrc_commands[0])); i++ )
+	for( size_t i = 0U; i < (sizeof(initrc_commands) / sizeof(initrc_commands[0U])); i++ )
 	{
-		if( strcmp(command->tok->tokens[0], initrc_commands[i].name) == 0 )
+		if( strcmp(command->tok->tokens[0U], initrc_commands[i].name) == 0U )
 		{
 			(*initrc_commands[i].func)(command);
 			return true;
@@ -62,8 +64,9 @@ static bool initrcCommandDispatch(const initrc_command_t *command)
 static bool initrcVersionCommand(const initrc_command_t *command, const char *position,
 								 const char *option, const int expected_version)
 {
-	if( (strcmp(command->tok->tokens[0], "setVersion") != 0) || (command->tok->count < 2) ||
-		(strcmp(command->tok->tokens[1], option) != 0) )
+	if( (strcmp(command->tok->tokens[0U], "setVersion") != 0U) ||
+		(command->tok->count < PARSEINITRC_COUNT_VERSIONMIN) ||
+		(strcmp(command->tok->tokens[1U], option) != 0U) )
 	{
 		AUTOCODE_MSG_ERROR("%s init.rc command [%s:%i] must be setVersion %s %i",
 						   position,
@@ -81,21 +84,22 @@ static bool initrcVersionCommand(const initrc_command_t *command, const char *po
  * Require the two version commands before any declaration. Parsing errors are recorded by
  * autoCode; the return value reports file access failures.
  */
-int parseInitrc(modules_database_t *data_base, const char *initrc_name, const char *source_path)
+ac_result_t parseInitrc(modules_database_t *data_base, const char *initrc_name,
+						const char *source_path)
 {
 	AUTOCODE_MSG_INFO("open <%s>", initrc_name);
 
 	file_t initrc_list;
 	fileInit(&initrc_list);
 	initrc_list.name = (char *)initrc_name;
-	if( fileOpen(&initrc_list, "r", FILE_READONLY) != FILE_UTILITY_OK )
+	if( fileOpen(&initrc_list, "r", FILEUTILITY_MODE_READONLY) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("opening file <%s>", initrc_name);
-		return -1;
+		return AC_RESULT_ERROR;
 	}
 
-	int file_line_number = 0;
-	tokenizer_t tok = {0};
+	int file_line_number = 0U;
+	tokenizer_t tok = {0U};
 	file_get_line_result_t line_result;
 	bool version_major_set = false;
 	bool version_minor_set = false;
@@ -120,7 +124,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 			}
 			continue;
 		}
-		if( (tok.count == 0) || (strcmp(tok.tokens[0], "#") == 0) ) { continue; }
+		if( (tok.count == 0U) || (strcmp(tok.tokens[0U], "#") == 0U) ) { continue; }
 
 		const initrc_command_t command = {.data_base = data_base,
 										  .tok = &tok,
@@ -131,7 +135,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		if( version_major_set == false )
 		{
 			version_major_set =
-				initrcVersionCommand(&command, "first", "major", AC_INITRC_EXPECTED_VER_MAJOR);
+				initrcVersionCommand(&command, "first", "major", AUTOCODE_VERSION_INITRCMAJOR);
 			if( version_major_set == false )
 			{
 				version_invalid = true;
@@ -142,7 +146,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		if( version_minor_set == false )
 		{
 			version_minor_set =
-				initrcVersionCommand(&command, "second", "minor", AC_INITRC_EXPECTED_VER_MINOR);
+				initrcVersionCommand(&command, "second", "minor", AUTOCODE_VERSION_INITRCMINOR);
 			if( version_minor_set == false )
 			{
 				version_invalid = true;
@@ -150,7 +154,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 			}
 			continue;
 		}
-		if( strcmp(tok.tokens[0], "setVersion") == 0 )
+		if( strcmp(tok.tokens[0U], "setVersion") == 0U )
 		{
 			// Version declarations are valid only at the start of the file.
 			AUTOCODE_MSG_ERROR("setVersion command after init.rc version declaration [%s:%i]",
@@ -163,7 +167,7 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 		if( initrcCommandDispatch(&command) == false )
 		{
 			AUTOCODE_MSG_ERROR(
-				"unknown command [%s:%i] %s", initrc_name, file_line_number, tok.tokens[0]);
+				"unknown command [%s:%i] %s", initrc_name, file_line_number, tok.tokens[0U]);
 		}
 	}
 
@@ -175,21 +179,21 @@ int parseInitrc(modules_database_t *data_base, const char *initrc_name, const ch
 	if( (version_invalid == false) && (version_major_set == false) )
 	{
 		AUTOCODE_MSG_ERROR("missing setVersion major %i as first command of init.rc file <%s>",
-						   AC_INITRC_EXPECTED_VER_MAJOR,
+						   AUTOCODE_VERSION_INITRCMAJOR,
 						   initrc_name);
 	}
 	if( (version_invalid == false) && version_major_set && (version_minor_set == false) )
 	{
 		AUTOCODE_MSG_ERROR("missing setVersion minor %i as second command of init.rc file <%s>",
-						   AC_INITRC_EXPECTED_VER_MINOR,
+						   AUTOCODE_VERSION_INITRCMINOR,
 						   initrc_name);
 	}
 	tokenizerFree(&tok);
-	int result = (line_result == FILE_GET_LINE_ERROR) ? -1 : 0;
+	ac_result_t result = (line_result == FILE_GET_LINE_ERROR) ? AC_RESULT_ERROR : AC_RESULT_OK;
 	if( fileClose(&initrc_list) != FILE_UTILITY_OK )
 	{
 		AUTOCODE_MSG_ERROR("closing file <%s>", initrc_name);
-		result = -1;
+		result = AC_RESULT_ERROR;
 	}
 	return result;
 }

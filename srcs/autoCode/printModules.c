@@ -28,7 +28,7 @@ void printModules(const modules_database_t *data_base)
 
 	AUTOCODE_MSG_INFO("found drivers :");
 	const module_type_t *driver = &data_base->modules_type[MOD_DRIVER_ID];
-	for( int i = 0; i < driver->modules_count; i++ )
+	for( int i = 0U; i < driver->modules_count; i++ )
 	{
 		printf("\tdrivers[%i] \"%s\" runlevel=%i",
 			   i,
@@ -44,7 +44,7 @@ void printModules(const modules_database_t *data_base)
 
 	AUTOCODE_MSG_INFO("found threads :");
 	const module_type_t *threads = &data_base->modules_type[MOD_THREAD_ID];
-	for( int i = 0; i < threads->modules_count; i++ )
+	for( int i = 0U; i < threads->modules_count; i++ )
 	{
 		printf("\tthread[%i] \"%s\" runlevel=%i type=%i stack=%u words\n",
 			   i,

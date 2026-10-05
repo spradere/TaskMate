@@ -30,8 +30,8 @@
  * @brief Select read-only access and optional missing files.
  * @{
  */
-#define FILE_READONLY 1
-#define FILE_MISSING_ALLOWED 2
+#define FILEUTILITY_MODE_READONLY 1U
+#define FILEUTILITY_MODE_MISSING 2U
 /** @} */
 
 /**
@@ -51,7 +51,7 @@ typedef struct
  */
 typedef enum
 {
-	FILE_UTILITY_OK = 0,
+	FILE_UTILITY_OK = 0U,
 	FILE_GET_LINE_SUCCESS = FILE_UTILITY_OK,
 	FILE_GET_LINE_EOF,
 	FILE_UTILITY_DIFFERENT,

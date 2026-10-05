@@ -25,7 +25,7 @@ void tagWriterWriteThreadsList(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
-	for( int i = 0; i < mod->modules_count; i++ )
+	for( int i = 0U; i < mod->modules_count; i++ )
 	{
 		if( mod->modules[i].subtype == THREAD_BIT_TYPE_SYS )
 		{
@@ -42,7 +42,7 @@ void tagWriterWriteDriversList(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
 
-	for( int i = 0; i < mod->modules_count; i++ )
+	for( int i = 0U; i < mod->modules_count; i++ )
 	{
 		fprintf(context->file, "#include \"interfaces/drv_%s.h\"\n", mod->modules[i].name);
 	}

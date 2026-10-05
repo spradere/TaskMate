@@ -21,6 +21,8 @@
 #include <limits.h>
 #include <sys/stat.h>
 
+#define FILEUTILITY_SIZE_LINEMIN 2U
+
 /* -----------------------------------------------
  * Private types
  * ---------------------------------------------*/
@@ -36,10 +38,10 @@ typedef struct
  * Private variables
  * ---------------------------------------------*/
 
-static int file_updated = 0;
-static int file_unchanged = 0;
+static int file_updated = 0U;
+static int file_unchanged = 0U;
 static file_tmp_item_t *file_tmp_list = NULL;
-static size_t file_tmp_source_count = 0;
+static size_t file_tmp_source_count = 0U;
 static bool file_tmp_cleanup_registered = false;
 
 /* -----------------------------------------------
@@ -73,13 +75,13 @@ file_utility_err_t fileCmpReplaceAll(void)
 	file_utility_err_t result = FILE_UTILITY_OK;
 
 	// Compare each staged file before replacing its destination.
-	for( size_t i = 0; i < file_tmp_source_count; i++ )
+	for( size_t i = 0U; i < file_tmp_source_count; i++ )
 	{
 		// The destination may be absent; the staged file must already exist.
 		file_t file_src;
 		fileInit(&file_src);
 		file_src.name = file_tmp_list[i].source_name;
-		result = fileOpen(&file_src, "r", FILE_MISSING_ALLOWED);
+		result = fileOpen(&file_src, "r", FILEUTILITY_MODE_MISSING);
 		if( result != FILE_UTILITY_OK )
 		{
 			goto exit;
@@ -88,7 +90,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		file_t file_tmp;
 		fileInit(&file_tmp);
 		file_tmp.name = file_tmp_list[i].temporary_name;
-		result = fileOpen(&file_tmp, "r", FILE_READONLY);
+		result = fileOpen(&file_tmp, "r", FILEUTILITY_MODE_READONLY);
 		if( result != FILE_UTILITY_OK )
 		{
 			(void)fileClose(&file_src);
@@ -111,7 +113,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		if( comparison == FILE_UTILITY_OK )
 		{
 			AUTOCODE_MSG_INFO("keep the old one <%s>", file_tmp_list[i].source_name);
-			if( remove(file_tmp_list[i].temporary_name) != 0 )
+			if( remove(file_tmp_list[i].temporary_name) != 0U )
 			{
 				result = FILE_UTILITY_REMOVE;
 				goto exit;
@@ -122,7 +124,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		else
 		{
 			AUTOCODE_MSG_INFO("change for the new one, tmp -> <%s>", file_tmp_list[i].source_name);
-			if( rename(file_tmp_list[i].temporary_name, file_tmp_list[i].source_name) != 0 )
+			if( rename(file_tmp_list[i].temporary_name, file_tmp_list[i].source_name) != 0U )
 			{
 				result = FILE_UTILITY_RENAME;
 				goto exit;
@@ -143,19 +145,19 @@ exit:
 
 static file_utility_err_t fileCompare(file_t *file_old, file_t *file_new)
 {
-	char old[AC_BUFFER_SIZE];
-	char new[AC_BUFFER_SIZE];
+	char old[AUTOCODE_SIZE_BUFFER];
+	char new[AUTOCODE_SIZE_BUFFER];
 	bool same = true;
 	file_utility_err_t result = FILE_UTILITY_OK;
 
 	// Compare from the beginning even if a caller has already read either stream.
-	if( (file_old->stream != NULL) && (fseek(file_old->stream, 0L, SEEK_SET) != 0) )
+	if( (file_old->stream != NULL) && (fseek(file_old->stream, 0U, SEEK_SET) != 0U) )
 	{
 		result = FILE_UTILITY_SEEK;
 		goto exit;
 	}
 
-	if( fseek(file_new->stream, 0L, SEEK_SET) != 0 )
+	if( fseek(file_new->stream, 0U, SEEK_SET) != 0U )
 	{
 		result = FILE_UTILITY_SEEK;
 		goto exit;
@@ -183,7 +185,7 @@ static file_utility_err_t fileCompare(file_t *file_old, file_t *file_new)
 			same = (old_result == new_result);
 			break;
 		}
-		if( strcmp(old, new) != 0 )
+		if( strcmp(old, new) != 0U )
 		{
 			same = false;
 			break;
@@ -203,7 +205,7 @@ file_utility_err_t fileGetLine(file_t *file, char *line, const size_t line_size_
 {
 	file_utility_err_t result = FILE_GET_LINE_SUCCESS;
 	if( (file == NULL) || (file->stream == NULL) || (line == NULL) ||
-		(line_size_max < 2U) || (line_size_max > (size_t)INT_MAX) )
+		(line_size_max < FILEUTILITY_SIZE_LINEMIN) || (line_size_max > (size_t)INT_MAX) )
 	{
 		result = FILE_GET_LINE_ERROR;
 		goto exit;
@@ -224,7 +226,7 @@ file_utility_err_t fileGetLine(file_t *file, char *line, const size_t line_size_
 	}
 
 	// A filled buffer cannot prove that the complete input line was read.
-	if( line_length >= line_size_max - 1 )
+	if( line_length >= line_size_max - 1U )
 	{
 		result = FILE_GET_LINE_ERROR;
 		goto exit;
@@ -254,12 +256,12 @@ file_utility_err_t fileClose(file_t *file)
 
 	if( file->stream_opened )
 	{
-		if( file->write_access && (ferror(file->stream) != 0) )
+		if( file->write_access && (ferror(file->stream) != 0U) )
 		{
 			result = FILE_UTILITY_WRITE;
 		}
 		int err = fclose(file->stream);
-		if( err != 0 )
+		if( err != 0U )
 		{
 			result = FILE_UTILITY_CLOSE;
 		}
@@ -293,8 +295,8 @@ file_utility_err_t fileOpen(file_t *file, const char *mode, const int special_mo
 	{
 		// Comparison permits an absent destination; other opens must succeed.
 		struct stat file_info;
-		if( (special_mode != FILE_MISSING_ALLOWED) || (strcmp(mode, "r") != 0) ||
-			(stat(file->name, &file_info) == 0) )
+		if( (special_mode != FILEUTILITY_MODE_MISSING) || (strcmp(mode, "r") != 0U) ||
+			(stat(file->name, &file_info) == 0U) )
 		{
 			result = FILE_UTILITY_OPEN;
 		}
@@ -337,9 +339,9 @@ static file_utility_err_t fileTmpCleanupAll(void)
 {
 	file_utility_err_t result = FILE_UTILITY_OK;
 
-	for( size_t i = 0; i < file_tmp_source_count; i++ )
+	for( size_t i = 0U; i < file_tmp_source_count; i++ )
 	{
-		if( file_tmp_list[i].active && (remove(file_tmp_list[i].temporary_name) != 0) )
+		if( file_tmp_list[i].active && (remove(file_tmp_list[i].temporary_name) != 0U) )
 		{
 			result = FILE_UTILITY_REMOVE;
 		}
@@ -349,7 +351,7 @@ static file_utility_err_t fileTmpCleanupAll(void)
 
 	free(file_tmp_list);
 	file_tmp_list = NULL;
-	file_tmp_source_count = 0;
+	file_tmp_source_count = 0U;
 	return result;
 }
 
@@ -364,7 +366,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 	if( file_tmp_cleanup_registered == false )
 	{
 		// Clean staged files if parsing exits before publication.
-		if( atexit(fileTmpCleanup) != 0 )
+		if( atexit(fileTmpCleanup) != 0U )
 		{
 			result = FILE_UTILITY_REGISTER;
 			goto exit;
@@ -373,7 +375,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 	}
 
 	// Own both names because the caller's path storage may not survive publication.
-	const size_t source_name_size = strlen(file_src_name) + 1;
+	const size_t source_name_size = strlen(file_src_name) + 1U;
 	source_name = malloc(source_name_size);
 	if( source_name == NULL )
 	{
@@ -388,7 +390,7 @@ static file_utility_err_t fileTmpRegister(const char *file_src_name, char **temp
 	}
 
 	// Append only after both names are ready, leaving the existing list intact on failure.
-	file_tmp_item_t *list = realloc(file_tmp_list, (file_tmp_source_count + 1) * sizeof(*list));
+	file_tmp_item_t *list = realloc(file_tmp_list, (file_tmp_source_count + 1U) * sizeof(*list));
 	if( list == NULL )
 	{
 		result = FILE_UTILITY_ALLOC;

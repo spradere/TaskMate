@@ -19,6 +19,10 @@
 
 #include <errno.h>
 
+#define SETVERSION_BASE_DECIMAL 10U
+#define SETVERSION_COUNT_TOKENS 3U
+#define SETVERSION_INDEX_VALUE 2U
+
 /* -----------------------------------------------
  * Version option dispatch table
  * ---------------------------------------------*/
@@ -49,21 +53,22 @@ static bool versionValueMatches(const char *value, const unsigned long expected)
 	char *end;
 
 	// Reject partial numbers and overflow before checking exact compatibility.
-	errno = 0;
-	const unsigned long parsed = strtoul(value, &end, 10);
-	if( (value[0] == 0) || (*end != 0) || (errno == ERANGE) ) { return false; }
+	errno = 0U;
+	const unsigned long parsed = strtoul(value, &end, SETVERSION_BASE_DECIMAL);
+	if( (value[0U] == 0U) || (*end != 0U) || (errno == ERANGE) ) { return false; }
 	return parsed == expected;
 }
 
 static bool setVersionMajor(const initrc_command_t *command)
 {
-	if( versionValueMatches(command->tok->tokens[2], AC_INITRC_EXPECTED_VER_MAJOR) == false )
+	if( versionValueMatches(command->tok->tokens[SETVERSION_INDEX_VALUE],
+							 AUTOCODE_VERSION_INITRCMAJOR) == false )
 	{
 		AUTOCODE_MSG_ERROR("unsupported init.rc major syntax version [%s:%i] %s, expected %i",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->tokens[2],
-						   AC_INITRC_EXPECTED_VER_MAJOR);
+						   command->tok->tokens[SETVERSION_INDEX_VALUE],
+						   AUTOCODE_VERSION_INITRCMAJOR);
 		return false;
 	}
 	return true;
@@ -71,13 +76,14 @@ static bool setVersionMajor(const initrc_command_t *command)
 
 static bool setVersionMinor(const initrc_command_t *command)
 {
-	if( versionValueMatches(command->tok->tokens[2], AC_INITRC_EXPECTED_VER_MINOR) == false )
+	if( versionValueMatches(command->tok->tokens[SETVERSION_INDEX_VALUE],
+							 AUTOCODE_VERSION_INITRCMINOR) == false )
 	{
 		AUTOCODE_MSG_ERROR("unsupported init.rc minor syntax version [%s:%i] %s, expected %i",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->tokens[2],
-						   AC_INITRC_EXPECTED_VER_MINOR);
+						   command->tok->tokens[SETVERSION_INDEX_VALUE],
+						   AUTOCODE_VERSION_INITRCMINOR);
 		return false;
 	}
 	return true;
@@ -85,18 +91,18 @@ static bool setVersionMinor(const initrc_command_t *command)
 
 bool initrcSetVersion(const initrc_command_t *command)
 {
-	if( command->tok->count != 3 )
+	if( command->tok->count != SETVERSION_COUNT_TOKENS )
 	{
-		AUTOCODE_MSG_ERROR("setVersion token count [%s:%i] is %i, should be 3",
+		AUTOCODE_MSG_ERROR("setVersion token count [%s:%i] is %i, should be %u",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count);
+						   command->tok->count, SETVERSION_COUNT_TOKENS);
 		return false;
 	}
 
-	for( size_t i = 0; i < (sizeof(set_version_options) / sizeof(set_version_options[0])); i++ )
+	for( size_t i = 0U; i < (sizeof(set_version_options) / sizeof(set_version_options[0U])); i++ )
 	{
-		if( strcmp(command->tok->tokens[1], set_version_options[i].name) == 0 )
+		if( strcmp(command->tok->tokens[1U], set_version_options[i].name) == 0U )
 		{
 			return (*set_version_options[i].func)(command);
 		}
@@ -105,6 +111,6 @@ bool initrcSetVersion(const initrc_command_t *command)
 	AUTOCODE_MSG_ERROR("unknown setVersion option [%s:%i] %s",
 					   command->initrc_name,
 					   command->file_line_number,
-					   command->tok->tokens[1]);
+					   command->tok->tokens[1U]);
 	return false;
 }

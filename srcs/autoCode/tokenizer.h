@@ -28,14 +28,14 @@
 /**
  * @brief Input line capacity in bytes for tokenization.
  */
-#define TOKEN_LINE_SIZE_MAX 256
+#define TOKENIZER_SIZE_LINEMAX 256U
 
 /**
  * @brief Holds a tokenized input line and its token pointers.
  */
 typedef struct
 {
-	char line[TOKEN_LINE_SIZE_MAX];
+	char line[TOKENIZER_SIZE_LINEMAX];
 	char **tokens;
 	int count;
 
