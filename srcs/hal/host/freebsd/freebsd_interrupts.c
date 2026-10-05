@@ -16,6 +16,7 @@
  * ===========================================================================*/
 
 #include "freebsd_interrupts.h"
+#include <stddef.h>
 
 /* =============================================================================
  * Implementation - Functions
@@ -23,10 +24,10 @@
 
 bool freebsd_interruptsMask(sigset_t *mask)
 {
-	if( mask == 0 ) { return false; }
-	if( sigemptyset(mask) != 0 ) { return false; }
-	if( sigaddset(mask, FREEBSD_SIGNAL_SCHED) != 0 ) { return false; }
-	if( sigaddset(mask, FREEBSD_SIGNAL_STC) != 0 ) { return false; }
+	if( mask == NULL ) { return false; }
+	if( sigemptyset(mask) != 0U ) { return false; }
+	if( sigaddset(mask, FREEBSD_SIGNAL_SCHED) != 0U ) { return false; }
+	if( sigaddset(mask, FREEBSD_SIGNAL_STC) != 0U ) { return false; }
 	return true;
 }
 
@@ -34,5 +35,5 @@ bool freebsd_interruptsBlock(sigset_t *previous)
 {
 	sigset_t mask;
 	if( !freebsd_interruptsMask(&mask) ) { return false; }
-	return sigprocmask(SIG_BLOCK, &mask, previous) == 0;
+	return sigprocmask(SIG_BLOCK, &mask, previous) == 0U;
 }

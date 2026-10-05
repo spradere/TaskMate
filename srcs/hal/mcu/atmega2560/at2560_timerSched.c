@@ -18,6 +18,7 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <stddef.h>
 #include <util/atomic.h>
 
 #include "hal/arch/avr8/avr8_context.h"
@@ -30,7 +31,8 @@
  * Constants
  * ---------------------------------------------*/
 
-const uint16_t TIMER1_OVERFLOW_COUNT = 1999; // Interrupt every 1ms (1.10^-3 x 16.10^6 )/8 = 2000
+#define AT2560TIMERSCHED_COUNT_OVERFLOW 1999U // Interrupt every 1 ms
+#define AT2560TIMERSCHED_COUNT_GUARD 4U
 
 /* -----------------------------------------------
  * Private variables
@@ -57,21 +59,21 @@ static hal_driver_state_t timerSchedSetError(err_codes_t error)
 
 static hal_driver_state_t hal_timerSchedGetStatus(void)
 {
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0U )
 	{
 		timer_sched_last_error = ERR_HAL_DRIVER_DEAD;
 		return DRV_STATE_DEAD;
 	}
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0U )
 	{
-		if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
+		if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0U ) { return DRV_STATE_OFF; }
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0U ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
@@ -100,8 +102,7 @@ hal_driver_state_t hal_timerSchedLoad(void)
 {
 	hal_driver_state_t state = timerSchedRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
-#define LOAD_GUARD 4
-	const uint16_t LOAD = TIMER1_OVERFLOW_COUNT - LOAD_GUARD;
+	const uint16_t LOAD = AT2560TIMERSCHED_COUNT_OVERFLOW - AT2560TIMERSCHED_COUNT_GUARD;
 
 	TCNT1 = LOAD;
 	return DRV_STATE_RUNNING;
@@ -113,13 +114,13 @@ hal_driver_state_t hal_timerSchedLoad(void)
 
 static hal_driver_state_t hal_timerSchedInit(void)
 {
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_DEAD);
 	}
 	// Set up timer1 interrupt for scheduler
 	TM_SETBIT(TCCR1B, WGM12); // CTC mode
-	OCR1A = TIMER1_OVERFLOW_COUNT;
+	OCR1A = AT2560TIMERSCHED_COUNT_OVERFLOW;
 	TM_SETBIT(TIMSK1, OCIE1A); // output compare interrupt enable
 
 	TM_SETBIT(timer_sched_status, DRV_BIT_INIT);
@@ -137,11 +138,11 @@ static hal_driver_state_t hal_timerSchedInit(void)
 
 static hal_driver_state_t hal_timerSchedStart(void)
 {
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_DEAD);
 	}
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0U )
 	{
 
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
@@ -229,7 +230,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			return hal_timerSchedStop();
 		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -238,12 +239,12 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			timer_sched_status |= data->run_level;
 			return hal_timerSchedGetStatus();
 		case DRV_CTRL_RLGET:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			data->run_level = timer_sched_status & RL_LEVEL_MASK;
 			return hal_timerSchedGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -251,7 +252,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			TM_SETBIT(timer_sched_status, data->status_bit);
 			return hal_timerSchedGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -259,18 +260,18 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			TM_CLEARBIT(timer_sched_status, data->status_bit);
 			return hal_timerSchedGetStatus();
 		case DRV_CTRL_GETBIT:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			data->bit_value = TM_GETBIT(timer_sched_status, data->status_bit) != 0;
+			data->bit_value = TM_GETBIT(timer_sched_status, data->status_bit) != 0U;
 			return hal_timerSchedGetStatus();
 		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_timerSchedGetStatus();
 		case DRV_CTRL_GETLASTERROR:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			data->error = timer_sched_last_error;
 			return hal_timerSchedGetStatus();
 		default:

@@ -16,6 +16,7 @@
  * ===========================================================================*/
 
 #include <signal.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/time.h>
@@ -29,7 +30,7 @@
  * Constants
  * ---------------------------------------------*/
 
-#define FREEBSD_STC_INTERVAL_US 10000
+#define FREEBSDTIMERSTC_INTERVAL_us 10000U
 
 /* -----------------------------------------------
  * Private variables
@@ -59,17 +60,17 @@ static hal_driver_state_t timerSTCSetError(err_codes_t error)
 
 static hal_driver_state_t timerSTCGetStatus(void)
 {
-	if( TM_GETBIT(timer_stc_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(timer_stc_status, DRV_BIT_DEAD) != 0U )
 	{
 		timer_stc_last_error = ERR_HAL_DRIVER_DEAD;
 		return DRV_STATE_DEAD;
 	}
-	if( TM_GETBIT(timer_stc_status, DRV_BIT_ERROR) != 0 )
+	if( TM_GETBIT(timer_stc_status, DRV_BIT_ERROR) != 0U )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(timer_stc_status, DRV_BIT_INIT) == 0 ) { return DRV_STATE_OFF; }
-	if( TM_GETBIT(timer_stc_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	if( TM_GETBIT(timer_stc_status, DRV_BIT_INIT) == 0U ) { return DRV_STATE_OFF; }
+	if( TM_GETBIT(timer_stc_status, DRV_BIT_START) == 0U ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
@@ -78,12 +79,12 @@ static void timerSTCHandler(int signal, siginfo_t *info, void *native_context)
 	(void)info;
 	(void)native_context;
 	if( signal != FREEBSD_SIGNAL_STC ) { return; }
-	if( stc_callback != 0 ) { stc_callback(); }
+	if( stc_callback != NULL ) { stc_callback(); }
 }
 
 hal_driver_state_t hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
 {
-	if( func_ptr == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
+	if( func_ptr == NULL ) { return timerSTCSetError(ERR_NULL_POINTER); }
 	stc_callback = func_ptr;
 	return timerSTCGetStatus();
 }
@@ -91,14 +92,14 @@ hal_driver_state_t hal_timerSTCSetCallback(hal_timerSTCCallback_t func_ptr)
 static hal_driver_state_t timerSTCInit(void)
 {
 	struct sigaction action;
-	memset(&action, 0, sizeof(action));
+	memset(&action, 0U, sizeof(action));
 	action.sa_sigaction = timerSTCHandler;
 	action.sa_flags = SA_SIGINFO;
 	if( !freebsd_interruptsMask(&action.sa_mask) )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( sigaction(FREEBSD_SIGNAL_STC, &action, 0) != 0 )
+	if( sigaction(FREEBSD_SIGNAL_STC, &action, 0U) != 0U )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
@@ -110,16 +111,16 @@ static hal_driver_state_t timerSTCInit(void)
 
 static hal_driver_state_t timerSTCStart(void)
 {
-	if( TM_GETBIT(timer_stc_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(timer_stc_status, DRV_BIT_INIT) == 0U )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
 
 	const struct itimerval timer = {
-		.it_interval = {.tv_sec = 0, .tv_usec = FREEBSD_STC_INTERVAL_US},
-		.it_value = {.tv_sec = 0, .tv_usec = FREEBSD_STC_INTERVAL_US},
+		.it_interval = {.tv_sec = 0U, .tv_usec = FREEBSDTIMERSTC_INTERVAL_us},
+		.it_value = {.tv_sec = 0U, .tv_usec = FREEBSDTIMERSTC_INTERVAL_us},
 	};
-	if( setitimer(ITIMER_REAL, &timer, 0) != 0 )
+	if( setitimer(ITIMER_REAL, &timer, 0U) != 0U )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
@@ -130,8 +131,8 @@ static hal_driver_state_t timerSTCStart(void)
 
 static hal_driver_state_t timerSTCStop(void)
 {
-	const struct itimerval timer = {0};
-	if( setitimer(ITIMER_REAL, &timer, 0) != 0 )
+	const struct itimerval timer = {0U};
+	if( setitimer(ITIMER_REAL, &timer, 0U) != 0U )
 	{
 		return timerSTCSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
@@ -152,7 +153,7 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			return timerSTCStop();
 		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
-			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
 			{
 				return timerSTCSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -161,14 +162,14 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			timer_stc_status |= data->run_level;
 			return timerSTCGetStatus();
 		case DRV_CTRL_RLGET:
-			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			data->run_level = timer_stc_status & RL_LEVEL_MASK;
 			return timerSTCGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 		case DRV_CTRL_CLEARBIT:
 		case DRV_CTRL_GETBIT:
-			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return timerSTCSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -177,14 +178,14 @@ hal_driver_state_t hal_timerSTCControl(hal_driver_control_t command,
 			if( command == DRV_CTRL_CLEARBIT ) { TM_CLEARBIT(timer_stc_status, data->status_bit); }
 			if( command == DRV_CTRL_GETBIT )
 			{
-				data->bit_value = TM_GETBIT(timer_stc_status, data->status_bit) != 0;
+				data->bit_value = TM_GETBIT(timer_stc_status, data->status_bit) != 0U;
 			}
 			return timerSTCGetStatus();
 		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return timerSTCGetStatus();
 		case DRV_CTRL_GETLASTERROR:
-			if( data == 0 ) { return timerSTCSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSTCSetError(ERR_NULL_POINTER); }
 			data->error = timer_stc_last_error;
 			return timerSTCGetStatus();
 		default:

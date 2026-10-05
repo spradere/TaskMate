@@ -18,6 +18,7 @@
 #include "freebsd_timerSched.h"
 
 #include <signal.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -35,7 +36,7 @@
  * Constants
  * ---------------------------------------------*/
 
-#define FREEBSD_SCHED_INTERVAL_US 1000
+#define FREEBSDTIMERSCHED_INTERVAL_us 1000U
 
 /* -----------------------------------------------
  * Private variables
@@ -66,40 +67,40 @@ static hal_driver_state_t timerSchedSetError(err_codes_t error)
 
 static hal_driver_state_t timerSchedGetStatus(void)
 {
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_DEAD) != 0U )
 	{
 		timer_sched_last_error = ERR_HAL_DRIVER_DEAD;
 		return DRV_STATE_DEAD;
 	}
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_ERROR) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 ) { return DRV_STATE_OFF; }
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0U ) { return DRV_STATE_OFF; }
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_START) == 0U ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
 static void timerSchedHandler(int signal, siginfo_t *info, void *native_context)
 {
 	(void)info;
-	if( (signal != FREEBSD_SIGNAL_SCHED) || (sched_callback == 0) || (native_context == 0) )
+	if( (signal != FREEBSD_SIGNAL_SCHED) || (sched_callback == NULL) || (native_context == NULL) )
 	{
 		hal_halt();
 	}
 
 	hal_context_t interrupted_context = {.native = (ucontext_t *)native_context};
 	hal_context_t *next_context = sched_callback(&interrupted_context);
-	if( next_context == 0 ) { hal_halt(); }
+	if( next_context == NULL ) { hal_halt(); }
 
 	/* FreeBSD restores registers, stack, and signal mask atomically here. */
-	if( sigreturn(next_context->native) != 0 ) { hal_halt(); }
+	if( sigreturn(next_context->native) != 0U ) { hal_halt(); }
 	hal_halt();
 }
 
 hal_driver_state_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
 {
-	if( func_ptr == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+	if( func_ptr == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 	sched_callback = func_ptr;
 	return timerSchedGetStatus();
 }
@@ -110,7 +111,7 @@ hal_driver_state_t hal_timerSchedLoad(void)
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_RUNNING);
 	}
-	if( raise(FREEBSD_SIGNAL_SCHED) != 0 )
+	if( raise(FREEBSD_SIGNAL_SCHED) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
@@ -123,24 +124,24 @@ void freebsd_timerSchedActivate(void)
 	if( timerSchedGetStatus() != DRV_STATE_RUNNING ) { hal_halt(); }
 
 	const struct itimerval timer = {
-		.it_interval = {.tv_sec = 0, .tv_usec = FREEBSD_SCHED_INTERVAL_US},
-		.it_value = {.tv_sec = 0, .tv_usec = FREEBSD_SCHED_INTERVAL_US},
+		.it_interval = {.tv_sec = 0U, .tv_usec = FREEBSDTIMERSCHED_INTERVAL_us},
+		.it_value = {.tv_sec = 0U, .tv_usec = FREEBSDTIMERSCHED_INTERVAL_us},
 	};
-	if( setitimer(ITIMER_VIRTUAL, &timer, 0) != 0 ) { hal_halt(); }
+	if( setitimer(ITIMER_VIRTUAL, &timer, 0U) != 0U ) { hal_halt(); }
 	timer_sched_activated = true;
 }
 
 static hal_driver_state_t timerSchedInit(void)
 {
 	struct sigaction action;
-	memset(&action, 0, sizeof(action));
+	memset(&action, 0U, sizeof(action));
 	action.sa_sigaction = timerSchedHandler;
 	action.sa_flags = SA_SIGINFO;
 	if( !freebsd_interruptsMask(&action.sa_mask) )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( sigaction(FREEBSD_SIGNAL_SCHED, &action, 0) != 0 )
+	if( sigaction(FREEBSD_SIGNAL_SCHED, &action, 0U) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
@@ -152,7 +153,7 @@ static hal_driver_state_t timerSchedInit(void)
 
 static hal_driver_state_t timerSchedStart(void)
 {
-	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(timer_sched_status, DRV_BIT_INIT) == 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
@@ -162,8 +163,8 @@ static hal_driver_state_t timerSchedStart(void)
 
 static hal_driver_state_t timerSchedStop(void)
 {
-	const struct itimerval timer = {0};
-	if( setitimer(ITIMER_VIRTUAL, &timer, 0) != 0 )
+	const struct itimerval timer = {0U};
+	if( setitimer(ITIMER_VIRTUAL, &timer, 0U) != 0U )
 	{
 		return timerSchedSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
@@ -185,7 +186,7 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			return timerSchedStop();
 		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -194,14 +195,14 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			timer_sched_status |= data->run_level;
 			return timerSchedGetStatus();
 		case DRV_CTRL_RLGET:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			data->run_level = timer_sched_status & RL_LEVEL_MASK;
 			return timerSchedGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 		case DRV_CTRL_CLEARBIT:
 		case DRV_CTRL_GETBIT:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -213,14 +214,14 @@ hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
 			}
 			if( command == DRV_CTRL_GETBIT )
 			{
-				data->bit_value = TM_GETBIT(timer_sched_status, data->status_bit) != 0;
+				data->bit_value = TM_GETBIT(timer_sched_status, data->status_bit) != 0U;
 			}
 			return timerSchedGetStatus();
 		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return timerSchedGetStatus();
 		case DRV_CTRL_GETLASTERROR:
-			if( data == 0 ) { return timerSchedSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 			data->error = timer_sched_last_error;
 			return timerSchedGetStatus();
 		default:
