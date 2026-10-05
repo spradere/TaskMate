@@ -32,8 +32,8 @@
  * @brief Reserve ucontext stack words and boundary canaries.
  * @{
  */
-#define UCONTEXT_THREAD_STACK_WORD_COUNT 32768u
-#define UCONTEXT_THREAD_STACK_CANARY_WORD_COUNT 2u
+#define UCONTEXTTYPES_COUNT_STACKWORD 32768U
+#define UCONTEXTTYPES_COUNT_CANARYWORD 2U
 /** @} */
 
 typedef uint8_t hal_stack_word_t;

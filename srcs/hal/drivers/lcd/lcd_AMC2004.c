@@ -16,6 +16,8 @@
  * Declarations - Include
  * ===========================================================================*/
 
+#include <stddef.h>
+
 #include "interfaces/drv_i2c.h"
 #include "interfaces/drv_lcd.h"
 #include "interfaces/hal_delay.h"
@@ -56,6 +58,11 @@ static err_codes_t lcd_last_error = ERR_NO_ERROR;
 #define LCDAMC2004_CMD_DISPLAYMODE 0x0CU // Display ON, Cursor OFF, Blink OFF
 #define LCDAMC2004_CMD_CLEAR 0x01U // Clear Display
 #define LCDAMC2004_CMD_ENTRYMODE 0x06U // Entry Mode: Cursor moves right, no shift
+#define LCDAMC2004_ADDR_ROW0 0x00U
+#define LCDAMC2004_ADDR_ROW1 0x40U
+#define LCDAMC2004_ADDR_ROW2 0x14U
+#define LCDAMC2004_ADDR_ROW3 0x54U
+#define LCDAMC2004_CMD_SETCURSOR 0x80U
 
 /* =============================================================================
  * Implementation - Functions
@@ -72,25 +79,25 @@ static hal_driver_state_t lcdSetError(err_codes_t error)
 }
 static hal_driver_state_t hal_lcdGetStatus(void)
 {
-	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0U )
 	{
 		lcd_last_error = ERR_HAL_DRIVER_DEAD;
 		return DRV_STATE_DEAD;
 	}
-	if( TM_GETBIT(lcd_status, DRV_BIT_ERROR) != 0 )
+	if( TM_GETBIT(lcd_status, DRV_BIT_ERROR) != 0U )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING )
+	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0U) != DRV_STATE_RUNNING )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
-	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0U )
 	{
-		if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
+		if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0U ) { return DRV_STATE_OFF; }
 		return lcdSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	if( TM_GETBIT(lcd_status, DRV_BIT_START) == 0U ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
@@ -106,8 +113,8 @@ static hal_driver_state_t lcdRequireRunning(void)
 
 static hal_driver_state_t hal_lcdInit(void)
 {
-	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
-	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING )
+	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0U ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
+	if( hal_i2cControl(DRV_CTRL_GETSTATUS, 0U) != DRV_STATE_RUNNING )
 	{
 		return lcdSetError(ERR_HAL_DRIVER_DEPENDENCY);
 	}
@@ -139,8 +146,8 @@ static hal_driver_state_t hal_lcdInit(void)
 
 static hal_driver_state_t hal_lcdStart(void)
 {
-	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0 ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
-	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(lcd_status, DRV_BIT_DEAD) != 0U ) { return lcdSetError(ERR_HAL_DRIVER_DEAD); }
+	if( TM_GETBIT(lcd_status, DRV_BIT_INIT) == 0U )
 	{
 
 		return lcdSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
@@ -203,8 +210,9 @@ hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 	{
 		return lcdSetError(ERR_HAL_LCD_CURSOR_OUT_OF_RANGE);
 	}
-	const uint8_t row_offsets[] = {0x00, 0x40, 0x14, 0x54};
-	return lcdAMC2004SendCommand((uint8_t)(0x80u | (col + row_offsets[row])));
+	const uint8_t row_offsets[] = {LCDAMC2004_ADDR_ROW0, LCDAMC2004_ADDR_ROW1,
+								   LCDAMC2004_ADDR_ROW2, LCDAMC2004_ADDR_ROW3};
+	return lcdAMC2004SendCommand((uint8_t)(LCDAMC2004_CMD_SETCURSOR | (col + row_offsets[row])));
 }
 
 hal_driver_state_t hal_lcdWriteStart(void)
@@ -251,7 +259,7 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			return hal_lcdStop();
 		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
-			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -260,12 +268,12 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			lcd_status |= data->run_level;
 			return hal_lcdGetStatus();
 		case DRV_CTRL_RLGET:
-			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
 			data->run_level = lcd_status & RL_LEVEL_MASK;
 			return hal_lcdGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
-			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -273,7 +281,7 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			TM_SETBIT(lcd_status, data->status_bit);
 			return hal_lcdGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -281,18 +289,18 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			TM_CLEARBIT(lcd_status, data->status_bit);
 			return hal_lcdGetStatus();
 		case DRV_CTRL_GETBIT:
-			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			data->bit_value = TM_GETBIT(lcd_status, data->status_bit) != 0;
+			data->bit_value = TM_GETBIT(lcd_status, data->status_bit) != 0U;
 			return hal_lcdGetStatus();
 		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_lcdGetStatus();
 		case DRV_CTRL_GETLASTERROR:
-			if( data == 0 ) { return lcdSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
 			data->error = lcd_last_error;
 			return hal_lcdGetStatus();
 		default:

@@ -17,6 +17,7 @@
 
 #include "ucontext_context.h"
 
+#include <stddef.h>
 #include <stdint.h>
 #include <ucontext.h>
 
@@ -39,10 +40,10 @@ static uint16_t initial_context_count;
 
 void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top)
 {
-	if( (func == 0) || (context == 0) || (stack_top == 0) ) { hal_halt(); }
+	if( (func == NULL) || (context == NULL) || (stack_top == NULL) ) { hal_halt(); }
 	if( initial_context_count >= MOD_THREAD_COUNT ) { hal_halt(); }
 	context->native = &initial_contexts[initial_context_count++];
-	if( getcontext(context->native) != 0 ) { hal_halt(); }
+	if( getcontext(context->native) != 0U ) { hal_halt(); }
 
 	/*
 	 * This experimental target gives every generated thread exactly the same
@@ -50,23 +51,23 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *sta
 	 * sysCore canaries.
 	 */
 	const size_t stack_size =
-		(UCONTEXT_THREAD_STACK_WORD_COUNT - UCONTEXT_THREAD_STACK_CANARY_WORD_COUNT) *
+		(UCONTEXTTYPES_COUNT_STACKWORD - UCONTEXTTYPES_COUNT_CANARYWORD) *
 		sizeof(hal_stack_word_t);
 	uint8_t *stack_end = (uint8_t *)stack_top + sizeof(hal_stack_word_t);
 	context->native->uc_stack.ss_sp = stack_end - stack_size;
 	context->native->uc_stack.ss_size = stack_size;
-	context->native->uc_stack.ss_flags = 0;
-	context->native->uc_link = 0;
-	if( sigemptyset(&context->native->uc_sigmask) != 0 ) { hal_halt(); }
-	makecontext(context->native, func, 0);
+	context->native->uc_stack.ss_flags = 0U;
+	context->native->uc_link = 0U;
+	if( sigemptyset(&context->native->uc_sigmask) != 0U ) { hal_halt(); }
+	makecontext(context->native, func, 0U);
 }
 
 _Noreturn void hal_contextStart(const hal_context_t *context)
 {
-	if( context == 0 ) { hal_halt(); }
+	if( context == NULL ) { hal_halt(); }
 	/* setcontext() restores the initial empty mask after this indivisible start. */
-	if( !freebsd_interruptsBlock(0) ) { hal_halt(); }
+	if( !freebsd_interruptsBlock(0U) ) { hal_halt(); }
 	freebsd_timerSchedActivate();
-	if( setcontext(context->native) != 0 ) { hal_halt(); }
+	if( setcontext(context->native) != 0U ) { hal_halt(); }
 	hal_halt();
 }

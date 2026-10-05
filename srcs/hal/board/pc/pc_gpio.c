@@ -41,7 +41,7 @@ static bool signal_values[GPIO_SIGNAL_COUNT];
 void hal_gpioSignalInit(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
+	for( uint8_t i = 0U; i < GPIO_SIGNAL_COUNT; i++ )
 	{
 		signal_names[i] = "unwired";
 		targetWireSignal((gpio_signal_t)i);

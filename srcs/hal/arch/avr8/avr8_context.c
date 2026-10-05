@@ -23,6 +23,13 @@
 
 #include "avr8_constants.h"
 
+/* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define AVR8CONTEXT_MASK_PC 0xFFU
+#define AVR8CONTEXT_SHIFT_PCH 8U
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -32,14 +39,14 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *sta
 	// Stack initialisation
 	hal_stack_word_t *sp = stack_top;
 
-	*(sp--) = (uint8_t)((uintptr_t)func & 0xFF); // PCL;
-	*(sp--) = (uint8_t)(((uintptr_t)func >> 8u) & 0xFF); // PCH
-	*(sp--) = 0x00; // PCHH is always 0 if the flash code size is below 128 kB
-	*(sp--) = 0x00; // R0
+	*(sp--) = (uint8_t)((uintptr_t)func & AVR8CONTEXT_MASK_PC); // PCL;
+	*(sp--) = (uint8_t)(((uintptr_t)func >> AVR8CONTEXT_SHIFT_PCH) & AVR8CONTEXT_MASK_PC); // PCH
+	*(sp--) = 0U; // PCHH is always 0 if the flash code size is below 128 kB
+	*(sp--) = 0U; // R0
 	*(sp--) = SREG;
 
 	// Registers R1-R31
-	for( uint8_t i = 1; i < AVR8_REGISTER_COUNT; i++ ) { *(sp--) = 0x00; }
+	for( uint8_t i = 1U; i < AVR8CONSTANTS_COUNT_REGISTER; i++ ) { *(sp--) = 0U; }
 
 	context->stack_pointer = sp;
 }

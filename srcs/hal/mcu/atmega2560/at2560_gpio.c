@@ -74,7 +74,7 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 
 void hal_gpioSignalInit(void)
 {
-	for( uint8_t i = 0; i < GPIO_SIGNAL_COUNT; i++ )
+	for( uint8_t i = 0U; i < GPIO_SIGNAL_COUNT; i++ )
 	{
 		targetWireSignal((gpio_signal_t)i);
 		hal_gpioPinInit(&signal_table[i].pin);
@@ -98,7 +98,7 @@ bool hal_gpioPinRead(const hal_pin_t pin)
 {
 	if( pin.mode == GPIO_PIN_MODE_INPUT )
 	{
-		return (*(mcu_ports[pin.port].pin) & (1 << pin.number)) >> pin.number;
+		return (*(mcu_ports[pin.port].pin) & (1U << pin.number)) >> pin.number;
 	}
-	return (*(mcu_ports[pin.port].port) & (1 << pin.number)) >> pin.number;
+	return (*(mcu_ports[pin.port].port) & (1U << pin.number)) >> pin.number;
 }

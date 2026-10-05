@@ -26,13 +26,13 @@
  * Constants
  * ---------------------------------------------*/
 
-#define FREEBSD_ATOMIC_NESTING_MAX 16u
+#define FREEBSDATOMIC_MAX_NESTING 16U
 
 /* -----------------------------------------------
  * Private variables
  * ---------------------------------------------*/
 
-static sigset_t atomic_masks[FREEBSD_ATOMIC_NESTING_MAX];
+static sigset_t atomic_masks[FREEBSDATOMIC_MAX_NESTING];
 static uint8_t atomic_depth;
 
 /* =============================================================================
@@ -41,7 +41,7 @@ static uint8_t atomic_depth;
 
 hal_atomic_state_t hal_atomicStart(void)
 {
-	if( atomic_depth >= FREEBSD_ATOMIC_NESTING_MAX ) { hal_halt(); }
+	if( atomic_depth >= FREEBSDATOMIC_MAX_NESTING ) { hal_halt(); }
 	if( !freebsd_interruptsBlock(&atomic_masks[atomic_depth]) ) { hal_halt(); }
 
 	atomic_depth++;
@@ -50,8 +50,8 @@ hal_atomic_state_t hal_atomicStart(void)
 
 void hal_atomicEnd(hal_atomic_state_t state)
 {
-	if( (state == 0) || (state != atomic_depth) ) { hal_halt(); }
+	if( (state == 0U) || (state != atomic_depth) ) { hal_halt(); }
 
 	atomic_depth--;
-	if( sigprocmask(SIG_SETMASK, &atomic_masks[atomic_depth], 0) != 0 ) { hal_halt(); }
+	if( sigprocmask(SIG_SETMASK, &atomic_masks[atomic_depth], 0U) != 0U ) { hal_halt(); }
 }

@@ -17,6 +17,7 @@
  * ===========================================================================*/
 
 #include <avr/interrupt.h>
+#include <stddef.h>
 
 #include "at2560_constants.h"
 #include "interfaces/drv_usart.h"
@@ -28,15 +29,19 @@
  * ---------------------------------------------*/
 
 // Always use a power of two for the buffer size to avoid modulo operations
-#define HAL_USART_BUFFER_SIZE 64
+#define AT2560USART_SIZE_BUFFER 64U
+#define AT2560USART_MAX_BUFFER 256U
+#define AT2560USART_DIVISOR_BAUD 16UL
+#define AT2560USART_SHIFT_UBRRH 8U
 
-_Static_assert((HAL_USART_BUFFER_SIZE & (HAL_USART_BUFFER_SIZE - 1)) == 0,
-			   "HAL_USART_BUFFER_SIZE must be a power of two");
+_Static_assert((AT2560USART_SIZE_BUFFER & (AT2560USART_SIZE_BUFFER - 1U)) == 0U,
+			   "AT2560USART_SIZE_BUFFER must be a power of two");
 
-_Static_assert((HAL_USART_BUFFER_SIZE <= 256), "HAL_USART_BUFFER_SIZE must be 256 max");
+_Static_assert((AT2560USART_SIZE_BUFFER <= AT2560USART_MAX_BUFFER),
+			   "AT2560USART_SIZE_BUFFER exceeds maximum");
 
-#define CB_MASK (HAL_USART_BUFFER_SIZE - 1)
-#define CB_NEXT(index) (((index) + 1) & CB_MASK)
+#define AT2560USART_MASK_BUFFER (AT2560USART_SIZE_BUFFER - 1U)
+#define CB_NEXT(index) (((index) + 1U) & AT2560USART_MASK_BUFFER)
 #define CB_FULL(head, tail) (CB_NEXT(head) == (tail))
 #define CB_EMPTY(head, tail) ((head) == (tail))
 
@@ -44,10 +49,10 @@ _Static_assert((HAL_USART_BUFFER_SIZE <= 256), "HAL_USART_BUFFER_SIZE must be 25
  * Private variables
  * ---------------------------------------------*/
 
-static volatile uint8_t buffer_rx[HAL_USART_BUFFER_SIZE];
-static volatile uint8_t buffer_tx[HAL_USART_BUFFER_SIZE];
-static volatile uint8_t buffer_rx_head = 0, buffer_rx_tail = 0;
-static volatile uint8_t buffer_tx_head = 0, buffer_tx_tail = 0;
+static volatile uint8_t buffer_rx[AT2560USART_SIZE_BUFFER];
+static volatile uint8_t buffer_tx[AT2560USART_SIZE_BUFFER];
+static volatile uint8_t buffer_rx_head = 0U, buffer_rx_tail = 0U;
+static volatile uint8_t buffer_tx_head = 0U, buffer_tx_tail = 0U;
 static hal_driver_status_t usart_status;
 // Shared with the RX ISR; err_codes_t is one byte on the AVR8 build (-fshort-enums).
 static volatile err_codes_t usart_last_error = ERR_NO_ERROR;
@@ -75,21 +80,21 @@ static hal_driver_state_t usartSetError(err_codes_t error)
 
 static hal_driver_state_t hal_usartGetStatus(void)
 {
-	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0 )
+	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0U )
 	{
 		usart_last_error = ERR_HAL_DRIVER_DEAD;
 		return DRV_STATE_DEAD;
 	}
-	if( TM_GETBIT(usart_status, DRV_BIT_ERROR) != 0 )
+	if( TM_GETBIT(usart_status, DRV_BIT_ERROR) != 0U )
 	{
 		return usartSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(usart_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(usart_status, DRV_BIT_INIT) == 0U )
 	{
-		if( TM_GETBIT(usart_status, DRV_BIT_START) == 0 ) { return DRV_STATE_OFF; }
+		if( TM_GETBIT(usart_status, DRV_BIT_START) == 0U ) { return DRV_STATE_OFF; }
 		return usartSetError(ERR_HAL_DRIVER_INVALID_STATE);
 	}
-	if( TM_GETBIT(usart_status, DRV_BIT_START) == 0 ) { return DRV_STATE_INITIALIZED; }
+	if( TM_GETBIT(usart_status, DRV_BIT_START) == 0U ) { return DRV_STATE_INITIALIZED; }
 	return DRV_STATE_RUNNING;
 }
 
@@ -105,10 +110,10 @@ static hal_driver_state_t usartRequireRunning(void)
 
 static hal_driver_state_t hal_usartInit(void)
 {
-	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0 ) { return usartSetError(ERR_HAL_DRIVER_DEAD); }
-	uint16_t ubrr = (F_CPU / (16UL * USART_BAUD_RATE)) - 1;
+	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0U ) { return usartSetError(ERR_HAL_DRIVER_DEAD); }
+	uint16_t ubrr = (F_CPU / (AT2560USART_DIVISOR_BAUD * AT2560CONSTANTS_RATE_USART_baud)) - 1U;
 
-	UBRR1H = (uint8_t)(ubrr >> 8);
+	UBRR1H = (uint8_t)(ubrr >> AT2560USART_SHIFT_UBRRH);
 	UBRR1L = (uint8_t)ubrr;
 
 	TM_WRITEBIT(UCSR1B, RXEN1, TXEN1); // Enable Rx and Tx
@@ -121,8 +126,8 @@ static hal_driver_state_t hal_usartInit(void)
 
 static hal_driver_state_t hal_usartStart(void)
 {
-	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0 ) { return usartSetError(ERR_HAL_DRIVER_DEAD); }
-	if( TM_GETBIT(usart_status, DRV_BIT_INIT) == 0 )
+	if( TM_GETBIT(usart_status, DRV_BIT_DEAD) != 0U ) { return usartSetError(ERR_HAL_DRIVER_DEAD); }
+	if( TM_GETBIT(usart_status, DRV_BIT_INIT) == 0U )
 	{
 		return usartSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
 	}
@@ -162,7 +167,7 @@ hal_driver_state_t hal_usartRead(uint8_t *data)
 {
 	hal_driver_state_t state = usartRequireRunning();
 	if( state != DRV_STATE_RUNNING ) { return state; }
-	if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+	if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 	if( CB_EMPTY(buffer_rx_head, buffer_rx_tail) )
 	{
 		return usartSetError(ERR_HAL_USART_RX_BUFFER_EMPTY);
@@ -226,7 +231,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			return hal_usartStop();
 		// Keep lifecycle flags when updating the run-level bits.
 		case DRV_CTRL_RLSET:
-			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 			if( data->run_level >= RL_LEVEL_COUNT )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -235,12 +240,12 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			usart_status |= data->run_level;
 			return hal_usartGetStatus();
 		case DRV_CTRL_RLGET:
-			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 			data->run_level = usart_status & RL_LEVEL_MASK;
 			return hal_usartGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
-			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -248,7 +253,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			TM_SETBIT(usart_status, data->status_bit);
 			return hal_usartGetStatus();
 		case DRV_CTRL_CLEARBIT:
-			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
@@ -256,18 +261,18 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			TM_CLEARBIT(usart_status, data->status_bit);
 			return hal_usartGetStatus();
 		case DRV_CTRL_GETBIT:
-			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			data->bit_value = TM_GETBIT(usart_status, data->status_bit) != 0;
+			data->bit_value = TM_GETBIT(usart_status, data->status_bit) != 0U;
 			return hal_usartGetStatus();
 		// Expose current state and the most recent driver error separately.
 		case DRV_CTRL_GETSTATUS:
 			return hal_usartGetStatus();
 		case DRV_CTRL_GETLASTERROR:
-			if( data == 0 ) { return usartSetError(ERR_NULL_POINTER); }
+			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
 			data->error = usart_last_error;
 			return hal_usartGetStatus();
 		default:
