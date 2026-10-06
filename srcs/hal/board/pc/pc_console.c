@@ -29,20 +29,21 @@
  * Constants
  * ---------------------------------------------*/
 
-#define PCCONSOLE_MIN_COLUMNS ((int)60U)
-#define PCCONSOLE_MIN_ROWS ((int)16U)
-#define PCCONSOLE_WIDTH_GPIO 24U
-#define PCCONSOLE_HEIGHT_INPUT 3U
-#define PCCONSOLE_SIZE_INPUT 64U
-#define PCCONSOLE_COLOUR_OFF 1U
-#define PCCONSOLE_COLOUR_ON 2U
-#define PCCONSOLE_WIDTH_BORDER 2U
-#define PCCONSOLE_COLUMN_LABEL 2U
-#define PCCONSOLE_KEY_HALT 10U
-#define PCCONSOLE_KEY_DELETE 0x7FU
-#define PCCONSOLE_CHAR_PRINTABLEMIN ((int)0x20U)
-#define PCCONSOLE_CHAR_PRINTABLEMAX ((int)0x7EU)
-#define PCCONSOLE_COLOUR_DEFAULT (-(int)1U)
+// ncurses uses int for geometry, colours and keys, including negative error values.
+#define PCCONSOLE_MIN_COLUMNS 60
+#define PCCONSOLE_MIN_ROWS 16
+#define PCCONSOLE_WIDTH_GPIO 24
+#define PCCONSOLE_HEIGHT_INPUT 3
+#define PCCONSOLE_SIZE_INPUT 64
+#define PCCONSOLE_COLOUR_OFF 1
+#define PCCONSOLE_COLOUR_ON 2
+#define PCCONSOLE_WIDTH_BORDER 2
+#define PCCONSOLE_COLUMN_LABEL 2
+#define PCCONSOLE_KEY_HALT 10
+#define PCCONSOLE_KEY_DELETE 0x7F
+#define PCCONSOLE_CHAR_PRINTABLEMIN 0x20
+#define PCCONSOLE_CHAR_PRINTABLEMAX 0x7E
+#define PCCONSOLE_COLOUR_DEFAULT (-1)
 
 /* -----------------------------------------------
  * Private variables
