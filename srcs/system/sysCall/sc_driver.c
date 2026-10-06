@@ -17,6 +17,8 @@
 
 #include "sc_driver.h"
 
+#include <stddef.h>
+
 #include "interfaces/drv_i2c.h"
 #include "interfaces/drv_lcd.h"
 #include "interfaces/drv_rtc.h"
@@ -80,18 +82,19 @@ uint16_t sc_driverGetCount(void) { return MOD_DRIVER_COUNT; }
 bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint8_t *status_bits)
 {
-	if( (id >= MOD_DRIVER_COUNT) || (name == 0) || (run_level == 0) || (status_bits == 0) )
+	if( (id >= MOD_DRIVER_COUNT) || (name == NULL) || (run_level == NULL) ||
+		(status_bits == NULL) )
 	{
 		return false;
 	}
 
 	mod_driver_item_t *driver = mod_driverGetPointer((uint8_t)id);
-	if( driver->control == 0 ) { return false; }
+	if( driver->control == NULL ) { return false; }
 
 	hal_driver_control_data_t control_data;
 	if( driver->control(DRV_CTRL_RLGET, &control_data) == DRV_STATE_ERROR ) { return false; }
 	*run_level = control_data.run_level;
-	*status_bits = 0;
+	*status_bits = 0U;
 
 	static const hal_driver_status_bit_t status_bit[] = {
 		DRV_BIT_INIT,
@@ -99,7 +102,7 @@ bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 		DRV_BIT_ERROR,
 		DRV_BIT_DEAD,
 	};
-	for( uint8_t i = 0; i < (sizeof(status_bit) / sizeof(status_bit[0])); i++ )
+	for( uint8_t i = 0U; i < (sizeof(status_bit) / sizeof(status_bit[0U])); i++ )
 	{
 		control_data.status_bit = status_bit[i];
 		if( driver->control(DRV_CTRL_GETBIT, &control_data) == DRV_STATE_ERROR ) { return false; }
@@ -107,7 +110,7 @@ bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 	}
 
 	*name = driver_name_catalog[id];
-	return *name != 0;
+	return *name != NULL;
 }
 
 bool sc_driverInit(const char *name) { return sc_driverControl(name, DRV_CTRL_INIT); }
@@ -118,7 +121,7 @@ void sc_driverRunLevelStart(uint8_t run_level)
 {
 	if( (run_level == RL_RUN_NONE) || (run_level >= RL_LEVEL_COUNT) ) { return; }
 
-	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
+	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		hal_driver_control_data_t control_data;
@@ -126,8 +129,8 @@ void sc_driverRunLevelStart(uint8_t run_level)
 		if( (driver->control(DRV_CTRL_RLGET, &control_data) != DRV_STATE_ERROR) &&
 			(control_data.run_level == run_level) )
 		{
-			driver->control(DRV_CTRL_INIT, 0);
-			driver->control(DRV_CTRL_START, 0);
+			driver->control(DRV_CTRL_INIT, NULL);
+			driver->control(DRV_CTRL_START, NULL);
 		}
 	}
 }
@@ -136,14 +139,14 @@ bool sc_driverRunLevelIsReady(uint8_t run_level)
 {
 	if( run_level >= RL_LEVEL_COUNT ) { return false; }
 
-	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
+	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		hal_driver_control_data_t control_data;
 
 		if( driver->control(DRV_CTRL_RLGET, &control_data) == DRV_STATE_ERROR ) { return false; }
 		if( (control_data.run_level == run_level) &&
-			(driver->control(DRV_CTRL_GETSTATUS, 0) != DRV_STATE_RUNNING) )
+			(driver->control(DRV_CTRL_GETSTATUS, NULL) != DRV_STATE_RUNNING) )
 		{
 			return false;
 		}
@@ -162,15 +165,15 @@ err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 {
 	err_codes_t error = sc_driverError(hal_lcdSetCursor(row, col), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
-	if( str.text == 0 ) { return ERR_NULL_POINTER; }
+	if( str.text == NULL ) { return ERR_NULL_POINTER; }
 
 	error = sc_driverError(hal_lcdWriteStart(), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
 
-	for( uint8_t index = 0; index < TM_STRING_SIZE_MAX; index++ )
+	for( uint8_t index = 0U; index < TM_STRING_SIZE_MAX; index++ )
 	{
 		uint8_t str_byte = sc_stringGetByte(&str, index);
-		if( str_byte == 0 ) { break; }
+		if( str_byte == 0U ) { break; }
 		error = sc_driverError(hal_lcdWriteByte(str_byte), hal_lcdControl);
 		if( error != ERR_NO_ERROR )
 		{
@@ -190,13 +193,13 @@ err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
 
 err_codes_t sc_rtcRead(hal_rtc_time_t *time)
 {
-	if( time == 0 ) { return ERR_NULL_POINTER; }
+	if( time == NULL ) { return ERR_NULL_POINTER; }
 	return sc_driverError(hal_rtcRead(time), hal_rtcControl);
 }
 
 err_codes_t sc_rtcWrite(const hal_rtc_time_t *time)
 {
-	if( time == 0 ) { return ERR_NULL_POINTER; }
+	if( time == NULL ) { return ERR_NULL_POINTER; }
 	return sc_driverError(hal_rtcWrite(time), hal_rtcControl);
 }
 
@@ -210,7 +213,7 @@ err_codes_t sc_rtcSaveStartupTime(void)
 
 err_codes_t sc_rtcGetStartupTime(hal_rtc_time_t *time)
 {
-	if( time == 0 ) { return ERR_NULL_POINTER; }
+	if( time == NULL ) { return ERR_NULL_POINTER; }
 	*time = rtc_startup_time;
 	return ERR_NO_ERROR;
 }
@@ -226,7 +229,7 @@ err_codes_t sc_i2cScan(void)
 	bool address_buffer_full = false;
 
 	// Gather the complete bus scan before changing any declared driver state.
-	i2c_scan_address_count = 0;
+	i2c_scan_address_count = 0U;
 	while( hal_i2cScan(&address) == DRV_STATE_RUNNING )
 	{
 		if( i2c_scan_address_count < I2C_SCAN_ADDRESS_COUNT_MAX )
@@ -244,7 +247,7 @@ err_codes_t sc_i2cScan(void)
 
 	// Mark declared devices absent from the bus as dead.
 	control_data.status_bit = DRV_BIT_DEAD;
-	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
+	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		if( (driver->address != MOD_DRIVER_ADDRESS_NONE) && !sc_i2cAddressFound(driver->address) )
@@ -254,10 +257,10 @@ err_codes_t sc_i2cScan(void)
 	}
 
 	// Clear stale state when a previously dead device is present again.
-	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
+	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
-		if( (driver->control(DRV_CTRL_GETSTATUS, 0) == DRV_STATE_DEAD) &&
+		if( (driver->control(DRV_CTRL_GETSTATUS, NULL) == DRV_STATE_DEAD) &&
 			sc_i2cAddressFound(driver->address) )
 		{
 			sc_i2cDriverSetOff(driver);
@@ -273,7 +276,7 @@ err_codes_t sc_i2cScan(void)
 
 err_codes_t sc_usartRead(uint8_t *data)
 {
-	if( data == 0 ) { return ERR_NULL_POINTER; }
+	if( data == NULL ) { return ERR_NULL_POINTER; }
 
 	/* Keep the failed operation and its error snapshot indivisible from the RX ISR. */
 	hal_atomic_state_t state = hal_atomicStart();
@@ -305,34 +308,34 @@ static err_codes_t sc_driverError(hal_driver_state_t state,
 
 static mod_driver_item_t *sc_driverGetPointer(const char *name)
 {
-	if( name == 0 ) { return 0; }
+	if( name == NULL ) { return NULL; }
 
-	for( uint8_t i = 0; i < MOD_DRIVER_COUNT; i++ )
+	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		const tm_string_t *driver_name = driver_name_catalog[i];
-		if( (driver->control != 0) && (driver_name != 0) &&
-			sc_stringCompare(*driver_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
+		if( (driver->control != NULL) && (driver_name != NULL) &&
+			sc_stringCompare(*driver_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0U )
 		{
 			return driver;
 		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 static bool sc_driverControl(const char *name, hal_driver_control_t command)
 {
 	mod_driver_item_t *driver = sc_driverGetPointer(name);
-	if( driver == 0 ) { return false; }
+	if( driver == NULL ) { return false; }
 
-	hal_driver_state_t state = driver->control(command, 0);
+	hal_driver_state_t state = driver->control(command, NULL);
 	return (state != DRV_STATE_ERROR) && (state != DRV_STATE_DEAD);
 }
 
 static bool sc_i2cAddressFound(uint8_t address)
 {
-	for( uint8_t i = 0; i < i2c_scan_address_count; i++ )
+	for( uint8_t i = 0U; i < i2c_scan_address_count; i++ )
 	{
 		if( i2c_scan_addresses[i] == address ) { return true; }
 	}

@@ -25,6 +25,24 @@
 #include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SCLIDATE_COUNT_SHOWARGS 1U
+#define SCLIDATE_COUNT_SUBCOMMANDARGS 2U
+#define SCLIDATE_COUNT_SETARGS 3U
+#define SCLIDATE_INDEX_VALUE 2U
+#define SCLIDATE_BASE_DECIMAL 10U
+#define SCLIDATE_COUNT_TIMEDIGITS 2U
+#define SCLIDATE_COUNT_YEARDIGITS 4U
+#define SCLIDATE_MAX_HOURS 23U
+#define SCLIDATE_MAX_MINUTES 59U
+#define SCLIDATE_MAX_SECONDS 59U
+#define SCLIDATE_MAX_MONTH 12U
+#define SCLIDATE_YEAR_FIRST 2000U
+#define SCLIDATE_YEAR_LAST 2099U
+
+/* -----------------------------------------------
  * Private types
  * ---------------------------------------------*/
 
@@ -63,7 +81,7 @@ static const date_cmd_t date_cmd[] = {
 	{"time", dateSetTime},
 	{"date", dateSetDate},
 	{"help", dateHelp},
-	{0, 0},
+	{NULL, NULL},
 };
 
 /* =============================================================================
@@ -76,17 +94,18 @@ static const date_cmd_t date_cmd[] = {
 
 bool dateCommand(uint8_t argc, char *argv[])
 {
-	if( argc == 1u ) { return dateShow(argc, argv); }
+	if( argc == SCLIDATE_COUNT_SHOWARGS ) { return dateShow(argc, argv); }
 
-	for( uint8_t i = 0; date_cmd[i].name != 0; i++ )
+	for( uint8_t i = 0U; date_cmd[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) ==
+			0U )
 		{
 			return date_cmd[i].func(argc, argv);
 		}
 	}
 
-	dateHelp(0, NULL);
+	dateHelp(0U, NULL);
 	return false;
 }
 
@@ -109,9 +128,9 @@ static bool dateShowStartup(uint8_t argc, char *argv[])
 {
 	(void)argv;
 
-	if( argc != 2u )
+	if( argc != SCLIDATE_COUNT_SUBCOMMANDARGS )
 	{
-		dateHelp(0, NULL);
+		dateHelp(0U, NULL);
 		return false;
 	}
 
@@ -129,15 +148,15 @@ static bool dateShowStartup(uint8_t argc, char *argv[])
 
 static bool dateSetTime(uint8_t argc, char *argv[])
 {
-	if( argc != 3u )
+	if( argc != SCLIDATE_COUNT_SETARGS )
 	{
-		dateHelp(0, NULL);
+		dateHelp(0U, NULL);
 		return false;
 	}
 
 	hal_rtc_time_t time;
 	if( !dateRead(&time) ) { return false; }
-	if( !dateParseTime(argv[2], &time) )
+	if( !dateParseTime(argv[SCLIDATE_INDEX_VALUE], &time) )
 	{
 		tm_syslog(TM_STR("[date] invalid time, expected hh:mm:ss\n"));
 		return false;
@@ -150,15 +169,15 @@ static bool dateSetTime(uint8_t argc, char *argv[])
 
 static bool dateSetDate(uint8_t argc, char *argv[])
 {
-	if( argc != 3u )
+	if( argc != SCLIDATE_COUNT_SETARGS )
 	{
-		dateHelp(0, NULL);
+		dateHelp(0U, NULL);
 		return false;
 	}
 
 	hal_rtc_time_t time;
 	if( !dateRead(&time) ) { return false; }
-	if( !dateParseDate(argv[2], &time) )
+	if( !dateParseDate(argv[SCLIDATE_INDEX_VALUE], &time) )
 	{
 		tm_syslog(TM_STR("[date] invalid date, expected day/month/year (2000-2099)\n"));
 		return false;
@@ -217,7 +236,7 @@ static void datePrint(const hal_rtc_time_t *time)
 static void datePrintError(err_codes_t error)
 {
 	const tm_string_t *message = err_getMessage((uint8_t)error);
-	if( message != 0 ) { tm_syslog(TM_STR("[date] RTC error: %s\n"), message); }
+	if( message != NULL ) { tm_syslog(TM_STR("[date] RTC error: %s\n"), message); }
 	else { tm_syslog(TM_STR("[date] RTC error\n")); }
 }
 
@@ -228,21 +247,21 @@ static void datePrintError(err_codes_t error)
 static bool dateParseField(const char **cursor, char separator, uint8_t digit_count_min,
 						   uint8_t digit_count_max, uint16_t *value)
 {
-	if( (cursor == 0) || (*cursor == 0) || (value == 0) ) { return false; }
+	if( (cursor == NULL) || (*cursor == NULL) || (value == NULL) ) { return false; }
 
-	uint16_t parsed = 0;
-	uint8_t digit_count = 0;
+	uint16_t parsed = 0U;
+	uint8_t digit_count = 0U;
 	while( ((**cursor >= '0') && (**cursor <= '9')) && (digit_count < digit_count_max) )
 	{
-		parsed = (parsed * 10u) + (uint8_t)(**cursor - '0');
+		parsed = (parsed * SCLIDATE_BASE_DECIMAL) + (uint8_t)(**cursor - '0');
 		(*cursor)++;
 		digit_count++;
 	}
 	if( (digit_count < digit_count_min) || (digit_count > digit_count_max) ) { return false; }
 
-	if( separator == 0 )
+	if( separator == 0U )
 	{
-		if( **cursor != 0 ) { return false; }
+		if( **cursor != 0U ) { return false; }
 	}
 	else
 	{
@@ -256,19 +275,23 @@ static bool dateParseField(const char **cursor, char separator, uint8_t digit_co
 
 static bool dateParseTime(const char *text, hal_rtc_time_t *time)
 {
-	if( (text == 0) || (time == 0) ) { return false; }
+	if( (text == NULL) || (time == NULL) ) { return false; }
 
 	const char *cursor = text;
 	uint16_t hours;
 	uint16_t minutes;
 	uint16_t seconds;
-	if( !dateParseField(&cursor, ':', 2u, 2u, &hours) ||
-		!dateParseField(&cursor, ':', 2u, 2u, &minutes) ||
-		!dateParseField(&cursor, 0, 2u, 2u, &seconds) )
+	if( !dateParseField(&cursor, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
+						&hours) ||
+		!dateParseField(&cursor, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
+						&minutes) ||
+		!dateParseField(&cursor, 0U, SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
+						&seconds) )
 	{
 		return false;
 	}
-	if( (hours > 23u) || (minutes > 59u) || (seconds > 59u) ) { return false; }
+	if( (hours > SCLIDATE_MAX_HOURS) || (minutes > SCLIDATE_MAX_MINUTES) ||
+		(seconds > SCLIDATE_MAX_SECONDS) ) { return false; }
 
 	time->hours = (uint8_t)hours;
 	time->minutes = (uint8_t)minutes;
@@ -278,21 +301,23 @@ static bool dateParseTime(const char *text, hal_rtc_time_t *time)
 
 static bool dateParseDate(const char *text, hal_rtc_time_t *time)
 {
-	if( (text == 0) || (time == 0) ) { return false; }
+	if( (text == NULL) || (time == NULL) ) { return false; }
 
 	const char *cursor = text;
 	uint16_t day;
 	uint16_t month;
 	uint16_t year;
-	if( !dateParseField(&cursor, '/', 1u, 2u, &day) ||
-		!dateParseField(&cursor, '/', 1u, 2u, &month) ||
-		!dateParseField(&cursor, 0, 4u, 4u, &year) )
+	if( !dateParseField(&cursor, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &day) ||
+		!dateParseField(&cursor, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &month) ||
+		!dateParseField(&cursor, 0U, SCLIDATE_COUNT_YEARDIGITS, SCLIDATE_COUNT_YEARDIGITS,
+						&year) )
 	{
 		return false;
 	}
-	if( (year < 2000u) || (year > 2099u) || (month < 1u) || (month > 12u) ) { return false; }
+	if( (year < SCLIDATE_YEAR_FIRST) || (year > SCLIDATE_YEAR_LAST) || (month < 1U) ||
+		(month > SCLIDATE_MAX_MONTH) ) { return false; }
 
-	uint8_t rtc_year = (uint8_t)(year - 2000u);
+	uint8_t rtc_year = (uint8_t)(year - SCLIDATE_YEAR_FIRST);
 
 	time->day = (uint8_t)day;
 	time->month = (uint8_t)month;

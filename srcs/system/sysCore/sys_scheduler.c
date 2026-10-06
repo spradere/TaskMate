@@ -54,15 +54,15 @@ static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current);
 void tm_schedulerInit(void)
 {
 	scheduler_run_level = RL_RUN_CORE;
-	hal_timerSchedControl(DRV_CTRL_INIT, 0);
+	hal_timerSchedControl(DRV_CTRL_INIT, 0U);
 	hal_timerSchedSetCallback(tm_schedulerRR);
 }
 
 void tm_schedulerStart(void)
 {
-	hal_timerSchedControl(DRV_CTRL_START, 0);
+	hal_timerSchedControl(DRV_CTRL_START, 0U);
 
-	mod_thread_item_t *mod = mod_threadGetPointer(0);
+	mod_thread_item_t *mod = mod_threadGetPointer(0U);
 
 	hal_contextStart(&mod->context);
 }
@@ -132,9 +132,9 @@ static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current)
 {
 	uint8_t active_run_level = scheduler_run_level;
 
-	for( uint8_t count = 0; count < MOD_THREAD_COUNT; count++ )
+	for( uint8_t count = 0U; count < MOD_THREAD_COUNT; count++ )
 	{
-		if( ++current == MOD_THREAD_COUNT ) { current = 0; }
+		if( ++current == MOD_THREAD_COUNT ) { current = 0U; }
 
 		mod_thread_item_t *thread = mod_threadGetPointer(current);
 		uint8_t thread_run_level = RL_GET_RUN_LEVEL(thread->status);

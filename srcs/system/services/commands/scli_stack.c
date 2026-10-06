@@ -22,13 +22,20 @@
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 
+/* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SCLISTACK_COUNT_COMMANDARGS 2U
+
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
 bool stackCommand(uint8_t argc, char *argv[])
 {
-	if( (argc != 2) || (tm_strncmp(TM_STR_RAM(argv[1]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0) )
+	if( (argc != SCLISTACK_COUNT_COMMANDARGS) ||
+		(tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0U) )
 	{
 		tm_syslog(TM_STR("[stack] usage:\n"));
 		tm_syslog(TM_STR("\tstack depth\n"));
@@ -37,7 +44,7 @@ bool stackCommand(uint8_t argc, char *argv[])
 
 	tm_syslog(TM_STR("[stack] depth:\n"));
 	const uint16_t thread_count = sc_threadGetCount();
-	for( uint16_t id = 0; id < thread_count; id++ )
+	for( uint16_t id = 0U; id < thread_count; id++ )
 	{
 		const tm_string_t *name;
 		uint8_t run_level;

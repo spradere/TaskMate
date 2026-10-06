@@ -35,16 +35,17 @@
  * @brief Build bit masks using register width and up to four bit positions.
  * @{
  */
-#define TM_BIT_MASK_8(bit) ((uint8_t)(1u << (bit)))
-#define TM_BIT_MASK_16(bit) ((uint16_t)(1u << (bit)))
-#define TM_BIT_MASK_32(bit) ((uint32_t)(1UL << (bit)))
-#define TM_BIT_MASK_64(bit) ((uint64_t)(1ULL << (bit)))
 
-#define TM_REGISTER_BIT_MASK(reg, bit)          \
-	((sizeof(reg) == 1)	  ? TM_BIT_MASK_8(bit)  \
-	 : (sizeof(reg) == 2) ? TM_BIT_MASK_16(bit) \
-	 : (sizeof(reg) == 4) ? TM_BIT_MASK_32(bit) \
-						  : TM_BIT_MASK_64(bit))
+#define TM_BIT_MASK_8(bit) ((uint8_t)(1U << (bit)))
+#define TM_BIT_MASK_16(bit) ((uint16_t)(1U << (bit)))
+#define TM_BIT_MASK_32(bit) ((uint32_t)((uint32_t)1U << (bit)))
+#define TM_BIT_MASK_64(bit) ((uint64_t)((uint64_t)1U << (bit)))
+
+#define TM_REGISTER_BIT_MASK(reg, bit)                              \
+	((sizeof(reg) == 1U) ? TM_BIT_MASK_8(bit)       \
+	 : (sizeof(reg) == 2U) ? TM_BIT_MASK_16(bit)   \
+	 : (sizeof(reg) == 4U) ? TM_BIT_MASK_32(bit)   \
+										: TM_BIT_MASK_64(bit))
 // N-element macros
 #define TM_SET_BITS_1(reg, a) TM_REGISTER_BIT_MASK(reg, a)
 

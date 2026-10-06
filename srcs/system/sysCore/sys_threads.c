@@ -54,9 +54,9 @@ uint16_t mod_threadGetSTC(void) { return threads[thread_current].software_time_c
 
 void mod_threadsTickSTC(void)
 {
-	for( uint8_t id = 0; id < MOD_THREAD_COUNT; id++ )
+	for( uint8_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{
-		if( threads[id].software_time_counter > 0 ) { threads[id].software_time_counter--; }
+		if( threads[id].software_time_counter > 0U ) { threads[id].software_time_counter--; }
 	}
 }
 
@@ -71,7 +71,7 @@ uint16_t mod_threadStackDepthGet(uint8_t id)
 {
 	const volatile hal_stack_word_t *stack = threads[id].stack;
 	const uint16_t usable_words = threads[id].stack_size - MOD_STACK_CANARY_WORD_COUNT;
-	uint16_t unused_words = 0;
+	uint16_t unused_words = 0U;
 
 	while( (unused_words < usable_words) &&
 		   (stack[unused_words + MOD_STACK_FIRST_USABLE_INDEX] == MOD_STACK_PATTERN) )
@@ -106,11 +106,11 @@ void mod_threadStop(uint8_t id)
 
 bool mod_threadsRunLevelIsReady(uint8_t run_level)
 {
-	for( uint8_t id = 0; id < MOD_THREAD_COUNT; id++ )
+	for( uint8_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{
 		if( (RL_GET_RUN_LEVEL(threads[id].status) == run_level) &&
-			((TM_GETBIT(threads[id].status, THREAD_BIT_INITIALIZED) == 0) ||
-			 (TM_GETBIT(threads[id].status, THREAD_BIT_DEAD) != 0)) )
+		((TM_GETBIT(threads[id].status, THREAD_BIT_INITIALIZED) == 0U) ||
+		 (TM_GETBIT(threads[id].status, THREAD_BIT_DEAD) != 0U)) )
 		{
 			return false;
 		}
@@ -123,14 +123,14 @@ void mod_threadSetYielded(uint8_t id) { TM_SETBIT(threads[id].status, THREAD_BIT
 
 bool mod_threadIsYielded(uint8_t id)
 {
-	return TM_GETBIT(threads[id].status, THREAD_BIT_YIELDED) != 0;
+	return TM_GETBIT(threads[id].status, THREAD_BIT_YIELDED) != 0U;
 }
 
 mod_thread_item_t *mod_threadGetPointer(uint8_t id) { return &threads[id]; }
 
 static void mod_threadStackInit(mod_thread_item_t *thread)
 {
-	for( uint16_t stack_index = 0; stack_index < thread->stack_size; stack_index++ )
+	for( uint16_t stack_index = 0U; stack_index < thread->stack_size; stack_index++ )
 	{
 		thread->stack[stack_index] = MOD_STACK_PATTERN;
 	}

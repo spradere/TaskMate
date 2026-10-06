@@ -33,6 +33,10 @@ static void tm_putChar(char ch);
  * ---------------------------------------------*/
 
 #define SNPRINTF_BUFF_TEMP_SIZE 32
+#define SNPRINTF_BASE_BINARY 2U
+#define SNPRINTF_BASE_DECIMAL 10U
+#define SNPRINTF_BASE_HEXADECIMAL 16U
+#define SNPRINTF_PADDING_MAX 9U
 
 typedef struct
 {
@@ -53,13 +57,13 @@ static void baseConvert(uint16_t value, uint8_t base)
 	const char digits[] = "0123456789abcdef";
 
 	char tmp[SNPRINTF_BUFF_TEMP_SIZE];
-	uint8_t pos = 0;
+	uint8_t pos = 0U;
 
 	// Convert in reverse order
-	if( value == 0 ) { tmp[pos++] = '0'; }
+	if( value == 0U ) { tmp[pos++] = '0'; }
 	else
 	{
-		while( (value != 0) && (pos < SNPRINTF_BUFF_TEMP_SIZE) )
+		while( (value != 0U) && (pos < SNPRINTF_BUFF_TEMP_SIZE) )
 		{
 			uint16_t data = (value % base);
 			value /= base;
@@ -70,7 +74,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	while( pos < tm_snprintf_buffer.padding ) { tmp[pos++] = '0'; }
 
 	// Reverse order
-	while( pos > 0 ) { tm_putChar(tmp[--pos]); }
+	while( pos > 0U ) { tm_putChar(tmp[--pos]); }
 }
 
 int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...)
@@ -95,23 +99,23 @@ int tm_printf(const tm_string_t format, ...)
 
 int tm_vprintf(const tm_string_t format, va_list args)
 {
-	return tm_vsnprintf(NULL, 0, format, args);
+	return tm_vsnprintf(NULL, 0U, format, args);
 }
 
 static void tm_putChar(char ch)
 {
 	if( tm_snprintf_buffer.ptr != NULL )
 	{
-		if( tm_snprintf_buffer.size == 0 ) { return; }
-		if( ch == 0 )
+		if( tm_snprintf_buffer.size == 0U ) { return; }
+		if( ch == 0U )
 		{
-			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0;
+			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0U;
 			return;
 		}
-		if( tm_snprintf_buffer.index >= (uint8_t)(tm_snprintf_buffer.size - 1) ) { return; }
+		if( tm_snprintf_buffer.index >= (uint8_t)(tm_snprintf_buffer.size - 1U) ) { return; }
 
 		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index++] = ch;
-		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0;
+		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0U;
 	}
 	else
 	{
@@ -130,10 +134,10 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	// Store variables
 	tm_snprintf_buffer.ptr = ptr;
 	tm_snprintf_buffer.size = size;
-	tm_snprintf_buffer.index = 0;
-	tm_snprintf_buffer.padding = 0;
+	tm_snprintf_buffer.index = 0U;
+	tm_snprintf_buffer.padding = 0U;
 
-	uint8_t format_index = 0;
+	uint8_t format_index = 0U;
 	char format_c = (char)sc_stringGetByte(&format, format_index++);
 
 	while( format_c )
@@ -146,8 +150,8 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 			if( (format_c) == '0' )
 			{
 				format_c = (char)sc_stringGetByte(&format, format_index++);
-				tm_snprintf_buffer.padding = (uint8_t)(format_c - 48); // atoi
-				if( tm_snprintf_buffer.padding > 9 ) { goto exit; }
+				tm_snprintf_buffer.padding = (uint8_t)(format_c - '0');
+				if( tm_snprintf_buffer.padding > SNPRINTF_PADDING_MAX ) { goto exit; }
 				format_c = (char)sc_stringGetByte(&format, format_index++);
 			}
 
@@ -165,9 +169,9 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 				case 's':
 				{
 					const tm_string_t *str = va_arg(args, const tm_string_t *);
-					uint8_t str_index = 0;
+					uint8_t str_index = 0U;
 					char str_c = (char)sc_stringGetByte(str, str_index++);
-					while( str_c != 0 )
+					while( str_c != 0U )
 					{
 						tm_putChar(str_c);
 						str_c = (char)sc_stringGetByte(str, str_index++);
@@ -186,20 +190,20 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 					switch( format_c )
 					{
 						case 'u':
-							base = 10;
+							base = SNPRINTF_BASE_DECIMAL;
 							break;
 						case 'x':
-							base = 16;
+							base = SNPRINTF_BASE_HEXADECIMAL;
 							break;
 						case 'b':
-							base = 2;
+							base = SNPRINTF_BASE_BINARY;
 							break;
 						default:
-							base = 10;
+							base = SNPRINTF_BASE_DECIMAL;
 							break;
 					}
 					baseConvert(value, base);
-					tm_snprintf_buffer.padding = 0;
+					tm_snprintf_buffer.padding = 0U;
 					break;
 				}
 
@@ -218,6 +222,6 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 exit:
 
 	// Leave a bounded string terminated even after an unsupported width.
-	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0); } // close string
+	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0U); } // close string
 	return tm_snprintf_buffer.index;
 }

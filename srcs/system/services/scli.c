@@ -19,6 +19,7 @@
 #include "scli.h"
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #include "system/sysCall/sc_driver.h"
@@ -34,6 +35,7 @@
 
 #define SCLI_LINE_SIZE 64
 #define SCLI_ARGUMENT_COUNT_MAX 4
+#define SCLI_POLL_STC_TICKS 50U
 
 /* -----------------------------------------------
  * Target command table
@@ -77,16 +79,16 @@ void scli(void)
 {
 	sc_threadSetInitialized();
 
-	while( 1 )
+	while( 1U )
 	{
 		err_codes_t error = scliRead();
 		if( error != ERR_NO_ERROR )
 		{
 			const tm_string_t *message = err_getMessage((uint8_t)error);
-			if( message != 0 ) { tm_syslog(TM_STR("[scli] error: %s\n"), message); }
+			if( message != NULL ) { tm_syslog(TM_STR("[scli] error: %s\n"), message); }
 		}
-		sc_threadSetSTC(50);
-		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
+		sc_threadSetSTC(SCLI_POLL_STC_TICKS);
+		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); };
 	}
 }
 
@@ -96,20 +98,20 @@ void scli(void)
 
 static err_codes_t scliRead(void)
 {
-	uint8_t data = 0;
-	uint8_t i = 0;
+	uint8_t data = 0U;
+	uint8_t i = 0U;
 	err_codes_t error = ERR_NO_ERROR;
 
-	while( i < (sizeof(scli_line) - 1) )
+	while( i < (sizeof(scli_line) - 1U) )
 	{
 		error = sc_usartRead(&data);
 		if( error != ERR_NO_ERROR ) { break; }
 		scli_line[i++] = (char)data;
 	}
 
-	if( i > 0 )
+	if( i > 0U )
 	{
-		scli_line[i] = 0;
+		scli_line[i] = 0U;
 		scliLineProcess();
 	}
 
@@ -122,33 +124,33 @@ static void scliLineProcess(void)
 	char *argv[SCLI_ARGUMENT_COUNT_MAX];
 
 	uint8_t argc = scliTokenize(scli_line, argv);
-	if( (argc > 0) && !scliCommandDispatch(argc, argv) )
+	if( (argc > 0U) && !scliCommandDispatch(argc, argv) )
 	{
-		tm_string_t command = TM_STR_RAM(argv[0]);
+		tm_string_t command = TM_STR_RAM(argv[0U]);
 		tm_syslog(TM_STR("[scli] error: unknown command %s\n"), &command);
-		for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
+		for( uint8_t i = 0U; scli_commands[i].name != NULL; i++ )
 		{
 			tm_string_t command_name = TM_STR_RAM(scli_commands[i].name);
 			tm_syslog(TM_STR("\tcmd %s\n"), &command_name);
 		}
 	}
-	scli_line_length = 0;
+	scli_line_length = 0U;
 }
 
 static uint8_t scliTokenize(char *line, char *argv[])
 {
-	uint8_t argc = 0;
+	uint8_t argc = 0U;
 	char *cursor = line;
 
-	while( *cursor != 0 )
+	while( *cursor != 0U )
 	{
 		while( (*cursor == ' ') || (*cursor == '\t') ) { cursor++; }
-		if( *cursor == 0 ) { break; }
+		if( *cursor == 0U ) { break; }
 		if( argc == SCLI_ARGUMENT_COUNT_MAX ) { return argc; }
 
 		argv[argc++] = cursor;
-		while( (*cursor != 0) && (*cursor != ' ') && (*cursor != '\t') ) { cursor++; }
-		if( *cursor != 0 ) { *cursor++ = 0; }
+		while( (*cursor != 0U) && (*cursor != ' ') && (*cursor != '\t') ) { cursor++; }
+		if( *cursor != 0U ) { *cursor++ = 0U; }
 	}
 
 	return argc;
@@ -160,10 +162,10 @@ static uint8_t scliTokenize(char *line, char *argv[])
 
 static bool scliCommandDispatch(uint8_t argc, char *argv[])
 {
-	for( uint8_t i = 0; scli_commands[i].name != 0; i++ )
+	for( uint8_t i = 0U; scli_commands[i].name != NULL; i++ )
 	{
 		if( tm_strncmp(
-				TM_STR_RAM(argv[0]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) == 0 )
+				TM_STR_RAM(argv[0U]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) == 0U )
 		{
 			scli_commands[i].func(argc, argv);
 			return true;

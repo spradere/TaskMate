@@ -17,6 +17,8 @@
 
 #include "sc_threads.h"
 
+#include <stddef.h>
+
 #include "interfaces/hal_atomic.h"
 #include "interfaces/tm_modules.h"
 #include "interfaces/tm_runLevel.h"
@@ -90,7 +92,8 @@ uint16_t sc_threadGetCount(void) { return MOD_THREAD_COUNT; }
 bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint16_t *stack_size_bytes)
 {
-	if( (id >= MOD_THREAD_COUNT) || (name == 0) || (run_level == 0) || (stack_size_bytes == 0) )
+	if( (id >= MOD_THREAD_COUNT) || (name == NULL) || (run_level == NULL) ||
+		(stack_size_bytes == NULL) )
 	{
 		return false;
 	}
@@ -101,12 +104,12 @@ bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 	*stack_size_bytes = mod_threadStackSizeGet((uint8_t)id);
 	hal_atomicEnd(state);
 
-	return *name != 0;
+	return *name != NULL;
 }
 
 bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes)
 {
-	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == 0) ) { return false; }
+	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == NULL) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
 	*depth_bytes = mod_threadStackDepthGet((uint8_t)id);
@@ -182,13 +185,13 @@ void sc_coopYield(void)
 
 static bool sc_threadGetId(const char *name, uint8_t *id)
 {
-	if( (name == 0) || (id == 0) ) { return false; }
+	if( (name == NULL) || (id == NULL) ) { return false; }
 
-	for( uint8_t i = 0; i < MOD_THREAD_COUNT; i++ )
+	for( uint8_t i = 0U; i < MOD_THREAD_COUNT; i++ )
 	{
 		const tm_string_t *thread_name = thread_name_catalog[i];
-		if( (thread_name != 0) &&
-			sc_stringCompare(*thread_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0 )
+		if( (thread_name != NULL) &&
+			sc_stringCompare(*thread_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0U )
 		{
 			*id = i;
 			return true;

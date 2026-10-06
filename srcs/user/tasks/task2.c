@@ -22,6 +22,12 @@
 #include "system/sysCall/sc_threads.h"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define TASK2_DELAY_STC_TICKS 50U
+
+/* -----------------------------------------------
  * Task state
  * ---------------------------------------------*/
 
@@ -35,11 +41,11 @@ void task2(void)
 {
 	sc_threadSetInitialized();
 
-	while( 1 )
+	while( 1U )
 	{
 		sc_gpio_signalToggle(GPIO_SIGNAL_TASK2_LED);
 
-		sc_threadSetSTC(50);
-		while( sc_threadGetSTC() > 0 );
+		sc_threadSetSTC(TASK2_DELAY_STC_TICKS);
+		while( sc_threadGetSTC() > 0U );
 	}
 }

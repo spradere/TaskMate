@@ -18,7 +18,16 @@
 
 #include "sc_string.h"
 
+#include <stddef.h>
+
 #include "interfaces/drv_usart.h"
+
+/* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SCSTRING_ORDER_LESS (-1)
+#define SCSTRING_ORDER_GREATER 1
 
 /* =============================================================================
  * Implementation - Functions
@@ -51,7 +60,10 @@ err_codes_t sc_consoleFlush(void)
 
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 {
-	if( (string == 0) || (string->text == 0) || (index >= TM_STRING_SIZE_MAX) ) { return 0; }
+	if( (string == NULL) || (string->text == NULL) || (index >= TM_STRING_SIZE_MAX) )
+	{
+		return 0U;
+	}
 
 	switch( string->storage )
 	{
@@ -60,42 +72,42 @@ uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 		case TM_MEM_ROM:
 			return (uint8_t)HAL_STRING_ROMGETBYTE(&(string->text[index]));
 		default:
-			return 0;
+			return 0U;
 	}
 }
 
 int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size)
 {
-	for( uint8_t i = 0; i < size; i++ )
+	for( uint8_t i = 0U; i < size; i++ )
 	{
 		uint8_t left_byte = sc_stringGetByte(&left, i);
 		uint8_t right_byte = sc_stringGetByte(&right, i);
 
-		if( left_byte < right_byte ) { return -1; }
-		if( left_byte > right_byte ) { return 1; }
-		if( left_byte == 0 ) { return 0; }
+		if( left_byte < right_byte ) { return SCSTRING_ORDER_LESS; }
+		if( left_byte > right_byte ) { return SCSTRING_ORDER_GREATER; }
+		if( left_byte == 0U ) { return 0U; }
 	}
 
-	return 0;
+	return 0U;
 }
 
 void sc_stringCopy(char *dest, tm_string_t src, uint8_t size)
 {
-	uint8_t i = 0;
+	uint8_t i = 0U;
 
-	if( (dest == 0) || (size == 0) ) { return; }
-	if( src.text == 0 )
+	if( (dest == NULL) || (size == 0U) ) { return; }
+	if( src.text == NULL )
 	{
-		dest[0] = 0;
+		dest[0U] = 0U;
 		return;
 	}
 
-	while( (i < (uint8_t)(size - 1)) && (i < (TM_STRING_SIZE_MAX - 1)) )
+	while( (i < (uint8_t)(size - 1U)) && (i < (TM_STRING_SIZE_MAX - 1U)) )
 	{
 		uint8_t src_byte = sc_stringGetByte(&src, i);
-		if( src_byte == 0 ) { break; }
+		if( src_byte == 0U ) { break; }
 		dest[i] = (char)src_byte;
 		i++;
 	}
-	dest[i] = 0;
+	dest[i] = 0U;
 }

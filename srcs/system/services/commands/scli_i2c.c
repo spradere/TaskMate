@@ -24,6 +24,12 @@
 #include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SCLII2C_COUNT_COMMANDARGS 2U
+
+/* -----------------------------------------------
  * Private types
  * ---------------------------------------------*/
 
@@ -49,7 +55,7 @@ static bool i2cHelp(uint8_t argc, char *argv[]);
 static const i2c_cmd_t i2c_cmd[] = {
 	{"scan", i2cScan},
 	{"help", i2cHelp},
-	{0, 0},
+	{NULL, NULL},
 };
 
 /* =============================================================================
@@ -62,21 +68,22 @@ static const i2c_cmd_t i2c_cmd[] = {
 
 bool i2cCommand(uint8_t argc, char *argv[])
 {
-	if( argc < 2 )
+	if( argc < SCLII2C_COUNT_COMMANDARGS )
 	{
-		i2cHelp(0, NULL);
+		i2cHelp(0U, NULL);
 		return false;
 	}
 
-	for( uint8_t i = 0; i2c_cmd[i].name != 0; i++ )
+	for( uint8_t i = 0U; i2c_cmd[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) == 0 )
+		if( tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) ==
+			0U )
 		{
 			return i2c_cmd[i].func(argc, argv);
 		}
 	}
 
-	i2cHelp(0, NULL);
+	i2cHelp(0U, NULL);
 	return false;
 }
 
@@ -88,9 +95,9 @@ static bool i2cScan(uint8_t argc, char *argv[])
 {
 	(void)argv;
 
-	if( argc != 2 )
+	if( argc != SCLII2C_COUNT_COMMANDARGS )
 	{
-		i2cHelp(0, NULL);
+		i2cHelp(0U, NULL);
 		return false;
 	}
 
@@ -102,7 +109,7 @@ static bool i2cScan(uint8_t argc, char *argv[])
 	}
 
 	const tm_string_t *message = err_getMessage((uint8_t)error);
-	if( message != 0 ) { tm_syslog(TM_STR("[i2c] scan error: %s\n"), message); }
+	if( message != NULL ) { tm_syslog(TM_STR("[i2c] scan error: %s\n"), message); }
 	else { tm_syslog(TM_STR("[i2c] scan error\n")); }
 	return false;
 }

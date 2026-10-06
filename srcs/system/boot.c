@@ -33,9 +33,9 @@
 int main(void)
 {
 	// Usart startup
-	hal_driver_state_t state = hal_usartControl(DRV_CTRL_INIT, 0);
+	hal_driver_state_t state = hal_usartControl(DRV_CTRL_INIT, 0U);
 	if( state != DRV_STATE_INITIALIZED ) { hal_halt(); }
-	state = hal_usartControl(DRV_CTRL_START, 0);
+	state = hal_usartControl(DRV_CTRL_START, 0U);
 	if( state != DRV_STATE_RUNNING ) { hal_halt(); }
 
 	hal_usartWriteByte('\n');

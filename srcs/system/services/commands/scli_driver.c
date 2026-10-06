@@ -25,6 +25,14 @@
 #include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SCLIDRIVER_COUNT_COMMANDARGS 2U
+#define SCLIDRIVER_COUNT_ACTIONARGS 3U
+#define SCLIDRIVER_INDEX_NAME 2U
+
+/* -----------------------------------------------
  * Private types
  * ---------------------------------------------*/
 
@@ -56,7 +64,7 @@ static const driver_cmd_t driver_cmd[] = {
 	{"stop", driverStop},
 	{"list", driverList},
 	{"help", driverHelp},
-	{0, 0},
+	{NULL, NULL},
 };
 
 /* =============================================================================
@@ -69,22 +77,22 @@ static const driver_cmd_t driver_cmd[] = {
 
 bool driverCommand(uint8_t argc, char *argv[])
 {
-	if( argc < 2 )
+	if( argc < SCLIDRIVER_COUNT_COMMANDARGS )
 	{
-		driverHelp(0, NULL);
+		driverHelp(0U, NULL);
 		return false;
 	}
 
-	for( uint8_t i = 0; driver_cmd[i].name != 0; i++ )
+	for( uint8_t i = 0U; driver_cmd[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1]), TM_STR_RAM(driver_cmd[i].name), TM_STRING_SIZE_MAX) ==
-			0 )
+		if( tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(driver_cmd[i].name), TM_STRING_SIZE_MAX) ==
+			0U )
 		{
 			return driver_cmd[i].func(argc, argv);
 		}
 	}
 
-	driverHelp(0, NULL);
+	driverHelp(0U, NULL);
 	return false;
 }
 
@@ -113,7 +121,7 @@ static bool driverList(uint8_t argc, char *argv[])
 
 	tm_syslog(TM_STR("[driver] drivers:\n"));
 	const uint16_t driver_count = sc_driverGetCount();
-	for( uint16_t id = 0; id < driver_count; id++ )
+	for( uint16_t id = 0U; id < driver_count; id++ )
 	{
 		const tm_string_t *name;
 		uint8_t run_level;
@@ -123,10 +131,10 @@ static bool driverList(uint8_t argc, char *argv[])
 		tm_syslog(TM_STR("\t%s runlevel=%i status[init=%i start=%i error=%i dead=%i]\n"),
 				  name,
 				  run_level,
-				  TM_GETBIT(status_bits, DRV_BIT_INIT) != 0,
-				  TM_GETBIT(status_bits, DRV_BIT_START) != 0,
-				  TM_GETBIT(status_bits, DRV_BIT_ERROR) != 0,
-				  TM_GETBIT(status_bits, DRV_BIT_DEAD) != 0);
+				  TM_GETBIT(status_bits, DRV_BIT_INIT) != 0U,
+				  TM_GETBIT(status_bits, DRV_BIT_START) != 0U,
+				  TM_GETBIT(status_bits, DRV_BIT_ERROR) != 0U,
+				  TM_GETBIT(status_bits, DRV_BIT_DEAD) != 0U);
 	}
 
 	return true;
@@ -134,14 +142,14 @@ static bool driverList(uint8_t argc, char *argv[])
 
 static bool driverInit(uint8_t argc, char *argv[])
 {
-	if( argc != 3 )
+	if( argc != SCLIDRIVER_COUNT_ACTIONARGS )
 	{
-		driverHelp(0, NULL);
+		driverHelp(0U, NULL);
 		return false;
 	}
 
-	tm_string_t driver_name = TM_STR_RAM(argv[2]);
-	if( sc_driverInit(argv[2]) )
+	tm_string_t driver_name = TM_STR_RAM(argv[SCLIDRIVER_INDEX_NAME]);
+	if( sc_driverInit(argv[SCLIDRIVER_INDEX_NAME]) )
 	{
 		tm_syslog(TM_STR("[driver] %s initialized\n"), &driver_name);
 		return true;
@@ -153,14 +161,14 @@ static bool driverInit(uint8_t argc, char *argv[])
 
 static bool driverStart(uint8_t argc, char *argv[])
 {
-	if( argc != 3 )
+	if( argc != SCLIDRIVER_COUNT_ACTIONARGS )
 	{
-		driverHelp(0, NULL);
+		driverHelp(0U, NULL);
 		return false;
 	}
 
-	tm_string_t driver_name = TM_STR_RAM(argv[2]);
-	if( sc_driverStart(argv[2]) )
+	tm_string_t driver_name = TM_STR_RAM(argv[SCLIDRIVER_INDEX_NAME]);
+	if( sc_driverStart(argv[SCLIDRIVER_INDEX_NAME]) )
 	{
 		tm_syslog(TM_STR("[driver] %s started\n"), &driver_name);
 		return true;
@@ -172,14 +180,14 @@ static bool driverStart(uint8_t argc, char *argv[])
 
 static bool driverStop(uint8_t argc, char *argv[])
 {
-	if( argc != 3 )
+	if( argc != SCLIDRIVER_COUNT_ACTIONARGS )
 	{
-		driverHelp(0, NULL);
+		driverHelp(0U, NULL);
 		return false;
 	}
 
-	tm_string_t driver_name = TM_STR_RAM(argv[2]);
-	if( sc_driverStop(argv[2]) )
+	tm_string_t driver_name = TM_STR_RAM(argv[SCLIDRIVER_INDEX_NAME]);
+	if( sc_driverStop(argv[SCLIDRIVER_INDEX_NAME]) )
 	{
 		tm_syslog(TM_STR("[driver] %s stopped\n"), &driver_name);
 		return true;

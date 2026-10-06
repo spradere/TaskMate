@@ -40,6 +40,7 @@
 #define SYSTEM_RUN_LEVEL_RR_ROUND_COUNT 10u
 #define SYSTEM_IDLE_STC_TICKS 1u
 #define SYSTEM_DISPLAY_STC_TICKS 50u
+#define SYSTEM_SIZE_LCDMESSAGE 30U
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -76,15 +77,15 @@ void system(void)
 #endif
 
 #ifdef TM_DRIVER_HAVE_LCD
-	char msg[30];
+	char msg[SYSTEM_SIZE_LCDMESSAGE];
 	tm_snprintf(
 		msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
-	sc_lcdWriteString(TM_STR_RAM(msg), 0, 0);
+	sc_lcdWriteString(TM_STR_RAM(msg), 0U, 0U);
 #endif
 
 	// After startup, refresh the display when available and yield between updates.
-	while( 1 )
+	while( 1U )
 	{
 #if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
 		sc_rtcRead(&time);
@@ -97,13 +98,13 @@ void system(void)
 					time.hours,
 					time.minutes,
 					time.seconds);
-		sc_lcdWriteString(TM_STR_RAM(msg), 1, 0);
+		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
 		sc_threadSetSTC(SYSTEM_DISPLAY_STC_TICKS);
 #else
 		sc_threadSetSTC(SYSTEM_IDLE_STC_TICKS);
 #endif
 
-		while( sc_threadGetSTC() > 0 ) { sc_coopYield(); };
+		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); };
 	}
 }
 
@@ -118,12 +119,12 @@ void system(void)
 static void systemStart(void)
 {
 	uint8_t run_level = sc_runLevelGet();
-	uint8_t incomplete_round_count = 0;
+	uint8_t incomplete_round_count = 0U;
 
 	if( run_level != RL_RUN_CORE ) { sc_halt(); }
 	systemRunLevelStart(run_level);
 
-	while( 1 )
+	while( 1U )
 	{
 		/* As thread zero, returning here means one complete round-robin turn elapsed. */
 		sc_coopYield();
@@ -135,7 +136,7 @@ static void systemStart(void)
 			run_level++;
 			if( !sc_runLevelSet(run_level) ) { sc_halt(); }
 			systemRunLevelStart(run_level);
-			incomplete_round_count = 0;
+			incomplete_round_count = 0U;
 		}
 		else
 		{

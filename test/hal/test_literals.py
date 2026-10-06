@@ -6,7 +6,7 @@
 # See the LICENSE file for full license terms.
 #
 
-"""Reject unnamed numeric literals in HAL C code."""
+"""Reject unnamed numeric literals in TaskMate C code."""
 
 from pathlib import Path
 import re
@@ -16,11 +16,12 @@ import re
 # Constants
 # ---------------------------------------------------------------------------
 
-HAL_ROOT = Path(__file__).resolve().parents[2] / "srcs" / "hal"
+SOURCE_ROOT = Path(__file__).resolve().parents[2] / "srcs"
 NUMBER = re.compile(
     r"(?<![A-Za-z_0-9.])(?:0[xX][0-9A-Fa-f]+|0[bB][01]+|[0-9]+)[uUlL]*(?![A-Za-z_0-9.])"
 )
 NAMED_DEFINE = re.compile(r"\s*#define\s+[A-Z][A-Za-z0-9_]*\b(?!\()")
+NAMED_ENUM = re.compile(r"\s*(?:enum\s*\{\s*)?[A-Z][A-Z0-9_]*\s*=")
 
 
 # ---------------------------------------------------------------------------
@@ -69,7 +70,7 @@ def code_only(source: str) -> str:
 
 def main() -> int:
     violations = []
-    for path in sorted(HAL_ROOT.rglob("*")):
+    for path in sorted(SOURCE_ROOT.rglob("*")):
         if path.suffix not in (".c", ".h"):
             continue
         source = path.read_text()
@@ -77,7 +78,7 @@ def main() -> int:
         original = source.splitlines()
         in_named_define = False
         for line_number, (line, raw) in enumerate(zip(masked, original), 1):
-            named_define = bool(NAMED_DEFINE.match(line))
+            named_define = bool(NAMED_DEFINE.match(line) or NAMED_ENUM.match(line))
             if not (in_named_define or named_define):
                 for match in NUMBER.finditer(line):
                     if match.group() not in ("0U", "1U"):
@@ -86,7 +87,7 @@ def main() -> int:
     if violations:
         print("\n".join(violations))
         return 1
-    print("HAL C numeric literals: passed")
+    print("TaskMate C numeric literals: passed")
     return 0
 
 
