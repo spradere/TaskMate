@@ -426,7 +426,7 @@ runConfigurationTests()
 		"srcs/user/target/test1/test1_signals.gpio"
 	expectFailure wire_gpio_outside "Path outside current directory rejected" \
 		targetMake \
-		FILE_WIREGPIO="/usr/bin/sh" \
+		FILE_WIREGPIO="/etc/passwd" \
 		_autocode_dependency_check
 	expectFailure wire_gpio_wrong_type "Invalid -f path rejected" \
 		targetMake FILE_WIREGPIO="${PATH_PROJECT}/build" \
