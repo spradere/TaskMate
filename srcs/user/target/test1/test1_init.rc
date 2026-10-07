@@ -5,7 +5,6 @@ setVersion minor 10
 
 # System core
 addModule driver timerContext -run none -source_file hal/mcu/atmega2560/at2560_timerContext.c
-addModule driver timerSTC -run core -source_file hal/mcu/atmega2560/at2560_timerSTC.c
 addModule driver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
 addModule service system -run core -stack 256 -source_file system/services/system.c

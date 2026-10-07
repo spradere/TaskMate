@@ -31,10 +31,17 @@
 #include "system/sysCore/sys_threads_data.h"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SYSSCHEDULER_COUNT_CALLSPERSTC 10U
+
+/* -----------------------------------------------
  * Private variables
  * ---------------------------------------------*/
 
 static volatile uint8_t scheduler_run_level = RL_RUN_CORE;
+static uint8_t scheduler_stc_tick_count;
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -54,6 +61,7 @@ static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current);
 void tm_schedulerInit(void)
 {
 	scheduler_run_level = RL_RUN_CORE;
+	scheduler_stc_tick_count = 0U;
 	hal_timerContextControl(DRV_CTRL_INIT, 0U);
 	hal_timerContextSetCallback(tm_schedulerRR);
 }
@@ -112,6 +120,13 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 	if( thread->stack[thread->stack_size - MOD_STACK_FIRST_USABLE_INDEX] != MOD_CANARY )
 	{
 		hal_halt();
+	}
+
+	// Advance software time after ten scheduler interrupts.
+	if( ++scheduler_stc_tick_count == SYSSCHEDULER_COUNT_CALLSPERSTC )
+	{
+		scheduler_stc_tick_count = 0U;
+		mod_threadTickSTC();
 	}
 
 	// Switch threads

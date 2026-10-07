@@ -52,7 +52,7 @@ uint8_t mod_threadGetCurrent(void) { return thread_current; }
 void mod_threadSetSTC(uint16_t count) { threads[thread_current].software_time_counter = count; }
 uint16_t mod_threadGetSTC(void) { return threads[thread_current].software_time_counter; }
 
-void mod_threadsTickSTC(void)
+void mod_threadTickSTC(void)
 {
 	for( uint8_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{

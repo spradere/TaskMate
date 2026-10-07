@@ -27,7 +27,6 @@ bool freebsd_interruptsMask(sigset_t *mask)
 	if( mask == NULL ) { return false; }
 	if( sigemptyset(mask) != 0U ) { return false; }
 	if( sigaddset(mask, FREEBSD_SIGNAL_SCHED) != 0U ) { return false; }
-	if( sigaddset(mask, FREEBSD_SIGNAL_STC) != 0U ) { return false; }
 	return true;
 }
 

@@ -50,7 +50,7 @@ uint16_t mod_threadGetSTC(void);
 /**
  * @brief Advance software time counters for active threads.
  */
-void mod_threadsTickSTC(void);
+void mod_threadTickSTC(void);
 
 /**
  * @brief Get a thread's run level.
