@@ -784,7 +784,7 @@ runCompareReplaceTests()
 	stageBegin compare_replace
 	caseBegin stable_generation
 	printf '%s\n' \
-		'addModule driver timerSched -run driver -source_file system.c' \
+		'addModule driver timerContext -run driver -source_file system.c' \
 		'addScliCommand date -source_file system/services/commands/scli_date.c' \
 		'addScliCommand driver -source_file system/services/commands/scli_driver.c' \
 		>> "${PATH_CASE}/init.rc"
@@ -806,11 +806,11 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/threads_list.inc"; then
 		fail "threads_list generated service declaration is missing"
 	fi
-	if ! grep -F -q '#include "interfaces/drv_timerSched.h"' \
+	if ! grep -F -q '#include "interfaces/drv_timerContext.h"' \
 		"${PATH_CASE}/generated/drivers_list.inc"; then
 		fail "drivers_list generated driver declaration is missing"
 	fi
-	if ! grep -F -q '#define TM_DRIVER_HAVE_TIMER_SCHED 1U' \
+	if ! grep -F -q '#define TM_DRIVER_HAVE_TIMER_CONTEXT 1U' \
 		"${PATH_CASE}/generated/driver_have.inc"; then
 		fail "driver_have generated presence definition is missing"
 	fi
