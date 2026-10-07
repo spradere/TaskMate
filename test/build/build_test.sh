@@ -271,7 +271,7 @@ runConfigurationTests()
 		"-include srcs/hal/arch/avr8/avr8_types.h" \
 		targetMake -V CFLAGS_srcs/system/sysCore/sys_scheduler.c
 	for VAL_SOURCE in system/boot.c system/sysCall/sc_driver.c system/sysCall/sc_gpio.c \
-		system/sysCall/sc_threads.c system/sysCore/sys_softwareTimeCounter.c
+		system/sysCall/sc_threads.c
 	do
 		VAL_ARCH_TEST_NAME=$(printf '%s' "${VAL_SOURCE}" | tr '/.' '__')
 		VAL_ARCH_TEST_NAME="architecture_types_unselected_${VAL_ARCH_TEST_NAME}"
@@ -324,7 +324,7 @@ runConfigurationTests()
 	logContains z600_compile_sources "srcs/hal/host/ucontext/ucontext_context.c"
 	logContains z600_compile_sources "srcs/hal/board/pc/pc_gpio.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
-	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
+	logExcludes z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
 	logContains z600_compile_sources "srcs/system/services/scli.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_driver.c"
@@ -342,6 +342,7 @@ runConfigurationTests()
 	logContains default_compile_sources "srcs/hal/drivers/lcd/lcd_AMC2004.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_stack.c"
+	logExcludes default_compile_sources "srcs/system/sysCore/sys_softwareTimeCounter.c"
 	logExcludes default_compile_sources "test1_scli_commands"
 
 	expectSuccess default_initrc_sources targetMake -V FILES_INITRC_SRC
@@ -350,6 +351,7 @@ runConfigurationTests()
 	logContains default_initrc_sources "srcs/system/services/commands/scli_stack.c"
 	logExcludes default_initrc_sources "test1_scli_commands"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerContext.c"
+	logExcludes default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSTC.c"
 	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
@@ -399,7 +401,6 @@ runConfigurationTests()
 	VAL_DRIVER_INTERFACES="srcs/interfaces/drv_i2c.h srcs/interfaces/drv_lcd.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_rtc.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerContext.h"
-	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerSTC.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_usart.h"
 	expectOutput driver_interface_order "${VAL_DRIVER_INTERFACES}" \
 		targetMake -V FILES_DRIVER_INTERFACES

@@ -23,7 +23,6 @@
 #include "interfaces/tm_info.h"
 #include "system/sysCore/sys_drivers.h"
 #include "system/sysCore/sys_scheduler.h"
-#include "system/sysCore/sys_softwareTimeCounter.h"
 #include "system/sysCore/sys_threads.h"
 
 /* =============================================================================
@@ -50,8 +49,6 @@ int main(void)
 	hal_usartSendTXBuffer();
 
 	// Start scheduler
-	tm_softwareTimeCounterInit();
-
 	hal_usartWriteByte('3');
 	hal_usartWriteByte('\n');
 	hal_usartSendTXBuffer();
