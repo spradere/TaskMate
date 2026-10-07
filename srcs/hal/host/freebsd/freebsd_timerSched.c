@@ -27,7 +27,7 @@
 
 #include "freebsd_interrupts.h"
 #include "hal/host/ucontext/ucontext_types.h"
-#include "interfaces/drv_timerSched.h"
+#include "interfaces/drv_timerContext.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
@@ -42,7 +42,7 @@
  * Private variables
  * ---------------------------------------------*/
 
-static hal_timerSchedCallback_ptr_t sched_callback;
+static hal_timerContextCallback_ptr_t sched_callback;
 static hal_driver_status_t timer_sched_status;
 static err_codes_t timer_sched_last_error = ERR_NO_ERROR;
 static bool timer_sched_activated;
@@ -98,14 +98,14 @@ static void timerSchedHandler(int signal, siginfo_t *info, void *native_context)
 	hal_halt();
 }
 
-hal_driver_state_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr)
+hal_driver_state_t hal_timerContextSetCallback(hal_timerContextCallback_ptr_t func_ptr)
 {
 	if( func_ptr == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
 	sched_callback = func_ptr;
 	return timerSchedGetStatus();
 }
 
-hal_driver_state_t hal_timerSchedLoad(void)
+hal_driver_state_t hal_timerContextLoad(void)
 {
 	if( timerSchedGetStatus() != DRV_STATE_RUNNING )
 	{
@@ -173,7 +173,7 @@ static hal_driver_state_t timerSchedStop(void)
 	return timerSchedGetStatus();
 }
 
-hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
+hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 										 hal_driver_control_data_t *data)
 {
 	switch( command )

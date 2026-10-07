@@ -4,7 +4,7 @@ setVersion major 1
 setVersion minor 10
 
 # Virtual HAL drivers
-addModule driver timerSched -run none -source_file hal/host/freebsd/freebsd_timerSched.c
+addModule driver timerContext -run none -source_file hal/host/freebsd/freebsd_timerSched.c
 addModule driver timerSTC -run core -source_file hal/host/freebsd/freebsd_timerSTC.c
 addModule driver usart -run none -source_file hal/host/freebsd/freebsd_usart.c
 

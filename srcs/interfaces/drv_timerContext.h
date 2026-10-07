@@ -7,12 +7,12 @@
  */
 
 /**
- * @file drv_timerSched.h
+ * @file drv_timerContext.h
  * @brief Generic scheduler timer driver interface declarations.
  */
 
-#ifndef INTERFACES_DRV_TIMERSCHED_H
-#define INTERFACES_DRV_TIMERSCHED_H
+#ifndef INTERFACES_DRV_TIMERCONTEXT_H
+#define INTERFACES_DRV_TIMERCONTEXT_H
 
 /* ============================================================================
  * Includes
@@ -25,8 +25,8 @@
  * Public definitions
  * ========================================================================== */
 
-typedef hal_context_t *hal_timerSchedCallback_func_t(hal_context_t *context);
-typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
+typedef hal_context_t *hal_timerContextCallback_func_t(hal_context_t *context);
+typedef hal_timerContextCallback_func_t *hal_timerContextCallback_ptr_t;
 
 /* ============================================================================
  * Public API
@@ -36,18 +36,18 @@ typedef hal_timerSchedCallback_func_t *hal_timerSchedCallback_ptr_t;
  * @brief Apply a common scheduler timer control command.
  * @return Resulting driver state.
  */
-hal_driver_state_t hal_timerSchedControl(hal_driver_control_t command,
+hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 										 hal_driver_control_data_t *data);
 /**
  * @brief Register the scheduler timer callback.
  * @param func_ptr Callback invoked from the scheduler timer interrupt.
  * @return Driver state after registration.
  */
-hal_driver_state_t hal_timerSchedSetCallback(hal_timerSchedCallback_ptr_t func_ptr);
+hal_driver_state_t hal_timerContextSetCallback(hal_timerContextCallback_ptr_t func_ptr);
 /**
  * @brief Load the scheduler timer period.
  * @return Driver state after loading the timer.
  */
-hal_driver_state_t hal_timerSchedLoad(void);
+hal_driver_state_t hal_timerContextLoad(void);
 
-#endif // INTERFACES_DRV_TIMERSCHED_H
+#endif // INTERFACES_DRV_TIMERCONTEXT_H

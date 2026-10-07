@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 
-#include "interfaces/drv_timerSched.h"
+#include "interfaces/drv_timerContext.h"
 #include "interfaces/hal_context.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
@@ -40,7 +40,7 @@ static volatile uint8_t scheduler_run_level = RL_RUN_CORE;
  * Private function prototypes
  * ---------------------------------------------*/
 
-static hal_timerSchedCallback_func_t tm_schedulerRR;
+static hal_timerContextCallback_func_t tm_schedulerRR;
 static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current);
 
 /* =============================================================================
@@ -54,13 +54,13 @@ static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current);
 void tm_schedulerInit(void)
 {
 	scheduler_run_level = RL_RUN_CORE;
-	hal_timerSchedControl(DRV_CTRL_INIT, 0U);
-	hal_timerSchedSetCallback(tm_schedulerRR);
+	hal_timerContextControl(DRV_CTRL_INIT, 0U);
+	hal_timerContextSetCallback(tm_schedulerRR);
 }
 
 void tm_schedulerStart(void)
 {
-	hal_timerSchedControl(DRV_CTRL_START, 0U);
+	hal_timerContextControl(DRV_CTRL_START, 0U);
 
 	mod_thread_item_t *mod = mod_threadGetPointer(0U);
 
@@ -89,7 +89,7 @@ uint8_t tm_schedulerRunLevelGet(void) { return scheduler_run_level; }
  * Cooperative trigger
  * ---------------------------------------------*/
 
-void tm_schedulerCoop(void) { hal_timerSchedLoad(); }
+void tm_schedulerCoop(void) { hal_timerContextLoad(); }
 
 /* -----------------------------------------------
  * Round-robin policy
