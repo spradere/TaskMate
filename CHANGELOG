@@ -1,3 +1,5 @@
+	[code] remove magic numbers in all code base
+	[code] harden assembly code for context switch
 	[code] fix AVR timer3 init/start/stop, harden timer1 stop
  	[doc] [code] add Doxygen comments in .h code
 	[doc] [code] add inline comments in C code
