@@ -200,6 +200,13 @@ runConfigurationTests()
 		-V FILE_CLANG_TIDY
 	expectOutput cppcheck_command "cppcheck" bmake -C "${PATH_PROJECT}" \
 		-V FILE_CPPCHECK
+	assertFileContains "${PATH_PROJECT}/.clang-tidy" "  readability-*,"
+	assertFileExcludes "${PATH_PROJECT}/.clang-tidy" "  -readability-magic-numbers,"
+	assertFileContains "${PATH_PROJECT}/.clang-tidy" \
+		"WarningsAsErrors: 'readability-magic-numbers'"
+	assertFileContains "${PATH_PROJECT}/.clang-tidy" \
+		"  - key: readability-magic-numbers.IgnoredIntegerValues"
+	assertFileContains "${PATH_PROJECT}/.clang-tidy" "    value: '1'"
 	expectSuccess autocode_tidy_recipe targetMake -n \
 		FILE_CLANG_TIDY=taskmate-test-clang-tidy tidy_autocode
 	logContains autocode_tidy_recipe "taskmate-test-clang-tidy"
