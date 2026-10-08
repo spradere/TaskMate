@@ -69,7 +69,6 @@ Start C files, headers, scripts, and Makefile fragments with the TaskMate BSD-2-
 Use the established TaskMate prefixes only when they describe a real boundary or subsystem. Follow `doc/rules/TaskMate_prefixes.md` and `doc/rules/make_prefixes.md`.
 
 - Public subsystem APIs use lower camel case after the prefix.
-- Types use `snake_case` with a `_t` suffix.
 - Enum constants and preprocessor constants use `UPPER_SNAKE_CASE`.
 - Variables use descriptive `snake_case`.
 - Name numeric constants `<FILE>_<TYPE>_<DESCRIPTION>`, using a compact uppercase form of the source file name, a short type or role, and a concise description. Add a lowercase unit suffix when needed, as in `LCDAMC2004_DELAY_POWERUP_ms` from `lcd_AMC2004.c`. Avoid extra underscores within each part.
@@ -80,8 +79,6 @@ Use the established TaskMate prefixes only when they describe a real boundary or
 
 **Embedded code:**
 
-- Use explicit fixed-width integer types from `<stdint.h>` for embedded data.
-- Use `bool` from `<stdbool.h>` for boolean state.
 - Keep hardware-specific code inside the HAL architecture.
 - Keep portable contracts in `srcs/interfaces/`; they must not depend on HAL, sysCall, services, or tasks.
 - Tasks should use sysCall and service APIs, not raw HAL or MCU registers.
