@@ -18,10 +18,15 @@ Checks: >
   -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
   -clang-analyzer-security.insecureAPI.UncheckedReturn,
   -portability-restrict-system-includes,
-  -readability-magic-numbers,
   -readability-uppercase-literal-suffix
 
 CheckOptions:
+  - key: readability-magic-numbers.IgnoredIntegerValues
+    value: '1'
+  - key: readability-magic-numbers.IgnoredFloatingPointValues
+    value: ''
+  - key: readability-magic-numbers.IgnoreBitFieldsWidths
+    value: 'false'
   - key: readability-function-cognitive-complexity.Threshold
     value: '100'
   - key: readability-identifier-length.MinimumVariableNameLength
@@ -32,6 +37,6 @@ CheckOptions:
     value: 1
 
 HeaderFilterRegex: (^|/)srcs/
-WarningsAsErrors: ''
+WarningsAsErrors: 'readability-magic-numbers'
 SystemHeaders: false
 FormatStyle: file
