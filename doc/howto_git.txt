@@ -84,6 +84,30 @@ git branch -vv
 	git ls-remote --tags
 
 ##################################################
+# publish branch and create GitHub pull request
+##################################################
+
+# configure for the current repository
+git config alias.publish \
+'!f() {
+	test "$#" -gt 0 || {
+		echo "usage: git publish <commit message>" >&2
+		return 2
+	}
+	git add --all -- . &&
+	git commit -m "$*" &&
+	git push -u origin HEAD &&
+	{
+		gh pr view --json url --jq .url 2>/dev/null ||
+		gh pr create --fill --base test
+	}
+}; f'
+
+# usage
+git status
+git publish "Commit message"
+
+##################################################
 # update local repo
 ##################################################
 
