@@ -26,8 +26,8 @@ END {
 		code_pct \
 		comment_pct \
 		doc_pct \
-		make_total \
-		make_pct \
+		build_total \
+		build_pct \
 		", order, " ")
 
 	for (i = 1; i <= length(order); i++)

@@ -28,15 +28,15 @@ $1 == "C" {
 	}
 
 ($1 == "make") || ($1 == "awk") {
-	make_blank += $3
-	make_comment += $4
-	make_code += $5
+	build_blank += $3
+	build_comment += $4
+	build_code += $5
 	}
 	
 ($1 == "Bourne") && ($2 == "Shell") {
-	make_blank += $4
-	make_comment += $5
-	make_code += $6
+	build_blank += $4
+	build_comment += $5
+	build_code += $6
 	}
 
 ($1 == "Markdown") || ($1 == "Text") {
@@ -45,25 +45,25 @@ $1 == "C" {
 	}
 
 END {
-	loc_total = c_blank + c_comment + c_code + make_blank + make_comment + make_code
-	code_total = c_code + make_code
-	make_total = make_blank + make_comment + make_code
-	comment_total = c_comment + make_comment
+	loc_total = c_blank + c_comment + c_code + build_blank + build_comment + build_code
+	code_total = c_code + build_code
+	build_total = build_blank + build_comment + build_code
+	comment_total = c_comment + build_comment
 	doc_total = doc_blank + doc_code
 
 	code_pct = (code_total / loc_total) * 100
 	comment_pct = (comment_total / loc_total) * 100
 	doc_pct = (doc_total / (loc_total+doc_total)) * 100
-	make_pct = (make_total / loc_total) * 100
+	build_pct = (build_total / loc_total) * 100
 
 	printf("Count lines of code \n") > file
 	printf("code_total %d\n", loc_total) >> file
-	printf("make_total %d\n", make_total) >> file
+	printf("build_total %d\n", build_total) >> file
 	printf("code+doc_total %d\n", loc_total + doc_total) >> file
 	printf("code_pct %0.1f\n", code_pct) >> file
 	printf("comment_pct %0.1f\n", comment_pct) >> file
 	printf("doc_pct %0.1f\n", doc_pct) >> file
-	printf("make_pct %0.1f\n", make_pct) >> file
+	printf("build_pct %0.1f\n", build_pct) >> file
 
 	close(file)
 	}
