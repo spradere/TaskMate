@@ -12,7 +12,7 @@ This guide defines the use of C++20 in TaskMate embedded system code. C++ is an 
 
 ## Zero-cost requirement
 
-- Every C++ abstraction must have a cost equivalent to a direct, suitable C implementation for the selected target.
+- C++ abstractions must add no unnecessary structural runtime cost compared with a suitable direct C implementation. Code-generation differences are acceptable only when measured, bounded, and justified for the target.
 - Source-level elegance is not proof of zero cost. Review the linked image, map, symbols, and disassembly when an abstraction can affect flash, RAM, stack, timing, or interrupt latency.
 - C++ abstractions must not add dynamic dispatch, hidden allocation, hidden initialization, implicit registration, unbounded work, or an unexpected runtime-library dependency.
 - A zero-cost abstraction must add no generic dispatch state, runtime type data, constructor table, destructor table, guard variable, or persistent state that an equivalent direct implementation does not need.
@@ -37,12 +37,12 @@ This guide defines the use of C++20 in TaskMate embedded system code. C++ is an 
 
 ## Prohibited features and mechanisms
 
-- Do not use RAII. Object construction or destruction must not acquire, release, restore, start, stop, lock, unlock, or otherwise control a resource or system state.
+- Do not use RAII for resource or system-state management. Constructors and destructors must not acquire, release, restore, start, stop, lock, or unlock resources. Trivial value objects are allowed.
 - Do not use exceptions. Compile C++ code with exceptions disabled, and use the existing explicit error contracts.
 - Do not use RTTI, `dynamic_cast`, or `typeid`.
-- Do not use `malloc`, `calloc`, `realloc`, `free`, `new`, or `delete`, including placement forms and user-defined allocation functions.
+- Do not use `malloc`, `calloc`, `realloc`, `free`, allocating `new`/`delete`, or user-defined allocation functions. Placement `new` does not allocate but remains prohibited initially pending explicit review.
 - Do not use virtual functions, virtual inheritance, or other implicit runtime polymorphism.
-- Do not use global constructors, global destructors, function-local static initialization guards, or any other dynamic initialization before `main`.
+- Do not use dynamic initialization before `main`, non-trivial global destruction, or function-local static initialization guards. `constexpr` and `constinit` objects with trivial destruction are allowed.
 - Do not use standard-library containers, strings, streams, smart pointers, `std::function`, or algorithms that allocate or hide unbounded work.
 - The initial standard-library allowlist contains only C compatibility headers already accepted by the project. Add a C++ header or facility only after its implementation, runtime dependencies, memory use, timing, and availability have been validated for every affected toolchain.
 - Do not use C++20 modules, coroutines, ranges, concurrency facilities, or library containers without a separate rule and an explicit architectural need.
@@ -52,7 +52,7 @@ This guide defines the use of C++20 in TaskMate embedded system code. C++ is an 
 - `srcs/interfaces/` must remain neutral between C and C++. Its headers and generated contracts must compile as both C and C++.
 - Interfaces must expose C-compatible fixed-width types, enums, constants, structures, opaque handles, and function signatures.
 - Interfaces must not expose classes, templates, concepts, references, overloaded functions, constructors, destructors, namespaces, or C++ standard-library types.
-- `extern "C"` is authorized only as a C++ language-linkage specifier for functions at an intentional C/C++ ABI boundary.
+- TaskMate permits `extern "C"` only for functions at an intentional C/C++ ABI boundary; the language also supports C linkage for objects, but project policy prohibits externally linked variables.
 - Shared headers must guard C++ linkage with `#ifdef __cplusplus` so the same declarations remain valid C.
 - The `extern "C"` exception does not authorize externally linked objects, ordinary `extern` variable declarations, shared mutable state, or C++ types in an interface.
 - In C code, variables with external linkage remain prohibited. File-local state must continue to use `static` and follow the existing ownership rules.
