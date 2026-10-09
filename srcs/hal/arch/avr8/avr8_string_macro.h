@@ -34,11 +34,13 @@
  * @{
  */
 #define HAL_STRING_INROM(name, txt)                           \
-	static const char TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
+	static const uint8_t TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
 	static const tm_string_t(name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 
-#define HAL_STRING_ROM(string) ((tm_string_t){.text = PSTR(string), .storage = TM_MEM_ROM})
-#define HAL_STRING_RAM(string) ((tm_string_t){.text = (string), .storage = TM_MEM_RAM})
+#define HAL_STRING_ROM(string) \
+	((tm_string_t){.text = (const uint8_t *)PSTR(string), .storage = TM_MEM_ROM})
+#define HAL_STRING_RAM(string) \
+	((tm_string_t){.text = (const uint8_t *)(string), .storage = TM_MEM_RAM})
 
 #define HAL_STRING_ROMGETBYTE(ptr) pgm_read_byte(ptr)
 

@@ -68,9 +68,9 @@ uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 	switch( string->storage )
 	{
 		case TM_MEM_RAM:
-			return (uint8_t)string->text[index];
+			return string->text[index];
 		case TM_MEM_ROM:
-			return (uint8_t)HAL_STRING_ROMGETBYTE(&(string->text[index]));
+			return HAL_STRING_ROMGETBYTE(&(string->text[index]));
 		default:
 			return 0U;
 	}
