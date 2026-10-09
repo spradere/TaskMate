@@ -35,6 +35,7 @@
 #define SCLIDATE_BASE_DECIMAL 10U
 #define SCLIDATE_COUNT_TIMEDIGITS 2U
 #define SCLIDATE_COUNT_YEARDIGITS 4U
+#define SCLIDATE_TEXT_SIZE_MAX 11U
 #define SCLIDATE_MAX_HOURS 23U
 #define SCLIDATE_MAX_MINUTES 59U
 #define SCLIDATE_MAX_SECONDS 59U
@@ -67,8 +68,8 @@ static bool dateRead(hal_rtc_time_t *time);
 static bool dateWrite(const hal_rtc_time_t *time);
 static void datePrint(const hal_rtc_time_t *time);
 static void datePrintError(err_codes_t error);
-static bool dateParseField(const char **cursor, char separator, uint8_t digit_count_min,
-						   uint8_t digit_count_max, uint16_t *value);
+static bool dateParseField(const char *text, uint8_t *index, char separator,
+						   uint8_t digit_count_min, uint8_t digit_count_max, uint16_t *value);
 static bool dateParseTime(const char *text, hal_rtc_time_t *time);
 static bool dateParseDate(const char *text, hal_rtc_time_t *time);
 
@@ -244,29 +245,30 @@ static void datePrintError(err_codes_t error)
  * Input parsing
  * ---------------------------------------------*/
 
-static bool dateParseField(const char **cursor, char separator, uint8_t digit_count_min,
-						   uint8_t digit_count_max, uint16_t *value)
+static bool dateParseField(const char *text, uint8_t *index, char separator,
+						   uint8_t digit_count_min, uint8_t digit_count_max, uint16_t *value)
 {
-	if( (cursor == NULL) || (*cursor == NULL) || (value == NULL) ) { return false; }
+	if( (text == NULL) || (index == NULL) || (value == NULL) ) { return false; }
 
 	uint16_t parsed = 0U;
 	uint8_t digit_count = 0U;
-	while( ((**cursor >= '0') && (**cursor <= '9')) && (digit_count < digit_count_max) )
+	while( (*index < SCLIDATE_TEXT_SIZE_MAX) && (digit_count < digit_count_max) &&
+		(text[*index] >= '0') && (text[*index] <= '9') )
 	{
-		parsed = (parsed * SCLIDATE_BASE_DECIMAL) + (uint8_t)(**cursor - '0');
-		(*cursor)++;
+		parsed = (parsed * SCLIDATE_BASE_DECIMAL) + (uint8_t)(text[*index] - '0');
+		(*index)++;
 		digit_count++;
 	}
-	if( (digit_count < digit_count_min) || (digit_count > digit_count_max) ) { return false; }
+	if( (digit_count < digit_count_min) || (*index >= SCLIDATE_TEXT_SIZE_MAX) ) { return false; }
 
 	if( separator == 0U )
 	{
-		if( **cursor != 0U ) { return false; }
+		if( text[*index] != 0U ) { return false; }
 	}
 	else
 	{
-		if( **cursor != separator ) { return false; }
-		(*cursor)++;
+		if( text[*index] != separator ) { return false; }
+		(*index)++;
 	}
 
 	*value = parsed;
@@ -277,15 +279,15 @@ static bool dateParseTime(const char *text, hal_rtc_time_t *time)
 {
 	if( (text == NULL) || (time == NULL) ) { return false; }
 
-	const char *cursor = text;
+	uint8_t index = 0U;
 	uint16_t hours;
 	uint16_t minutes;
 	uint16_t seconds;
-	if( !dateParseField(&cursor, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
+	if( !dateParseField(text, &index, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
 						&hours) ||
-		!dateParseField(&cursor, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
+		!dateParseField(text, &index, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
 						&minutes) ||
-		!dateParseField(&cursor, 0U, SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
+		!dateParseField(text, &index, 0U, SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
 						&seconds) )
 	{
 		return false;
@@ -303,13 +305,13 @@ static bool dateParseDate(const char *text, hal_rtc_time_t *time)
 {
 	if( (text == NULL) || (time == NULL) ) { return false; }
 
-	const char *cursor = text;
+	uint8_t index = 0U;
 	uint16_t day;
 	uint16_t month;
 	uint16_t year;
-	if( !dateParseField(&cursor, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &day) ||
-		!dateParseField(&cursor, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &month) ||
-		!dateParseField(&cursor, 0U, SCLIDATE_COUNT_YEARDIGITS, SCLIDATE_COUNT_YEARDIGITS,
+	if( !dateParseField(text, &index, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &day) ||
+		!dateParseField(text, &index, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &month) ||
+		!dateParseField(text, &index, 0U, SCLIDATE_COUNT_YEARDIGITS, SCLIDATE_COUNT_YEARDIGITS,
 						&year) )
 	{
 		return false;

@@ -32,6 +32,7 @@
 #define SCLITHREAD_INDEX_NAME 2U
 #define SCLITHREAD_INDEX_RUNLEVEL 3U
 #define SCLITHREAD_BASE_DECIMAL 10U
+#define SCLITHREAD_COUNT_RUNLEVELDIGITS 3U
 
 /* -----------------------------------------------
  * Private types
@@ -189,17 +190,24 @@ static bool threadStop(uint8_t argc, char *argv[])
 
 static bool threadRunLevelParse(const char *text, uint8_t *run_level)
 {
-	if( (text == NULL) || (run_level == NULL) || (*text == 0U) ) { return false; }
+	if( (text == NULL) || (run_level == NULL) || (text[0U] == 0U) ) { return false; }
 
 	uint16_t value = 0U;
-	while( *text != 0U )
+	uint8_t index = 0U;
+	while( index < SCLITHREAD_COUNT_RUNLEVELDIGITS )
 	{
-		if( (*text < '0') || (*text > '9') ) { return false; }
-		value = (value * SCLITHREAD_BASE_DECIMAL) + (uint8_t)(*text - '0');
+		if( text[index] == 0U )
+		{
+			*run_level = (uint8_t)value;
+			return true;
+		}
+		if( (text[index] < '0') || (text[index] > '9') ) { return false; }
+		value = (value * SCLITHREAD_BASE_DECIMAL) + (uint8_t)(text[index] - '0');
 		if( value > UINT8_MAX ) { return false; }
-		text++;
+		index++;
 	}
 
+	if( text[index] != 0U ) { return false; }
 	*run_level = (uint8_t)value;
 	return true;
 }
