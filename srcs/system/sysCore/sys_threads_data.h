@@ -22,6 +22,7 @@
 
 #include "interfaces/hal_context.h"
 #include "interfaces/tm_mod.h"
+#include "interfaces/tm_runLevel.h"
 
 /* ============================================================================
  * Internal definitions
@@ -37,7 +38,7 @@
 typedef struct
 {
 	volatile uint8_t status;
-	uint8_t saved_run_level;
+	tm_run_level_t saved_run_level;
 
 	void (*main)(void);
 

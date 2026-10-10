@@ -24,6 +24,7 @@
 #include "interfaces/drv_rtc.h"
 #include "interfaces/error_catalog.h"
 #include "interfaces/tm_mod.h"
+#include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
@@ -46,7 +47,7 @@ mod_count_t sc_driverGetCount(void);
  * @param[out] status_bits Receives driver status bits.
  * @return true if driver information was retrieved.
  */
-bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
 					  uint8_t *status_bits);
 /**
  * @brief Initialize a driver by name.
@@ -66,12 +67,12 @@ bool sc_driverStop(const char *name);
 /**
  * @brief Start drivers assigned to a run level.
  */
-void sc_driverRunLevelStart(uint8_t run_level);
+void sc_driverRunLevelStart(tm_run_level_t run_level);
 /**
  * @brief Check whether all drivers in a run level are ready.
  * @return true if all drivers in the run level are ready.
  */
-bool sc_driverRunLevelIsReady(uint8_t run_level);
+bool sc_driverRunLevelIsReady(tm_run_level_t run_level);
 
 /* -----------------------------------------------
  * LCD operations

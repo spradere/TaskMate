@@ -79,7 +79,7 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 		fprintf(context->file, "\tmod->software_time_counter = 0U;\n");
 		fprintf(context->file, "\tmod->status = %i;\n", mod->modules[i].status);
 		fprintf(context->file,
-				"\tmod->saved_run_level = %i;\n",
+				"\tmod->saved_run_level = RL_GET_RUN_LEVEL(%iU);\n",
 				mod->modules[i].status & RL_LEVEL_MASK);
 		fprintf(context->file, "\tmod->main = %s;\n", mod->modules[i].name);
 

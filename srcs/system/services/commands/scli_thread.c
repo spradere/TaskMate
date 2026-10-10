@@ -54,7 +54,7 @@ static bool threadStart(uint8_t argc, char *argv[]);
 static bool threadStop(uint8_t argc, char *argv[]);
 static bool threadList(uint8_t argc, char *argv[]);
 static bool threadHelp(uint8_t argc, char *argv[]);
-static bool threadRunLevelParse(const char *text, uint8_t *run_level);
+static bool threadRunLevelParse(const char *text, tm_run_level_t *run_level);
 
 /* -----------------------------------------------
  * Command table
@@ -125,7 +125,7 @@ static bool threadList(uint8_t argc, char *argv[])
 	for( mod_count_t id = 0U; id < thread_count; id++ )
 	{
 		const tm_string_t *name;
-		uint8_t run_level;
+		tm_run_level_t run_level;
 		uint16_t stack_size_bytes;
 		if( !sc_threadGetInfo(id, &name, &run_level, &stack_size_bytes) ) { return false; }
 
@@ -144,7 +144,7 @@ static bool threadStart(uint8_t argc, char *argv[])
 		return false;
 	}
 
-	uint8_t run_level = 0U;
+	tm_run_level_t run_level = RL_RUN_NONE;
 	if( (argc == SCLITHREAD_COUNT_STARTARGS) &&
 		!threadRunLevelParse(argv[SCLITHREAD_INDEX_RUNLEVEL], &run_level) )
 	{
@@ -188,7 +188,7 @@ static bool threadStop(uint8_t argc, char *argv[])
  * Run-level parsing
  * ---------------------------------------------*/
 
-static bool threadRunLevelParse(const char *text, uint8_t *run_level)
+static bool threadRunLevelParse(const char *text, tm_run_level_t *run_level)
 {
 	if( (text == NULL) || (run_level == NULL) || (text[0U] == 0U) ) { return false; }
 
@@ -198,7 +198,8 @@ static bool threadRunLevelParse(const char *text, uint8_t *run_level)
 	{
 		if( text[index] == 0U )
 		{
-			*run_level = (uint8_t)value;
+			if( (value < RL_RUN_CORE) || (value >= RL_LEVEL_COUNT) ) { return false; }
+			*run_level = (tm_run_level_t)value;
 			return true;
 		}
 		if( (text[index] < '0') || (text[index] > '9') ) { return false; }
@@ -208,6 +209,7 @@ static bool threadRunLevelParse(const char *text, uint8_t *run_level)
 	}
 
 	if( text[index] != 0U ) { return false; }
-	*run_level = (uint8_t)value;
+	if( (value < RL_RUN_CORE) || (value >= RL_LEVEL_COUNT) ) { return false; }
+	*run_level = (tm_run_level_t)value;
 	return true;
 }

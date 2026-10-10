@@ -472,11 +472,11 @@ runInitrcTests()
 		"${PATH_CASE}/generated/modules_count.inc"; then
 		fail "valid_commands: module categories are incorrect"
 	fi
-	if ! grep -F -q 'control_data.run_level = 2;' \
+	if ! grep -F -q 'control_data.run_level = RL_GET_RUN_LEVEL(2U);' \
 		"${PATH_CASE}/generated/drivers_alloc.inc" || \
-		! grep -F -q 'mod->saved_run_level = 3;' \
+		! grep -F -q 'mod->saved_run_level = RL_GET_RUN_LEVEL(3U);' \
 		"${PATH_CASE}/generated/threads_alloc.inc" || \
-		! grep -F -q 'mod->saved_run_level = 4;' \
+		! grep -F -q 'mod->saved_run_level = RL_GET_RUN_LEVEL(4U);' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "valid_commands: generated run levels are incorrect"
 	fi

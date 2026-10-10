@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 #include "interfaces/error_catalog.h"
+#include "interfaces/tm_runLevel.h"
 
 /* ============================================================================
  * Public definitions
@@ -76,7 +77,7 @@ _Static_assert(sizeof(hal_driver_state_t) == 1U, "hal_driver_state_t must be one
 
 typedef union
 {
-	uint8_t run_level;
+	tm_run_level_t run_level;
 	hal_driver_status_bit_t status_bit;
 	bool bit_value;
 	err_codes_t error;

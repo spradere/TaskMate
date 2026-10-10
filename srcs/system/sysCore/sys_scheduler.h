@@ -22,6 +22,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "interfaces/tm_runLevel.h"
+
 /* ============================================================================
  * Public API
  * ========================================================================== */
@@ -42,10 +44,10 @@ void tm_schedulerCoop(void);
  * @brief Set the scheduler run level.
  * @return true if the run level was accepted.
  */
-bool tm_schedulerRunLevelSet(uint8_t run_level);
+bool tm_schedulerRunLevelSet(tm_run_level_t run_level);
 /**
  * @brief Get the scheduler run level.
  */
-uint8_t tm_schedulerRunLevelGet(void);
+tm_run_level_t tm_schedulerRunLevelGet(void);
 
 #endif // SYSCORE_SYS_SCHEDULER_H

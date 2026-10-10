@@ -269,7 +269,7 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			return hal_lcdGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
-			data->run_level = lcd_status & RL_LEVEL_MASK;
+			data->run_level = RL_GET_RUN_LEVEL(lcd_status);
 			return hal_lcdGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:

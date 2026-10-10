@@ -40,7 +40,7 @@
  * Private variables
  * ---------------------------------------------*/
 
-static volatile uint8_t scheduler_run_level = RL_RUN_CORE;
+static volatile tm_run_level_t scheduler_run_level = RL_RUN_CORE;
 static uint8_t scheduler_stc_tick_count;
 
 /* -----------------------------------------------
@@ -79,7 +79,7 @@ void tm_schedulerStart(void)
  * Run level
  * ---------------------------------------------*/
 
-bool tm_schedulerRunLevelSet(uint8_t run_level)
+bool tm_schedulerRunLevelSet(tm_run_level_t run_level)
 {
 	if( (run_level < RL_RUN_CORE) || (run_level >= RL_LEVEL_COUNT) ||
 		(run_level < scheduler_run_level) )
@@ -91,7 +91,7 @@ bool tm_schedulerRunLevelSet(uint8_t run_level)
 	return true;
 }
 
-uint8_t tm_schedulerRunLevelGet(void) { return scheduler_run_level; }
+tm_run_level_t tm_schedulerRunLevelGet(void) { return scheduler_run_level; }
 
 /* -----------------------------------------------
  * Cooperative trigger
@@ -145,14 +145,14 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 
 static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 {
-	uint8_t active_run_level = scheduler_run_level;
+	tm_run_level_t active_run_level = scheduler_run_level;
 
 	for( mod_count_t count = 0U; count < MOD_THREAD_COUNT; count++ )
 	{
 		if( ++current == MOD_THREAD_COUNT ) { current = 0U; }
 
 		mod_thread_item_t *thread = mod_threadGetPointer(current);
-		uint8_t thread_run_level = RL_GET_RUN_LEVEL(thread->status);
+		tm_run_level_t thread_run_level = RL_GET_RUN_LEVEL(thread->status);
 		if( (thread_run_level != RL_RUN_NONE) && (thread_run_level <= active_run_level) )
 		{
 			mod_threadSetCurrent(current);

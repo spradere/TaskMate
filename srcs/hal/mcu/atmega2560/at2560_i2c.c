@@ -280,7 +280,7 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			return hal_i2cGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return i2cSetError(ERR_NULL_POINTER); }
-			data->run_level = i2c_status & RL_LEVEL_MASK;
+			data->run_level = RL_GET_RUN_LEVEL(i2c_status);
 			return hal_i2cGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:

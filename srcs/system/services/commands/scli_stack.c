@@ -47,7 +47,7 @@ bool stackCommand(uint8_t argc, char *argv[])
 	for( mod_count_t id = 0U; id < thread_count; id++ )
 	{
 		const tm_string_t *name;
-		uint8_t run_level;
+		tm_run_level_t run_level;
 		uint16_t stack_size_bytes;
 		uint16_t depth_bytes;
 		if( !sc_threadGetInfo(id, &name, &run_level, &stack_size_bytes) ||
