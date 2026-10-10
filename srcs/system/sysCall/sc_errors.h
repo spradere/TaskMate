@@ -44,10 +44,10 @@ typedef struct
 
 /**
  * @brief Get the message for an error code.
- * @param num Error code index.
- * @return Stored message for the code.
+ * @param code Error code to look up.
+ * @return Stored message for a valid code, or NULL for an invalid code.
  */
-const tm_string_t *err_getMessage(error_count_t num);
+const tm_string_t *err_getMessage(err_codes_t code);
 /**
  * @brief Stop system execution.
  */

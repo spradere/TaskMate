@@ -386,8 +386,13 @@ runErrorTests()
 		VAL_INDEX=0
 		while [ "${VAL_INDEX}" -lt "${VAL_LIMIT}" ]
 		do
-			printf 'ERR_BOUND_%03d "" FLOW\n' "${VAL_INDEX}" \
-				>> "${PATH_CASE}/errors.err"
+			if [ "${VAL_INDEX}" -eq 0 ] || [ "${VAL_INDEX}" -eq $((VAL_LIMIT - 1)) ]; then
+				printf 'ERR_BOUND_%03d "boundary" WARN\n' "${VAL_INDEX}" \
+					>> "${PATH_CASE}/errors.err"
+			else
+				printf 'ERR_BOUND_%03d "" FLOW\n' "${VAL_INDEX}" \
+					>> "${PATH_CASE}/errors.err"
+			fi
 			VAL_INDEX=$((VAL_INDEX + 1))
 		done
 		expectSuccess "error_count_${VAL_LIMIT}" \
@@ -407,6 +412,14 @@ runErrorTests()
 			"_Static_assert(sizeof(err_codes_t) == ${VAL_SIZE}U, \"wrong code size\");" | \
 			clang -std=gnu11 -I"${PATH_CASE}/generated" -x c -fsyntax-only -; then
 			fail "error_count_${VAL_LIMIT}: generated enum size is invalid"
+		fi
+		if ! clang -std=gnu11 -Wall -Wextra -Wconversion -Wenum-conversion \
+			-I"srcs" -I"${PATH_CASE}/generated" \
+			"test/sysCall/test_sc_errors.c" -o "${PATH_CASE}/test_sc_errors"; then
+			fail "error_count_${VAL_LIMIT}: error lookup test did not compile"
+		fi
+		if ! "${PATH_CASE}/test_sc_errors"; then
+			fail "error_count_${VAL_LIMIT}: error lookup failed"
 		fi
 	done
 }

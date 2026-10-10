@@ -35,10 +35,10 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-const tm_string_t *err_getMessage(error_count_t num)
+const tm_string_t *err_getMessage(err_codes_t code)
 {
-	if( num < ERROR_COUNT ) { return error_catalog[num].name; }
-	return NULL;
+	if( code >= ERROR_COUNT ) { return NULL; }
+	return error_catalog[(error_count_t)code].name;
 }
 
 void sc_halt(void) { hal_halt(); }
