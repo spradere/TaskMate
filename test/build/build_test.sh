@@ -189,7 +189,7 @@ runConfigurationTests()
 	expectSuccess documentation_editor_order bmake -C "${PATH_PROJECT}" \
 		-V FILES_EDITOR_DOC
 	assertFileNamesSorted documentation_editor_order
-	logContains documentation_editor_order "doc/architecture/build.md"
+	logContains documentation_editor_order "doc/arch_notes/build.md"
 	logContains documentation_editor_order "doc/howto_doxygen.txt"
 	expectSuccess selected_target_autocode_test bmake -C "${PATH_PROJECT}" -n \
 		TARGET=test1 FILE_AUTOCODE_TARGET="${PATH_STAGE_WORK}/autoCode" test_autoCode

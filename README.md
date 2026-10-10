@@ -119,7 +119,7 @@ You may use, modify, and redistribute it in source or binary form, provided that
 
 **Architecture :**
 
-You will find more information about the architecture in the files under `doc/architecture/`. These files contain information about the development history, current implementation, strengths and weaknesses of the source code.
+You will find more information about the architecture in the files under `doc/arch_notes/`. These files contain information about the development history, current implementation, strengths and weaknesses of the source code.
 
 **Books :**
 
