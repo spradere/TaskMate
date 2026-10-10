@@ -23,7 +23,7 @@
 #include "at2560_constants.h"
 #include "interfaces/drv_i2c.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 
 /* -----------------------------------------------

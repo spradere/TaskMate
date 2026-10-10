@@ -121,8 +121,8 @@ static bool threadList(uint8_t argc, char *argv[])
 	(void)argv;
 
 	tm_syslog(TM_STR("[thread] threads:\n"));
-	const uint16_t thread_count = sc_threadGetCount();
-	for( uint16_t id = 0U; id < thread_count; id++ )
+	const mod_count_t thread_count = sc_threadGetCount();
+	for( mod_count_t id = 0U; id < thread_count; id++ )
 	{
 		const tm_string_t *name;
 		uint8_t run_level;

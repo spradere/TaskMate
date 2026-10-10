@@ -21,6 +21,7 @@
 #include <stdint.h>
 
 #include "interfaces/hal_context.h"
+#include "interfaces/tm_mod.h"
 
 /* ============================================================================
  * Internal definitions
@@ -53,6 +54,6 @@ typedef struct
  * Internal API
  * ========================================================================== */
 
-mod_thread_item_t *mod_threadGetPointer(uint8_t id);
+mod_thread_item_t *mod_threadGetPointer(mod_count_t id);
 
 #endif // SYSCORE_SYS_THREADS_DATA_H

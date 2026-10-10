@@ -21,6 +21,7 @@
 #include "fileUtility.h"
 #include "initrcCommands/addModule.h"
 #include "initrcCommands/addScliCommand.h"
+#include "initrcCommands/setModuleCount.h"
 #include "initrcCommands/setVersion.h"
 #include "tokenizer.h"
 
@@ -30,9 +31,10 @@ enum { PARSEINITRC_COUNT_VERSIONMIN = 2U };
  * init.rc command dispatch table
  * ---------------------------------------------*/
 
-#define INITRC_COMMAND(X)           \
-	X("addModule", initrcAddModule) \
-	X("addScliCommand", initrcAddScliCommand)
+#define INITRC_COMMAND(X)                     \
+	X("addModule", initrcAddModule)           \
+	X("addScliCommand", initrcAddScliCommand) \
+	X("setModuleCount", initrcSetModuleCount)
 
 static const struct
 {
@@ -189,6 +191,11 @@ ac_result_t parseInitrc(modules_database_t *data_base, const char *initrc_name,
 		AUTOCODE_MSG_ERROR("missing setVersion minor %i as second command of init.rc file <%s>",
 						   AUTOCODE_VERSION_INITRCMINOR,
 						   initrc_name);
+	}
+	if( (version_invalid == false) && version_major_set && version_minor_set &&
+		(data_base->module_count_set == false) )
+	{
+		AUTOCODE_MSG_ERROR("missing setModuleCount in init.rc file <%s>", initrc_name);
 	}
 	tokenizerFree(&tok);
 	ac_result_t result = (line_result == FILE_GET_LINE_ERROR) ? AC_RESULT_ERROR : AC_RESULT_OK;

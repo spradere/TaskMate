@@ -23,6 +23,7 @@
 
 #include "interfaces/drv_rtc.h"
 #include "interfaces/error_catalog.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
@@ -36,7 +37,7 @@
 /**
  * @brief Get the number of configured drivers.
  */
-uint16_t sc_driverGetCount(void);
+mod_count_t sc_driverGetCount(void);
 /**
  * @brief Read metadata and status for a driver identifier.
  * @param id Driver identifier below sc_driverGetCount().
@@ -45,7 +46,7 @@ uint16_t sc_driverGetCount(void);
  * @param[out] status_bits Receives driver status bits.
  * @return true if driver information was retrieved.
  */
-bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint8_t *status_bits);
 /**
  * @brief Initialize a driver by name.

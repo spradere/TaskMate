@@ -36,9 +36,9 @@
  * @{
  */
 #define AUTOCODE_VERSION_INITRCMAJOR 1U
-#define AUTOCODE_VERSION_INITRCMINOR 10U
+#define AUTOCODE_VERSION_INITRCMINOR 11U
 #define AUTOCODE_VERSION_MAJOR 1U
-#define AUTOCODE_VERSION_MINOR 6U
+#define AUTOCODE_VERSION_MINOR 7U
 /** @} */
 
 /* ============================================================================
@@ -52,7 +52,7 @@
 #include <string.h>
 
 // Get TaskMate definitions
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_threads.h"
 
@@ -131,8 +131,9 @@ typedef struct
  */
 typedef struct
 {
-	module_item_t modules[MOD_COUNT_MAX];
-	int modules_count;
+	/* The target command selects the usable prefix and limits counts before insertion. */
+	module_item_t modules[UINT16_MAX];
+	size_t modules_count;
 
 } module_type_t;
 
@@ -142,6 +143,10 @@ typedef struct
 typedef struct
 {
 	module_type_t modules_type[MOD_TYPE_COUNT];
+	size_t module_count_max;
+	size_t module_count;
+	uint8_t module_count_width;
+	bool module_count_set;
 	struct
 	{
 		struct

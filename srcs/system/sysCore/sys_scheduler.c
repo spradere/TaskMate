@@ -24,7 +24,7 @@
 #include "interfaces/hal_context.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_threads.h"
 #include "system/sysCore/sys_threads.h"
@@ -48,7 +48,7 @@ static uint8_t scheduler_stc_tick_count;
  * ---------------------------------------------*/
 
 static hal_timerContextCallback_func_t tm_schedulerRR;
-static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current);
+static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current);
 
 /* =============================================================================
  * Implementation - Functions
@@ -143,11 +143,11 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 	return &thread->context;
 }
 
-static mod_thread_item_t *tm_schedulerSelectNext(uint8_t current)
+static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 {
 	uint8_t active_run_level = scheduler_run_level;
 
-	for( uint8_t count = 0U; count < MOD_THREAD_COUNT; count++ )
+	for( mod_count_t count = 0U; count < MOD_THREAD_COUNT; count++ )
 	{
 		if( ++current == MOD_THREAD_COUNT ) { current = 0U; }
 

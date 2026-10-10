@@ -19,7 +19,7 @@
 
 #include "interfaces/hal_context.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_threads.h"
 #include "system/sysCore/sys_threads_data.h"
@@ -30,7 +30,7 @@
  * ---------------------------------------------*/
 
 static mod_thread_item_t threads[MOD_THREAD_COUNT];
-static uint8_t thread_current;
+static mod_count_t thread_current;
 
 // [autoCode_tag] thread_stacks
 #include "thread_stacks.inc"
@@ -46,28 +46,28 @@ static void mod_threadStackInit(mod_thread_item_t *thread);
  * Implementation - Functions
  * ===========================================================================*/
 
-void mod_threadSetCurrent(uint8_t id) { thread_current = id; }
-uint8_t mod_threadGetCurrent(void) { return thread_current; }
+void mod_threadSetCurrent(mod_count_t id) { thread_current = id; }
+mod_count_t mod_threadGetCurrent(void) { return thread_current; }
 
 void mod_threadSetSTC(uint16_t count) { threads[thread_current].software_time_counter = count; }
 uint16_t mod_threadGetSTC(void) { return threads[thread_current].software_time_counter; }
 
 void mod_threadTickSTC(void)
 {
-	for( uint8_t id = 0U; id < MOD_THREAD_COUNT; id++ )
+	for( mod_count_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{
 		if( threads[id].software_time_counter > 0U ) { threads[id].software_time_counter--; }
 	}
 }
 
-uint8_t mod_threadRunLevelGet(uint8_t id) { return RL_GET_RUN_LEVEL(threads[id].status); }
+uint8_t mod_threadRunLevelGet(mod_count_t id) { return RL_GET_RUN_LEVEL(threads[id].status); }
 
-uint16_t mod_threadStackSizeGet(uint8_t id)
+uint16_t mod_threadStackSizeGet(mod_count_t id)
 {
 	return (uint16_t)(threads[id].stack_size * sizeof(hal_stack_word_t));
 }
 
-uint16_t mod_threadStackDepthGet(uint8_t id)
+uint16_t mod_threadStackDepthGet(mod_count_t id)
 {
 	const volatile hal_stack_word_t *stack = threads[id].stack;
 	const uint16_t usable_words = threads[id].stack_size - MOD_STACK_CANARY_WORD_COUNT;
@@ -82,9 +82,12 @@ uint16_t mod_threadStackDepthGet(uint8_t id)
 	return (uint16_t)((usable_words - unused_words) * sizeof(hal_stack_word_t));
 }
 
-void mod_threadSetInitialized(uint8_t id) { TM_SETBIT(threads[id].status, THREAD_BIT_INITIALIZED); }
+void mod_threadSetInitialized(mod_count_t id)
+{
+	TM_SETBIT(threads[id].status, THREAD_BIT_INITIALIZED);
+}
 
-void mod_threadStart(uint8_t id, uint8_t initial_run_level)
+void mod_threadStart(mod_count_t id, uint8_t initial_run_level)
 {
 	mod_thread_item_t *thread = &threads[id];
 
@@ -96,7 +99,7 @@ void mod_threadStart(uint8_t id, uint8_t initial_run_level)
 	}
 }
 
-void mod_threadStop(uint8_t id)
+void mod_threadStop(mod_count_t id)
 {
 	mod_thread_item_t *thread = &threads[id];
 
@@ -106,7 +109,7 @@ void mod_threadStop(uint8_t id)
 
 bool mod_threadsRunLevelIsReady(uint8_t run_level)
 {
-	for( uint8_t id = 0U; id < MOD_THREAD_COUNT; id++ )
+	for( mod_count_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{
 		if( (RL_GET_RUN_LEVEL(threads[id].status) == run_level) &&
 		((TM_GETBIT(threads[id].status, THREAD_BIT_INITIALIZED) == 0U) ||
@@ -119,14 +122,14 @@ bool mod_threadsRunLevelIsReady(uint8_t run_level)
 	return true;
 }
 
-void mod_threadSetYielded(uint8_t id) { TM_SETBIT(threads[id].status, THREAD_BIT_YIELDED); }
+void mod_threadSetYielded(mod_count_t id) { TM_SETBIT(threads[id].status, THREAD_BIT_YIELDED); }
 
-bool mod_threadIsYielded(uint8_t id)
+bool mod_threadIsYielded(mod_count_t id)
 {
 	return TM_GETBIT(threads[id].status, THREAD_BIT_YIELDED) != 0U;
 }
 
-mod_thread_item_t *mod_threadGetPointer(uint8_t id) { return &threads[id]; }
+mod_thread_item_t *mod_threadGetPointer(mod_count_t id) { return &threads[id]; }
 
 static void mod_threadStackInit(mod_thread_item_t *thread)
 {

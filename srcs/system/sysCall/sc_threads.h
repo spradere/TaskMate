@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
@@ -61,7 +62,7 @@ uint16_t sc_threadGetSTC(void);
 /**
  * @brief Get the number of configured threads.
  */
-uint16_t sc_threadGetCount(void);
+mod_count_t sc_threadGetCount(void);
 /**
  * @brief Read metadata for a thread identifier.
  * @param id Thread identifier below sc_threadGetCount().
@@ -70,7 +71,7 @@ uint16_t sc_threadGetCount(void);
  * @param[out] stack_size_bytes Receives configured stack size in bytes.
  * @return true if the identifier and output pointers are valid.
  */
-bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint16_t *stack_size_bytes);
 /**
  * @brief Measure a thread's used stack space.
@@ -78,7 +79,7 @@ bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
  * @param[out] depth_bytes Receives used stack depth in bytes.
  * @return true if the identifier and output pointer are valid.
  */
-bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes);
+bool sc_threadGetStackDepth(mod_count_t id, uint16_t *depth_bytes);
 /**
  * @brief Mark the current thread as initialized.
  */
