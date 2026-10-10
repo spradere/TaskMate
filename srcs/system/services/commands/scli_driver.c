@@ -21,6 +21,7 @@
 #include "interfaces/tm_define.h"
 #include "interfaces/tm_macros.h"
 #include "system/sysCall/sc_driver.h"
+#include "system/sysCall/sc_errors.h"
 #include "tmLibc/tm_string.h"
 #include "tmLibc/tm_syslog.h"
 
@@ -125,7 +126,7 @@ static bool driverList(uint8_t argc, char *argv[])
 	{
 		const tm_string_t *name;
 		tm_run_level_t run_level;
-		uint8_t status_bits;
+		hal_driver_status_t status_bits;
 		if( !sc_driverGetInfo(id, &name, &run_level, &status_bits) ) { return false; }
 
 		tm_syslog(TM_STR("\t%s runlevel=%i status[init=%i start=%i error=%i dead=%i]\n"),
@@ -149,13 +150,19 @@ static bool driverInit(uint8_t argc, char *argv[])
 	}
 
 	tm_string_t driver_name = TM_STR_RAM(argv[SCLIDRIVER_INDEX_NAME]);
-	if( sc_driverInit(argv[SCLIDRIVER_INDEX_NAME]) )
+	err_code_t error = sc_driverInit(argv[SCLIDRIVER_INDEX_NAME]);
+	if( error == ERR_NO_ERROR )
 	{
 		tm_syslog(TM_STR("[driver] %s initialized\n"), &driver_name);
 		return true;
 	}
 
-	tm_syslog(TM_STR("[driver] %s not initialized\n"), &driver_name);
+	const tm_string_t *message = err_getMessage((err_codes_t)error);
+	if( message != NULL )
+	{
+		tm_syslog(TM_STR("[driver] %s not initialized: %s\n"), &driver_name, message);
+	}
+	else { tm_syslog(TM_STR("[driver] %s not initialized: error %i\n"), &driver_name, error); }
 	return false;
 }
 
@@ -168,13 +175,19 @@ static bool driverStart(uint8_t argc, char *argv[])
 	}
 
 	tm_string_t driver_name = TM_STR_RAM(argv[SCLIDRIVER_INDEX_NAME]);
-	if( sc_driverStart(argv[SCLIDRIVER_INDEX_NAME]) )
+	err_code_t error = sc_driverStart(argv[SCLIDRIVER_INDEX_NAME]);
+	if( error == ERR_NO_ERROR )
 	{
 		tm_syslog(TM_STR("[driver] %s started\n"), &driver_name);
 		return true;
 	}
 
-	tm_syslog(TM_STR("[driver] %s not started\n"), &driver_name);
+	const tm_string_t *message = err_getMessage((err_codes_t)error);
+	if( message != NULL )
+	{
+		tm_syslog(TM_STR("[driver] %s not started: %s\n"), &driver_name, message);
+	}
+	else { tm_syslog(TM_STR("[driver] %s not started: error %i\n"), &driver_name, error); }
 	return false;
 }
 
@@ -187,12 +200,18 @@ static bool driverStop(uint8_t argc, char *argv[])
 	}
 
 	tm_string_t driver_name = TM_STR_RAM(argv[SCLIDRIVER_INDEX_NAME]);
-	if( sc_driverStop(argv[SCLIDRIVER_INDEX_NAME]) )
+	err_code_t error = sc_driverStop(argv[SCLIDRIVER_INDEX_NAME]);
+	if( error == ERR_NO_ERROR )
 	{
 		tm_syslog(TM_STR("[driver] %s stopped\n"), &driver_name);
 		return true;
 	}
 
-	tm_syslog(TM_STR("[driver] %s not stopped\n"), &driver_name);
+	const tm_string_t *message = err_getMessage((err_codes_t)error);
+	if( message != NULL )
+	{
+		tm_syslog(TM_STR("[driver] %s not stopped: %s\n"), &driver_name, message);
+	}
+	else { tm_syslog(TM_STR("[driver] %s not stopped: error %i\n"), &driver_name, error); }
 	return false;
 }

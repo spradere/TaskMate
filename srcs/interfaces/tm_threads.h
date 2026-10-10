@@ -15,8 +15,19 @@
 #define INTERFACES_TM_THREADS_H
 
 /* ============================================================================
+ * Includes
+ * ========================================================================== */
+
+#include <stdint.h>
+
+/* ============================================================================
  * Public definitions
  * ========================================================================== */
+
+/**
+ * @brief Stores the encoded run level and thread lifecycle flags.
+ */
+typedef uint8_t tm_thread_status_t;
 
 // Bits [2:0] contain the run level
 /**

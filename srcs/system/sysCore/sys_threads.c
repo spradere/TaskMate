@@ -97,7 +97,7 @@ void mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
 	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
 	else
 	{
-		thread->status &= (uint8_t)~RL_LEVEL_MASK;
+		thread->status &= (tm_thread_status_t)~RL_LEVEL_MASK;
 		thread->status |= thread->saved_run_level;
 	}
 }
@@ -107,7 +107,7 @@ void mod_threadStop(mod_count_t id)
 	mod_thread_item_t *thread = &threads[id];
 
 	thread->saved_run_level = RL_GET_RUN_LEVEL(thread->status);
-	thread->status &= (uint8_t)~RL_LEVEL_MASK;
+	thread->status &= (tm_thread_status_t)~RL_LEVEL_MASK;
 }
 
 bool mod_threadsRunLevelIsReady(tm_run_level_t run_level)
