@@ -84,6 +84,8 @@ Keep `hal_<driver>Control()` limited to the common driver contract: life cycle, 
 
 Treat files under `doc/audits/` as dated historical snapshots. Do not update them during code refactors, even when a correction makes their findings stale; change or remove them only when the prompt explicitly targets those audits.
 
+Every new audit must include the audit date, version tag, and current HEAD commit in its header. This rule applies only to audits created after this rule and is not retroactive.
+
 Architecture notes are concise working documents rather than exhaustive technical reports. When their update is explicitly requested:
 
 - keep each note within 50 lines;
