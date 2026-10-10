@@ -37,7 +37,7 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 		return;
 	}
 
-	fprintf(context->file, "typedef enum\n");
+	fprintf(context->file, "typedef enum __attribute__((packed))\n");
 	fprintf(context->file, "{\n");
 
 	tokenizer_t tok = {0U};
@@ -75,6 +75,8 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	// The final enum value sizes the logical signal table in the target.
 	fprintf(context->file, "\tGPIO_SIGNAL_COUNT\n");
 	fprintf(context->file, "} gpio_signal_t;\n");
+	fprintf(context->file,
+			"_Static_assert(sizeof(gpio_signal_t) == 1U, \"gpio_signal_t must be one byte\");\n");
 
 	// Release parser storage and report any failure to close the signal source.
 	tokenizerFree(&tok);

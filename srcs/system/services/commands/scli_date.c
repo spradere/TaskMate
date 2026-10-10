@@ -236,7 +236,7 @@ static void datePrint(const hal_rtc_time_t *time)
 
 static void datePrintError(err_codes_t error)
 {
-	const tm_string_t *message = err_getMessage((uint8_t)error);
+	const tm_string_t *message = err_getMessage((error_count_t)error);
 	if( message != NULL ) { tm_syslog(TM_STR("[date] RTC error: %s\n"), message); }
 	else { tm_syslog(TM_STR("[date] RTC error\n")); }
 }

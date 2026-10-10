@@ -54,8 +54,8 @@ static volatile uint8_t buffer_tx[AT2560USART_SIZE_BUFFER];
 static volatile uint8_t buffer_rx_head = 0U, buffer_rx_tail = 0U;
 static volatile uint8_t buffer_tx_head = 0U, buffer_tx_tail = 0U;
 static hal_driver_status_t usart_status;
-// Shared with the RX ISR; err_codes_t is one byte on the AVR8 build (-fshort-enums).
-static volatile err_codes_t usart_last_error = ERR_NO_ERROR;
+// Shared with the RX ISR; valid error identifiers fit in one atomic byte.
+static volatile err_code_t usart_last_error = ERR_NO_ERROR;
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -74,7 +74,7 @@ static hal_driver_state_t usartSetError(err_codes_t error);
 
 static hal_driver_state_t usartSetError(err_codes_t error)
 {
-	usart_last_error = error;
+	usart_last_error = (err_code_t)error;
 	return DRV_STATE_ERROR;
 }
 
@@ -273,7 +273,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			return hal_usartGetStatus();
 		case DRV_CTRL_GETLASTERROR:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			data->error = usart_last_error;
+			data->error = (err_codes_t)usart_last_error;
 			return hal_usartGetStatus();
 		default:
 			return usartSetError(ERR_HAL_DRIVER_INVALID_CONTROL);

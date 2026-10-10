@@ -108,7 +108,7 @@ static bool i2cScan(uint8_t argc, char *argv[])
 		return true;
 	}
 
-	const tm_string_t *message = err_getMessage((uint8_t)error);
+	const tm_string_t *message = err_getMessage((error_count_t)error);
 	if( message != NULL ) { tm_syslog(TM_STR("[i2c] scan error: %s\n"), message); }
 	else { tm_syslog(TM_STR("[i2c] scan error\n")); }
 	return false;

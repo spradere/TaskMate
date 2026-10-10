@@ -168,6 +168,7 @@ int main(int argc, const char *argv[])
 
 		tokenizerFree(&tok);
 		autoCodeExit(AC_FORCE_EXIT);
+		if( stage == AC_STAGE_ERRORS ) { data_base.error_count = (size_t)errors_catalog.error_count; }
 
 		if( stage == AC_STAGE_TAGS ) { parseTagHave(); }
 		autoCodeExit(AC_FORCE_EXIT);
@@ -208,5 +209,9 @@ static void setupDatabase(modules_database_t *data_base)
 	data_base->module_count = 0U;
 	data_base->module_count_width = 0U;
 	data_base->module_count_set = false;
+	data_base->error_count_max = 0U;
+	data_base->error_count = 0U;
+	data_base->error_count_width = 0U;
+	data_base->error_count_set = false;
 	for( int i = 0U; i < MOD_TYPE_COUNT; i++ ) { data_base->modules_type[i].modules_count = 0U; }
 }

@@ -30,7 +30,7 @@
 /**
  * @brief Identifies an ATmega2560 GPIO port.
  */
-typedef enum
+typedef enum __attribute__((packed))
 {
 	PORT_A,
 	PORT_B,
@@ -47,6 +47,7 @@ typedef enum
 
 	PORT_COUNT
 } hal_port_list_t;
+_Static_assert(sizeof(hal_port_list_t) == 1U, "hal_port_list_t must be one byte");
 
 /**
  * @brief Describes one ATmega2560 GPIO pin and its configuration.

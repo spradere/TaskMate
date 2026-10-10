@@ -7,15 +7,15 @@
  */
 
 /**
- * @file setModuleCount.c
- * @brief init.rc setModuleCount command implementation.
+ * @file setModuleCountMax.c
+ * @brief init.rc setModuleCountMax command implementation.
  */
 
 /* =============================================================================
  * Declarations - Include
  * ===========================================================================*/
 
-#include "setModuleCount.h"
+#include "setModuleCountMax.h"
 
 enum
 {
@@ -30,11 +30,11 @@ enum
  * Implementation - Functions
  * ===========================================================================*/
 
-void initrcSetModuleCount(const initrc_command_t *command)
+void initrcSetModuleCountMax(const initrc_command_t *command)
 {
 	if( command->tok->count != SETMODULECOUNT_TOKEN_COUNT )
 	{
-		AUTOCODE_MSG_ERROR("setModuleCount token count [%s:%i] is %i, should be %i",
+		AUTOCODE_MSG_ERROR("setModuleCountMax token count [%s:%i] is %i, should be %i",
 						   command->initrc_name,
 						   command->file_line_number,
 						   command->tok->count,
@@ -44,7 +44,7 @@ void initrcSetModuleCount(const initrc_command_t *command)
 
 	if( command->data_base->module_count_set )
 	{
-		AUTOCODE_MSG_ERROR("setModuleCount is already defined [%s:%i]",
+		AUTOCODE_MSG_ERROR("setModuleCountMax is already defined [%s:%i]",
 						   command->initrc_name,
 						   command->file_line_number);
 		return;

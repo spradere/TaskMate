@@ -2,7 +2,8 @@
 
 setVersion major 1
 setVersion minor 11
-setModuleCount 6
+setModuleCountMax 6
+setErrorCountMax 255
 
 # Virtual HAL drivers
 addModule driver timerContext -run none -source_file hal/host/freebsd/freebsd_timerSched.c
