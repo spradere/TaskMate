@@ -95,7 +95,7 @@ This differs from peripheral syscalls such as RTC, LCD, I2C, USART, and console 
 
 Recommendation: return the fixed-width semantic error type from driver lifecycle syscalls if callers are expected to diagnose failure. Add a specific name-not-found error and preserve the HAL last error. If the intended contract is only command acceptance, retain `bool` but state that diagnostic loss explicitly in the API documentation.
 
-### 7. Medium: two unused task variables have accidental public linkage
+### 7. ~Medium: two unused task variables have accidental public linkage~
 
 `task1_msg_channel` and `task2_msg_channel` are non-static definitions in `srcs/user/tasks/task1.c` and `srcs/user/tasks/task2.c`. They have no header declaration and no use in the repository.
 
