@@ -35,7 +35,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-const tm_string_t *err_getMessage(uint8_t num)
+const tm_string_t *err_getMessage(error_count_t num)
 {
 	if( num < ERROR_COUNT ) { return error_catalog[num].name; }
 	return NULL;

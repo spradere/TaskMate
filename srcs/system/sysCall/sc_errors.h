@@ -47,7 +47,7 @@ typedef struct
  * @param num Error code index.
  * @return Stored message for the code.
  */
-const tm_string_t *err_getMessage(uint8_t num);
+const tm_string_t *err_getMessage(error_count_t num);
 /**
  * @brief Stop system execution.
  */

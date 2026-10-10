@@ -27,7 +27,8 @@ VAL_TEST_SKIP_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCount 8'
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 8' \
+		'setErrorCountMax 256'
 }
 
 fail()
@@ -371,6 +372,43 @@ runErrorTests()
 		> "${PATH_CASE}/errors.list"
 	expectFailure long_error_list_line "reading file" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	for VAL_LIMIT in 255 256
+	do
+		caseBegin "error_count_${VAL_LIMIT}"
+		if [ "${VAL_LIMIT}" -eq 255 ]; then
+			printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+				'setModuleCountMax 8' 'setErrorCountMax 255' \
+				'addModule service system -run core -stack 256 -source_file system.c' \
+				> "${PATH_CASE}/init.rc"
+		fi
+		: > "${PATH_CASE}/errors.err"
+		VAL_INDEX=0
+		while [ "${VAL_INDEX}" -lt "${VAL_LIMIT}" ]
+		do
+			printf 'ERR_BOUND_%03d "" FLOW\n' "${VAL_INDEX}" \
+				>> "${PATH_CASE}/errors.err"
+			VAL_INDEX=$((VAL_INDEX + 1))
+		done
+		expectSuccess "error_count_${VAL_LIMIT}" \
+			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+		if [ "${VAL_LIMIT}" -eq 255 ]; then
+			VAL_WIDTH=8
+			VAL_SIZE=1
+		else
+			VAL_WIDTH=16
+			VAL_SIZE=2
+		fi
+		if ! grep -F -q "typedef uint${VAL_WIDTH}_t error_count_t;" \
+			"${PATH_CASE}/generated/error_enum.inc"; then
+			fail "error_count_${VAL_LIMIT}: wrong count type"
+		fi
+		if ! printf '%s\n' '#include <stdint.h>' '#include "error_enum.inc"' \
+			"_Static_assert(sizeof(err_codes_t) == ${VAL_SIZE}U, \"wrong code size\");" | \
+			clang -std=gnu11 -I"${PATH_CASE}/generated" -x c -fsyntax-only -; then
+			fail "error_count_${VAL_LIMIT}: generated enum size is invalid"
+		fi
+	done
 }
 
 runInitrcTests()
@@ -415,9 +453,62 @@ runInitrcTests()
 		"${PATH_CASE}/generated/modules_count.inc"; then
 		fail "valid_commands: generated module count type is missing"
 	fi
+	if ! grep -F -q 'typedef uint16_t error_count_t;' \
+		"${PATH_CASE}/generated/error_enum.inc"; then
+		fail "valid_commands: generated error count type is missing"
+	fi
+
+	caseBegin missing_error_count
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+		'setModuleCountMax 8' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		> "${PATH_CASE}/init.rc"
+	expectFailure missing_error_count "missing setErrorCountMax" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	for VAL_COUNT in 0 257 invalid -1
+	do
+		VAL_NAME=$(printf '%s' "${VAL_COUNT}" | tr -c '[:alnum:]' '_')
+		caseBegin "invalid_error_count_${VAL_NAME}"
+		printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+			'setModuleCountMax 8' "setErrorCountMax ${VAL_COUNT}" \
+			> "${PATH_CASE}/init.rc"
+		expectFailure "invalid_error_count_${VAL_NAME}" "expected 1..256" \
+			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	done
+
+	caseBegin duplicate_error_count
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setErrorCountMax 256' >> "${PATH_CASE}/init.rc"
+	expectFailure duplicate_error_count "setErrorCountMax is already defined" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin malformed_error_count
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+		'setModuleCountMax 8' 'setErrorCountMax 8 extra' \
+		> "${PATH_CASE}/init.rc"
+	expectFailure malformed_error_count "setErrorCountMax token count" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin error_count_overflow
+	printf '%s\n' 'ERR_FIRST "" FLOW' 'ERR_SECOND "" FLOW' \
+		> "${PATH_CASE}/errors.err"
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+		'setModuleCountMax 8' 'setErrorCountMax 1' \
+		> "${PATH_CASE}/init.rc"
+	expectFailure error_count_overflow "error count exceeds configured maximum 1" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin old_module_count_command
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+		'setModuleCount 8' 'setErrorCountMax 256' \
+		> "${PATH_CASE}/init.rc"
+	expectFailure old_module_count_command "unknown command" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_16_bit_module_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCount 256' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 256' \
+		'setErrorCountMax 256' \
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
 	expectSuccess valid_16_bit_module_count \
@@ -431,7 +522,7 @@ runInitrcTests()
 	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
-	expectFailure missing_module_count "setModuleCount must be defined before addModule" \
+	expectFailure missing_module_count "setModuleCountMax must be defined before addModule" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	for VAL_COUNT in 0 65536 invalid -1
@@ -439,25 +530,26 @@ runInitrcTests()
 		VAL_NAME=$(printf '%s' "${VAL_COUNT}" | tr -c '[:alnum:]' '_')
 		caseBegin "invalid_module_count_${VAL_NAME}"
 		printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
-			"setModuleCount ${VAL_COUNT}" > "${PATH_CASE}/init.rc"
+			"setModuleCountMax ${VAL_COUNT}" > "${PATH_CASE}/init.rc"
 		expectFailure "invalid_module_count_${VAL_NAME}" "expected 1..65535" \
 			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	done
 
 	caseBegin malformed_module_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCount 8 extra' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 8 extra' \
 		> "${PATH_CASE}/init.rc"
-	expectFailure malformed_module_count "setModuleCount token count" \
+	expectFailure malformed_module_count "setModuleCountMax token count" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin duplicate_module_count
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'setModuleCount 8' >> "${PATH_CASE}/init.rc"
-	expectFailure duplicate_module_count "setModuleCount is already defined" \
+	printf '%s\n' 'setModuleCountMax 8' >> "${PATH_CASE}/init.rc"
+	expectFailure duplicate_module_count "setModuleCountMax is already defined" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_count_boundary
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCount 255' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 255' \
+		'setErrorCountMax 256' \
 		> "${PATH_CASE}/init.rc"
 	printf '%s\n' 'addModule service system -run core -stack 256 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
@@ -471,7 +563,8 @@ runInitrcTests()
 	expectSuccess module_count_boundary "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_count_overflow
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCount 255' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 255' \
+		'setErrorCountMax 256' \
 		> "${PATH_CASE}/init.rc"
 	printf '%s\n' 'addModule service system -run core -stack 256 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
@@ -723,7 +816,7 @@ runInitrcTests()
 	do
 		logContains malformed_initrc "${VAL_PATTERN}"
 	done
-	logContains malformed_initrc "init.rc:20"
+	logContains malformed_initrc "init.rc:21"
 
 	caseBegin unterminated_initrc_list
 	printf '%s\n' '"unterminated' "${PATH_CASE}/init.rc" \

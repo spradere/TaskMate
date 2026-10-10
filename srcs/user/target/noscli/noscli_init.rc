@@ -2,7 +2,8 @@
 
 setVersion major 1
 setVersion minor 11
-setModuleCount 8
+setModuleCountMax 8
+setErrorCountMax 255
 
 # System core, 
 addModule driver timerContext -run none -source_file hal/mcu/atmega2560/at2560_timerContext.c

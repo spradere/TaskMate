@@ -15,17 +15,32 @@
 #define INTERFACES_ERROR_CATALOG_H
 
 /* ============================================================================
+ * Includes
+ * ========================================================================== */
+
+#include <stdint.h>
+
+/* ============================================================================
  * Public definitions
  * ========================================================================== */
+
+/**
+ * @brief Stores one valid error identifier independently of the catalogue count.
+ */
+typedef uint8_t err_code_t;
 
 #ifdef AUTOCODE_BUILD
 /**
  * @brief Provides the placeholder error count during autoCode compilation.
  */
-typedef enum
+typedef uint8_t error_count_t;
+typedef enum __attribute__((packed))
 {
 	ERROR_COUNT
 } err_codes_t;
+_Static_assert(sizeof(err_codes_t) <= sizeof(error_count_t),
+		   "err_codes_t exceeds error_count_t");
+_Static_assert(ERROR_COUNT <= (UINT8_MAX + 1U), "error identifiers exceed err_code_t");
 #else
 	// [autoCode_tag] error_enum
 #include "error_enum.inc"

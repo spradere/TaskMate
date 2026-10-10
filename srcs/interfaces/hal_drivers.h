@@ -30,7 +30,7 @@
 /**
  * @brief Selects a common driver control operation.
  */
-typedef enum
+typedef enum __attribute__((packed))
 {
 	DRV_CTRL_INIT,
 	DRV_CTRL_START,
@@ -43,6 +43,7 @@ typedef enum
 	DRV_CTRL_GETSTATUS,
 	DRV_CTRL_GETLASTERROR
 } hal_driver_control_t;
+_Static_assert(sizeof(hal_driver_control_t) == 1U, "hal_driver_control_t must be one byte");
 
 typedef uint8_t hal_driver_status_t;
 
@@ -50,18 +51,20 @@ typedef uint8_t hal_driver_status_t;
 /**
  * @brief Identifies status bits in the driver status word.
  */
-typedef enum
+typedef enum __attribute__((packed))
 {
 	DRV_BIT_INIT = 3,
 	DRV_BIT_START,
 	DRV_BIT_ERROR,
 	DRV_BIT_DEAD
 } hal_driver_status_bit_t;
+_Static_assert(sizeof(hal_driver_status_bit_t) == 1U,
+		   "hal_driver_status_bit_t must be one byte");
 
 /**
  * @brief Describes the current driver life cycle state.
  */
-typedef enum
+typedef enum __attribute__((packed))
 {
 	DRV_STATE_OFF,
 	DRV_STATE_INITIALIZED,
@@ -69,6 +72,7 @@ typedef enum
 	DRV_STATE_ERROR,
 	DRV_STATE_DEAD
 } hal_driver_state_t;
+_Static_assert(sizeof(hal_driver_state_t) == 1U, "hal_driver_state_t must be one byte");
 
 typedef union
 {

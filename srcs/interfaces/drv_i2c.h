@@ -29,20 +29,22 @@
 /**
  * @brief Selects I2C transfer direction.
  */
-typedef enum
+typedef enum __attribute__((packed))
 {
 	HAL_I2C_WRITE,
 	HAL_I2C_READ
 } hal_i2c_direction_t;
+_Static_assert(sizeof(hal_i2c_direction_t) == 1U, "hal_i2c_direction_t must be one byte");
 
 /**
  * @brief Selects the acknowledge bit sent after an I2C read.
  */
-typedef enum
+typedef enum __attribute__((packed))
 {
 	HAL_I2C_NACK,
 	HAL_I2C_ACK
 } hal_i2c_ack_t;
+_Static_assert(sizeof(hal_i2c_ack_t) == 1U, "hal_i2c_ack_t must be one byte");
 
 /* ============================================================================
  * Public API

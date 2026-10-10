@@ -33,7 +33,7 @@ CC = avr-gcc
 VAL_CC_VERSION != avr-gcc -dumpversion
 
 # General options
-CFLAGS += -Os -MMD -MP -mrelax -fshort-enums -mcall-prologues
+CFLAGS += -Os -MMD -MP -mrelax -mcall-prologues
 CFLAGS += -DF_CPU=${VAL_CPU_FREQ} -mmcu=${VAL_MCU_SERIAL}
 
 # General warnings

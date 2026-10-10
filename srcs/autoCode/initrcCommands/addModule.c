@@ -380,7 +380,7 @@ void initrcAddModule(const initrc_command_t *command)
 {
 	if( command->data_base->module_count_set == false )
 	{
-		AUTOCODE_MSG_ERROR("setModuleCount must be defined before addModule [%s:%i]",
+		AUTOCODE_MSG_ERROR("setModuleCountMax must be defined before addModule [%s:%i]",
 						   command->initrc_name,
 						   command->file_line_number);
 		return;

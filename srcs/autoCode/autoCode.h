@@ -147,6 +147,10 @@ typedef struct
 	size_t module_count;
 	uint8_t module_count_width;
 	bool module_count_set;
+	size_t error_count_max;
+	size_t error_count;
+	uint8_t error_count_width;
+	bool error_count_set;
 	struct
 	{
 		struct

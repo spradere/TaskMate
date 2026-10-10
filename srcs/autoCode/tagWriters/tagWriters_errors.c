@@ -79,7 +79,10 @@ static const char *errorLevelName(const err_level_t level)
 
 void tagWriterWriteErrorEnum(const tag_writer_context_t *context)
 {
-	fprintf(context->file, "typedef enum\n");
+	fprintf(context->file,
+			"typedef uint%u_t error_count_t;\n",
+			(unsigned int)context->data_base->error_count_width);
+	fprintf(context->file, "typedef enum __attribute__((packed))\n");
 	fprintf(context->file, "{\n");
 
 	for( int i = 0U; i < context->errors->error_count; i++ )
@@ -87,5 +90,11 @@ void tagWriterWriteErrorEnum(const tag_writer_context_t *context)
 		fprintf(context->file, "\t%s,\n", context->errors->catalog[i].name);
 	}
 	fprintf(context->file, "\tERROR_COUNT\n");
-	fprintf(context->file, "} err_codes_t;\n\n");
+	fprintf(context->file, "} err_codes_t;\n");
+	fprintf(context->file,
+			"_Static_assert(sizeof(err_codes_t) <= sizeof(error_count_t), "
+			"\"err_codes_t exceeds error_count_t\");\n\n");
+	fprintf(context->file,
+			"_Static_assert(ERROR_COUNT <= (UINT8_MAX + 1U), "
+			"\"error identifiers exceed err_code_t\");\n\n");
 }

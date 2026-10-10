@@ -7,12 +7,12 @@
  */
 
 /**
- * @file setModuleCount.h
- * @brief init.rc setModuleCount command declarations.
+ * @file setErrorCountMax.h
+ * @brief init.rc setErrorCountMax command declarations.
  */
 
-#ifndef INITRCCOMMANDS_SET_MODULE_COUNT_H
-#define INITRCCOMMANDS_SET_MODULE_COUNT_H
+#ifndef INITRCCOMMANDS_SET_ERROR_COUNT_MAX_H
+#define INITRCCOMMANDS_SET_ERROR_COUNT_MAX_H
 
 /* =============================================================================
  * Includes
@@ -25,9 +25,9 @@
  * ===========================================================================*/
 
 /**
- * @brief Set the target module capacity and select the corresponding count type.
- * @param command Parsed setModuleCount command.
+ * @brief Set the target error capacity and select the corresponding count type.
+ * @param command Parsed setErrorCountMax command.
  */
-void initrcSetModuleCount(const initrc_command_t *command);
+void initrcSetErrorCountMax(const initrc_command_t *command);
 
-#endif // INITRCCOMMANDS_SET_MODULE_COUNT_H
+#endif // INITRCCOMMANDS_SET_ERROR_COUNT_MAX_H

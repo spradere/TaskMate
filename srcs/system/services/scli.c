@@ -84,7 +84,7 @@ void scli(void)
 		err_codes_t error = scliRead();
 		if( error != ERR_NO_ERROR )
 		{
-			const tm_string_t *message = err_getMessage((uint8_t)error);
+			const tm_string_t *message = err_getMessage((error_count_t)error);
 			if( message != NULL ) { tm_syslog(TM_STR("[scli] error: %s\n"), message); }
 		}
 		sc_threadSetSTC(SCLI_POLL_STC_TICKS);
