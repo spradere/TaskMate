@@ -39,7 +39,7 @@ void task2(void)
 	{
 		sc_gpio_signalToggle(GPIO_SIGNAL_TASK2_LED);
 
-		sc_threadSetSTC(TASK2_DELAY_STC_TICKS);
+		sc_threadSetSTC(TASK2_DELAY_TICKS);
 		while( sc_threadGetSTC() > 0U );
 	}
 }

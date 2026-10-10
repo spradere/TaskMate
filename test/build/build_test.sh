@@ -694,7 +694,7 @@ runReportTests()
 	expectSuccess cloc_data awk -v file="${PATH_STAGE_WORK}/cloc.data" \
 		-f "${PATH_PROJECT}/scripts/cloc_data.awk" "${PATH_STAGE_WORK}/cloc.raw"
 	assertFileContains "${PATH_STAGE_WORK}/cloc.data" "code_total 67"
-	assertFileContains "${PATH_STAGE_WORK}/cloc.data" "make_total 23"
+	assertFileContains "${PATH_STAGE_WORK}/cloc.data" "build_total 23"
 	expectSuccess cloc_show awk -f "${PATH_PROJECT}/scripts/cloc_show.awk" \
 		"${PATH_STAGE_WORK}/cloc.data"
 	logContains cloc_show "code         : 67 loc"
