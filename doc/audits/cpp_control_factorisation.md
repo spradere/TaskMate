@@ -21,6 +21,14 @@ Zero cost means no dynamic allocation, no added persistent RAM for generic dispa
 - `P2`: Templates do not guarantee one linked implementation for different policies. The shared control and peripheral algorithms require an out-of-line non-template core and binary verification.
 - `P2`: RAII is safe only for short, deterministic scopes. Interrupt state, scheduler transitions, volatile accesses, and failure reporting require explicit restrictions and disassembly review.
 
+## Pre-migration technical debt
+
+- Resolve known technical debt, defects, and inconsistencies in the affected C components before introducing C++.
+- Exclude the planned driver architecture refactoring, which may be implemented as part of the C++ transition.
+-Establish a clean, tested C baseline before modifying implementation language.
+-Do not combine unrelated cleanup, architectural changes, and C++ migration in the same change set.
+-Document any remaining technical debt and justify why it does not affect migration safety or validation.
+
 ## Current evidence
 
 - `test1_init.rc` declares five drivers: scheduling timer, USART, I2C, LCD, and RTC. The scheduling timer, USART, and I2C are MCU implementations; LCD and RTC are reusable drivers.
