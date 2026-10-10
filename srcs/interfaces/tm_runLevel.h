@@ -8,7 +8,7 @@
 
 /**
  * @file tm_runLevel.h
- * @brief run level define header declarations.
+ * @brief Run level contract declarations.
  */
 
 #ifndef INTERFACES_TM_RUNLEVEL_H
@@ -19,16 +19,18 @@
  * ========================================================================== */
 
 /**
- * @name Run level identifiers
- * @brief Order system startup from core through user tasks.
- * @{
+ * @brief Orders system startup from core through user tasks.
  */
-#define RL_RUN_NONE 0
-#define RL_RUN_CORE 1
-#define RL_RUN_DRIVER 2
-#define RL_RUN_SERVICE 3
-#define RL_RUN_USER 4
-/** @} */
+typedef enum __attribute__((packed))
+{
+	RL_RUN_NONE = 0U,
+	RL_RUN_CORE,
+	RL_RUN_DRIVER,
+	RL_RUN_SERVICE,
+	RL_RUN_USER,
+	RL_LEVEL_COUNT
+} tm_run_level_t;
+_Static_assert(sizeof(tm_run_level_t) == 1U, "tm_run_level_t must be one byte");
 
 /**
  * @name Run level encoding
@@ -36,12 +38,12 @@
  * @{
  */
 #define RL_LEVEL_MASK 0x07
-#define RL_LEVEL_COUNT 5
 /** @} */
+_Static_assert(RL_LEVEL_COUNT <= (RL_LEVEL_MASK + 1U), "run levels exceed status field");
 
 /**
  * @brief Extract run level bits from a status value.
  */
-#define RL_GET_RUN_LEVEL(status) ((status) & RL_LEVEL_MASK)
+#define RL_GET_RUN_LEVEL(status) ((tm_run_level_t)((status) & RL_LEVEL_MASK))
 
 #endif // INTERFACES_TM_RUNLEVEL_H

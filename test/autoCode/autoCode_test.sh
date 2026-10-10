@@ -466,6 +466,20 @@ runInitrcTests()
 		"${PATH_CASE}/generated/modules_count.inc"; then
 		fail "valid_commands: generated module count type is missing"
 	fi
+	if ! grep -F -q '#define MOD_DRIVER_COUNT 1U' \
+		"${PATH_CASE}/generated/modules_count.inc" || \
+		! grep -F -q '#define MOD_THREAD_COUNT 2U' \
+		"${PATH_CASE}/generated/modules_count.inc"; then
+		fail "valid_commands: module categories are incorrect"
+	fi
+	if ! grep -F -q 'control_data.run_level = 2;' \
+		"${PATH_CASE}/generated/drivers_alloc.inc" || \
+		! grep -F -q 'mod->saved_run_level = 3;' \
+		"${PATH_CASE}/generated/threads_alloc.inc" || \
+		! grep -F -q 'mod->saved_run_level = 4;' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "valid_commands: generated run levels are incorrect"
+	fi
 	if ! grep -F -q 'typedef uint16_t error_count_t;' \
 		"${PATH_CASE}/generated/error_enum.inc"; then
 		fail "valid_commands: generated error count type is missing"
