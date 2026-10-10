@@ -47,8 +47,8 @@
  * ---------------------------------------------*/
 
 static void systemStart(void);
-static void systemRunLevelStart(uint8_t run_level);
-static bool systemRunLevelIsReady(uint8_t run_level);
+static void systemRunLevelStart(tm_run_level_t run_level);
+static bool systemRunLevelIsReady(tm_run_level_t run_level);
 
 /* =============================================================================
  * Implementation - Functions
@@ -118,7 +118,7 @@ void system(void)
  */
 static void systemStart(void)
 {
-	uint8_t run_level = sc_runLevelGet();
+	tm_run_level_t run_level = sc_runLevelGet();
 	uint8_t incomplete_round_count = 0U;
 
 	if( run_level != RL_RUN_CORE ) { sc_halt(); }
@@ -133,7 +133,7 @@ static void systemStart(void)
 		{
 			if( run_level == RL_RUN_USER ) { return; }
 
-			run_level++;
+			run_level = (tm_run_level_t)(run_level + 1U);
 			if( !sc_runLevelSet(run_level) ) { sc_halt(); }
 			systemRunLevelStart(run_level);
 			incomplete_round_count = 0U;
@@ -146,7 +146,7 @@ static void systemStart(void)
 	}
 }
 
-static void systemRunLevelStart(uint8_t run_level)
+static void systemRunLevelStart(tm_run_level_t run_level)
 {
 	tm_syslog(TM_STR("[system] switch to run level %u\n"), run_level);
 	sc_driverRunLevelStart(run_level);
@@ -159,14 +159,16 @@ static void systemRunLevelStart(uint8_t run_level)
 #endif
 }
 
-static bool systemRunLevelIsReady(uint8_t run_level)
+static bool systemRunLevelIsReady(tm_run_level_t run_level)
 {
-	for( uint8_t level = RL_RUN_NONE; level <= run_level; level++ )
+	for( tm_run_level_t level = RL_RUN_NONE; level <= run_level;
+		 level = (tm_run_level_t)(level + 1U) )
 	{
 		if( !sc_driverRunLevelIsReady(level) ) { return false; }
 	}
 
-	for( uint8_t level = RL_RUN_CORE; level <= run_level; level++ )
+	for( tm_run_level_t level = RL_RUN_CORE; level <= run_level;
+		 level = (tm_run_level_t)(level + 1U) )
 	{
 		if( !sc_threadRunLevelIsReady(level) ) { return false; }
 	}

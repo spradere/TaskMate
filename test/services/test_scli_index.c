@@ -41,7 +41,7 @@
 int main(void)
 {
 	char *argv[SCLI_ARGUMENT_COUNT_MAX];
-	uint8_t run_level = 0U;
+	tm_run_level_t run_level = RL_RUN_NONE;
 	hal_rtc_time_t time = {0};
 
 	strcpy(scli_line, " thread start task ");
@@ -59,8 +59,13 @@ int main(void)
 	scli_line[sizeof(scli_line) - 1U] = 0U;
 	assert(scliTokenize(argv) == 1U);
 
-	assert(threadRunLevelParse("255", &run_level));
-	assert(run_level == UINT8_MAX);
+	assert(threadRunLevelParse("1", &run_level));
+	assert(run_level == RL_RUN_CORE);
+	assert(threadRunLevelParse("4", &run_level));
+	assert(run_level == RL_RUN_USER);
+	assert(!threadRunLevelParse("0", &run_level));
+	assert(!threadRunLevelParse("5", &run_level));
+	assert(!threadRunLevelParse("255", &run_level));
 	assert(!threadRunLevelParse("256", &run_level));
 	assert(!threadRunLevelParse("1234", &run_level));
 	assert(!threadRunLevelParse("1x", &run_level));

@@ -79,7 +79,7 @@ static void sc_i2cDriverSetOff(mod_driver_item_t *driver);
 
 mod_count_t sc_driverGetCount(void) { return MOD_DRIVER_COUNT; }
 
-bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
 					  uint8_t *status_bits)
 {
 	if( (id >= MOD_DRIVER_COUNT) || (name == NULL) || (run_level == NULL) ||
@@ -117,7 +117,7 @@ bool sc_driverInit(const char *name) { return sc_driverControl(name, DRV_CTRL_IN
 bool sc_driverStart(const char *name) { return sc_driverControl(name, DRV_CTRL_START); }
 bool sc_driverStop(const char *name) { return sc_driverControl(name, DRV_CTRL_STOP); }
 
-void sc_driverRunLevelStart(uint8_t run_level)
+void sc_driverRunLevelStart(tm_run_level_t run_level)
 {
 	if( (run_level == RL_RUN_NONE) || (run_level >= RL_LEVEL_COUNT) ) { return; }
 
@@ -135,7 +135,7 @@ void sc_driverRunLevelStart(uint8_t run_level)
 	}
 }
 
-bool sc_driverRunLevelIsReady(uint8_t run_level)
+bool sc_driverRunLevelIsReady(tm_run_level_t run_level)
 {
 	if( run_level >= RL_LEVEL_COUNT ) { return false; }
 

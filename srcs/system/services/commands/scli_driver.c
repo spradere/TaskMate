@@ -124,7 +124,7 @@ static bool driverList(uint8_t argc, char *argv[])
 	for( mod_count_t id = 0U; id < driver_count; id++ )
 	{
 		const tm_string_t *name;
-		uint8_t run_level;
+		tm_run_level_t run_level;
 		uint8_t status_bits;
 		if( !sc_driverGetInfo(id, &name, &run_level, &status_bits) ) { return false; }
 

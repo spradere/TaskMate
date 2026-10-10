@@ -258,7 +258,7 @@ hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 			return hal_timerContextGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return timerContextSetError(ERR_NULL_POINTER); }
-			data->run_level = timer_context_status & RL_LEVEL_MASK;
+			data->run_level = RL_GET_RUN_LEVEL(timer_context_status);
 			return hal_timerContextGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:

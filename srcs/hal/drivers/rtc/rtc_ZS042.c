@@ -269,7 +269,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			return hal_rtcGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return rtcSetError(ERR_NULL_POINTER); }
-			data->run_level = rtc_status & RL_LEVEL_MASK;
+			data->run_level = RL_GET_RUN_LEVEL(rtc_status);
 			return hal_rtcGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:

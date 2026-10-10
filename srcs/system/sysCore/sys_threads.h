@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 #include "interfaces/tm_mod.h"
+#include "interfaces/tm_runLevel.h"
 
 /* ============================================================================
  * Public API
@@ -57,7 +58,7 @@ void mod_threadTickSTC(void);
 /**
  * @brief Get a thread's run level.
  */
-uint8_t mod_threadRunLevelGet(mod_count_t id);
+tm_run_level_t mod_threadRunLevelGet(mod_count_t id);
 /**
  * @brief Get a thread's configured stack size.
  */
@@ -76,7 +77,7 @@ void mod_threadSetInitialized(mod_count_t id);
 /**
  * @brief Start a thread at an initial run level.
  */
-void mod_threadStart(mod_count_t id, uint8_t initial_run_level);
+void mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level);
 /**
  * @brief Stop a thread.
  */
@@ -85,7 +86,7 @@ void mod_threadStop(mod_count_t id);
  * @brief Check whether a run level's threads are ready.
  * @return true if all threads in the run level are ready.
  */
-bool mod_threadsRunLevelIsReady(uint8_t run_level);
+bool mod_threadsRunLevelIsReady(tm_run_level_t run_level);
 
 /**
  * @brief Mark a thread as cooperatively yielded.

@@ -48,15 +48,15 @@ static bool sc_threadGetId(const char *name, mod_count_t *id);
  * Run level
  * ---------------------------------------------*/
 
-uint8_t sc_runLevelGet(void)
+tm_run_level_t sc_runLevelGet(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	uint8_t run_level = tm_schedulerRunLevelGet();
+	tm_run_level_t run_level = tm_schedulerRunLevelGet();
 	hal_atomicEnd(state);
 	return run_level;
 }
 
-bool sc_runLevelSet(uint8_t run_level)
+bool sc_runLevelSet(tm_run_level_t run_level)
 {
 	hal_atomic_state_t state = hal_atomicStart();
 	bool result = tm_schedulerRunLevelSet(run_level);
@@ -89,7 +89,7 @@ uint16_t sc_threadGetSTC(void)
 
 mod_count_t sc_threadGetCount(void) { return MOD_THREAD_COUNT; }
 
-bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
 					  uint16_t *stack_size_bytes)
 {
 	if( (id >= MOD_THREAD_COUNT) || (name == NULL) || (run_level == NULL) ||
@@ -128,9 +128,10 @@ void sc_threadSetInitialized(void)
 	hal_atomicEnd(state);
 }
 
-bool sc_threadStart(const char *name, uint8_t initial_run_level)
+bool sc_threadStart(const char *name, tm_run_level_t initial_run_level)
 {
 	mod_count_t id;
+	if( initial_run_level >= RL_LEVEL_COUNT ) { return false; }
 	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
@@ -150,7 +151,7 @@ bool sc_threadStop(const char *name)
 	return true;
 }
 
-bool sc_threadRunLevelIsReady(uint8_t run_level)
+bool sc_threadRunLevelIsReady(tm_run_level_t run_level)
 {
 	if( (run_level == RL_RUN_NONE) || (run_level >= RL_LEVEL_COUNT) ) { return false; }
 

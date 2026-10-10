@@ -60,7 +60,10 @@ void mod_threadTickSTC(void)
 	}
 }
 
-uint8_t mod_threadRunLevelGet(mod_count_t id) { return RL_GET_RUN_LEVEL(threads[id].status); }
+tm_run_level_t mod_threadRunLevelGet(mod_count_t id)
+{
+	return RL_GET_RUN_LEVEL(threads[id].status);
+}
 
 uint16_t mod_threadStackSizeGet(mod_count_t id)
 {
@@ -87,7 +90,7 @@ void mod_threadSetInitialized(mod_count_t id)
 	TM_SETBIT(threads[id].status, THREAD_BIT_INITIALIZED);
 }
 
-void mod_threadStart(mod_count_t id, uint8_t initial_run_level)
+void mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
 {
 	mod_thread_item_t *thread = &threads[id];
 
@@ -107,7 +110,7 @@ void mod_threadStop(mod_count_t id)
 	thread->status &= (uint8_t)~RL_LEVEL_MASK;
 }
 
-bool mod_threadsRunLevelIsReady(uint8_t run_level)
+bool mod_threadsRunLevelIsReady(tm_run_level_t run_level)
 {
 	for( mod_count_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{

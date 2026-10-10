@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 #include "interfaces/tm_mod.h"
+#include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
@@ -35,12 +36,12 @@
 /**
  * @brief Get the current system run level.
  */
-uint8_t sc_runLevelGet(void);
+tm_run_level_t sc_runLevelGet(void);
 /**
  * @brief Set the system run level.
  * @return true if the requested run level was accepted.
  */
-bool sc_runLevelSet(uint8_t run_level);
+bool sc_runLevelSet(tm_run_level_t run_level);
 
 /* -----------------------------------------------
  * Software time counter
@@ -71,7 +72,7 @@ mod_count_t sc_threadGetCount(void);
  * @param[out] stack_size_bytes Receives configured stack size in bytes.
  * @return true if the identifier and output pointers are valid.
  */
-bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
 					  uint16_t *stack_size_bytes);
 /**
  * @brief Measure a thread's used stack space.
@@ -88,7 +89,7 @@ void sc_threadSetInitialized(void);
  * @brief Start a thread by name at an initial run level.
  * @return true if the named thread was started.
  */
-bool sc_threadStart(const char *name, uint8_t initial_run_level);
+bool sc_threadStart(const char *name, tm_run_level_t initial_run_level);
 /**
  * @brief Stop a thread by name.
  * @return true if the named thread was stopped.
@@ -98,7 +99,7 @@ bool sc_threadStop(const char *name);
  * @brief Check whether all threads in a run level are ready.
  * @return true if all threads in the run level are ready.
  */
-bool sc_threadRunLevelIsReady(uint8_t run_level);
+bool sc_threadRunLevelIsReady(tm_run_level_t run_level);
 
 /* -----------------------------------------------
  * Cooperative scheduling
