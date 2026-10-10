@@ -61,7 +61,7 @@ static hal_rtc_time_t rtc_startup_time;
  * ---------------------------------------------*/
 
 static mod_driver_item_t *sc_driverGetPointer(const char *name);
-static bool sc_driverControl(const char *name, hal_driver_control_t command);
+static err_code_t sc_driverControl(const char *name, hal_driver_control_t command);
 static err_codes_t sc_driverError(hal_driver_state_t state,
 								  hal_driver_state_t (*control)(hal_driver_control_t,
 																hal_driver_control_data_t *));
@@ -80,7 +80,7 @@ static void sc_i2cDriverSetOff(mod_driver_item_t *driver);
 mod_count_t sc_driverGetCount(void) { return MOD_DRIVER_COUNT; }
 
 bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
-					  uint8_t *status_bits)
+					  hal_driver_status_t *status_bits)
 {
 	if( (id >= MOD_DRIVER_COUNT) || (name == NULL) || (run_level == NULL) ||
 		(status_bits == NULL) )
@@ -113,9 +113,9 @@ bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 	return *name != NULL;
 }
 
-bool sc_driverInit(const char *name) { return sc_driverControl(name, DRV_CTRL_INIT); }
-bool sc_driverStart(const char *name) { return sc_driverControl(name, DRV_CTRL_START); }
-bool sc_driverStop(const char *name) { return sc_driverControl(name, DRV_CTRL_STOP); }
+err_code_t sc_driverInit(const char *name) { return sc_driverControl(name, DRV_CTRL_INIT); }
+err_code_t sc_driverStart(const char *name) { return sc_driverControl(name, DRV_CTRL_START); }
+err_code_t sc_driverStop(const char *name) { return sc_driverControl(name, DRV_CTRL_STOP); }
 
 void sc_driverRunLevelStart(tm_run_level_t run_level)
 {
@@ -324,13 +324,19 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 	return NULL;
 }
 
-static bool sc_driverControl(const char *name, hal_driver_control_t command)
+static err_code_t sc_driverControl(const char *name, hal_driver_control_t command)
 {
+	if( name == NULL ) { return ERR_NULL_POINTER; }
 	mod_driver_item_t *driver = sc_driverGetPointer(name);
-	if( driver == NULL ) { return false; }
+	if( driver == NULL ) { return ERR_DRIVER_NOT_FOUND; }
 
 	hal_driver_state_t state = driver->control(command, NULL);
-	return (state != DRV_STATE_ERROR) && (state != DRV_STATE_DEAD);
+	if( (state != DRV_STATE_ERROR) && (state != DRV_STATE_DEAD) ) { return ERR_NO_ERROR; }
+
+	hal_driver_control_data_t control_data;
+	driver->control(DRV_CTRL_GETLASTERROR, &control_data);
+	if( control_data.error != ERR_NO_ERROR ) { return (err_code_t)control_data.error; }
+	return (state == DRV_STATE_DEAD) ? ERR_HAL_DRIVER_DEAD : ERR_HAL_DRIVER_INVALID_STATE;
 }
 
 static bool sc_i2cAddressFound(uint8_t address)

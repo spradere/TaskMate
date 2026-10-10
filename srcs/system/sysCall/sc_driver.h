@@ -23,6 +23,7 @@
 
 #include "interfaces/drv_rtc.h"
 #include "interfaces/error_catalog.h"
+#include "interfaces/hal_drivers.h"
 #include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_string.h"
@@ -48,22 +49,22 @@ mod_count_t sc_driverGetCount(void);
  * @return true if driver information was retrieved.
  */
 bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
-					  uint8_t *status_bits);
+					  hal_driver_status_t *status_bits);
 /**
  * @brief Initialize a driver by name.
- * @return true if the named driver was initialized.
+ * @return ERR_NO_ERROR on success; ERR_NULL_POINTER, ERR_DRIVER_NOT_FOUND, or the driver error.
  */
-bool sc_driverInit(const char *name);
+err_code_t sc_driverInit(const char *name);
 /**
  * @brief Start a driver by name.
- * @return true if the named driver was started.
+ * @return ERR_NO_ERROR on success; ERR_NULL_POINTER, ERR_DRIVER_NOT_FOUND, or the driver error.
  */
-bool sc_driverStart(const char *name);
+err_code_t sc_driverStart(const char *name);
 /**
  * @brief Stop a driver by name.
- * @return true if the named driver was stopped.
+ * @return ERR_NO_ERROR on success; ERR_NULL_POINTER, ERR_DRIVER_NOT_FOUND, or the driver error.
  */
-bool sc_driverStop(const char *name);
+err_code_t sc_driverStop(const char *name);
 /**
  * @brief Start drivers assigned to a run level.
  */

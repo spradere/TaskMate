@@ -1,5 +1,5 @@
 # TaskMate general errors
 ERR_NO_ERROR "" FLOW
 ERR_NULL_POINTER "Pointer is NULL" WARN
-
+ERR_DRIVER_NOT_FOUND "Driver name was not found" WARN
 
