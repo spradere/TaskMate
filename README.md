@@ -1,4 +1,4 @@
-# TaskMate RTOS ![](doc/icon_64.png)
+# TaskMate RTOS ![](doc/images/icon_64.png)
 
 **Microcontroller Unit - Real-Time Operating System**
 
@@ -14,7 +14,7 @@ At a much smaller scale and within my own limits this project is also a way to r
 >
 > <span style="color:green">1085 commits • 178 source files • 15150 lines of code • AVR target binary size: 15990 bytes • RAM usage: 1327 bytes</span>
 
-![Project stats](doc/stats.png)
+![Project stats](doc/images/stats.png)
 
 > ⚠️ <span style="color:red">**Development Status**</span>
 >
@@ -25,7 +25,7 @@ At a much smaller scale and within my own limits this project is also a way to r
 
 ## 🗺️ TaskMate Layers - Run Time
 
-![System Layer Diagram](doc/TaskMate_layers.png)
+![System Layer Diagram](doc/images/TaskMate_layers.png)
 
 
 The diagram shows the architectural direction of TaskMate. Each layer communicates primarily with its direct neighbours, following a strict top-down model to maintain clear boundaries and avoid hidden dependencies.
@@ -43,7 +43,7 @@ TaskMate uses a custom build system that fully manages dependencies and workflow
 
 **Portability relies mostly on build-time source selection, with minimal use of preprocessor logic.**
 
-![Build system](doc/build_v3.png)
+![Build system](doc/images/build_v3.png)
 
 ---
 
@@ -107,7 +107,7 @@ You may use, modify, and redistribute it in source or binary form, provided that
 
 ## 📟 Hardware setup: AVR8 - ATmega2560 - Arduino Mega board
 
-![Arduino mega board](doc/hardware_mega.jpg)
+![Arduino mega board](doc/images/hardware_mega.jpg)
 
 ---
 
