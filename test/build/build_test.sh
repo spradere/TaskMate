@@ -468,28 +468,28 @@ runScriptTests()
 	FILE_INITRC_SOURCES="${PATH_PROJECT}/scripts/initrc_sources.awk"
 
 	printf '%s\n' '#define AUTOCODE_VERSION_INITRCMAJOR 1U' \
-		'#define AUTOCODE_VERSION_INITRCMINOR 11U' \
+		'#define AUTOCODE_VERSION_INITRCMINOR 12U' \
 		'#define AUTOCODE_VERSION_MAJOR 1U' \
-		'#define AUTOCODE_VERSION_MINOR 4U' > "${PATH_STAGE_WORK}/autoCode.h"
-	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=4 \
+		'#define AUTOCODE_VERSION_MINOR 8U' > "${PATH_STAGE_WORK}/autoCode.h"
+	expectSuccess autocode_version_match awk -v expected_major=1 -v expected_minor=8 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
-	expectOutput autocode_version_report "autoCode : 1.4
-initrc : 1.11" awk -v expected_major=1 -v expected_minor=4 -v report_versions=1 \
+	expectOutput autocode_version_report "autoCode : 1.8
+initrc : 1.12" awk -v expected_major=1 -v expected_minor=8 -v report_versions=1 \
 		-f "${FILE_AUTOCODE_VERSION}" "${PATH_STAGE_WORK}/autoCode.h"
 	expectFailure autocode_version_major_mismatch "expected 2, found 1" awk \
-		-v expected_major=2 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=2 -v expected_minor=8 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
-	expectFailure autocode_version_minor_mismatch "expected 5, found 4" awk \
-		-v expected_major=1 -v expected_minor=5 -f "${FILE_AUTOCODE_VERSION}" \
+	expectFailure autocode_version_minor_mismatch "expected 9, found 8" awk \
+		-v expected_major=1 -v expected_minor=9 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/autoCode.h"
 	printf '%s\n' '#define AUTOCODE_VERSION_MAJOR 1U' > "${PATH_STAGE_WORK}/missing.h"
 	expectFailure autocode_version_missing "Missing autoCode version definition" awk \
-		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=1 -v expected_minor=8 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/missing.h"
 	printf '%s\n' '#define AUTOCODE_VERSION_MAJOR one' \
-		'#define AUTOCODE_VERSION_MINOR 4U' > "${PATH_STAGE_WORK}/malformed.h"
+		'#define AUTOCODE_VERSION_MINOR 8U' > "${PATH_STAGE_WORK}/malformed.h"
 	expectFailure autocode_version_malformed "Invalid autoCode version definition" awk \
-		-v expected_major=1 -v expected_minor=4 -f "${FILE_AUTOCODE_VERSION}" \
+		-v expected_major=1 -v expected_minor=8 -f "${FILE_AUTOCODE_VERSION}" \
 		"${PATH_STAGE_WORK}/malformed.h"
 
 	printf '%s\n' \

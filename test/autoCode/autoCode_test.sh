@@ -27,7 +27,7 @@ VAL_TEST_SKIP_COUNT=0
 
 writeInitrcVersion()
 {
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 8' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' 'setModuleCountMax 8' \
 		'setErrorCountMax 256'
 }
 
@@ -377,7 +377,7 @@ runErrorTests()
 	do
 		caseBegin "error_count_${VAL_LIMIT}"
 		if [ "${VAL_LIMIT}" -eq 255 ]; then
-			printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+			printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 				'setModuleCountMax 8' 'setErrorCountMax 255' \
 				'addModule service system -run core -stack 256 -source_file system.c' \
 				> "${PATH_CASE}/init.rc"
@@ -454,6 +454,64 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	logDoesNotContain stop_after_initrc_file_failure "must_not_be_opened.rc"
 
+	caseBegin default_stack_size_min
+	printf '%s\n' 'addModule task task -run user -stack 3 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess default_stack_size_min "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin configured_stack_size_min
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setStackSizeMin 64' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		'addModule task task -run user -stack 64 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess configured_stack_size_min "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin below_stack_size_min
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setStackSizeMin 64' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		'addModule task task -run user -stack 63 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure below_stack_size_min '63 for option -stack' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin configured_large_stack_size_min
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setStackSizeMin 8192' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		'addModule task task -run user -stack 8192 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess configured_large_stack_size_min \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	for VAL_SIZE in 0 2 65536 invalid -1 999999999999999999999999999999
+	do
+		caseBegin "invalid_stack_size_min_${VAL_SIZE}"
+		writeInitrcVersion > "${PATH_CASE}/init.rc"
+		printf '%s\n' "setStackSizeMin ${VAL_SIZE}" >> "${PATH_CASE}/init.rc"
+		expectFailure "invalid_stack_size_min_${VAL_SIZE}" \
+			'invalid minimum stack size' "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	done
+
+	caseBegin malformed_stack_size_min
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setStackSizeMin 64 extra' >> "${PATH_CASE}/init.rc"
+	expectFailure malformed_stack_size_min 'setStackSizeMin token count' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin duplicate_stack_size_min
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setStackSizeMin 64' 'setStackSizeMin 8192' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure duplicate_stack_size_min 'setStackSizeMin is already defined' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin late_stack_size_min
+	printf '%s\n' 'setStackSizeMin 64' >> "${PATH_CASE}/init.rc"
+	expectFailure late_stack_size_min 'setStackSizeMin must be defined before addModule' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin valid_commands
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
@@ -486,7 +544,7 @@ runInitrcTests()
 	fi
 
 	caseBegin missing_error_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 		'setModuleCountMax 8' \
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
@@ -497,7 +555,7 @@ runInitrcTests()
 	do
 		VAL_NAME=$(printf '%s' "${VAL_COUNT}" | tr -c '[:alnum:]' '_')
 		caseBegin "invalid_error_count_${VAL_NAME}"
-		printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+		printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 			'setModuleCountMax 8' "setErrorCountMax ${VAL_COUNT}" \
 			> "${PATH_CASE}/init.rc"
 		expectFailure "invalid_error_count_${VAL_NAME}" "expected 1..256" \
@@ -511,7 +569,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin malformed_error_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 		'setModuleCountMax 8' 'setErrorCountMax 8 extra' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure malformed_error_count "setErrorCountMax token count" \
@@ -520,21 +578,21 @@ runInitrcTests()
 	caseBegin error_count_overflow
 	printf '%s\n' 'ERR_FIRST "" FLOW' 'ERR_SECOND "" FLOW' \
 		> "${PATH_CASE}/errors.err"
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 		'setModuleCountMax 8' 'setErrorCountMax 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure error_count_overflow "error count exceeds configured maximum 1" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin old_module_count_command
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 		'setModuleCount 8' 'setErrorCountMax 256' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure old_module_count_command "unknown command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin valid_16_bit_module_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 256' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' 'setModuleCountMax 256' \
 		'setErrorCountMax 256' \
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
@@ -546,7 +604,7 @@ runInitrcTests()
 	fi
 
 	caseBegin missing_module_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure missing_module_count "setModuleCountMax must be defined before addModule" \
@@ -556,14 +614,14 @@ runInitrcTests()
 	do
 		VAL_NAME=$(printf '%s' "${VAL_COUNT}" | tr -c '[:alnum:]' '_')
 		caseBegin "invalid_module_count_${VAL_NAME}"
-		printf '%s\n' 'setVersion major 1' 'setVersion minor 11' \
+		printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 			"setModuleCountMax ${VAL_COUNT}" > "${PATH_CASE}/init.rc"
 		expectFailure "invalid_module_count_${VAL_NAME}" "expected 1..65535" \
 			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	done
 
 	caseBegin malformed_module_count
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 8 extra' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' 'setModuleCountMax 8 extra' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure malformed_module_count "setModuleCountMax token count" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
@@ -575,7 +633,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_count_boundary
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 255' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' 'setModuleCountMax 255' \
 		'setErrorCountMax 256' \
 		> "${PATH_CASE}/init.rc"
 	printf '%s\n' 'addModule service system -run core -stack 256 -source_file system.c' \
@@ -590,7 +648,7 @@ runInitrcTests()
 	expectSuccess module_count_boundary "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin module_count_overflow
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 11' 'setModuleCountMax 255' \
+	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' 'setModuleCountMax 255' \
 		'setErrorCountMax 256' \
 		> "${PATH_CASE}/init.rc"
 	printf '%s\n' 'addModule service system -run core -stack 256 -source_file system.c' \
@@ -763,7 +821,7 @@ runInitrcTests()
 
 	caseBegin missing_minor_initrc_version
 	printf '%s\n' 'setVersion major 1' > "${PATH_CASE}/init.rc"
-	expectFailure missing_minor_initrc_version "missing setVersion minor 11" \
+	expectFailure missing_minor_initrc_version "missing setVersion minor 12" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin malformed_initrc_version
@@ -778,7 +836,7 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_major_initrc_version
-	printf '%s\n' 'setVersion major 0' 'setVersion minor 11' \
+	printf '%s\n' 'setVersion major 0' 'setVersion minor 12' \
 		'addModule service must_not_be_parsed -run core -stack 256 -source_file system.c' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_major_initrc_version "unsupported init.rc major syntax version" \
@@ -792,14 +850,14 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin wrong_initrc_version_order
-	printf '%s\n' 'setVersion minor 11' 'setVersion major 1' \
+	printf '%s\n' 'setVersion minor 12' 'setVersion major 1' \
 		> "${PATH_CASE}/init.rc"
 	expectFailure wrong_initrc_version_order "first init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin late_initrc_version
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addModule service system -run core -stack 256' 'setVersion minor 11' \
+	printf '%s\n' 'addModule service system -run core -stack 256' 'setVersion minor 12' \
 		>> "${PATH_CASE}/init.rc"
 	expectFailure late_initrc_version "setVersion command after init.rc version declaration" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"

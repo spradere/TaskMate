@@ -1,9 +1,10 @@
 # Hardware target noscli, copy of test1 without scli.
 
 setVersion major 1
-setVersion minor 11
+setVersion minor 12
 setModuleCountMax 8
 setErrorCountMax 255
+setStackSizeMin 64
 
 # System core, 
 addModule driver timerContext -run none -source_file hal/mcu/atmega2560/at2560_timerContext.c
