@@ -120,8 +120,8 @@ static bool driverList(uint8_t argc, char *argv[])
 	(void)argv;
 
 	tm_syslog(TM_STR("[driver] drivers:\n"));
-	const uint16_t driver_count = sc_driverGetCount();
-	for( uint16_t id = 0U; id < driver_count; id++ )
+	const mod_count_t driver_count = sc_driverGetCount();
+	for( mod_count_t id = 0U; id < driver_count; id++ )
 	{
 		const tm_string_t *name;
 		uint8_t run_level;

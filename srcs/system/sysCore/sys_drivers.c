@@ -17,7 +17,7 @@
 
 #include "sys_drivers.h"
 
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "system/sysCore/sys_drivers_list.h"
 
 /* -----------------------------------------------
@@ -30,7 +30,7 @@ static mod_driver_item_t drivers[MOD_DRIVER_COUNT];
  * Implementation - Functions
  * ===========================================================================*/
 
-mod_driver_item_t *mod_driverGetPointer(uint8_t id) { return &drivers[id]; }
+mod_driver_item_t *mod_driverGetPointer(mod_count_t id) { return &drivers[id]; }
 
 void mod_driversAlloc(void)
 {

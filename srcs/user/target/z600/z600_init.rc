@@ -1,7 +1,8 @@
 # z600 FreeBSD ucontext simulation init.rc
 
 setVersion major 1
-setVersion minor 10
+setVersion minor 11
+setModuleCount 6
 
 # Virtual HAL drivers
 addModule driver timerContext -run none -source_file hal/host/freebsd/freebsd_timerSched.c

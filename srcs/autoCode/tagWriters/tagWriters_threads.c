@@ -24,17 +24,17 @@
 void tagWriterWriteThreadStacks(const tag_writer_context_t *context)
 {
 	// Reserve index zero for the system thread, regardless of declaration order.
-	int threads_count = 1U;
+	size_t threads_count = 1U;
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
-	for( int i = 0U; i < mod->modules_count; i++ )
+	for( size_t i = 0U; i < mod->modules_count; i++ )
 	{
-		int thread_index = threads_count;
+		size_t thread_index = threads_count;
 		if( strcmp(mod->modules[i].name, "system") == 0U ) { thread_index = 0U; }
 		else { threads_count++; }
 
 		fprintf(context->file,
-				"static hal_stack_word_t thread%i_stack[%u];\n",
+				"static hal_stack_word_t thread%zu_stack[%u];\n",
 				thread_index,
 				mod->modules[i].stack_size);
 	}
@@ -42,8 +42,8 @@ void tagWriterWriteThreadStacks(const tag_writer_context_t *context)
 
 void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 {
-	int threads_count = 1U;
-	int thread_index;
+	size_t threads_count = 1U;
+	size_t thread_index;
 	bool in_system = false;
 	bool system_thread_found = false;
 	const module_type_t *mod;
@@ -53,7 +53,7 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 	mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
 	// Use the same index mapping for stacks, records, and name catalogues.
-	for( int i = 0U; i < mod->modules_count; i++ )
+	for( size_t i = 0U; i < mod->modules_count; i++ )
 	{
 		// The system thread occupies record zero.
 		if( strcmp(mod->modules[i].name, "system") == 0U )
@@ -64,8 +64,8 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 		}
 		else { thread_index = threads_count; }
 
-		fprintf(context->file, "\n\tmod = mod_threadGetPointer(%i);\n", thread_index);
-		fprintf(context->file, "\tmod->stack = thread%i_stack;\n", thread_index);
+		fprintf(context->file, "\n\tmod = mod_threadGetPointer(%zu);\n", thread_index);
+		fprintf(context->file, "\tmod->stack = thread%zu_stack;\n", thread_index);
 		fprintf(context->file, "\tmod->stack_size = %u;\n", mod->modules[i].stack_size);
 		fprintf(context->file, "\tmod_threadStackInit(mod);\n");
 
@@ -93,17 +93,17 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context)
 {
 	// Designated entries preserve the thread indices used by allocation.
-	int threads_count = 1U;
+	size_t threads_count = 1U;
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
-	for( int i = 0U; i < mod->modules_count; i++ )
+	for( size_t i = 0U; i < mod->modules_count; i++ )
 	{
-		int thread_index = threads_count;
+		size_t thread_index = threads_count;
 		if( strcmp(mod->modules[i].name, "system") == 0U ) { thread_index = 0U; }
 		else { threads_count++; }
 
 		fprintf(context->file,
-				"TM_STR_NEW(thread%i_name, \"%s\");\n",
+				"TM_STR_NEW(thread%zu_name, \"%s\");\n",
 				thread_index,
 				mod->modules[i].name);
 	}
@@ -111,12 +111,12 @@ void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context)
 	fprintf(context->file,
 			"\nstatic const tm_string_t *const thread_name_catalog[MOD_THREAD_COUNT] =\n{\n");
 	threads_count = 1U;
-	for( int i = 0U; i < mod->modules_count; i++ )
+	for( size_t i = 0U; i < mod->modules_count; i++ )
 	{
-		int thread_index = threads_count;
+		size_t thread_index = threads_count;
 		if( strcmp(mod->modules[i].name, "system") == 0U ) { thread_index = 0U; }
 		else { threads_count++; }
-		fprintf(context->file, "\t[%i] = &thread%i_name,\n", thread_index, thread_index);
+		fprintf(context->file, "\t[%zu] = &thread%zu_name,\n", thread_index, thread_index);
 	}
 	fprintf(context->file, "};\n");
 }

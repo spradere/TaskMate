@@ -345,7 +345,7 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 	AUTOCODE_MSG_INFO("found module : %s", name);
 	module_type_t *module_list = &command->data_base->modules_type[module->type];
 	// Names must be unique within the shared driver or thread list.
-	for( int i = 0U; i < module_list->modules_count; i++ )
+	for( size_t i = 0U; i < module_list->modules_count; i++ )
 	{
 		if( strcmp(module_list->modules[i].name, name) == 0U )
 		{
@@ -357,13 +357,14 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 		}
 	}
 
-	const int index = module_list->modules_count;
-	if( index >= MOD_COUNT_MAX )
+	if( command->data_base->module_count >= command->data_base->module_count_max )
 	{
-		AUTOCODE_MSG_ERROR("too much modules > %i type=%i\n", index, module->type);
+		AUTOCODE_MSG_ERROR("module count exceeds configured maximum %zu\n",
+						   command->data_base->module_count_max);
 		return;
 	}
 
+	const size_t index = module_list->modules_count;
 	// Publish the record only after name and capacity checks have passed.
 	snprintf(
 		module_list->modules[index].name, sizeof(module_list->modules[index].name), "%s", name);
@@ -372,10 +373,19 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 	module_list->modules[index].address = module->address;
 	module_list->modules[index].stack_size = module->stack_size;
 	module_list->modules_count = index + ADDMODULE_COUNT_NEXT;
+	command->data_base->module_count++;
 }
 
 void initrcAddModule(const initrc_command_t *command)
 {
+	if( command->data_base->module_count_set == false )
+	{
+		AUTOCODE_MSG_ERROR("setModuleCount must be defined before addModule [%s:%i]",
+						   command->initrc_name,
+						   command->file_line_number);
+		return;
+	}
+
 	if( command->tok->count < ADDMODULE_COUNT_HEADER )
 	{
 		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least %i",

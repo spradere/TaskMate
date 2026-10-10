@@ -24,7 +24,7 @@
 #include "hal/host/freebsd/freebsd_interrupts.h"
 #include "hal/host/freebsd/freebsd_timerSched.h"
 #include "interfaces/hal_halt.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "ucontext_types.h"
 
 /* -----------------------------------------------
@@ -32,7 +32,7 @@
  * ---------------------------------------------*/
 
 static ucontext_t initial_contexts[MOD_THREAD_COUNT];
-static uint16_t initial_context_count;
+static mod_count_t initial_context_count;
 
 /* =============================================================================
  * Implementation - Functions

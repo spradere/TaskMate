@@ -20,7 +20,7 @@
 #include <stddef.h>
 
 #include "interfaces/hal_atomic.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_string.h"
 #include "system/sysCore/sys_scheduler.h"
@@ -38,7 +38,7 @@
  * Private function prototypes
  * ---------------------------------------------*/
 
-static bool sc_threadGetId(const char *name, uint8_t *id);
+static bool sc_threadGetId(const char *name, mod_count_t *id);
 
 /* =============================================================================
  * Implementation - Functions
@@ -87,9 +87,9 @@ uint16_t sc_threadGetSTC(void)
  * Thread metadata
  * ---------------------------------------------*/
 
-uint16_t sc_threadGetCount(void) { return MOD_THREAD_COUNT; }
+mod_count_t sc_threadGetCount(void) { return MOD_THREAD_COUNT; }
 
-bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint16_t *stack_size_bytes)
 {
 	if( (id >= MOD_THREAD_COUNT) || (name == NULL) || (run_level == NULL) ||
@@ -100,19 +100,19 @@ bool sc_threadGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 
 	hal_atomic_state_t state = hal_atomicStart();
 	*name = thread_name_catalog[id];
-	*run_level = mod_threadRunLevelGet((uint8_t)id);
-	*stack_size_bytes = mod_threadStackSizeGet((uint8_t)id);
+	*run_level = mod_threadRunLevelGet(id);
+	*stack_size_bytes = mod_threadStackSizeGet(id);
 	hal_atomicEnd(state);
 
 	return *name != NULL;
 }
 
-bool sc_threadGetStackDepth(uint16_t id, uint16_t *depth_bytes)
+bool sc_threadGetStackDepth(mod_count_t id, uint16_t *depth_bytes)
 {
 	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == NULL) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	*depth_bytes = mod_threadStackDepthGet((uint8_t)id);
+	*depth_bytes = mod_threadStackDepthGet(id);
 	hal_atomicEnd(state);
 	return true;
 }
@@ -130,7 +130,7 @@ void sc_threadSetInitialized(void)
 
 bool sc_threadStart(const char *name, uint8_t initial_run_level)
 {
-	uint8_t id;
+	mod_count_t id;
 	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
@@ -141,7 +141,7 @@ bool sc_threadStart(const char *name, uint8_t initial_run_level)
 
 bool sc_threadStop(const char *name)
 {
-	uint8_t id;
+	mod_count_t id;
 	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
@@ -172,7 +172,7 @@ bool sc_threadRunLevelIsReady(uint8_t run_level)
 void sc_coopYield(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	uint8_t id = mod_threadGetCurrent();
+	mod_count_t id = mod_threadGetCurrent();
 	mod_threadSetYielded(id);
 	tm_schedulerCoop();
 	hal_atomicEnd(state);
@@ -183,11 +183,11 @@ void sc_coopYield(void)
  * Private helpers
  * ---------------------------------------------*/
 
-static bool sc_threadGetId(const char *name, uint8_t *id)
+static bool sc_threadGetId(const char *name, mod_count_t *id)
 {
 	if( (name == NULL) || (id == NULL) ) { return false; }
 
-	for( uint8_t i = 0U; i < MOD_THREAD_COUNT; i++ )
+	for( mod_count_t i = 0U; i < MOD_THREAD_COUNT; i++ )
 	{
 		const tm_string_t *thread_name = thread_name_catalog[i];
 		if( (thread_name != NULL) &&

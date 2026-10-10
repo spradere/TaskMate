@@ -92,8 +92,8 @@ int main(int argc, const char *argv[])
 		auto_options.test_mode ? AUTOCODE_COUNT_ERRORTEST : AUTOCODE_COUNT_ERRORNORMAL;
 	autoCodeExit(AC_FORCE_EXIT);
 
-	// Keep one database for all stages so tags use the validated declarations.
-	modules_database_t data_base;
+	// Keep the maximum-width database off the host stack and available to every generation stage.
+	static modules_database_t data_base;
 	setupDatabase(&data_base);
 
 	error_catalog_t errors_catalog;
@@ -204,5 +204,9 @@ void autoCodeExit(ac_error_cmd_t cmd)
 static void setupDatabase(modules_database_t *data_base)
 {
 	data_base->scli.count = 0U;
+	data_base->module_count_max = 0U;
+	data_base->module_count = 0U;
+	data_base->module_count_width = 0U;
+	data_base->module_count_set = false;
 	for( int i = 0U; i < MOD_TYPE_COUNT; i++ ) { data_base->modules_type[i].modules_count = 0U; }
 }

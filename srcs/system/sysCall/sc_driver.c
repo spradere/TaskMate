@@ -26,7 +26,7 @@
 #include "interfaces/hal_atomic.h"
 #include "interfaces/hal_drivers.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_modules.h"
+#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_string.h"
 #include "system/sysCore/sys_drivers.h"
@@ -77,9 +77,9 @@ static void sc_i2cDriverSetOff(mod_driver_item_t *driver);
  * Driver metadata and life cycle
  * ---------------------------------------------*/
 
-uint16_t sc_driverGetCount(void) { return MOD_DRIVER_COUNT; }
+mod_count_t sc_driverGetCount(void) { return MOD_DRIVER_COUNT; }
 
-bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
+bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, uint8_t *run_level,
 					  uint8_t *status_bits)
 {
 	if( (id >= MOD_DRIVER_COUNT) || (name == NULL) || (run_level == NULL) ||
@@ -88,7 +88,7 @@ bool sc_driverGetInfo(uint16_t id, const tm_string_t **name, uint8_t *run_level,
 		return false;
 	}
 
-	mod_driver_item_t *driver = mod_driverGetPointer((uint8_t)id);
+	mod_driver_item_t *driver = mod_driverGetPointer(id);
 	if( driver->control == NULL ) { return false; }
 
 	hal_driver_control_data_t control_data;
@@ -121,7 +121,7 @@ void sc_driverRunLevelStart(uint8_t run_level)
 {
 	if( (run_level == RL_RUN_NONE) || (run_level >= RL_LEVEL_COUNT) ) { return; }
 
-	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
+	for( mod_count_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		hal_driver_control_data_t control_data;
@@ -139,7 +139,7 @@ bool sc_driverRunLevelIsReady(uint8_t run_level)
 {
 	if( run_level >= RL_LEVEL_COUNT ) { return false; }
 
-	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
+	for( mod_count_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		hal_driver_control_data_t control_data;
@@ -247,7 +247,7 @@ err_codes_t sc_i2cScan(void)
 
 	// Mark declared devices absent from the bus as dead.
 	control_data.status_bit = DRV_BIT_DEAD;
-	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
+	for( mod_count_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		if( (driver->address != MOD_DRIVER_ADDRESS_NONE) && !sc_i2cAddressFound(driver->address) )
@@ -257,7 +257,7 @@ err_codes_t sc_i2cScan(void)
 	}
 
 	// Clear stale state when a previously dead device is present again.
-	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
+	for( mod_count_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		if( (driver->control(DRV_CTRL_GETSTATUS, NULL) == DRV_STATE_DEAD) &&
@@ -310,7 +310,7 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 {
 	if( name == NULL ) { return NULL; }
 
-	for( uint8_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
+	for( mod_count_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		const tm_string_t *driver_name = driver_name_catalog[i];

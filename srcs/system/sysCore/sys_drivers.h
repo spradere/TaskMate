@@ -21,6 +21,7 @@
 #include <stdint.h>
 
 #include "interfaces/hal_drivers.h"
+#include "interfaces/tm_mod.h"
 
 /* ============================================================================
  * Public definitions
@@ -46,7 +47,7 @@ typedef struct
  * @param id Valid driver identifier below the configured driver count.
  * @return Driver record for the identifier.
  */
-mod_driver_item_t *mod_driverGetPointer(uint8_t id);
+mod_driver_item_t *mod_driverGetPointer(mod_count_t id);
 /**
  * @brief Initialize the static driver database.
  */

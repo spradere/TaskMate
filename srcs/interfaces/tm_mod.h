@@ -7,23 +7,25 @@
  */
 
 /**
- * @file tm_modules.h
- * @brief modules define header declarations.
+ * @file tm_mod.h
+ * @brief Module database contract declarations.
  */
 
-#ifndef INTERFACES_TM_MODULES_H
-#define INTERFACES_TM_MODULES_H
+#ifndef INTERFACES_TM_MOD_H
+#define INTERFACES_TM_MOD_H
 
 /* ============================================================================
  * Includes
  * ========================================================================== */
+
+#include <stdint.h>
 
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
 
 /* -----------------------------------------------
- * Generated module counts
+ * Generated module count type and configured counts
  * ---------------------------------------------*/
 
 #ifndef AUTOCODE_BUILD
@@ -35,11 +37,6 @@
 /* -----------------------------------------------
  * Module constants
  * ---------------------------------------------*/
-
-/**
- * @brief Maximum number of modules in the static database.
- */
-#define MOD_COUNT_MAX 256
 
 /**
  * @name Module type identifiers
@@ -63,4 +60,4 @@
 #define MOD_DRIVER_ADDRESS_NONE 0xFFu
 /** @} */
 
-#endif // INTERFACES_TM_MODULES_H
+#endif // INTERFACES_TM_MOD_H
