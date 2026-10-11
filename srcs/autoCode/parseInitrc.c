@@ -23,6 +23,7 @@
 #include "initrcCommands/addScliCommand.h"
 #include "initrcCommands/setErrorCountMax.h"
 #include "initrcCommands/setModuleCountMax.h"
+#include "initrcCommands/setStackSizeMin.h"
 #include "initrcCommands/setVersion.h"
 #include "tokenizer.h"
 
@@ -36,7 +37,8 @@ enum { PARSEINITRC_COUNT_VERSIONMIN = 2U };
 	X("addModule", initrcAddModule)           \
 	X("addScliCommand", initrcAddScliCommand) \
 	X("setModuleCountMax", initrcSetModuleCountMax) \
-	X("setErrorCountMax", initrcSetErrorCountMax)
+	X("setErrorCountMax", initrcSetErrorCountMax) \
+	X("setStackSizeMin", initrcSetStackSizeMin)
 
 static const struct
 {
