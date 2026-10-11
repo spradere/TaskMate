@@ -17,10 +17,10 @@
  * ===========================================================================*/
 
 #include <assert.h>
+#include <stdbool.h>
 #include <limits.h>
+#include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "system/sysCall/sc_string.h"
 #include "tmLibc/stdio/tm_snprintf.h"
@@ -30,6 +30,9 @@
  * ---------------------------------------------*/
 
 #define TEST_SNPRINTF_BUFFER_SIZE 64U
+#define TEST_SNPRINTF_TRUNCATED_SIZE 4U
+#define TEST_SNPRINTF_TEXT_LENGTH 6
+#define TEST_SNPRINTF_STRING_LENGTH 5
 #define TEST_SNPRINTF_ABOVE_UINT16 ((unsigned int)UINT16_MAX + 1U)
 
 _Static_assert(UINT_MAX == UINT32_MAX, "host test requires a 32-bit unsigned int");
@@ -39,6 +42,10 @@ _Static_assert(UINT_MAX == UINT32_MAX, "host test requires a 32-bit unsigned int
  * ---------------------------------------------*/
 
 static void testUnsigned(const char *format_text, unsigned int value, const char *expected);
+static bool textEquals(const char *left, const char *right);
+
+static unsigned int test_console_bytes;
+static unsigned int test_console_flushes;
 
 /* =============================================================================
  * Implementation - Functions
@@ -51,12 +58,17 @@ static void testUnsigned(const char *format_text, unsigned int value, const char
 err_codes_t sc_consoleWriteByte(uint8_t data)
 {
 	(void)data;
-	return (err_codes_t)0U;
+	test_console_bytes++;
+	return ERR_NO_ERROR;
 }
 
-err_codes_t sc_consoleFlush(void) { return (err_codes_t)0U; }
+err_codes_t sc_consoleFlush(void)
+{
+	test_console_flushes++;
+	return ERR_NO_ERROR;
+}
 
-uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
+uint8_t sc_stringGetByte(const tm_string_t *string, size_t index)
 {
 	return string->text[index];
 }
@@ -70,22 +82,50 @@ static void testUnsigned(const char *format_text, unsigned int value, const char
 	char buffer[TEST_SNPRINTF_BUFFER_SIZE];
 	tm_string_t format = {.text = (const uint8_t *)format_text, .storage = TM_MEM_RAM};
 
-	int count = tm_snprintf(buffer, TEST_SNPRINTF_BUFFER_SIZE, format, value);
-	assert(count == (int)strlen(expected));
-	assert(strcmp(buffer, expected) == 0);
+	int count = snprintf(buffer, TEST_SNPRINTF_BUFFER_SIZE, format, value);
+	size_t length = 0U;
+	while( expected[length] != 0 ) { length++; }
+	assert(count == (int)length);
+	assert(textEquals(buffer, expected));
+}
+
+static bool textEquals(const char *left, const char *right)
+{
+	size_t index = 0U;
+	while( left[index] == right[index] )
+	{
+		if( left[index] == 0 ) { return true; }
+		index++;
+	}
+	return false;
 }
 
 int main(void)
 {
-	char expected[TEST_SNPRINTF_BUFFER_SIZE];
+	char short_buffer[TEST_SNPRINTF_TRUNCATED_SIZE];
+	char full_buffer[TEST_SNPRINTF_BUFFER_SIZE];
+	tm_string_t format = {.text = (const uint8_t *)"abcdef", .storage = TM_MEM_RAM};
+	tm_string_t string_format = {
+		.text = (const uint8_t *)"X%s%%\n", .storage = TM_MEM_RAM};
+	tm_string_t word = {.text = (const uint8_t *)"ab", .storage = TM_MEM_RAM};
 
 	testUnsigned("%u", UINT16_MAX, "65535");
+	testUnsigned("%02u", 1U, "01");
 	testUnsigned("%u", TEST_SNPRINTF_ABOVE_UINT16, "65536");
 	testUnsigned("%x", TEST_SNPRINTF_ABOVE_UINT16, "10000");
 	testUnsigned("%b", TEST_SNPRINTF_ABOVE_UINT16, "10000000000000000");
 
-	(void)snprintf(expected, sizeof(expected), "%u", UINT_MAX);
-	testUnsigned("%u", UINT_MAX, expected);
+	testUnsigned("%u", UINT_MAX, "4294967295");
 	testUnsigned("%b", UINT_MAX, "11111111111111111111111111111111");
+	assert(snprintf(short_buffer, sizeof(short_buffer), format) == TEST_SNPRINTF_TEXT_LENGTH);
+	assert(textEquals(short_buffer, "abc"));
+	assert(snprintf(NULL, 0U, format) == TEST_SNPRINTF_TEXT_LENGTH);
+	assert(test_console_bytes == 0U);
+	assert(snprintf(full_buffer, sizeof(full_buffer), string_format, &word) ==
+		TEST_SNPRINTF_STRING_LENGTH);
+	assert(textEquals(full_buffer, "Xab%\n"));
+	assert(printf(string_format, &word) == TEST_SNPRINTF_STRING_LENGTH);
+	assert(test_console_bytes == TEST_SNPRINTF_STRING_LENGTH);
+	assert(test_console_flushes == 1U);
 	return 0;
 }

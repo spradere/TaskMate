@@ -71,7 +71,7 @@ void tagWriterWriteDriverNameCatalog(const tag_writer_context_t *context)
 			"\nstatic const tm_string_t *const driver_name_catalog[MOD_DRIVER_COUNT] =\n{\n");
 	for( size_t i = 0U; i < mod->modules_count; i++ )
 	{
-		fprintf(context->file, "\t&driver%zu_name,\n", i);
+		fprintf(context->file, "\tTM_STR_REF(driver%zu_name),\n", i);
 	}
 	fprintf(context->file, "};\n");
 }

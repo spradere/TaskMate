@@ -160,18 +160,18 @@ bool sc_driverRunLevelIsReady(tm_run_level_t run_level)
 
 err_codes_t sc_lcdClear(void) { return sc_driverError(hal_lcdClear(), hal_lcdControl); }
 
-err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col)
+err_codes_t sc_lcdWriteString(tm_string_arg_t str, uint8_t row, uint8_t col)
 {
 	err_codes_t error = sc_driverError(hal_lcdSetCursor(row, col), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
-	if( str.text == NULL ) { return ERR_NULL_POINTER; }
+	if( TM_STR_DATA(str) == NULL ) { return ERR_NULL_POINTER; }
 
 	error = sc_driverError(hal_lcdWriteStart(), hal_lcdControl);
 	if( error != ERR_NO_ERROR ) { return error; }
 
 	for( uint8_t index = 0U; index < TM_STRING_SIZE_MAX; index++ )
 	{
-		uint8_t str_byte = sc_stringGetByte(&str, index);
+		uint8_t str_byte = sc_stringGetByte(TM_STR_ARG(str), index);
 		if( str_byte == 0U ) { break; }
 		error = sc_driverError(hal_lcdWriteByte(str_byte), hal_lcdControl);
 		if( error != ERR_NO_ERROR )
@@ -314,7 +314,7 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		const tm_string_t *driver_name = driver_name_catalog[i];
 		if( (driver->control != NULL) && (driver_name != NULL) &&
-			sc_stringCompare(*driver_name, TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0U )
+			HAL_STRING_COMPARE(TM_STR_VALUE(driver_name), TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0U )
 		{
 			return driver;
 		}

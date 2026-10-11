@@ -29,8 +29,12 @@
  * @brief Select exactly one TaskMate or standard C library implementation.
  * @{
  */
-#define TM_LIBC_TASKMATE 1
-#define TM_LIBC_CSTD 0
+#ifndef TM_LIBC_TASKMATE
+	#define TM_LIBC_TASKMATE 1
+#endif
+#ifndef TM_LIBC_CSTD
+	#define TM_LIBC_CSTD 0
+#endif
 /** @} */
 
 #if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)

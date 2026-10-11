@@ -19,8 +19,8 @@
  * ========================================================================== */
 
 #include <stdint.h>
+#include <string.h>
 
-#include "interfaces/tm_macros.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================
@@ -32,15 +32,12 @@
  * @brief Create string descriptors backed by host memory.
  * @{
  */
-#define HAL_STRING_INROM(name, txt)                      \
-	static const uint8_t TM_UNIQUE_NAME(name)[] = (txt); \
-	static const tm_string_t(name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
+#define HAL_STRING_INROM(name, txt) static const char name[] = (txt)
 
-#define HAL_STRING_ROM(string) \
-	((tm_string_t){.text = (const uint8_t *)(string), .storage = TM_MEM_ROM})
-#define HAL_STRING_RAM(string) \
-	((tm_string_t){.text = (const uint8_t *)(string), .storage = TM_MEM_RAM})
+#define HAL_STRING_ROM(string) (string)
+#define HAL_STRING_RAM(string) (string)
 #define HAL_STRING_ROMGETBYTE(ptr) (*(const uint8_t *)(ptr))
+#define HAL_STRING_COMPARE(left, right, size) strncmp((left), (right), (size))
 
 #define HAL_STRING(string) HAL_STRING_ROM(string)
 /** @} */

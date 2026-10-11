@@ -26,12 +26,10 @@
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_gpio.h"
+#include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
-#ifdef TM_DRIVER_HAVE_LCD
-	#include "tmLibc/tm_stdio.h"
-#endif
+#include "tmLibc/tm_stdio.h"
 #include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Constants
@@ -62,13 +60,13 @@ void system(void)
 	systemStart();
 
 	// Print system info
-	tm_syslog(
+	printf(
 		TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
 #ifdef TM_DRIVER_HAVE_RTC
 	hal_rtc_time_t time;
 	sc_rtcRead(&time);
-	tm_syslog(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
+	printf(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
 			  time.day,
 			  time.month,
 			  time.year,
@@ -78,7 +76,7 @@ void system(void)
 
 #ifdef TM_DRIVER_HAVE_LCD
 	char msg[SYSTEM_SIZE_LCDMESSAGE];
-	tm_snprintf(
+	snprintf(
 		msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
 	sc_lcdWriteString(TM_STR_RAM(msg), 0U, 0U);
@@ -89,7 +87,7 @@ void system(void)
 	{
 #if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
 		sc_rtcRead(&time);
-		tm_snprintf(msg,
+		snprintf(msg,
 					sizeof(msg),
 					TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
 					time.day,
@@ -148,7 +146,7 @@ static void systemStart(void)
 
 static void systemRunLevelStart(tm_run_level_t run_level)
 {
-	tm_syslog(TM_STR("[system] switch to run level %u\n"), run_level);
+	printf(TM_STR("[system] switch to run level %u\n"), run_level);
 	sc_driverRunLevelStart(run_level);
 
 #ifdef TM_DRIVER_HAVE_I2C

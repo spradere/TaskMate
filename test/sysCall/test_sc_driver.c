@@ -27,6 +27,8 @@
 #define HAL_STRING_ROM(string) HAL_STRING(string)
 #define HAL_STRING_INROM(name, txt) \
 	static const tm_string_t name = {.text = (const uint8_t *)(txt), .storage = TM_MEM_ROM}
+#define HAL_STRING_COMPARE(left, right, size) \
+	strncmp((const char *)(left).text, (const char *)(right).text, (size))
 
 #include "system/sysCall/sc_driver.c"
 #include "system/sysCall/sc_errors.c"
@@ -58,11 +60,6 @@ static hal_driver_state_t testControl(hal_driver_control_t command,
  * ---------------------------------------------*/
 
 mod_driver_item_t *mod_driverGetPointer(mod_count_t id) { return &test_drivers[id]; }
-
-int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size)
-{
-	return strncmp((const char *)left.text, (const char *)right.text, size);
-}
 
 static hal_driver_state_t testControl(hal_driver_control_t command,
 									  hal_driver_control_data_t *data)

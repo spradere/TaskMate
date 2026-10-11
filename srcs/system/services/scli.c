@@ -27,7 +27,7 @@
 #include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
+#include "tmLibc/tm_stdio.h"
 
 /* -----------------------------------------------
  * Constants
@@ -85,7 +85,7 @@ void scli(void)
 		if( error != ERR_NO_ERROR )
 		{
 			const tm_string_t *message = err_getMessage(error);
-			if( message != NULL ) { tm_syslog(TM_STR("[scli] error: %s\n"), message); }
+			if( message != NULL ) { printf(TM_STR("[scli] error: %s\n"), message); }
 		}
 		sc_threadSetSTC(SCLI_POLL_STC_TICKS);
 		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); };
@@ -126,12 +126,12 @@ static void scliLineProcess(void)
 	uint8_t argc = scliTokenize(argv);
 	if( (argc > 0U) && !scliCommandDispatch(argc, argv) )
 	{
-		tm_string_t command = TM_STR_RAM(argv[0U]);
-		tm_syslog(TM_STR("[scli] error: unknown command %s\n"), &command);
+		tm_string_arg_t command = TM_STR_RAM(argv[0U]);
+		printf(TM_STR("[scli] error: unknown command %s\n"), TM_STR_ARG(command));
 		for( uint8_t i = 0U; scli_commands[i].name != NULL; i++ )
 		{
-			tm_string_t command_name = TM_STR_RAM(scli_commands[i].name);
-			tm_syslog(TM_STR("\tcmd %s\n"), &command_name);
+			tm_string_arg_t command_name = TM_STR_RAM(scli_commands[i].name);
+			printf(TM_STR("\tcmd %s\n"), TM_STR_ARG(command_name));
 		}
 	}
 	scli_line_length = 0U;
@@ -176,7 +176,7 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[])
 {
 	for( uint8_t i = 0U; scli_commands[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(
+		if( strncmp(
 				TM_STR_RAM(argv[0U]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) == 0U )
 		{
 			scli_commands[i].func(argc, argv);

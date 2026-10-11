@@ -50,7 +50,7 @@ void tagWriterWriteErrorCatalog(const tag_writer_context_t *context)
 		else
 		{
 			fprintf(context->file,
-					"\t{&err%i, %s},\n",
+					"\t{TM_STR_REF(err%i), %s},\n",
 					i,
 					errorLevelName(context->errors->catalog[i].level));
 		}

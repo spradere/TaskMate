@@ -43,6 +43,8 @@
 	((tm_string_t){.text = (const uint8_t *)(string), .storage = TM_MEM_RAM})
 
 #define HAL_STRING_ROMGETBYTE(ptr) pgm_read_byte(ptr)
+#define HAL_STRING_COMPARE(left, right, size) \
+	strncmp_P((const char *)(right).text, (const char *)(left).text, (size))
 
 // Default storage for AVR8
 #define HAL_STRING(string) HAL_STRING_ROM(string)

@@ -20,8 +20,9 @@
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
+#include "system/sysCall/sc_string.h"
 #include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
+#include "tmLibc/tm_stdio.h"
 
 /* -----------------------------------------------
  * Constants
@@ -76,7 +77,7 @@ bool i2cCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0U; i2c_cmd[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) ==
+		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) ==
 			0U )
 		{
 			return i2c_cmd[i].func(argc, argv);
@@ -104,13 +105,13 @@ static bool i2cScan(uint8_t argc, char *argv[])
 	err_codes_t error = sc_i2cScan();
 	if( error == ERR_NO_ERROR )
 	{
-		tm_syslog(TM_STR("[i2c] scan complete\n"));
+		printf(TM_STR("[i2c] scan complete\n"));
 		return true;
 	}
 
 	const tm_string_t *message = err_getMessage(error);
-	if( message != NULL ) { tm_syslog(TM_STR("[i2c] scan error: %s\n"), message); }
-	else { tm_syslog(TM_STR("[i2c] scan error\n")); }
+	if( message != NULL ) { printf(TM_STR("[i2c] scan error: %s\n"), message); }
+	else { printf(TM_STR("[i2c] scan error\n")); }
 	return false;
 }
 
@@ -119,8 +120,8 @@ static bool i2cHelp(uint8_t argc, char *argv[])
 	(void)argc;
 	(void)argv;
 
-	tm_syslog(TM_STR("[i2c] usage:\n"));
-	tm_syslog(TM_STR("\ti2c scan\n"));
-	tm_syslog(TM_STR("\ti2c help\n"));
+	printf(TM_STR("[i2c] usage:\n"));
+	printf(TM_STR("\ti2c scan\n"));
+	printf(TM_STR("\ti2c help\n"));
 	return true;
 }

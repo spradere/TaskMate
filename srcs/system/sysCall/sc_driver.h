@@ -91,7 +91,7 @@ err_codes_t sc_lcdClear(void);
  * @param col Display column.
  * @return ERR_NO_ERROR on success; an error code otherwise.
  */
-err_codes_t sc_lcdWriteString(tm_string_t str, uint8_t row, uint8_t col);
+err_codes_t sc_lcdWriteString(tm_string_arg_t str, uint8_t row, uint8_t col);
 
 /* -----------------------------------------------
  * RTC operations

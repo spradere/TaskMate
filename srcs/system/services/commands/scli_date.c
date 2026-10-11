@@ -21,8 +21,9 @@
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
+#include "system/sysCall/sc_string.h"
 #include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
+#include "tmLibc/tm_stdio.h"
 
 /* -----------------------------------------------
  * Constants
@@ -99,7 +100,7 @@ bool dateCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0U; date_cmd[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) ==
+		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) ==
 			0U )
 		{
 			return date_cmd[i].func(argc, argv);
@@ -159,7 +160,7 @@ static bool dateSetTime(uint8_t argc, char *argv[])
 	if( !dateRead(&time) ) { return false; }
 	if( !dateParseTime(argv[SCLIDATE_INDEX_VALUE], &time) )
 	{
-		tm_syslog(TM_STR("[date] invalid time, expected hh:mm:ss\n"));
+		printf(TM_STR("[date] invalid time, expected hh:mm:ss\n"));
 		return false;
 	}
 	if( !dateWrite(&time) ) { return false; }
@@ -180,7 +181,7 @@ static bool dateSetDate(uint8_t argc, char *argv[])
 	if( !dateRead(&time) ) { return false; }
 	if( !dateParseDate(argv[SCLIDATE_INDEX_VALUE], &time) )
 	{
-		tm_syslog(TM_STR("[date] invalid date, expected day/month/year (2000-2099)\n"));
+		printf(TM_STR("[date] invalid date, expected day/month/year (2000-2099)\n"));
 		return false;
 	}
 	if( !dateWrite(&time) ) { return false; }
@@ -194,12 +195,12 @@ static bool dateHelp(uint8_t argc, char *argv[])
 	(void)argc;
 	(void)argv;
 
-	tm_syslog(TM_STR("[date] usage:\n"));
-	tm_syslog(TM_STR("\tdate\n"));
-	tm_syslog(TM_STR("\tdate startup\n"));
-	tm_syslog(TM_STR("\tdate time hh:mm:ss\n"));
-	tm_syslog(TM_STR("\tdate date day/month/year\n"));
-	tm_syslog(TM_STR("\tdate help\n"));
+	printf(TM_STR("[date] usage:\n"));
+	printf(TM_STR("\tdate\n"));
+	printf(TM_STR("\tdate startup\n"));
+	printf(TM_STR("\tdate time hh:mm:ss\n"));
+	printf(TM_STR("\tdate date day/month/year\n"));
+	printf(TM_STR("\tdate help\n"));
 	return true;
 }
 
@@ -225,7 +226,7 @@ static bool dateWrite(const hal_rtc_time_t *time)
 
 static void datePrint(const hal_rtc_time_t *time)
 {
-	tm_syslog(TM_STR("[date] %02u/%02u/20%02u %02u:%02u:%02u\n"),
+	printf(TM_STR("[date] %02u/%02u/20%02u %02u:%02u:%02u\n"),
 			  (unsigned int)time->day,
 			  (unsigned int)time->month,
 			  (unsigned int)time->year,
@@ -237,8 +238,8 @@ static void datePrint(const hal_rtc_time_t *time)
 static void datePrintError(err_codes_t error)
 {
 	const tm_string_t *message = err_getMessage(error);
-	if( message != NULL ) { tm_syslog(TM_STR("[date] RTC error: %s\n"), message); }
-	else { tm_syslog(TM_STR("[date] RTC error\n")); }
+	if( message != NULL ) { printf(TM_STR("[date] RTC error: %s\n"), message); }
+	else { printf(TM_STR("[date] RTC error\n")); }
 }
 
 /* -----------------------------------------------

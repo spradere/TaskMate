@@ -26,32 +26,27 @@
 
 #if TM_LIBC_CSTD
 	#include <string.h>
-/**
- * @name Standard string aliases
- * @brief Route bounded string operations to the standard C library.
- * @{
- */
-	#define tm_strncmp strncmp
-	#define tm_strncpy strncpy
-/** @} */
 #endif
 
 #if TM_LIBC_TASKMATE
-	#include <stdint.h>
+	#include <stddef.h>
 	#include "system/sysCall/sc_string.h"
+	#define strncmp taskmate_strncmp
+	#define strncpy taskmate_strncpy
 
 /**
  * @brief Compare up to n bytes of storage-aware strings.
  * @param n Maximum number of bytes to compare.
  * @return Zero if equal within the limit; negative or positive for ordering.
  */
-	int tm_strncmp(tm_string_t left, tm_string_t right, uint8_t n);
+	int strncmp(tm_string_t left, tm_string_t right, size_t n);
 /**
- * @brief Copy up to n bytes of a storage-aware string to RAM.
+ * @brief Copy and NUL-pad exactly n bytes from a storage-aware string.
  * @param[out] dest Destination RAM buffer.
  * @param n Maximum number of bytes to copy.
+ * @return Destination buffer.
  */
-	void tm_strncpy(char *dest, tm_string_t src, uint8_t n);
+	char *strncpy(char *dest, tm_string_t src, size_t n);
 #endif
 
 // clang-format on

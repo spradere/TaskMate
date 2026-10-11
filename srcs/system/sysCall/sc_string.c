@@ -26,9 +26,6 @@
  * Constants
  * ---------------------------------------------*/
 
-#define SCSTRING_ORDER_LESS (-1)
-#define SCSTRING_ORDER_GREATER 1
-
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
@@ -58,9 +55,10 @@ err_codes_t sc_consoleFlush(void)
 	return control_data.error;
 }
 
-uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
+uint8_t sc_stringGetByte(const tm_string_t *string, size_t index)
 {
-	if( (string == NULL) || (string->text == NULL) || (index >= TM_STRING_SIZE_MAX) ) { return 0U; }
+#if TM_LIBC_TASKMATE
+	if( (string == NULL) || (string->text == NULL) ) { return 0U; }
 
 	switch( string->storage )
 	{
@@ -71,40 +69,8 @@ uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 		default:
 			return 0U;
 	}
-}
-
-int sc_stringCompare(tm_string_t left, tm_string_t right, uint8_t size)
-{
-	for( uint8_t i = 0U; i < size; i++ )
-	{
-		uint8_t left_byte = sc_stringGetByte(&left, i);
-		uint8_t right_byte = sc_stringGetByte(&right, i);
-
-		if( left_byte < right_byte ) { return SCSTRING_ORDER_LESS; }
-		if( left_byte > right_byte ) { return SCSTRING_ORDER_GREATER; }
-		if( left_byte == 0U ) { return 0U; }
-	}
-
-	return 0U;
-}
-
-void sc_stringCopy(char *dest, tm_string_t src, uint8_t size)
-{
-	uint8_t i = 0U;
-
-	if( (dest == NULL) || (size == 0U) ) { return; }
-	if( src.text == NULL )
-	{
-		dest[0U] = 0U;
-		return;
-	}
-
-	while( (i < (uint8_t)(size - 1U)) && (i < (TM_STRING_SIZE_MAX - 1U)) )
-	{
-		uint8_t src_byte = sc_stringGetByte(&src, i);
-		if( src_byte == 0U ) { break; }
-		dest[i] = (char)src_byte;
-		i++;
-	}
-	dest[i] = 0U;
+#else
+	if( string == NULL ) { return 0U; }
+	return (uint8_t)string[index];
+#endif
 }

@@ -20,19 +20,21 @@
  * ========================================================================== */
 
 #include <stdint.h>
+#include "interfaces/tm_options.h"
 
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
 
 /**
- * @brief Maximum length used by storage-aware string operations.
+ * @brief Default limit for bounded application text operations.
  */
 #define TM_STRING_SIZE_MAX 255
 
 /**
  * @brief Identifies whether a string resides in RAM or ROM.
  */
+#if TM_LIBC_TASKMATE
 typedef enum __attribute__((packed))
 {
 	TM_MEM_RAM,
@@ -48,5 +50,10 @@ typedef struct
 	const uint8_t *text;
 	const tm_string_storage_t storage;
 } tm_string_t;
+typedef tm_string_t tm_string_arg_t;
+#else
+typedef char tm_string_t;
+typedef const char *tm_string_arg_t;
+#endif
 
 #endif // INTERFACES_TM_STRING_H

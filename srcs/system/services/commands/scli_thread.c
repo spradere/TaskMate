@@ -18,9 +18,10 @@
 #include "scli_thread.h"
 
 #include "interfaces/tm_define.h"
+#include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
+#include "tmLibc/tm_stdio.h"
 #include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
 
 /* -----------------------------------------------
  * Constants
@@ -86,7 +87,7 @@ bool threadCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0U; thread_cmd[i].name != NULL; i++ )
 	{
-		if( tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(thread_cmd[i].name), TM_STRING_SIZE_MAX) ==
+		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(thread_cmd[i].name), TM_STRING_SIZE_MAX) ==
 			0U )
 		{
 			return thread_cmd[i].func(argc, argv);
@@ -106,12 +107,12 @@ static bool threadHelp(uint8_t argc, char *argv[])
 	(void)argc;
 	(void)argv;
 
-	tm_syslog(TM_STR("[thread] usage:\n"));
+	printf(TM_STR("[thread] usage:\n"));
 
-	tm_syslog(TM_STR("\tthread start <name> [runlevel:1..4]\n"));
-	tm_syslog(TM_STR("\tthread stop <name>\n"));
-	tm_syslog(TM_STR("\tthread list\n"));
-	tm_syslog(TM_STR("\tthread help\n"));
+	printf(TM_STR("\tthread start <name> [runlevel:1..4]\n"));
+	printf(TM_STR("\tthread stop <name>\n"));
+	printf(TM_STR("\tthread list\n"));
+	printf(TM_STR("\tthread help\n"));
 	return true;
 }
 
@@ -120,7 +121,7 @@ static bool threadList(uint8_t argc, char *argv[])
 	(void)argc;
 	(void)argv;
 
-	tm_syslog(TM_STR("[thread] threads:\n"));
+	printf(TM_STR("[thread] threads:\n"));
 	const mod_count_t thread_count = sc_threadGetCount();
 	for( mod_count_t id = 0U; id < thread_count; id++ )
 	{
@@ -130,7 +131,7 @@ static bool threadList(uint8_t argc, char *argv[])
 		if( !sc_threadGetInfo(id, &name, &run_level, &stack_size_bytes) ) { return false; }
 
 		(void)stack_size_bytes;
-		tm_syslog(TM_STR("\t%s runlevel=%u\n"), name, (unsigned int)run_level);
+		printf(TM_STR("\t%s runlevel=%u\n"), name, (unsigned int)run_level);
 	}
 
 	return true;
@@ -148,19 +149,19 @@ static bool threadStart(uint8_t argc, char *argv[])
 	if( (argc == SCLITHREAD_COUNT_STARTARGS) &&
 		!threadRunLevelParse(argv[SCLITHREAD_INDEX_RUNLEVEL], &run_level) )
 	{
-		tm_syslog(TM_STR("[thread] invalid runlevel\n"));
+		printf(TM_STR("[thread] invalid runlevel\n"));
 		return false;
 	}
 
 	if( sc_threadStart(argv[SCLITHREAD_INDEX_NAME], run_level) )
 	{
-		tm_string_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
-		tm_syslog(TM_STR("[thread] %s started\n"), &thread_name);
+		tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
+		printf(TM_STR("[thread] %s started\n"), TM_STR_ARG(thread_name));
 		return true;
 	}
 
-	tm_string_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
-	tm_syslog(TM_STR("[thread] %s not started: bad name or runlevel\n"), &thread_name);
+		tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
+		printf(TM_STR("[thread] %s not started: bad name or runlevel\n"), TM_STR_ARG(thread_name));
 	return false;
 }
 
@@ -174,13 +175,13 @@ static bool threadStop(uint8_t argc, char *argv[])
 
 	if( sc_threadStop(argv[SCLITHREAD_INDEX_NAME]) )
 	{
-		tm_string_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
-		tm_syslog(TM_STR("[thread] %s stop\n"), &thread_name);
+		tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
+		printf(TM_STR("[thread] %s stop\n"), TM_STR_ARG(thread_name));
 		return true;
 	}
 
-	tm_string_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
-	tm_syslog(TM_STR("[thread] name not found %s\n"), &thread_name);
+		tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
+		printf(TM_STR("[thread] name not found %s\n"), TM_STR_ARG(thread_name));
 	return false;
 }
 

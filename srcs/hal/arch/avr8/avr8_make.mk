@@ -52,6 +52,7 @@ CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-dec
 
 # Command line #include and #define
 CFLAGS += -I${PATH_SRCS} -I.
+CFLAGS += -DTM_LIBC_TASKMATE=1 -DTM_LIBC_CSTD=0
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto

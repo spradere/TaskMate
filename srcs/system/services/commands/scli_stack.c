@@ -19,8 +19,9 @@
 
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_threads.h"
+#include "system/sysCall/sc_string.h"
 #include "tmLibc/tm_string.h"
-#include "tmLibc/tm_syslog.h"
+#include "tmLibc/tm_stdio.h"
 
 /* -----------------------------------------------
  * Constants
@@ -35,14 +36,14 @@
 bool stackCommand(uint8_t argc, char *argv[])
 {
 	if( (argc != SCLISTACK_COUNT_COMMANDARGS) ||
-		(tm_strncmp(TM_STR_RAM(argv[1U]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0U) )
+		(strncmp(TM_STR_RAM(argv[1U]), TM_STR("depth"), TM_STRING_SIZE_MAX) != 0U) )
 	{
-		tm_syslog(TM_STR("[stack] usage:\n"));
-		tm_syslog(TM_STR("\tstack depth\n"));
+		printf(TM_STR("[stack] usage:\n"));
+		printf(TM_STR("\tstack depth\n"));
 		return false;
 	}
 
-	tm_syslog(TM_STR("[stack] depth:\n"));
+	printf(TM_STR("[stack] depth:\n"));
 	const mod_count_t thread_count = sc_threadGetCount();
 	for( mod_count_t id = 0U; id < thread_count; id++ )
 	{
@@ -57,7 +58,7 @@ bool stackCommand(uint8_t argc, char *argv[])
 		}
 
 		(void)run_level;
-		tm_syslog(TM_STR("\t%s depth=%u/%u bytes\n"), name, depth_bytes, stack_size_bytes);
+		printf(TM_STR("\t%s depth=%u/%u bytes\n"), name, depth_bytes, stack_size_bytes);
 	}
 
 	return true;

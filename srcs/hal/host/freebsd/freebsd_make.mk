@@ -36,6 +36,7 @@ CFLAGS += -Wconversion -Wsign-conversion -Wenum-conversion -Wcast-align -Wcast-q
 CFLAGS += -Wnull-dereference -Wundef -Werror=undef -Werror=implicit-function-declaration
 CFLAGS += -Werror=return-type -Wdouble-promotion -Wwrite-strings -fno-common -Wpointer-arith
 CFLAGS += -I${PATH_SRCS} -I.
+CFLAGS += -DTM_LIBC_TASKMATE=0 -DTM_LIBC_CSTD=1
 CFLAGS += -ffunction-sections -fdata-sections
 
 LDFLAGS = -Wl,--gc-sections -lncursesw -ltinfow

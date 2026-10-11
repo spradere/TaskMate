@@ -19,8 +19,9 @@
 #include <stdarg.h>
 #include <string.h>
 
+#define TM_LIBC_TASKMATE 0
+#define TM_LIBC_CSTD 1
 #include "hal/host/ucontext/ucontext_string_macro.h"
-#include "tmLibc/stdio/tm_snprintf.h"
 
 #include "system/services/commands/scli_driver.c"
 #include "system/services/commands/scli_thread.c"
@@ -39,10 +40,8 @@
 
 static char test_output[TEST_SCLI_OUTPUT_SIZE];
 static uint8_t test_output_length;
-static const tm_string_t test_driver_name = {
-	.text = (const uint8_t *)"timerContext", .storage = TM_MEM_RAM};
-static const tm_string_t test_thread_name = {
-	.text = (const uint8_t *)"task1", .storage = TM_MEM_RAM};
+static const tm_string_t test_driver_name[] = "timerContext";
+static const tm_string_t test_thread_name[] = "task1";
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -58,11 +57,6 @@ static void testResetOutput(void);
  * Syscall and logging dependencies
  * ---------------------------------------------*/
 
-uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
-{
-	return string->text[index];
-}
-
 err_codes_t sc_consoleWriteByte(uint8_t data)
 {
 	(void)data;
@@ -71,16 +65,17 @@ err_codes_t sc_consoleWriteByte(uint8_t data)
 
 err_codes_t sc_consoleFlush(void) { return ERR_NO_ERROR; }
 
-void tm_syslog(tm_string_t format, ...)
+int printf(const char *format, ...)
 {
 	va_list args;
 	va_start(args, format);
-	int written = tm_vsnprintf(&test_output[test_output_length],
-		(uint8_t)(TEST_SCLI_OUTPUT_SIZE - test_output_length), format, args);
+	int written = vsnprintf(&test_output[test_output_length],
+		(size_t)(TEST_SCLI_OUTPUT_SIZE - test_output_length), format, args);
 	va_end(args);
 	assert(written >= 0);
 	assert(written < (int)(TEST_SCLI_OUTPUT_SIZE - test_output_length));
 	test_output_length += (uint8_t)written;
+	return written;
 }
 
 mod_count_t sc_driverGetCount(void) { return 1U; }
@@ -89,7 +84,7 @@ bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 					  hal_driver_status_t *status_bits)
 {
 	assert(id == 0U);
-	*name = &test_driver_name;
+	*name = test_driver_name;
 	*run_level = RL_RUN_DRIVER;
 	*status_bits = (hal_driver_status_t)((1U << DRV_BIT_INIT) | (1U << DRV_BIT_START));
 	return true;
@@ -125,7 +120,7 @@ bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 					  uint16_t *stack_size_bytes)
 {
 	assert(id == 0U);
-	*name = &test_thread_name;
+	*name = test_thread_name;
 	*run_level = RL_RUN_USER;
 	*stack_size_bytes = 0U;
 	return true;

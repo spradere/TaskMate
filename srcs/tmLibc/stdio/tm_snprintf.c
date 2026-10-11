@@ -18,6 +18,10 @@
 
 #include "tm_snprintf.h"
 
+#if TM_LIBC_TASKMATE
+#include <limits.h>
+#include <stdbool.h>
+
 #include "interfaces/tm_define.h"
 #include "system/sysCall/sc_string.h"
 
@@ -26,7 +30,8 @@
  * ---------------------------------------------*/
 
 static void baseConvert(unsigned int value, uint8_t base);
-static void tm_putChar(char ch);
+static void putChar(char ch);
+static int formatString(char *ptr, size_t size, bool console, tm_string_t format, va_list args);
 
 /* -----------------------------------------------
  * Formatter state
@@ -37,13 +42,16 @@ static void tm_putChar(char ch);
 #define SNPRINTF_BASE_DECIMAL 10U
 #define SNPRINTF_BASE_HEXADECIMAL 16U
 #define SNPRINTF_PADDING_MAX 9U
+#define SNPRINTF_ERROR (-1)
 
 typedef struct
 {
 	char *ptr;
-	uint8_t size;
-	uint8_t index;
+	size_t size;
+	size_t index;
 	uint8_t padding;
+	bool console;
+	bool failed;
 } tm_snprintf_buffer_t;
 
 static tm_snprintf_buffer_t tm_snprintf_buffer;
@@ -74,61 +82,62 @@ static void baseConvert(unsigned int value, uint8_t base)
 	while( pos < tm_snprintf_buffer.padding ) { tmp[pos++] = '0'; }
 
 	// Reverse order
-	while( pos > 0U ) { tm_putChar(tmp[--pos]); }
+	while( pos > 0U ) { putChar(tmp[--pos]); }
 }
 
-int tm_snprintf(char *ptr, uint8_t size, const tm_string_t format, ...)
+int snprintf(char *ptr, size_t size, const tm_string_t format, ...)
 {
 	int ret;
 	va_list args;
 	va_start(args, format);
-	ret = tm_vsnprintf(ptr, size, format, args);
+	ret = vsnprintf(ptr, size, format, args);
 	va_end(args);
 	return ret;
 }
 
-int tm_printf(const tm_string_t format, ...)
+int printf(const tm_string_t format, ...)
 {
 	int ret;
 	va_list args;
 	va_start(args, format);
-	ret = tm_vprintf(format, args);
+	ret = vprintf(format, args);
 	va_end(args);
 	return ret;
 }
 
-int tm_vprintf(const tm_string_t format, va_list args)
+int vprintf(const tm_string_t format, va_list args)
 {
-	return tm_vsnprintf(NULL, 0U, format, args);
+	return formatString(NULL, 0U, true, format, args);
 }
 
-static void tm_putChar(char ch)
+static void putChar(char ch)
 {
-	if( tm_snprintf_buffer.ptr != NULL )
+	if( tm_snprintf_buffer.console )
 	{
-		if( tm_snprintf_buffer.size == 0U ) { return; }
-		if( ch == 0U )
+		if( sc_consoleWriteByte((uint8_t)ch) != ERR_NO_ERROR ) { tm_snprintf_buffer.failed = true; }
+		if( (ch == '\n') && (sc_consoleFlush() != ERR_NO_ERROR) )
 		{
-			tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0U;
-			return;
+			tm_snprintf_buffer.failed = true;
 		}
-		if( tm_snprintf_buffer.index >= (uint8_t)(tm_snprintf_buffer.size - 1U) ) { return; }
-
-		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index++] = ch;
-		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = 0U;
 	}
-	else
+	else if( (tm_snprintf_buffer.ptr != NULL) && (tm_snprintf_buffer.size > 0U) &&
+		(tm_snprintf_buffer.index < (tm_snprintf_buffer.size - 1U)) )
 	{
-		(void)sc_consoleWriteByte((uint8_t)ch);
-		if( ch == '\n' ) { (void)sc_consoleFlush(); }
+		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = ch;
 	}
+	tm_snprintf_buffer.index++;
 }
 
 /*
  * Format through shared static state. Calls must not overlap, including calls from an ISR
- * or another thread; a null destination sends bytes to the console.
+ * or another thread. The stream entry points send bytes to the console.
  */
-int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args)
+int vsnprintf(char *ptr, size_t size, const tm_string_t format, va_list args)
+{
+	return formatString(ptr, size, false, format, args);
+}
+
+static int formatString(char *ptr, size_t size, bool console, const tm_string_t format, va_list args)
 {
 
 	// Store variables
@@ -136,8 +145,10 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 	tm_snprintf_buffer.size = size;
 	tm_snprintf_buffer.index = 0U;
 	tm_snprintf_buffer.padding = 0U;
+	tm_snprintf_buffer.console = console;
+	tm_snprintf_buffer.failed = false;
 
-	uint8_t format_index = 0U;
+	size_t format_index = 0U;
 	char format_c = (char)sc_stringGetByte(&format, format_index++);
 
 	while( format_c )
@@ -162,18 +173,18 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 				case 'c':
 				{
 					int cc = va_arg(args, int);
-					tm_putChar((char)cc);
+					putChar((char)cc);
 					break;
 				}
 
 				case 's':
 				{
 					const tm_string_t *str = va_arg(args, const tm_string_t *);
-					uint8_t str_index = 0U;
+					size_t str_index = 0U;
 					char str_c = (char)sc_stringGetByte(str, str_index++);
 					while( str_c != 0U )
 					{
-						tm_putChar(str_c);
+						putChar(str_c);
 						str_c = (char)sc_stringGetByte(str, str_index++);
 					}
 					break;
@@ -203,25 +214,33 @@ int tm_vsnprintf(char *ptr, uint8_t size, const tm_string_t format, va_list args
 							break;
 					}
 					baseConvert(value, base);
-					tm_snprintf_buffer.padding = 0U;
 					break;
 				}
 
 				case '%':
-					tm_putChar('%');
+					putChar('%');
 					break;
 				default:
-					tm_putChar('?');
 					break;
 			}
+			tm_snprintf_buffer.padding = 0U;
 		}
-		else { tm_putChar(format_c); }
+		else { putChar(format_c); }
 		format_c = (char)sc_stringGetByte(&format, format_index++);
 	}
 
 exit:
 
-	// Leave a bounded string terminated even after an unsupported width.
-	if( tm_snprintf_buffer.ptr != NULL ) { tm_putChar(0U); } // close string
-	return tm_snprintf_buffer.index;
+	if( (ptr != NULL) && (size > 0U) )
+	{
+		size_t end = tm_snprintf_buffer.index;
+		if( end >= size ) { end = size - 1U; }
+		ptr[end] = 0U;
+	}
+	if( tm_snprintf_buffer.failed || (tm_snprintf_buffer.index > INT_MAX) )
+	{
+		return SNPRINTF_ERROR;
+	}
+	return (int)tm_snprintf_buffer.index;
 }
+#endif

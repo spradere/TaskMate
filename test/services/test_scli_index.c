@@ -19,14 +19,9 @@
 #include <assert.h>
 #include <string.h>
 
+#define TM_LIBC_TASKMATE 0
+#define TM_LIBC_CSTD 1
 #include "interfaces/tm_string.h"
-
-/* Test-only RAM storage keeps the service sources independent of a target backend. */
-#define HAL_STRING_RAM(string) \
-	((tm_string_t){.text = (const uint8_t *)(string), .storage = TM_MEM_RAM})
-#define HAL_STRING_ROM(string) HAL_STRING_RAM(string)
-#define HAL_STRING(string) HAL_STRING_RAM(string)
-#define HAL_STRING_INROM(name, txt) static const char name[] = (txt)
 
 #define SCLITEST_MAX_DAY 31U
 
