@@ -40,7 +40,6 @@ typedef enum __attribute__((packed))
 	PORT_F,
 	PORT_G,
 	PORT_H,
-	PORT_I,
 	PORT_J,
 	PORT_K,
 	PORT_L,
