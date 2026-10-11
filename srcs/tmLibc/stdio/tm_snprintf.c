@@ -25,7 +25,7 @@
  * Private function prototypes
  * ---------------------------------------------*/
 
-static void baseConvert(uint16_t value, uint8_t base);
+static void baseConvert(unsigned int value, uint8_t base);
 static void tm_putChar(char ch);
 
 /* -----------------------------------------------
@@ -52,7 +52,7 @@ static tm_snprintf_buffer_t tm_snprintf_buffer;
  * Implementation - Functions
  * ===========================================================================*/
 
-static void baseConvert(uint16_t value, uint8_t base)
+static void baseConvert(unsigned int value, uint8_t base)
 {
 	const char digits[] = "0123456789abcdef";
 
@@ -65,7 +65,7 @@ static void baseConvert(uint16_t value, uint8_t base)
 	{
 		while( (value != 0U) && (pos < SNPRINTF_BUFF_TEMP_SIZE) )
 		{
-			uint16_t data = (value % base);
+			uint8_t data = (uint8_t)(value % base);
 			value /= base;
 			tmp[pos++] = digits[data];
 		}
