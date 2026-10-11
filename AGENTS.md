@@ -15,7 +15,7 @@ Before a substantial change, read the relevant documents in `doc/arch_notes/` an
 
 ## Working scope and validation
 
-- Keep corrections and refactors limited to the scope named in the request. Do not absorb adjacent audit findings, hardening, locking, reentrancy, or broader cleanup without a separately scoped request.
+- Keep corrections and refactors limited to the scope named in the request. Do not absorb adjacent audit findings, hardening, locking, reentrancy, or broader clean-up without a separately scoped request.
 - Treat files not tracked by Git as outside Codex's working scope unless the prompt explicitly requests them.
 - Never modify code under `legacy/`. It is preserved as a historical snapshot.
 - Do not run code formatters or reformat code unless the prompt explicitly asks for formatting. Preserve the existing formatting during implementation and validation.
@@ -63,7 +63,7 @@ The normal application paths are therefore tasks -> services -> `sysCall` and ta
 - Name units and document timing, ISR/concurrency, initialization order, and non-obvious hardware constraints. Avoid magic numbers and dynamic allocation without an explicit architectural reason.
 - `.clang-format` and `doc/rules/style.md` are authoritative: tabs (width 4), Allman braces, 100-column lines, `if( condition )`, and right-aligned pointers.
 - `.c` files include their matching local header first. New C/header/Make/AWK files use the BSD-2-Clause banner; C headers and sources also include a Doxygen `@file` / `@brief` block.
-- Always add section comments when creating a new code file. Use the section names and layout of neighboring files.
+- Always add section comments when creating a new code file. Use the section names and layout of neighbouring files.
 - Header guards use `<LAST_PARENT_DIRECTORY>_<FILE_NAME>_H`. Convert the immediate parent directory and file name to uppercase, preserve word-separating underscores, replace other separators with underscores, and omit the file extension.
 - Types are `snake_case_t`; constants/enums are `UPPER_SNAKE_CASE`; static data is descriptive `snake_case`; functions are descriptive camelCase. Use prefixes only for real boundaries: `tm_`, `sc_`, `gpio_`, `err_`, `mod_`, and `rl_`.
 - Comments explain intent and constraints, not the obvious code.

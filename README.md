@@ -89,6 +89,18 @@ AutoCode is used to generate parts of the system from simple configuration files
 
 ---
 
+## Programming Languages
+
+TaskMate follows a simple philosophy: **use the right language for the right job**, keeping things close to the hardware without sacrificing clarity or maintainability.
+
+**Assembly** is kept to a strict minimum, mainly for stack manipulation and context switching, with careful adherence to the C ABI to get back to C code as quickly as possible. **Embedded C** remains the foundation of the system, providing direct hardware control and a natural fit for its internal logic and structure. **Zero-cost C++** is being progressively introduced to move the complexity of code factoring, type safety, and abstractions from runtime code to the compiler, without unnecessary runtime overhead.
+
+The build system relies on **make**, FreeBSD heritage, of course ;-), supported by **shell** and **awk** scripts to keep Makefiles lean, readable, and manageable.
+
+A special mention goes to the **init.rc** files: what started as simple configuration files is gradually evolving into a small, project-specific language of its own, describing the composition and runtime configuration of each hardware target.
+
+---
+
 ## 🧭 About ChatGPT and TaskMate
 
 Although **no code from ChatGPT is ever copied directly** into the TaskMate source tree, the project would never have reached its current level of maturity without the assistance of AI. ChatGPT has been a great tool for structuring ideas, learning new concepts, and refining both code and architectural design. It provides technical guidance.
