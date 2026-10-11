@@ -1,3 +1,4 @@
+v1.11	add required `setModuleCountMax` and `setErrorCountMax` commands
 v1.10	add `-source_file` to `addScliCommand`
 v1.9	add `addscliCommand`
 v1.8 	remove `addDriver` `addService` `addtask`, add command `addModule` with type

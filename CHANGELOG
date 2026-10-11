@@ -1,3 +1,8 @@
+	[code] validate driver lifecycle results and error message lookups
+	[code] use packed enums for run levels, module types, and error codes
+	[build] size module and error counts from init.rc target limits
+	[code] use byte-oriented text and bounded SCLI argument indexes
+	[arch] move software ticks into scheduler and remove timerSTC
 	[code] remove magic numbers in all code base
 	[code] harden assembly code for context switch
 	[code] fix AVR timer3 init/start/stop, harden timer1 stop
