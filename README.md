@@ -89,7 +89,7 @@ AutoCode is used to generate parts of the system from simple configuration files
 
 ---
 
-## Programming Languages
+## 🛠️ Programming Languages
 
 TaskMate follows a simple philosophy: **use the right language for the right job**, keeping things close to the hardware without sacrificing clarity or maintainability.
 
