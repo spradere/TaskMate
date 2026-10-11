@@ -82,10 +82,7 @@ file_utility_err_t fileCmpReplaceAll(void)
 		fileInit(&file_src);
 		file_src.name = file_tmp_list[i].source_name;
 		result = fileOpen(&file_src, "r", FILEUTILITY_MODE_MISSING);
-		if( result != FILE_UTILITY_OK )
-		{
-			goto exit;
-		}
+		if( result != FILE_UTILITY_OK ) { goto exit; }
 
 		file_t file_tmp;
 		fileInit(&file_tmp);
@@ -256,15 +253,9 @@ file_utility_err_t fileClose(file_t *file)
 
 	if( file->stream_opened )
 	{
-		if( file->write_access && (ferror(file->stream) != 0U) )
-		{
-			result = FILE_UTILITY_WRITE;
-		}
+		if( file->write_access && (ferror(file->stream) != 0U) ) { result = FILE_UTILITY_WRITE; }
 		int err = fclose(file->stream);
-		if( err != 0U )
-		{
-			result = FILE_UTILITY_CLOSE;
-		}
+		if( err != 0U ) { result = FILE_UTILITY_CLOSE; }
 		if( file->name_allocated ) { free(file->name); }
 		fileInit(file);
 	}

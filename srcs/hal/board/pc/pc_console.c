@@ -101,8 +101,10 @@ static void consoleDrawFrames(void)
 	mvwprintw(output_frame, 0U, PCCONSOLE_COLUMN_LABEL, " USART output ");
 	mvwprintw(input_frame, 0U, PCCONSOLE_COLUMN_LABEL, " USART input ");
 	mvwprintw(gpio_frame, 0U, PCCONSOLE_COLUMN_LABEL, " GPIO LEDs ");
-	mvwprintw(gpio_frame, getmaxy(gpio_frame) - PCCONSOLE_WIDTH_BORDER,
-			  PCCONSOLE_COLUMN_LABEL, " F10: halt ");
+	mvwprintw(gpio_frame,
+			  getmaxy(gpio_frame) - PCCONSOLE_WIDTH_BORDER,
+			  PCCONSOLE_COLUMN_LABEL,
+			  " F10: halt ");
 	wnoutrefresh(output_frame);
 	wnoutrefresh(input_frame);
 	wnoutrefresh(gpio_frame);
@@ -145,11 +147,17 @@ bool pc_consoleInit(void)
 		return false;
 	}
 
-	output_console = derwin(output_frame, output_height - PCCONSOLE_WIDTH_BORDER,
-							output_width - PCCONSOLE_WIDTH_BORDER, 1U, 1U);
+	output_console = derwin(output_frame,
+							output_height - PCCONSOLE_WIDTH_BORDER,
+							output_width - PCCONSOLE_WIDTH_BORDER,
+							1U,
+							1U);
 	input_console = derwin(input_frame, 1U, output_width - PCCONSOLE_WIDTH_BORDER, 1U, 1U);
-	gpio_console = derwin(gpio_frame, rows - PCCONSOLE_WIDTH_BORDER,
-						  PCCONSOLE_WIDTH_GPIO - PCCONSOLE_WIDTH_BORDER, 1U, 1U);
+	gpio_console = derwin(gpio_frame,
+						  rows - PCCONSOLE_WIDTH_BORDER,
+						  PCCONSOLE_WIDTH_GPIO - PCCONSOLE_WIDTH_BORDER,
+						  1U,
+						  1U);
 	if( (output_console == NULL) || (input_console == NULL) || (gpio_console == NULL) )
 	{
 		consoleDeleteWindows();

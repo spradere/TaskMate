@@ -37,7 +37,7 @@ typedef hal_timerContextCallback_func_t *hal_timerContextCallback_ptr_t;
  * @return Resulting driver state.
  */
 hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
-										 hal_driver_control_data_t *data);
+										   hal_driver_control_data_t *data);
 /**
  * @brief Register the scheduler timer callback.
  * @param func_ptr Callback invoked from the scheduler timer interrupt.

@@ -64,7 +64,7 @@ typedef add_module_result_t (*add_module_option_func_t)(const char *data,
  * ---------------------------------------------*/
 
 #define ADD_MODULE_TYPE(X)                                    \
-	X(DRIVER, "driver", MOD_DRIVER_ID, 0U)                     \
+	X(DRIVER, "driver", MOD_DRIVER_ID, 0U)                    \
 	X(SERVICE, "service", MOD_THREAD_ID, THREAD_BIT_TYPE_SYS) \
 	X(TASK, "task", MOD_THREAD_ID, THREAD_BIT_TYPE_USER)
 
@@ -242,15 +242,17 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least %i",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count, ADDMODULE_COUNT_MIN);
+						   command->tok->count,
+						   ADDMODULE_COUNT_MIN);
 		return false;
 	}
 
-	const add_module_context_t context = {
-		.module = module,
-		.source_path = command->source_path,
-		.stack_size_min = (module->subtype == THREAD_BIT_TYPE_USER)
-							  ? command->data_base->stack_size_min : AUTOCODE_SIZE_STACKMIN};
+	const add_module_context_t context = {.module = module,
+										  .source_path = command->source_path,
+										  .stack_size_min =
+											  (module->subtype == THREAD_BIT_TYPE_USER)
+												  ? command->data_base->stack_size_min
+												  : AUTOCODE_SIZE_STACKMIN};
 	bool module_is_valid = true;
 	// Option names and values occur in pairs after the module type and name.
 	for( int token = ADDMODULE_COUNT_HEADER; token < command->tok->count;
@@ -266,9 +268,8 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 
 			// Apply the matched value and count only options whose data is valid.
 			option_found = true;
-			if( (*module_options[option].func)(
-					command->tok->tokens[token + ADDMODULE_COUNT_NEXT], &context) ==
-				ADD_MODULE_OK )
+			if( (*module_options[option].func)(command->tok->tokens[token + ADDMODULE_COUNT_NEXT],
+											   &context) == ADD_MODULE_OK )
 			{
 				option_count[option]++;
 			}
@@ -396,7 +397,8 @@ void initrcAddModule(const initrc_command_t *command)
 		AUTOCODE_MSG_ERROR("wrong token count [%s:%i] is %i, should be odd and at least %i",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count, ADDMODULE_COUNT_MIN);
+						   command->tok->count,
+						   ADDMODULE_COUNT_MIN);
 		return;
 	}
 
@@ -407,8 +409,8 @@ void initrcAddModule(const initrc_command_t *command)
 	moduleInit(&module, module_type);
 	unsigned int option_count[ADD_MODULE_OPTION_COUNT] = {0U};
 	if( moduleOptionsParse(command, &module, option_count) == false ) { return; }
-	if( moduleOptionsValidate(command->tok->tokens[ADDMODULE_INDEX_NAME],
-							  module_type, option_count) == false )
+	if( moduleOptionsValidate(
+			command->tok->tokens[ADDMODULE_INDEX_NAME], module_type, option_count) == false )
 	{
 		return;
 	}

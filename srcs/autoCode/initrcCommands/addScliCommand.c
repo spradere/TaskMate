@@ -72,7 +72,8 @@ static bool commandSourceFileExists(const initrc_command_t *command, const char 
 
 static const scli_command_definition_t *commandDefinitionFind(const char *name)
 {
-	for( size_t i = 0U; i < (sizeof(scli_command_definitions) / sizeof(scli_command_definitions[0U]));
+	for( size_t i = 0U;
+		 i < (sizeof(scli_command_definitions) / sizeof(scli_command_definitions[0U]));
 		 i++ )
 	{
 		if( strcmp(scli_command_definitions[i].name, name) == 0U )
@@ -95,7 +96,8 @@ void initrcAddScliCommand(const initrc_command_t *command)
 		AUTOCODE_MSG_ERROR("addScliCommand token count [%s:%i] is %i, should be %u",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count, ADDSCLICOMMAND_COUNT_TOKENS);
+						   command->tok->count,
+						   ADDSCLICOMMAND_COUNT_TOKENS);
 		return;
 	}
 	if( strcmp(command->tok->tokens[ADDSCLICOMMAND_INDEX_OPTION], "-source_file") != 0U )
@@ -135,7 +137,8 @@ void initrcAddScliCommand(const initrc_command_t *command)
 						   name);
 		return;
 	}
-	if( commandSourceFileExists(command, command->tok->tokens[ADDSCLICOMMAND_INDEX_SOURCE]) == false )
+	if( commandSourceFileExists(command, command->tok->tokens[ADDSCLICOMMAND_INDEX_SOURCE]) ==
+		false )
 	{
 		AUTOCODE_MSG_ERROR("SCLI command source file not found [%s:%i] %s",
 						   command->initrc_name,

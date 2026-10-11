@@ -48,8 +48,10 @@ void tagWriterWriteDriversAlloc(const tag_writer_context_t *context)
 		}
 		else
 		{
-			fprintf(context->file, "\t\t.address = 0x%0*X,\n",
-					(int)TAGWRITERSDRIVERS_WIDTH_ADDRESS, mod->modules[i].address);
+			fprintf(context->file,
+					"\t\t.address = 0x%0*X,\n",
+					(int)TAGWRITERSDRIVERS_WIDTH_ADDRESS,
+					mod->modules[i].address);
 		}
 		fprintf(context->file, "\t\t.control = hal_%sControl\n", mod->modules[i].name);
 		fprintf(context->file, "\t};\n");

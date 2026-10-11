@@ -33,7 +33,7 @@
  * @brief Create string descriptors with AVR8 RAM or program-memory storage.
  * @{
  */
-#define HAL_STRING_INROM(name, txt)                           \
+#define HAL_STRING_INROM(name, txt)                              \
 	static const uint8_t TM_UNIQUE_NAME(name)[] PROGMEM = (txt); \
 	static const tm_string_t(name) = {.text = TM_UNIQUE_NAME(name), .storage = TM_MEM_ROM}
 

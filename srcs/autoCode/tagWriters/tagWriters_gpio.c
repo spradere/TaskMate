@@ -19,7 +19,10 @@
 #include "../tokenizer.h"
 #include "tagWriters.h"
 
-enum { TAGWRITERSGPIO_COUNT_FIELDS = 1U };
+enum
+{
+	TAGWRITERSGPIO_COUNT_FIELDS = 1U
+};
 
 /* =============================================================================
  * Implementation - Functions

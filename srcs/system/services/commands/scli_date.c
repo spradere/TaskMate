@@ -253,7 +253,7 @@ static bool dateParseField(const char *text, uint8_t *index, char separator,
 	uint16_t parsed = 0U;
 	uint8_t digit_count = 0U;
 	while( (*index < SCLIDATE_TEXT_SIZE_MAX) && (digit_count < digit_count_max) &&
-		(text[*index] >= '0') && (text[*index] <= '9') )
+		   (text[*index] >= '0') && (text[*index] <= '9') )
 	{
 		parsed = (parsed * SCLIDATE_BASE_DECIMAL) + (uint8_t)(text[*index] - '0');
 		(*index)++;
@@ -283,17 +283,20 @@ static bool dateParseTime(const char *text, hal_rtc_time_t *time)
 	uint16_t hours;
 	uint16_t minutes;
 	uint16_t seconds;
-	if( !dateParseField(text, &index, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
-						&hours) ||
-		!dateParseField(text, &index, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
-						&minutes) ||
-		!dateParseField(text, &index, 0U, SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS,
-						&seconds) )
+	if( !dateParseField(
+			text, &index, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS, &hours) ||
+		!dateParseField(
+			text, &index, ':', SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS, &minutes) ||
+		!dateParseField(
+			text, &index, 0U, SCLIDATE_COUNT_TIMEDIGITS, SCLIDATE_COUNT_TIMEDIGITS, &seconds) )
 	{
 		return false;
 	}
 	if( (hours > SCLIDATE_MAX_HOURS) || (minutes > SCLIDATE_MAX_MINUTES) ||
-		(seconds > SCLIDATE_MAX_SECONDS) ) { return false; }
+		(seconds > SCLIDATE_MAX_SECONDS) )
+	{
+		return false;
+	}
 
 	time->hours = (uint8_t)hours;
 	time->minutes = (uint8_t)minutes;
@@ -311,13 +314,16 @@ static bool dateParseDate(const char *text, hal_rtc_time_t *time)
 	uint16_t year;
 	if( !dateParseField(text, &index, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &day) ||
 		!dateParseField(text, &index, '/', 1U, SCLIDATE_COUNT_TIMEDIGITS, &month) ||
-		!dateParseField(text, &index, 0U, SCLIDATE_COUNT_YEARDIGITS, SCLIDATE_COUNT_YEARDIGITS,
-						&year) )
+		!dateParseField(
+			text, &index, 0U, SCLIDATE_COUNT_YEARDIGITS, SCLIDATE_COUNT_YEARDIGITS, &year) )
 	{
 		return false;
 	}
 	if( (year < SCLIDATE_YEAR_FIRST) || (year > SCLIDATE_YEAR_LAST) || (month < 1U) ||
-		(month > SCLIDATE_MAX_MONTH) ) { return false; }
+		(month > SCLIDATE_MAX_MONTH) )
+	{
+		return false;
+	}
 
 	uint8_t rtc_year = (uint8_t)(year - SCLIDATE_YEAR_FIRST);
 

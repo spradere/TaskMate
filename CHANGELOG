@@ -19,10 +19,10 @@
 TaskMate 0.32
 
 	[build] [code] scli commands selection in initrc files
-	[code] refactor initrc parser, function dispather and X macro
+	[code] refactor initrc parser, function dispatcher and X macro
 	[build] remove useless code and add comments in makefiles
-	[code] upade autoCode init.rc parser
-	[code] add simulation taget FreeBSD-ucontext
+	[code] update autoCode init.rc parser
+	[code] add simulation target FreeBSD-ucontext
 	[code] variable size for stacks
 	[code] move stack out of modules data base
 	[code] add stack depth measurement
@@ -30,7 +30,7 @@ TaskMate 0.32
 TaskMate 0.31
 
 	[arch] [code] remove hal/public
-	[code] upgrade schedler to handle context instead of stack
+	[code] upgrade scheduler to handle context instead of stack
 	[arch] [build] portable macro for string storage
  	[arch] remove useless init.* in code, makefiles and autoCode
 	[build] select and validate compilation sources through init.rc

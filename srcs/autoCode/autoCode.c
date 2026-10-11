@@ -82,7 +82,8 @@ int main(int argc, const char *argv[])
 	if( argc != AUTOCODE_COUNT_ARGC )
 	{
 		AUTOCODE_MSG_ERROR("autoCode bad argc (is %i, not %u)\n\tuse autoCode configuration_file",
-						   argc, AUTOCODE_COUNT_ARGC);
+						   argc,
+						   AUTOCODE_COUNT_ARGC);
 		return EXIT_FAILURE;
 	}
 
@@ -132,9 +133,9 @@ int main(int argc, const char *argv[])
 								   tokenizerErrorMessage(token_error));
 				continue;
 			}
-			
+
 			if( tok.count == 0U ) { continue; }
-			
+
 			// Each stage consumes the same list format but validates a different input.
 			if( (stage == AC_STAGE_ERRORS) &&
 				(globalError(tok.tokens[0U], &errors_catalog) != AC_RESULT_OK) )
@@ -142,12 +143,14 @@ int main(int argc, const char *argv[])
 				break;
 			}
 			if( (stage == AC_STAGE_INITRC) &&
-				(parseInitrc(&data_base, tok.tokens[0U], auto_options.source_path) != AC_RESULT_OK) )
+				(parseInitrc(&data_base, tok.tokens[0U], auto_options.source_path) !=
+				 AC_RESULT_OK) )
 			{
 				break;
 			}
 			if( (stage == AC_STAGE_TAGS) &&
-				(parseTag(&data_base, tok.tokens[0U], &errors_catalog, &auto_options) != AC_RESULT_OK) )
+				(parseTag(&data_base, tok.tokens[0U], &errors_catalog, &auto_options) !=
+				 AC_RESULT_OK) )
 			{
 				break;
 			}
@@ -168,7 +171,10 @@ int main(int argc, const char *argv[])
 
 		tokenizerFree(&tok);
 		autoCodeExit(AC_FORCE_EXIT);
-		if( stage == AC_STAGE_ERRORS ) { data_base.error_count = (size_t)errors_catalog.error_count; }
+		if( stage == AC_STAGE_ERRORS )
+		{
+			data_base.error_count = (size_t)errors_catalog.error_count;
+		}
 
 		if( stage == AC_STAGE_TAGS ) { parseTagHave(); }
 		autoCodeExit(AC_FORCE_EXIT);

@@ -60,10 +60,7 @@ err_codes_t sc_consoleFlush(void)
 
 uint8_t sc_stringGetByte(const tm_string_t *string, uint8_t index)
 {
-	if( (string == NULL) || (string->text == NULL) || (index >= TM_STRING_SIZE_MAX) )
-	{
-		return 0U;
-	}
+	if( (string == NULL) || (string->text == NULL) || (index >= TM_STRING_SIZE_MAX) ) { return 0U; }
 
 	switch( string->storage )
 	{

@@ -149,10 +149,10 @@ _Static_assert(_SFR_MEM_ADDR(TCNT1L) == AT2560TIMERCONTEXT_ADDR_TCNT1L,
 			   "Unexpected TCNT1L address");
 
 // Start timer1 by enabling prescaler=8
-#define TIMER_CONTEXT_START      \
-	"lds r24, 0x81\n\t"      \
-	"ori r24, 0x02\n\t" 	\
-	"sts  0x81, r24\n\t"	\
+#define TIMER_CONTEXT_START \
+	"lds r24, 0x81\n\t"     \
+	"ori r24, 0x02\n\t"     \
+	"sts  0x81, r24\n\t"
 
 static hal_driver_state_t hal_timerContextStart(void)
 {
@@ -177,13 +177,13 @@ static hal_driver_state_t hal_timerContextStart(void)
 
 // stop timer by setting CS1x = 0
 
-#define TIMER_CONTEXT_STOP                             \
-	"clr r1 \n\t"                                    \
-	"lds r24, 0x81\n\t"                            \
-	"andi r24, 0xF8\n\t" 							\
-	"sts  0x81, r24\n\t"                           \
-	"sts 0x85,r1 \n\t"                             \
-	"sts 0x84,r1 \n\t"							 \
+#define TIMER_CONTEXT_STOP \
+	"clr r1 \n\t"          \
+	"lds r24, 0x81\n\t"    \
+	"andi r24, 0xF8\n\t"   \
+	"sts  0x81, r24\n\t"   \
+	"sts 0x85,r1 \n\t"     \
+	"sts 0x84,r1 \n\t"
 
 static hal_driver_state_t hal_timerContextStop(void)
 {
@@ -218,7 +218,7 @@ static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
 	"ld r18, Z+ \n\t"                   \
 	"ld r19, Z \n\t"                    \
 	"out 0x3e, r19 \n\t"                \
-	"out 0x3d, r18 \n\t"				\
+	"out 0x3d, r18 \n\t"
 
 /*
  * Naked ISR: save the interrupted context before any C code runs, switch stacks through
@@ -226,9 +226,8 @@ static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
  */
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	asm volatile(
-		AVR8_CONTEXT_SAVE TIMER_CONTEXT_STOP TM_SCHED_CALLBACK TIMER_CONTEXT_START AVR8_CONTEXT_RESTORE
-		"reti \n\t");
+	asm volatile(AVR8_CONTEXT_SAVE TIMER_CONTEXT_STOP TM_SCHED_CALLBACK
+					 TIMER_CONTEXT_START AVR8_CONTEXT_RESTORE "reti \n\t");
 }
 
 /* -----------------------------------------------
@@ -236,7 +235,7 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED)
  * ---------------------------------------------*/
 
 hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
-										 hal_driver_control_data_t *data)
+										   hal_driver_control_data_t *data)
 {
 	switch( command )
 	{

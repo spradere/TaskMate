@@ -82,8 +82,7 @@ mod_count_t sc_driverGetCount(void) { return MOD_DRIVER_COUNT; }
 bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *run_level,
 					  hal_driver_status_t *status_bits)
 {
-	if( (id >= MOD_DRIVER_COUNT) || (name == NULL) || (run_level == NULL) ||
-		(status_bits == NULL) )
+	if( (id >= MOD_DRIVER_COUNT) || (name == NULL) || (run_level == NULL) || (status_bits == NULL) )
 	{
 		return false;
 	}

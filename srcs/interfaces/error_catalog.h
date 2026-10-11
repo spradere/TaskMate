@@ -38,12 +38,11 @@ typedef enum __attribute__((packed))
 {
 	ERROR_COUNT
 } err_codes_t;
-_Static_assert(sizeof(err_codes_t) <= sizeof(error_count_t),
-		   "err_codes_t exceeds error_count_t");
+_Static_assert(sizeof(err_codes_t) <= sizeof(error_count_t), "err_codes_t exceeds error_count_t");
 _Static_assert(ERROR_COUNT <= (UINT8_MAX + 1U), "error identifiers exceed err_code_t");
 #else
 	// [autoCode_tag] error_enum
-#include "error_enum.inc"
+	#include "error_enum.inc"
 // [/tag]
 #endif
 

@@ -51,8 +51,7 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *sta
 	 * sysCore canaries.
 	 */
 	const size_t stack_size =
-		(UCONTEXTTYPES_COUNT_STACKWORD - UCONTEXTTYPES_COUNT_CANARYWORD) *
-		sizeof(hal_stack_word_t);
+		(UCONTEXTTYPES_COUNT_STACKWORD - UCONTEXTTYPES_COUNT_CANARYWORD) * sizeof(hal_stack_word_t);
 	uint8_t *stack_end = (uint8_t *)stack_top + sizeof(hal_stack_word_t);
 	context->native->uc_stack.ss_sp = stack_end - stack_size;
 	context->native->uc_stack.ss_size = stack_size;

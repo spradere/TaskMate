@@ -27,17 +27,20 @@
 #include "initrcCommands/setVersion.h"
 #include "tokenizer.h"
 
-enum { PARSEINITRC_COUNT_VERSIONMIN = 2U };
+enum
+{
+	PARSEINITRC_COUNT_VERSIONMIN = 2U
+};
 
 /* -----------------------------------------------
  * init.rc command dispatch table
  * ---------------------------------------------*/
 
-#define INITRC_COMMAND(X)                     \
-	X("addModule", initrcAddModule)           \
-	X("addScliCommand", initrcAddScliCommand) \
+#define INITRC_COMMAND(X)                           \
+	X("addModule", initrcAddModule)                 \
+	X("addScliCommand", initrcAddScliCommand)       \
 	X("setModuleCountMax", initrcSetModuleCountMax) \
-	X("setErrorCountMax", initrcSetErrorCountMax) \
+	X("setErrorCountMax", initrcSetErrorCountMax)   \
 	X("setStackSizeMin", initrcSetStackSizeMin)
 
 static const struct

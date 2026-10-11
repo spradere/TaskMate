@@ -18,8 +18,8 @@
 #include "freebsd_timerSched.h"
 
 #include <signal.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/time.h>
@@ -174,7 +174,7 @@ static hal_driver_state_t timerSchedStop(void)
 }
 
 hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
-										 hal_driver_control_data_t *data)
+										   hal_driver_control_data_t *data)
 {
 	switch( command )
 	{

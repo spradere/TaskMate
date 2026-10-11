@@ -59,8 +59,7 @@ typedef enum __attribute__((packed))
 	DRV_BIT_ERROR,
 	DRV_BIT_DEAD
 } hal_driver_status_bit_t;
-_Static_assert(sizeof(hal_driver_status_bit_t) == 1U,
-		   "hal_driver_status_bit_t must be one byte");
+_Static_assert(sizeof(hal_driver_status_bit_t) == 1U, "hal_driver_status_bit_t must be one byte");
 
 /**
  * @brief Describes the current driver life cycle state.

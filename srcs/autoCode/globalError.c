@@ -144,7 +144,7 @@ ac_result_t globalError(const char *src_name, error_catalog_t *errors)
 			else
 			{
 				AUTOCODE_MSG_ERROR("wrong error level argument <%s>",
-							   tok.tokens[GLOBALERROR_INDEX_LEVEL]);
+								   tok.tokens[GLOBALERROR_INDEX_LEVEL]);
 
 				error_is_valid = false;
 			}

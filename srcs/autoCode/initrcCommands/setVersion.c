@@ -62,7 +62,7 @@ static bool versionValueMatches(const char *value, const unsigned long expected)
 static bool setVersionMajor(const initrc_command_t *command)
 {
 	if( versionValueMatches(command->tok->tokens[SETVERSION_INDEX_VALUE],
-							 AUTOCODE_VERSION_INITRCMAJOR) == false )
+							AUTOCODE_VERSION_INITRCMAJOR) == false )
 	{
 		AUTOCODE_MSG_ERROR("unsupported init.rc major syntax version [%s:%i] %s, expected %i",
 						   command->initrc_name,
@@ -77,7 +77,7 @@ static bool setVersionMajor(const initrc_command_t *command)
 static bool setVersionMinor(const initrc_command_t *command)
 {
 	if( versionValueMatches(command->tok->tokens[SETVERSION_INDEX_VALUE],
-							 AUTOCODE_VERSION_INITRCMINOR) == false )
+							AUTOCODE_VERSION_INITRCMINOR) == false )
 	{
 		AUTOCODE_MSG_ERROR("unsupported init.rc minor syntax version [%s:%i] %s, expected %i",
 						   command->initrc_name,
@@ -96,7 +96,8 @@ bool initrcSetVersion(const initrc_command_t *command)
 		AUTOCODE_MSG_ERROR("setVersion token count [%s:%i] is %i, should be %u",
 						   command->initrc_name,
 						   command->file_line_number,
-						   command->tok->count, SETVERSION_COUNT_TOKENS);
+						   command->tok->count,
+						   SETVERSION_COUNT_TOKENS);
 		return false;
 	}
 

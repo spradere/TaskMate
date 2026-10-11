@@ -210,8 +210,8 @@ hal_driver_state_t hal_lcdSetCursor(uint8_t row, uint8_t col)
 	{
 		return lcdSetError(ERR_HAL_LCD_CURSOR_OUT_OF_RANGE);
 	}
-	const uint8_t row_offsets[] = {LCDAMC2004_ADDR_ROW0, LCDAMC2004_ADDR_ROW1,
-								   LCDAMC2004_ADDR_ROW2, LCDAMC2004_ADDR_ROW3};
+	const uint8_t row_offsets[] = {
+		LCDAMC2004_ADDR_ROW0, LCDAMC2004_ADDR_ROW1, LCDAMC2004_ADDR_ROW2, LCDAMC2004_ADDR_ROW3};
 	return lcdAMC2004SendCommand((uint8_t)(LCDAMC2004_CMD_SETCURSOR | (col + row_offsets[row])));
 }
 

@@ -115,8 +115,8 @@ bool mod_threadsRunLevelIsReady(tm_run_level_t run_level)
 	for( mod_count_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{
 		if( (RL_GET_RUN_LEVEL(threads[id].status) == run_level) &&
-		((TM_GETBIT(threads[id].status, THREAD_BIT_INITIALIZED) == 0U) ||
-		 (TM_GETBIT(threads[id].status, THREAD_BIT_DEAD) != 0U)) )
+			((TM_GETBIT(threads[id].status, THREAD_BIT_INITIALIZED) == 0U) ||
+			 (TM_GETBIT(threads[id].status, THREAD_BIT_DEAD) != 0U)) )
 		{
 			return false;
 		}

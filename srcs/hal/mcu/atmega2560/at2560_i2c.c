@@ -17,8 +17,8 @@
  * ===========================================================================*/
 
 #include <avr/io.h>
-#include <util/twi.h>
 #include <stddef.h>
+#include <util/twi.h>
 
 #include "at2560_constants.h"
 #include "interfaces/drv_i2c.h"

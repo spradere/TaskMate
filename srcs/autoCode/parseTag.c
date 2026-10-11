@@ -37,8 +37,7 @@ enum
  * ---------------------------------------------*/
 
 static ac_result_t generatedFileName(char *file_name, size_t file_name_size,
-								 const char *generated_path,
-							 const char *tag);
+									 const char *generated_path, const char *tag);
 
 /* -----------------------------------------------
  * Tag dispatch table
@@ -120,7 +119,7 @@ static ac_result_t tagCmdDispatch(const char *cmd, const tag_writer_context_t *c
 }
 
 static ac_result_t generatedFileName(char *file_name, const size_t file_name_size,
-							 const char *generated_path, const char *tag)
+									 const char *generated_path, const char *tag)
 {
 	const int length = snprintf(file_name, file_name_size, "%s/%s.inc", generated_path, tag);
 
@@ -140,8 +139,7 @@ void parseTagInit(void)
 }
 
 ac_result_t parseTag(modules_database_t *data_base, const char *file_name,
-				 const error_catalog_t *errors,
-			 const options_list_t *auto_options)
+					 const error_catalog_t *errors, const options_list_t *auto_options)
 {
 	// Stage the tagged source alongside its generated fragment.
 	AUTOCODE_MSG_INFO("open <%s>", file_name);
@@ -203,9 +201,11 @@ ac_result_t parseTag(modules_database_t *data_base, const char *file_name,
 			// A start tag needs one name and cannot nest inside another region.
 			if( tok.count != PARSETAG_COUNT_START )
 			{
-				AUTOCODE_MSG_ERROR(
-					"token count != %i tok.line [%s:%i] %s",
-					PARSETAG_COUNT_START, file_src.name, file_line_number, line);
+				AUTOCODE_MSG_ERROR("token count != %i tok.line [%s:%i] %s",
+								   PARSETAG_COUNT_START,
+								   file_src.name,
+								   file_line_number,
+								   line);
 				break;
 			}
 
@@ -272,9 +272,10 @@ ac_result_t parseTag(modules_database_t *data_base, const char *file_name,
 
 			if( err != AC_RESULT_OK )
 			{
-				AUTOCODE_MSG_ERROR(
-					"unknown tag [%s:%i] %s\n", file_name, file_line_number,
-					tok.tokens[PARSETAG_INDEX_NAME]);
+				AUTOCODE_MSG_ERROR("unknown tag [%s:%i] %s\n",
+								   file_name,
+								   file_line_number,
+								   tok.tokens[PARSETAG_INDEX_NAME]);
 			}
 		}
 
