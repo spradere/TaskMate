@@ -7,17 +7,17 @@
  */
 
 /**
- * @file pc_gpio.h
- * @brief PC virtual GPIO declarations.
+ * @file z600_task1.h
+ * @brief First simulation task declaration.
  */
 
-#ifndef PC_PC_GPIO_H
-#define PC_PC_GPIO_H
+#ifndef Z600_Z600_TASK1_H
+#define Z600_Z600_TASK1_H
 
 /* ============================================================================
- * Includes
+ * Public API
  * ========================================================================== */
 
-#include "interfaces/gpio_signals.h"
+void task1(void);
 
-#endif // PC_PC_GPIO_H
+#endif // Z600_Z600_TASK1_H

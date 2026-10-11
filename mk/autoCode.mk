@@ -22,11 +22,19 @@ FILE_AUTOCODE_LOG_DATED = ${FILE_AUTOCODE_LOG}_${VAL_DATE_TIME}
 FILES_AUTOCODE_INC != if [ -d "${PATH_BUILD_GENERATED}" ]; then \
 	find ${PATH_BUILD_GENERATED} ${OPT_FIND_EXCLUDE} -type f -name "*.inc" | sort; \
 	fi
+.if empty(FILE_GPIO_SIGNALS)
+FILES_AUTOCODE_INC := ${FILES_AUTOCODE_INC:N${PATH_BUILD_GENERATED}/gpio_signals.inc}
+FILES_AUTOCODE_INC := ${FILES_AUTOCODE_INC:N${PATH_BUILD_GENERATED}/wire_gpio.inc}
+.endif
 CFLAGS += -I${PATH_BUILD_GENERATED}
 
 FILES_PARSE_TAG != find ${PATH_SRCS}/system ${PATH_SRCS}/interfaces ${OPT_FIND_EXCLUDE} \
 	-type f -exec grep -qFl '[autoCode_tag]' {} \; -print | sort
+.if empty(FILE_GPIO_SIGNALS)
+FILES_PARSE_TAG := ${FILES_PARSE_TAG:N${PATH_SRCS}/interfaces/gpio_signals.h}
+.else
 FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
+.endif
 
 .for path_list in FILES_AUTOCODE_INC FILES_PARSE_TAG
 ${path_list} := ${${path_list}:O}
@@ -60,8 +68,10 @@ _autocode_version_check: ${FILE_AUTOCODE_HEADER} ${SCRIPT_AUTOCODE_VERSION}
 
 # autoCode launch and required files
 ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR_LIST} \
-						${FILE_PARSE_TAG_LIST} ${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} \
-						${FILE_WIREGPIO} ${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
+						${FILE_PARSE_TAG_LIST} ${FILES_DRIVER_INTERFACES} ${FILES_AUTOCODE_INC}
+.if !empty(FILE_GPIO_SIGNALS)
+${FILE_AUTOCODE_STAMP}: ${FILE_GPIO_SIGNALS} ${FILE_GPIO_SIGNALS_DEPS} ${FILE_WIREGPIO}
+.endif
 
 	@printf "%sautoCode or related files have changed -> run autoCode%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
@@ -77,13 +87,22 @@ ${FILE_AUTOCODE_STAMP}: ${FILE_AUTOCODE_TARGET} ${FILE_INITRC_LIST} ${FILE_ERROR
 	@printf "%s\n" "--errors ${FILE_ERROR_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--initrc ${FILE_INITRC_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--parsetag ${FILE_PARSE_TAG_LIST}" >> "${FILE_AUTOCODE_CONFIG}"
+.if !empty(FILE_GPIO_SIGNALS)
 	@printf "%s\n" "--gpio_signals ${FILE_GPIO_SIGNALS}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--wire_gpio ${FILE_WIREGPIO}" >> "${FILE_AUTOCODE_CONFIG}"
+.endif
 	@printf "%s\n" "--generated_path ${PATH_BUILD_GENERATED}" >> "${FILE_AUTOCODE_CONFIG}"
 	@printf "%s\n" "--source_path ${PATH_SRCS}" >> "${FILE_AUTOCODE_CONFIG}"
 		
 	# Launch autoCode
 	${_QUIET}./${FILE_AUTOCODE_TARGET} ${FILE_AUTOCODE_CONFIG} > "${FILE_AUTOCODE_LOG_DATED}"
+.if empty(FILE_GPIO_SIGNALS)
+	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_BUILD_TARGET}"
+	@${SCRIPT_CHECK_PATH_FILE} -d "${PATH_BUILD_GENERATED}"
+	@find "${PATH_BUILD_GENERATED}" -maxdepth 1 -type f \
+		\( -name gpio_signals.inc -o -name wire_gpio.inc \) -delete
+	@find "${PATH_BUILD_TARGET}" -maxdepth 1 -type f -name gpio_signals.deps -delete
+.endif
 	@touch ${FILE_AUTOCODE_STAMP}
 
 # Missing or externally modified generated artefacts force autoCode to run.
@@ -92,15 +111,19 @@ ${FILES_AUTOCODE_INC}:
 # Dependency generation
 .PHONY: _autocode_dependency_check
 _autocode_dependency_check:
+.if !empty(FILE_WIREGPIO)
 	@${SCRIPT_CHECK_PATH_FILE} -f "${FILE_WIREGPIO}"
+.endif
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_INITRC_DEPS}" "${FILES_INITRC}"
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_PARSE_TAG_DEPS}" "${FILES_PARSE_TAG}"
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_ERROR_DEPS}" "${FILES_ERROR}"
+.if !empty(FILE_GPIO_SIGNALS)
 	@${SCRIPT_COMPARE_REPLACE} \
 		"${FILE_GPIO_SIGNALS_DEPS}" "${FILE_GPIO_SIGNALS}"
+.endif
 
 # Generate files list for autoCode
 ${FILE_ERROR_LIST}: ${FILES_ERROR} ${FILE_ERROR_DEPS}

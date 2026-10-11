@@ -314,11 +314,16 @@ ac_result_t parseTag(modules_database_t *data_base, const char *file_name,
 	return file_error ? AC_RESULT_ERROR : AC_RESULT_OK;
 }
 
-void parseTagHave(void)
+void parseTagHave(const options_list_t *auto_options)
 {
-	// Every known tag must have produced exactly one fragment.
+	// GPIO tags are required only when the target supplies GPIO configuration.
 	for( int i = 0U; i < HAVE_COUNT; i++ )
 	{
+		if( (i == HAVE_GPIO_SIGNALS || i == HAVE_WIRE_GPIO) &&
+			(auto_options->file_gpio_signals[0U] == '\0') )
+		{
+			continue;
+		}
 		if( have_tag_count[i] == 0U )
 		{
 			AUTOCODE_MSG_ERROR("required autoCode tag %s is not set", string_from_have(i));

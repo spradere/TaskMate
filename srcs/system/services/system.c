@@ -25,7 +25,9 @@
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
+#if TM_GPIO_ENABLED
 #include "system/sysCall/sc_gpio.h"
+#endif
 #include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_stdio.h"
@@ -55,7 +57,9 @@ static bool systemRunLevelIsReady(tm_run_level_t run_level);
 void system(void)
 {
 	// Finish staged startup before reporting system information.
+#if TM_GPIO_ENABLED
 	sc_gpio_signalInit();
+#endif
 	sc_threadSetInitialized();
 	systemStart();
 

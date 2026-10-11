@@ -264,6 +264,12 @@ ac_result_t options(const char *file_name, options_list_t *opt)
 	// Check cardinality after the complete configuration has been read.
 	for( int i = 0U; i < HAVE_COUNT; i++ )
 	{
+		if( (i == HAVE_GPIO_SIGNALS || i == HAVE_WIRE_GPIO) &&
+			(have_options_count[HAVE_GPIO_SIGNALS] == 0U) &&
+			(have_options_count[HAVE_WIRE_GPIO] == 0U) )
+		{
+			continue;
+		}
 		if( have_options_count[i] == 0U )
 		{
 			AUTOCODE_MSG_ERROR("required autoCode option %s is not set", string_from_have(i));

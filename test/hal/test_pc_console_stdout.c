@@ -28,6 +28,8 @@
 
 #define TEST_CONSOLE_OUTPUT_ROW 1
 #define TEST_CONSOLE_OUTPUT_COLUMN 1
+#define TEST_CONSOLE_HINT_ROW 21
+#define TEST_CONSOLE_HINT_COLUMN 68
 
 /* =============================================================================
  * Implementation - Functions
@@ -42,9 +44,12 @@ int main(void)
 	int written = printf("libc output");
 	bool output_visible = (mvwinch(curscr, TEST_CONSOLE_OUTPUT_ROW, TEST_CONSOLE_OUTPUT_COLUMN) &
 		A_CHARTEXT) == 'l';
+	bool halt_hint_visible = (mvwinch(curscr, TEST_CONSOLE_HINT_ROW, TEST_CONSOLE_HINT_COLUMN) &
+		A_CHARTEXT) == 'F';
 
 	pc_consoleShutdown();
-	if( !stream_replaced || (written == EOF) || !output_visible || (stdout != original_stdout) )
+	if( !stream_replaced || (written == EOF) || !output_visible || !halt_hint_visible ||
+		(stdout != original_stdout) )
 	{
 		return EXIT_FAILURE;
 	}

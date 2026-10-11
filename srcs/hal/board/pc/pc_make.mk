@@ -19,11 +19,7 @@ VAL_HW_STACK += pc
 
 PATH_PC = ${PATH_SRCS}/hal/board/pc
 PATHS_SOURCE_SEARCH += ${PATH_PC}
-FILES_EXTRA_SRC += \
-	${PATH_PC}/pc_console.c \
-	${PATH_PC}/pc_gpio.c
-	
-FILE_WIREGPIO_TAG = ${PATH_SRCS}/hal/board/pc/pc_gpio.c
+FILES_EXTRA_SRC += ${PATH_PC}/pc_console.c
 
 .include "${PATH_SRCS}/hal/host/freebsd/freebsd_make.mk"
 

@@ -176,7 +176,7 @@ int main(int argc, const char *argv[])
 			data_base.error_count = (size_t)errors_catalog.error_count;
 		}
 
-		if( stage == AC_STAGE_TAGS ) { parseTagHave(); }
+		if( stage == AC_STAGE_TAGS ) { parseTagHave(&auto_options); }
 		autoCodeExit(AC_FORCE_EXIT);
 	}
 

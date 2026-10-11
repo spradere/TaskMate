@@ -45,6 +45,6 @@ ac_result_t parseTag(modules_database_t *data_base, const char *file_name,
 /**
  * @brief Report which supported tags were found.
  */
-void parseTagHave(void);
+void parseTagHave(const options_list_t *auto_options);
 
 #endif // AUTOCODE_PARSETAG_H

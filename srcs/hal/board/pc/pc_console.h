@@ -31,6 +31,5 @@ void pc_consoleWriteByte(uint8_t data);
 void pc_consoleFlush(void);
 bool pc_consoleReadByte(uint8_t *data);
 void pc_consolePollInput(void);
-void pc_consoleLedWrite(uint8_t index, const char *name, bool value);
 
 #endif // PC_PC_CONSOLE_H

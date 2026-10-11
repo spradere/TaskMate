@@ -329,7 +329,12 @@ runConfigurationTests()
 	expectSuccess z600_compile_sources bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_COMPILE_SRC
 	logContains z600_compile_sources "srcs/hal/host/ucontext/ucontext_context.c"
-	logContains z600_compile_sources "srcs/hal/board/pc/pc_gpio.c"
+	logExcludes z600_compile_sources "srcs/hal/board/pc/pc_gpio.c"
+	logExcludes z600_compile_sources "srcs/system/sysCall/sc_gpio.c"
+	logExcludes z600_compile_sources "srcs/user/tasks/task1.c"
+	logExcludes z600_compile_sources "srcs/user/tasks/task2.c"
+	logContains z600_compile_sources "srcs/user/target/z600/z600_task1.c"
+	logContains z600_compile_sources "srcs/user/target/z600/z600_task2.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
 	logExcludes z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
@@ -342,6 +347,18 @@ runConfigurationTests()
 	logExcludes z600_compile_sources "srcs/system/services/commands/scli_i2c.c"
 	logExcludes z600_compile_sources "srcs/hal/arch/"
 	logExcludes z600_compile_sources "srcs/hal/mcu/"
+	expectOutput z600_gpio_signals "" bmake -C "${PATH_PROJECT}" \
+		VAL_TARGET=z600 -V FILE_GPIO_SIGNALS
+	expectOutput z600_gpio_wiring "" bmake -C "${PATH_PROJECT}" \
+		VAL_TARGET=z600 -V FILE_WIREGPIO
+	expectSuccess z600_tag_inputs bmake -C "${PATH_PROJECT}" \
+		VAL_TARGET=z600 -V FILES_PARSE_TAG
+	logExcludes z600_tag_inputs "gpio_signals.h"
+	logExcludes z600_tag_inputs "pc_gpio.c"
+	expectSuccess z600_generated_inputs bmake -C "${PATH_PROJECT}" \
+		VAL_TARGET=z600 -V FILES_AUTOCODE_INC
+	logExcludes z600_generated_inputs "gpio_signals.inc"
+	logExcludes z600_generated_inputs "wire_gpio.inc"
 
 	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"

@@ -30,21 +30,18 @@
  * Constants
  * ---------------------------------------------*/
 
-// ncurses uses int for geometry, colours and keys, including negative error values.
+// ncurses uses int for geometry and keys, including negative error values.
 #define PCCONSOLE_MIN_COLUMNS 60
 #define PCCONSOLE_MIN_ROWS 16
-#define PCCONSOLE_WIDTH_GPIO 24
 #define PCCONSOLE_HEIGHT_INPUT 3
 #define PCCONSOLE_SIZE_INPUT 64
-#define PCCONSOLE_COLOUR_OFF 1
-#define PCCONSOLE_COLOUR_ON 2
 #define PCCONSOLE_WIDTH_BORDER 2
 #define PCCONSOLE_COLUMN_LABEL 2
+#define PCCONSOLE_WIDTH_HALT_LABEL 13
 #define PCCONSOLE_KEY_HALT 10
 #define PCCONSOLE_KEY_DELETE 0x7F
 #define PCCONSOLE_CHAR_PRINTABLEMIN 0x20
 #define PCCONSOLE_CHAR_PRINTABLEMAX 0x7E
-#define PCCONSOLE_COLOUR_DEFAULT (-1)
 
 /* -----------------------------------------------
  * Private variables
@@ -54,10 +51,7 @@ static WINDOW *output_frame;
 static WINDOW *output_console;
 static WINDOW *input_frame;
 static WINDOW *input_console;
-static WINDOW *gpio_frame;
-static WINDOW *gpio_console;
 static bool console_started;
-static bool console_colours;
 static FILE *console_stdout;
 static FILE *terminal_stdout;
 
@@ -84,37 +78,29 @@ static void consoleDeleteWindows(void)
 {
 	if( output_console != NULL ) { delwin(output_console); }
 	if( input_console != NULL ) { delwin(input_console); }
-	if( gpio_console != NULL ) { delwin(gpio_console); }
 	if( output_frame != NULL ) { delwin(output_frame); }
 	if( input_frame != NULL ) { delwin(input_frame); }
-	if( gpio_frame != NULL ) { delwin(gpio_frame); }
 
 	output_console = NULL;
 	input_console = NULL;
-	gpio_console = NULL;
 	output_frame = NULL;
 	input_frame = NULL;
-	gpio_frame = NULL;
 }
 
 static void consoleDrawFrames(void)
 {
 	box(output_frame, 0U, 0U);
 	box(input_frame, 0U, 0U);
-	box(gpio_frame, 0U, 0U);
 	mvwprintw(output_frame, 0U, PCCONSOLE_COLUMN_LABEL, " USART output ");
 	mvwprintw(input_frame, 0U, PCCONSOLE_COLUMN_LABEL, " USART input ");
-	mvwprintw(gpio_frame, 0U, PCCONSOLE_COLUMN_LABEL, " GPIO LEDs ");
-	mvwprintw(gpio_frame,
-			  getmaxy(gpio_frame) - PCCONSOLE_WIDTH_BORDER,
-			  PCCONSOLE_COLUMN_LABEL,
+	mvwprintw(input_frame,
+			  0U,
+			  getmaxx(input_frame) - PCCONSOLE_WIDTH_HALT_LABEL,
 			  " F10: halt ");
 	wnoutrefresh(output_frame);
 	wnoutrefresh(input_frame);
-	wnoutrefresh(gpio_frame);
 	wnoutrefresh(output_console);
 	wnoutrefresh(input_console);
-	wnoutrefresh(gpio_console);
 	doupdate();
 }
 
@@ -131,13 +117,13 @@ static int consoleStdoutWrite(void *cookie, const char *buffer, int length)
 }
 
 /*
- * Set up the three terminal views and register shutdown after all windows are ready.
+ * Set up the two terminal views and register shutdown after both windows are ready.
  * A terminal smaller than the fixed layout is rejected.
  */
 bool pc_consoleInit(void)
 {
 	if( console_started ) { return true; }
-	// Check terminal dimensions before allocating the three view windows.
+	// Check terminal dimensions before allocating the two view windows.
 	(void)setlocale(LC_ALL, "");
 	if( initscr() == NULL ) { return false; }
 
@@ -151,12 +137,11 @@ bool pc_consoleInit(void)
 	}
 
 	// Allocate frames first, then the inner windows owned by those frames.
-	const int output_width = columns - PCCONSOLE_WIDTH_GPIO;
+	const int output_width = columns;
 	const int output_height = rows - PCCONSOLE_HEIGHT_INPUT;
 	output_frame = newwin(output_height, output_width, 0U, 0U);
 	input_frame = newwin(PCCONSOLE_HEIGHT_INPUT, output_width, output_height, 0U);
-	gpio_frame = newwin(rows, PCCONSOLE_WIDTH_GPIO, 0U, output_width);
-	if( (output_frame == NULL) || (input_frame == NULL) || (gpio_frame == NULL) )
+	if( (output_frame == NULL) || (input_frame == NULL) )
 	{
 		consoleDeleteWindows();
 		endwin();
@@ -169,12 +154,7 @@ bool pc_consoleInit(void)
 							1U,
 							1U);
 	input_console = derwin(input_frame, 1U, output_width - PCCONSOLE_WIDTH_BORDER, 1U, 1U);
-	gpio_console = derwin(gpio_frame,
-						  rows - PCCONSOLE_WIDTH_BORDER,
-						  PCCONSOLE_WIDTH_GPIO - PCCONSOLE_WIDTH_BORDER,
-						  1U,
-						  1U);
-	if( (output_console == NULL) || (input_console == NULL) || (gpio_console == NULL) )
+	if( (output_console == NULL) || (input_console == NULL) )
 	{
 		consoleDeleteWindows();
 		endwin();
@@ -192,16 +172,6 @@ bool pc_consoleInit(void)
 	nodelay(input_console, true);
 	scrollok(output_console, true);
 	(void)curs_set(1U);
-
-	// Colour is optional; the LED view remains usable without it.
-	if( has_colors() )
-	{
-		start_color();
-		use_default_colors();
-		init_pair(PCCONSOLE_COLOUR_OFF, COLOR_WHITE, PCCONSOLE_COLOUR_DEFAULT);
-		init_pair(PCCONSOLE_COLOUR_ON, COLOR_GREEN, PCCONSOLE_COLOUR_DEFAULT);
-		console_colours = true;
-	}
 
 	// Register terminal cleanup only after initialization can be completed.
 	input_edit_length = 0U;
@@ -310,21 +280,4 @@ bool pc_consoleReadByte(uint8_t *data)
 		input_ready_length = 0U;
 	}
 	return true;
-}
-
-void pc_consoleLedWrite(uint8_t index, const char *name, bool value)
-{
-	if( !console_started || (name == NULL) ) { return; }
-	pc_consolePollInput();
-
-	if( console_colours )
-	{
-		wattron(gpio_console, COLOR_PAIR(value ? PCCONSOLE_COLOUR_ON : PCCONSOLE_COLOUR_OFF));
-	}
-	mvwprintw(gpio_console, index, 0U, "%-12s [%s]", name, value ? "ON " : "OFF");
-	if( console_colours )
-	{
-		wattroff(gpio_console, COLOR_PAIR(value ? PCCONSOLE_COLOUR_ON : PCCONSOLE_COLOUR_OFF));
-	}
-	wrefresh(gpio_console);
 }

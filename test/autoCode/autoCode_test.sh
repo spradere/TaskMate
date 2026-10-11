@@ -60,6 +60,19 @@ writeTags()
 	done
 }
 
+writeTagsWithoutGpio()
+{
+	FILE_TAGS=$1
+	: > "${FILE_TAGS}"
+	for VAL_TAG in thread_stacks threads_alloc drivers_alloc thread_name_catalog \
+		driver_name_catalog driver_have error_enum error_catalog modules_count threads_list \
+		drivers_list scli_commands
+	do
+		printf '%s\n%s\n%s\n' "// [autoCode_tag] ${VAL_TAG}" \
+			"stale generated data" "// [/tag]" >> "${FILE_TAGS}"
+	done
+}
+
 writeConfig()
 {
 	printf '%s\n' \
@@ -1033,6 +1046,23 @@ runParseTagTests()
 runCompareReplaceTests()
 {
 	stageBegin compare_replace
+	caseBegin no_gpio_generation
+	writeTagsWithoutGpio "${PATH_CASE}/tags.c"
+	sed '/^--gpio_signals /d; /^--wire_gpio /d' "${PATH_CASE}/autoCode.conf" \
+		> "${PATH_CASE}/changed.conf"
+	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
+	expectSuccess no_gpio_generation "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	if [ -e "${PATH_CASE}/generated/gpio_signals.inc" ] || \
+		[ -e "${PATH_CASE}/generated/wire_gpio.inc" ]; then
+		fail "GPIO fragments were generated without GPIO inputs"
+	fi
+	caseBegin incomplete_gpio_options
+	sed '/^--wire_gpio /d' "${PATH_CASE}/autoCode.conf" \
+		> "${PATH_CASE}/changed.conf"
+	mv "${PATH_CASE}/changed.conf" "${PATH_CASE}/autoCode.conf"
+	expectFailure incomplete_gpio_options "required autoCode option --wire_gpio is not set" \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin stable_generation
 	printf '%s\n' \
 		'addModule driver timerContext -run driver -source_file system.c' \

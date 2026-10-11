@@ -42,6 +42,14 @@ FILES_BASE_SYSTEM_SRC != find \
 	${FILES_INITRC_DIR_SRC} \
 	${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_BASE_SYSTEM_SRC += ${PATH_SRCS}/system/boot.c
+.if empty(FILE_GPIO_SIGNALS) && empty(FILE_WIREGPIO)
+FILES_BASE_SYSTEM_SRC := ${FILES_BASE_SYSTEM_SRC:N${PATH_SRCS}/system/sysCall/sc_gpio.c}
+CFLAGS += -DTM_GPIO_ENABLED=0
+.elif !empty(FILE_GPIO_SIGNALS) && !empty(FILE_WIREGPIO)
+CFLAGS += -DTM_GPIO_ENABLED=1
+.else
+.error GPIO signals and wiring must both be set
+.endif
 
 FILES_COMPILE_SRC = \
 	${FILES_BASE_SYSTEM_SRC} \
@@ -63,11 +71,11 @@ _TEST != ${SCRIPT_CHECK_PATH_FILE} -f ${file}; printf '%s\n' "$$?"
 FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Test files provided by the target
-.if !exists(${FILE_GPIO_SIGNALS})
+.if !empty(FILE_GPIO_SIGNALS) && !exists(${FILE_GPIO_SIGNALS})
 .error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
 .endif
 
-.if !exists(${FILE_WIREGPIO})
+.if !empty(FILE_WIREGPIO) && !exists(${FILE_WIREGPIO})
 .error GPIO target wiring not found >>>${FILE_WIREGPIO}<<<
 .endif
 
