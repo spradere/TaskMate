@@ -225,13 +225,13 @@ static bool dateWrite(const hal_rtc_time_t *time)
 
 static void datePrint(const hal_rtc_time_t *time)
 {
-	tm_syslog(TM_STR("[date] %02i/%02i/20%02i %02i:%02i:%02i\n"),
-			  time->day,
-			  time->month,
-			  time->year,
-			  time->hours,
-			  time->minutes,
-			  time->seconds);
+	tm_syslog(TM_STR("[date] %02u/%02u/20%02u %02u:%02u:%02u\n"),
+			  (unsigned int)time->day,
+			  (unsigned int)time->month,
+			  (unsigned int)time->year,
+			  (unsigned int)time->hours,
+			  (unsigned int)time->minutes,
+			  (unsigned int)time->seconds);
 }
 
 static void datePrintError(err_codes_t error)

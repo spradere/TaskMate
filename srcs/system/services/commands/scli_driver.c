@@ -129,13 +129,13 @@ static bool driverList(uint8_t argc, char *argv[])
 		hal_driver_status_t status_bits;
 		if( !sc_driverGetInfo(id, &name, &run_level, &status_bits) ) { return false; }
 
-		tm_syslog(TM_STR("\t%s runlevel=%i status[init=%i start=%i error=%i dead=%i]\n"),
+		tm_syslog(TM_STR("\t%s runlevel=%u status[init=%u start=%u error=%u dead=%u]\n"),
 				  name,
-				  run_level,
-				  TM_GETBIT(status_bits, DRV_BIT_INIT) != 0U,
-				  TM_GETBIT(status_bits, DRV_BIT_START) != 0U,
-				  TM_GETBIT(status_bits, DRV_BIT_ERROR) != 0U,
-				  TM_GETBIT(status_bits, DRV_BIT_DEAD) != 0U);
+				  (unsigned int)run_level,
+				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_INIT) != 0U),
+				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_START) != 0U),
+				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_ERROR) != 0U),
+				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_DEAD) != 0U));
 	}
 
 	return true;
@@ -162,7 +162,8 @@ static bool driverInit(uint8_t argc, char *argv[])
 	{
 		tm_syslog(TM_STR("[driver] %s not initialized: %s\n"), &driver_name, message);
 	}
-	else { tm_syslog(TM_STR("[driver] %s not initialized: error %i\n"), &driver_name, error); }
+	else { tm_syslog(TM_STR("[driver] %s not initialized: error %u\n"), &driver_name,
+					 (unsigned int)error); }
 	return false;
 }
 
@@ -187,7 +188,8 @@ static bool driverStart(uint8_t argc, char *argv[])
 	{
 		tm_syslog(TM_STR("[driver] %s not started: %s\n"), &driver_name, message);
 	}
-	else { tm_syslog(TM_STR("[driver] %s not started: error %i\n"), &driver_name, error); }
+	else { tm_syslog(TM_STR("[driver] %s not started: error %u\n"), &driver_name,
+					 (unsigned int)error); }
 	return false;
 }
 
@@ -212,6 +214,7 @@ static bool driverStop(uint8_t argc, char *argv[])
 	{
 		tm_syslog(TM_STR("[driver] %s not stopped: %s\n"), &driver_name, message);
 	}
-	else { tm_syslog(TM_STR("[driver] %s not stopped: error %i\n"), &driver_name, error); }
+	else { tm_syslog(TM_STR("[driver] %s not stopped: error %u\n"), &driver_name,
+					 (unsigned int)error); }
 	return false;
 }
