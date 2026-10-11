@@ -236,6 +236,7 @@ void pc_consolePollInput(void)
 {
 	if( !console_started || (input_ready_index < input_ready_length) ) { return; }
 
+	bool line_modified = false;
 	int key;
 	while( (key = wgetch(input_console)) != ERR )
 	{
@@ -253,8 +254,11 @@ void pc_consolePollInput(void)
 		// Editing affects only the line still visible in the input window.
 		if( (key == KEY_BACKSPACE) || (key == PCCONSOLE_KEY_DELETE) || (key == '\b') )
 		{
-			if( input_edit_length > 0U ) { input_edit_length--; }
-			consoleInputRender();
+			if( input_edit_length > 0U )
+			{
+				input_edit_length--;
+				line_modified = true;
+			}
 			continue;
 		}
 		// Reserve one byte so the edit buffer never reaches its full capacity.
@@ -262,9 +266,10 @@ void pc_consolePollInput(void)
 			(input_edit_length < (PCCONSOLE_SIZE_INPUT - 1U)) )
 		{
 			input_edit[input_edit_length++] = (uint8_t)key;
-			consoleInputRender();
+			line_modified = true;
 		}
 	}
+	if( line_modified ) { consoleInputRender(); }
 }
 
 bool pc_consoleReadByte(uint8_t *data)
