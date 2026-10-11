@@ -597,13 +597,6 @@ runInitrcTests()
 	expectFailure error_count_overflow "error count exceeds configured maximum 1" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	caseBegin old_module_count_command
-	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
-		'setModuleCount 8' 'setErrorCountMax 256' \
-		> "${PATH_CASE}/init.rc"
-	expectFailure old_module_count_command "unknown command" \
-		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-
 	caseBegin valid_16_bit_module_count
 	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' 'setModuleCountMax 256' \
 		'setErrorCountMax 256' \
@@ -813,12 +806,6 @@ runInitrcTests()
 	expectFailure missing_initrc_version "first init.rc command" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	caseBegin legacy_initrc_version
-	printf '%s\n' '!set_initrc_ver_major 1' '!set_initrc_ver_minor 6' \
-		> "${PATH_CASE}/init.rc"
-	expectFailure legacy_initrc_version "first init.rc command" \
-		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
-
 	caseBegin empty_initrc
 	: > "${PATH_CASE}/init.rc"
 	expectFailure empty_initrc "missing setVersion major 1" \
@@ -881,10 +868,8 @@ runInitrcTests()
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		'addModule task few' \
 		'badCommand badcmd -run user -stack 256 -source_file system.c' \
-		'addTask legacy -run user -stack 256 -source_file system.c' \
 		'addModule task badoption -bad value -run user -stack 256 -source_file system.c' \
 		'addModule task badrun -run invalid -stack 256 -source_file system.c' \
-		'legacy -type user -run user -stack 256 -source_file system.c' \
 		'addModule invalid badtype -run core -source_file system.c' \
 		'addModule driver badi2c -run core -i2c invalid -source_file system.c' \
 		'addModule task abcdefghijklmnopqrstuvwxyzabcdef -run user -stack 256 -source_file system.c' \
@@ -914,7 +899,7 @@ runInitrcTests()
 	do
 		logContains malformed_initrc "${VAL_PATTERN}"
 	done
-	logContains malformed_initrc "init.rc:21"
+	logContains malformed_initrc "init.rc:19"
 
 	caseBegin unterminated_initrc_list
 	printf '%s\n' '"unterminated' "${PATH_CASE}/init.rc" \

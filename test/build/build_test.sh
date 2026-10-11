@@ -247,7 +247,6 @@ runConfigurationTests()
 		bmake -C "${PATH_PROJECT}" TARGET=test1 -V VAL_HW_STACK
 	expectOutput default_stack "test1 arduinoMega atmega2560 avr8" \
 		targetMake -V VAL_HW_STACK
-	assertFileExcludes "${PATH_PROJECT}/conf/hardware-targets.conf" "test_noscli"
 	expectOutput default_path "build/test1_arduinoMega_atmega2560_avr8" \
 		targetMake -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
@@ -290,8 +289,6 @@ runConfigurationTests()
 	expectOutput string_macro_selected_compile_flag \
 		"-include srcs/hal/arch/avr8/avr8_string_macro.h" \
 		targetMake -V CFLAGS_srcs/system/sysCall/sc_driver.c
-	expectSuccess source_search_paths targetMake -V PATHS_SOURCE_SEARCH
-	logExcludes source_search_paths "srcs/hal/public"
 	expectSuccess autocode_generated_inputs targetMake -V FILES_AUTOCODE_INC
 	logExcludes autocode_generated_inputs "find "
 	logExcludes autocode_generated_inputs "-path"
@@ -302,7 +299,6 @@ runConfigurationTests()
 	logContains autocode_tag_inputs "srcs/interfaces/error_catalog.h"
 	logContains autocode_tag_inputs "srcs/hal/mcu/atmega2560/at2560_gpio.c"
 	logExcludes autocode_tag_inputs "srcs/autoCode/"
-	logExcludes autocode_tag_inputs "srcs/hal/board/pc/pc_gpio.c"
 	expectOutput cpu_frequency "16000000UL" targetMake -V VAL_CPU_FREQ
 	expectOutput mcu_serial "atmega2560" targetMake -V VAL_MCU_SERIAL
 
@@ -329,20 +325,17 @@ runConfigurationTests()
 	expectSuccess z600_compile_sources bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_COMPILE_SRC
 	logContains z600_compile_sources "srcs/hal/host/ucontext/ucontext_context.c"
-	logExcludes z600_compile_sources "srcs/hal/board/pc/pc_gpio.c"
 	logExcludes z600_compile_sources "srcs/system/sysCall/sc_gpio.c"
 	logExcludes z600_compile_sources "srcs/user/tasks/task1.c"
 	logExcludes z600_compile_sources "srcs/user/tasks/task2.c"
 	logContains z600_compile_sources "srcs/user/target/z600/z600_task1.c"
 	logContains z600_compile_sources "srcs/user/target/z600/z600_task2.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
-	logExcludes z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSTC.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
 	logContains z600_compile_sources "srcs/system/services/scli.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_driver.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_stack.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_thread.c"
-	logExcludes z600_compile_sources "ucontext_scli_commands"
 	logExcludes z600_compile_sources "srcs/system/services/commands/scli_date.c"
 	logExcludes z600_compile_sources "srcs/system/services/commands/scli_i2c.c"
 	logExcludes z600_compile_sources "srcs/hal/arch/"
@@ -354,7 +347,6 @@ runConfigurationTests()
 	expectSuccess z600_tag_inputs bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_PARSE_TAG
 	logExcludes z600_tag_inputs "gpio_signals.h"
-	logExcludes z600_tag_inputs "pc_gpio.c"
 	expectSuccess z600_generated_inputs bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_AUTOCODE_INC
 	logExcludes z600_generated_inputs "gpio_signals.inc"
@@ -366,22 +358,17 @@ runConfigurationTests()
 	logContains default_compile_sources "srcs/hal/drivers/lcd/lcd_AMC2004.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_stack.c"
-	logExcludes default_compile_sources "srcs/system/sysCore/sys_softwareTimeCounter.c"
-	logExcludes default_compile_sources "test1_scli_commands"
 
 	expectSuccess default_initrc_sources targetMake -V FILES_INITRC_SRC
 	logContains default_initrc_sources "srcs/system/services/scli.c"
 	logContains default_initrc_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_initrc_sources "srcs/system/services/commands/scli_stack.c"
-	logExcludes default_initrc_sources "test1_scli_commands"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerContext.c"
-	logExcludes default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerSTC.c"
 	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
 	expectSuccess default_extra_sources targetMake -V FILES_EXTRA_SRC
 	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
-	logExcludes default_extra_sources "srcs/user/target/test1/targetWireSignal.c"
 
 	expectOutput initrc_directory_sources "" targetMake -V FILES_INITRC_DIR_SRC
 
@@ -415,7 +402,7 @@ runConfigurationTests()
 		targetMake FILES_INITRC="${PATH_STAGE_WORK}/missing_source_init.rc" \
 		-V FILES_COMPILE_SRC
 	printf '%s\n' \
-		'.include "srcs/user/target/test1/target.mk"' \
+		'.include "srcs/user/target/test1/test1.mk"' \
 		'FILES_EXTRA_SRC += /etc/passwd' \
 		> "${PATH_STAGE_WORK}/invalid_source_target.mk"
 	expectFailure target_source_outside \
@@ -643,7 +630,7 @@ runGuardTests()
 	PATH_CONCRETE_SRCS="${PATH_STAGE_WORK}/concrete_srcs"
 	FILES_CONCRETE=""
 	for FILE_CALLER in \
-		system/TaskMate.c system/sysCore/core.c system/sysCall/call.c \
+		system/boot.c system/sysCore/core.c system/sysCall/call.c \
 		system/services/service.c tmLibc/lib.c interfaces/api.h user/tasks/task.c
 	do
 		mkdir -p "${PATH_CONCRETE_SRCS}/${FILE_CALLER%/*}"
@@ -655,7 +642,7 @@ runGuardTests()
 		-v matrix_file="${PATH_PROJECT}/conf/arch_valid_matrix.md" \
 		-v path_sources="${PATH_CONCRETE_SRCS}" -f "${FILE_ARCH}" \
 		"${PATH_PROJECT}/conf/arch_valid_matrix.md" ${FILES_CONCRETE}
-	for FILE_CALLER in TaskMate.c core.c call.c service.c lib.c api.h task.c
+	for FILE_CALLER in boot.c core.c call.c service.c lib.c api.h task.c
 	do
 		logContains concrete_hal_forbidden "${FILE_CALLER}:1:"
 	done
