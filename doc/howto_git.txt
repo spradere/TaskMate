@@ -9,8 +9,8 @@ git push -f
 # Tag a version
 ##################################################
 
-git commit -am "Tag version to 0.7"
-git tag -a v0.7 -m "TaskMate 0.7 - New feature"
+git commit -am "Tag version to 0.33"
+git tag -a v0.33 -m "TaskMate 0.33"
 git push --tags
 git push
 
