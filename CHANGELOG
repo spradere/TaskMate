@@ -1,3 +1,4 @@
+	[code] refactor string stack, using standard or TM libc
 	[code] validate driver lifecycle results and error message lookups
 	[code] use packed enums for run levels, module types, and error codes
 	[build] size module and error counts from init.rc target limits

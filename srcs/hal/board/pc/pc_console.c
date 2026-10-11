@@ -93,10 +93,7 @@ static void consoleDrawFrames(void)
 	box(input_frame, 0U, 0U);
 	mvwprintw(output_frame, 0U, PCCONSOLE_COLUMN_LABEL, " USART output ");
 	mvwprintw(input_frame, 0U, PCCONSOLE_COLUMN_LABEL, " USART input ");
-	mvwprintw(input_frame,
-			  0U,
-			  getmaxx(input_frame) - PCCONSOLE_WIDTH_HALT_LABEL,
-			  " F10: halt ");
+	mvwprintw(input_frame, 0U, getmaxx(input_frame) - PCCONSOLE_WIDTH_HALT_LABEL, " F10: halt ");
 	wnoutrefresh(output_frame);
 	wnoutrefresh(input_frame);
 	wnoutrefresh(output_console);
@@ -108,10 +105,7 @@ static void consoleDrawFrames(void)
 static int consoleStdoutWrite(void *cookie, const char *buffer, int length)
 {
 	(void)cookie;
-	for( int index = 0U; index < length; index++ )
-	{
-		pc_consoleWriteByte((uint8_t)buffer[index]);
-	}
+	for( int index = 0U; index < length; index++ ) { pc_consoleWriteByte((uint8_t)buffer[index]); }
 	pc_consoleFlush();
 	return length;
 }

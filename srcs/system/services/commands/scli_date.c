@@ -22,8 +22,8 @@
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"
-#include "tmLibc/tm_string.h"
 #include "tmLibc/tm_stdio.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Constants
@@ -100,8 +100,7 @@ bool dateCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0U; date_cmd[i].name != NULL; i++ )
 	{
-		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) ==
-			0U )
+		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(date_cmd[i].name), TM_STRING_SIZE_MAX) == 0U )
 		{
 			return date_cmd[i].func(argc, argv);
 		}
@@ -227,12 +226,12 @@ static bool dateWrite(const hal_rtc_time_t *time)
 static void datePrint(const hal_rtc_time_t *time)
 {
 	printf(TM_STR("[date] %02u/%02u/20%02u %02u:%02u:%02u\n"),
-			  (unsigned int)time->day,
-			  (unsigned int)time->month,
-			  (unsigned int)time->year,
-			  (unsigned int)time->hours,
-			  (unsigned int)time->minutes,
-			  (unsigned int)time->seconds);
+		   (unsigned int)time->day,
+		   (unsigned int)time->month,
+		   (unsigned int)time->year,
+		   (unsigned int)time->hours,
+		   (unsigned int)time->minutes,
+		   (unsigned int)time->seconds);
 }
 
 static void datePrintError(err_codes_t error)

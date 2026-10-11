@@ -18,10 +18,10 @@
 #include "scli_stack.h"
 
 #include "interfaces/tm_define.h"
-#include "system/sysCall/sc_threads.h"
 #include "system/sysCall/sc_string.h"
-#include "tmLibc/tm_string.h"
+#include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_stdio.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Constants

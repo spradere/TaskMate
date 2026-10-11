@@ -26,7 +26,7 @@
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #if TM_GPIO_ENABLED
-#include "system/sysCall/sc_gpio.h"
+	#include "system/sysCall/sc_gpio.h"
 #endif
 #include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
@@ -64,24 +64,22 @@ void system(void)
 	systemStart();
 
 	// Print system info
-	printf(
-		TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	printf(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
 #ifdef TM_DRIVER_HAVE_RTC
 	hal_rtc_time_t time;
 	sc_rtcRead(&time);
 	printf(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
-			  time.day,
-			  time.month,
-			  time.year,
-			  time.hours,
-			  time.minutes);
+		   time.day,
+		   time.month,
+		   time.year,
+		   time.hours,
+		   time.minutes);
 #endif
 
 #ifdef TM_DRIVER_HAVE_LCD
 	char msg[SYSTEM_SIZE_LCDMESSAGE];
-	snprintf(
-		msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	snprintf(msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
 	sc_lcdWriteString(TM_STR_RAM(msg), 0U, 0U);
 #endif
@@ -92,14 +90,14 @@ void system(void)
 #if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
 		sc_rtcRead(&time);
 		snprintf(msg,
-					sizeof(msg),
-					TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
-					time.day,
-					time.month,
-					time.year,
-					time.hours,
-					time.minutes,
-					time.seconds);
+				 sizeof(msg),
+				 TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
+				 time.day,
+				 time.month,
+				 time.year,
+				 time.hours,
+				 time.minutes,
+				 time.seconds);
 		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
 		sc_threadSetSTC(SYSTEM_DISPLAY_STC_TICKS);
 #else

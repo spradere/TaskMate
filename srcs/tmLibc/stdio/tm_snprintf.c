@@ -19,11 +19,11 @@
 #include "tm_snprintf.h"
 
 #if TM_LIBC_TASKMATE
-#include <limits.h>
-#include <stdbool.h>
+	#include <limits.h>
+	#include <stdbool.h>
 
-#include "interfaces/tm_define.h"
-#include "system/sysCall/sc_string.h"
+	#include "interfaces/tm_define.h"
+	#include "system/sysCall/sc_string.h"
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -37,12 +37,12 @@ static int formatString(char *ptr, size_t size, bool console, tm_string_t format
  * Formatter state
  * ---------------------------------------------*/
 
-#define SNPRINTF_BUFF_TEMP_SIZE 32
-#define SNPRINTF_BASE_BINARY 2U
-#define SNPRINTF_BASE_DECIMAL 10U
-#define SNPRINTF_BASE_HEXADECIMAL 16U
-#define SNPRINTF_PADDING_MAX 9U
-#define SNPRINTF_ERROR (-1)
+	#define SNPRINTF_BUFF_TEMP_SIZE 32
+	#define SNPRINTF_BASE_BINARY 2U
+	#define SNPRINTF_BASE_DECIMAL 10U
+	#define SNPRINTF_BASE_HEXADECIMAL 16U
+	#define SNPRINTF_PADDING_MAX 9U
+	#define SNPRINTF_ERROR (-1)
 
 typedef struct
 {
@@ -121,7 +121,7 @@ static void putChar(char ch)
 		}
 	}
 	else if( (tm_snprintf_buffer.ptr != NULL) && (tm_snprintf_buffer.size > 0U) &&
-		(tm_snprintf_buffer.index < (tm_snprintf_buffer.size - 1U)) )
+			 (tm_snprintf_buffer.index < (tm_snprintf_buffer.size - 1U)) )
 	{
 		tm_snprintf_buffer.ptr[tm_snprintf_buffer.index] = ch;
 	}
@@ -137,7 +137,8 @@ int vsnprintf(char *ptr, size_t size, const tm_string_t format, va_list args)
 	return formatString(ptr, size, false, format, args);
 }
 
-static int formatString(char *ptr, size_t size, bool console, const tm_string_t format, va_list args)
+static int formatString(char *ptr, size_t size, bool console, const tm_string_t format,
+						va_list args)
 {
 
 	// Store variables

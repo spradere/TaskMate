@@ -314,7 +314,8 @@ static mod_driver_item_t *sc_driverGetPointer(const char *name)
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
 		const tm_string_t *driver_name = driver_name_catalog[i];
 		if( (driver->control != NULL) && (driver_name != NULL) &&
-			HAL_STRING_COMPARE(TM_STR_VALUE(driver_name), TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0U )
+			HAL_STRING_COMPARE(TM_STR_VALUE(driver_name), TM_STR_RAM(name), MOD_NAME_SIZE_MAX) ==
+				0U )
 		{
 			return driver;
 		}

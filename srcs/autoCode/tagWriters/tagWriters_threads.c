@@ -116,7 +116,8 @@ void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context)
 		size_t thread_index = threads_count;
 		if( strcmp(mod->modules[i].name, "system") == 0U ) { thread_index = 0U; }
 		else { threads_count++; }
-		fprintf(context->file, "\t[%zu] = TM_STR_REF(thread%zu_name),\n", thread_index, thread_index);
+		fprintf(
+			context->file, "\t[%zu] = TM_STR_REF(thread%zu_name),\n", thread_index, thread_index);
 	}
 	fprintf(context->file, "};\n");
 }

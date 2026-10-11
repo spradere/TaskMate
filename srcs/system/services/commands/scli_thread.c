@@ -160,8 +160,8 @@ static bool threadStart(uint8_t argc, char *argv[])
 		return true;
 	}
 
-		tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
-		printf(TM_STR("[thread] %s not started: bad name or runlevel\n"), TM_STR_ARG(thread_name));
+	tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
+	printf(TM_STR("[thread] %s not started: bad name or runlevel\n"), TM_STR_ARG(thread_name));
 	return false;
 }
 
@@ -180,8 +180,8 @@ static bool threadStop(uint8_t argc, char *argv[])
 		return true;
 	}
 
-		tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
-		printf(TM_STR("[thread] name not found %s\n"), TM_STR_ARG(thread_name));
+	tm_string_arg_t thread_name = TM_STR_RAM(argv[SCLITHREAD_INDEX_NAME]);
+	printf(TM_STR("[thread] name not found %s\n"), TM_STR_ARG(thread_name));
 	return false;
 }
 

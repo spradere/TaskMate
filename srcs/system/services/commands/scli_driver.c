@@ -131,12 +131,12 @@ static bool driverList(uint8_t argc, char *argv[])
 		if( !sc_driverGetInfo(id, &name, &run_level, &status_bits) ) { return false; }
 
 		printf(TM_STR("\t%s runlevel=%u status[init=%u start=%u error=%u dead=%u]\n"),
-				  name,
-				  (unsigned int)run_level,
-				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_INIT) != 0U),
-				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_START) != 0U),
-				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_ERROR) != 0U),
-				  (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_DEAD) != 0U));
+			   name,
+			   (unsigned int)run_level,
+			   (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_INIT) != 0U),
+			   (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_START) != 0U),
+			   (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_ERROR) != 0U),
+			   (unsigned int)(TM_GETBIT(status_bits, DRV_BIT_DEAD) != 0U));
 	}
 
 	return true;
@@ -163,8 +163,12 @@ static bool driverInit(uint8_t argc, char *argv[])
 	{
 		printf(TM_STR("[driver] %s not initialized: %s\n"), TM_STR_ARG(driver_name), message);
 	}
-	else { printf(TM_STR("[driver] %s not initialized: error %u\n"), TM_STR_ARG(driver_name),
-					 (unsigned int)error); }
+	else
+	{
+		printf(TM_STR("[driver] %s not initialized: error %u\n"),
+			   TM_STR_ARG(driver_name),
+			   (unsigned int)error);
+	}
 	return false;
 }
 
@@ -189,8 +193,12 @@ static bool driverStart(uint8_t argc, char *argv[])
 	{
 		printf(TM_STR("[driver] %s not started: %s\n"), TM_STR_ARG(driver_name), message);
 	}
-	else { printf(TM_STR("[driver] %s not started: error %u\n"), TM_STR_ARG(driver_name),
-					 (unsigned int)error); }
+	else
+	{
+		printf(TM_STR("[driver] %s not started: error %u\n"),
+			   TM_STR_ARG(driver_name),
+			   (unsigned int)error);
+	}
 	return false;
 }
 
@@ -215,7 +223,11 @@ static bool driverStop(uint8_t argc, char *argv[])
 	{
 		printf(TM_STR("[driver] %s not stopped: %s\n"), TM_STR_ARG(driver_name), message);
 	}
-	else { printf(TM_STR("[driver] %s not stopped: error %u\n"), TM_STR_ARG(driver_name),
-					 (unsigned int)error); }
+	else
+	{
+		printf(TM_STR("[driver] %s not stopped: error %u\n"),
+			   TM_STR_ARG(driver_name),
+			   (unsigned int)error);
+	}
 	return false;
 }

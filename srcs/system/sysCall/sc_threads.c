@@ -192,7 +192,8 @@ static bool sc_threadGetId(const char *name, mod_count_t *id)
 	{
 		const tm_string_t *thread_name = thread_name_catalog[i];
 		if( (thread_name != NULL) &&
-			HAL_STRING_COMPARE(TM_STR_VALUE(thread_name), TM_STR_RAM(name), MOD_NAME_SIZE_MAX) == 0U )
+			HAL_STRING_COMPARE(TM_STR_VALUE(thread_name), TM_STR_RAM(name), MOD_NAME_SIZE_MAX) ==
+				0U )
 		{
 			*id = i;
 			return true;

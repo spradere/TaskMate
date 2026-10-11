@@ -26,8 +26,8 @@
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
-#include "tmLibc/tm_string.h"
 #include "tmLibc/tm_stdio.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Constants
@@ -176,8 +176,8 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[])
 {
 	for( uint8_t i = 0U; scli_commands[i].name != NULL; i++ )
 	{
-		if( strncmp(
-				TM_STR_RAM(argv[0U]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) == 0U )
+		if( strncmp(TM_STR_RAM(argv[0U]), TM_STR_RAM(scli_commands[i].name), TM_STRING_SIZE_MAX) ==
+			0U )
 		{
 			scli_commands[i].func(argc, argv);
 			return true;

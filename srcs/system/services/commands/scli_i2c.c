@@ -21,8 +21,8 @@
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"
-#include "tmLibc/tm_string.h"
 #include "tmLibc/tm_stdio.h"
+#include "tmLibc/tm_string.h"
 
 /* -----------------------------------------------
  * Constants
@@ -77,8 +77,7 @@ bool i2cCommand(uint8_t argc, char *argv[])
 
 	for( uint8_t i = 0U; i2c_cmd[i].name != NULL; i++ )
 	{
-		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) ==
-			0U )
+		if( strncmp(TM_STR_RAM(argv[1U]), TM_STR_RAM(i2c_cmd[i].name), TM_STRING_SIZE_MAX) == 0U )
 		{
 			return i2c_cmd[i].func(argc, argv);
 		}
