@@ -86,6 +86,8 @@ Treat files under `doc/audits/` as dated historical snapshots. Do not update the
 
 Every new audit must include the audit date, version tag, and current HEAD commit in its header. This rule applies only to audits created after this rule and is not retroactive.
 
+Mini audits in `doc/mini_audits/` follow `doc/mini_audits/ABOUT.md`. Keep them to one page with a header, question, code findings, and solution. Treat them as dated snapshots under the same resolution and deletion rules as audits.
+
 Architecture notes are concise working documents rather than exhaustive technical reports. When their update is explicitly requested:
 
 - keep each note within 50 lines;
