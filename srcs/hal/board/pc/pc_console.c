@@ -21,6 +21,7 @@
 #include <ncurses.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "interfaces/hal_halt.h"
@@ -57,6 +58,8 @@ static WINDOW *gpio_frame;
 static WINDOW *gpio_console;
 static bool console_started;
 static bool console_colours;
+static FILE *console_stdout;
+static FILE *terminal_stdout;
 
 static uint8_t input_edit[PCCONSOLE_SIZE_INPUT];
 static uint8_t input_ready[PCCONSOLE_SIZE_INPUT];
@@ -71,6 +74,7 @@ static uint8_t input_ready_index;
 static void consoleDeleteWindows(void);
 static void consoleDrawFrames(void);
 static void consoleInputRender(void);
+static int consoleStdoutWrite(void *cookie, const char *buffer, int length);
 
 /* =============================================================================
  * Implementation - Functions
@@ -112,6 +116,18 @@ static void consoleDrawFrames(void)
 	wnoutrefresh(input_console);
 	wnoutrefresh(gpio_console);
 	doupdate();
+}
+
+/* Keep standard libc output inside the USART output window after ncurses captures the terminal. */
+static int consoleStdoutWrite(void *cookie, const char *buffer, int length)
+{
+	(void)cookie;
+	for( int index = 0U; index < length; index++ )
+	{
+		pc_consoleWriteByte((uint8_t)buffer[index]);
+	}
+	pc_consoleFlush();
+	return length;
 }
 
 /*
@@ -191,6 +207,16 @@ bool pc_consoleInit(void)
 	input_edit_length = 0U;
 	input_ready_length = 0U;
 	input_ready_index = 0U;
+	console_stdout = fwopen(NULL, consoleStdoutWrite);
+	if( (console_stdout == NULL) || (setvbuf(console_stdout, NULL, _IONBF, 0U) != 0U) )
+	{
+		if( console_stdout != NULL ) { fclose(console_stdout); }
+		consoleDeleteWindows();
+		endwin();
+		return false;
+	}
+	terminal_stdout = stdout;
+	stdout = console_stdout;
 	console_started = true;
 	if( atexit(pc_consoleShutdown) != 0U )
 	{
@@ -205,6 +231,10 @@ void pc_consoleShutdown(void)
 {
 	if( !console_started ) { return; }
 	console_started = false;
+	stdout = terminal_stdout;
+	fclose(console_stdout);
+	console_stdout = NULL;
+	terminal_stdout = NULL;
 	consoleDeleteWindows();
 	endwin();
 }
