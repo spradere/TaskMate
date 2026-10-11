@@ -36,9 +36,9 @@
  * @{
  */
 #define AUTOCODE_VERSION_INITRCMAJOR 1U
-#define AUTOCODE_VERSION_INITRCMINOR 11U
+#define AUTOCODE_VERSION_INITRCMINOR 12U
 #define AUTOCODE_VERSION_MAJOR 1U
-#define AUTOCODE_VERSION_MINOR 7U
+#define AUTOCODE_VERSION_MINOR 8U
 /** @} */
 
 /* ============================================================================
@@ -147,6 +147,8 @@ typedef struct
 	size_t module_count;
 	uint8_t module_count_width;
 	bool module_count_set;
+	uint16_t stack_size_min;
+	bool stack_size_min_set;
 	size_t error_count_max;
 	size_t error_count;
 	uint8_t error_count_width;

@@ -53,6 +53,7 @@ typedef struct
 {
 	module_item_t *module;
 	const char *source_path;
+	uint16_t stack_size_min;
 } add_module_context_t;
 
 typedef add_module_result_t (*add_module_option_func_t)(const char *data,
@@ -167,7 +168,7 @@ static add_module_result_t optionStack(const char *data, const add_module_contex
 	char *end;
 	const unsigned long stack_size = strtoul(data, &end, ADDMODULE_BASE_DECIMAL);
 
-	if( (data[0U] == 0U) || (*end != 0U) || (stack_size < AUTOCODE_SIZE_STACKMIN) ||
+	if( (data[0U] == 0U) || (*end != 0U) || (stack_size < context->stack_size_min) ||
 		(stack_size > UINT16_MAX) )
 	{
 		return ADD_MODULE_INVALID_DATA;
@@ -245,7 +246,11 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 		return false;
 	}
 
-	const add_module_context_t context = {.module = module, .source_path = command->source_path};
+	const add_module_context_t context = {
+		.module = module,
+		.source_path = command->source_path,
+		.stack_size_min = (module->subtype == THREAD_BIT_TYPE_USER)
+							  ? command->data_base->stack_size_min : AUTOCODE_SIZE_STACKMIN};
 	bool module_is_valid = true;
 	// Option names and values occur in pairs after the module type and name.
 	for( int token = ADDMODULE_COUNT_HEADER; token < command->tok->count;
