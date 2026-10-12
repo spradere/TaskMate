@@ -40,7 +40,7 @@ CFLAGS += -I${PATH_SRCS} -I.
 CFLAGS += -DTM_LIBC_TASKMATE=0 -DTM_LIBC_CSTD=1
 CFLAGS += -ffunction-sections -fdata-sections
 
-CXXFLAGS = -std=c++20 -O0 -g -MMD -MP
+CXXFLAGS = -std=c++20 -pedantic-errors -O0 -g -MMD -MP
 CXXFLAGS += -Wall -Wextra -Wshadow -Wconversion -Wsign-conversion -Werror=return-type
 CXXFLAGS += -fno-exceptions -fno-rtti -fno-threadsafe-statics -fno-use-cxa-atexit
 CXXFLAGS += -ffunction-sections -fdata-sections
