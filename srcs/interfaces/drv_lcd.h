@@ -26,6 +26,10 @@
  * Public API
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Apply a common LCD driver control command.
  * @param command Common driver control command.
@@ -58,5 +62,9 @@ hal_driver_state_t hal_lcdWriteByte(uint8_t data);
  * @return Driver state after ending the write sequence.
  */
 hal_driver_state_t hal_lcdWriteEnd(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_DRV_LCD_H

@@ -21,6 +21,8 @@
 
 #include <stdbool.h>
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
@@ -28,6 +30,10 @@
 // [autoCode_tag] gpio_signals
 #include "gpio_signals.inc"
 // [/tag]
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Initialize configured logical GPIO signals.
@@ -42,5 +48,9 @@ void hal_gpioSignalWrite(gpio_signal_t signal, bool value);
  * @return Current logical value of the signal.
  */
 bool hal_gpioSignalRead(gpio_signal_t signal);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_GPIO_SIGNALS_H

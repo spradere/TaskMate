@@ -14,6 +14,8 @@
 #ifndef INTERFACES_HAL_CONTEXT_H
 #define INTERFACES_HAL_CONTEXT_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
@@ -27,6 +29,10 @@ typedef struct hal_context hal_context_t;
  * Public API
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Initialize a thread context on architecture-defined stack storage.
  * @param func Entry function for the thread.
@@ -38,6 +44,10 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *sta
 /**
  * @brief Restore and start a context as one indivisible architecture operation.
  */
-_Noreturn void hal_contextStart(const hal_context_t *context);
+TM_NORETURN void hal_contextStart(const hal_context_t *context);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_HAL_CONTEXT_H

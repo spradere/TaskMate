@@ -14,6 +14,8 @@
 #ifndef INTERFACES_TM_MOD_H
 #define INTERFACES_TM_MOD_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Includes
  * ========================================================================== */
@@ -47,7 +49,7 @@ typedef enum __attribute__((packed))
 	MOD_THREAD_ID,
 	MOD_TYPE_COUNT
 } mod_type_id_t;
-_Static_assert(sizeof(mod_type_id_t) == 1U, "mod_type_id_t must be one byte");
+TM_STATIC_ASSERT(sizeof(mod_type_id_t) == 1U, "mod_type_id_t must be one byte");
 
 /**
  * @name Module database limits

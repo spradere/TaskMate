@@ -15,6 +15,8 @@
 #ifndef INTERFACES_TM_OPTIONS_H
 #define INTERFACES_TM_OPTIONS_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
@@ -38,7 +40,7 @@
 /** @} */
 
 #if !(TM_LIBC_CSTD ^ TM_LIBC_TASKMATE)
-_Static_assert(0U, "Select exactly one libc, external or internal");
+TM_STATIC_ASSERT(0U, "Select exactly one libc, external or internal");
 #endif
 
 #endif // INTERFACES_TM_OPTIONS_H

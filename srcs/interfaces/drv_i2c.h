@@ -14,6 +14,8 @@
 #ifndef INTERFACES_DRV_I2C_H
 #define INTERFACES_DRV_I2C_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Includes
  * ========================================================================== */
@@ -34,7 +36,7 @@ typedef enum __attribute__((packed))
 	HAL_I2C_WRITE,
 	HAL_I2C_READ
 } hal_i2c_direction_t;
-_Static_assert(sizeof(hal_i2c_direction_t) == 1U, "hal_i2c_direction_t must be one byte");
+TM_STATIC_ASSERT(sizeof(hal_i2c_direction_t) == 1U, "hal_i2c_direction_t must be one byte");
 
 /**
  * @brief Selects the acknowledge bit sent after an I2C read.
@@ -44,11 +46,15 @@ typedef enum __attribute__((packed))
 	HAL_I2C_NACK,
 	HAL_I2C_ACK
 } hal_i2c_ack_t;
-_Static_assert(sizeof(hal_i2c_ack_t) == 1U, "hal_i2c_ack_t must be one byte");
+TM_STATIC_ASSERT(sizeof(hal_i2c_ack_t) == 1U, "hal_i2c_ack_t must be one byte");
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Apply a common I2C driver control command.
@@ -87,5 +93,9 @@ hal_driver_state_t hal_i2cWrite(uint8_t data);
  * @return Driver state after receiving the byte.
  */
 hal_driver_state_t hal_i2cRead(uint8_t *data, hal_i2c_ack_t ack);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_DRV_I2C_H

@@ -24,10 +24,18 @@
  * Public API
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Block the caller for at least the requested number of milliseconds. */
 void hal_delayMs(uint16_t milliseconds);
 
 /** Block the caller for at least the requested number of microseconds. */
 void hal_delayUs(uint16_t microseconds);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_HAL_DELAY_H

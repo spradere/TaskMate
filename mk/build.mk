@@ -61,6 +61,10 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@git describe --tags >> "${FILE_BUILD_INFO}"
 	@printf "${CC} : " >> "${FILE_BUILD_INFO}"
 	@printf "${VAL_CC_VERSION}\n" >> "${FILE_BUILD_INFO}"
+.if !empty(FILES_CPP_SRC)
+	@printf "${CXX} : " >> "${FILE_BUILD_INFO}"
+	@${CXX} --version | head -n 1 >> "${FILE_BUILD_INFO}"
+.endif
 	@awk -v expected_major="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR}" \
 		-v expected_minor="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR}" \
 		-v report_versions=1 -f "${SCRIPT_AUTOCODE_VERSION}" \
@@ -140,13 +144,20 @@ cppcheck: _autocode
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${FILE_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_TARGET} \
 		${CFLAGS_CPPCHECK} \
-		${FILES_COMPILE_SRC}
+		${FILES_C_SRC}
+.if !empty(FILES_CPP_SRC)
+	@${FILE_CPPCHECK} --std=c++20 --language=c++ ${OPT_CPPCHECK_TARGET} \
+		${CFLAGS_CPPCHECK} ${FILES_CPP_SRC}
+.endif
 
 .PHONY: tidy
 tidy: _autocode
 #help tidy: clang-tidy static code analysis.
 	@printf "%sTidy TaskMate static test code, config in clang-tidy%s\n" \
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"	
-.for file in ${FILES_CLANG_TIDY_SRC}
+.for file in ${FILES_CLANG_TIDY_SRC:M*.c}
 	@${FILE_CLANG_TIDY} "${file}" -- ${CFLAGS_CLANG_TIDY} ${CFLAGS_${file}}
+.endfor
+.for file in ${FILES_CLANG_TIDY_SRC:M*.cpp}
+	@${FILE_CLANG_TIDY} "${file}" -- ${CFLAGS_CLANG_TIDY_CPP} ${CFLAGS_${file}}
 .endfor

@@ -44,6 +44,10 @@ typedef struct
  * Public API
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Apply a common RTC driver control command.
  * @param command Common driver control command.
@@ -63,5 +67,9 @@ hal_driver_state_t hal_rtcRead(hal_rtc_time_t *time);
  * @return Driver state after writing.
  */
 hal_driver_state_t hal_rtcWrite(const hal_rtc_time_t *time);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_DRV_RTC_H

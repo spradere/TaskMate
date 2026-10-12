@@ -21,12 +21,13 @@ PATH_FREEBSD = ${PATH_SRCS}/hal/host/freebsd
 PATHS_SOURCE_SEARCH += ${PATH_FREEBSD}
 FILES_EXTRA_SRC += \
 	${PATH_FREEBSD}/freebsd_atomic.c \
-	${PATH_FREEBSD}/freebsd_halt.c \
+	${PATH_FREEBSD}/freebsd_halt.cpp \
 	${PATH_FREEBSD}/freebsd_interrupts.c
 
 FILE_ARCH_CC = ${PATH_FREEBSD}/freebsd_CC.mk
 
 CC = cc
+CXX = c++
 VAL_CC_VERSION != ${CC} --version | head -n 1
 
 CFLAGS += -std=gnu17 -O0 -g -MMD -MP
@@ -39,13 +40,22 @@ CFLAGS += -I${PATH_SRCS} -I.
 CFLAGS += -DTM_LIBC_TASKMATE=0 -DTM_LIBC_CSTD=1
 CFLAGS += -ffunction-sections -fdata-sections
 
-LDFLAGS = -Wl,--gc-sections -lncursesw -ltinfow
+CXXFLAGS = -std=c++20 -O0 -g -MMD -MP
+CXXFLAGS += -Wall -Wextra -Wshadow -Wconversion -Wsign-conversion -Werror=return-type
+CXXFLAGS += -fno-exceptions -fno-rtti -fno-threadsafe-statics -fno-use-cxa-atexit
+CXXFLAGS += -ffunction-sections -fdata-sections
+CXXFLAGS += ${CFLAGS:M-I*} ${CFLAGS:M-D*}
+
+LDFLAGS = -Wl,--gc-sections -Wl,-Map,${FILE_TARGET}.map -lncursesw -ltinfow
 
 # Linters
 FILE_CLANG_TIDY_TARGET != ${CC} -dumpmachine
 CFLAGS_CLANG_TIDY = --target=${FILE_CLANG_TIDY_TARGET} -std=gnu17
 CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
 CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCH_TYPES}
+CFLAGS_CLANG_TIDY_CPP = --target=${FILE_CLANG_TIDY_TARGET} -std=c++20
+CFLAGS_CLANG_TIDY_CPP += ${CXXFLAGS:M-D*} ${CXXFLAGS:M-I*}
+CFLAGS_CLANG_TIDY_CPP += -include ${FILE_HAL_ARCH_TYPES}
 FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC}
 
 OPT_CPPCHECK_TARGET = --platform=unix64 --library=bsd --library=posix

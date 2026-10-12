@@ -7,7 +7,7 @@
  */
 
 /**
- * @file freebsd_halt.c
+ * @file freebsd_halt.cpp
  * @brief FreeBSD halt implementation.
  */
 
@@ -15,12 +15,12 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include <stdlib.h>
-
 #include "interfaces/hal_halt.h"
+
+#include <cstdlib>
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
 
-_Noreturn void hal_halt(void) { exit(EXIT_FAILURE); }
+TM_NORETURN void hal_halt(void) { std::exit(EXIT_FAILURE); }

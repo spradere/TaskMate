@@ -31,7 +31,8 @@ PATHS_INITRC_SOURCES != awk -v source_option="-source_dir" -v source_root="${PAT
 
 FILES_INITRC_DIR_SRC =
 .if !empty(PATHS_INITRC_SOURCES)
-FILES_INITRC_DIR_SRC != find ${PATHS_INITRC_SOURCES} ${OPT_FIND_EXCLUDE} -type f -name "*.c"
+FILES_INITRC_DIR_SRC != find ${PATHS_INITRC_SOURCES} ${OPT_FIND_EXCLUDE} -type f \
+	\( -name "*.c" -o -name "*.cpp" \)
 .endif
 
 # Base system sources + target-specific compilation list
@@ -40,7 +41,7 @@ FILES_BASE_SYSTEM_SRC != find \
 	${PATH_SRCS}/system/sysCall \
 	${PATHS_EXTRA_SRC} \
 	${FILES_INITRC_DIR_SRC} \
-	${OPT_FIND_EXCLUDE} -type f -name "*.c"
+	${OPT_FIND_EXCLUDE} -type f \( -name "*.c" -o -name "*.cpp" \)
 FILES_BASE_SYSTEM_SRC += ${PATH_SRCS}/system/boot.c
 .if empty(FILE_GPIO_SIGNALS) && empty(FILE_WIREGPIO)
 FILES_BASE_SYSTEM_SRC := ${FILES_BASE_SYSTEM_SRC:N${PATH_SRCS}/system/sysCall/sc_gpio.c}
@@ -57,6 +58,8 @@ FILES_COMPILE_SRC = \
 	${FILES_INITRC_SRC} \
 
 FILES_COMPILE_SRC := ${FILES_COMPILE_SRC:O}
+FILES_C_SRC = ${FILES_COMPILE_SRC:M*.c}
+FILES_CPP_SRC = ${FILES_COMPILE_SRC:M*.cpp}
 
 .for file in ${FILES_COMPILE_SRC}
 _TEST != ${SCRIPT_CHECK_PATH_FILE} -f ${file}; printf '%s\n' "$$?"
@@ -68,7 +71,9 @@ _TEST != ${SCRIPT_CHECK_PATH_FILE} -f ${file}; printf '%s\n' "$$?"
 .endif
 .endfor
 
-FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
+FILES_C_OBJ = ${FILES_C_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
+FILES_CPP_OBJ = ${FILES_CPP_SRC:%.cpp=${PATH_BUILD_TARGET}/%.cpp.o}
+FILES_OBJ = ${FILES_C_OBJ} ${FILES_CPP_OBJ}
 
 # Test files provided by the target
 .if !empty(FILE_GPIO_SIGNALS) && !exists(${FILE_GPIO_SIGNALS})
@@ -95,7 +100,8 @@ FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
 .for path_list in \
 	PATHS_SOURCE_SEARCH PATHS_EXTRA_SRC FILES_EXTRA_SRC FILES_SRC_H \
 	FILES_DRIVER_INTERFACES FILES_INITRC FILES_INITRC_SRC PATHS_INITRC_SOURCES \
-	FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_OBJ FILES_DEP \
+	FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_C_SRC \
+	FILES_CPP_SRC FILES_C_OBJ FILES_CPP_OBJ FILES_OBJ FILES_DEP \
 	FILES_ERROR
 ${path_list} := ${${path_list}:O}
 .if ${${path_list}:[#]} != ${${path_list}:u:[#]}
@@ -114,7 +120,8 @@ FILES_AUTOCODE_SRC_ALL = ${FILES_AUTOCODE_SRC} ${FILES_AUTOCODE_SRC_H}
 FILES_AUTOCODE_SRC_ALL := ${FILES_AUTOCODE_SRC_ALL:O}
 
 # Target-independent TaskMate sources used by global utilities
-FILES_NOTARGET_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.c"
+FILES_NOTARGET_SRC != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' \
+	-type f \( -name "*.c" -o -name "*.cpp" \)
 FILES_NOTARGET_SRC_H != find ${PATH_SRCS} ${OPT_FIND_EXCLUDE} ! -path '${PATH_SRCS}/autoCode/*' -type f -name "*.h"
 FILES_NOTARGET_SRC_ALL = ${FILES_NOTARGET_SRC} ${FILES_NOTARGET_SRC_H}
 FILES_NOTARGET_SRC_ALL := ${FILES_NOTARGET_SRC_ALL:O}

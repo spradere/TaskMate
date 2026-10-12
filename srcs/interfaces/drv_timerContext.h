@@ -25,6 +25,10 @@
  * Public definitions
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef hal_context_t *hal_timerContextCallback_func_t(hal_context_t *context);
 typedef hal_timerContextCallback_func_t *hal_timerContextCallback_ptr_t;
 
@@ -49,5 +53,9 @@ hal_driver_state_t hal_timerContextSetCallback(hal_timerContextCallback_ptr_t fu
  * @return Driver state after loading the timer.
  */
 hal_driver_state_t hal_timerContextLoad(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_DRV_TIMERCONTEXT_H

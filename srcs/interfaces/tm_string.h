@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 #include "interfaces/tm_options.h"
+#include "interfaces/tm_cpp_compat.h"
 
 /* ============================================================================
  * Public definitions
@@ -41,7 +42,7 @@ typedef enum __attribute__((packed))
 	TM_MEM_RAM,
 	TM_MEM_ROM
 } tm_string_storage_t;
-_Static_assert(sizeof(tm_string_storage_t) == 1U, "tm_string_storage_t must be one byte");
+TM_STATIC_ASSERT(sizeof(tm_string_storage_t) == 1U, "tm_string_storage_t must be one byte");
 
 /**
  * @brief Identifies string data and its RAM or ROM storage.

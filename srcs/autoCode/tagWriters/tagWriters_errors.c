@@ -92,9 +92,9 @@ void tagWriterWriteErrorEnum(const tag_writer_context_t *context)
 	fprintf(context->file, "\tERROR_COUNT\n");
 	fprintf(context->file, "} err_codes_t;\n");
 	fprintf(context->file,
-			"_Static_assert(sizeof(err_codes_t) <= sizeof(error_count_t), "
+			"TM_STATIC_ASSERT(sizeof(err_codes_t) <= sizeof(error_count_t), "
 			"\"err_codes_t exceeds error_count_t\");\n\n");
 	fprintf(context->file,
-			"_Static_assert(ERROR_COUNT <= (UINT8_MAX + 1U), "
+			"TM_STATIC_ASSERT(ERROR_COUNT <= (UINT8_MAX + 1U), "
 			"\"error identifiers exceed err_code_t\");\n\n");
 }

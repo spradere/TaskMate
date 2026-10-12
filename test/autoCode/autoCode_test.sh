@@ -421,10 +421,17 @@ runErrorTests()
 			"${PATH_CASE}/generated/error_enum.inc"; then
 			fail "error_count_${VAL_LIMIT}: wrong count type"
 		fi
-		if ! printf '%s\n' '#include <stdint.h>' '#include "error_enum.inc"' \
+		if ! printf '%s\n' '#include <stdint.h>' \
+			'#include "interfaces/tm_cpp_compat.h"' '#include "error_enum.inc"' \
 			"_Static_assert(sizeof(err_codes_t) == ${VAL_SIZE}U, \"wrong code size\");" | \
-			clang -std=gnu11 -I"${PATH_CASE}/generated" -x c -fsyntax-only -; then
+			clang -std=gnu11 -Isrcs -I"${PATH_CASE}/generated" -x c -fsyntax-only -; then
 			fail "error_count_${VAL_LIMIT}: generated enum size is invalid"
+		fi
+		if ! printf '%s\n' '#include <stdint.h>' \
+			'#include "interfaces/tm_cpp_compat.h"' '#include "error_enum.inc"' | \
+			clang++ -std=c++20 -Isrcs -I"${PATH_CASE}/generated" \
+			-x c++ -fsyntax-only -; then
+			fail "error_count_${VAL_LIMIT}: generated enum is not C++20 compatible"
 		fi
 		if ! clang -std=gnu11 -Wall -Wextra -Wconversion -Wenum-conversion \
 			-I"srcs" -I"${PATH_CASE}/generated" \

@@ -79,7 +79,7 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	fprintf(context->file, "\tGPIO_SIGNAL_COUNT\n");
 	fprintf(context->file, "} gpio_signal_t;\n");
 	fprintf(context->file,
-			"_Static_assert(sizeof(gpio_signal_t) == 1U, \"gpio_signal_t must be one byte\");\n");
+			"TM_STATIC_ASSERT(sizeof(gpio_signal_t) == 1U, \"gpio_signal_t must be one byte\");\n");
 
 	// Release parser storage and report any failure to close the signal source.
 	tokenizerFree(&tok);

@@ -14,6 +14,8 @@
 #ifndef INTERFACES_TM_THREADS_H
 #define INTERFACES_TM_THREADS_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Includes
  * ========================================================================== */
@@ -41,6 +43,6 @@ typedef enum __attribute__((packed))
 	THREAD_BIT_DEAD,
 	THREAD_BIT_YIELDED
 } tm_thread_status_bit_t;
-_Static_assert(sizeof(tm_thread_status_bit_t) == 1U, "tm_thread_status_bit_t must be one byte");
+TM_STATIC_ASSERT(sizeof(tm_thread_status_bit_t) == 1U, "tm_thread_status_bit_t must be one byte");
 
 #endif // INTERFACES_TM_THREADS_H

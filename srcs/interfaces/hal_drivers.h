@@ -14,6 +14,8 @@
 #ifndef INTERFACES_HAL_DRIVERS_H
 #define INTERFACES_HAL_DRIVERS_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Includes
  * ========================================================================== */
@@ -44,7 +46,7 @@ typedef enum __attribute__((packed))
 	DRV_CTRL_GETSTATUS,
 	DRV_CTRL_GETLASTERROR
 } hal_driver_control_t;
-_Static_assert(sizeof(hal_driver_control_t) == 1U, "hal_driver_control_t must be one byte");
+TM_STATIC_ASSERT(sizeof(hal_driver_control_t) == 1U, "hal_driver_control_t must be one byte");
 
 typedef uint8_t hal_driver_status_t;
 
@@ -59,7 +61,7 @@ typedef enum __attribute__((packed))
 	DRV_BIT_ERROR,
 	DRV_BIT_DEAD
 } hal_driver_status_bit_t;
-_Static_assert(sizeof(hal_driver_status_bit_t) == 1U, "hal_driver_status_bit_t must be one byte");
+TM_STATIC_ASSERT(sizeof(hal_driver_status_bit_t) == 1U, "hal_driver_status_bit_t must be one byte");
 
 /**
  * @brief Describes the current driver life cycle state.
@@ -72,7 +74,7 @@ typedef enum __attribute__((packed))
 	DRV_STATE_ERROR,
 	DRV_STATE_DEAD
 } hal_driver_state_t;
-_Static_assert(sizeof(hal_driver_state_t) == 1U, "hal_driver_state_t must be one byte");
+TM_STATIC_ASSERT(sizeof(hal_driver_state_t) == 1U, "hal_driver_state_t must be one byte");
 
 typedef union
 {

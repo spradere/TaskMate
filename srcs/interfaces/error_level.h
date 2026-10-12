@@ -14,6 +14,8 @@
 #ifndef INTERFACES_ERROR_LEVEL_H
 #define INTERFACES_ERROR_LEVEL_H
 
+#include "interfaces/tm_cpp_compat.h"
+
 /* ============================================================================
  * Public definitions
  * ========================================================================== */
@@ -28,6 +30,6 @@ typedef enum __attribute__((packed))
 	ERR_LEVEL_FAIL, // Component failure; handled by the system and logged persistently.
 	ERR_LEVEL_PANIC // Critical problem; handled by the system through a controlled halt.
 } err_level_t;
-_Static_assert(sizeof(err_level_t) == 1U, "err_level_t must be one byte");
+TM_STATIC_ASSERT(sizeof(err_level_t) == 1U, "err_level_t must be one byte");
 
 #endif // INTERFACES_ERROR_LEVEL_H

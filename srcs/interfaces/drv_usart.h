@@ -26,6 +26,10 @@
  * Public API
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Apply a common USART driver control command.
  * @return Resulting driver state.
@@ -47,5 +51,9 @@ hal_driver_state_t hal_usartWriteByte(uint8_t data);
  * @return Driver state after sending queued bytes.
  */
 hal_driver_state_t hal_usartSendTXBuffer(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_DRV_USART_H

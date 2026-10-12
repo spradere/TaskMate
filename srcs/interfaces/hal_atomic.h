@@ -31,6 +31,10 @@ typedef uintptr_t hal_atomic_state_t;
  * Public API
  * ========================================================================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Mask interrupts and capture the prior interrupt state.
  * Nested calls and calls from interrupt context preserve the state seen by each caller.
@@ -43,5 +47,9 @@ hal_atomic_state_t hal_atomicStart(void);
  * @param state Token returned by hal_atomicStart().
  */
 void hal_atomicEnd(hal_atomic_state_t state);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INTERFACES_HAL_ATOMIC_H

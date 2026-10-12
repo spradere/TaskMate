@@ -332,6 +332,7 @@ runConfigurationTests()
 	logContains z600_compile_sources "srcs/user/target/z600/z600_task2.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
+	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_halt.cpp"
 	logContains z600_compile_sources "srcs/system/services/scli.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_driver.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_stack.c"
@@ -340,6 +341,33 @@ runConfigurationTests()
 	logExcludes z600_compile_sources "srcs/system/services/commands/scli_i2c.c"
 	logExcludes z600_compile_sources "srcs/hal/arch/"
 	logExcludes z600_compile_sources "srcs/hal/mcu/"
+	expectOutput z600_cpp_source "srcs/hal/host/freebsd/freebsd_halt.cpp" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILES_CPP_SRC
+	expectOutput z600_cpp_object \
+		"build/z600_pc_freebsd_ucontext/srcs/hal/host/freebsd/freebsd_halt.cpp.o" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILES_CPP_OBJ
+	expectSuccess z600_cpp_dependency bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 \
+		-V FILES_DEP
+	logContains z600_cpp_dependency \
+		"build/z600_pc_freebsd_ucontext/srcs/hal/host/freebsd/freebsd_halt.cpp.d"
+	expectOutput z600_link_compiler "c++" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_LINK_COMPILER
+	expectOutput z600_link_flags "-nostdlib++" \
+		bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V FILE_LINK_FLAGS
+	expectSuccess z600_cpp_flags bmake -C "${PATH_PROJECT}" VAL_TARGET=z600 -V CXXFLAGS
+	logContains z600_cpp_flags "-std=c++20"
+	logContains z600_cpp_flags "-fno-exceptions"
+	logContains z600_cpp_flags "-fno-rtti"
+	printf '%s\n' \
+		'#include "interfaces/drv_timerContext.h"' \
+		'#include "interfaces/hal_context.h"' \
+		'#include "interfaces/hal_halt.h"' \
+		'#include "interfaces/tm_string.h"' \
+		'#include "interfaces/error_catalog.h"' \
+		> "${PATH_STAGE_WORK}/cpp_interfaces.cpp"
+	expectSuccess cpp_interface_contracts c++ -std=c++20 -DAUTOCODE_BUILD \
+		-DTM_LIBC_TASKMATE=0 -DTM_LIBC_CSTD=1 -I "${PATH_PROJECT}/srcs" \
+		-fsyntax-only "${PATH_STAGE_WORK}/cpp_interfaces.cpp"
 	expectOutput z600_gpio_signals "" bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILE_GPIO_SIGNALS
 	expectOutput z600_gpio_wiring "" bmake -C "${PATH_PROJECT}" \
