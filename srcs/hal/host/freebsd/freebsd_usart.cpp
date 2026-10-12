@@ -63,13 +63,28 @@ struct usart_context_t
 	hal_driver_status_t status;
 };
 
+template<typename Policy>
+concept usart_console_policy = requires(uint8_t *data, uint8_t byte) {
+	{ static_cast<bool>(Policy::readByte(data)) };
+	Policy::writeByte(byte);
+	Policy::flush();
+};
+
+/* The host build uses -O0, so policy adapters must not add runtime calls. */
+struct pc_console_policy_t
+{
+	[[gnu::always_inline]] static bool readByte(uint8_t *data) { return pc_consoleReadByte(data); }
+	[[gnu::always_inline]] static void writeByte(uint8_t data) { pc_consoleWriteByte(data); }
+	[[gnu::always_inline]] static void flush(void) { pc_consoleFlush(); }
+};
+
 static_assert(RL_LEVEL_COUNT <= (RL_LEVEL_MASK + 1U), "Run levels exceed the status field");
+static_assert(usart_console_policy<pc_console_policy_t>, "Invalid FreeBSD USART console policy");
 
 /* -----------------------------------------------
  * Private variables
  * ---------------------------------------------*/
 
-static constinit usart_context_t usart_context = {};
 static constinit err_codes_t usart_last_error = ERR_NO_ERROR;
 
 /* -----------------------------------------------
@@ -79,6 +94,7 @@ static constinit err_codes_t usart_last_error = ERR_NO_ERROR;
 static hal_driver_state_t usartSetError(err_codes_t error);
 static hal_driver_state_t usartGetStatus(usart_context_t &context);
 static hal_driver_state_t usartRequireRunning(usart_context_t &context);
+static hal_driver_state_t usartWriteByteCore(usart_context_t &context, uint8_t data);
 static hal_driver_state_t usartControlCore(usart_context_t &context,
 										   hal_driver_control_t command,
 										   hal_driver_control_data_t *data);
@@ -147,44 +163,15 @@ static hal_driver_state_t usartStop(usart_context_t &context)
 	return usartGetStatus(context);
 }
 
-hal_driver_state_t hal_usartRead(uint8_t *data)
+static hal_driver_state_t usartWriteByteCore(usart_context_t &context, uint8_t data)
 {
-	hal_driver_state_t state = usartRequireRunning(usart_context);
+	hal_driver_state_t state = usartRequireRunning(context);
 	if( state != DRV_STATE_RUNNING ) { return state; }
-	if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-
-	hal_atomic_state_t atomic_state = hal_atomicStart();
-	bool have_data = pc_consoleReadByte(data);
-	hal_atomicEnd(atomic_state);
-	if( !have_data ) { return usartSetError(ERR_HAL_USART_RX_BUFFER_EMPTY); }
-	return DRV_STATE_RUNNING;
-}
-
-hal_driver_state_t hal_usartWriteByte(uint8_t data)
-{
-	hal_driver_state_t state = usartRequireRunning(usart_context);
-	if( state != DRV_STATE_RUNNING ) { return state; }
-	if( usart_context.tx_length >= FREEBSDUSART_SIZE_TXBUFFER )
+	if( context.tx_length >= FREEBSDUSART_SIZE_TXBUFFER )
 	{
 		return usartSetError(ERR_HAL_USART_TX_BUFFER_FULL);
 	}
-	usart_context.tx_buffer[usart_context.tx_length++] = data;
-	return DRV_STATE_RUNNING;
-}
-
-hal_driver_state_t hal_usartSendTXBuffer(void)
-{
-	hal_driver_state_t state = usartRequireRunning(usart_context);
-	if( state != DRV_STATE_RUNNING ) { return state; }
-
-	hal_atomic_state_t atomic_state = hal_atomicStart();
-	for( uint16_t i = 0U; i < usart_context.tx_length; i++ )
-	{
-		pc_consoleWriteByte(usart_context.tx_buffer[i]);
-	}
-	pc_consoleFlush();
-	usart_context.tx_length = 0U;
-	hal_atomicEnd(atomic_state);
+	context.tx_buffer[context.tx_length++] = data;
 	return DRV_STATE_RUNNING;
 }
 
@@ -253,7 +240,56 @@ static hal_driver_state_t usartControlCore(usart_context_t &context,
 	}
 }
 
+/* One console policy selects the host operations without runtime dispatch state. */
+template<usart_console_policy Policy>
+struct usart_driver_t
+{
+	usart_context_t context;
+
+	[[gnu::always_inline]] hal_driver_state_t read(uint8_t *data)
+	{
+		hal_driver_state_t state = usartRequireRunning(context);
+		if( state != DRV_STATE_RUNNING ) { return state; }
+		if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
+
+		hal_atomic_state_t atomic_state = hal_atomicStart();
+		bool have_data = Policy::readByte(data);
+		hal_atomicEnd(atomic_state);
+		if( !have_data ) { return usartSetError(ERR_HAL_USART_RX_BUFFER_EMPTY); }
+		return DRV_STATE_RUNNING;
+	}
+
+	[[gnu::always_inline]] hal_driver_state_t sendTXBuffer(void)
+	{
+		hal_driver_state_t state = usartRequireRunning(context);
+		if( state != DRV_STATE_RUNNING ) { return state; }
+
+		hal_atomic_state_t atomic_state = hal_atomicStart();
+		for( uint16_t i = 0U; i < context.tx_length; i++ )
+		{
+			Policy::writeByte(context.tx_buffer[i]);
+		}
+		Policy::flush();
+		context.tx_length = 0U;
+		hal_atomicEnd(atomic_state);
+		return DRV_STATE_RUNNING;
+	}
+};
+
+static_assert(sizeof(usart_driver_t<pc_console_policy_t>) == sizeof(usart_context_t),
+			  "The policy must not add persistent driver state");
+static constinit usart_driver_t<pc_console_policy_t> usart_driver = {};
+
+hal_driver_state_t hal_usartRead(uint8_t *data) { return usart_driver.read(data); }
+
+hal_driver_state_t hal_usartWriteByte(uint8_t data)
+{
+	return usartWriteByteCore(usart_driver.context, data);
+}
+
+hal_driver_state_t hal_usartSendTXBuffer(void) { return usart_driver.sendTXBuffer(); }
+
 hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_control_data_t *data)
 {
-	return usartControlCore(usart_context, command, data);
+	return usartControlCore(usart_driver.context, command, data);
 }

@@ -31,6 +31,23 @@ c++ -std=c++20 -pedantic-errors -Wall -Wextra -Werror -fno-exceptions -fno-rtti 
 	-fno-threadsafe-statics -fno-use-cxa-atexit -Isrcs -I. \
 	-Ibuild/z600_pc_freebsd_ucontext/generated \
 	-c srcs/hal/host/freebsd/freebsd_usart.cpp -o "${PATH_TEST_TMP}/usart.o"
+
+printf '%s\n' \
+	'#include "srcs/hal/host/freebsd/freebsd_usart.cpp"' \
+	'struct invalid_console_policy_t {};' \
+	'using invalid_driver_t = usart_driver_t<invalid_console_policy_t>;' \
+	'invalid_driver_t invalid_driver;' > "${PATH_TEST_TMP}/invalid_policy.cpp"
+if c++ -std=c++20 -pedantic-errors -Isrcs -I. \
+	-Ibuild/z600_pc_freebsd_ucontext/generated -fsyntax-only \
+	"${PATH_TEST_TMP}/invalid_policy.cpp" > "${PATH_TEST_TMP}/invalid_policy.log" 2>&1; then
+	printf 'Invalid FreeBSD USART console policy compiled\n' >&2
+	exit 1
+fi
+if ! grep -q 'usart_console_policy' "${PATH_TEST_TMP}/invalid_policy.log"; then
+	printf 'Invalid policy failed for an unrelated reason\n' >&2
+	exit 1
+fi
+
 if nm -u "${PATH_TEST_TMP}/usart.o" | grep -E '_Zn|_Zd|_ZTI|_ZTV|__cxa|__gxx|__dynamic_cast'; then
 	printf 'Unexpected C++ runtime dependency in FreeBSD USART\n' >&2
 	exit 1
