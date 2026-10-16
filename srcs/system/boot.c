@@ -43,6 +43,7 @@ int main(void)
 	state = hal_gpioControl(DRV_CTRL_START, 0U);
 	if( state != DRV_STATE_RUNNING ) { hal_halt(); }
 #endif
+
 	// Usart startup
 	state = hal_usartControl(DRV_CTRL_INIT, 0U);
 	if( state != DRV_STATE_INITIALIZED ) { hal_halt(); }
