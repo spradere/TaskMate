@@ -16,13 +16,38 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "at2560_gpio.h"
+#include "interfaces/drv_gpio.h"
 
 #include <avr/io.h>
 #include <stdbool.h>
+#include <stddef.h>
 
-#include "interfaces/gpio_signals.h"
+#include "hal/mcu/atmega2560/at2560_ports_pins.h"
 #include "interfaces/tm_macros.h"
+#include "interfaces/tm_runLevel.h"
+
+/* -----------------------------------------------
+ * Private definitions
+ * ---------------------------------------------*/
+
+/**
+ * @brief Maps a logical signal to a pin and active level.
+ */
+typedef struct
+{
+	hal_pin_t pin;
+	bool active_high;
+} hal_signal_t;
+
+/**
+ * @brief Groups GPIO register addresses for one port.
+ */
+typedef struct
+{
+	volatile uint8_t *ddr;
+	volatile uint8_t *port;
+	volatile uint8_t *pin;
+} hal_port_t;
 
 /* -----------------------------------------------
  * Private variables
@@ -65,6 +90,16 @@ static const hal_port_t mcu_ports[PORT_COUNT] = {
 };
 
 static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
+static hal_driver_status_t gpio_status;
+static err_codes_t gpio_last_error = ERR_NO_ERROR;
+
+/* -----------------------------------------------
+ * Private function prototypes
+ * ---------------------------------------------*/
+
+static void gpioPinInit(const hal_pin_t *pin);
+static void gpioPinWrite(hal_pin_t pin, bool value);
+static bool gpioPinRead(hal_pin_t pin);
 
 // [autoCode_tag] wire_gpio
 #include "wire_gpio.inc"
@@ -74,7 +109,83 @@ static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_gpioPinInit(const hal_pin_t *pin)
+/* -----------------------------------------------
+ * Driver life cycle
+ * ---------------------------------------------*/
+
+static hal_driver_state_t gpioSetError(err_codes_t error)
+{
+	gpio_last_error = error;
+	return DRV_STATE_ERROR;
+}
+
+static hal_driver_state_t hal_gpioGetStatus(void)
+{
+	if( TM_GETBIT(gpio_status, DRV_BIT_DEAD) != 0U )
+	{
+		gpio_last_error = ERR_HAL_DRIVER_DEAD;
+		return DRV_STATE_DEAD;
+	}
+	if( TM_GETBIT(gpio_status, DRV_BIT_ERROR) != 0U )
+	{
+		return gpioSetError(ERR_HAL_DRIVER_INVALID_STATE);
+	}
+	if( TM_GETBIT(gpio_status, DRV_BIT_INIT) == 0U )
+	{
+		if( TM_GETBIT(gpio_status, DRV_BIT_START) == 0U ) { return DRV_STATE_OFF; }
+		return gpioSetError(ERR_HAL_DRIVER_INVALID_STATE);
+	}
+	if( TM_GETBIT(gpio_status, DRV_BIT_START) == 0U ) { return DRV_STATE_INITIALIZED; }
+	return DRV_STATE_RUNNING;
+}
+
+static bool gpioRequireRunning(void)
+{
+	hal_driver_state_t state = hal_gpioGetStatus();
+	if( state == DRV_STATE_RUNNING ) { return true; }
+	if( (state == DRV_STATE_OFF) || (state == DRV_STATE_INITIALIZED) )
+	{
+		gpioSetError(ERR_HAL_DRIVER_NOT_RUNNING);
+	}
+	return false;
+}
+
+static hal_driver_state_t hal_gpioInit(void)
+{
+	if( TM_GETBIT(gpio_status, DRV_BIT_DEAD) != 0U ) { return gpioSetError(ERR_HAL_DRIVER_DEAD); }
+	for( uint8_t i = 0U; i < GPIO_SIGNAL_COUNT; i++ ) { targetWireSignal((gpio_signal_t)i); }
+	TM_SETBIT(gpio_status, DRV_BIT_INIT);
+	gpio_last_error = ERR_NO_ERROR;
+	return DRV_STATE_INITIALIZED;
+}
+
+static hal_driver_state_t hal_gpioStart(void)
+{
+	if( TM_GETBIT(gpio_status, DRV_BIT_DEAD) != 0U ) { return gpioSetError(ERR_HAL_DRIVER_DEAD); }
+	if( TM_GETBIT(gpio_status, DRV_BIT_INIT) == 0U )
+	{
+		return gpioSetError(ERR_HAL_DRIVER_NOT_INITIALIZED);
+	}
+	for( uint8_t i = 0U; i < GPIO_SIGNAL_COUNT; i++ )
+	{
+		gpioPinInit(&signal_table[i].pin);
+	}
+	TM_SETBIT(gpio_status, DRV_BIT_START);
+	gpio_last_error = ERR_NO_ERROR;
+	return DRV_STATE_RUNNING;
+}
+
+static hal_driver_state_t hal_gpioStop(void)
+{
+	TM_CLEARBIT(gpio_status, DRV_BIT_START);
+	return hal_gpioGetStatus();
+}
+
+/* -----------------------------------------------
+ * GPIO operations
+ * ---------------------------------------------*/
+
+static void gpioPinInit(const hal_pin_t *pin)
 {
 	if( pin->mode == GPIO_PIN_MODE_INPUT )
 	{
@@ -88,33 +199,93 @@ void hal_gpioPinInit(const hal_pin_t *pin)
 	if( pin->pull == GPIO_PIN_PULL_UP ) { TM_SETBIT(*(mcu_ports[pin->port].port), pin->number); }
 }
 
-void hal_gpioSignalInit(void)
-{
-	for( uint8_t i = 0U; i < GPIO_SIGNAL_COUNT; i++ )
-	{
-		targetWireSignal((gpio_signal_t)i);
-		hal_gpioPinInit(&signal_table[i].pin);
-	}
-}
-
 void hal_gpioSignalWrite(gpio_signal_t signal, bool value)
 {
-	hal_gpioPinWrite(signal_table[signal].pin, value);
+	if( !gpioRequireRunning() ) { return; }
+	gpioPinWrite(signal_table[signal].pin, value);
 }
 
-bool hal_gpioSignalRead(gpio_signal_t signal) { return hal_gpioPinRead(signal_table[signal].pin); }
-
-void hal_gpioPinWrite(const hal_pin_t pin, bool value)
+bool hal_gpioSignalRead(gpio_signal_t signal)
 {
+	if( !gpioRequireRunning() ) { return false; }
+	return gpioPinRead(signal_table[signal].pin);
+}
+
+static void gpioPinWrite(hal_pin_t pin, bool value)
+{
+	if( !gpioRequireRunning() ) { return; }
 	if( value ) { TM_SETBIT(*(mcu_ports[pin.port].port), pin.number); }
 	else { TM_CLEARBIT(*(mcu_ports[pin.port].port), pin.number); }
 }
 
-bool hal_gpioPinRead(const hal_pin_t pin)
+static bool gpioPinRead(hal_pin_t pin)
 {
+	if( !gpioRequireRunning() ) { return false; }
 	if( pin.mode == GPIO_PIN_MODE_INPUT )
 	{
 		return (*(mcu_ports[pin.port].pin) & (1U << pin.number)) >> pin.number;
 	}
 	return (*(mcu_ports[pin.port].port) & (1U << pin.number)) >> pin.number;
+}
+
+/* -----------------------------------------------
+ * Driver control
+ * ---------------------------------------------*/
+
+hal_driver_state_t hal_gpioControl(hal_driver_control_t command, hal_driver_control_data_t *data)
+{
+	switch( command )
+	{
+		case DRV_CTRL_INIT:
+			return hal_gpioInit();
+		case DRV_CTRL_START:
+			return hal_gpioStart();
+		case DRV_CTRL_STOP:
+			return hal_gpioStop();
+		case DRV_CTRL_RLSET:
+			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
+			if( data->run_level >= RL_LEVEL_COUNT )
+			{
+				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			gpio_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
+			gpio_status |= data->run_level;
+			return hal_gpioGetStatus();
+		case DRV_CTRL_RLGET:
+			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
+			data->run_level = RL_GET_RUN_LEVEL(gpio_status);
+			return hal_gpioGetStatus();
+		case DRV_CTRL_SETBIT:
+			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_SETBIT(gpio_status, data->status_bit);
+			return hal_gpioGetStatus();
+		case DRV_CTRL_CLEARBIT:
+			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			TM_CLEARBIT(gpio_status, data->status_bit);
+			return hal_gpioGetStatus();
+		case DRV_CTRL_GETBIT:
+			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
+			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			{
+				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
+			}
+			data->bit_value = TM_GETBIT(gpio_status, data->status_bit) != 0U;
+			return hal_gpioGetStatus();
+		case DRV_CTRL_GETSTATUS:
+			return hal_gpioGetStatus();
+		case DRV_CTRL_GETLASTERROR:
+			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
+			data->error = gpio_last_error;
+			return hal_gpioGetStatus();
+		default:
+			return gpioSetError(ERR_HAL_DRIVER_INVALID_CONTROL);
+	}
 }

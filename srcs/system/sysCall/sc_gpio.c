@@ -17,26 +17,12 @@
 
 #include "sc_gpio.h"
 
-#include "interfaces/gpio_signals.h"
+#include "interfaces/drv_gpio.h"
 #include "interfaces/hal_atomic.h"
-#include "system/sysCore/sys_threads.h"
-
-/* -----------------------------------------------
- * Constants
- * ---------------------------------------------*/
-
-#define SC_GPIO_SYSTEM_THREAD_ID 0u
 
 /* =============================================================================
  * Implementation - Functions
  * ===========================================================================*/
-
-void sc_gpio_signalInit(void)
-{
-	if( mod_threadGetCurrent() != SC_GPIO_SYSTEM_THREAD_ID ) { return; }
-
-	hal_gpioSignalInit();
-}
 
 void sc_gpio_signalSet(gpio_signal_t signal, bool val) { hal_gpioSignalWrite(signal, val); }
 bool sc_gpio_signalGet(gpio_signal_t signal) { return hal_gpioSignalRead(signal); }

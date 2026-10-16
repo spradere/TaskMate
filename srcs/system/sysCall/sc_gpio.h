@@ -28,10 +28,6 @@
  * ========================================================================== */
 
 /**
- * @brief Initialize logical GPIO signal mappings.
- */
-void sc_gpio_signalInit(void);
-/**
  * @brief Set a logical GPIO signal.
  */
 void sc_gpio_signalSet(gpio_signal_t signal, bool val);

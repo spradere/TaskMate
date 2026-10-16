@@ -16,31 +16,11 @@
 #define INTERFACES_GPIO_SIGNALS_H
 
 /* ============================================================================
- * Includes
- * ========================================================================== */
-
-#include <stdbool.h>
-
-/* ============================================================================
  * Public definitions
  * ========================================================================== */
 
 // [autoCode_tag] gpio_signals
 #include "gpio_signals.inc"
 // [/tag]
-
-/**
- * @brief Initialize configured logical GPIO signals.
- */
-void hal_gpioSignalInit(void);
-/**
- * @brief Set a logical GPIO signal.
- */
-void hal_gpioSignalWrite(gpio_signal_t signal, bool value);
-/**
- * @brief Read a logical GPIO signal.
- * @return Current logical value of the signal.
- */
-bool hal_gpioSignalRead(gpio_signal_t signal);
 
 #endif // INTERFACES_GPIO_SIGNALS_H
