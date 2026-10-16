@@ -22,6 +22,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "hal/arch/avr8/avr8_port.h"
 #include "hal/mcu/atmega2560/at2560_ports_pins.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
@@ -39,52 +40,42 @@ typedef struct
 	bool active_high;
 } hal_signal_t;
 
-/**
- * @brief Groups GPIO register addresses for one port.
- */
-typedef struct
-{
-	volatile uint8_t *ddr;
-	volatile uint8_t *port;
-	volatile uint8_t *pin;
-} hal_port_t;
-
 /* -----------------------------------------------
  * Private variables
  * ---------------------------------------------*/
 
-static const hal_port_t mcu_ports[PORT_COUNT] = {
-	[PORT_A] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
+static const avr8_port_t mcu_ports[PORT_COUNT] = {
+	[PORT_A] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRA),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTA),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINA)},
-	[PORT_B] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB),
+	[PORT_B] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRB),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTB),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINB)},
-	[PORT_C] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRC),
+	[PORT_C] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRC),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTC),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINC)},
-	[PORT_D] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRD),
+	[PORT_D] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRD),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTD),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PIND)},
-	[PORT_E] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRE),
+	[PORT_E] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRE),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTE),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINE)},
-	[PORT_F] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRF),
+	[PORT_F] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRF),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTF),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINF)},
-	[PORT_G] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRG),
+	[PORT_G] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRG),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTG),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PING)},
-	[PORT_H] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRH),
+	[PORT_H] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRH),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTH),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINH)},
-	[PORT_J] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRJ),
+	[PORT_J] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRJ),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTJ),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINJ)},
-	[PORT_K] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRK),
+	[PORT_K] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRK),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTK),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINK)},
-	[PORT_L] = (hal_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRL),
+	[PORT_L] = (avr8_port_t){(volatile uint8_t *)_SFR_MEM_ADDR(DDRL),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PORTL),
 							(volatile uint8_t *)_SFR_MEM_ADDR(PINL)},
 };

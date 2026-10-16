@@ -20,7 +20,7 @@
 
 #include <stdbool.h>
 
-#include "interfaces/gpio_signals.h"
+#include "interfaces/gpio_common.h"
 #include "interfaces/hal_drivers.h"
 
 /* ============================================================================

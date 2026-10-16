@@ -21,7 +21,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "interfaces/gpio_signals.h"
+#include "interfaces/gpio_common.h"
 
 /* ============================================================================
  * Public API

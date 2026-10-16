@@ -41,4 +41,11 @@ typedef enum __attribute__((packed))
 } gpio_pin_pull_t;
 _Static_assert(sizeof(gpio_pin_pull_t) == 1U, "gpio_pin_pull_t must be one byte");
 
+/**
+ * @brief Identifies logical GPIO signals configured for the selected target.
+ */
+// [autoCode_tag] gpio_signals
+#include "gpio_signals.inc"
+// [/tag]
+
 #endif // INTERFACES_GPIO_COMMON_H

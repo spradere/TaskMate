@@ -15,7 +15,7 @@
  * Includes
  * ========================================================================== */
 
-#include "interfaces/gpio_signals.h"
+#include "interfaces/gpio_common.h"
 
 /* =============================================================================
  * Implementation - Functions
