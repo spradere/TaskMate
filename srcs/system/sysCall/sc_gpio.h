@@ -21,16 +21,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "interfaces/gpio_signals.h"
+#include "interfaces/gpio_common.h"
 
 /* ============================================================================
  * Public API
  * ========================================================================== */
 
-/**
- * @brief Initialize logical GPIO signal mappings.
- */
-void sc_gpio_signalInit(void);
 /**
  * @brief Set a logical GPIO signal.
  */

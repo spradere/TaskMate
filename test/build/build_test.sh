@@ -346,7 +346,7 @@ runConfigurationTests()
 		VAL_TARGET=z600 -V FILE_WIREGPIO
 	expectSuccess z600_tag_inputs bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_PARSE_TAG
-	logExcludes z600_tag_inputs "gpio_signals.h"
+	logExcludes z600_tag_inputs "gpio_common.h"
 	expectSuccess z600_generated_inputs bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_AUTOCODE_INC
 	logExcludes z600_generated_inputs "gpio_signals.inc"
@@ -363,12 +363,12 @@ runConfigurationTests()
 	logContains default_initrc_sources "srcs/system/services/scli.c"
 	logContains default_initrc_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_initrc_sources "srcs/system/services/commands/scli_stack.c"
+	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerContext.c"
 	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
-	expectSuccess default_extra_sources targetMake -V FILES_EXTRA_SRC
-	logContains default_extra_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
+	expectOutput default_extra_sources "" targetMake -V FILES_EXTRA_SRC
 
 	expectOutput initrc_directory_sources "" targetMake -V FILES_INITRC_DIR_SRC
 
@@ -409,7 +409,8 @@ runConfigurationTests()
 		'>>> path check failed for file /etc/passwd <<<' \
 		targetMake FILE_TARGET_MK="${PATH_STAGE_WORK}/invalid_source_target.mk" \
 		-V FILES_COMPILE_SRC
-	VAL_DRIVER_INTERFACES="srcs/interfaces/drv_i2c.h srcs/interfaces/drv_lcd.h"
+	VAL_DRIVER_INTERFACES="srcs/interfaces/drv_gpio.h srcs/interfaces/drv_i2c.h"
+	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_lcd.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_rtc.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerContext.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_usart.h"
@@ -664,7 +665,7 @@ runGuardTests()
 	mkdir -p "${PATH_GPIO_GENERATED}"
 	printf 'typedef enum { GPIO_SIGNAL_TEST, GPIO_SIGNAL_COUNT } gpio_signal_t;\n' \
 		> "${PATH_GPIO_GENERATED}/gpio_signals.inc"
-	printf '#include "interfaces/gpio_signals.h"\n' > "${PATH_STAGE_WORK}/gpio_header.c"
+	printf '#include "interfaces/gpio_common.h"\n' > "${PATH_STAGE_WORK}/gpio_header.c"
 	expectSuccess gpio_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -I "${PATH_GPIO_GENERATED}" -fsyntax-only \
 		"${PATH_STAGE_WORK}/gpio_header.c"

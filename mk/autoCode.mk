@@ -31,7 +31,7 @@ CFLAGS += -I${PATH_BUILD_GENERATED}
 FILES_PARSE_TAG != find ${PATH_SRCS}/system ${PATH_SRCS}/interfaces ${OPT_FIND_EXCLUDE} \
 	-type f -exec grep -qFl '[autoCode_tag]' {} \; -print | sort
 .if empty(FILE_GPIO_SIGNALS)
-FILES_PARSE_TAG := ${FILES_PARSE_TAG:N${PATH_SRCS}/interfaces/gpio_signals.h}
+FILES_PARSE_TAG := ${FILES_PARSE_TAG:N${PATH_SRCS}/interfaces/gpio_common.h}
 .else
 FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
 .endif

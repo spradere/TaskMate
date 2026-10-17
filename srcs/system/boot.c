@@ -18,6 +18,10 @@
 
 #include <stdint.h>
 
+#include "interfaces/tm_driver_have.h"
+#ifdef TM_DRIVER_HAVE_GPIO
+	#include "interfaces/drv_gpio.h"
+#endif
 #include "interfaces/drv_usart.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_info.h"
@@ -31,8 +35,17 @@
 
 int main(void)
 {
+	hal_driver_state_t state;
+#ifdef TM_DRIVER_HAVE_GPIO
+	// GPIO startup precedes USART and static driver allocation.
+	state = hal_gpioControl(DRV_CTRL_INIT, 0U);
+	if( state != DRV_STATE_INITIALIZED ) { hal_halt(); }
+	state = hal_gpioControl(DRV_CTRL_START, 0U);
+	if( state != DRV_STATE_RUNNING ) { hal_halt(); }
+#endif
+
 	// Usart startup
-	hal_driver_state_t state = hal_usartControl(DRV_CTRL_INIT, 0U);
+	state = hal_usartControl(DRV_CTRL_INIT, 0U);
 	if( state != DRV_STATE_INITIALIZED ) { hal_halt(); }
 	state = hal_usartControl(DRV_CTRL_START, 0U);
 	if( state != DRV_STATE_RUNNING ) { hal_halt(); }
