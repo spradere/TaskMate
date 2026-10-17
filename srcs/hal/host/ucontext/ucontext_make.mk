@@ -25,5 +25,5 @@ FILE_HAL_STRING_MACRO = ${PATH_UCONTEXT}/ucontext_string_macro.h
 FILE_HAL_ARCH_TYPES = ${PATH_UCONTEXT}/ucontext_types.h
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif

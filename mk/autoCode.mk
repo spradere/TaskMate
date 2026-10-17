@@ -39,7 +39,7 @@ FILES_PARSE_TAG += ${FILE_WIREGPIO_TAG}
 .for path_list in FILES_AUTOCODE_INC FILES_PARSE_TAG
 ${path_list} := ${${path_list}:O}
 .if ${${path_list}:[#]} != ${${path_list}:u:[#]}
-.error Duplicate path in ${path_list}: ${${path_list}}
+.error >>> Duplicate path in ${path_list}: ${${path_list}} <<<
 .endif
 .endfor
 

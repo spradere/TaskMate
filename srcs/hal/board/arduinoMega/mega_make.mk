@@ -31,5 +31,5 @@ VAL_PROGRAMMER_PORT = /dev/ttyU0
 .endif
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif

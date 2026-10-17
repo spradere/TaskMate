@@ -44,7 +44,7 @@ FILES_BASE_SYSTEM_SRC != find \
 FILES_BASE_SYSTEM_SRC += ${PATH_SRCS}/system/boot.c
 
 .if empty(FILE_GPIO_SIGNALS) && empty(FILE_WIREGPIO)
-.error GPIO file for signals and wiring must both be set
+.error >>> GPIO file for signals and wiring must both be set <<<
 .endif
 
 FILES_COMPILE_SRC = \
@@ -68,11 +68,11 @@ FILES_OBJ = ${FILES_COMPILE_SRC:%.c=${PATH_BUILD_TARGET}/%.o}
 
 # Test files provided by the target
 .if !empty(FILE_GPIO_SIGNALS) && !exists(${FILE_GPIO_SIGNALS})
-.error GPIO signals list not found >>>${FILE_GPIO_SIGNALS}<<<
+.error >>> GPIO signals list not found ${FILE_GPIO_SIGNALS} <<<
 .endif
 
 .if !empty(FILE_WIREGPIO) && !exists(${FILE_WIREGPIO})
-.error GPIO target wiring not found >>>${FILE_WIREGPIO}<<<
+.error >>> GPIO target wiring not found ${FILE_WIREGPIO} <<<
 .endif
 
 # Dependency files
@@ -95,7 +95,7 @@ FILES_ERROR += ${PATH_SRCS}/hal/drivers_errors.err
 	FILES_ERROR
 ${path_list} := ${${path_list}:O}
 .if ${${path_list}:[#]} != ${${path_list}:u:[#]}
-.error Duplicate path in ${path_list}: ${${path_list}}
+.error >>> Duplicate path in ${path_list}: ${${path_list}} <<<
 .endif
 .endfor
 
@@ -134,6 +134,6 @@ FILES_MK := ${FILES_MK:O}
 	FILES_MK_MK FILES_MK_HAL FILES_MK_TEST FILES_MK
 ${path_list} := ${${path_list}:O}
 .if ${${path_list}:[#]} != ${${path_list}:u:[#]}
-.error Duplicate path in ${path_list}: ${${path_list}}
+.error >>> Duplicate path in ${path_list}: ${${path_list}} <<<
 .endif
 .endfor

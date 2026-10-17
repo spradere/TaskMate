@@ -24,7 +24,7 @@ VAL_TARGET = ${TARGET}
 FILE_TARGET_MK = ${PATH_SRCS}/user/target/${VAL_TARGET}/${VAL_TARGET}.mk
 
 .if !exists(${FILE_TARGET_MK})
-.error Target makefile not found >>>${FILE_TARGET_MK}<<<
+.error >>> Target makefile not found ${FILE_TARGET_MK} <<<
 .endif
 .include "${FILE_TARGET_MK}"
 

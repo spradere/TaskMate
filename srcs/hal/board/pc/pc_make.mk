@@ -24,5 +24,5 @@ FILES_EXTRA_SRC += ${PATH_PC}/pc_console.c
 .include "${PATH_SRCS}/hal/host/freebsd/freebsd_make.mk"
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif

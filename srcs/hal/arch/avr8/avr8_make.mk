@@ -73,5 +73,5 @@ CFLAGS_CPPCHECK += --include=${FILE_HAL_ARCH_TYPES}
 CFLAGS_CPPCHECK += --include=${FILE_HAL_STRING_MACRO}
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif
