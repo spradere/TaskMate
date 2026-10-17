@@ -63,13 +63,12 @@ void initrcSetStackSizeMin(const initrc_command_t *command)
 	errno = 0U;
 	const unsigned long size = strtoul(size_text, &end, SETSTACKSIZEMIN_BASE_DECIMAL);
 	if( (size_text[0U] == 0U) || (*end != 0U) || (errno == ERANGE) ||
-		(size < AUTOCODE_SIZE_STACKMIN) || (size > UINT16_MAX) )
+		(size == 0U) || (size > UINT16_MAX) )
 	{
-		AUTOCODE_MSG_ERROR("invalid minimum stack size [%s:%i] %s, expected %lu..%u",
+		AUTOCODE_MSG_ERROR("invalid minimum stack size [%s:%i] %s, expected nonzero up to %u",
 						   command->initrc_name,
 						   command->file_line_number,
 						   size_text,
-						   AUTOCODE_SIZE_STACKMIN,
 						   (unsigned int)UINT16_MAX);
 		return;
 	}

@@ -467,10 +467,19 @@ runInitrcTests()
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	logDoesNotContain stop_after_initrc_file_failure "must_not_be_opened.rc"
 
-	caseBegin default_stack_size_min
-	printf '%s\n' 'addModule task task -run user -stack 3 -source_file system.c' \
+	caseBegin missing_stack_size_min
+	printf '%s\n' 'addModule task task -run user -stack 1 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
-	expectSuccess default_stack_size_min "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	expectFailure missing_stack_size_min 'setStackSizeMin must be defined before addModule task' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
+	caseBegin minimum_stack_size_one
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' 'setStackSizeMin 1' \
+		'addModule service system -run core -stack 1 -source_file system.c' \
+		'addModule task task -run user -stack 1 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess minimum_stack_size_one "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
 	caseBegin configured_stack_size_min
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
@@ -498,7 +507,7 @@ runInitrcTests()
 	expectSuccess configured_large_stack_size_min \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	for VAL_SIZE in 0 2 65536 invalid -1 999999999999999999999999999999
+	for VAL_SIZE in 0 65536 invalid -1 999999999999999999999999999999
 	do
 		caseBegin "invalid_stack_size_min_${VAL_SIZE}"
 		writeInitrcVersion > "${PATH_CASE}/init.rc"
@@ -528,6 +537,7 @@ runInitrcTests()
 	caseBegin valid_commands
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
+		'setStackSizeMin 64' \
 		'addModule driver driver -run driver -i2c 0x20 -source_file system.c' \
 		'addModule service system -run service -stack 256 -source_file system.c' \
 		'addModule task task -run user -stack 256 -source_file system.c' \
@@ -774,7 +784,7 @@ runInitrcTests()
 	expectFailure missing_stack "-stack option is not set" \
 		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 
-	for VAL_STACK in 0 2 invalid 65536
+	for VAL_STACK in 0 invalid 65536
 	do
 		VAL_NAME=$(printf '%s' "${VAL_STACK}" | tr -c '[:alnum:]' '_')
 		caseBegin "invalid_stack_${VAL_NAME}"
@@ -865,6 +875,7 @@ runInitrcTests()
 	caseBegin malformed_initrc
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' \
+		'setStackSizeMin 64' \
 		'addModule service system -run core -stack 256 -source_file system.c' \
 		'addModule task few' \
 		'badCommand badcmd -run user -stack 256 -source_file system.c' \
@@ -899,7 +910,7 @@ runInitrcTests()
 	do
 		logContains malformed_initrc "${VAL_PATTERN}"
 	done
-	logContains malformed_initrc "init.rc:19"
+	logContains malformed_initrc "init.rc:20"
 
 	caseBegin unterminated_initrc_list
 	printf '%s\n' '"unterminated' "${PATH_CASE}/init.rc" \
@@ -989,7 +1000,8 @@ runParseTagTests()
 
 	caseBegin missing_system_thread
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
-	printf '%s\n' 'addModule task task -run user -stack 256 -source_file system.c' \
+	printf '%s\n' 'setStackSizeMin 64' \
+		'addModule task task -run user -stack 256 -source_file system.c' \
 		>> "${PATH_CASE}/init.rc"
 	runTagCase missing_system_thread "thread system was not found"
 

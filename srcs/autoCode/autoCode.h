@@ -21,12 +21,11 @@
 
 /**
  * @name autoCode buffer and table limits
- * @brief Set autoCode buffer, line, stack, and command constants.
+ * @brief Set autoCode buffer, line, and command constants.
  * @{
  */
 #define AUTOCODE_SIZE_BUFFER 256U
 #define AUTOCODE_LINE_GENERATED 1000U
-#define AUTOCODE_SIZE_STACKMIN 3UL
 #define AUTOCODE_COUNT_SCLIMAX 16U
 /** @} */
 

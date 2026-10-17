@@ -168,7 +168,8 @@ static add_module_result_t optionStack(const char *data, const add_module_contex
 	char *end;
 	const unsigned long stack_size = strtoul(data, &end, ADDMODULE_BASE_DECIMAL);
 
-	if( (data[0U] == 0U) || (*end != 0U) || (stack_size < context->stack_size_min) ||
+	if( (data[0U] == 0U) || (*end != 0U) || (stack_size == 0U) ||
+		(stack_size < context->stack_size_min) ||
 		(stack_size > UINT16_MAX) )
 	{
 		return ADD_MODULE_INVALID_DATA;
@@ -252,7 +253,7 @@ static bool moduleOptionsParse(const initrc_command_t *command, module_item_t *m
 										  .stack_size_min =
 											  (module->subtype == THREAD_BIT_TYPE_USER)
 												  ? command->data_base->stack_size_min
-												  : AUTOCODE_SIZE_STACKMIN};
+												  : 0U};
 	bool module_is_valid = true;
 	// Option names and values occur in pairs after the module type and name.
 	for( int token = ADDMODULE_COUNT_HEADER; token < command->tok->count;
@@ -404,6 +405,13 @@ void initrcAddModule(const initrc_command_t *command)
 
 	add_module_type_t module_type;
 	if( moduleTypeParse(command, &module_type) == false ) { return; }
+	if( (module_type == ADD_MODULE_TASK) && (command->data_base->stack_size_min == 0U) )
+	{
+		AUTOCODE_MSG_ERROR("setStackSizeMin must be defined before addModule task [%s:%i]",
+						   command->initrc_name,
+						   command->file_line_number);
+		return;
+	}
 
 	module_item_t module;
 	moduleInit(&module, module_type);
