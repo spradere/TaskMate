@@ -348,6 +348,12 @@ runConfigurationTests()
 		VAL_TARGET=z600 -V FILE_GPIO_SIGNALS
 	expectOutput z600_gpio_wiring "" bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILE_WIREGPIO
+	expectFailure gpio_signals_without_wiring \
+		'>>> GPIO file for signals and wiring must both be set <<<' \
+		targetMake FILE_WIREGPIO= -V FILES_COMPILE_SRC
+	expectFailure gpio_wiring_without_signals \
+		'>>> GPIO file for signals and wiring must both be set <<<' \
+		targetMake FILE_GPIO_SIGNALS= -V FILES_COMPILE_SRC
 	expectSuccess z600_tag_inputs bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_PARSE_TAG
 	logExcludes z600_tag_inputs "gpio_common.h"
