@@ -22,7 +22,6 @@
 #include <stdint.h>
 
 #include "interfaces/error_catalog.h"
-#include "interfaces/error_level.h"
 #include "interfaces/tm_string.h"
 
 /* ============================================================================

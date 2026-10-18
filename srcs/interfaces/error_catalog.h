@@ -29,6 +29,18 @@
  */
 typedef uint8_t err_code_t;
 
+/**
+ * @brief Classifies how TaskMate handles an error.
+ */
+typedef enum __attribute__((packed))
+{
+	ERR_LEVEL_FLOW, // Normal flow interruption; handled by the thread.
+	ERR_LEVEL_WARN, // Recoverable abnormal flow; handled by the thread and logged by the system.
+	ERR_LEVEL_FAIL, // Component failure; handled by the system and logged persistently.
+	ERR_LEVEL_PANIC // Critical problem; handled by the system through a controlled halt.
+} err_level_t;
+_Static_assert(sizeof(err_level_t) == 1U, "err_level_t must be one byte");
+
 #ifdef AUTOCODE_BUILD
 /**
  * @brief Provides the placeholder error count during autoCode compilation.

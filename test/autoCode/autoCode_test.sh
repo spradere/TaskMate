@@ -421,10 +421,12 @@ runErrorTests()
 			"${PATH_CASE}/generated/error_enum.inc"; then
 			fail "error_count_${VAL_LIMIT}: wrong count type"
 		fi
-		if ! printf '%s\n' '#include <stdint.h>' '#include "error_enum.inc"' \
-			"_Static_assert(sizeof(err_codes_t) == ${VAL_SIZE}U, \"wrong code size\");" | \
-			clang -std=gnu11 -I"${PATH_CASE}/generated" -x c -fsyntax-only -; then
-			fail "error_count_${VAL_LIMIT}: generated enum size is invalid"
+		if ! printf '%s\n' '#include "interfaces/error_catalog.h"' \
+			"_Static_assert(sizeof(err_codes_t) == ${VAL_SIZE}U, \"wrong code size\");" \
+			'_Static_assert(sizeof(err_level_t) == 1U, "wrong level size");' \
+			'_Static_assert(ERR_LEVEL_PANIC == 3, "wrong level value");' | \
+			clang -std=gnu11 -Isrcs -I"${PATH_CASE}/generated" -x c -fsyntax-only -; then
+			fail "error_count_${VAL_LIMIT}: generated error interface is invalid"
 		fi
 		if ! clang -std=gnu11 -Wall -Wextra -Wconversion -Wenum-conversion \
 			-I"srcs" -I"${PATH_CASE}/generated" \
