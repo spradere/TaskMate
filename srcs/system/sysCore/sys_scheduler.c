@@ -18,6 +18,7 @@
 
 #include "sys_scheduler.h"
 
+#include <stddef.h>
 #include <stdint.h>
 
 #include "interfaces/drv_timerContext.h"
@@ -71,6 +72,7 @@ void tm_schedulerStart(void)
 	hal_timerContextControl(DRV_CTRL_START, 0U);
 
 	mod_thread_item_t *mod = mod_threadGetPointer(0U);
+	if( mod == NULL ) { hal_halt(); }
 
 	hal_contextStart(&mod->context);
 }
@@ -113,6 +115,7 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 
 	// Save the current thread context
 	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	if( thread == NULL ) { hal_halt(); }
 	thread->context = *context;
 
 	// Canary check
@@ -152,10 +155,11 @@ static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 		if( ++current == MOD_THREAD_COUNT ) { current = 0U; }
 
 		mod_thread_item_t *thread = mod_threadGetPointer(current);
+		if( thread == NULL ) { hal_halt(); }
 		tm_run_level_t thread_run_level = RL_GET_RUN_LEVEL(thread->status);
 		if( (thread_run_level != RL_RUN_NONE) && (thread_run_level <= active_run_level) )
 		{
-			mod_threadSetCurrent(current);
+			if( !mod_threadSetCurrent(current) ) { hal_halt(); }
 			return thread;
 		}
 	}

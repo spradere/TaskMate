@@ -49,12 +49,20 @@ bool sc_runLevelSet(tm_run_level_t run_level);
 
 /**
  * @brief Set the current thread software time counter.
+ * @return true if the current thread identifier is valid.
  */
-void sc_threadSetSTC(uint16_t count);
+bool sc_threadSetSTC(uint16_t count);
 /**
  * @brief Get the current thread software time counter.
+ * @return Counter value, or zero if the current thread identifier is invalid.
  */
 uint16_t sc_threadGetSTC(void);
+/**
+ * @brief Read the current thread software time counter with an explicit error result.
+ * @param[out] count Receives the counter value.
+ * @return true if the current thread identifier and output pointer are valid.
+ */
+bool sc_threadGetSTCChecked(uint16_t *count);
 
 /* -----------------------------------------------
  * Thread life cycle
@@ -83,8 +91,9 @@ bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 bool sc_threadGetStackDepth(mod_count_t id, uint16_t *depth_bytes);
 /**
  * @brief Mark the current thread as initialized.
+ * @return true if the current thread identifier is valid.
  */
-void sc_threadSetInitialized(void);
+bool sc_threadSetInitialized(void);
 /**
  * @brief Start a thread by name at an initial run level.
  * @return true if the named thread was started.
@@ -107,7 +116,8 @@ bool sc_threadRunLevelIsReady(tm_run_level_t run_level);
 
 /**
  * @brief Yield the current thread to the scheduler.
+ * @return true if the current thread identifier remains valid.
  */
-void sc_coopYield(void);
+bool sc_coopYield(void);
 
 #endif // SYSCALL_SC_THREADS_H

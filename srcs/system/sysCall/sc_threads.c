@@ -68,19 +68,28 @@ bool sc_runLevelSet(tm_run_level_t run_level)
  * Software time counters
  * ---------------------------------------------*/
 
-void sc_threadSetSTC(uint16_t count)
+bool sc_threadSetSTC(uint16_t count)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_threadSetSTC(count);
+	bool result = mod_threadSetSTC(count);
 	hal_atomicEnd(state);
+	return result;
 }
 
 uint16_t sc_threadGetSTC(void)
 {
+	uint16_t count = 0U;
+	(void)sc_threadGetSTCChecked(&count);
+	return count;
+}
+
+bool sc_threadGetSTCChecked(uint16_t *count)
+{
+	if( count == NULL ) { return false; }
 	hal_atomic_state_t state = hal_atomicStart();
-	uint16_t timer = mod_threadGetSTC();
+	bool result = mod_threadGetSTC(count);
 	hal_atomicEnd(state);
-	return timer;
+	return result;
 }
 
 /* -----------------------------------------------
@@ -100,11 +109,11 @@ bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 
 	hal_atomic_state_t state = hal_atomicStart();
 	*name = thread_name_catalog[id];
-	*run_level = mod_threadRunLevelGet(id);
-	*stack_size_bytes = mod_threadStackSizeGet(id);
+	bool result = mod_threadRunLevelGet(id, run_level) &&
+				  mod_threadStackSizeGet(id, stack_size_bytes);
 	hal_atomicEnd(state);
 
-	return *name != NULL;
+	return result && (*name != NULL);
 }
 
 bool sc_threadGetStackDepth(mod_count_t id, uint16_t *depth_bytes)
@@ -112,20 +121,21 @@ bool sc_threadGetStackDepth(mod_count_t id, uint16_t *depth_bytes)
 	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == NULL) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	*depth_bytes = mod_threadStackDepthGet(id);
+	bool result = mod_threadStackDepthGet(id, depth_bytes);
 	hal_atomicEnd(state);
-	return true;
+	return result;
 }
 
 /* -----------------------------------------------
  * Thread life cycle
  * ---------------------------------------------*/
 
-void sc_threadSetInitialized(void)
+bool sc_threadSetInitialized(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_threadSetInitialized(mod_threadGetCurrent());
+	bool result = mod_threadSetInitialized(mod_threadGetCurrent());
 	hal_atomicEnd(state);
+	return result;
 }
 
 bool sc_threadStart(const char *name, tm_run_level_t initial_run_level)
@@ -135,9 +145,9 @@ bool sc_threadStart(const char *name, tm_run_level_t initial_run_level)
 	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_threadStart(id, initial_run_level);
+	bool result = mod_threadStart(id, initial_run_level);
 	hal_atomicEnd(state);
-	return true;
+	return result;
 }
 
 bool sc_threadStop(const char *name)
@@ -146,9 +156,9 @@ bool sc_threadStop(const char *name)
 	if( !sc_threadGetId(name, &id) ) { return false; }
 
 	hal_atomic_state_t state = hal_atomicStart();
-	mod_threadStop(id);
+	bool result = mod_threadStop(id);
 	hal_atomicEnd(state);
-	return true;
+	return result;
 }
 
 bool sc_threadRunLevelIsReady(tm_run_level_t run_level)
@@ -170,14 +180,23 @@ bool sc_threadRunLevelIsReady(tm_run_level_t run_level)
  * Request an early timer switch, then wait until the scheduler clears this thread's
  * yielded bit when it is selected again.
  */
-void sc_coopYield(void)
+bool sc_coopYield(void)
 {
 	hal_atomic_state_t state = hal_atomicStart();
 	mod_count_t id = mod_threadGetCurrent();
-	mod_threadSetYielded(id);
+	if( !mod_threadSetYielded(id) )
+	{
+		hal_atomicEnd(state);
+		return false;
+	}
 	tm_schedulerCoop();
 	hal_atomicEnd(state);
-	while( mod_threadIsYielded(id) );
+	bool yielded;
+	do
+	{
+		if( !mod_threadIsYielded(id, &yielded) ) { return false; }
+	} while( yielded );
+	return true;
 }
 
 /* -----------------------------------------------
