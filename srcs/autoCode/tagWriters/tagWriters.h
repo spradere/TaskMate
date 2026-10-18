@@ -44,58 +44,58 @@ typedef struct
 /**
  * @brief Write generated module counts.
  */
-void tagWriterWriteModulesCount(const tag_writer_context_t *context);
+void tagWriterModulesCount(const tag_writer_context_t *context);
 /**
  * @brief Write generated thread declarations.
  */
-void tagWriterWriteThreadsList(const tag_writer_context_t *context);
+void tagWriterThreadsList(const tag_writer_context_t *context);
 /**
  * @brief Write generated driver declarations.
  */
-void tagWriterWriteDriversList(const tag_writer_context_t *context);
+void tagWriterDriversList(const tag_writer_context_t *context);
 /**
  * @brief Write generated thread stack definitions.
  */
-void tagWriterWriteThreadStacks(const tag_writer_context_t *context);
+void tagWriterThreadStacks(const tag_writer_context_t *context);
 /**
  * @brief Write generated thread allocation data.
  */
-void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context);
+void tagWriterThreadsAlloc(const tag_writer_context_t *context);
 /**
  * @brief Write generated thread names.
  */
-void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context);
+void tagWriterThreadNameCatalog(const tag_writer_context_t *context);
 /**
  * @brief Write generated driver allocation data.
  */
-void tagWriterWriteDriversAlloc(const tag_writer_context_t *context);
+void tagWriterDriversAlloc(const tag_writer_context_t *context);
 /**
  * @brief Write generated driver names.
  */
-void tagWriterWriteDriverNameCatalog(const tag_writer_context_t *context);
+void tagWriterDriverNameCatalog(const tag_writer_context_t *context);
 /**
  * @brief Write generated driver capability flags.
  */
-void tagWriterWriteDriverHave(const tag_writer_context_t *context);
+void tagWriterDriverHave(const tag_writer_context_t *context);
 /**
  * @brief Write generated error identifiers.
  */
-void tagWriterWriteErrorEnum(const tag_writer_context_t *context);
+void tagWriterErrorEnum(const tag_writer_context_t *context);
 /**
  * @brief Write generated error messages.
  */
-void tagWriterWriteErrorCatalog(const tag_writer_context_t *context);
+void tagWriterErrorCatalog(const tag_writer_context_t *context);
 /**
  * @brief Write generated logical GPIO signals.
  */
-void tagWriterWriteGpioSignals(const tag_writer_context_t *context);
+void tagWriterGpioSignals(const tag_writer_context_t *context);
 /**
  * @brief Write generated GPIO wiring.
  */
-void tagWriterWriteWireGpio(const tag_writer_context_t *context);
+void tagWriterWireGpio(const tag_writer_context_t *context);
 /**
  * @brief Write generated SCLI command data.
  */
-void tagWriterWriteScliCommands(const tag_writer_context_t *context);
+void tagWriterScliCommands(const tag_writer_context_t *context);
 
 #endif // TAGWRITERS_TAGWRITERS_H

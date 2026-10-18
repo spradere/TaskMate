@@ -21,7 +21,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteThreadStacks(const tag_writer_context_t *context)
+void tagWriterThreadStacks(const tag_writer_context_t *context)
 {
 	// Reserve index zero for the system thread, regardless of declaration order.
 	size_t threads_count = 1U;
@@ -40,7 +40,7 @@ void tagWriterWriteThreadStacks(const tag_writer_context_t *context)
 	}
 }
 
-void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
+void tagWriterThreadsAlloc(const tag_writer_context_t *context)
 {
 	size_t threads_count = 1U;
 	size_t thread_index;
@@ -91,7 +91,7 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 	if( system_thread_found == false ) { AUTOCODE_MSG_ERROR("thread system was not found."); }
 }
 
-void tagWriterWriteThreadNameCatalog(const tag_writer_context_t *context)
+void tagWriterThreadNameCatalog(const tag_writer_context_t *context)
 {
 	// Designated entries preserve the thread indices used by allocation.
 	size_t threads_count = 1U;

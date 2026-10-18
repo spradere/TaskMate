@@ -21,7 +21,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteScliCommands(const tag_writer_context_t *context)
+void tagWriterScliCommands(const tag_writer_context_t *context)
 {
 	for( uint8_t i = 0U; i < context->data_base->scli.count; i++ )
 	{

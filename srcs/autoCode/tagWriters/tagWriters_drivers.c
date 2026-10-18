@@ -24,7 +24,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteDriversAlloc(const tag_writer_context_t *context)
+void tagWriterDriversAlloc(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
 
@@ -58,7 +58,7 @@ void tagWriterWriteDriversAlloc(const tag_writer_context_t *context)
 	}
 }
 
-void tagWriterWriteDriverNameCatalog(const tag_writer_context_t *context)
+void tagWriterDriverNameCatalog(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
 
@@ -76,7 +76,7 @@ void tagWriterWriteDriverNameCatalog(const tag_writer_context_t *context)
 	fprintf(context->file, "};\n");
 }
 
-void tagWriterWriteDriverHave(const tag_writer_context_t *context)
+void tagWriterDriverHave(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
 

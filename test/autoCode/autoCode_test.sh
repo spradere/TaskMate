@@ -1096,6 +1096,14 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/driver_have.inc"; then
 		fail "driver_have generated presence definition is missing"
 	fi
+	if ! grep -F -q 'TM_STR_NEW(thread0_name, "system");' \
+		"${PATH_CASE}/generated/thread_name_catalog.inc"; then
+		fail "thread_name_catalog generated system name is missing"
+	fi
+	if ! grep -F -q 'TM_STR_NEW(driver0_name, "timerContext");' \
+		"${PATH_CASE}/generated/driver_name_catalog.inc"; then
+		fail "driver_name_catalog generated timer name is missing"
+	fi
 	if ! grep -F -q 'mod->software_time_counter = 0U;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc generated zero initialization is missing"

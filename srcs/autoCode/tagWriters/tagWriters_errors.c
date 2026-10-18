@@ -27,7 +27,7 @@ static const char *errorLevelName(err_level_t level);
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteErrorCatalog(const tag_writer_context_t *context)
+void tagWriterErrorCatalog(const tag_writer_context_t *context)
 {
 	// FLOW entries have no message object but keep their catalogue index.
 	for( int i = 0U; i < context->errors->error_count; i++ )
@@ -77,7 +77,7 @@ static const char *errorLevelName(const err_level_t level)
 	return "ERR_LEVEL_FAIL";
 }
 
-void tagWriterWriteErrorEnum(const tag_writer_context_t *context)
+void tagWriterErrorEnum(const tag_writer_context_t *context)
 {
 	fprintf(context->file,
 			"typedef uint%u_t error_count_t;\n",

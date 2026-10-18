@@ -21,7 +21,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteThreadsList(const tag_writer_context_t *context)
+void tagWriterThreadsList(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_THREAD_ID];
 
@@ -38,7 +38,7 @@ void tagWriterWriteThreadsList(const tag_writer_context_t *context)
 	}
 }
 
-void tagWriterWriteDriversList(const tag_writer_context_t *context)
+void tagWriterDriversList(const tag_writer_context_t *context)
 {
 	const module_type_t *mod = &context->data_base->modules_type[MOD_DRIVER_ID];
 
@@ -48,7 +48,7 @@ void tagWriterWriteDriversList(const tag_writer_context_t *context)
 	}
 }
 
-void tagWriterWriteModulesCount(const tag_writer_context_t *context)
+void tagWriterModulesCount(const tag_writer_context_t *context)
 {
 	fprintf(context->file,
 			"typedef uint%u_t mod_count_t;\n\n",

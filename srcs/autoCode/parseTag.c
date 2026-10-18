@@ -44,20 +44,20 @@ static ac_result_t generatedFileName(char *file_name, size_t file_name_size,
  * ---------------------------------------------*/
 
 #define HAVE_TAG(X)                                                                     \
-	X(HAVE_THREAD_STACKS, "thread_stacks", tagWriterWriteThreadStacks)                  \
-	X(HAVE_THREADS_ALLOC, "threads_alloc", tagWriterWriteThreadsAlloc)                  \
-	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", tagWriterWriteDriversAlloc)                  \
-	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", tagWriterWriteThreadNameCatalog) \
-	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", tagWriterWriteDriverNameCatalog) \
-	X(HAVE_DRIVER_HAVE, "driver_have", tagWriterWriteDriverHave)                        \
-	X(HAVE_ERROR_ENUM, "error_enum", tagWriterWriteErrorEnum)                           \
-	X(HAVE_ERROR_CATALOG, "error_catalog", tagWriterWriteErrorCatalog)                  \
-	X(HAVE_MOD_COUNT, "modules_count", tagWriterWriteModulesCount)                      \
-	X(HAVE_THREADS_LIST, "threads_list", tagWriterWriteThreadsList)                     \
-	X(HAVE_DRIVERS_LIST, "drivers_list", tagWriterWriteDriversList)                     \
-	X(HAVE_GPIO_SIGNALS, "gpio_signals", tagWriterWriteGpioSignals)                     \
-	X(HAVE_WIRE_GPIO, "wire_gpio", tagWriterWriteWireGpio)                              \
-	X(HAVE_SCLI_COMMANDS, "scli_commands", tagWriterWriteScliCommands)
+	X(HAVE_THREAD_STACKS, "thread_stacks", tagWriterThreadStacks)                       \
+	X(HAVE_THREADS_ALLOC, "threads_alloc", tagWriterThreadsAlloc)                       \
+	X(HAVE_DRIVERS_ALLOC, "drivers_alloc", tagWriterDriversAlloc)                       \
+	X(HAVE_THREAD_NAME_CATALOG, "thread_name_catalog", tagWriterThreadNameCatalog)      \
+	X(HAVE_DRIVER_NAME_CATALOG, "driver_name_catalog", tagWriterDriverNameCatalog)      \
+	X(HAVE_DRIVER_HAVE, "driver_have", tagWriterDriverHave)                             \
+	X(HAVE_ERROR_ENUM, "error_enum", tagWriterErrorEnum)                                \
+	X(HAVE_ERROR_CATALOG, "error_catalog", tagWriterErrorCatalog)                       \
+	X(HAVE_MOD_COUNT, "modules_count", tagWriterModulesCount)                           \
+	X(HAVE_THREADS_LIST, "threads_list", tagWriterThreadsList)                          \
+	X(HAVE_DRIVERS_LIST, "drivers_list", tagWriterDriversList)                          \
+	X(HAVE_GPIO_SIGNALS, "gpio_signals", tagWriterGpioSignals)                          \
+	X(HAVE_WIRE_GPIO, "wire_gpio", tagWriterWireGpio)                                   \
+	X(HAVE_SCLI_COMMANDS, "scli_commands", tagWriterScliCommands)
 
 enum
 {

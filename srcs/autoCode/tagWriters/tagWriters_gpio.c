@@ -28,7 +28,7 @@ enum
  * Implementation - Functions
  * ===========================================================================*/
 
-void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
+void tagWriterGpioSignals(const tag_writer_context_t *context)
 {
 	file_t file_signals;
 	fileInit(&file_signals);
@@ -90,7 +90,7 @@ void tagWriterWriteGpioSignals(const tag_writer_context_t *context)
 	}
 }
 
-void tagWriterWriteWireGpio(const tag_writer_context_t *context)
+void tagWriterWireGpio(const tag_writer_context_t *context)
 {
 	const char *wire_gpio = context->auto_options->file_wire_gpio;
 
