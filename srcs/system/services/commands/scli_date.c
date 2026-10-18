@@ -17,8 +17,9 @@
 
 #include "scli_date.h"
 
+#include <stddef.h>
+
 #include "interfaces/drv_rtc.h"
-#include "interfaces/tm_define.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"

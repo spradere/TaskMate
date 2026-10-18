@@ -23,7 +23,6 @@
 
 #include "hal/arch/avr8/avr8_context.h"
 #include "interfaces/drv_timerContext.h"
-#include "interfaces/tm_define.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
 

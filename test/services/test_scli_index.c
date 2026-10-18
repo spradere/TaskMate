@@ -17,6 +17,7 @@
  * ===========================================================================*/
 
 #include <assert.h>
+#include <stddef.h>
 #include <string.h>
 
 #define TM_LIBC_TASKMATE 0
@@ -65,15 +66,21 @@ int main(void)
 	assert(!threadRunLevelParse("1234", &run_level));
 	assert(!threadRunLevelParse("1x", &run_level));
 	assert(!threadRunLevelParse("", &run_level));
+	assert(!threadRunLevelParse(NULL, &run_level));
+	assert(!threadRunLevelParse("1", NULL));
 
 	assert(dateParseTime("23:59:59", &time));
 	assert(time.hours == SCLIDATE_MAX_HOURS);
 	assert(!dateParseTime("24:00:00", &time));
 	assert(!dateParseTime("23:59:590", &time));
+	assert(!dateParseTime(NULL, &time));
+	assert(!dateParseTime("23:59:59", NULL));
 	assert(dateParseDate("31/12/2099", &time));
 	assert(time.day == SCLITEST_MAX_DAY);
 	assert(!dateParseDate("31/12/2100", &time));
 	assert(!dateParseDate("31/12/20999", &time));
+	assert(!dateParseDate(NULL, &time));
+	assert(!dateParseDate("31/12/2099", NULL));
 
 	return 0;
 }

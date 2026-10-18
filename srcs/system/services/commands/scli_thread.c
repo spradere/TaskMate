@@ -17,7 +17,8 @@
 
 #include "scli_thread.h"
 
-#include "interfaces/tm_define.h"
+#include <stddef.h>
+
 #include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
 #include "tmLibc/tm_stdio.h"

@@ -21,8 +21,8 @@
 #if TM_LIBC_TASKMATE
 	#include <limits.h>
 	#include <stdbool.h>
+	#include <stddef.h>
 
-	#include "interfaces/tm_define.h"
 	#include "system/sysCall/sc_string.h"
 
 /* -----------------------------------------------

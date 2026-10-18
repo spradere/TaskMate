@@ -17,8 +17,9 @@
 
 #include "scli_driver.h"
 
+#include <stddef.h>
+
 #include "interfaces/hal_drivers.h"
-#include "interfaces/tm_define.h"
 #include "interfaces/tm_macros.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
