@@ -572,6 +572,30 @@ runInitrcTests()
 		fail "valid_commands: generated error count type is missing"
 	fi
 
+	caseBegin driver_addresses
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'addModule driver no_address -run driver -source_file system.c' \
+		'addModule driver max_address -run driver -i2c 0x7E -source_file system.c' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectSuccess driver_addresses "${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+	if ! grep -F -q '.address = DRV_ADDRESS_NONE,' \
+		"${PATH_CASE}/generated/drivers_alloc.inc" || \
+		! grep -F -q '.address = 0x7E,' \
+		"${PATH_CASE}/generated/drivers_alloc.inc"; then
+		fail "driver_addresses: driver address contract is incorrect"
+	fi
+
+	caseBegin driver_address_above_max
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'addModule driver invalid_address -run driver -i2c 0x7F -source_file system.c' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure driver_address_above_max 'unknown data' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin missing_error_count
 	printf '%s\n' 'setVersion major 1' 'setVersion minor 12' \
 		'setModuleCountMax 8' \

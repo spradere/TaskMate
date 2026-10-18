@@ -22,8 +22,8 @@
 
 #include "at2560_constants.h"
 #include "interfaces/drv_i2c.h"
+#include "interfaces/hal_drivers.h"
 #include "interfaces/tm_macros.h"
-#include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 
 /* -----------------------------------------------
@@ -134,7 +134,7 @@ hal_driver_state_t hal_i2cScan(uint8_t *address)
 	if( state != DRV_STATE_RUNNING ) { return state; }
 	if( address == NULL ) { return i2cSetError(ERR_NULL_POINTER); }
 
-	while( i2c_scan_address <= MOD_I2C_ADDRESS_MAX )
+	while( i2c_scan_address <= DRV_I2C_ADDRESS_MAX )
 	{
 		TM_WRITEBIT(TWCR, TWSTA, TWEN, TWINT);
 		while( !(TM_GETBIT(TWCR, TWINT)) );
