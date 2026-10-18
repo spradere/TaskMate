@@ -71,7 +71,7 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 
 		// Use the generated stack boundary when creating the entry context.
 		fprintf(context->file,
-				"\n\thal_threadContextInit(%s, &(mod->context), "
+				"\thal_threadContextInit(%s, &(mod->context), "
 				"&(mod->stack[mod->stack_size - MOD_STACK_CANARY_WORD_COUNT]));\n",
 				mod->modules[i].name);
 
