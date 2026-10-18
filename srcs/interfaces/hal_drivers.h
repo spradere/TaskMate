@@ -29,6 +29,15 @@
  * ========================================================================== */
 
 /**
+ * @name Driver address limits
+ * @brief Define the maximum configured I2C address and the absent-address marker.
+ * @{
+ */
+#define DRV_I2C_ADDRESS_MAX 0x7Eu
+#define DRV_ADDRESS_NONE 0xFFu
+/** @} */
+
+/**
  * @brief Selects a common driver control operation.
  */
 typedef enum __attribute__((packed))

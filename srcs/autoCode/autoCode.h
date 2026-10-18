@@ -51,6 +51,7 @@
 #include <string.h>
 
 // Get TaskMate definitions
+#include "interfaces/hal_drivers.h"
 #include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
 #include "interfaces/tm_threads.h"

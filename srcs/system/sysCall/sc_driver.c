@@ -243,7 +243,7 @@ err_codes_t sc_i2cScan(void)
 	for( mod_count_t i = 0U; i < MOD_DRIVER_COUNT; i++ )
 	{
 		mod_driver_item_t *driver = mod_driverGetPointer(i);
-		if( (driver->address != MOD_DRIVER_ADDRESS_NONE) && !sc_i2cAddressFound(driver->address) )
+		if( (driver->address != DRV_ADDRESS_NONE) && !sc_i2cAddressFound(driver->address) )
 		{
 			driver->control(DRV_CTRL_SETBIT, &control_data);
 		}

@@ -42,9 +42,9 @@ void tagWriterDriversAlloc(const tag_writer_context_t *context)
 				mod->modules[i].name);
 		fprintf(context->file, "\t*(mod) = (mod_driver_item_t)\n");
 		fprintf(context->file, "\t{\n");
-		if( mod->modules[i].address == MOD_DRIVER_ADDRESS_NONE )
+		if( mod->modules[i].address == DRV_ADDRESS_NONE )
 		{
-			fprintf(context->file, "\t\t.address = MOD_DRIVER_ADDRESS_NONE,\n");
+			fprintf(context->file, "\t\t.address = DRV_ADDRESS_NONE,\n");
 		}
 		else
 		{

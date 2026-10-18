@@ -154,7 +154,7 @@ static add_module_result_t optionI2c(const char *data, const add_module_context_
 	char *end;
 	const unsigned long address = strtoul(data, &end, ADDMODULE_BASE_HEX);
 
-	if( (data[0U] == 0U) || (*end != 0U) || (address > MOD_I2C_ADDRESS_MAX) )
+	if( (data[0U] == 0U) || (*end != 0U) || (address > DRV_I2C_ADDRESS_MAX) )
 	{
 		return ADD_MODULE_INVALID_DATA;
 	}
@@ -210,7 +210,7 @@ static void moduleInit(module_item_t *module, const add_module_type_t module_typ
 	module->run_level = RL_RUN_NONE;
 	module->type = module_types[module_type].type;
 	module->subtype = module_types[module_type].subtype;
-	module->address = MOD_DRIVER_ADDRESS_NONE;
+	module->address = DRV_ADDRESS_NONE;
 	module->stack_size = 0U;
 
 	if( module->type == MOD_THREAD_ID ) { module->status |= (1U << module->subtype); }

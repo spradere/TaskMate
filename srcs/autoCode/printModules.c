@@ -34,7 +34,7 @@ void printModules(const modules_database_t *data_base)
 			   i,
 			   driver->modules[i].name,
 			   driver->modules[i].run_level);
-		if( driver->modules[i].address != MOD_DRIVER_ADDRESS_NONE )
+		if( driver->modules[i].address != DRV_ADDRESS_NONE )
 		{
 			printf(" i2c=0x%02X", driver->modules[i].address);
 		}
