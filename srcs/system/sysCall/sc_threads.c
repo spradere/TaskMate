@@ -76,7 +76,14 @@ bool sc_threadSetSTC(uint16_t count)
 	return result;
 }
 
-bool sc_threadGetSTC(uint16_t *count)
+uint16_t sc_threadGetSTC(void)
+{
+	uint16_t count = 0U;
+	(void)sc_threadGetSTCChecked(&count);
+	return count;
+}
+
+bool sc_threadGetSTCChecked(uint16_t *count)
 {
 	if( count == NULL ) { return false; }
 	hal_atomic_state_t state = hal_atomicStart();

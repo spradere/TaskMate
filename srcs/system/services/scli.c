@@ -77,8 +77,7 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[]);
 
 void scli(void)
 {
-	if( !sc_threadSetInitialized() ) { sc_halt(); }
-	uint16_t ticks;
+	sc_threadSetInitialized();
 
 	while( 1U )
 	{
@@ -88,12 +87,8 @@ void scli(void)
 			const tm_string_t *message = err_getMessage(error);
 			if( message != NULL ) { printf(TM_STR("[scli] error: %s\n"), message); }
 		}
-		if( !sc_threadSetSTC(SCLI_POLL_STC_TICKS) ) { sc_halt(); }
-		do
-		{
-			if( !sc_threadGetSTC(&ticks) ) { sc_halt(); }
-			if( (ticks > 0U) && !sc_coopYield() ) { sc_halt(); }
-		} while( ticks > 0U );
+		sc_threadSetSTC(SCLI_POLL_STC_TICKS);
+		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); };
 	}
 }
 

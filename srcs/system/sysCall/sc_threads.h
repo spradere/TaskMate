@@ -54,10 +54,15 @@ bool sc_runLevelSet(tm_run_level_t run_level);
 bool sc_threadSetSTC(uint16_t count);
 /**
  * @brief Get the current thread software time counter.
+ * @return Counter value, or zero if the current thread identifier is invalid.
+ */
+uint16_t sc_threadGetSTC(void);
+/**
+ * @brief Read the current thread software time counter with an explicit error result.
  * @param[out] count Receives the counter value.
  * @return true if the current thread identifier and output pointer are valid.
  */
-bool sc_threadGetSTC(uint16_t *count);
+bool sc_threadGetSTCChecked(uint16_t *count);
 
 /* -----------------------------------------------
  * Thread life cycle

@@ -130,18 +130,20 @@ int main(void)
 	assert(sc_threadGetStackDepth(0U, &depth_bytes));
 	assert(!sc_threadGetInfo(MOD_THREAD_COUNT, &name, &run_level, &size_bytes));
 	assert(!sc_threadGetStackDepth(MOD_THREAD_COUNT, &depth_bytes));
-	assert(!sc_threadGetSTC(NULL));
+	assert(!sc_threadGetSTCChecked(NULL));
 	assert(!sc_threadStart("missing", RL_RUN_CORE));
 
 	thread_current = MOD_THREAD_COUNT;
 	assert(!sc_threadSetSTC(1U));
-	assert(!sc_threadGetSTC(&count));
+	assert(!sc_threadGetSTCChecked(&count));
+	assert(sc_threadGetSTC() == 0U);
 	assert(!sc_threadSetInitialized());
 	assert(!sc_coopYield());
 	assert(atomic_depth == 0U);
 	assert(mod_threadSetCurrent(0U));
 	assert(sc_threadSetSTC(1U));
-	assert(sc_threadGetSTC(&count) && (count == 1U));
+	assert(sc_threadGetSTCChecked(&count) && (count == 1U));
+	assert(sc_threadGetSTC() == 1U);
 	assert(sc_threadSetInitialized());
 	assert(sc_coopYield());
 	assert(atomic_depth == 0U);
