@@ -17,6 +17,7 @@
 
 #include "z600_task1.h"
 
+#include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_threads.h"
 
 /* -----------------------------------------------
@@ -31,11 +32,15 @@
 
 void task1(void)
 {
-	sc_threadSetInitialized();
+	if( !sc_threadSetInitialized() ) { sc_halt(); }
+	uint16_t ticks;
 
 	while( 1U )
 	{
-		sc_threadSetSTC(Z600TASK1_DELAY_TICKS);
-		while( sc_threadGetSTC() > 0U );
+		if( !sc_threadSetSTC(Z600TASK1_DELAY_TICKS) ) { sc_halt(); }
+		do
+		{
+			if( !sc_threadGetSTC(&ticks) ) { sc_halt(); }
+		} while( ticks > 0U );
 	}
 }

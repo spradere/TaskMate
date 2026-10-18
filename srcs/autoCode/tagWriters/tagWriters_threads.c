@@ -65,6 +65,7 @@ void tagWriterWriteThreadsAlloc(const tag_writer_context_t *context)
 		else { thread_index = threads_count; }
 
 		fprintf(context->file, "\n\tmod = mod_threadGetPointer(%zu);\n", thread_index);
+		fprintf(context->file, "\tif( mod == NULL ) { hal_halt(); }\n");
 		fprintf(context->file, "\tmod->stack = thread%zu_stack;\n", thread_index);
 		fprintf(context->file, "\tmod->stack_size = %u;\n", mod->modules[i].stack_size);
 		fprintf(context->file, "\tmod_threadStackInit(mod);\n");

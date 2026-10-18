@@ -1076,6 +1076,10 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc generated context initialization is missing"
 	fi
+	if ! grep -F -q 'if( mod == NULL ) { hal_halt(); }' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc generated pointer checks are missing"
+	fi
 	if ! grep -F -q 'static hal_stack_word_t thread0_stack[256];' \
 		"${PATH_CASE}/generated/thread_stacks.inc"; then
 		fail "thread_stacks generated static storage is missing"

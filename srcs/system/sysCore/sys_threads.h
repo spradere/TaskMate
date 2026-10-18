@@ -35,8 +35,9 @@ void mod_threadsAlloc(void);
 
 /**
  * @brief Set the current thread identifier.
+ * @return true if the identifier is valid.
  */
-void mod_threadSetCurrent(mod_count_t id);
+bool mod_threadSetCurrent(mod_count_t id);
 /**
  * @brief Get the current thread identifier.
  */
@@ -45,11 +46,12 @@ mod_count_t mod_threadGetCurrent(void);
 /**
  * @brief Set the current thread software time counter.
  */
-void mod_threadSetSTC(uint16_t count);
+bool mod_threadSetSTC(uint16_t count);
 /**
  * @brief Get the current thread software time counter.
+ * @param[out] count Receives the counter value.
  */
-uint16_t mod_threadGetSTC(void);
+bool mod_threadGetSTC(uint16_t *count);
 /**
  * @brief Advance software time counters for active threads.
  */
@@ -57,31 +59,33 @@ void mod_threadTickSTC(void);
 
 /**
  * @brief Get a thread's run level.
+ * @param[out] run_level Receives the run level.
  */
-tm_run_level_t mod_threadRunLevelGet(mod_count_t id);
+bool mod_threadRunLevelGet(mod_count_t id, tm_run_level_t *run_level);
 /**
  * @brief Get a thread's configured stack size.
+ * @param[out] size_bytes Receives the stack size in bytes.
  */
-uint16_t mod_threadStackSizeGet(mod_count_t id);
+bool mod_threadStackSizeGet(mod_count_t id, uint16_t *size_bytes);
 /**
  * @brief Measure a thread's used stack space.
  * @param id Thread identifier.
- * @return Used stack depth in bytes.
+ * @param[out] depth_bytes Receives used stack depth in bytes.
  */
-uint16_t mod_threadStackDepthGet(mod_count_t id);
+bool mod_threadStackDepthGet(mod_count_t id, uint16_t *depth_bytes);
 
 /**
  * @brief Mark a thread as initialized.
  */
-void mod_threadSetInitialized(mod_count_t id);
+bool mod_threadSetInitialized(mod_count_t id);
 /**
  * @brief Start a thread at an initial run level.
  */
-void mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level);
+bool mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level);
 /**
  * @brief Stop a thread.
  */
-void mod_threadStop(mod_count_t id);
+bool mod_threadStop(mod_count_t id);
 /**
  * @brief Check whether a run level's threads are ready.
  * @return true if all threads in the run level are ready.
@@ -91,11 +95,11 @@ bool mod_threadsRunLevelIsReady(tm_run_level_t run_level);
 /**
  * @brief Mark a thread as cooperatively yielded.
  */
-void mod_threadSetYielded(mod_count_t id);
+bool mod_threadSetYielded(mod_count_t id);
 /**
  * @brief Check whether a thread has yielded.
- * @return true if the thread has yielded.
+ * @param[out] yielded Receives the yielded state.
  */
-bool mod_threadIsYielded(mod_count_t id);
+bool mod_threadIsYielded(mod_count_t id, bool *yielded);
 
 #endif // SYSCORE_SYS_THREADS_H

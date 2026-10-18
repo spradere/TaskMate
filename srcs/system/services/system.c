@@ -53,7 +53,8 @@ static bool systemRunLevelIsReady(tm_run_level_t run_level);
 
 void system(void)
 {
-	sc_threadSetInitialized();
+	if( !sc_threadSetInitialized() ) { sc_halt(); }
+	uint16_t ticks;
 	systemStart();
 
 	// Print system info
@@ -92,12 +93,16 @@ void system(void)
 				 time.minutes,
 				 time.seconds);
 		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
-		sc_threadSetSTC(SYSTEM_DISPLAY_STC_TICKS);
+		if( !sc_threadSetSTC(SYSTEM_DISPLAY_STC_TICKS) ) { sc_halt(); }
 #else
-		sc_threadSetSTC(SYSTEM_IDLE_STC_TICKS);
+		if( !sc_threadSetSTC(SYSTEM_IDLE_STC_TICKS) ) { sc_halt(); }
 #endif
 
-		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); };
+		do
+		{
+			if( !sc_threadGetSTC(&ticks) ) { sc_halt(); }
+			if( (ticks > 0U) && !sc_coopYield() ) { sc_halt(); }
+		} while( ticks > 0U );
 	}
 }
 
@@ -120,7 +125,7 @@ static void systemStart(void)
 	while( 1U )
 	{
 		/* As thread zero, returning here means one complete round-robin turn elapsed. */
-		sc_coopYield();
+		if( !sc_coopYield() ) { sc_halt(); }
 
 		if( systemRunLevelIsReady(run_level) )
 		{

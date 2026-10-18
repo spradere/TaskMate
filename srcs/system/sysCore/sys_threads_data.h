@@ -56,6 +56,10 @@ typedef struct
  * Internal API
  * ========================================================================== */
 
+/**
+ * @brief Get a thread record by identifier.
+ * @return The record, or NULL when the identifier is out of range.
+ */
 mod_thread_item_t *mod_threadGetPointer(mod_count_t id);
 
 #endif // SYSCORE_SYS_THREADS_DATA_H

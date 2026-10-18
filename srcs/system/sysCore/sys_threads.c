@@ -17,7 +17,10 @@
 
 #include "sys_threads.h"
 
+#include <stddef.h>
+
 #include "interfaces/hal_context.h"
+#include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_mod.h"
 #include "interfaces/tm_runLevel.h"
@@ -46,11 +49,28 @@ static void mod_threadStackInit(mod_thread_item_t *thread);
  * Implementation - Functions
  * ===========================================================================*/
 
-void mod_threadSetCurrent(mod_count_t id) { thread_current = id; }
+bool mod_threadSetCurrent(mod_count_t id)
+{
+	if( id >= MOD_THREAD_COUNT ) { return false; }
+	thread_current = id;
+	return true;
+}
 mod_count_t mod_threadGetCurrent(void) { return thread_current; }
 
-void mod_threadSetSTC(uint16_t count) { threads[thread_current].software_time_counter = count; }
-uint16_t mod_threadGetSTC(void) { return threads[thread_current].software_time_counter; }
+bool mod_threadSetSTC(uint16_t count)
+{
+	mod_thread_item_t *thread = mod_threadGetPointer(thread_current);
+	if( thread == NULL ) { return false; }
+	thread->software_time_counter = count;
+	return true;
+}
+bool mod_threadGetSTC(uint16_t *count)
+{
+	mod_thread_item_t *thread = mod_threadGetPointer(thread_current);
+	if( (thread == NULL) || (count == NULL) ) { return false; }
+	*count = thread->software_time_counter;
+	return true;
+}
 
 void mod_threadTickSTC(void)
 {
@@ -60,20 +80,28 @@ void mod_threadTickSTC(void)
 	}
 }
 
-tm_run_level_t mod_threadRunLevelGet(mod_count_t id)
+bool mod_threadRunLevelGet(mod_count_t id, tm_run_level_t *run_level)
 {
-	return RL_GET_RUN_LEVEL(threads[id].status);
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( (thread == NULL) || (run_level == NULL) ) { return false; }
+	*run_level = RL_GET_RUN_LEVEL(thread->status);
+	return true;
 }
 
-uint16_t mod_threadStackSizeGet(mod_count_t id)
+bool mod_threadStackSizeGet(mod_count_t id, uint16_t *size_bytes)
 {
-	return (uint16_t)(threads[id].stack_size * sizeof(hal_stack_word_t));
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( (thread == NULL) || (size_bytes == NULL) ) { return false; }
+	*size_bytes = (uint16_t)(thread->stack_size * sizeof(hal_stack_word_t));
+	return true;
 }
 
-uint16_t mod_threadStackDepthGet(mod_count_t id)
+bool mod_threadStackDepthGet(mod_count_t id, uint16_t *depth_bytes)
 {
-	const volatile hal_stack_word_t *stack = threads[id].stack;
-	const uint16_t usable_words = threads[id].stack_size - MOD_STACK_CANARY_WORD_COUNT;
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( (thread == NULL) || (depth_bytes == NULL) ) { return false; }
+	const volatile hal_stack_word_t *stack = thread->stack;
+	const uint16_t usable_words = thread->stack_size - MOD_STACK_CANARY_WORD_COUNT;
 	uint16_t unused_words = 0U;
 
 	while( (unused_words < usable_words) &&
@@ -82,17 +110,22 @@ uint16_t mod_threadStackDepthGet(mod_count_t id)
 		unused_words++;
 	}
 
-	return (uint16_t)((usable_words - unused_words) * sizeof(hal_stack_word_t));
+	*depth_bytes = (uint16_t)((usable_words - unused_words) * sizeof(hal_stack_word_t));
+	return true;
 }
 
-void mod_threadSetInitialized(mod_count_t id)
+bool mod_threadSetInitialized(mod_count_t id)
 {
-	TM_SETBIT(threads[id].status, THREAD_BIT_INITIALIZED);
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( thread == NULL ) { return false; }
+	TM_SETBIT(thread->status, THREAD_BIT_INITIALIZED);
+	return true;
 }
 
-void mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
+bool mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
 {
-	mod_thread_item_t *thread = &threads[id];
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( thread == NULL ) { return false; }
 
 	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
 	else
@@ -100,14 +133,17 @@ void mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
 		thread->status &= (tm_thread_status_t)~RL_LEVEL_MASK;
 		thread->status |= thread->saved_run_level;
 	}
+	return true;
 }
 
-void mod_threadStop(mod_count_t id)
+bool mod_threadStop(mod_count_t id)
 {
-	mod_thread_item_t *thread = &threads[id];
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( thread == NULL ) { return false; }
 
 	thread->saved_run_level = RL_GET_RUN_LEVEL(thread->status);
 	thread->status &= (tm_thread_status_t)~RL_LEVEL_MASK;
+	return true;
 }
 
 bool mod_threadsRunLevelIsReady(tm_run_level_t run_level)
@@ -125,14 +161,27 @@ bool mod_threadsRunLevelIsReady(tm_run_level_t run_level)
 	return true;
 }
 
-void mod_threadSetYielded(mod_count_t id) { TM_SETBIT(threads[id].status, THREAD_BIT_YIELDED); }
-
-bool mod_threadIsYielded(mod_count_t id)
+bool mod_threadSetYielded(mod_count_t id)
 {
-	return TM_GETBIT(threads[id].status, THREAD_BIT_YIELDED) != 0U;
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( thread == NULL ) { return false; }
+	TM_SETBIT(thread->status, THREAD_BIT_YIELDED);
+	return true;
 }
 
-mod_thread_item_t *mod_threadGetPointer(mod_count_t id) { return &threads[id]; }
+bool mod_threadIsYielded(mod_count_t id, bool *yielded)
+{
+	mod_thread_item_t *thread = mod_threadGetPointer(id);
+	if( (thread == NULL) || (yielded == NULL) ) { return false; }
+	*yielded = TM_GETBIT(thread->status, THREAD_BIT_YIELDED) != 0U;
+	return true;
+}
+
+mod_thread_item_t *mod_threadGetPointer(mod_count_t id)
+{
+	if( id >= MOD_THREAD_COUNT ) { return NULL; }
+	return &threads[id];
+}
 
 static void mod_threadStackInit(mod_thread_item_t *thread)
 {

@@ -1,0 +1,31 @@
+#!/bin/sh
+
+################################################################################
+#
+# TaskMate Project
+# (c) 2026 PRADERE Sebastien
+#
+# This file is part of TaskMate and is distributed under the BSD-2-Clause License.
+# See the LICENSE file for full license terms.
+#
+################################################################################
+
+# ------------------------------------------------------------------------------
+# Description: Check static thread identifier bounds using the test1 contract.
+# Inputs: Generated test1 headers and the host C compiler.
+# Outputs: Nonzero status if an invalid identifier accesses thread storage.
+# ------------------------------------------------------------------------------
+
+set -eu
+
+PATH_PROJECT=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
+cd "${PATH_PROJECT}"
+
+tmp_dir=$(mktemp -d)
+trap 'rm -rf "${tmp_dir}"' EXIT HUP INT TERM
+
+cc -std=gnu17 -O0 -Wall -Wextra -Werror \
+	-Isrcs -I. -Ibuild/test1_arduinoMega_atmega2560_avr8/generated \
+	test/sysCore/test_sys_threads.c -o "${tmp_dir}/sys_threads"
+
+"${tmp_dir}/sys_threads"
