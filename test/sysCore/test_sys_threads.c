@@ -51,7 +51,8 @@ _Noreturn void hal_halt(void)
 	while( 1U );
 }
 
-void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top)
+void hal_threadContextInit(void (*func)(void), hal_context_t *context,
+						   hal_stack_word_t *stack_top)
 {
 	(void)func;
 	(void)context;

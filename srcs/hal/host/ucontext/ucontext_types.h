@@ -36,8 +36,6 @@
 #define UCONTEXTTYPES_COUNT_CANARYWORD 2U
 /** @} */
 
-typedef uint8_t hal_stack_word_t;
-
 /**
  * @brief Holds the native host context for a suspended thread.
  */
