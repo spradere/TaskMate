@@ -52,7 +52,7 @@ _Noreturn void hal_halt(void)
 }
 
 void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   hal_stack_word_t *stack_top)
+						   void *stack_top)
 {
 	(void)func;
 	(void)context;

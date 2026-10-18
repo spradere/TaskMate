@@ -23,7 +23,7 @@
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_halt(void)
+_Noreturn void hal_halt(void)
 {
 	cli();
 	while( 1U ) {}

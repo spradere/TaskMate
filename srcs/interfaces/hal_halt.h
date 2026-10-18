@@ -21,6 +21,6 @@
 /**
  * @brief Stop execution without returning.
  */
-void hal_halt(void);
+_Noreturn void hal_halt(void);
 
 #endif // INTERFACES_HAL_HALT_H

@@ -40,7 +40,7 @@ typedef struct hal_context hal_context_t;
  * @param stack_top Final word of the allocated stack.
  */
 void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   hal_stack_word_t *stack_top);
+						   void *stack_top);
 
 /**
  * @brief Restore and start a context as one indivisible architecture operation.

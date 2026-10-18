@@ -43,6 +43,11 @@ FILES_BASE_SYSTEM_SRC != find \
 	${OPT_FIND_EXCLUDE} -type f -name "*.c"
 FILES_BASE_SYSTEM_SRC += ${PATH_SRCS}/system/boot.c
 
+.if (empty(FILE_GPIO_SIGNALS) && !empty(FILE_WIREGPIO)) || \
+	(!empty(FILE_GPIO_SIGNALS) && empty(FILE_WIREGPIO))
+.error >>> GPIO file for signals and wiring must both be set <<<
+.endif
+
 .if empty(FILE_GPIO_SIGNALS) && empty(FILE_WIREGPIO)
 FILES_BASE_SYSTEM_SRC := ${FILES_BASE_SYSTEM_SRC:N${PATH_SRCS}/system/sysCall/sc_gpio.c}
 .endif

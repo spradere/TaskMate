@@ -692,10 +692,31 @@ runGuardTests()
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/delay_header.c"
 
 	printf '%s\n' '#include "interfaces/hal_context.h"' \
-		'hal_context_t *context;' 'hal_stack_word_t *stack_top;' \
+		'hal_context_t *context;' 'void *stack_top;' \
 		> "${PATH_STAGE_WORK}/context_header.c"
 	expectSuccess context_interface_self_contained clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/context_header.c"
+	printf '%s\n' '#include <stdint.h>' 'typedef uint16_t hal_stack_word_t;' \
+		'#include "interfaces/hal_context.h"' \
+		> "${PATH_STAGE_WORK}/context_arch_word.c"
+	expectSuccess context_interface_arch_word clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/context_arch_word.c"
+	printf '%s\n' '#include "hal/arch/avr8/avr8_types.h"' \
+		'_Static_assert(sizeof(hal_stack_word_t) == 1U, "AVR8 stack word must be one byte");' \
+		> "${PATH_STAGE_WORK}/avr8_types_header.c"
+	expectSuccess avr8_types_stack_word clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/avr8_types_header.c"
+	printf '%s\n' '#include "hal/host/ucontext/ucontext_types.h"' \
+		'_Static_assert(sizeof(hal_stack_word_t) == 1U, "ucontext stack word must be one byte");' \
+		> "${PATH_STAGE_WORK}/ucontext_types_header.c"
+	expectSuccess ucontext_types_stack_word clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/ucontext_types_header.c"
+
+	printf '%s\n' '#include "interfaces/hal_halt.h"' \
+		'_Noreturn void testHalt(void) { hal_halt(); }' \
+		> "${PATH_STAGE_WORK}/halt_header.c"
+	expectSuccess halt_interface_noreturn clang -std=c17 -Wall -Wextra -Werror \
+		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/halt_header.c"
 
 	printf 'build-system guard tests passed: %d cases\n' "${VAL_TEST_COUNT}"
 }

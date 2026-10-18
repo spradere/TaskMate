@@ -56,10 +56,11 @@ _Static_assert(sizeof(avr8__context_t) == 37, "Invalid AVR8 context size");
  * ===========================================================================*/
 
 void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   hal_stack_word_t *stack_top)
+						   void *stack_top)
 {
 	// Stack initialisation
-	avr8__context_t *ctx = (avr8__context_t *)(stack_top - sizeof(avr8__context_t));
+	hal_stack_word_t *stack_word_top = stack_top;
+	avr8__context_t *ctx = (avr8__context_t *)(stack_word_top - sizeof(avr8__context_t));
 
 	// set special register value
 	ctx->pc_low = (uint8_t)((uintptr_t)func & AVR8CONTEXT_MASK_PC);
