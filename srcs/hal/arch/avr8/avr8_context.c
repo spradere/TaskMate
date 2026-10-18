@@ -64,8 +64,8 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *sta
 	// set special register value
 	ctx->pc_low = (uint8_t)((uintptr_t)func & AVR8CONTEXT_MASK_PC);
 	ctx->pc_high = (uint8_t)(((uintptr_t)func >> AVR8CONTEXT_SHIFT_PCH) & AVR8CONTEXT_MASK_PC);
-	ctx->pc_high = (uint8_t)(((uintptr_t)func >> AVR8CONTEXT_SHIFT_PCEXT) & AVR8CONTEXT_MASK_PC);
-	//ctx->pc_ext = 0U; // avrgcc ABI handle adress > 16 bytes via trampolines, EIND is out of context save/restore.
+	//ctx->pc_high = (uint8_t)(((uintptr_t)func >> AVR8CONTEXT_SHIFT_PCEXT) & AVR8CONTEXT_MASK_PC);
+	ctx->pc_ext = 0U; // avrgcc ABI handle adress > 16 bytes via trampolines, EIND is out of context save/restore.
 	
 	ctx->r0 = 0U;
 	ctx->avr8_SREG = 0U; // I bit is handled by int/reti
@@ -80,14 +80,16 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *sta
 	context->stack_pointer = (hal_stack_word_t*)ctx - 1;
 }
 
-void hal_contextStart(const hal_context_t *)
+void hal_contextStart(const hal_context_t *context)
 {
-	asm volatile("movw r30, r24 \n\t"
-				 "ld r26, Z+ \n\t"
-				 "ld r27, Z \n\t"
-				 "out __SP_H__, r27 \n\t"
-				 "out __SP_L__, r26 \n\t" 
-				 AVR8_CONTEXT_RESTORE
-				 "reti \n\t");
+	asm volatile("ld r26, Z+ \n\t"
+					 "ld r27, Z \n\t"
+					 "out __SP_H__, r27 \n\t"
+					 "out __SP_L__, r26 \n\t"
+					 AVR8_CONTEXT_RESTORE
+					 "reti \n\t"
+					 : "+z"(context)
+					 :
+					 : "r26", "r27", "memory");
 	__builtin_unreachable();
 }
