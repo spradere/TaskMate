@@ -114,6 +114,8 @@ int main(void)
 	uint16_t depth_bytes;
 	bool yielded;
 	assert(mod_threadRunLevelGet(0U, &run_level));
+	assert(run_level == RL_RUN_CORE);
+	assert(mod_threadGetPointer(0U)->status == (1U << THREAD_BIT_TYPE_SYS));
 	assert(mod_threadStackSizeGet(0U, &size_bytes));
 	assert(mod_threadStackDepthGet(0U, &depth_bytes));
 	assert(!mod_threadRunLevelGet(MOD_THREAD_COUNT, &run_level));
@@ -125,6 +127,17 @@ int main(void)
 	assert(!mod_threadSetYielded(MOD_THREAD_COUNT));
 	assert(!mod_threadIsYielded(MOD_THREAD_COUNT, &yielded));
 	assert(!mod_threadIsYielded(0U, NULL));
+	mod_thread_item_t *task = mod_threadGetPointer(MOD_THREAD_COUNT - 1U);
+	const tm_thread_status_t task_status = task->status;
+	assert(mod_threadRunLevelGet(MOD_THREAD_COUNT - 1U, &run_level));
+	assert(run_level == RL_RUN_USER);
+	assert(mod_threadStop(MOD_THREAD_COUNT - 1U));
+	assert(task->run_level == RL_RUN_NONE);
+	assert(task->saved_run_level == RL_RUN_USER);
+	assert(task->status == task_status);
+	assert(mod_threadStart(MOD_THREAD_COUNT - 1U, RL_RUN_CORE));
+	assert(task->run_level == RL_RUN_USER);
+	assert(task->status == task_status);
 
 	const tm_string_t *name;
 	assert(sc_threadGetInfo(0U, &name, &run_level, &size_bytes));

@@ -95,17 +95,11 @@ bool sc_driverGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 	*run_level = control_data.run_level;
 	*status_bits = 0U;
 
-	static const hal_driver_status_bit_t status_bit[] = {
-		DRV_BIT_INIT,
-		DRV_BIT_START,
-		DRV_BIT_ERROR,
-		DRV_BIT_DEAD,
-	};
-	for( uint8_t i = 0U; i < (sizeof(status_bit) / sizeof(status_bit[0U])); i++ )
+	for( uint8_t bit = DRV_BIT_INIT; bit <= DRV_BIT_DEAD; bit++ )
 	{
-		control_data.status_bit = status_bit[i];
+		control_data.status_bit = (hal_driver_status_bit_t)bit;
 		if( driver->control(DRV_CTRL_GETBIT, &control_data) == DRV_STATE_ERROR ) { return false; }
-		if( control_data.bit_value ) { TM_SETBIT(*status_bits, status_bit[i]); }
+		if( control_data.bit_value ) { TM_SETBIT(*status_bits, bit); }
 	}
 
 	*name = driver_name_catalog[id];

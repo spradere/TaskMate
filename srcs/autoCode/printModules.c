@@ -33,7 +33,7 @@ void printModules(const modules_database_t *data_base)
 		printf("\tdrivers[%zu] \"%s\" runlevel=%i",
 			   i,
 			   driver->modules[i].name,
-			   driver->modules[i].status);
+			   driver->modules[i].run_level);
 		if( driver->modules[i].address != MOD_DRIVER_ADDRESS_NONE )
 		{
 			printf(" i2c=0x%02X", driver->modules[i].address);
@@ -49,8 +49,8 @@ void printModules(const modules_database_t *data_base)
 		printf("\tthread[%zu] \"%s\" runlevel=%i type=%i stack=%u words\n",
 			   i,
 			   threads->modules[i].name,
-			   RL_GET_RUN_LEVEL(threads->modules[i].status),
-			   threads->modules[i].status & (~RL_LEVEL_MASK),
+			   threads->modules[i].run_level,
+			   threads->modules[i].status,
 			   threads->modules[i].stack_size);
 	}
 	printf("\n");

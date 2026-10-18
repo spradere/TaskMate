@@ -35,8 +35,8 @@ void tagWriterDriversAlloc(const tag_writer_context_t *context)
 	{
 		fprintf(context->file, "\n\tmod = mod_driverGetPointer(%zu);\n", i);
 		fprintf(context->file,
-				"\tcontrol_data.run_level = RL_GET_RUN_LEVEL(%iU);\n",
-				mod->modules[i].status);
+				"\tcontrol_data.run_level = (tm_run_level_t)%iU;\n",
+				mod->modules[i].run_level);
 		fprintf(context->file,
 				"\thal_%sControl(DRV_CTRL_RLSET, &control_data);\n",
 				mod->modules[i].name);

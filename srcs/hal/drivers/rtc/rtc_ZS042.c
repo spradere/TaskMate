@@ -56,6 +56,7 @@
 
 static uint8_t buf[RTCZS042_COUNT_REGISTER];
 static hal_driver_status_t rtc_status;
+static tm_run_level_t rtc_run_level = RL_RUN_NONE;
 static err_codes_t rtc_last_error = ERR_NO_ERROR;
 
 /* =============================================================================
@@ -264,17 +265,16 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			{
 				return rtcSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			rtc_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			rtc_status |= data->run_level;
+			rtc_run_level = data->run_level;
 			return hal_rtcGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return rtcSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(rtc_status);
+			data->run_level = rtc_run_level;
 			return hal_rtcGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == NULL ) { return rtcSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return rtcSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -282,7 +282,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			return hal_rtcGetStatus();
 		case DRV_CTRL_CLEARBIT:
 			if( data == NULL ) { return rtcSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return rtcSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -290,7 +290,7 @@ hal_driver_state_t hal_rtcControl(hal_driver_control_t command, hal_driver_contr
 			return hal_rtcGetStatus();
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return rtcSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return rtcSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

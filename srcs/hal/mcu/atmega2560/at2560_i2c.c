@@ -41,6 +41,7 @@
  * ---------------------------------------------*/
 
 static hal_driver_status_t i2c_status;
+static tm_run_level_t i2c_run_level = RL_RUN_NONE;
 static err_codes_t i2c_last_error = ERR_NO_ERROR;
 static uint8_t i2c_scan_address = 0U;
 
@@ -275,17 +276,16 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			{
 				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			i2c_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			i2c_status |= data->run_level;
+			i2c_run_level = data->run_level;
 			return hal_i2cGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return i2cSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(i2c_status);
+			data->run_level = i2c_run_level;
 			return hal_i2cGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == NULL ) { return i2cSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -293,7 +293,7 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			return hal_i2cGetStatus();
 		case DRV_CTRL_CLEARBIT:
 			if( data == NULL ) { return i2cSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -301,7 +301,7 @@ hal_driver_state_t hal_i2cControl(hal_driver_control_t command, hal_driver_contr
 			return hal_i2cGetStatus();
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return i2cSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return i2cSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

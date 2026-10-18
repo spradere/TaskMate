@@ -43,6 +43,7 @@ static err_codes_t test_error;
 static hal_driver_status_t test_status;
 static hal_driver_control_t test_command;
 static uint8_t test_error_reads;
+static uint8_t test_bit_reads;
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -77,6 +78,7 @@ static hal_driver_state_t testControl(hal_driver_control_t command,
 	}
 	if( command == DRV_CTRL_GETBIT )
 	{
+		test_bit_reads++;
 		data->bit_value = TM_GETBIT(test_status, data->status_bit) != 0U;
 		return DRV_STATE_OFF;
 	}
@@ -141,6 +143,7 @@ int main(void)
 	assert(strcmp((const char *)name->text, "timerContext") == 0);
 	assert(run_level == RL_RUN_DRIVER);
 	assert(status_bits == test_status);
+	assert(test_bit_reads == (uint8_t)(DRV_BIT_DEAD + 1U));
 	assert(!sc_driverGetInfo(MOD_DRIVER_COUNT, &name, &run_level, &status_bits));
 	assert(!sc_driverGetInfo(0U, &name, &run_level, NULL));
 

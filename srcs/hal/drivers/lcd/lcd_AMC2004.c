@@ -37,6 +37,7 @@ static hal_driver_state_t lcdSetError(err_codes_t error);
  * ---------------------------------------------*/
 
 static hal_driver_status_t lcd_status;
+static tm_run_level_t lcd_run_level = RL_RUN_NONE;
 static err_codes_t lcd_last_error = ERR_NO_ERROR;
 
 /* -----------------------------------------------
@@ -264,17 +265,16 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			lcd_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			lcd_status |= data->run_level;
+			lcd_run_level = data->run_level;
 			return hal_lcdGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(lcd_status);
+			data->run_level = lcd_run_level;
 			return hal_lcdGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -282,7 +282,7 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			return hal_lcdGetStatus();
 		case DRV_CTRL_CLEARBIT:
 			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -290,7 +290,7 @@ hal_driver_state_t hal_lcdControl(hal_driver_control_t command, hal_driver_contr
 			return hal_lcdGetStatus();
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return lcdSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return lcdSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

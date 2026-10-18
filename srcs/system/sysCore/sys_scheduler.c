@@ -156,7 +156,7 @@ static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 
 		mod_thread_item_t *thread = mod_threadGetPointer(current);
 		if( thread == NULL ) { hal_halt(); }
-		tm_run_level_t thread_run_level = RL_GET_RUN_LEVEL(thread->status);
+		tm_run_level_t thread_run_level = thread->run_level;
 		if( (thread_run_level != RL_RUN_NONE) && (thread_run_level <= active_run_level) )
 		{
 			if( !mod_threadSetCurrent(current) ) { hal_halt(); }

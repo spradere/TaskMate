@@ -80,8 +80,11 @@ void tagWriterThreadsAlloc(const tag_writer_context_t *context)
 		fprintf(context->file, "\tmod->software_time_counter = 0U;\n");
 		fprintf(context->file, "\tmod->status = %i;\n", mod->modules[i].status);
 		fprintf(context->file,
-				"\tmod->saved_run_level = RL_GET_RUN_LEVEL(%iU);\n",
-				mod->modules[i].status & RL_LEVEL_MASK);
+				"\tmod->run_level = (tm_run_level_t)%iU;\n",
+				mod->modules[i].run_level);
+		fprintf(context->file,
+				"\tmod->saved_run_level = (tm_run_level_t)%iU;\n",
+				mod->modules[i].run_level);
 		fprintf(context->file, "\tmod->main = %s;\n", mod->modules[i].name);
 
 		if( in_system == false ) { threads_count++; }

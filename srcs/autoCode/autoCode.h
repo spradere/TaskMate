@@ -118,6 +118,7 @@ typedef struct
 {
 	char name[MOD_NAME_SIZE_MAX];
 	unsigned char status;
+	tm_run_level_t run_level;
 	unsigned char type;
 	unsigned char subtype;
 	unsigned char address;

@@ -25,17 +25,16 @@
  * ========================================================================== */
 
 /**
- * @brief Stores the encoded run level and thread lifecycle flags.
+ * @brief Stores thread lifecycle flags.
  */
 typedef uint8_t tm_thread_status_t;
 
-// Bits [2:0] contain the run level
 /**
  * @brief Identifies status bits in the thread status word.
  */
 typedef enum __attribute__((packed))
 {
-	THREAD_BIT_TYPE_USER = 3,
+	THREAD_BIT_TYPE_USER = 0,
 	THREAD_BIT_TYPE_SYS,
 	THREAD_BIT_INITIALIZED,
 	THREAD_BIT_DEAD,

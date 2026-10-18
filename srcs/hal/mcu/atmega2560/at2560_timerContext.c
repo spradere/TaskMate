@@ -46,6 +46,7 @@
 static hal_timerContextCallback_ptr_t sched_callback = NULL;
 static hal_context_t scheduler_context;
 static hal_driver_status_t timer_context_status;
+static tm_run_level_t timer_context_run_level = RL_RUN_NONE;
 static err_codes_t timer_context_last_error = ERR_NO_ERROR;
 
 /* =============================================================================
@@ -251,17 +252,16 @@ hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 			{
 				return timerContextSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			timer_context_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			timer_context_status |= data->run_level;
+			timer_context_run_level = data->run_level;
 			return hal_timerContextGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return timerContextSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(timer_context_status);
+			data->run_level = timer_context_run_level;
 			return hal_timerContextGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == NULL ) { return timerContextSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return timerContextSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -269,7 +269,7 @@ hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 			return hal_timerContextGetStatus();
 		case DRV_CTRL_CLEARBIT:
 			if( data == NULL ) { return timerContextSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return timerContextSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -277,7 +277,7 @@ hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 			return hal_timerContextGetStatus();
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return timerContextSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return timerContextSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

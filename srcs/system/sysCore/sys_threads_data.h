@@ -39,6 +39,7 @@
 typedef struct
 {
 	volatile tm_thread_status_t status;
+	volatile tm_run_level_t run_level;
 	tm_run_level_t saved_run_level;
 
 	void (*main)(void);
