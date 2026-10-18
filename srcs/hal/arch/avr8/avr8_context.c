@@ -29,7 +29,6 @@
 
 #define AVR8CONTEXT_MASK_PC 0xFFU
 #define AVR8CONTEXT_SHIFT_PCH 8U
-#define AVR8CONTEXT_SHIFT_PCEXT 16U
 #define AVR8CONTEXT_R_COUNT 30U // r register count without r0 and r1
 
 /* -----------------------------------------------
@@ -65,7 +64,6 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context,
 	// set special register value
 	ctx->pc_low = (uint8_t)((uintptr_t)func & AVR8CONTEXT_MASK_PC);
 	ctx->pc_high = (uint8_t)(((uintptr_t)func >> AVR8CONTEXT_SHIFT_PCH) & AVR8CONTEXT_MASK_PC);
-	//ctx->pc_high = (uint8_t)(((uintptr_t)func >> AVR8CONTEXT_SHIFT_PCEXT) & AVR8CONTEXT_MASK_PC);
 	ctx->pc_ext = 0U; // avrgcc ABI handle adress > 16 bytes via trampolines, EIND is out of context save/restore.
 	
 	ctx->r0 = 0U;

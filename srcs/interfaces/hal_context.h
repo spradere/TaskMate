@@ -24,8 +24,6 @@
  * Public definitions
  * ========================================================================== */
 
-typedef uint8_t hal_stack_word_t;
-
 /**
  * @brief Opaque execution context owned by the selected HAL backend.
  */
