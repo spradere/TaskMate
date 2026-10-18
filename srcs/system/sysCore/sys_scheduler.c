@@ -163,6 +163,5 @@ static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 			return thread;
 		}
 	}
-
-	hal_halt();
+	return 0;
 }

@@ -32,6 +32,8 @@
 	"push r0 \n\t"         \
 	"in r0, __SREG__ \n\t" \
 	"push r0 \n\t"         \
+	"in r0, __RAMPZ__ \n\t" \
+	"push r0 \n\t"         \
 	"push r1 \n\t"         \
 	"clr r1 \n\t"          \
 	"push r2 \n\t"         \
@@ -63,7 +65,7 @@
 	"push r28 \n\t"        \
 	"push r29 \n\t"        \
 	"push r30 \n\t"        \
-	"push r31 \n\t"
+	"push r31 \n\t" \
 
 #define AVR8_CONTEXT_RESTORE \
 	"pop r31 \n\t"           \
@@ -98,6 +100,8 @@
 	"pop r2 \n\t"            \
 	"pop r1 \n\t"            \
 	"pop r0 \n\t"            \
+	"out __RAMPZ__, r0 \n\t"  \
+	"pop r0	\n\t" \
 	"out __SREG__, r0 \n\t"  \
 	"pop r0	\n\t"
 
