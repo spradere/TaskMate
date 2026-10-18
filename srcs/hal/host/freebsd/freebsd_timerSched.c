@@ -44,6 +44,7 @@
 
 static hal_timerContextCallback_ptr_t sched_callback;
 static hal_driver_status_t timer_sched_status;
+static tm_run_level_t timer_sched_run_level = RL_RUN_NONE;
 static err_codes_t timer_sched_last_error = ERR_NO_ERROR;
 static bool timer_sched_activated;
 
@@ -191,19 +192,18 @@ hal_driver_state_t hal_timerContextControl(hal_driver_control_t command,
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			timer_sched_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			timer_sched_status |= data->run_level;
+			timer_sched_run_level = data->run_level;
 			return timerSchedGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(timer_sched_status);
+			data->run_level = timer_sched_run_level;
 			return timerSchedGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 		case DRV_CTRL_CLEARBIT:
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return timerSchedSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return timerSchedSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

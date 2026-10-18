@@ -139,11 +139,11 @@ static const struct
 
 static add_module_result_t optionRun(const char *data, const add_module_context_t *context)
 {
-	if( strcmp(data, "none") == 0U ) { context->module->status |= RL_RUN_NONE; }
-	else if( strcmp(data, "core") == 0U ) { context->module->status |= RL_RUN_CORE; }
-	else if( strcmp(data, "driver") == 0U ) { context->module->status |= RL_RUN_DRIVER; }
-	else if( strcmp(data, "service") == 0U ) { context->module->status |= RL_RUN_SERVICE; }
-	else if( strcmp(data, "user") == 0U ) { context->module->status |= RL_RUN_USER; }
+	if( strcmp(data, "none") == 0U ) { context->module->run_level = RL_RUN_NONE; }
+	else if( strcmp(data, "core") == 0U ) { context->module->run_level = RL_RUN_CORE; }
+	else if( strcmp(data, "driver") == 0U ) { context->module->run_level = RL_RUN_DRIVER; }
+	else if( strcmp(data, "service") == 0U ) { context->module->run_level = RL_RUN_SERVICE; }
+	else if( strcmp(data, "user") == 0U ) { context->module->run_level = RL_RUN_USER; }
 	else { return ADD_MODULE_INVALID_DATA; }
 
 	return ADD_MODULE_OK;
@@ -207,6 +207,7 @@ static add_module_result_t optionSourceDir(const char *data, const add_module_co
 static void moduleInit(module_item_t *module, const add_module_type_t module_type)
 {
 	module->status = 0U;
+	module->run_level = RL_RUN_NONE;
 	module->type = module_types[module_type].type;
 	module->subtype = module_types[module_type].subtype;
 	module->address = MOD_DRIVER_ADDRESS_NONE;
@@ -374,6 +375,7 @@ static void moduleAdd(const initrc_command_t *command, const module_item_t *modu
 	snprintf(
 		module_list->modules[index].name, sizeof(module_list->modules[index].name), "%s", name);
 	module_list->modules[index].status = module->status;
+	module_list->modules[index].run_level = module->run_level;
 	module_list->modules[index].subtype = module->subtype;
 	module_list->modules[index].address = module->address;
 	module_list->modules[index].stack_size = module->stack_size;

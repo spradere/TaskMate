@@ -32,18 +32,4 @@ typedef enum __attribute__((packed))
 } tm_run_level_t;
 _Static_assert(sizeof(tm_run_level_t) == 1U, "tm_run_level_t must be one byte");
 
-/**
- * @name Run level encoding
- * @brief Bound run levels and extract their status bit field.
- * @{
- */
-#define RL_LEVEL_MASK 0x07
-/** @} */
-_Static_assert(RL_LEVEL_COUNT <= (RL_LEVEL_MASK + 1U), "run levels exceed status field");
-
-/**
- * @brief Extract run level bits from a status value.
- */
-#define RL_GET_RUN_LEVEL(status) ((tm_run_level_t)((status) & RL_LEVEL_MASK))
-
 #endif // INTERFACES_TM_RUNLEVEL_H

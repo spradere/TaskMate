@@ -48,13 +48,12 @@ _Static_assert(sizeof(hal_driver_control_t) == 1U, "hal_driver_control_t must be
 
 typedef uint8_t hal_driver_status_t;
 
-// bits [2:0] contain the run level
 /**
  * @brief Identifies status bits in the driver status word.
  */
 typedef enum __attribute__((packed))
 {
-	DRV_BIT_INIT = 3,
+	DRV_BIT_INIT = 0,
 	DRV_BIT_START,
 	DRV_BIT_ERROR,
 	DRV_BIT_DEAD

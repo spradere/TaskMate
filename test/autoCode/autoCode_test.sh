@@ -553,13 +553,19 @@ runInitrcTests()
 		"${PATH_CASE}/generated/modules_count.inc"; then
 		fail "valid_commands: module categories are incorrect"
 	fi
-	if ! grep -F -q 'control_data.run_level = RL_GET_RUN_LEVEL(2U);' \
+	if ! grep -F -q 'control_data.run_level = (tm_run_level_t)2U;' \
 		"${PATH_CASE}/generated/drivers_alloc.inc" || \
-		! grep -F -q 'mod->saved_run_level = RL_GET_RUN_LEVEL(3U);' \
+		! grep -F -q 'mod->run_level = (tm_run_level_t)3U;' \
 		"${PATH_CASE}/generated/threads_alloc.inc" || \
-		! grep -F -q 'mod->saved_run_level = RL_GET_RUN_LEVEL(4U);' \
+		! grep -F -q 'mod->saved_run_level = (tm_run_level_t)4U;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "valid_commands: generated run levels are incorrect"
+	fi
+	if ! grep -F -q 'mod->status = 1;' \
+		"${PATH_CASE}/generated/threads_alloc.inc" || \
+		! grep -F -q 'mod->status = 2;' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "valid_commands: thread status contains a run level"
 	fi
 	if ! grep -F -q 'typedef uint16_t error_count_t;' \
 		"${PATH_CASE}/generated/error_enum.inc"; then

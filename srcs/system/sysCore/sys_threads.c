@@ -84,7 +84,7 @@ bool mod_threadRunLevelGet(mod_count_t id, tm_run_level_t *run_level)
 {
 	mod_thread_item_t *thread = mod_threadGetPointer(id);
 	if( (thread == NULL) || (run_level == NULL) ) { return false; }
-	*run_level = RL_GET_RUN_LEVEL(thread->status);
+	*run_level = thread->run_level;
 	return true;
 }
 
@@ -130,8 +130,7 @@ bool mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
 	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
 	else
 	{
-		thread->status &= (tm_thread_status_t)~RL_LEVEL_MASK;
-		thread->status |= thread->saved_run_level;
+		thread->run_level = thread->saved_run_level;
 	}
 	return true;
 }
@@ -141,8 +140,8 @@ bool mod_threadStop(mod_count_t id)
 	mod_thread_item_t *thread = mod_threadGetPointer(id);
 	if( thread == NULL ) { return false; }
 
-	thread->saved_run_level = RL_GET_RUN_LEVEL(thread->status);
-	thread->status &= (tm_thread_status_t)~RL_LEVEL_MASK;
+	thread->saved_run_level = thread->run_level;
+	thread->run_level = RL_RUN_NONE;
 	return true;
 }
 
@@ -150,7 +149,7 @@ bool mod_threadsRunLevelIsReady(tm_run_level_t run_level)
 {
 	for( mod_count_t id = 0U; id < MOD_THREAD_COUNT; id++ )
 	{
-		if( (RL_GET_RUN_LEVEL(threads[id].status) == run_level) &&
+		if( (threads[id].run_level == run_level) &&
 			((TM_GETBIT(threads[id].status, THREAD_BIT_INITIALIZED) == 0U) ||
 			 (TM_GETBIT(threads[id].status, THREAD_BIT_DEAD) != 0U)) )
 		{

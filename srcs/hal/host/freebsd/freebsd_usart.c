@@ -37,6 +37,7 @@
 static uint8_t tx_buffer[FREEBSDUSART_SIZE_TXBUFFER];
 static uint16_t tx_length;
 static hal_driver_status_t usart_status;
+static tm_run_level_t usart_run_level = RL_RUN_NONE;
 static err_codes_t usart_last_error = ERR_NO_ERROR;
 
 /* -----------------------------------------------
@@ -163,19 +164,18 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			usart_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			usart_status |= data->run_level;
+			usart_run_level = data->run_level;
 			return usartGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(usart_status);
+			data->run_level = usart_run_level;
 			return usartGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 		case DRV_CTRL_CLEARBIT:
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

@@ -63,10 +63,15 @@ int main(void)
 	assert(data.error == ERR_HAL_DRIVER_NOT_INITIALIZED);
 
 	assert(hal_gpioControl(DRV_CTRL_INIT, NULL) == DRV_STATE_INITIALIZED);
-	data.run_level = RL_RUN_NONE;
+	data.run_level = RL_RUN_USER;
 	assert(hal_gpioControl(DRV_CTRL_RLSET, &data) == DRV_STATE_INITIALIZED);
 	assert(hal_gpioControl(DRV_CTRL_RLGET, &data) == DRV_STATE_INITIALIZED);
-	assert(data.run_level == RL_RUN_NONE);
+	assert(data.run_level == RL_RUN_USER);
+	assert(gpio_status == (hal_driver_status_t)(1U << DRV_BIT_INIT));
+	data.run_level = RL_LEVEL_COUNT;
+	assert(hal_gpioControl(DRV_CTRL_RLSET, &data) == DRV_STATE_ERROR);
+	assert(hal_gpioControl(DRV_CTRL_RLGET, &data) == DRV_STATE_INITIALIZED);
+	assert(data.run_level == RL_RUN_USER);
 	assert((DDRA == 0U) && (DDRB == 0U));
 	assert(signal_table[GPIO_SIGNAL_INBOARD_LED].pin.port == PORT_B);
 	assert(signal_table[GPIO_SIGNAL_TASK1_LED].pin.port == PORT_A);

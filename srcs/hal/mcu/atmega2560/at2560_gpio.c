@@ -81,6 +81,7 @@ static const avr8_port_t mcu_ports[PORT_COUNT] = {
 
 static hal_signal_t signal_table[GPIO_SIGNAL_COUNT];
 static hal_driver_status_t gpio_status;
+static tm_run_level_t gpio_run_level = RL_RUN_NONE;
 static err_codes_t gpio_last_error = ERR_NO_ERROR;
 
 /* -----------------------------------------------
@@ -235,16 +236,15 @@ hal_driver_state_t hal_gpioControl(hal_driver_control_t command, hal_driver_cont
 			{
 				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			gpio_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			gpio_status |= data->run_level;
+			gpio_run_level = data->run_level;
 			return hal_gpioGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(gpio_status);
+			data->run_level = gpio_run_level;
 			return hal_gpioGetStatus();
 		case DRV_CTRL_SETBIT:
 			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -252,7 +252,7 @@ hal_driver_state_t hal_gpioControl(hal_driver_control_t command, hal_driver_cont
 			return hal_gpioGetStatus();
 		case DRV_CTRL_CLEARBIT:
 			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -260,7 +260,7 @@ hal_driver_state_t hal_gpioControl(hal_driver_control_t command, hal_driver_cont
 			return hal_gpioGetStatus();
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return gpioSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return gpioSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}

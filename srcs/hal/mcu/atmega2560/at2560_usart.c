@@ -54,6 +54,7 @@ static volatile uint8_t buffer_tx[AT2560USART_SIZE_BUFFER];
 static volatile uint8_t buffer_rx_head = 0U, buffer_rx_tail = 0U;
 static volatile uint8_t buffer_tx_head = 0U, buffer_tx_tail = 0U;
 static hal_driver_status_t usart_status;
+static tm_run_level_t usart_run_level = RL_RUN_NONE;
 // Shared with the RX ISR; valid error identifiers fit in one atomic byte.
 static volatile err_code_t usart_last_error = ERR_NO_ERROR;
 
@@ -236,17 +237,16 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
-			usart_status &= (hal_driver_status_t)~RL_LEVEL_MASK;
-			usart_status |= data->run_level;
+			usart_run_level = data->run_level;
 			return hal_usartGetStatus();
 		case DRV_CTRL_RLGET:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			data->run_level = RL_GET_RUN_LEVEL(usart_status);
+			data->run_level = usart_run_level;
 			return hal_usartGetStatus();
 		// Limit bit operations to the shared driver status flags.
 		case DRV_CTRL_SETBIT:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -254,7 +254,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			return hal_usartGetStatus();
 		case DRV_CTRL_CLEARBIT:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
@@ -262,7 +262,7 @@ hal_driver_state_t hal_usartControl(hal_driver_control_t command, hal_driver_con
 			return hal_usartGetStatus();
 		case DRV_CTRL_GETBIT:
 			if( data == NULL ) { return usartSetError(ERR_NULL_POINTER); }
-			if( (data->status_bit < DRV_BIT_INIT) || (data->status_bit > DRV_BIT_DEAD) )
+			if( data->status_bit > DRV_BIT_DEAD )
 			{
 				return usartSetError(ERR_HAL_DRIVER_INVALID_VALUE);
 			}
