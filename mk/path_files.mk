@@ -94,7 +94,7 @@ FILES_GIT_ALLOWED.${PATH_DOCS} = *.c *.md *.txt *.png *.jpg Doxyfile *.ods
 FILES_GIT_ALLOWED.${PATH_MAKEFILES} = *.mk *
 FILES_GIT_ALLOWED.${PATH_SRCS} = *.c *.h *.rc *.err *.mk *.gpio *.list *.awk
 FILES_GIT_ALLOWED.${PATH_SCRIPTS} = *.awk *.sh
-FILES_GIT_ALLOWED.${PATH_TEST} = *.c *.mk *.sh
+FILES_GIT_ALLOWED.${PATH_TEST} = *.c *.mk *.sh *.awk
 FILES_GIT_ALLOWED.${PATH_LEGACY} = *.c *.h Makefile
 FILES_GIT_ALLOWED = .clang-format .clang-tidy AGENTS.md\
 	audit_todo CHANGELOG CHANGELOG_AUTOCODE_SYNTAX CHANGELOG_INITRC_SYNTAX \
