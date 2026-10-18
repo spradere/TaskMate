@@ -208,16 +208,16 @@ static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
 }
 
 #define TM_SCHED_CALLBACK               \
-	"in r18, 0x3d \n\t"                 \
-	"in r19, 0x3e \n\t"                 \
+	"in r18, __SP_L__ \n\t"                 \
+	"in r19, __SP_H__ \n\t"                 \
 	"sts scheduler_context, r18 \n\t"   \
 	"sts scheduler_context+1, r19 \n\t" \
 	"call schedWrapper\n\t"             \
 	"movw r30, r24 \n\t"                \
 	"ld r18, Z+ \n\t"                   \
 	"ld r19, Z \n\t"                    \
-	"out 0x3e, r19 \n\t"                \
-	"out 0x3d, r18 \n\t"
+	"out __SP_H__, r19 \n\t"                \
+	"out __SP_L__, r18 \n\t"
 
 /*
  * Naked ISR: save the interrupted context before any C code runs, switch stacks through

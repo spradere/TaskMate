@@ -45,6 +45,6 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context,
 /**
  * @brief Restore and start a context as one indivisible architecture operation.
  */
-void hal_contextStart(const hal_context_t *context);
+_Noreturn void hal_contextStart(const hal_context_t *context);
 
 #endif // INTERFACES_HAL_CONTEXT_H

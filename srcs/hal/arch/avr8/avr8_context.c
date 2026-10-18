@@ -80,7 +80,7 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context,
 	context->stack_pointer = (hal_stack_word_t*)ctx - 1;
 }
 
-void hal_contextStart(const hal_context_t *context)
+_Noreturn void hal_contextStart(const hal_context_t *context)
 {
 	asm volatile("ld r26, Z+ \n\t"
 					 "ld r27, Z \n\t"

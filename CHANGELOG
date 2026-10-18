@@ -1,8 +1,9 @@
+	[code] harden avr asm code
+	[code] refactor GPIO to be a driver
 	[code] refactor string stack, using standard or TM libc
 	[code] validate driver lifecycle results and error message lookups
 	[code] use packed enums for run levels, module types, and error codes
 	[build] size module and error counts from init.rc target limits
-	[arch][code] gpio is now a driver
 
 TaskMate 0.33
 
