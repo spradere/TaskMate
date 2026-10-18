@@ -143,7 +143,8 @@ runConfigurationTests()
 		-V OPT_ENVIRONMENT
 	expectOutput cygwin_environment "w10-cygwin" bmake -C "${PATH_PROJECT}" \
 		HOST=w10-cygwin -V OPT_ENVIRONMENT
-	expectFailure invalid_environment "Invalid option OPT_ENVIRONMENT" \
+	expectFailure invalid_environment \
+		'>>> Invalid option OPT_ENVIRONMENT : "invalid". Valid values: [ freebsd | linux | w10-cygwin ] <<<' \
 		bmake -C "${PATH_PROJECT}" HOST=invalid -V OPT_ENVIRONMENT
 	expectOutput verbose_default "0" bmake -C "${PATH_PROJECT}" -V OPT_VERBOSE_LEVEL
 	expectOutput verbose_linux "0" bmake -C "${PATH_PROJECT}" HOST=linux \
@@ -152,9 +153,12 @@ runConfigurationTests()
 		-V OPT_VERBOSE_LEVEL
 	expectOutput verbose_level_two "2" bmake -C "${PATH_PROJECT}" VERBOSE=2 \
 		-V OPT_VERBOSE_LEVEL
-	expectFailure verbose_not_numeric "should be a number" bmake -C "${PATH_PROJECT}" \
+	expectFailure verbose_not_numeric \
+		'>>> Invalid option for OPT_VERBOSE_LEVEL : "invalid", should be a number. <<<' \
+		bmake -C "${PATH_PROJECT}" \
 		VERBOSE=invalid -V OPT_VERBOSE_LEVEL
-	expectFailure verbose_out_of_range "should be [ 0 | 1 ]" \
+	expectFailure verbose_out_of_range \
+		'>>> Invalid option for OPT_VERBOSE_LEVEL : "3", should be [ 0 | 1 ]. <<<' \
 		bmake -C "${PATH_PROJECT}" VERBOSE=3 -V OPT_VERBOSE_LEVEL
 	expectSuccess autocode_source_order bmake -C "${PATH_PROJECT}" \
 		-V FILES_AUTOCODE_SRC_ALL
@@ -344,6 +348,12 @@ runConfigurationTests()
 		VAL_TARGET=z600 -V FILE_GPIO_SIGNALS
 	expectOutput z600_gpio_wiring "" bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILE_WIREGPIO
+	expectFailure gpio_signals_without_wiring \
+		'>>> GPIO file for signals and wiring must both be set <<<' \
+		targetMake FILE_WIREGPIO= -V FILES_COMPILE_SRC
+	expectFailure gpio_wiring_without_signals \
+		'>>> GPIO file for signals and wiring must both be set <<<' \
+		targetMake FILE_GPIO_SIGNALS= -V FILES_COMPILE_SRC
 	expectSuccess z600_tag_inputs bmake -C "${PATH_PROJECT}" \
 		VAL_TARGET=z600 -V FILES_PARSE_TAG
 	logExcludes z600_tag_inputs "gpio_common.h"
@@ -389,11 +399,13 @@ runConfigurationTests()
 		expectSuccess "path_list_${VAL_PATH_LIST}" targetMake -V "${VAL_PATH_LIST}"
 		assertWordsSorted "path_list_${VAL_PATH_LIST}"
 	done
-	expectFailure duplicate_direct_path "Duplicate path in FILES_AUTOCODE_SRC:" \
+	expectFailure duplicate_direct_path \
+		'>>> Duplicate path in FILES_AUTOCODE_SRC: duplicate.c duplicate.c <<<' \
 		bmake -C "${PATH_PROJECT}" FILES_AUTOCODE_SRC='duplicate.c duplicate.c' \
 		-V FILES_AUTOCODE_SRC
-	expectFailure duplicate_composed_path "Duplicate path in FILES_COMPILE_SRC:" \
+	expectFailure duplicate_composed_path '>>> Duplicate path in FILES_COMPILE_SRC:' \
 		targetMake FILES_EXTRA_SRC=srcs/system/boot.c -V FILES_COMPILE_SRC
+	logContains duplicate_composed_path ' <<<'
 	printf '%s\n' \
 		'addModule task missing -source_file user/tasks/missing_from_initrc.c' \
 		> "${PATH_STAGE_WORK}/missing_source_init.rc"
@@ -418,9 +430,10 @@ runConfigurationTests()
 		targetMake -V FILES_DRIVER_INTERFACES
 
 	expectFailure invalid_target \
-		"Target makefile not found >>>srcs/user/target/missing/missing.mk<<<" \
+		'>>> Target makefile not found srcs/user/target/missing/missing.mk <<<' \
 		bmake -C "${PATH_PROJECT}" VAL_TARGET=missing -V VAL_HW_STACK
-	expectFailure invalid_option 'Invalid option OPT_CLEAN_AUTOCODE_LOGS : "invalid"' \
+	expectFailure invalid_option \
+		'>>> Invalid option OPT_CLEAN_AUTOCODE_LOGS : "invalid". Valid values: [ yes | no ] <<<' \
 		targetMake OPT_CLEAN_AUTOCODE_LOGS=invalid -V VAL_HW_STACK
 
 	PATH_MANIFESTS="${PATH_STAGE_WORK}/manifests"

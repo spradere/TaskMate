@@ -34,5 +34,5 @@ VAL_FLASH_SIZE_K=64
 VAL_RAM_SIZE_K=8
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif

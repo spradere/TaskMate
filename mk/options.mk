@@ -21,7 +21,7 @@ HOST ?= freebsd
 OPT_ENVIRONMENT := ${HOST}
 
 .if ${OPT_ENVIRONMENT} != "freebsd" && ${OPT_ENVIRONMENT} != "linux" && ${OPT_ENVIRONMENT} != "w10-cygwin"
-.error Invalid option OPT_ENVIRONMENT : "${OPT_ENVIRONMENT}". Valid values: [ freebsd | linux | w10-cygwin ]
+.error >>> Invalid option OPT_ENVIRONMENT : "${OPT_ENVIRONMENT}". Valid values: [ freebsd | linux | w10-cygwin ] <<<
 .endif
 
 # Global find option
@@ -34,7 +34,7 @@ VAL_BUILD_AUTOCODE_EXPECTED_VER_MINOR=8
 OPT_CLEAN_AUTOCODE_LOGS = yes
 
 .if ${OPT_CLEAN_AUTOCODE_LOGS} != "yes" && ${OPT_CLEAN_AUTOCODE_LOGS} != "no"
-.error Invalid option OPT_CLEAN_AUTOCODE_LOGS : "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [ yes | no ]
+.error >>> Invalid option OPT_CLEAN_AUTOCODE_LOGS : "${OPT_CLEAN_AUTOCODE_LOGS}". Valid values: [ yes | no ] <<<
 .endif
 
 # Verbose level
@@ -43,11 +43,11 @@ VERBOSE ?=0
 OPT_VERBOSE_LEVEL = ${VERBOSE}
 
 .if empty(OPT_VERBOSE_LEVEL:M[0-9]*)
-.error Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be a number.
+.error >>> Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be a number. <<<
 .endif
 
 .if (${OPT_VERBOSE_LEVEL} < 0) || (${OPT_VERBOSE_LEVEL} > 2)
-.error Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be [ 0 | 1 ].
+.error >>> Invalid option for OPT_VERBOSE_LEVEL : "${OPT_VERBOSE_LEVEL}", should be [ 0 | 1 ]. <<<
 .endif
 
 _QUIET = ${${OPT_VERBOSE_LEVEL} == 1 :? : @}

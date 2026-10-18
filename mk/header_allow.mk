@@ -20,7 +20,7 @@ PATHS_TM_STRING_ALLOWED= \
 
 PATHS_TM_STRING_ALLOWED := ${PATHS_TM_STRING_ALLOWED:O}
 .if ${PATHS_TM_STRING_ALLOWED:[#]} != ${PATHS_TM_STRING_ALLOWED:u:[#]}
-.error Duplicate path in PATHS_TM_STRING_ALLOWED: ${PATHS_TM_STRING_ALLOWED}
+.error >>> Duplicate path in PATHS_TM_STRING_ALLOWED: ${PATHS_TM_STRING_ALLOWED} <<<
 .endif
 	
 .for src in ${PATHS_TM_STRING_ALLOWED}
@@ -34,7 +34,7 @@ FILES_HAL_ARCH_TYPES_ALLOWED = \
 
 .for file in ${FILES_HAL_ARCH_TYPES_ALLOWED}
 .if !exists(${file})
-.error file in FILES_HAL_ARCH_TYPES_ALLOWED not fond >>>${file}<<<
+.error >>> file in FILES_HAL_ARCH_TYPES_ALLOWED not fond ${file} <<<
 .endif
 CFLAGS_${file} += -include ${FILE_HAL_ARCH_TYPES}
 .endfor

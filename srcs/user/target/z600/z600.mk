@@ -25,5 +25,5 @@ PATHS_SOURCE_SEARCH += ${PATH_TARGET_Z600}
 .include "${PATH_SRCS}/hal/board/pc/pc_make.mk"
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif

@@ -30,5 +30,5 @@ FILE_WIREGPIO = ${PATH_TEST1}/test1_signals.c
 .include "${PATH_SRCS}/hal/board/arduinoMega/mega_make.mk"
 
 .else
-.error Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE}
+.error >>> Multiple inclusion of ${.PARSEDIR}/${.PARSEFILE} <<<
 .endif
