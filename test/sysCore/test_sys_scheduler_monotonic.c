@@ -21,6 +21,8 @@
 #include <stdlib.h>
 
 #include "hal/arch/avr8/avr8_types.h"
+#include "interfaces/tm_driver_have.h"
+#undef TM_DRIVER_HAVE_TIMER_MONOTONIC
 #include "system/sysCore/sys_scheduler.c"
 
 /* -----------------------------------------------

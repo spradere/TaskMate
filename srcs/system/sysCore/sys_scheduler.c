@@ -22,10 +22,7 @@
 #include <stdint.h>
 
 #include "interfaces/drv_timerContext.h"
-#include "interfaces/tm_driver_have.h"
-#ifdef TM_DRIVER_HAVE_TIMER_MONOTONIC
-	#include "interfaces/drv_timerMonotonic.h"
-#endif
+#include "interfaces/drv_timerMonotonic.h"
 #include "interfaces/hal_context.h"
 #include "interfaces/hal_halt.h"
 #include "interfaces/tm_macros.h"
@@ -158,9 +155,7 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 		hal_halt();
 	}
 
-#ifdef TM_DRIVER_HAVE_TIMER_MONOTONIC
 	thread->last_start_ticks_100us = hal_timerMonotonicRead();
-#endif
 	TM_CLEARBIT(thread->status, THREAD_BIT_YIELDED);
 	return &thread->context;
 }
