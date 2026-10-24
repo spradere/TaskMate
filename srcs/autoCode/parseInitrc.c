@@ -23,8 +23,7 @@
 #include "initrcCommands/addScliCommand.h"
 #include "initrcCommands/setErrorCountMax.h"
 #include "initrcCommands/setModuleCountMax.h"
-#include "initrcCommands/setStackSizeMin.h"
-#include "initrcCommands/setVersion.h"
+#include "initrcCommands/setInitrcVersion.h"
 #include "tokenizer.h"
 
 enum
@@ -40,8 +39,7 @@ enum
 	X("addModule", initrcAddModule)                 \
 	X("addScliCommand", initrcAddScliCommand)       \
 	X("setErrorCountMax", initrcSetErrorCountMax)   \
-	X("setModuleCountMax", initrcSetModuleCountMax) \
-	X("setStackSizeMin", initrcSetStackSizeMin)
+	X("setModuleCountMax", initrcSetModuleCountMax)
 
 static const struct
 {
@@ -73,11 +71,11 @@ static bool initrcCommandDispatch(const initrc_command_t *command)
 static bool initrcVersionCommand(const initrc_command_t *command, const char *position,
 								 const char *option, const int expected_version)
 {
-	if( (strcmp(command->tok->tokens[0U], "setVersion") != 0U) ||
+	if( (strcmp(command->tok->tokens[0U], "setInitrcVersion") != 0U) ||
 		(command->tok->count < PARSEINITRC_COUNT_VERSIONMIN) ||
 		(strcmp(command->tok->tokens[1U], option) != 0U) )
 	{
-		AUTOCODE_MSG_ERROR("%s init.rc command [%s:%i] must be setVersion %s %i",
+		AUTOCODE_MSG_ERROR("%s init.rc command [%s:%i] must be setInitrcVersion %s %i",
 						   position,
 						   command->initrc_name,
 						   command->file_line_number,
@@ -86,7 +84,7 @@ static bool initrcVersionCommand(const initrc_command_t *command, const char *po
 		return false;
 	}
 
-	return initrcSetVersion(command);
+	return initrcSetInitrcVersion(command);
 }
 
 /*
@@ -165,10 +163,10 @@ ac_result_t parseInitrc(modules_database_t *data_base, const char *initrc_name,
 			}
 			continue;
 		}
-		if( strcmp(tok.tokens[0U], "setVersion") == 0U )
+		if( strcmp(tok.tokens[0U], "setInitrcVersion") == 0U )
 		{
 			// Version declarations are valid only at the start of the file.
-			AUTOCODE_MSG_ERROR("setVersion command after init.rc version declaration [%s:%i]",
+			AUTOCODE_MSG_ERROR("setInitrcVersion command after init.rc version declaration [%s:%i]",
 							   initrc_name,
 							   file_line_number);
 			version_invalid = true;
@@ -189,13 +187,13 @@ ac_result_t parseInitrc(modules_database_t *data_base, const char *initrc_name,
 	// At EOF, distinguish missing version commands from malformed ones already reported.
 	if( (version_invalid == false) && (version_major_set == false) )
 	{
-		AUTOCODE_MSG_ERROR("missing setVersion major %i as first command of init.rc file <%s>",
+		AUTOCODE_MSG_ERROR("missing setInitrcVersion major %i as first command of init.rc file <%s>",
 						   AUTOCODE_VERSION_INITRCMAJOR,
 						   initrc_name);
 	}
 	if( (version_invalid == false) && version_major_set && (version_minor_set == false) )
 	{
-		AUTOCODE_MSG_ERROR("missing setVersion minor %i as second command of init.rc file <%s>",
+		AUTOCODE_MSG_ERROR("missing setInitrcVersion minor %i as second command of init.rc file <%s>",
 						   AUTOCODE_VERSION_INITRCMINOR,
 						   initrc_name);
 	}
