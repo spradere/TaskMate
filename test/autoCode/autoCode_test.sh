@@ -253,13 +253,13 @@ runOptionTests()
 	caseBegin all_required_missing
 	: > "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_missing \
-		"required autoCode option --test_mode is not set"
+		"required autoCode option --errors is not set"
 
 	caseBegin all_required_duplicate
 	cp "${PATH_CASE}/autoCode.conf" "${PATH_CASE}/duplicate.conf"
 	cat "${PATH_CASE}/duplicate.conf" >> "${PATH_CASE}/autoCode.conf"
 	runOptionFailure all_required_duplicate \
-		"required autoCode option --test_mode is multiple set"
+		"required autoCode option --errors is multiple set"
 
 	for VAL_VALUE in yes ON 1 0
 	do

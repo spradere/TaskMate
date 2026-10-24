@@ -47,14 +47,14 @@ static void setTestMode(const char *value, options_list_t *opt);
  * ---------------------------------------------*/
 
 #define HAVE_OPTIONS(X)                                          \
-	X(HAVE_TEST_MODE, "--test_mode", setTestMode)                \
 	X(HAVE_ERRORS, "--errors", setErrorsFile)                    \
+	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath) \
+	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile)   \
 	X(HAVE_INITRC, "--initrc", setInitrcFile)                    \
 	X(HAVE_PARSETAG, "--parsetag", setParseTagFile)              \
-	X(HAVE_GPIO_SIGNALS, "--gpio_signals", setGpioSignalsFile)   \
-	X(HAVE_WIRE_GPIO, "--wire_gpio", setWireGpioFile)            \
-	X(HAVE_GENERATED_PATH, "--generated_path", setGeneratedPath) \
-	X(HAVE_SOURCE_PATH, "--source_path", setSourcePath)
+	X(HAVE_SOURCE_PATH, "--source_path", setSourcePath)          \
+	X(HAVE_TEST_MODE, "--test_mode", setTestMode)                \
+	X(HAVE_WIRE_GPIO, "--wire_gpio", setWireGpioFile)
 
 static const struct
 {

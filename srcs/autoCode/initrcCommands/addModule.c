@@ -97,22 +97,22 @@ static add_module_result_t optionStack(const char *data, const add_module_contex
 static add_module_result_t optionSourceFile(const char *data, const add_module_context_t *context);
 static add_module_result_t optionSourceDir(const char *data, const add_module_context_t *context);
 
-#define ADD_MODULE_OPTION(X)                                                            \
-	X(RUN, "-run", optionRun, OPTION_REQUIRED, OPTION_REQUIRED, OPTION_REQUIRED)        \
-	X(I2C, "-i2c", optionI2c, OPTION_OPTIONAL, OPTION_FORBIDDEN, OPTION_FORBIDDEN)      \
-	X(STACK, "-stack", optionStack, OPTION_FORBIDDEN, OPTION_REQUIRED, OPTION_REQUIRED) \
-	X(SOURCE_FILE,                                                                      \
-	  "-source_file",                                                                   \
-	  optionSourceFile,                                                                 \
-	  OPTION_CUMULATIVE,                                                                \
-	  OPTION_CUMULATIVE,                                                                \
-	  OPTION_CUMULATIVE)                                                                \
-	X(SOURCE_DIR,                                                                       \
-	  "-source_dir",                                                                    \
-	  optionSourceDir,                                                                  \
-	  OPTION_CUMULATIVE,                                                                \
-	  OPTION_CUMULATIVE,                                                                \
-	  OPTION_CUMULATIVE)
+#define ADD_MODULE_OPTION(X)                                                       \
+	X(I2C, "-i2c", optionI2c, OPTION_OPTIONAL, OPTION_FORBIDDEN, OPTION_FORBIDDEN) \
+	X(RUN, "-run", optionRun, OPTION_REQUIRED, OPTION_REQUIRED, OPTION_REQUIRED)   \
+	X(SOURCE_DIR,                                                                  \
+	  "-source_dir",                                                               \
+	  optionSourceDir,                                                             \
+	  OPTION_CUMULATIVE,                                                           \
+	  OPTION_CUMULATIVE,                                                           \
+	  OPTION_CUMULATIVE)                                                           \
+	X(SOURCE_FILE,                                                                 \
+	  "-source_file",                                                              \
+	  optionSourceFile,                                                            \
+	  OPTION_CUMULATIVE,                                                           \
+	  OPTION_CUMULATIVE,                                                           \
+	  OPTION_CUMULATIVE)                                                           \
+	X(STACK, "-stack", optionStack, OPTION_FORBIDDEN, OPTION_REQUIRED, OPTION_REQUIRED)
 
 typedef enum
 {

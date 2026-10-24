@@ -39,8 +39,8 @@ enum
 #define INITRC_COMMAND(X)                           \
 	X("addModule", initrcAddModule)                 \
 	X("addScliCommand", initrcAddScliCommand)       \
-	X("setModuleCountMax", initrcSetModuleCountMax) \
 	X("setErrorCountMax", initrcSetErrorCountMax)   \
+	X("setModuleCountMax", initrcSetModuleCountMax) \
 	X("setStackSizeMin", initrcSetStackSizeMin)
 
 static const struct
