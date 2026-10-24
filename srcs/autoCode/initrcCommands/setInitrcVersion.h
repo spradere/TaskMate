@@ -7,12 +7,12 @@
  */
 
 /**
- * @file setStackSizeMin.h
- * @brief init.rc setStackSizeMin command declarations.
+ * @file setInitrcVersion.h
+ * @brief init.rc setInitrcVersion command declarations.
  */
 
-#ifndef INITRCCOMMANDS_SET_STACK_SIZE_MIN_H
-#define INITRCCOMMANDS_SET_STACK_SIZE_MIN_H
+#ifndef INITRCCOMMANDS_SET_INITRC_VERSION_H
+#define INITRCCOMMANDS_SET_INITRC_VERSION_H
 
 /* =============================================================================
  * Includes
@@ -25,9 +25,9 @@
  * ===========================================================================*/
 
 /**
- * @brief Set the minimum accepted task stack size for this target.
- * @param command Parsed setStackSizeMin command.
+ * @brief Validate the init.rc version command.
+ * @return true if the syntax version matches autoCode.
  */
-void initrcSetStackSizeMin(const initrc_command_t *command);
+bool initrcSetInitrcVersion(const initrc_command_t *command);
 
-#endif // INITRCCOMMANDS_SET_STACK_SIZE_MIN_H
+#endif // INITRCCOMMANDS_SET_INITRC_VERSION_H

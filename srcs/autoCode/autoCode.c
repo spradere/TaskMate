@@ -215,8 +215,6 @@ static void setupDatabase(modules_database_t *data_base)
 	data_base->module_count = 0U;
 	data_base->module_count_width = 0U;
 	data_base->module_count_set = false;
-	data_base->stack_size_min = 0U;
-	data_base->stack_size_min_set = false;
 	data_base->error_count_max = 0U;
 	data_base->error_count = 0U;
 	data_base->error_count_width = 0U;
