@@ -353,6 +353,7 @@ runConfigurationTests()
 	logContains z600_compile_sources "srcs/user/target/z600/z600_task1.c"
 	logContains z600_compile_sources "srcs/user/target/z600/z600_task2.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerSched.c"
+	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_timerMonotonic.c"
 	logContains z600_compile_sources "srcs/hal/host/freebsd/freebsd_usart.c"
 	logContains z600_compile_sources "srcs/system/services/scli.c"
 	logContains z600_compile_sources "srcs/system/services/commands/scli_driver.c"

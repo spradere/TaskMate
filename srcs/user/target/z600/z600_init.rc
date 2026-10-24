@@ -2,11 +2,12 @@
 
 setInitrcVersion major 1
 setInitrcVersion minor 13
-setModuleCountMax 6
+setModuleCountMax 7
 setErrorCountMax 255
 
 # Virtual HAL drivers
 addModule driver timerContext -run none -source_file hal/host/freebsd/freebsd_timerSched.c
+addModule driver timerMonotonic -run core -source_file hal/host/freebsd/freebsd_timerMonotonic.c
 addModule driver usart -run none -source_file hal/host/freebsd/freebsd_usart.c
 
 # The current HAL context contract requires one uniform target stack size.
