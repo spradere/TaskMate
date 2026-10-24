@@ -13,23 +13,27 @@
 #ifndef ATMEGA2560_AT2560_TIMERCONTEXT_INC
 #define ATMEGA2560_AT2560_TIMERCONTEXT_INC
 
+#include <avr/io.h>
+
 /* =============================================================================
  * Timer clock macros
  * ========================================================================== */
 
-.macro TIMER_CONTEXT_START
-	lds r24, 0x81
-	ori r24, 0x02
-	sts 0x81, r24
+.macro AT2560_TIMERCONTEXT_START
+	lds r24, TCCR1B
+	/* CS12:CS10 = 010 selects the Timer1 clock divided by 8. */
+	ori r24, (1 << CS11)
+	sts TCCR1B, r24
 .endm
 
-.macro TIMER_CONTEXT_STOP
+.macro AT2560_TIMERCONTEXT_STOP
 	clr r1
-	lds r24, 0x81
-	andi r24, 0xF8
-	sts 0x81, r24
-	sts 0x85, r1
-	sts 0x84, r1
+	lds r24, TCCR1B
+	/* CS12:CS10 = 000 stops Timer1. */
+	andi r24, lo8(~((1 << CS12) | (1 << CS11) | (1 << CS10)))
+	sts TCCR1B, r24
+	sts TCNT1H, r1
+	sts TCNT1L, r1
 .endm
 
 #endif // ATMEGA2560_AT2560_TIMERCONTEXT_INC

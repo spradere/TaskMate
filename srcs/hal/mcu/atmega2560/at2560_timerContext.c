@@ -16,8 +16,6 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "at2560_timerContext.h"
-
 #include <avr/io.h>
 #include <stddef.h>
 
@@ -40,6 +38,13 @@ hal_timerContextCallback_ptr_t schedCallback = NULL;
 static hal_driver_status_t timer_context_status;
 static tm_run_level_t timer_context_run_level = RL_RUN_NONE;
 static err_codes_t timer_context_last_error = ERR_NO_ERROR;
+
+/* -----------------------------------------------
+ * Private function prototypes
+ * ---------------------------------------------*/
+
+void asm_timerContextClockStart(void);
+void asm_timerContextClockStop(void);
 
 /* =============================================================================
  * Implementation - Functions
@@ -145,20 +150,14 @@ static hal_driver_state_t hal_timerContextStart(void)
 	TCNT1 = 0U;
 	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_SETBIT(TIMSK1, OCIE1A);
-	asm volatile(".include \"srcs/hal/mcu/atmega2560/at2560_timerContext.inc\"\n"
-				 "TIMER_CONTEXT_START\n"
-				 ".purgem TIMER_CONTEXT_START\n"
-				 ".purgem TIMER_CONTEXT_STOP\n");
+	asm_timerContextClockStart();
 	TM_SETBIT(timer_context_status, DRV_BIT_START);
 	return DRV_STATE_RUNNING;
 }
 
 static hal_driver_state_t hal_timerContextStop(void)
 {
-	asm volatile(".include \"srcs/hal/mcu/atmega2560/at2560_timerContext.inc\"\n"
-				 "TIMER_CONTEXT_STOP\n"
-				 ".purgem TIMER_CONTEXT_START\n"
-				 ".purgem TIMER_CONTEXT_STOP\n");
+	asm_timerContextClockStop();
 	TM_CLEARBIT(TIMSK1, OCIE1A);
 	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_CLEARBIT(timer_context_status, DRV_BIT_START);

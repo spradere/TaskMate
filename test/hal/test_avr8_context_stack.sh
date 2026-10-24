@@ -51,6 +51,14 @@ if avr-nm --defined-only "${file_elf}" | tr -d '\r' |
 	awk '$3 == "hal_contextStart" { found = 1 } END { exit !found }'; then
 	start_symbol=hal_contextStart
 fi
+for timer_symbol in asm_timerContextClockStart asm_timerContextClockStop
+do
+	if ! avr-nm --defined-only "${file_elf}" | tr -d '\r' |
+		awk -v symbol="${timer_symbol}" '$3 == symbol { found = 1 } END { exit !found }'; then
+		printf 'timer context assembly symbol not found: %s\n' "${timer_symbol}" >&2
+		exit 1
+	fi
+done
 avr-objdump -d --disassemble="${start_symbol}" "${file_elf}" |
 	tr -d '\r' > "${tmp_dir}/start.txt"
 

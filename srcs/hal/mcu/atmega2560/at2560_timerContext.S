@@ -30,6 +30,30 @@ scheduler_context:
 .size scheduler_context, .-scheduler_context
 
 /* =============================================================================
+ * Timer clock control
+ * ========================================================================== */
+
+.section .text.asm_timerContextClockStart, "ax", @progbits
+.global asm_timerContextClockStart
+.type asm_timerContextClockStart, @function
+
+asm_timerContextClockStart:
+	AT2560_TIMERCONTEXT_START
+	ret
+
+.size asm_timerContextClockStart, .-asm_timerContextClockStart
+
+.section .text.asm_timerContextClockStop, "ax", @progbits
+.global asm_timerContextClockStop
+.type asm_timerContextClockStop, @function
+
+asm_timerContextClockStop:
+	AT2560_TIMERCONTEXT_STOP
+	ret
+
+.size asm_timerContextClockStop, .-asm_timerContextClockStop
+
+/* =============================================================================
  * Context-switch interrupt
  * ========================================================================== */
 
@@ -39,7 +63,7 @@ scheduler_context:
 
 TIMER1_COMPA_vect:
 	AVR8_CONTEXT_SAVE
-	TIMER_CONTEXT_STOP
+	AT2560_TIMERCONTEXT_STOP
 	in r18, AVR_STACK_POINTER_LO_ADDR
 	in r19, AVR_STACK_POINTER_HI_ADDR
 	sts scheduler_context, r18
@@ -58,7 +82,7 @@ TIMER1_COMPA_vect:
 	ld r19, Z
 	out AVR_STACK_POINTER_HI_ADDR, r19
 	out AVR_STACK_POINTER_LO_ADDR, r18
-	TIMER_CONTEXT_START
+	AT2560_TIMERCONTEXT_START
 	AVR8_CONTEXT_RESTORE
 	reti
 

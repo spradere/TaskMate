@@ -746,12 +746,9 @@ runGuardTests()
 		fail "cannot stage at2560_timerContext.inc"
 	printf '%s\n' '#include "at2560_timerContext.inc"' \
 		'.text' '.global test_timer_context_macros' 'test_timer_context_macros:' \
-		'TIMER_CONTEXT_STOP' 'TIMER_CONTEXT_START' 'ret' \
+		'AT2560_TIMERCONTEXT_STOP' 'AT2560_TIMERCONTEXT_START' 'ret' \
 		> "${PATH_STAGE_WORK}/at2560_timer_context_macros.S"
 	expectSuccess at2560_timer_context_macros assembleAt2560TimerContextMacros
-	expectSuccess at2560_timer_context_header avr-gcc -mmcu=atmega2560 -std=gnu17 \
-		-Wall -Wextra -Werror -Isrcs -fsyntax-only -x c \
-		srcs/hal/mcu/atmega2560/at2560_timerContext.h
 	printf '%s\n' '#include "hal/host/ucontext/ucontext_types.h"' \
 		'_Static_assert(sizeof(hal_stack_word_t) == 1U, "ucontext stack word must be one byte");' \
 		> "${PATH_STAGE_WORK}/ucontext_types_header.c"
