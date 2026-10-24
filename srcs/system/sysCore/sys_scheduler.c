@@ -49,7 +49,7 @@ static uint8_t scheduler_stc_tick_count;
  * ---------------------------------------------*/
 
 static hal_timerContextCallback_func_t tm_schedulerRR;
-static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current);
+//static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current);
 
 /* =============================================================================
  * Implementation - Functions
@@ -112,9 +112,10 @@ void tm_schedulerCoop(void) { hal_timerContextLoad(); }
 static hal_context_t *tm_schedulerRR(hal_context_t *context)
 {
 	mod_thread_item_t *thread;
-
+	mod_count_t current = mod_threadGetCurrent();
+	
 	// Save the current thread context
-	thread = mod_threadGetPointer(mod_threadGetCurrent());
+	thread = mod_threadGetPointer(current);
 	if( thread == NULL ) { hal_halt(); }
 	thread->context = *context;
 
@@ -132,8 +133,19 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 		mod_threadTickSTC();
 	}
 
-	// Switch threads
-	thread = tm_schedulerSelectNext(mod_threadGetCurrent());
+	// Switch thread
+	tm_run_level_t thread_run_level;
+	
+	do
+	{
+		if( ++current == MOD_THREAD_COUNT ) { current = 0U; }
+		thread = mod_threadGetPointer(current);
+		thread_run_level = thread->run_level;
+	} 
+	while((thread_run_level == RL_RUN_NONE) || (thread_run_level > scheduler_run_level));
+	
+	mod_threadSetCurrent(current);
+	thread = mod_threadGetPointer(current);
 
 	// Canary check
 	if( thread->stack[MOD_STACK_LOW_CANARY_INDEX] != MOD_CANARY ) { hal_halt(); }
@@ -146,7 +158,7 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 	return &thread->context;
 }
 
-static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
+/*static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 {
 	tm_run_level_t active_run_level = scheduler_run_level;
 
@@ -164,4 +176,4 @@ static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
 		}
 	}
 	return 0;
-}
+}*/
