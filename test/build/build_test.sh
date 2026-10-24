@@ -384,6 +384,7 @@ runConfigurationTests()
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_contextStart.S"
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_delay.c"
+	logContains default_compile_sources "srcs/hal/mcu/atmega2560/at2560_timerContext.S"
 	logContains default_compile_sources "srcs/hal/drivers/lcd/lcd_AMC2004.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_stack.c"
@@ -398,7 +399,8 @@ runConfigurationTests()
 		targetMake -V PATHS_INITRC_SOURCES
 
 	expectOutput default_extra_sources \
-		"srcs/hal/arch/avr8/avr8_contextStart.S" targetMake -V FILES_EXTRA_SRC
+		"srcs/hal/arch/avr8/avr8_contextStart.S srcs/hal/mcu/atmega2560/at2560_timerContext.S" \
+		targetMake -V FILES_EXTRA_SRC
 
 	expectOutput initrc_directory_sources "" targetMake -V FILES_INITRC_DIR_SRC
 
@@ -406,7 +408,9 @@ runConfigurationTests()
 	logContains object_mapping \
 		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/boot.o"
 	logContains object_mapping \
-		"build/test1_arduinoMega_atmega2560_avr8/srcs/hal/arch/avr8/avr8_contextStart.o"
+		"build/test1_arduinoMega_atmega2560_avr8/srcs/hal/arch/avr8/avr8_contextStart_asm.o"
+	logContains object_mapping \
+		"build/test1_arduinoMega_atmega2560_avr8/srcs/hal/mcu/atmega2560/at2560_timerContext_asm.o"
 	logExcludes object_mapping ".c.o"
 	logExcludes object_mapping ".S.o"
 

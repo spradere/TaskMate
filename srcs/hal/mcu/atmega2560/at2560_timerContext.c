@@ -18,12 +18,9 @@
 
 #include "at2560_timerContext.h"
 
-#include <avr/interrupt.h>
+#include <avr/io.h>
 #include <stddef.h>
-#include <util/atomic.h>
 
-#include "hal/arch/avr8/avr8_types.h"
-#include "hal/arch/avr8/avr8_context.h"
 #include "interfaces/drv_timerContext.h"
 #include "interfaces/tm_macros.h"
 #include "interfaces/tm_runLevel.h"
@@ -39,8 +36,7 @@
  * Private variables
  * ---------------------------------------------*/
 
-static hal_timerContextCallback_ptr_t sched_callback = NULL;
-static hal_context_t scheduler_context;
+hal_timerContextCallback_ptr_t schedCallback = NULL;
 static hal_driver_status_t timer_context_status;
 static tm_run_level_t timer_context_run_level = RL_RUN_NONE;
 static err_codes_t timer_context_last_error = ERR_NO_ERROR;
@@ -96,7 +92,7 @@ static hal_driver_state_t timerContextRequireRunning(void)
 hal_driver_state_t hal_timerContextSetCallback(hal_timerContextCallback_ptr_t func_ptr)
 {
 	if( func_ptr == NULL ) { return timerContextSetError(ERR_NULL_POINTER); }
-	sched_callback = func_ptr;
+	schedCallback = func_ptr;
 	return hal_timerContextGetStatus();
 }
 
@@ -167,45 +163,6 @@ static hal_driver_state_t hal_timerContextStop(void)
 	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_CLEARBIT(timer_context_status, DRV_BIT_START);
 	return hal_timerContextGetStatus();
-}
-
-/* -----------------------------------------------
- * Context-switch interrupt
- * ---------------------------------------------*/
-
-_Static_assert(offsetof(hal_context_t, stack_pointer) == 0U,
-			   "stack_pointer must be first in scheduler_context_t");
-
-static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
-{
-	if( sched_callback != NULL ) { return sched_callback(&scheduler_context); }
-
-	return &scheduler_context;
-}
-
-#define TM_SCHED_CALLBACK               \
-	"in r18, __SP_L__ \n\t"                 \
-	"in r19, __SP_H__ \n\t"                 \
-	"sts scheduler_context, r18 \n\t"   \
-	"sts scheduler_context+1, r19 \n\t" \
-	"call schedWrapper\n\t"             \
-	"movw r30, r24 \n\t"                \
-	"ld r18, Z+ \n\t"                   \
-	"ld r19, Z \n\t"                    \
-	"out __SP_H__, r19 \n\t"                \
-	"out __SP_L__, r18 \n\t"
-
-/*
- * Naked ISR: save the interrupted context before any C code runs, switch stacks through
- * the scheduler callback, then restore registers and return to the selected thread.
- */
-ISR(TIMER1_COMPA_vect, ISR_NAKED)
-{
-	asm volatile(".include \"srcs/hal/mcu/atmega2560/at2560_timerContext.inc\"\n"
-				 AVR8_CONTEXT_SAVE "TIMER_CONTEXT_STOP\n" TM_SCHED_CALLBACK
-				 "TIMER_CONTEXT_START\n" AVR8_CONTEXT_RESTORE "reti \n\t"
-				 ".purgem TIMER_CONTEXT_START\n"
-				 ".purgem TIMER_CONTEXT_STOP\n");
 }
 
 /* -----------------------------------------------

@@ -16,12 +16,10 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "avr8_context.h"
+#include "hal/arch/avr8/avr8_types.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-
-#include "hal/arch/avr8/avr8_types.h"
 
 /* -----------------------------------------------
  * Private Constants

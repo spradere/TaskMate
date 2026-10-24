@@ -56,5 +56,5 @@ avr-objdump -d --disassemble="${start_symbol}" "${file_elf}" |
 
 awk -f test/hal/avr8_context_stack.awk \
 	srcs/hal/arch/avr8/avr8_context.c \
-	srcs/hal/arch/avr8/avr8_context.h \
+	srcs/hal/arch/avr8/avr8_context.inc \
 	"${tmp_dir}/vector.txt" "${tmp_dir}/start.txt"
