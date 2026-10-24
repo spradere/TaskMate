@@ -34,24 +34,35 @@ if [ ! -f "${file_elf}" ]; then
 fi
 
 vector=$(printf '#include <avr/interrupt.h>\nTIMER1_COMPA_vect\n' |
-	avr-gcc -mmcu=atmega2560 -E -P -x c - | tail -n 1)
+	avr-gcc -mmcu=atmega2560 -E -P -x c - | tr -d '\r' | tail -n 1)
 case "${vector}" in
 	__vector_[0-9]*) ;;
 	*) printf 'cannot resolve TIMER1_COMPA_vect: %s\n' "${vector}" >&2; exit 1 ;;
 esac
 
-tmp_dir=$(mktemp -d)
+mkdir -p build
+tmp_dir=$(mktemp -d build/avr8_context_stack.XXXXXX)
 trap 'rm -rf "${tmp_dir}"' EXIT HUP INT TERM
 
-avr-objdump -d --disassemble="${vector}" "${file_elf}" > "${tmp_dir}/vector.txt"
+avr-objdump -d --disassemble="${vector}" "${file_elf}" |
+	tr -d '\r' > "${tmp_dir}/vector.txt"
 start_symbol=main
-if avr-nm --defined-only "${file_elf}" |
+if avr-nm --defined-only "${file_elf}" | tr -d '\r' |
 	awk '$3 == "hal_contextStart" { found = 1 } END { exit !found }'; then
 	start_symbol=hal_contextStart
 fi
-avr-objdump -d --disassemble="${start_symbol}" "${file_elf}" > "${tmp_dir}/start.txt"
+for timer_symbol in asm_timerContextClockStart asm_timerContextClockStop
+do
+	if ! avr-nm --defined-only "${file_elf}" | tr -d '\r' |
+		awk -v symbol="${timer_symbol}" '$3 == symbol { found = 1 } END { exit !found }'; then
+		printf 'timer context assembly symbol not found: %s\n' "${timer_symbol}" >&2
+		exit 1
+	fi
+done
+avr-objdump -d --disassemble="${start_symbol}" "${file_elf}" |
+	tr -d '\r' > "${tmp_dir}/start.txt"
 
 awk -f test/hal/avr8_context_stack.awk \
 	srcs/hal/arch/avr8/avr8_context.c \
-	srcs/hal/arch/avr8/avr8_context.h \
+	srcs/hal/arch/avr8/avr8_context.inc \
 	"${tmp_dir}/vector.txt" "${tmp_dir}/start.txt"

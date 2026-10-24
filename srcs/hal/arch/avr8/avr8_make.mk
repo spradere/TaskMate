@@ -21,6 +21,7 @@ VAL_HW_STACK += avr8
 PATH_AVR8 = ${PATH_SRCS}/hal/arch/avr8
 PATHS_SOURCE_SEARCH += ${PATH_AVR8}
 PATHS_EXTRA_SRC += ${PATH_SRCS}/hal/arch/avr8
+FILES_EXTRA_SRC += ${PATH_AVR8}/avr8_contextStart.S
 
 FILE_HAL_STRING_MACRO = ${PATH_SRCS}/hal/arch/avr8/avr8_string_macro.h
 FILE_HAL_ARCH_TYPES = ${PATH_AVR8}/avr8_types.h
@@ -60,7 +61,7 @@ LDFLAGS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
 
 # Linters
 # Clang rejects the GCC naked context implementation even with the AVR target.
-FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_SRC:N${PATH_AVR8}/avr8_context.c}
+FILES_CLANG_TIDY_SRC = ${FILES_COMPILE_C:N${PATH_AVR8}/avr8_context.c}
 CFLAGS_CLANG_TIDY = --target=avr -mmcu=${VAL_MCU_SERIAL} -std=gnu17
 CFLAGS_CLANG_TIDY += ${CFLAGS:M-D*} ${CFLAGS:M-I*}
 CFLAGS_CLANG_TIDY += -include ${FILE_HAL_ARCH_TYPES}

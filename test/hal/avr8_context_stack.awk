@@ -10,7 +10,7 @@
 
 # ------------------------------------------------------------------------------
 # Description: Compare the private AVR8 context layout with source and linked code.
-# Inputs: Context C source, macro header, timer vector dump, and startup dump.
+# Inputs: Context C source, macro include, timer vector dump, and startup dump.
 # Outputs: Validation summary or the first layout, macro, or instruction mismatch.
 # ------------------------------------------------------------------------------
 
@@ -66,12 +66,12 @@ function build_expected(    i, field)
 		field = fields[i]
 		if( field == "avr8_SREG" )
 		{
-			add_save("in r0,__SREG__")
+			add_save("in r0,AVR_STATUS_ADDR")
 			add_save("push r0")
 		}
 		else if( field == "avr8_RAMPZ" )
 		{
-			add_save("in r0,__RAMPZ__")
+			add_save("in r0,AVR_RAMPZ_ADDR")
 			add_save("push r0")
 		}
 		else if( field ~ /^r([0-9]|[12][0-9]|3[01])$/ )
@@ -87,12 +87,12 @@ function build_expected(    i, field)
 		if( field == "avr8_SREG" )
 		{
 			add_restore("pop r0")
-			add_restore("out __SREG__,r0")
+			add_restore("out AVR_STATUS_ADDR,r0")
 		}
 		else if( field == "avr8_RAMPZ" )
 		{
 			add_restore("pop r0")
-			add_restore("out __RAMPZ__,r0")
+			add_restore("out AVR_RAMPZ_ADDR,r0")
 		}
 		else { add_restore("pop " field) }
 	}
@@ -100,8 +100,8 @@ function build_expected(    i, field)
 
 function disassembly_form(instruction)
 {
-	gsub(/__SREG__/, "0x3f", instruction)
-	gsub(/__RAMPZ__/, "0x3b", instruction)
+	gsub(/AVR_STATUS_ADDR/, "0x3f", instruction)
+	gsub(/AVR_RAMPZ_ADDR/, "0x3b", instruction)
 	if( instruction == "clr r1" ) { instruction = "eor r1,r1" }
 	return instruction
 }
@@ -157,14 +157,11 @@ stage == 1 {
 }
 
 stage == 2 {
-	if( /^#define AVR8_CONTEXT_SAVE[[:space:]]/ ) { macro = "save"; next }
-	if( /^#define AVR8_CONTEXT_RESTORE[[:space:]]/ ) { macro = "restore"; next }
-	if( /^#define/ || /^#endif/ ) { macro = "" }
-	if( macro == "" || index($0, "\"") == 0 ) { next }
+	if( $1 == ".macro" && $2 == "AVR8_CONTEXT_SAVE" ) { macro = "save"; next }
+	if( $1 == ".macro" && $2 == "AVR8_CONTEXT_RESTORE" ) { macro = "restore"; next }
+	if( $1 == ".endm" ) { macro = ""; next }
+	if( macro == "" ) { next }
 	instruction = $0
-	sub(/^[^\"]*\"/, "", instruction)
-	sub(/\".*$/, "", instruction)
-	sub(/\\n\\t.*/, "", instruction)
 	instruction = canonical(instruction)
 	if( macro == "save" ) { macro_save[++macro_save_count] = instruction }
 	else { macro_restore[++macro_restore_count] = instruction }
@@ -226,7 +223,9 @@ END {
 		{
 			fail("unexpected stack operation between vector save and restore")
 		}
+		if( vector_ops[i] == "icall" ) { callback_count++ }
 	}
+	if( callback_count != 1 ) { fail("expected one direct scheduler callback") }
 
 	# LTO can place hal_contextStart in main; locate its SP write in either symbol.
 	for( i = 1; i <= start_count - restore_count - 2; i++ )

@@ -16,12 +16,10 @@
  * Declarations - Include
  * ===========================================================================*/
 
-#include "avr8_context.h"
+#include "hal/arch/avr8/avr8_types.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-
-#include "avr8_constants.h"
 
 /* -----------------------------------------------
  * Private Constants
@@ -78,18 +76,4 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context,
 
 	// set stack pointer
 	context->stack_pointer = (hal_stack_word_t*)ctx - 1;
-}
-
-_Noreturn void hal_contextStart(const hal_context_t *context)
-{
-	asm volatile("ld r26, Z+ \n\t"
-					 "ld r27, Z \n\t"
-					 "out __SP_H__, r27 \n\t"
-					 "out __SP_L__, r26 \n\t"
-					 AVR8_CONTEXT_RESTORE
-					 "reti \n\t"
-					 : "+z"(context)
-					 :
-					 : "r26", "r27", "memory");
-	__builtin_unreachable();
 }

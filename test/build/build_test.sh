@@ -130,6 +130,24 @@ targetMake()
 	bmake -C "${PATH_PROJECT}" VAL_TARGET=test1 "$@"
 }
 
+assembleAvr8ContextMacros()
+{
+	(
+		cd "${PATH_STAGE_WORK}" || exit 1
+		avr-gcc -mmcu=atmega2560 -x assembler-with-cpp \
+			-c avr8_context_macros.S -o avr8_context_macros.o
+	)
+}
+
+assembleAt2560TimerContextMacros()
+{
+	(
+		cd "${PATH_STAGE_WORK}" || exit 1
+		avr-gcc -mmcu=atmega2560 -x assembler-with-cpp \
+			-c at2560_timer_context_macros.S -o at2560_timer_context_macros.o
+	)
+}
+
 runConfigurationTests()
 {
 	stageBegin configuration
@@ -364,7 +382,9 @@ runConfigurationTests()
 
 	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
+	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_contextStart.S"
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_delay.c"
+	logContains default_compile_sources "srcs/hal/mcu/atmega2560/at2560_timerContext.S"
 	logContains default_compile_sources "srcs/hal/drivers/lcd/lcd_AMC2004.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_stack.c"
@@ -378,20 +398,28 @@ runConfigurationTests()
 	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
-	expectOutput default_extra_sources "" targetMake -V FILES_EXTRA_SRC
+	expectOutput default_extra_sources \
+		"srcs/hal/arch/avr8/avr8_contextStart.S srcs/hal/mcu/atmega2560/at2560_timerContext.S" \
+		targetMake -V FILES_EXTRA_SRC
 
 	expectOutput initrc_directory_sources "" targetMake -V FILES_INITRC_DIR_SRC
 
 	expectSuccess object_mapping targetMake -V FILES_OBJ
 	logContains object_mapping \
 		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/boot.o"
+	logContains object_mapping \
+		"build/test1_arduinoMega_atmega2560_avr8/srcs/hal/arch/avr8/avr8_contextStart_asm.o"
+	logContains object_mapping \
+		"build/test1_arduinoMega_atmega2560_avr8/srcs/hal/mcu/atmega2560/at2560_timerContext_asm.o"
 	logExcludes object_mapping ".c.o"
+	logExcludes object_mapping ".S.o"
 
 	for VAL_PATH_LIST in \
 		PATHS_SOURCE_SEARCH PATHS_EXTRA_SRC FILES_EXTRA_SRC FILES_SRC_H \
 		FILES_DRIVER_INTERFACES FILES_INITRC FILES_INITRC_SRC PATHS_INITRC_SOURCES \
-		FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_OBJ \
-		FILES_DEP FILES_ERROR FILES_AUTOCODE_SRC FILES_AUTOCODE_SRC_H \
+		FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_COMPILE_C \
+		FILES_COMPILE_S FILES_OBJ_C FILES_OBJ_S FILES_OBJ FILES_DEP FILES_ERROR \
+		FILES_AUTOCODE_SRC FILES_AUTOCODE_SRC_H \
 		FILES_AUTOCODE_SRC_ALL FILES_NOTARGET_SRC FILES_NOTARGET_SRC_H \
 		FILES_NOTARGET_SRC_ALL FILES_DOC FILES_MK_MK FILES_MK_HAL FILES_MK_TEST \
 		FILES_MK FILES_AUTOCODE_INC FILES_PARSE_TAG PATHS_TM_STRING_ALLOWED
@@ -706,6 +734,21 @@ runGuardTests()
 		> "${PATH_STAGE_WORK}/avr8_types_header.c"
 	expectSuccess avr8_types_stack_word clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/avr8_types_header.c"
+	cp "${PATH_PROJECT}/srcs/hal/arch/avr8/avr8_context.inc" \
+		"${PATH_STAGE_WORK}/avr8_context.inc" || fail "cannot stage avr8_context.inc"
+	printf '%s\n' '#include "avr8_context.inc"' \
+		'.text' '.global test_context_macros' 'test_context_macros:' \
+		'AVR8_CONTEXT_SAVE' 'AVR8_CONTEXT_RESTORE' 'ret' \
+		> "${PATH_STAGE_WORK}/avr8_context_macros.S"
+	expectSuccess avr8_context_macros assembleAvr8ContextMacros
+	cp "${PATH_PROJECT}/srcs/hal/mcu/atmega2560/at2560_timerContext.inc" \
+		"${PATH_STAGE_WORK}/at2560_timerContext.inc" || \
+		fail "cannot stage at2560_timerContext.inc"
+	printf '%s\n' '#include "at2560_timerContext.inc"' \
+		'.text' '.global test_timer_context_macros' 'test_timer_context_macros:' \
+		'AT2560_TIMERCONTEXT_STOP' 'AT2560_TIMERCONTEXT_START' 'ret' \
+		> "${PATH_STAGE_WORK}/at2560_timer_context_macros.S"
+	expectSuccess at2560_timer_context_macros assembleAt2560TimerContextMacros
 	printf '%s\n' '#include "hal/host/ucontext/ucontext_types.h"' \
 		'_Static_assert(sizeof(hal_stack_word_t) == 1U, "ucontext stack word must be one byte");' \
 		> "${PATH_STAGE_WORK}/ucontext_types_header.c"
