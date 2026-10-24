@@ -39,8 +39,7 @@ typedef struct hal_context hal_context_t;
  * @param[out] context Context to initialize.
  * @param stack_top Final word of the allocated stack.
  */
-void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   void *stack_top);
+void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top);
 
 /**
  * @brief Restore and start a context as one indivisible architecture operation.

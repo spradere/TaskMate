@@ -109,8 +109,8 @@ bool sc_threadGetInfo(mod_count_t id, const tm_string_t **name, tm_run_level_t *
 
 	hal_atomic_state_t state = hal_atomicStart();
 	*name = thread_name_catalog[id];
-	bool result = mod_threadRunLevelGet(id, run_level) &&
-				  mod_threadStackSizeGet(id, stack_size_bytes);
+	bool result =
+		mod_threadRunLevelGet(id, run_level) && mod_threadStackSizeGet(id, stack_size_bytes);
 	hal_atomicEnd(state);
 
 	return result && (*name != NULL);
@@ -192,8 +192,7 @@ bool sc_coopYield(void)
 	tm_schedulerCoop();
 	hal_atomicEnd(state);
 	bool yielded;
-	do
-	{
+	do {
 		if( !mod_threadIsYielded(id, &yielded) ) { return false; }
 	} while( yielded );
 	return true;

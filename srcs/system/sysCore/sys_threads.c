@@ -128,10 +128,7 @@ bool mod_threadStart(mod_count_t id, tm_run_level_t initial_run_level)
 	if( thread == NULL ) { return false; }
 
 	if( thread->saved_run_level == RL_RUN_NONE ) { thread->saved_run_level = initial_run_level; }
-	else
-	{
-		thread->run_level = thread->saved_run_level;
-	}
+	else { thread->run_level = thread->saved_run_level; }
 	return true;
 }
 

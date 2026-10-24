@@ -1,3 +1,4 @@
+	[code] [arch] remove inline ASM, move to .S/.inc files
 	[code] harden avr asm code
 	[code] refactor GPIO to be a driver
 	[code] refactor string stack, using standard or TM libc

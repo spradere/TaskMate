@@ -38,8 +38,7 @@ static mod_count_t initial_context_count;
  * Implementation - Functions
  * ===========================================================================*/
 
-void hal_threadContextInit(void (*func)(void), hal_context_t *context,
-						   void *stack_top)
+void hal_threadContextInit(void (*func)(void), hal_context_t *context, void *stack_top)
 {
 	if( (func == NULL) || (context == NULL) || (stack_top == NULL) ) { hal_halt(); }
 	if( initial_context_count >= MOD_THREAD_COUNT ) { hal_halt(); }

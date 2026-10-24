@@ -49,7 +49,7 @@ ${FILES_OBJ_C}: ${FILE_COMPILE_SRC}
 FILE_COMPILE_S = ${.TARGET:${PATH_BUILD_TARGET}/%_asm.o=%.S}
 ${FILES_OBJ_S}: ${FILE_COMPILE_S}
 
-	@printf "%sCompilation ...%s\n" "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "%sAssembly ...%s\n" "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "source : <%s>\n" "${FILE_COMPILE_S}"
 	@mkdir -p "${.TARGET:H}"
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_S}} \

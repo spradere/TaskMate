@@ -79,9 +79,8 @@ void tagWriterThreadsAlloc(const tag_writer_context_t *context)
 		// Initialize scheduler metadata only after the context has been created.
 		fprintf(context->file, "\tmod->software_time_counter = 0U;\n");
 		fprintf(context->file, "\tmod->status = %i;\n", mod->modules[i].status);
-		fprintf(context->file,
-				"\tmod->run_level = (tm_run_level_t)%iU;\n",
-				mod->modules[i].run_level);
+		fprintf(
+			context->file, "\tmod->run_level = (tm_run_level_t)%iU;\n", mod->modules[i].run_level);
 		fprintf(context->file,
 				"\tmod->saved_run_level = (tm_run_level_t)%iU;\n",
 				mod->modules[i].run_level);
