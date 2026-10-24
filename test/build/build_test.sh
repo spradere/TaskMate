@@ -139,6 +139,15 @@ assembleAvr8ContextMacros()
 	)
 }
 
+assembleAt2560TimerContextMacros()
+{
+	(
+		cd "${PATH_STAGE_WORK}" || exit 1
+		avr-gcc -mmcu=atmega2560 -x assembler-with-cpp \
+			-c at2560_timer_context_macros.S -o at2560_timer_context_macros.o
+	)
+}
+
 runConfigurationTests()
 {
 	stageBegin configuration
@@ -728,6 +737,14 @@ runGuardTests()
 		'AVR8_CONTEXT_SAVE' 'AVR8_CONTEXT_RESTORE' 'ret' \
 		> "${PATH_STAGE_WORK}/avr8_context_macros.S"
 	expectSuccess avr8_context_macros assembleAvr8ContextMacros
+	cp "${PATH_PROJECT}/srcs/hal/mcu/atmega2560/at2560_timerContext.inc" \
+		"${PATH_STAGE_WORK}/at2560_timerContext.inc" || \
+		fail "cannot stage at2560_timerContext.inc"
+	printf '%s\n' '#include "at2560_timerContext.inc"' \
+		'.text' '.global test_timer_context_macros' 'test_timer_context_macros:' \
+		'TIMER_CONTEXT_STOP' 'TIMER_CONTEXT_START' 'ret' \
+		> "${PATH_STAGE_WORK}/at2560_timer_context_macros.S"
+	expectSuccess at2560_timer_context_macros assembleAt2560TimerContextMacros
 	expectSuccess at2560_timer_context_header avr-gcc -mmcu=atmega2560 -std=gnu17 \
 		-Wall -Wextra -Werror -Isrcs -fsyntax-only -x c \
 		srcs/hal/mcu/atmega2560/at2560_timerContext.h

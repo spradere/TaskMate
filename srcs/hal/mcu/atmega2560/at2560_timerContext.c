@@ -133,12 +133,6 @@ static hal_driver_state_t hal_timerContextInit(void)
 	return DRV_STATE_INITIALIZED;
 }
 
-// Start timer1 by enabling prescaler=8
-#define TIMER_CONTEXT_START \
-	"lds r24, 0x81\n\t"     \
-	"ori r24, 0x02\n\t"     \
-	"sts  0x81, r24\n\t"
-
 static hal_driver_state_t hal_timerContextStart(void)
 {
 	if( TM_GETBIT(timer_context_status, DRV_BIT_DEAD) != 0U )
@@ -155,24 +149,20 @@ static hal_driver_state_t hal_timerContextStart(void)
 	TCNT1 = 0U;
 	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_SETBIT(TIMSK1, OCIE1A);
-	asm volatile(TIMER_CONTEXT_START);
+	asm volatile(".include \"srcs/hal/mcu/atmega2560/at2560_timerContext.inc\"\n"
+				 "TIMER_CONTEXT_START\n"
+				 ".purgem TIMER_CONTEXT_START\n"
+				 ".purgem TIMER_CONTEXT_STOP\n");
 	TM_SETBIT(timer_context_status, DRV_BIT_START);
 	return DRV_STATE_RUNNING;
 }
 
-// stop timer by setting CS1x = 0
-
-#define TIMER_CONTEXT_STOP \
-	"clr r1 \n\t"          \
-	"lds r24, 0x81\n\t"    \
-	"andi r24, 0xF8\n\t"   \
-	"sts  0x81, r24\n\t"   \
-	"sts 0x85,r1 \n\t"     \
-	"sts 0x84,r1 \n\t"
-
 static hal_driver_state_t hal_timerContextStop(void)
 {
-	asm volatile(TIMER_CONTEXT_STOP);
+	asm volatile(".include \"srcs/hal/mcu/atmega2560/at2560_timerContext.inc\"\n"
+				 "TIMER_CONTEXT_STOP\n"
+				 ".purgem TIMER_CONTEXT_START\n"
+				 ".purgem TIMER_CONTEXT_STOP\n");
 	TM_CLEARBIT(TIMSK1, OCIE1A);
 	TM_WRITEBIT(TIFR1, OCF1A);
 	TM_CLEARBIT(timer_context_status, DRV_BIT_START);
@@ -211,8 +201,11 @@ static hal_context_t *__attribute__((noinline, used)) schedWrapper(void)
  */
 ISR(TIMER1_COMPA_vect, ISR_NAKED)
 {
-	asm volatile(AVR8_CONTEXT_SAVE TIMER_CONTEXT_STOP TM_SCHED_CALLBACK
-					 TIMER_CONTEXT_START AVR8_CONTEXT_RESTORE "reti \n\t");
+	asm volatile(".include \"srcs/hal/mcu/atmega2560/at2560_timerContext.inc\"\n"
+				 AVR8_CONTEXT_SAVE "TIMER_CONTEXT_STOP\n" TM_SCHED_CALLBACK
+				 "TIMER_CONTEXT_START\n" AVR8_CONTEXT_RESTORE "reti \n\t"
+				 ".purgem TIMER_CONTEXT_START\n"
+				 ".purgem TIMER_CONTEXT_STOP\n");
 }
 
 /* -----------------------------------------------
