@@ -395,6 +395,7 @@ runConfigurationTests()
 	logContains default_initrc_sources "srcs/system/services/commands/scli_stack.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_gpio.c"
 	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerContext.c"
+	logContains default_initrc_sources "srcs/hal/mcu/atmega2560/at2560_timerMonotonic.c"
 	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
@@ -453,6 +454,7 @@ runConfigurationTests()
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_lcd.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_rtc.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerContext.h"
+	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_timerMonotonic.h"
 	VAL_DRIVER_INTERFACES="${VAL_DRIVER_INTERFACES} srcs/interfaces/drv_usart.h"
 	expectOutput driver_interface_order "${VAL_DRIVER_INTERFACES}" \
 		targetMake -V FILES_DRIVER_INTERFACES

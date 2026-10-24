@@ -2,11 +2,12 @@
 
 setInitrcVersion major 1
 setInitrcVersion minor 13
-setModuleCountMax 9
+setModuleCountMax 10
 setErrorCountMax 255
 
 # System core, 
 addModule driver timerContext -run none -source_file hal/mcu/atmega2560/at2560_timerContext.c
+addModule driver timerMonotonic -run core -source_file hal/mcu/atmega2560/at2560_timerMonotonic.c
 addModule driver gpio -run none -source_file hal/mcu/atmega2560/at2560_gpio.c
 addModule driver usart -run none -source_file hal/mcu/atmega2560/at2560_usart.c
 
