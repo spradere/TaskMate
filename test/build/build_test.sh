@@ -130,6 +130,15 @@ targetMake()
 	bmake -C "${PATH_PROJECT}" VAL_TARGET=test1 "$@"
 }
 
+assembleAvr8ContextMacros()
+{
+	(
+		cd "${PATH_STAGE_WORK}" || exit 1
+		avr-gcc -mmcu=atmega2560 -x assembler-with-cpp \
+			-c avr8_context_macros.S -o avr8_context_macros.o
+	)
+}
+
 runConfigurationTests()
 {
 	stageBegin configuration
@@ -255,6 +264,8 @@ runConfigurationTests()
 		targetMake -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		targetMake -V FILE_ARCH_CC
+	expectSuccess avr8_assembler_include_flag targetMake -V LDFLAGS
+	logContains avr8_assembler_include_flag "-Wa,-Isrcs"
 	expectSuccess taskmate_tidy_flags targetMake -V CFLAGS_CLANG_TIDY
 	logContains taskmate_tidy_flags "--target=avr"
 	logContains taskmate_tidy_flags "-mmcu=atmega2560"
@@ -706,6 +717,16 @@ runGuardTests()
 		> "${PATH_STAGE_WORK}/avr8_types_header.c"
 	expectSuccess avr8_types_stack_word clang -std=c17 -Wall -Wextra -Werror \
 		-I "${PATH_PROJECT}/srcs" -fsyntax-only "${PATH_STAGE_WORK}/avr8_types_header.c"
+	cp "${PATH_PROJECT}/srcs/hal/arch/avr8/avr8_context.inc" \
+		"${PATH_STAGE_WORK}/avr8_context.inc" || fail "cannot stage avr8_context.inc"
+	printf '%s\n' '#include "avr8_context.inc"' \
+		'.text' '.global test_context_macros' 'test_context_macros:' \
+		'AVR8_CONTEXT_SAVE' 'AVR8_CONTEXT_RESTORE' 'ret' \
+		> "${PATH_STAGE_WORK}/avr8_context_macros.S"
+	expectSuccess avr8_context_macros assembleAvr8ContextMacros
+	expectSuccess at2560_timer_context_header avr-gcc -mmcu=atmega2560 -std=gnu17 \
+		-Wall -Wextra -Werror -Isrcs -fsyntax-only -x c \
+		srcs/hal/mcu/atmega2560/at2560_timerContext.h
 	printf '%s\n' '#include "hal/host/ucontext/ucontext_types.h"' \
 		'_Static_assert(sizeof(hal_stack_word_t) == 1U, "ucontext stack word must be one byte");' \
 		> "${PATH_STAGE_WORK}/ucontext_types_header.c"

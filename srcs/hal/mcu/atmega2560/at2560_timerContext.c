@@ -16,11 +16,13 @@
  * Declarations - Include
  * ===========================================================================*/
 
+#include "at2560_timerContext.h"
+
 #include <avr/interrupt.h>
-#include <avr/io.h>
 #include <stddef.h>
 #include <util/atomic.h>
 
+#include "hal/arch/avr8/avr8_types.h"
 #include "hal/arch/avr8/avr8_context.h"
 #include "interfaces/drv_timerContext.h"
 #include "interfaces/tm_macros.h"
@@ -32,12 +34,6 @@
 
 #define AT2560TIMERCONTEXT_COUNT_OVERFLOW 1999U // Interrupt every 1 ms
 #define AT2560TIMERCONTEXT_COUNT_GUARD 4U
-#define AT2560TIMERCONTEXT_BIT_CS10 0U
-#define AT2560TIMERCONTEXT_BIT_CS11 1U
-#define AT2560TIMERCONTEXT_BIT_CS12 2U
-#define AT2560TIMERCONTEXT_ADDR_TCCR1B 0x81U
-#define AT2560TIMERCONTEXT_ADDR_TCNT1H 0x85U
-#define AT2560TIMERCONTEXT_ADDR_TCNT1L 0x84U
 
 /* -----------------------------------------------
  * Private variables
@@ -136,17 +132,6 @@ static hal_driver_state_t hal_timerContextInit(void)
 	timer_context_last_error = ERR_NO_ERROR;
 	return DRV_STATE_INITIALIZED;
 }
-
-// contractual fixing of magic number
-_Static_assert(CS10 == AT2560TIMERCONTEXT_BIT_CS10, "Unexpected CS10 position");
-_Static_assert(CS11 == AT2560TIMERCONTEXT_BIT_CS11, "Unexpected CS11 position");
-_Static_assert(CS12 == AT2560TIMERCONTEXT_BIT_CS12, "Unexpected CS12 position");
-_Static_assert(_SFR_MEM_ADDR(TCCR1B) == AT2560TIMERCONTEXT_ADDR_TCCR1B,
-			   "Unexpected TCCR1B address");
-_Static_assert(_SFR_MEM_ADDR(TCNT1H) == AT2560TIMERCONTEXT_ADDR_TCNT1H,
-			   "Unexpected TCNT1H address");
-_Static_assert(_SFR_MEM_ADDR(TCNT1L) == AT2560TIMERCONTEXT_ADDR_TCNT1L,
-			   "Unexpected TCNT1L address");
 
 // Start timer1 by enabling prescaler=8
 #define TIMER_CONTEXT_START \

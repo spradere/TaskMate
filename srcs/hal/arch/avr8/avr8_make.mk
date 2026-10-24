@@ -56,7 +56,7 @@ CFLAGS += -DTM_LIBC_TASKMATE=1 -DTM_LIBC_CSTD=0
 
 # Linker flags
 CFLAGS += -ffunction-sections -fdata-sections -flto
-LDFLAGS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map
+LDFLAGS = -Wl,--gc-sections -Wl,-Map=${FILE_TARGET}.map -Wa,-I${PATH_SRCS}
 
 # Linters
 # Clang rejects the GCC naked context implementation even with the AVR target.
