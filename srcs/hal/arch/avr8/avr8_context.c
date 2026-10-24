@@ -79,18 +79,3 @@ void hal_threadContextInit(void (*func)(void), hal_context_t *context,
 	// set stack pointer
 	context->stack_pointer = (hal_stack_word_t*)ctx - 1;
 }
-
-_Noreturn void hal_contextStart(const hal_context_t *context)
-{
-	asm volatile(	".include \"hal/arch/avr8/avr8_context.inc\"\n"
-					"ld r26, Z+ \n"
-					"ld r27, Z \n"
-					"out __SP_H__, r27 \n"
-					"out __SP_L__, r26 \n"
-					"AVR8_CONTEXT_RESTORE\n"
-					"reti \n"
-					: "+z"(context)
-					:
-					: "r26", "r27", "memory");
-	__builtin_unreachable();
-}

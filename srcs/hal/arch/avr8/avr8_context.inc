@@ -13,15 +13,17 @@
 #ifndef AVR8_AVR8_CONTEXT_INC
 #define AVR8_AVR8_CONTEXT_INC
 
+#include <avr/io.h>
+
 /* =============================================================================
  * Context macros
  * ========================================================================== */
 
 .macro AVR8_CONTEXT_SAVE
 	push r0
-	in r0, __SREG__
+	in r0, AVR_STATUS_ADDR
 	push r0
-	in r0, __RAMPZ__
+	in r0, AVR_RAMPZ_ADDR
 	push r0
 	push r1
 	clr r1
@@ -90,9 +92,9 @@
 	pop r2
 	pop r1
 	pop r0
-	out __RAMPZ__, r0
+	out AVR_RAMPZ_ADDR, r0
 	pop r0
-	out __SREG__, r0
+	out AVR_STATUS_ADDR, r0
 	pop r0
 .endm
 

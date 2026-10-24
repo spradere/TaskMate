@@ -264,8 +264,6 @@ runConfigurationTests()
 		targetMake -V PATH_BUILD_TARGET
 	expectOutput architecture_compiler "srcs/hal/arch/avr8/avr8_CC.mk" \
 		targetMake -V FILE_ARCH_CC
-	expectSuccess avr8_assembler_include_flag targetMake -V LDFLAGS
-	logContains avr8_assembler_include_flag "-Wa,-Isrcs"
 	expectSuccess taskmate_tidy_flags targetMake -V CFLAGS_CLANG_TIDY
 	logContains taskmate_tidy_flags "--target=avr"
 	logContains taskmate_tidy_flags "-mmcu=atmega2560"
@@ -375,6 +373,7 @@ runConfigurationTests()
 
 	expectSuccess default_compile_sources targetMake -V FILES_COMPILE_SRC
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_atomic.c"
+	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_contextStart.S"
 	logContains default_compile_sources "srcs/hal/arch/avr8/avr8_delay.c"
 	logContains default_compile_sources "srcs/hal/drivers/lcd/lcd_AMC2004.c"
 	logContains default_compile_sources "srcs/system/services/commands/scli_date.c"
@@ -389,20 +388,25 @@ runConfigurationTests()
 	expectOutput default_initrc_dirs "" \
 		targetMake -V PATHS_INITRC_SOURCES
 
-	expectOutput default_extra_sources "" targetMake -V FILES_EXTRA_SRC
+	expectOutput default_extra_sources \
+		"srcs/hal/arch/avr8/avr8_contextStart.S" targetMake -V FILES_EXTRA_SRC
 
 	expectOutput initrc_directory_sources "" targetMake -V FILES_INITRC_DIR_SRC
 
 	expectSuccess object_mapping targetMake -V FILES_OBJ
 	logContains object_mapping \
 		"build/test1_arduinoMega_atmega2560_avr8/srcs/system/boot.o"
+	logContains object_mapping \
+		"build/test1_arduinoMega_atmega2560_avr8/srcs/hal/arch/avr8/avr8_contextStart.o"
 	logExcludes object_mapping ".c.o"
+	logExcludes object_mapping ".S.o"
 
 	for VAL_PATH_LIST in \
 		PATHS_SOURCE_SEARCH PATHS_EXTRA_SRC FILES_EXTRA_SRC FILES_SRC_H \
 		FILES_DRIVER_INTERFACES FILES_INITRC FILES_INITRC_SRC PATHS_INITRC_SOURCES \
-		FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_OBJ \
-		FILES_DEP FILES_ERROR FILES_AUTOCODE_SRC FILES_AUTOCODE_SRC_H \
+		FILES_INITRC_DIR_SRC FILES_BASE_SYSTEM_SRC FILES_COMPILE_SRC FILES_COMPILE_C \
+		FILES_COMPILE_S FILES_OBJ_C FILES_OBJ_S FILES_OBJ FILES_DEP FILES_ERROR \
+		FILES_AUTOCODE_SRC FILES_AUTOCODE_SRC_H \
 		FILES_AUTOCODE_SRC_ALL FILES_NOTARGET_SRC FILES_NOTARGET_SRC_H \
 		FILES_NOTARGET_SRC_ALL FILES_DOC FILES_MK_MK FILES_MK_HAL FILES_MK_TEST \
 		FILES_MK FILES_AUTOCODE_INC FILES_PARSE_TAG PATHS_TM_STRING_ALLOWED

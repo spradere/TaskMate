@@ -36,7 +36,7 @@ ${FILE_TARGET}: ${FILES_OBJ}
 # Compiler wrapper
 FILE_COMPILE_SRC = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.c}
 # Compile
-${FILES_OBJ}: ${FILE_COMPILE_SRC}
+${FILES_OBJ_C}: ${FILE_COMPILE_SRC}
 
 	@printf "%sCompilation ...%s\n" "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@printf "source : <%s>\n" "${FILE_COMPILE_SRC}"
@@ -45,6 +45,15 @@ ${FILES_OBJ}: ${FILE_COMPILE_SRC}
 	@mkdir -p "${.TARGET:H}"
 	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_SRC}} \
 	    -c "${FILE_COMPILE_SRC}" -o "${.TARGET}"
+
+FILE_COMPILE_S = ${.TARGET:${PATH_BUILD_TARGET}/%.o=%.S}
+${FILES_OBJ_S}: ${FILE_COMPILE_S}
+
+	@printf "%sCompilation ...%s\n" "${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
+	@printf "source : <%s>\n" "${FILE_COMPILE_S}"
+	@mkdir -p "${.TARGET:H}"
+	@${CC} ${CFLAGS} ${CFLAGS_${FILE_COMPILE_S}} \
+	    -c "${FILE_COMPILE_S}" -o "${.TARGET}"
 
 # HEX file generation
 ${FILE_HEX}: ${FILE_ELF}

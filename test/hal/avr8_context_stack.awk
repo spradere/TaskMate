@@ -162,8 +162,8 @@ stage == 2 {
 	if( /^#define/ || /^#endif/ ) { macro = "" }
 	if( macro == "" || index($0, "\"") == 0 ) { next }
 	instruction = $0
-	sub(/^[^\"]*\"/, "", instruction)
-	sub(/\".*$/, "", instruction)
+	sub(/^[^"]*"/, "", instruction)
+	sub(/".*$/, "", instruction)
 	sub(/\\n\\t.*/, "", instruction)
 	instruction = canonical(instruction)
 	if( macro == "save" ) { macro_save[++macro_save_count] = instruction }

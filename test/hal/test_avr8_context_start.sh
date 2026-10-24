@@ -21,7 +21,8 @@ set -eu
 PATH_PROJECT=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
 cd "${PATH_PROJECT}"
 
-tmp_dir=$(mktemp -d)
+mkdir -p build
+tmp_dir=$(mktemp -d build/avr8_context_start.XXXXXX)
 trap 'rm -rf "${tmp_dir}"' EXIT HUP INT TERM
 
 cat > "${tmp_dir}/context_start.c" <<'EOF'
@@ -41,9 +42,12 @@ int main(void)
 }
 EOF
 
+context_c=${1:-srcs/hal/arch/avr8/avr8_context.c}
+context_start_s=${2:-srcs/hal/arch/avr8/avr8_contextStart.S}
+
 avr-gcc -mmcu=atmega2560 -std=gnu17 -Os -flto -ffunction-sections -fdata-sections \
 	-Wl,--gc-sections -Isrcs -Isrcs/hal/arch/avr8 -I. \
-	"${tmp_dir}/context_start.c" "${1:-srcs/hal/arch/avr8/avr8_context.c}" \
+	"${tmp_dir}/context_start.c" "${context_c}" "${context_start_s}" \
 	-o "${tmp_dir}/context_start.elf"
 
 if ! avr-nm --defined-only "${tmp_dir}/context_start.elf" |

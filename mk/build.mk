@@ -140,7 +140,7 @@ cppcheck: _autocode
 		"${COLOUR_TARGET_INFO}" "${COLOUR_RESET}"
 	@${FILE_CPPCHECK} ${OPT_CPPCHECK} ${OPT_CPPCHECK_TARGET} \
 		${CFLAGS_CPPCHECK} \
-		${FILES_COMPILE_SRC}
+		${FILES_COMPILE_C}
 
 .PHONY: tidy
 tidy: _autocode
