@@ -56,6 +56,11 @@ bool mod_threadGetSTC(uint16_t *count);
  * @brief Advance software time counters for active threads.
  */
 void mod_threadTickSTC(void);
+/**
+ * @brief Set the delay before the current thread's next start, in milliseconds.
+ * @return true if the current thread identifier is valid.
+ */
+bool mod_threadSetNextStartDelay_ms(uint16_t delay_ms);
 
 /**
  * @brief Get a thread's run level.

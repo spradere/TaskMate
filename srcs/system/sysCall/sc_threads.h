@@ -63,6 +63,11 @@ uint16_t sc_threadGetSTC(void);
  * @return true if the current thread identifier and output pointer are valid.
  */
 bool sc_threadGetSTCChecked(uint16_t *count);
+/**
+ * @brief Set the current thread's delay before its next start, in milliseconds.
+ * @return true if the current thread identifier is valid.
+ */
+bool sc_threadSetNextStartDelay_ms(uint16_t delay_ms);
 
 /* -----------------------------------------------
  * Thread life cycle
