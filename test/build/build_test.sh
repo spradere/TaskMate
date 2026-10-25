@@ -513,6 +513,8 @@ runScriptTests()
 	FILE_COMPARE="${PATH_PROJECT}/scripts/compare_replace.sh"
 	FILE_PATH_CHECK="${PATH_PROJECT}/scripts/check_path_file.sh"
 	FILE_VERSION="${PATH_PROJECT}/scripts/git_version.sh"
+	FILE_BUNDLE="${PATH_PROJECT}/scripts/bundle.sh"
+	FILE_DEL_BRANCH="${PATH_PROJECT}/scripts/del_branch.sh"
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
 	FILE_INITRC_SOURCES="${PATH_PROJECT}/scripts/initrc_sources.awk"
 
@@ -618,6 +620,50 @@ initrc : 1.13" awk -v expected_major=1 -v expected_minor=9 -v report_versions=1 
 	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
 	[ "$(cat "${PATH_STAGE_WORK}/version_post_tag.log")" = "1.23" ] || \
 		fail "version_post_tag: suffix was not removed"
+
+	PATH_GIT_REPOSITORY="${PATH_GIT_CASE}/repository"
+	PATH_GIT_BUNDLE="${PATH_GIT_REPOSITORY}/.backup/TaskMate.bundle_$(date '+%Y_%m_%d')"
+	mkdir -p "${PATH_GIT_REPOSITORY}/scripts"
+	cp "${FILE_BUNDLE}" "${PATH_GIT_REPOSITORY}/scripts/bundle.sh" || \
+		fail "cannot copy bundle script into Git fixture"
+	git -C "${PATH_GIT_REPOSITORY}" branch codex/delete || \
+		fail "cannot create Git bundle fixture branch"
+	expectSuccess bundle_create sh "${PATH_GIT_REPOSITORY}/scripts/bundle.sh"
+	[ -f "${PATH_GIT_BUNDLE}" ] || fail "bundle_create: bundle file is missing"
+	expectSuccess bundle_verify git -C "${PATH_GIT_REPOSITORY}" \
+		bundle verify "${PATH_GIT_BUNDLE}"
+	expectSuccess bundle_refs git bundle list-heads "${PATH_GIT_BUNDLE}"
+	logContains bundle_refs refs/heads/codex/delete
+	logContains bundle_refs refs/tags/v1.23
+	expectSuccess bundle_clone git clone -q "${PATH_GIT_BUNDLE}" \
+		"${PATH_GIT_CASE}/restored"
+	[ "$(git -C "${PATH_GIT_CASE}/restored" rev-list --count HEAD)" -eq 2 ] || \
+		fail "bundle_clone: earlier history is missing"
+	[ "$(git -C "${PATH_GIT_CASE}/restored" rev-parse v1.23)" = \
+		"$(git -C "${PATH_GIT_REPOSITORY}" rev-parse v1.23)" ] || \
+		fail "bundle_clone: tag history is missing"
+
+	git init -q --bare "${PATH_GIT_CASE}/remote.git" || \
+		fail "cannot initialise Git remote fixture"
+	git -C "${PATH_GIT_REPOSITORY}" switch -q -c test || \
+		fail "cannot create test branch fixture"
+	git -C "${PATH_GIT_REPOSITORY}" remote add origin "${PATH_GIT_CASE}/remote.git" || \
+		fail "cannot add Git remote fixture"
+	git -C "${PATH_GIT_REPOSITORY}" push -q -u origin test || \
+		fail "cannot push test branch fixture"
+	git -C "${PATH_GIT_REPOSITORY}" branch codex/keep || \
+		fail "cannot create retained branch fixture"
+	printf 'y\nn\n' > "${PATH_GIT_CASE}/branch_answers"
+	expectSuccess branch_select sh -c 'cd "$1" && "$2" < "$3"' sh \
+		"${PATH_GIT_REPOSITORY}" "${FILE_DEL_BRANCH}" "${PATH_GIT_CASE}/branch_answers"
+	logContains branch_select "Delete local branch codex/delete? [y/N]"
+	logContains branch_select "Branch kept: codex/keep"
+	if git -C "${PATH_GIT_REPOSITORY}" show-ref --verify --quiet \
+		refs/heads/codex/delete; then
+		fail "branch_select: confirmed branch was kept"
+	fi
+	git -C "${PATH_GIT_REPOSITORY}" show-ref --verify --quiet \
+		refs/heads/codex/keep || fail "branch_select: declined branch was deleted"
 
 	printf 'build-system script tests passed: %d cases\n' "${VAL_TEST_COUNT}"
 }
