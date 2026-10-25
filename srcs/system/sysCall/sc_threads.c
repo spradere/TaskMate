@@ -100,6 +100,22 @@ bool sc_threadSetNextStartDelay_ms(uint16_t delay_ms)
 	return result;
 }
 
+bool sc_threadSetWCET_100us(uint16_t ticks)
+{
+	hal_atomic_state_t state = hal_atomicStart();
+	bool result = mod_threadSetWCET_100us(ticks);
+	hal_atomicEnd(state);
+	return result;
+}
+
+bool sc_threadSetDeadLine_100us(uint16_t ticks)
+{
+	hal_atomic_state_t state = hal_atomicStart();
+	bool result = mod_threadSetDeadLine_100us(ticks);
+	hal_atomicEnd(state);
+	return result;
+}
+
 /* -----------------------------------------------
  * Thread metadata
  * ---------------------------------------------*/

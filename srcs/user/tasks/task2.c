@@ -27,6 +27,7 @@
 
 #define TASK2_DELAY_TICKS 500U
 #define TASK2_DELAY_NEXT_START_ms 500U
+#define TASK2_WCET_100us 1U
 
 /* =============================================================================
  * Implementation - Functions
@@ -35,6 +36,7 @@
 void task2(void)
 {
 	sc_threadSetNextStartDelay_ms(TASK2_DELAY_NEXT_START_ms);
+	sc_threadSetWCET_100us(TASK2_WCET_100us);
 	sc_threadSetInitialized();
 
 	while( 1U )

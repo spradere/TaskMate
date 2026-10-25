@@ -88,6 +88,22 @@ bool mod_threadSetNextStartDelay_ms(uint16_t delay_ms)
 	return true;
 }
 
+bool mod_threadSetWCET_100us(uint16_t ticks)
+{
+	mod_thread_item_t *thread = mod_threadGetPointer(thread_current);
+	if( thread == NULL ) { return false; }
+	thread->wcet_ticks_100us = ticks;
+	return true;
+}
+
+bool mod_threadSetDeadLine_100us(uint16_t ticks)
+{
+	mod_thread_item_t *thread = mod_threadGetPointer(thread_current);
+	if( thread == NULL ) { return false; }
+	thread->dead_line_100us = ticks;
+	return true;
+}
+
 bool mod_threadRunLevelGet(mod_count_t id, tm_run_level_t *run_level)
 {
 	mod_thread_item_t *thread = mod_threadGetPointer(id);

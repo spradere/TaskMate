@@ -80,6 +80,8 @@ void tagWriterThreadsAlloc(const tag_writer_context_t *context)
 		fprintf(context->file, "\tmod->software_time_counter = 0U;\n");
 		fprintf(context->file, "\tmod->last_start_ticks_100us = 0U;\n");
 		fprintf(context->file, "\tmod->next_start_delay_ms = 0U;\n");
+		fprintf(context->file, "\tmod->wcet_ticks_100us = 0U;\n");
+		fprintf(context->file, "\tmod->dead_line_100us = 0U;\n");
 		fprintf(context->file, "\tmod->status = %i;\n", mod->modules[i].status);
 		fprintf(
 			context->file, "\tmod->run_level = (tm_run_level_t)%iU;\n", mod->modules[i].run_level);

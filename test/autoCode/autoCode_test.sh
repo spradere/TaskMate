@@ -501,6 +501,15 @@ runInitrcTests()
 			"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
 	done
 
+	caseBegin removed_wcet_option
+	writeInitrcVersion > "${PATH_CASE}/init.rc"
+	printf '%s\n' \
+		'addModule service system -run core -stack 256 -source_file system.c' \
+		'addModule task task -run user -stack 100 -wcet_100us 1 -source_file system.c' \
+		>> "${PATH_CASE}/init.rc"
+	expectFailure removed_wcet_option 'unknown option' \
+		"${FILE_AUTOCODE}" "${PATH_CASE}/autoCode.conf"
+
 	caseBegin removed_stack_minimum_command
 	writeInitrcVersion > "${PATH_CASE}/init.rc"
 	printf '%s\n' 'setStackSizeMin 64' >> "${PATH_CASE}/init.rc"
@@ -1121,6 +1130,12 @@ runCompareReplaceTests()
 	if ! grep -F -q 'mod->next_start_delay_ms = 0U;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc generated next start delay initialization is missing"
+	fi
+	if ! grep -F -q 'mod->wcet_ticks_100us = 0U;' \
+		"${PATH_CASE}/generated/threads_alloc.inc" || \
+		! grep -F -q 'mod->dead_line_100us = 0U;' \
+		"${PATH_CASE}/generated/threads_alloc.inc"; then
+		fail "threads_alloc generated timing initialization is missing"
 	fi
 	if ! grep -F -q 'mod->stack_size = 256;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then

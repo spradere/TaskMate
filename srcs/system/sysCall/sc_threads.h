@@ -68,6 +68,16 @@ bool sc_threadGetSTCChecked(uint16_t *count);
  * @return true if the current thread identifier is valid.
  */
 bool sc_threadSetNextStartDelay_ms(uint16_t delay_ms);
+/**
+ * @brief Set the current thread's estimated WCET, in 100 us ticks.
+ * @return true if the current thread identifier is valid.
+ */
+bool sc_threadSetWCET_100us(uint16_t ticks);
+/**
+ * @brief Set the current thread's deadline, in 100 us ticks.
+ * @return true if the current thread identifier is valid.
+ */
+bool sc_threadSetDeadLine_100us(uint16_t ticks);
 
 /* -----------------------------------------------
  * Thread life cycle

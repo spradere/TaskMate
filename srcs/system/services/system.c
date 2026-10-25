@@ -39,6 +39,7 @@
 #define SYSTEM_DISPLAY_STC_TICKS 50u
 #define SYSTEM_SIZE_LCDMESSAGE 30U
 #define SYSTEM_DELAY_NEXT_START_ms 10U
+#define SYSTEM_WCET_100us 2000U
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -55,6 +56,7 @@ static bool systemRunLevelIsReady(tm_run_level_t run_level);
 void system(void)
 {
 	sc_threadSetNextStartDelay_ms(SYSTEM_DELAY_NEXT_START_ms);
+	sc_threadSetWCET_100us(SYSTEM_WCET_100us);
 	sc_threadSetInitialized();
 	systemStart();
 

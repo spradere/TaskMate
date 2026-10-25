@@ -48,6 +48,8 @@ typedef struct
 	// The context ISR writes the start tick; AVR readers need an atomic 32-bit snapshot.
 	volatile uint32_t last_start_ticks_100us;
 	volatile uint16_t next_start_delay_ms;
+	volatile uint16_t wcet_ticks_100us;
+	volatile uint16_t dead_line_100us;
 
 	hal_context_t context;
 
