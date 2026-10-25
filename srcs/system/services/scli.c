@@ -146,30 +146,26 @@ static uint8_t scliTokenize(char *argv[])
 	uint8_t argc = 0U;
 	uint8_t index = 0U;
 
-	while( index < sizeof(scli_line) )
+	while( (scli_line[index] != 0U) && (argc < SCLI_ARGUMENT_COUNT_MAX) )
 	{
-		if( scli_line[index] == 0U ) { return argc; }
-		if( (scli_line[index] == ' ') || (scli_line[index] == '\t') )
+		while( scli_line[index] == ' ') 
 		{
-			index++;
-			continue;
+			index++; 
+			if(index > sizeof(scli_line)){return 0U;}
 		}
-		if( argc == SCLI_ARGUMENT_COUNT_MAX ) { return 0U; }
 
-		argv[argc++] = &scli_line[index];
-		while( index < sizeof(scli_line) )
+		argv[argc] = &scli_line[index];
+	
+		while( (scli_line[index] != ' ') && (scli_line[index] != 0U) ) 
 		{
-			if( scli_line[index] == 0U ) { return argc; }
-			if( (scli_line[index] == ' ') || (scli_line[index] == '\t') )
-			{
-				scli_line[index++] = 0U;
-				break;
-			}
 			index++;
+			if(index > sizeof(scli_line)){return 0U;}			
 		}
+		scli_line[index] = 0U;
+		argc++;
 	}
 
-	return 0U;
+	return argc;
 }
 
 /* -----------------------------------------------

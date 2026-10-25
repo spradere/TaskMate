@@ -60,7 +60,7 @@ void system(void)
 	systemStart();
 
 	// Print system info
-	printf(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	/*printf(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 
 #ifdef TM_DRIVER_HAVE_RTC
 	hal_rtc_time_t time;
@@ -78,12 +78,12 @@ void system(void)
 	snprintf(msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
 	sc_lcdClear();
 	sc_lcdWriteString(TM_STR_RAM(msg), 0U, 0U);
-#endif
+#endif*/
 
 	// After startup, refresh the display when available and yield between updates.
 	while( 1U )
 	{
-#if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
+/*#if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
 		sc_rtcRead(&time);
 		snprintf(msg,
 				 sizeof(msg),
@@ -95,7 +95,7 @@ void system(void)
 				 time.minutes,
 				 time.seconds);
 		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
-#endif
+#endif*/
 		sc_threadSetSTC(SYSTEM_STC_TICKS);
 
 		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); }
@@ -142,7 +142,7 @@ static void systemStart(void)
 
 static void systemRunLevelStart(tm_run_level_t run_level)
 {
-	printf(TM_STR("[system] switch to run level %u\n"), run_level);
+	//printf(TM_STR("[system] switch to run level %u\n"), run_level);
 	sc_driverRunLevelStart(run_level);
 
 #ifdef TM_DRIVER_HAVE_I2C
