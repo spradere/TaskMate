@@ -101,36 +101,22 @@ void scli(void)
  * Input processing
  * ---------------------------------------------*/
 
+
 static err_codes_t scliRead(void)
 {
 	uint8_t data = 0U;
+	uint8_t index = 0U;
 	err_codes_t error = ERR_NO_ERROR;
 
-	for( uint8_t read_count = 0U; read_count < SCLI_LINE_SIZE; read_count++ )
+	while( (data != '\n') && (index < (sizeof(scli_line) - 1U)) )
 	{
 		error = sc_usartRead(&data);
 		if( error != ERR_NO_ERROR ) { break; }
-
-		if( (data == '\r') || (data == '\n') )
-		{
-			if( !scli_line_overflow && (scli_line_length > 0U) )
-			{
-				scli_line[scli_line_length] = 0U;
-				scliLineProcess();
-			}
-			scli_line_length = 0U;
-			scli_line_overflow = false;
-			continue;
-		}
-
-		if( scli_line_overflow ) { continue; }
-		if( scli_line_length >= (sizeof(scli_line) - 1U) )
-		{
-			scli_line_overflow = true;
-			continue;
-		}
-		scli_line[scli_line_length++] = (char)data;
+		scli_line[index++] = (char)data;
 	}
+
+	scli_line[index] = 0U;
+	scliLineProcess();
 
 	if( error == ERR_HAL_USART_RX_BUFFER_EMPTY ) { return ERR_NO_ERROR; }
 	return error;
@@ -158,29 +144,27 @@ static uint8_t scliTokenize(char *argv[])
 	uint8_t argc = 0U;
 	uint8_t index = 0U;
 
-	while( index < sizeof(scli_line) )
+	while( (scli_line[index] != 0U) && (argc < SCLI_ARGUMENT_COUNT_MAX) )
 	{
-		while( (index < sizeof(scli_line)) &&
-			((scli_line[index] == ' ') || (scli_line[index] == '\t')) )
+		while( scli_line[index] == ' ') 
 		{
-			index++;
+			index++; 
+			if(index > sizeof(scli_line)){return 0U;}
 		}
-		if( index >= sizeof(scli_line) ) { return 0U; }
-		if( scli_line[index] == 0U ) { return argc; }
-		if( argc >= SCLI_ARGUMENT_COUNT_MAX ) { return 0U; }
 
-		argv[argc++] = &scli_line[index];
-		while( (index < sizeof(scli_line)) && (scli_line[index] != ' ') &&
-			(scli_line[index] != '\t') && (scli_line[index] != 0U) )
+		argv[argc] = &scli_line[index];
+	
+		while( (scli_line[index] != ' ') && (scli_line[index] != 0U) ) 
 		{
 			index++;
+			if(index > sizeof(scli_line)){return 0U;}			
 		}
-		if( index >= sizeof(scli_line) ) { return 0U; }
-		if( scli_line[index] == 0U ) { return argc; }
 		scli_line[index++] = 0U;
+		if(index > sizeof(scli_line)){return 0U;}	
+		argc++;
 	}
 
-	return 0U;
+	return argc;
 }
 
 /* -----------------------------------------------
