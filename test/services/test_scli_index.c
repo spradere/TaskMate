@@ -45,6 +45,10 @@ int main(void)
 	assert(strcmp(argv[0U], "thread") == 0);
 	assert(strcmp(argv[1U], "start") == 0);
 	assert(strcmp(argv[2U], "task") == 0);
+	strcpy(scli_line, "stack depth");
+	assert(scliTokenize(argv) == 2U);
+	assert(strcmp(argv[0U], "stack") == 0);
+	assert(strcmp(argv[1U], "depth") == 0);
 
 	strcpy(scli_line, "  \t ");
 	assert(scliTokenize(argv) == 0U);

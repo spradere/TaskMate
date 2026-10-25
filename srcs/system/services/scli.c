@@ -59,6 +59,7 @@ typedef struct
 
 static char scli_line[SCLI_LINE_SIZE];
 static uint8_t scli_line_length;
+static bool scli_line_overflow;
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -103,20 +104,32 @@ void scli(void)
 static err_codes_t scliRead(void)
 {
 	uint8_t data = 0U;
-	uint8_t i = 0U;
 	err_codes_t error = ERR_NO_ERROR;
 
-	while( i < (sizeof(scli_line) - 1U) )
+	for( uint8_t read_count = 0U; read_count < SCLI_LINE_SIZE; read_count++ )
 	{
 		error = sc_usartRead(&data);
 		if( error != ERR_NO_ERROR ) { break; }
-		scli_line[i++] = (char)data;
-	}
 
-	if( i > 0U )
-	{
-		scli_line[i] = 0U;
-		scliLineProcess();
+		if( (data == '\r') || (data == '\n') )
+		{
+			if( !scli_line_overflow && (scli_line_length > 0U) )
+			{
+				scli_line[scli_line_length] = 0U;
+				scliLineProcess();
+			}
+			scli_line_length = 0U;
+			scli_line_overflow = false;
+			continue;
+		}
+
+		if( scli_line_overflow ) { continue; }
+		if( scli_line_length >= (sizeof(scli_line) - 1U) )
+		{
+			scli_line_overflow = true;
+			continue;
+		}
+		scli_line[scli_line_length++] = (char)data;
 	}
 
 	if( error == ERR_HAL_USART_RX_BUFFER_EMPTY ) { return ERR_NO_ERROR; }
@@ -138,7 +151,6 @@ static void scliLineProcess(void)
 			printf(TM_STR("\tcmd %s\n"), TM_STR_ARG(command_name));
 		}
 	}
-	scli_line_length = 0U;
 }
 
 static uint8_t scliTokenize(char *argv[])
@@ -146,26 +158,29 @@ static uint8_t scliTokenize(char *argv[])
 	uint8_t argc = 0U;
 	uint8_t index = 0U;
 
-	while( (scli_line[index] != 0U) && (argc < SCLI_ARGUMENT_COUNT_MAX) )
+	while( index < sizeof(scli_line) )
 	{
-		while( scli_line[index] == ' ') 
-		{
-			index++; 
-			if(index > sizeof(scli_line)){return 0U;}
-		}
-
-		argv[argc] = &scli_line[index];
-	
-		while( (scli_line[index] != ' ') && (scli_line[index] != 0U) ) 
+		while( (index < sizeof(scli_line)) &&
+			((scli_line[index] == ' ') || (scli_line[index] == '\t')) )
 		{
 			index++;
-			if(index > sizeof(scli_line)){return 0U;}			
 		}
-		scli_line[index] = 0U;
-		argc++;
+		if( index >= sizeof(scli_line) ) { return 0U; }
+		if( scli_line[index] == 0U ) { return argc; }
+		if( argc >= SCLI_ARGUMENT_COUNT_MAX ) { return 0U; }
+
+		argv[argc++] = &scli_line[index];
+		while( (index < sizeof(scli_line)) && (scli_line[index] != ' ') &&
+			(scli_line[index] != '\t') && (scli_line[index] != 0U) )
+		{
+			index++;
+		}
+		if( index >= sizeof(scli_line) ) { return 0U; }
+		if( scli_line[index] == 0U ) { return argc; }
+		scli_line[index++] = 0U;
 	}
 
-	return argc;
+	return 0U;
 }
 
 /* -----------------------------------------------
