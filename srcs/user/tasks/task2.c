@@ -25,7 +25,7 @@
  * Constants
  * ---------------------------------------------*/
 
-#define TASK2_DELAY_TICKS 50U
+#define TASK2_DELAY_TICKS 500U
 #define TASK2_DELAY_NEXT_START_ms 500U
 
 /* =============================================================================
@@ -42,6 +42,6 @@ void task2(void)
 		sc_gpio_signalToggle(GPIO_SIGNAL_TASK2_LED);
 
 		sc_threadSetSTC(TASK2_DELAY_TICKS);
-		while( sc_threadGetSTC() > 0U );
+		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); }
 	}
 }

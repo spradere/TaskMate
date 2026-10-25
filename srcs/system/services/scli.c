@@ -36,6 +36,7 @@
 #define SCLI_LINE_SIZE 64
 #define SCLI_ARGUMENT_COUNT_MAX 4
 #define SCLI_POLL_STC_TICKS 50U
+#define SCLI_DELAY_NEXT_START_ms 100U
 
 /* -----------------------------------------------
  * Target command table
@@ -77,6 +78,7 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[]);
 
 void scli(void)
 {
+	sc_threadSetNextStartDelay_ms(SCLI_DELAY_NEXT_START_ms);
 	sc_threadSetInitialized();
 
 	while( 1U )

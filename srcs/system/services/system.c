@@ -38,6 +38,7 @@
 #define SYSTEM_IDLE_STC_TICKS 1u
 #define SYSTEM_DISPLAY_STC_TICKS 50u
 #define SYSTEM_SIZE_LCDMESSAGE 30U
+#define SYSTEM_DELAY_NEXT_START_ms 10U
 
 /* -----------------------------------------------
  * Private function prototypes
@@ -53,6 +54,7 @@ static bool systemRunLevelIsReady(tm_run_level_t run_level);
 
 void system(void)
 {
+	sc_threadSetNextStartDelay_ms(SYSTEM_DELAY_NEXT_START_ms);
 	sc_threadSetInitialized();
 	systemStart();
 
@@ -97,7 +99,7 @@ void system(void)
 		sc_threadSetSTC(SYSTEM_IDLE_STC_TICKS);
 #endif
 
-		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); };
+		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); }
 	}
 }
 
