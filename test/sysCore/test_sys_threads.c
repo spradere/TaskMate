@@ -32,6 +32,12 @@
 #include "system/sysCall/sc_threads.c"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define TESTSYSTHREADS_DELAY_NEXTSTART_ms 500U
+
+/* -----------------------------------------------
  * Test state
  * ---------------------------------------------*/
 
@@ -108,6 +114,9 @@ int main(void)
 	assert(mod_threadSetSTC(1U));
 	assert(mod_threadGetSTC(&count) && (count == 1U));
 	assert(!mod_threadGetSTC(NULL));
+	assert(mod_threadSetNextStartDelay_ms(TESTSYSTHREADS_DELAY_NEXTSTART_ms));
+	assert(mod_threadGetPointer(MOD_THREAD_COUNT - 1U)->next_start_delay_ms ==
+		   TESTSYSTHREADS_DELAY_NEXTSTART_ms);
 
 	tm_run_level_t run_level;
 	uint16_t size_bytes;
@@ -149,6 +158,7 @@ int main(void)
 
 	thread_current = MOD_THREAD_COUNT;
 	assert(!sc_threadSetSTC(1U));
+	assert(!sc_threadSetNextStartDelay_ms(1U));
 	assert(!sc_threadGetSTCChecked(&count));
 	assert(sc_threadGetSTC() == 0U);
 	assert(!sc_threadSetInitialized());
@@ -156,6 +166,8 @@ int main(void)
 	assert(atomic_depth == 0U);
 	assert(mod_threadSetCurrent(0U));
 	assert(sc_threadSetSTC(1U));
+	assert(sc_threadSetNextStartDelay_ms(TESTSYSTHREADS_DELAY_NEXTSTART_ms));
+	assert(mod_threadGetPointer(0U)->next_start_delay_ms == TESTSYSTHREADS_DELAY_NEXTSTART_ms);
 	assert(sc_threadGetSTCChecked(&count) && (count == 1U));
 	assert(sc_threadGetSTC() == 1U);
 	assert(sc_threadSetInitialized());

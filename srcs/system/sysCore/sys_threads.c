@@ -80,6 +80,14 @@ void mod_threadTickSTC(void)
 	}
 }
 
+bool mod_threadSetNextStartDelay_ms(uint16_t delay_ms)
+{
+	mod_thread_item_t *thread = mod_threadGetPointer(thread_current);
+	if( thread == NULL ) { return false; }
+	thread->next_start_delay_ms = delay_ms;
+	return true;
+}
+
 bool mod_threadRunLevelGet(mod_count_t id, tm_run_level_t *run_level)
 {
 	mod_thread_item_t *thread = mod_threadGetPointer(id);

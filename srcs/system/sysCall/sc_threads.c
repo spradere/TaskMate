@@ -92,6 +92,14 @@ bool sc_threadGetSTCChecked(uint16_t *count)
 	return result;
 }
 
+bool sc_threadSetNextStartDelay_ms(uint16_t delay_ms)
+{
+	hal_atomic_state_t state = hal_atomicStart();
+	bool result = mod_threadSetNextStartDelay_ms(delay_ms);
+	hal_atomicEnd(state);
+	return result;
+}
+
 /* -----------------------------------------------
  * Thread metadata
  * ---------------------------------------------*/

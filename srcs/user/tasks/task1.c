@@ -26,6 +26,7 @@
  * ---------------------------------------------*/
 
 #define TASK1_DELAY_TICKS 50U
+#define TASK1_DELAY_NEXT_START_ms 500U
 
 /* =============================================================================
  * Implementation - Functions
@@ -33,6 +34,7 @@
 
 void task1(void)
 {
+	sc_threadSetNextStartDelay_ms(TASK1_DELAY_NEXT_START_ms);
 	sc_threadSetInitialized();
 
 	while( 1U )
