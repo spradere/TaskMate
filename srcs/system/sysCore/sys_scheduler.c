@@ -159,23 +159,3 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 	TM_CLEARBIT(thread->status, THREAD_BIT_YIELDED);
 	return &thread->context;
 }
-
-/*static mod_thread_item_t *tm_schedulerSelectNext(mod_count_t current)
-{
-	tm_run_level_t active_run_level = scheduler_run_level;
-
-	for( mod_count_t count = 0U; count < MOD_THREAD_COUNT; count++ )
-	{
-		if( ++current == MOD_THREAD_COUNT ) { current = 0U; }
-
-		mod_thread_item_t *thread = mod_threadGetPointer(current);
-		if( thread == NULL ) { hal_halt(); }
-		tm_run_level_t thread_run_level = thread->run_level;
-		if( (thread_run_level != RL_RUN_NONE) && (thread_run_level <= active_run_level) )
-		{
-			if( !mod_threadSetCurrent(current) ) { hal_halt(); }
-			return thread;
-		}
-	}
-	return 0;
-}*/

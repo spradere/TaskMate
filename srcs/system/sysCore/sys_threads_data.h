@@ -45,7 +45,8 @@ typedef struct
 	void (*main)(void);
 
 	volatile uint16_t software_time_counter;
-	// The context ISR writes the start tick; AVR readers need an atomic 32-bit snapshot.
+	
+	// Real time data
 	volatile uint32_t last_start_ticks_100us;
 	volatile uint16_t next_start_delay_ms;
 	volatile uint16_t wcet_ticks_100us;

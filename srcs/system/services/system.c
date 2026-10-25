@@ -35,8 +35,7 @@
  * ---------------------------------------------*/
 
 #define SYSTEM_RUN_LEVEL_RR_ROUND_COUNT 10u
-#define SYSTEM_IDLE_STC_TICKS 1u
-#define SYSTEM_DISPLAY_STC_TICKS 50u
+#define SYSTEM_STC_TICKS 50u
 #define SYSTEM_SIZE_LCDMESSAGE 30U
 #define SYSTEM_DELAY_NEXT_START_ms 10U
 #define SYSTEM_WCET_100us 2000U
@@ -96,10 +95,8 @@ void system(void)
 				 time.minutes,
 				 time.seconds);
 		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
-		sc_threadSetSTC(SYSTEM_DISPLAY_STC_TICKS);
-#else
-		sc_threadSetSTC(SYSTEM_IDLE_STC_TICKS);
 #endif
+		sc_threadSetSTC(SYSTEM_STC_TICKS);
 
 		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); }
 	}

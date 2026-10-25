@@ -22,5 +22,5 @@ addModule driver rtc -run driver -i2c 0x68 -source_file hal/drivers/rtc/rtc_ZS04
 # Services
 
 # Tasks
-addModule task task1 -run user -stack 100 -source_file user/tasks/task1.c
-addModule task task2 -run user -stack 100 -source_file user/tasks/task2.c
+addModule task task1 -run user -stack 64 -source_file user/tasks/task1.c
+addModule task task2 -run user -stack 64 -source_file user/tasks/task2.c
