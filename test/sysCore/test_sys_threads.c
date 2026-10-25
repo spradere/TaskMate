@@ -36,6 +36,8 @@
  * ---------------------------------------------*/
 
 #define TESTSYSTHREADS_DELAY_NEXTSTART_ms 500U
+#define TESTSYSTHREADS_WCET_TICKS_100us 25U
+#define TESTSYSTHREADS_DEADLINE_TICKS_100us 100U
 
 /* -----------------------------------------------
  * Test state
@@ -100,6 +102,11 @@ void tm_schedulerCoop(void)
 int main(void)
 {
 	mod_threadsAlloc();
+	for( mod_count_t id = 0U; id < MOD_THREAD_COUNT; id++ )
+	{
+		assert(mod_threadGetPointer(id)->wcet_ticks_100us == 0U);
+		assert(mod_threadGetPointer(id)->dead_line_100us == 0U);
+	}
 	assert(mod_threadGetPointer(0U) != NULL);
 	assert(mod_threadGetPointer(MOD_THREAD_COUNT - 1U) != NULL);
 	assert(mod_threadGetPointer(MOD_THREAD_COUNT) == NULL);
@@ -117,6 +124,12 @@ int main(void)
 	assert(mod_threadSetNextStartDelay_ms(TESTSYSTHREADS_DELAY_NEXTSTART_ms));
 	assert(mod_threadGetPointer(MOD_THREAD_COUNT - 1U)->next_start_delay_ms ==
 		   TESTSYSTHREADS_DELAY_NEXTSTART_ms);
+	assert(mod_threadSetWCET_100us(TESTSYSTHREADS_WCET_TICKS_100us));
+	assert(mod_threadSetDeadLine_100us(TESTSYSTHREADS_DEADLINE_TICKS_100us));
+	assert(mod_threadGetPointer(MOD_THREAD_COUNT - 1U)->wcet_ticks_100us ==
+		   TESTSYSTHREADS_WCET_TICKS_100us);
+	assert(mod_threadGetPointer(MOD_THREAD_COUNT - 1U)->dead_line_100us ==
+		   TESTSYSTHREADS_DEADLINE_TICKS_100us);
 
 	tm_run_level_t run_level;
 	uint16_t size_bytes;
@@ -159,6 +172,10 @@ int main(void)
 	thread_current = MOD_THREAD_COUNT;
 	assert(!sc_threadSetSTC(1U));
 	assert(!sc_threadSetNextStartDelay_ms(1U));
+	assert(!mod_threadSetWCET_100us(1U));
+	assert(!mod_threadSetDeadLine_100us(1U));
+	assert(!sc_threadSetWCET_100us(1U));
+	assert(!sc_threadSetDeadLine_100us(1U));
 	assert(!sc_threadGetSTCChecked(&count));
 	assert(sc_threadGetSTC() == 0U);
 	assert(!sc_threadSetInitialized());
@@ -168,6 +185,11 @@ int main(void)
 	assert(sc_threadSetSTC(1U));
 	assert(sc_threadSetNextStartDelay_ms(TESTSYSTHREADS_DELAY_NEXTSTART_ms));
 	assert(mod_threadGetPointer(0U)->next_start_delay_ms == TESTSYSTHREADS_DELAY_NEXTSTART_ms);
+	assert(sc_threadSetWCET_100us(TESTSYSTHREADS_WCET_TICKS_100us));
+	assert(sc_threadSetDeadLine_100us(TESTSYSTHREADS_DEADLINE_TICKS_100us));
+	assert(mod_threadGetPointer(0U)->wcet_ticks_100us == TESTSYSTHREADS_WCET_TICKS_100us);
+	assert(mod_threadGetPointer(0U)->dead_line_100us ==
+		   TESTSYSTHREADS_DEADLINE_TICKS_100us);
 	assert(sc_threadGetSTCChecked(&count) && (count == 1U));
 	assert(sc_threadGetSTC() == 1U);
 	assert(sc_threadSetInitialized());

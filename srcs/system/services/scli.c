@@ -37,6 +37,7 @@
 #define SCLI_ARGUMENT_COUNT_MAX 4
 #define SCLI_POLL_STC_TICKS 50U
 #define SCLI_DELAY_NEXT_START_ms 100U
+#define SCLI_WCET_100us 6000U
 
 /* -----------------------------------------------
  * Target command table
@@ -79,6 +80,7 @@ static bool scliCommandDispatch(uint8_t argc, char *argv[]);
 void scli(void)
 {
 	sc_threadSetNextStartDelay_ms(SCLI_DELAY_NEXT_START_ms);
+	sc_threadSetWCET_100us(SCLI_WCET_100us);
 	sc_threadSetInitialized();
 
 	while( 1U )
