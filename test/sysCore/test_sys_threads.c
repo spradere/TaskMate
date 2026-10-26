@@ -38,12 +38,15 @@
 #define TESTSYSTHREADS_DELAY_NEXTSTART_ms 500U
 #define TESTSYSTHREADS_WCET_TICKS_100us 25U
 #define TESTSYSTHREADS_DEADLINE_TICKS_100us 100U
+#define TESTSYSTHREADS_STACK_FIRST_USED_WORD 101U
+#define TESTSYSTHREADS_STACK_SAMPLED_USED_WORD 102U
 
 /* -----------------------------------------------
  * Test state
  * ---------------------------------------------*/
 
 static uint8_t atomic_depth;
+static uint16_t atomic_start_count;
 
 /* =============================================================================
  * Implementation - Functions
@@ -75,6 +78,7 @@ void task2(void) {}
 hal_atomic_state_t hal_atomicStart(void)
 {
 	atomic_depth++;
+	atomic_start_count++;
 	return atomic_depth;
 }
 
@@ -140,6 +144,27 @@ int main(void)
 	assert(mod_threadGetPointer(0U)->status == (1U << THREAD_BIT_TYPE_SYS));
 	assert(mod_threadStackSizeGet(0U, &size_bytes));
 	assert(mod_threadStackDepthGet(0U, &depth_bytes));
+	assert(depth_bytes == 0U);
+	mod_thread_item_t *system_thread = mod_threadGetPointer(0U);
+	const uint16_t system_usable_words = system_thread->stack_size - MOD_STACK_CANARY_WORD_COUNT;
+	for( uint16_t stack_index = TESTSYSTHREADS_STACK_FIRST_USED_WORD;
+		 stack_index < system_usable_words;
+		 stack_index++ )
+	{
+		system_thread->stack[stack_index + MOD_STACK_FIRST_USABLE_INDEX] = 0U;
+	}
+	assert(mod_threadStackDepthGet(0U, &depth_bytes));
+	assert(depth_bytes == system_usable_words - TESTSYSTHREADS_STACK_FIRST_USED_WORD);
+	mod_threadStackInit(system_thread);
+	for( uint16_t stack_index = TESTSYSTHREADS_STACK_SAMPLED_USED_WORD;
+		 stack_index < system_usable_words;
+		 stack_index++ )
+	{
+		system_thread->stack[stack_index + MOD_STACK_FIRST_USABLE_INDEX] = 0U;
+	}
+	assert(mod_threadStackDepthGet(0U, &depth_bytes));
+	assert(depth_bytes == system_usable_words - TESTSYSTHREADS_STACK_FIRST_USED_WORD);
+	mod_threadStackInit(system_thread);
 	assert(!mod_threadRunLevelGet(MOD_THREAD_COUNT, &run_level));
 	assert(!mod_threadStackSizeGet(MOD_THREAD_COUNT, &size_bytes));
 	assert(!mod_threadStackDepthGet(MOD_THREAD_COUNT, &depth_bytes));
@@ -163,7 +188,10 @@ int main(void)
 
 	const tm_string_t *name;
 	assert(sc_threadGetInfo(0U, &name, &run_level, &size_bytes));
+	const uint16_t atomic_count_before_stack_scan = atomic_start_count;
 	assert(sc_threadGetStackDepth(0U, &depth_bytes));
+	assert(depth_bytes == 0U);
+	assert(atomic_start_count == atomic_count_before_stack_scan);
 	assert(!sc_threadGetInfo(MOD_THREAD_COUNT, &name, &run_level, &size_bytes));
 	assert(!sc_threadGetStackDepth(MOD_THREAD_COUNT, &depth_bytes));
 	assert(!sc_threadGetSTCChecked(NULL));

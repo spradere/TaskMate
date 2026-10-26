@@ -29,6 +29,12 @@
 #include "system/sysCore/sys_threads_list.h"
 
 /* -----------------------------------------------
+ * Constants
+ * ---------------------------------------------*/
+
+#define SYSTHREADS_STACK_SCAN_SAMPLE_COUNT 128U
+
+/* -----------------------------------------------
  * Private variables
  * ---------------------------------------------*/
 
@@ -126,15 +132,25 @@ bool mod_threadStackDepthGet(mod_count_t id, uint16_t *depth_bytes)
 	if( (thread == NULL) || (depth_bytes == NULL) ) { return false; }
 	const volatile hal_stack_word_t *stack = thread->stack;
 	const uint16_t usable_words = thread->stack_size - MOD_STACK_CANARY_WORD_COUNT;
-	uint16_t unused_words = 0U;
+	uint16_t scan_step = thread->stack_size / SYSTHREADS_STACK_SCAN_SAMPLE_COUNT;
+	if( scan_step == 0U ) { scan_step = 1U; }
 
-	while( (unused_words < usable_words) &&
-		   (stack[unused_words + MOD_STACK_FIRST_USABLE_INDEX] == MOD_STACK_PATTERN) )
+	uint16_t confirmed_unused_words = 0U;
+	uint16_t scan_index = 0U;
+	/* Keep at most 128 regular probes and round an intervening boundary toward more usage. */
+	while( scan_index < usable_words )
 	{
-		unused_words++;
+		if( stack[scan_index + MOD_STACK_FIRST_USABLE_INDEX] != MOD_STACK_PATTERN ) { break; }
+		confirmed_unused_words = scan_index + 1U;
+		if( confirmed_unused_words == usable_words ) { break; }
+
+		const uint16_t remaining_words = usable_words - confirmed_unused_words;
+		if( remaining_words <= scan_step ) { scan_index = usable_words - 1U; }
+		else { scan_index += scan_step; }
 	}
 
-	*depth_bytes = (uint16_t)((usable_words - unused_words) * sizeof(hal_stack_word_t));
+	*depth_bytes =
+		(uint16_t)((usable_words - confirmed_unused_words) * sizeof(hal_stack_word_t));
 	return true;
 }
 

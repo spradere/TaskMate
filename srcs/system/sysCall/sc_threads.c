@@ -144,10 +144,7 @@ bool sc_threadGetStackDepth(mod_count_t id, uint16_t *depth_bytes)
 {
 	if( (id >= MOD_THREAD_COUNT) || (depth_bytes == NULL) ) { return false; }
 
-	hal_atomic_state_t state = hal_atomicStart();
-	bool result = mod_threadStackDepthGet(id, depth_bytes);
-	hal_atomicEnd(state);
-	return result;
+	return mod_threadStackDepthGet(id, depth_bytes);
 }
 
 /* -----------------------------------------------

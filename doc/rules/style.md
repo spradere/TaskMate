@@ -89,6 +89,19 @@ Use the established TaskMate prefixes only when they describe a real boundary or
 - Use explicit null or zero checks when this makes intent clearer.
 - For register macros and bit manipulation, fully parenthesize macro parameters and results.
 
+## Critical Sections
+
+- Treat all code between `hal_atomicStart()` and its matching `hal_atomicEnd()` as one critical section, including the complete call chains of nested function calls.
+- Use a critical section only when shared state cannot be protected by natural atomicity, immutable ownership, or a smaller state snapshot.
+- Keep the protected scope to the minimum required operations. Validate inputs, compute derived values, and perform scanning, formatting, or other independent work outside the section.
+- On a physical real-time target, every critical section must be non-blocking and its worst-case duration must be strictly shorter than one monotonic timer step. The `test1` budget is less than 100 us.
+- Do not place delays, polling waits, peripheral transfers, console operations, allocation, scheduler waits, or context changes in a real-time critical section.
+- Prefer a few direct register or memory operations. Minimize nested function calls and use them only when their complete execution time is bounded and included in the section budget.
+- Loops inside a real-time critical section require a small static bound and a demonstrated worst-case duration below the timer-step budget.
+- Every exit path must pass the unchanged state token to the matching `hal_atomicEnd()`. Nested sections share the outer timing budget rather than starting a new budget.
+- Validate non-trivial critical sections against the selected target's final binary and account for CPU frequency, instruction cycles, compiler-generated helpers, volatile accesses, and the worst-case called path.
+- The FreeBSD host target is not a strict real-time target for now. It is exempt from the hard monotonic-step duration guarantee, but interrupt masking should still be minimized and no real-time WCET claim may be made for host library or system calls.
+
 ---
 
 ## Generated Code
