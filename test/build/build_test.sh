@@ -178,6 +178,18 @@ runConfigurationTests()
 	expectFailure verbose_out_of_range \
 		'>>> Invalid option for OPT_VERBOSE_LEVEL : "3", should be [ 0 | 1 ]. <<<' \
 		bmake -C "${PATH_PROJECT}" VERBOSE=3 -V OPT_VERBOSE_LEVEL
+	expectOutput taskmate_version "0.33" targetMake -V VAL_TM_VERSION
+	expectOutput taskmate_version_major "0" targetMake -V VAL_TM_VER_MAJOR
+	expectOutput taskmate_version_minor "33" targetMake -V VAL_TM_VER_MINOR
+	expectOutput build_counter "1324" targetMake -V VAL_BUILD_CNT
+	printf '%s\n' 'VAL_TM_VERSION = 7.42' > "${PATH_STAGE_WORK}/version.conf"
+	printf '%s\n' 'VAL_BUILD_CNT = 321' > "${PATH_STAGE_WORK}/counter.conf"
+	expectOutput configured_taskmate_version "7.42" targetMake \
+		CONF_TASKMATE_VERSION="${PATH_STAGE_WORK}/version.conf" \
+		CONF_BUILD_COUNTER="${PATH_STAGE_WORK}/counter.conf" -V VAL_TM_VERSION
+	expectOutput configured_build_counter "321" targetMake \
+		CONF_TASKMATE_VERSION="${PATH_STAGE_WORK}/version.conf" \
+		CONF_BUILD_COUNTER="${PATH_STAGE_WORK}/counter.conf" -V VAL_BUILD_CNT
 	expectSuccess autocode_source_order bmake -C "${PATH_PROJECT}" \
 		-V FILES_AUTOCODE_SRC_ALL
 	assertWordsSorted autocode_source_order
@@ -512,7 +524,6 @@ runScriptTests()
 	FILE_PROGRAMS="${PATH_PROJECT}/scripts/check_programs.sh"
 	FILE_COMPARE="${PATH_PROJECT}/scripts/compare_replace.sh"
 	FILE_PATH_CHECK="${PATH_PROJECT}/scripts/check_path_file.sh"
-	FILE_VERSION="${PATH_PROJECT}/scripts/git_version.sh"
 	FILE_BUNDLE="${PATH_PROJECT}/scripts/bundle.sh"
 	FILE_DEL_BRANCH="${PATH_PROJECT}/scripts/del_branch.sh"
 	FILE_AUTOCODE_VERSION="${PATH_PROJECT}/scripts/autocode_version.awk"
@@ -588,38 +599,16 @@ initrc : 1.13" awk -v expected_major=1 -v expected_minor=9 -v report_versions=1 
 	expectSuccess path_directory "${FILE_PATH_CHECK}" -d "${PATH_PROJECT}/build"
 	expectSuccess path_file "${FILE_PATH_CHECK}" -f "${PATH_PROJECT}/Makefile"
 
-	PATH_GIT_CASE="${PATH_STAGE_WORK}/git_version"
-	mkdir -p "${PATH_GIT_CASE}/not_a_repo" "${PATH_GIT_CASE}/repository"
-	if ! (cd "${PATH_GIT_CASE}/not_a_repo" && \
-		GIT_CEILING_DIRECTORIES="${PATH_GIT_CASE}" "${FILE_VERSION}") \
-		> "${PATH_STAGE_WORK}/version_no_repo.log" 2>&1; then
-		fail "version_no_repo: command failed"
-	fi
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
-	[ "$(cat "${PATH_STAGE_WORK}/version_no_repo.log")" = "0.00" ] || \
-		fail "version_no_repo: wrong fallback"
+	PATH_GIT_CASE="${PATH_STAGE_WORK}/git_utilities"
+	mkdir -p "${PATH_GIT_CASE}/repository"
 	git -C "${PATH_GIT_CASE}/repository" init -q || fail "cannot initialise Git fixture"
 	git -C "${PATH_GIT_CASE}/repository" -c user.name=TaskMate \
 		-c user.email=test@example.invalid commit -q --allow-empty -m initial || \
 		fail "cannot commit Git fixture"
 	git -C "${PATH_GIT_CASE}/repository" tag v1.23 || fail "cannot tag Git fixture"
-	if ! (cd "${PATH_GIT_CASE}/repository" && "${FILE_VERSION}") \
-		> "${PATH_STAGE_WORK}/version_tag.log" 2>&1; then
-		fail "version_tag: command failed"
-	fi
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
-	[ "$(cat "${PATH_STAGE_WORK}/version_tag.log")" = "1.23" ] || \
-		fail "version_tag: leading v was not removed"
 	git -C "${PATH_GIT_CASE}/repository" -c user.name=TaskMate \
 		-c user.email=test@example.invalid commit -q --allow-empty -m post_tag || \
 		fail "cannot add post-tag Git fixture commit"
-	if ! (cd "${PATH_GIT_CASE}/repository" && "${FILE_VERSION}") \
-		> "${PATH_STAGE_WORK}/version_post_tag.log" 2>&1; then
-		fail "version_post_tag: command failed"
-	fi
-	VAL_TEST_COUNT=$((VAL_TEST_COUNT + 1))
-	[ "$(cat "${PATH_STAGE_WORK}/version_post_tag.log")" = "1.23" ] || \
-		fail "version_post_tag: suffix was not removed"
 
 	PATH_GIT_REPOSITORY="${PATH_GIT_CASE}/repository"
 	PATH_GIT_BUNDLE="${PATH_GIT_REPOSITORY}/.backup/TaskMate.bundle_$(date '+%Y_%m_%d')"

@@ -12,13 +12,12 @@
 # Data
 ################################################################################
 
-# TaskMate version from tag
-VAL_TM_VERSION != ${SCRIPT_GIT_VERSION}
+# Project metadata
+.include "${CONF_TASKMATE_VERSION}"
+.include "${CONF_BUILD_COUNTER}"
+
 VAL_TM_VER_MAJOR != echo ${VAL_TM_VERSION} | cut -d'.' -f1
 VAL_TM_VER_MINOR != echo ${VAL_TM_VERSION} | cut -d'.' -f2
 
 # USB key directory backup
 VAL_TM_BACKUP_DIR != printf "/code/TaskMate/TaskMate_%s" ${VAL_TM_VERSION}
-
-# Build counter
-VAL_BUILD_CNT != git rev-list --count HEAD
