@@ -26,6 +26,7 @@
 #include "system/sysCall/sc_errors.h"
 #include "system/sysCall/sc_string.h"
 #include "system/sysCall/sc_threads.h"
+#include "interfaces/tm_info.h"
 #include "tmLibc/tm_stdio.h"
 #include "tmLibc/tm_string.h"
 
@@ -84,8 +85,43 @@ void scli(void)
 	sc_threadSetWCET_100us(SCLI_WCET_100us);
 	sc_threadSetInitialized();
 
+	// Print system info
+	printf(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+
+#ifdef TM_DRIVER_HAVE_RTC
+	hal_rtc_time_t time;
+	sc_rtcRead(&time);
+	printf(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
+		   time.day,
+		   time.month,
+		   time.year,
+		   time.hours,
+		   time.minutes);
+#endif
+
+#ifdef TM_DRIVER_HAVE_LCD
+	char msg[SYSTEM_SIZE_LCDMESSAGE];
+	snprintf(msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
+	sc_lcdClear();
+	sc_lcdWriteString(TM_STR_RAM(msg), 0U, 0U);
+#endif
+
 	while( 1U )
 	{
+		#if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
+		sc_rtcRead(&time);
+		snprintf(msg,
+				 sizeof(msg),
+				 TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
+				 time.day,
+				 time.month,
+				 time.year,
+				 time.hours,
+				 time.minutes,
+				 time.seconds);
+		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
+		#endif*/
+
 		err_codes_t error = scliRead();
 		if( error != ERR_NO_ERROR )
 		{

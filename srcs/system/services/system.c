@@ -21,7 +21,6 @@
 #include <stdint.h>
 
 #include "interfaces/tm_driver_have.h"
-#include "interfaces/tm_info.h"
 #include "interfaces/tm_runLevel.h"
 #include "system/sysCall/sc_driver.h"
 #include "system/sysCall/sc_errors.h"
@@ -59,43 +58,9 @@ void system(void)
 	sc_threadSetInitialized();
 	systemStart();
 
-	// Print system info
-	/*printf(TM_STR("[system] TaskMate v%u.%u build : %u\n"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
-
-#ifdef TM_DRIVER_HAVE_RTC
-	hal_rtc_time_t time;
-	sc_rtcRead(&time);
-	printf(TM_STR("[system] date & time : %02u/%02u/20%02u %02u:%02u\n"),
-		   time.day,
-		   time.month,
-		   time.year,
-		   time.hours,
-		   time.minutes);
-#endif
-
-#ifdef TM_DRIVER_HAVE_LCD
-	char msg[SYSTEM_SIZE_LCDMESSAGE];
-	snprintf(msg, sizeof(msg), TM_STR("TaskMate %u.%u %u"), TM_VER_MAJOR, TM_VER_MINOR, TM_BUILD);
-	sc_lcdClear();
-	sc_lcdWriteString(TM_STR_RAM(msg), 0U, 0U);
-#endif*/
-
 	// After startup, refresh the display when available and yield between updates.
 	while( 1U )
 	{
-/*#if defined(TM_DRIVER_HAVE_RTC) && defined(TM_DRIVER_HAVE_LCD)
-		sc_rtcRead(&time);
-		snprintf(msg,
-				 sizeof(msg),
-				 TM_STR("%02u/%02u/20%02u %02u:%02u:%02u"),
-				 time.day,
-				 time.month,
-				 time.year,
-				 time.hours,
-				 time.minutes,
-				 time.seconds);
-		sc_lcdWriteString(TM_STR_RAM(msg), 1U, 0U);
-#endif*/
 		sc_threadSetSTC(SYSTEM_STC_TICKS);
 
 		while( sc_threadGetSTC() > 0U ) { sc_coopYield(); }
