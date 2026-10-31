@@ -190,6 +190,11 @@ runConfigurationTests()
 	expectOutput configured_build_counter "321" targetMake \
 		CONF_TASKMATE_VERSION="${PATH_STAGE_WORK}/version.conf" \
 		CONF_BUILD_COUNTER="${PATH_STAGE_WORK}/counter.conf" -V VAL_BUILD_CNT
+	assertFileExcludes "${PATH_PROJECT}/conf/programs-list.conf" "git"
+	expectSuccess all_without_vcs_metadata targetMake -n \
+		FILE_GIT_IGNORE="${PATH_STAGE_WORK}/generated.gitignore" all
+	logExcludes all_without_vcs_metadata "git describe"
+	logExcludes all_without_vcs_metadata "generated.gitignore"
 	expectSuccess autocode_source_order bmake -C "${PATH_PROJECT}" \
 		-V FILES_AUTOCODE_SRC_ALL
 	assertWordsSorted autocode_source_order

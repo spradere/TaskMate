@@ -56,9 +56,6 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@date >> "${FILE_BUILD_INFO}"
 	@printf "Hardware target : %s\n" "${VAL_HW_STACK}" >> "${FILE_BUILD_INFO}"
 	@printf "build counter for this target : %s\n" "${VAL_BUILD_CNT}" >> "${FILE_BUILD_INFO}"
-	@git -v >> "${FILE_BUILD_INFO}"
-	@printf "git tag : " >> "${FILE_BUILD_INFO}"
-	@git describe --tags >> "${FILE_BUILD_INFO}"
 	@printf "${CC} : " >> "${FILE_BUILD_INFO}"
 	@printf "${VAL_CC_VERSION}\n" >> "${FILE_BUILD_INFO}"
 	@awk -v expected_major="${VAL_BUILD_AUTOCODE_EXPECTED_VER_MAJOR}" \
@@ -82,7 +79,7 @@ ${FILE_PROGRAMS_CHECK_STAMP}: ${CONF_PROGRAMS_LIST} ${SCRIPT_CHECK_PROGRAMS}
 	@printf "${COLOUR_RESET}"
 .endif
 
-all: ${FILE_GIT_IGNORE} _hardware_target_check \
+all: _hardware_target_check \
 	_autocode .WAIT _architecture_include_check .WAIT _dependency \
 	${FILE_TARGET} _mcu_memory_data _cloc_data
 #help all: [global] TaskMate build.
