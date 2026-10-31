@@ -12,30 +12,6 @@
 # Backup
 ################################################################################
 
-# Write .gitignore file
-${FILE_GIT_IGNORE}: ${PATH_MAKEFILES}/backup.mk ${PATH_MAKEFILES}/path_files.mk
-	@printf "# exclude everything\n" > "${FILE_GIT_IGNORE}"
-	@printf "*\n" >> "${FILE_GIT_IGNORE}"
-
-	@printf "\n# allowed directories and files\n" >> "${FILE_GIT_IGNORE}"
-.for dir in ${PATHS_GIT_ALLOWED}
-	@printf "!${dir}/\n" >> "${FILE_GIT_IGNORE}"
-	@printf "!${dir}/**/\n" >> "${FILE_GIT_IGNORE}"
-.for file in ${FILES_GIT_ALLOWED.${dir}}
-	@printf "!${dir}/**/${file}\n" >> "${FILE_GIT_IGNORE}"
-.endfor
-.endfor
-
-	@printf "\n# allowed files\n" >> "${FILE_GIT_IGNORE}"
-.for file in ${FILES_GIT_ALLOWED}
-	@printf "!${file}\n" >> "${FILE_GIT_IGNORE}"
-.endfor
-
-	@printf "\n# excluded files\n" >> "${FILE_GIT_IGNORE}"
-.for file in ${FILES_GIT_EXCLUDED}
-	@printf "${file}\n" >> "${FILE_GIT_IGNORE}"
-.endfor
-
 .PHONY: backup
 backup:
 #help backup: [global] USB key backup with version in directory name.
@@ -78,7 +54,6 @@ backup:
 		"${COLOUR_BACKUP}" "${COLOUR_RESET}"
 	@mkdir -p ${PATH_USBKEY}${VAL_TM_BACKUP_DIR}
 	rsync -av ./ --progress --delete --delete-excluded \
-		--exclude=".git" \
 		--exclude="${PATH_BUILDS}/" \
 		--exclude="${PATH_LOGS}" \
 		"${PATH_USBKEY}${VAL_TM_BACKUP_DIR}/" > "${FILE_RSYNC_LOG}"
