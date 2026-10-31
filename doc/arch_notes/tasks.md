@@ -18,11 +18,11 @@ Tasks include their local header and sysCall APIs. They may use services and tmL
 ### Strengths
 - Demonstration tasks have deterministic static records and no direct hardware dependency.
 - Logical GPIO follows the intended task to sysCall to neutral HAL path.
-- Generated registration and target-configured stacks avoid runtime discovery and allocation.
-- Run-level admission, readiness acknowledgement, and stack-depth reporting integrate tasks with startup and diagnostics.
+- Generated registration, target-configured stacks, and fixed timing metadata avoid runtime discovery and allocation.
+- Tasks acknowledge readiness and cooperatively yield during software-counter delays.
 
 ### Remaining weaknesses
-- Period, deadline, priority, stack budget, and worst-case execution time are not declared or enforced.
+- Tasks declare delay and WCET values, but deadlines, priorities, and enforcement remain absent.
 - User run level controls admission but provides no distinct scheduling policy afterward.
-- Busy-wait delays consume every assigned slice instead of yielding while the counter is non-zero.
+- Delay loops repeatedly poll a shared counter and yield instead of using a blocking timer wait.
 - Two synthetic LED tasks provide little evidence for realistic workload, overload, or inter-task communication behaviour.

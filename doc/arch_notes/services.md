@@ -20,10 +20,10 @@ SCLI polls USART into a fixed 64-byte buffer and dispatches generated `date`, `d
 - Service records, stacks, command tables, and buffers have fixed target-known memory costs.
 - Startup follows explicit core, driver, service, and user stages with bounded readiness rounds.
 - Optional driver capabilities remove unavailable peripheral paths at compile time.
-- Hardware and thread lifecycle operations remain behind focused syscalls.
+- Services declare initialization, cooperative delay, next-start delay, and WCET metadata through syscalls.
 
 ### Remaining weaknesses
-- Startup discards I2C scan, RTC snapshot, and individual driver-start errors.
+- Startup discards I2C scan, RTC snapshot, and individual driver-start results.
 - Readiness is self-declared and has no dependency graph, degraded state, retry, or recovery policy.
-- The display loop ignores RTC, formatting, and LCD errors after startup.
-- SCLI processes each available RX chunk as a command, does not assemble newline-delimited input, and silently rejects excess arguments.
+- SCLI processes partial USART chunks when no newline is available and does not preserve them across polls.
+- SCLI silently truncates excess arguments, while display and formatting operations still ignore runtime failures.

@@ -17,13 +17,13 @@ String syscalls read bounded RAM or program-memory descriptors, compare and copy
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Task-visible APIs separate kernel policy from selected hardware implementations.
-- Shared counters, run levels, stack scans, lifecycle changes, GPIO toggle, and RX error snapshots are atomic.
-- Metadata, pointer, ID, and bounded-string entry points validate their public inputs.
+- Task-visible APIs expose cooperation and timing metadata while separating kernel policy from hardware implementations.
+- Shared counters, run levels, lifecycle changes, GPIO toggle, and RX error snapshots use focused atomic sections.
+- Thread names, IDs, run levels, pointers, and bounded-string entry points validate their public inputs.
 - I2C discovery preserves declared state when scanning fails or overflows its fixed buffer.
 
 ### Remaining weaknesses
 - Run-level driver start returns no aggregate result and discards individual failures.
-- Thread start accepts an unchecked run level, and its first call can save a level without activating the thread.
+- A thread's first start call only records its run level, so activation semantics remain implicit and surprising.
 - GPIO set and get expose no error result for invalid or unsupported signals.
 - RTC startup data has no validity flag when capture fails, is unavailable, or has not run.

@@ -17,13 +17,13 @@ The architecture matrix makes interfaces the only deliberately cross-cutting lay
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Shared contracts are independent of concrete target headers and higher runtime layers.
-- Opaque mechanism APIs let sysCore use context, atomic, halt, delay, and timer services without AVR details.
-- Generated errors, signals, counts, and capability flags track the selected composition.
-- Interfaces add no runtime registration, allocation, or independent dispatch layer.
+- Shared contracts are independent of concrete target headers and higher runtime layers, with no added runtime dispatch.
+- Opaque mechanism APIs let sysCore use context, atomic, halt, delay, and timer services without target details.
+- Generated errors, signals, capacity-sized module counts, and capability flags track the selected composition.
+- Packed lifecycle enums and compile-time size checks make low-level storage costs explicit.
 
 ### Remaining weaknesses
-- Module limits, generated counts, and type identifiers remain grouped in one broad contract.
 - Context and stack representations still require target headers injected through compiler options.
-- String descriptors expose RAM versus ROM storage to otherwise portable callers.
+- String types and call signatures still vary with the selected libc backend.
+- RAM versus ROM storage remains visible to TaskMate-libc callers.
 - Contracts rarely state ISR safety, blocking behaviour, timing bounds, or asynchronous failure semantics.

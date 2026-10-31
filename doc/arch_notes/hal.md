@@ -19,12 +19,12 @@ Boot starts USART before static allocation. The scheduler initializes the timer-
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Neutral contracts are separated from selected architecture, MCU, board, host, and reusable-driver code.
-- AVR register, interrupt, timer, and naked context details remain inside selected HAL sources.
-- Physical and virtual targets exercise the same upper-layer contracts with static selection.
-- Driver control stays limited to common lifecycle and status operations.
+- AVR context save and restore now use shared assembly macros with structural tests for register and stack layout.
+- Physical and virtual targets provide the same 100 us monotonic timer contract and common driver lifecycle.
+- Driver control stays limited to lifecycle, run level, status bits, state, and last-error access.
 
 ### Remaining weaknesses
 - The ATmega2560 build is capped at 64 KiB of flash because context switching does not preserve the third program-counter byte.
 - The virtual stack does not implement the complete AVR peripheral set, so peripheral portability remains weakly exercised.
-- USART and timer-context startup remain special boot paths outside normal run-level driver startup.
+- GPIO, USART, and timer-context startup remain special paths outside normal run-level driver startup.
 - Run-level startup discards individual driver results and cannot unwind partial hardware initialization.

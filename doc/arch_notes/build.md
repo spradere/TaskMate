@@ -19,13 +19,13 @@ Artifacts, generated code, logs, manifests, stamps, and dependency files live be
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Hardware selection, source ownership, generation, boundary checking, compilation, and reporting are separated.
-- Module declarations drive both autoCode validation and the firmware compilation list.
+- Hardware selection, source ownership, generation, boundary checking, compilation, and reporting remain separate stages.
+- Module declarations drive both autoCode validation and the ordered firmware compilation list.
 - Duplicate paths, missing sources, incompatible versions, forbidden includes, and unsafe utility paths fail early.
-- AVR and host stacks reuse one composition pipeline while retaining target-specific compiler settings.
+- Version and build metadata come from explicit configuration, so normal builds no longer depend on Git state.
 
 ### Remaining weaknesses
 - Only `test1` is the required reference build, so regressions in `noscli` or `z600` can escape routine validation.
 - The pipeline depends on BSD `bmake` and a substantial Unix or BSD host-tool set.
 - Recursive `-source_dir` declarations can silently widen a module's compilation boundary.
-- Several Make-owned files are replaced independently, so interruption can leave a partially updated build state.
+- Generated fragments, metadata, dependencies, and reports are updated independently, so interruption can leave a partial build state.

@@ -19,11 +19,11 @@ The system service advances run levels through sysCall after readiness checks. C
 ### Strengths
 - Driver, thread, context, stack, and counter state are static and use no runtime heap.
 - Context mechanics remain in HAL while admission and round-robin policy remain in sysCore.
-- Active run levels prevent later services and tasks from running during staged startup.
-- Boundary canaries and measurable fill patterns expose stack overflow and high-water information.
+- Thread lookups validate generated IDs, and active run levels prevent later threads from running during staged startup.
+- Boundary canaries, bounded stack sampling, monotonic stop timestamps, and explicit timing metadata support diagnostics.
 
 ### Remaining weaknesses
 - Scheduling ignores initialized, dead, and yielded status when deciding whether a thread is runnable.
-- There is no priority, blocking, deadline, idle-thread, watchdog, or overrun policy.
-- Internal pointer access trusts IDs and the current-thread index without local bounds checks.
+- Next-start delay, WCET, and deadline fields are stored but not enforced by scheduling policy.
+- There is no priority, blocking wait queue, idle-thread, watchdog, or overrun policy.
 - Canary failure halts without identifying the thread or preserving diagnostic context.

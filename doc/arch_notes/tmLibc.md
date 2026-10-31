@@ -17,12 +17,12 @@ Formatting uses one fixed static state object and no heap. A null destination wr
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Constant strings reduce AVR RAM use while callers retain one descriptor API.
-- Copy, comparison, and formatting bound accesses and handle null text defensively.
-- The formatter has a fixed feature set, static storage, and no allocation.
+- Copy, comparison, and formatting bound destination accesses, handle null text, preserve unsigned width, and report transport failures.
+- TaskMate and standard-library backends now expose backend-appropriate string types and headers.
 - Architecture checks enforce the downward tmLibc to sysCall and interfaces dependency direction.
 
 ### Remaining weaknesses
 - Shared formatter state makes formatting and logging non-reentrant across threads, preemption, or interrupts.
-- Return length and truncation behaviour differ from standard `snprintf` semantics.
-- The standard-library branch is incomplete and does not match descriptor-based signatures.
-- Backend macros are compiler-injected, and RAM versus ROM storage remains visible at public call sites.
+- The formatter supports only a small conversion subset and silently drops unsupported specifiers.
+- Backend selection changes public string types and formatting behaviour between targets.
+- Target string macros are compiler-injected, and RAM versus ROM storage remains visible at TaskMate-libc call sites.

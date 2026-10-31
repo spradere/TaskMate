@@ -17,12 +17,12 @@ Tasks use syscalls to set, get, or atomically toggle logical signals. The select
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Tasks depend on generated logical names, never physical pins, registers, or host display details.
-- Target wiring, neutral operations, MCU pin mechanics, and task APIs have distinct ownership.
-- Static tables keep memory and normal-path dispatch bounded and deterministic.
-- The build requires a selected signal list and wiring source, and generation checks signal names.
+- Target wiring, the common driver lifecycle, MCU pin mechanics, and syscall APIs have distinct ownership.
+- Static tables keep memory and normal-path dispatch bounded, while operations reject a stopped driver.
+- Boot checks GPIO initialization and startup, and syscall toggle keeps read-modify-write atomic.
 
 ### Remaining weaknesses
 - ATmega2560 stores active polarity but does not apply it, so logical values still expose electrical polarity.
-- ATmega2560 signal, port, and pin indices have no runtime bounds validation.
+- Logical signal, port, and pin indices have no runtime bounds validation before table or register access.
 - The portable mode and pull enums are wider than the ATmega2560 implementation.
 - Generation does not detect duplicate physical pins or prove that target wiring returns a valid mapping.

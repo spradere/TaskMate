@@ -19,13 +19,13 @@ Normal and sanitizer black-box tests cover valid generation, malformed input, ve
 
 ## Well-built code and implementation weaknesses
 ### Strengths
-- Registration, source selection, errors, GPIO, driver capabilities, and SCLI commands share checked inputs.
-- Firmware records, stacks, names, and limits remain static and allocation-free at runtime.
-- Generated files are target-isolated, untracked, and stable when their ordered inputs do not change.
-- Staging prevents parse failures from replacing destinations and reports distinct file-operation failures.
+- Registration, source selection, errors, GPIO, driver capabilities, and SCLI commands share validated target inputs.
+- Target-declared module and error capacities select checked 8-bit or 16-bit generated count types.
+- Firmware records, stacks, names, limits, and real-time thread metadata remain static and allocation-free at runtime.
+- Target-isolated staging prevents parse failures from replacing destinations and has broad black-box regression coverage.
 
 ### Remaining weaknesses
 - Publication is still per fragment, so a rename failure can leave a mixed old and new generated set.
 - Temporary names are predictable per destination, so concurrent generation for one target is unsafe.
 - Fault tests do not inject real allocation, open, write, close, rename, or storage-exhaustion failures.
-- Syntax compatibility is exact, with no migration path or reader for older `init.rc` versions.
+- The host database reserves maximum-size module arrays independently of the configured target capacity.

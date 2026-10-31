@@ -17,12 +17,12 @@ Fatal paths call the neutral `_Noreturn` halt contract. AVR8 disables interrupts
 ## Well-built code and implementation weaknesses
 ### Strengths
 - Codes, messages, and levels come from checked, owner-local source catalogues.
-- Duplicate names, malformed records, invalid levels, and oversized catalogues stop generation.
+- Duplicate names, malformed records, invalid levels, and target capacity overflow stop generation.
+- The configured capacity selects the generated count type, while compile-time checks protect the 8-bit public identifier range.
 - Message-free `FLOW` entries preserve control semantics without consuming firmware text storage.
-- Terminal handling is small, deterministic, and independent of tmLibc or scheduler availability.
 
 ### Remaining weaknesses
-- Public lookup exposes message text but not severity, owner, or recovery policy.
+- Public lookup exposes message text but not the generated severity, owner, or recovery policy.
 - Driver wrappers flatten dependency failures and do not preserve a causal error chain.
-- Error lookup uses an 8-bit index while the catalogue limit and growth policy are not explicit at the API.
+- Several void or boolean service APIs discard detailed driver and scheduling errors before callers can report them.
 - Halt records no persistent diagnostic context and defines no verified hardware safe-state sequence.
