@@ -13,7 +13,7 @@
 # ------------------------------------------------------------------------------
 # Description: Check scheduler monotonic timestamps against the test1 contract.
 # Inputs: Generated test1 headers and the host C compiler.
-# Outputs: Nonzero status if the selected thread gets the wrong start tick.
+# Outputs: Nonzero status if the stopped thread gets the wrong stop tick.
 # ------------------------------------------------------------------------------
 
 set -eu

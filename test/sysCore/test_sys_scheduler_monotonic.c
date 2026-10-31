@@ -8,7 +8,7 @@
 
 /**
  * @file test_sys_scheduler_monotonic.c
- * @brief Check the selected thread's last start tick is recorded.
+ * @brief Check the stopped thread's last stop tick is recorded.
  */
 
 /* =============================================================================
@@ -119,16 +119,16 @@ int main(void)
 	test_tick = TEST_SCHEDULER_FIRST_TICK;
 	assert(tm_schedulerRR(&test_threads[0U].context) == &test_threads[1U].context);
 	assert(test_current == 1U);
-	assert(test_threads[1U].last_start_ticks_100us == TEST_SCHEDULER_FIRST_TICK);
-	assert(test_threads[0U].last_start_ticks_100us == 0U);
+	assert(test_threads[0U].last_stop_tick_100us == TEST_SCHEDULER_FIRST_TICK);
+	assert(test_threads[1U].last_stop_tick_100us == 0U);
 	assert(test_threads[1U].next_start_delay_ms == TEST_SCHEDULER_DELAY_ms);
 	assert(test_read_count == 1U);
 
 	test_tick = TEST_SCHEDULER_SECOND_TICK;
 	assert(tm_schedulerRR(&test_threads[1U].context) == &test_threads[0U].context);
 	assert(test_current == 0U);
-	assert(test_threads[0U].last_start_ticks_100us == TEST_SCHEDULER_SECOND_TICK);
-	assert(test_threads[1U].last_start_ticks_100us == TEST_SCHEDULER_FIRST_TICK);
+	assert(test_threads[0U].last_stop_tick_100us == TEST_SCHEDULER_FIRST_TICK);
+	assert(test_threads[1U].last_stop_tick_100us == TEST_SCHEDULER_SECOND_TICK);
 	assert(test_read_count == 2U);
 	return 0;
 }

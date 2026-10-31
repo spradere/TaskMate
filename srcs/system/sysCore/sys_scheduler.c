@@ -120,12 +120,15 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 	if( thread == NULL ) { hal_halt(); }
 	thread->context = *context;
 
+	thread->last_stop_tick_100us = hal_timerMonotonicRead();
+	
 	// Canary check
 	if( thread->stack[MOD_STACK_LOW_CANARY_INDEX] != MOD_CANARY ) { hal_halt(); }
 	if( thread->stack[thread->stack_size - MOD_STACK_FIRST_USABLE_INDEX] != MOD_CANARY )
 	{
 		hal_halt();
 	}
+
 
 	// Advance software time after ten scheduler interrupts.
 	if( ++scheduler_stc_tick_count == SYSSCHEDULER_COUNT_CALLSPERSTC )
@@ -155,7 +158,6 @@ static hal_context_t *tm_schedulerRR(hal_context_t *context)
 		hal_halt();
 	}
 
-	thread->last_start_ticks_100us = hal_timerMonotonicRead();
 	TM_CLEARBIT(thread->status, THREAD_BIT_YIELDED);
 	return &thread->context;
 }

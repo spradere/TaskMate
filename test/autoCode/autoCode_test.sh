@@ -1123,9 +1123,9 @@ runCompareReplaceTests()
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
 		fail "threads_alloc generated zero initialization is missing"
 	fi
-	if ! grep -F -q 'mod->last_start_ticks_100us = 0U;' \
+	if ! grep -F -q 'mod->last_stop_tick_100us = 0U;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
-		fail "threads_alloc generated start tick initialization is missing"
+		fail "threads_alloc generated stop tick initialization is missing"
 	fi
 	if ! grep -F -q 'mod->next_start_delay_ms = 0U;' \
 		"${PATH_CASE}/generated/threads_alloc.inc"; then
