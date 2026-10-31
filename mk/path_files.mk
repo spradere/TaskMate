@@ -32,8 +32,10 @@ FILE_USBDEV = /dev/da0s1
 VAL_USB_LABEL_EXPECTED = TASKMATE
 
 # Configuration
+CONF_BUILD_COUNTER = ${PATH_CONF}/build-counter.conf
 CONF_PROGRAMS_LIST = ${PATH_CONF}/programs-list.conf
 CONF_HARDWARE_TARGETS = ${PATH_CONF}/hardware-targets.conf
+CONF_TASKMATE_VERSION = ${PATH_CONF}/taskmate-version.conf
 
 # Tests
 PATH_AUTOCODE_TEST = ${PATH_TEST}/autoCode
@@ -79,7 +81,6 @@ SCRIPT_CHECK_PROGRAMS = ${PATH_SCRIPTS}/check_programs.sh
 SCRIPT_CLOC_DATA = ${PATH_SCRIPTS}/cloc_data.awk
 SCRIPT_CLOC_SHOW = ${PATH_SCRIPTS}/cloc_show.awk
 SCRIPT_COMPARE_REPLACE = ${PATH_SCRIPTS}/compare_replace.sh
-SCRIPT_GIT_VERSION = ${PATH_SCRIPTS}/git_version.sh
 SCRIPT_HARDWARE_TARGET = ${PATH_SCRIPTS}/hardware_target.awk
 SCRIPT_INITRC_SOURCES = ${PATH_SCRIPTS}/initrc_sources.awk
 SCRIPT_MAKE_HELP = ${PATH_SCRIPTS}/make_help.awk
